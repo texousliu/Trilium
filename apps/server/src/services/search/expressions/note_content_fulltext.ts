@@ -118,7 +118,7 @@ class NoteContentFulltextExp extends Expression {
     }
 
     /**
-     * Checks if content contains the exact word (with word boundaries)
+     * Checks if content contains the exact word (with word boundaries) or exact phrase
      * This is case-insensitive since content and token are already normalized
      */
     private containsExactWord(token: string, content: string): boolean {
@@ -126,7 +126,13 @@ class NoteContentFulltextExp extends Expression {
         const normalizedToken = normalizeSearchText(token);
         const normalizedContent = normalizeSearchText(content);
 
-        // Split content into words and check for exact match
+        // If token contains spaces, it's a multi-word phrase from quotes
+        // Check for substring match (consecutive phrase)
+        if (normalizedToken.includes(' ')) {
+            return normalizedContent.includes(normalizedToken);
+        }
+
+        // For single words, split content into words and check for exact match
         const words = normalizedContent.split(/\s+/);
         return words.some(word => word === normalizedToken);
     }

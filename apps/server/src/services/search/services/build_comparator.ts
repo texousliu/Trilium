@@ -15,18 +15,19 @@ type Comparator<T> = (comparedValue: T) => (val: string) => boolean;
 const stringComparators: Record<string, Comparator<string>> = {
     "=": (comparedValue) => (val) => {
         // For the = operator, check if the value contains the exact word or phrase
-        // This is case-insensitive since both values are already lowercased
+        // This is case-insensitive
         if (!val) return false;
 
         const normalizedVal = normalizeSearchText(val);
         const normalizedCompared = normalizeSearchText(comparedValue);
 
-        // If comparedValue has multiple words, check for exact phrase
+        // If comparedValue has spaces, it's a multi-word phrase
+        // Check for substring match (consecutive phrase)
         if (normalizedCompared.includes(" ")) {
             return normalizedVal.includes(normalizedCompared);
         }
 
-        // For single word, split into words and check for exact match
+        // For single word, split into words and check for exact word match
         const words = normalizedVal.split(/\s+/);
         return words.some(word => word === normalizedCompared);
     },
@@ -37,12 +38,13 @@ const stringComparators: Record<string, Comparator<string>> = {
         const normalizedVal = normalizeSearchText(val);
         const normalizedCompared = normalizeSearchText(comparedValue);
 
-        // If comparedValue has multiple words, check for exact phrase
+        // If comparedValue has spaces, it's a multi-word phrase
+        // Check for substring match (consecutive phrase) and negate
         if (normalizedCompared.includes(" ")) {
             return !normalizedVal.includes(normalizedCompared);
         }
 
-        // For single word, split into words and check for exact match
+        // For single word, split into words and check for exact word match, then negate
         const words = normalizedVal.split(/\s+/);
         return !words.some(word => word === normalizedCompared);
     },
