@@ -16,7 +16,7 @@
     "license": "MIT",
     "homepage": "https://split.js.org/",
     "scripts": {
-        "test": "karma start",
+        "test": "pnpm build && karma start",
         "prepublish": "rollup -c",
         "build": "rollup -c && npm run size",
         "watch": "rollup -cw",
@@ -37,5 +37,13 @@
     "collective": {
         "type": "opencollective",
         "url": "https://opencollective.com/splitjs"
+    },
+    "devDependencies": {
+        "@rollup/plugin-buble": "1.0.3",
+        "karma": "6.4.4",
+        "karma-chrome-launcher": "3.2.0",
+        "karma-firefox-launcher": "2.1.3",
+        "karma-jasmine": "5.1.0",
+        "rollup-plugin-terser": "7.0.2"
     }
 }

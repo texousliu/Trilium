@@ -1,14 +1,13 @@
 import buble from '@rollup/plugin-buble'
 import { terser } from 'rollup-plugin-terser'
-
-const pkg = require('./package.json')
+import pkg from "./package.json" with { type: "json" };
 
 const output = {
     format: 'umd',
-    file: pkg.main,
+    file: "dist/split.js",
     name: 'Split',
     sourcemap: false,
-    banner: `/*! Split.js - v${pkg.version} */\n`,
+    banner: `/*! Split.js - v${pkg.version} */\n`
 }
 
 export default [
@@ -17,7 +16,7 @@ export default [
         output: [
             output,
             {
-                file: pkg.module,
+                file: "dist/split.min.js",
                 format: 'esm',
                 sourcemap: false,
             },
@@ -29,7 +28,7 @@ export default [
         output: {
             ...output,
             sourcemap: true,
-            file: pkg['minified:main'],
+            file: "dist/split.min.js",
         },
         plugins: [buble(), terser()],
     },
