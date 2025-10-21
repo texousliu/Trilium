@@ -1,5 +1,5 @@
 import options from "./options.js";
-import Split from "split.js"
+import Split from "@triliumnext/split.js";
 
 export const DEFAULT_GUTTER_SIZE = 5;
 
@@ -99,7 +99,7 @@ function setupNoteSplitResizer(ntxIds: string[]) {
     let targetNtxIds: string[] | undefined;
     for (const ntxId of ntxIds) {
         targetNtxIds = findKeyByNtxId(ntxId);
-        if (targetNtxIds) break; 
+        if (targetNtxIds) break;
     }
 
     if (targetNtxIds) {

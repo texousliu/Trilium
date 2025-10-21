@@ -2,7 +2,7 @@ import type FNote from "../../entities/fnote.js";
 import utils from "../../services/utils.js";
 import EditableCodeTypeWidget from "./editable_code.js";
 import TypeWidget from "./type_widget.js";
-import Split from "split.js";
+import Split from "@triliumnext/split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 import options from "../../services/options.js";
 import type { EventData } from "../../components/app_context.js";
