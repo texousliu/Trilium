@@ -184,7 +184,8 @@
     },
     "import-status": "Statut de l'importation",
     "in-progress": "Importation en cours : {{progress}}",
-    "successful": "Importation terminée avec succès."
+    "successful": "Importation terminée avec succès.",
+    "importZipRecommendation": "Lors de l'importation d'un fichier ZIP, la hiérarchie des notes reflétera la structure des sous-répertoires au sein de l'archive."
   },
   "include_note": {
     "dialog_title": "Inclure une note",
@@ -1160,7 +1161,8 @@
     "download_images_description": "Le HTML collé peut contenir des références à des images en ligne, Trilium trouvera ces références et téléchargera les images afin qu'elles soient disponibles hors ligne.",
     "enable_image_compression": "Activer la compression des images",
     "max_image_dimensions": "Largeur/hauteur maximale d'une image en pixels (l'image sera redimensionnée si elle dépasse ce paramètre).",
-    "jpeg_quality_description": "Qualité JPEG (10 - pire qualité, 100 - meilleure qualité, 50 - 85 est recommandé)"
+    "jpeg_quality_description": "Qualité JPEG (10 - pire qualité, 100 - meilleure qualité, 50 - 85 est recommandé)",
+    "max_image_dimensions_unit": "pixels"
   },
   "attachment_erasure_timeout": {
     "attachment_erasure_timeout": "Délai d'effacement des pièces jointes",
@@ -1192,7 +1194,8 @@
     "note_revisions_snapshot_limit_description": "La limite du nombre de versions de note désigne le nombre maximum de versions pouvant être enregistrées pour chaque note. -1 signifie aucune limite, 0 signifie supprimer toutes les versions. Vous pouvez définir le nombre maximal de versions pour une seule note avec le label #versioningLimit.",
     "snapshot_number_limit_label": "Nombre limite de versions de note :",
     "erase_excess_revision_snapshots": "Effacer maintenant les versions en excès",
-    "erase_excess_revision_snapshots_prompt": "Les versions en excès ont été effacées."
+    "erase_excess_revision_snapshots_prompt": "Les versions en excès ont été effacées.",
+    "snapshot_number_limit_unit": "instantanés"
   },
   "search_engine": {
     "title": "Moteur de recherche",
@@ -1234,19 +1237,35 @@
     "title": "Table des matières",
     "description": "La table des matières apparaîtra dans les notes textuelles lorsque la note comporte plus d'un nombre défini de titres. Vous pouvez personnaliser ce nombre :",
     "disable_info": "Vous pouvez également utiliser cette option pour désactiver la table des matières en définissant un nombre très élevé.",
-    "shortcut_info": "Vous pouvez configurer un raccourci clavier pour afficher/masquer le volet de droite (y compris la table des matières) dans Options -> Raccourcis (nom « toggleRightPane »)."
+    "shortcut_info": "Vous pouvez configurer un raccourci clavier pour afficher/masquer le volet de droite (y compris la table des matières) dans Options -> Raccourcis (nom « toggleRightPane »).",
+    "unit": "titres"
   },
   "text_auto_read_only_size": {
     "title": "Taille automatique en lecture seule",
     "description": "La taille automatique des notes en lecture seule est la taille au-delà de laquelle les notes seront affichées en mode lecture seule (pour des raisons de performances).",
-    "label": "Taille automatique en lecture seule (notes de texte)"
+    "label": "Taille automatique en lecture seule (notes de texte)",
+    "unit": "caractères"
   },
   "i18n": {
     "title": "Paramètres régionaux",
     "language": "Langue",
     "first-day-of-the-week": "Premier jour de la semaine",
     "sunday": "Dimanche",
-    "monday": "Lundi"
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi",
+    "first-week-of-the-year": "Première semaine de l'année",
+    "first-week-contains-first-day": "La première semaine contient le premier jour de l'année",
+    "first-week-contains-first-thursday": "La première semaine contient le premier jeudi de l'année",
+    "first-week-has-minimum-days": "La première semaine a un nombre minimum de jours",
+    "min-days-in-first-week": "Nombre minimum de jours dans la première semaine",
+    "first-week-info": "La première semaine contient le premier jeudi de l'année et est basée sur la norme <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> .",
+    "first-week-warning": "La modification des options de la première semaine peut entraîner des doublons avec les notes de semaine existantes et les notes de semaine existantes ne seront pas mises à jour en conséquence.",
+    "formatting-locale": "Format de date et de nombre",
+    "formatting-locale-auto": "En fonction de la langue de l'application"
   },
   "backup": {
     "automatic_backup": "Sauvegarde automatique",
@@ -1284,7 +1303,9 @@
     "delete_token": "Supprimer/désactiver ce token",
     "rename_token_title": "Renommer le jeton",
     "rename_token_message": "Veuillez saisir le nom du nouveau jeton",
-    "delete_token_confirmation": "Êtes-vous sûr de vouloir supprimer le jeton ETAPI « {{name}} » ?"
+    "delete_token_confirmation": "Êtes-vous sûr de vouloir supprimer le jeton ETAPI « {{name}} » ?",
+    "see_more": "Voir plus de détails dans le {{- link_to_wiki}} et le {{- link_to_openapi_spec}} ou le {{- link_to_swagger_ui }}.",
+    "swagger_ui": "Interface utilisateur ETAPI Swagger"
   },
   "options_widget": {
     "options_status": "Statut des options",
@@ -1688,7 +1709,12 @@
     "minimum_input": "La valeur de temps saisie doit être d'au moins {{minimumSeconds}} secondes."
   },
   "multi_factor_authentication": {
-    "oauth_user_email": "Courriel de l'utilisateur : "
+    "oauth_user_email": "Courriel de l'utilisateur : ",
+    "title": "Authentification multifacteur",
+    "description": "L'authentification multifacteur (MFA) renforce la sécurité de votre compte. Au lieu de simplement saisir un mot de passe pour vous connecter, le MFA vous demande de fournir une ou plusieurs preuves supplémentaires pour vérifier votre identité. Ainsi, même si quelqu'un obtient votre mot de passe, il ne peut accéder à votre compte sans cette deuxième information. C'est comme ajouter une serrure supplémentaire à votre porte, rendant l'effraction beaucoup plus difficile.<br><br>Veuillez suivre les instructions ci-dessous pour activer le MFA. Si vous ne configurez pas correctement, la connexion se fera uniquement par mot de passe.",
+    "mfa_enabled": "Activer l'authentification multifacteur",
+    "mfa_method": "Méthode MFA",
+    "electron_disabled": "L'authentification multifacteur n'est actuellement pas prise en charge dans la version de bureau."
   },
   "modal": {
     "close": "Fermer"
@@ -1786,5 +1812,11 @@
     "enable-backdrop-effects": "Activer les effets d'arrière plan pour les menus, popups et panneaux",
     "enable-smooth-scroll": "Active le défilement fluide",
     "app-restart-required": "(redémarrer l'application pour appliquer les changements)"
+  },
+  "custom_date_time_format": {
+    "title": "Format de date/heure personnalisé",
+    "description": "Personnalisez le format de la date et de l'heure insérées via <shortcut /> ou la barre d'outils. Consultez la <doc>documentation Day.js</doc> pour connaître les formats disponibles.",
+    "format_string": "Chaîne de format :",
+    "formatted_time": "Date/heure formatée :"
   }
 }
