@@ -373,7 +373,8 @@
     "export_filter": "PDF 文件 (*.pdf)",
     "unable-to-export-message": "目前筆記無法被匯出為 PDF 。",
     "unable-to-export-title": "無法匯出為 PDF",
-    "unable-to-save-message": "所選檔案無法被寫入。請重試或選擇其他路徑。"
+    "unable-to-save-message": "所選檔案無法被寫入。請重試或選擇其他路徑。",
+    "unable-to-print": "無法列印筆記"
   },
   "tray": {
     "tooltip": "Trilium 筆記",
@@ -423,7 +424,12 @@
     "board_note_third": "第三個筆記",
     "board_status_todo": "待辦",
     "board_status_progress": "進行中",
-    "board_status_done": "已完成"
+    "board_status_done": "已完成",
+    "presentation": "簡報",
+    "presentation_slide": "簡報投影片",
+    "presentation_slide_first": "第一張投影片",
+    "presentation_slide_second": "第二張投影片",
+    "background": "背景"
   },
   "sql_init": {
     "db_not_initialized_desktop": "資料庫尚未初始化，請依螢幕指示操作。",

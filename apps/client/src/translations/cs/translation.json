@@ -4,7 +4,7 @@
     "homepage": "Domovská stránka:",
     "app_version": "Verze aplikace:",
     "db_version": "Verze DB:",
-    "sync_version": "Verze sync:",
+    "sync_version": "Verze synchronizace:",
     "build_date": "Datum sestavení:",
     "build_revision": "Revize sestavení:",
     "data_directory": "Datový adresář:"
@@ -36,6 +36,29 @@
     "add_link": "Přidat odkaz",
     "help_on_links": "Nápověda k odkazům",
     "note": "Poznámka",
-    "search_note": "hledat poznámku podle názvu"
+    "search_note": "hledat poznámku podle názvu",
+    "link_title": "Název odkazu",
+    "button_add_link": "Přidat odkaz"
+  },
+  "branch_prefix": {
+    "prefix": "Prefix: ",
+    "save": "Uložit"
+  },
+  "bulk_actions": {
+    "bulk_actions": "Hromadné akce",
+    "affected_notes": "Ovlivněné poznámky",
+    "notes": "Poznámky"
+  },
+  "confirm": {
+    "cancel": "Zrušit",
+    "ok": "OK"
+  },
+  "delete_notes": {
+    "cancel": "Zrušit",
+    "ok": "OK",
+    "close": "Zavřít"
+  },
+  "export": {
+    "close": "Zavřít"
   }
 }

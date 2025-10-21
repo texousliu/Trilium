@@ -31,6 +31,7 @@ export interface NumberProperty {
     bindToLabel: FilterLabelsByType<number>;
     width?: number;
     min?: number;
+    disabled?: (note: FNote) => boolean;
 }
 
 interface ComboBoxItem {
@@ -154,7 +155,8 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 label: t("book_properties_config.max-nesting-depth"),
                 type: "number",
                 bindToLabel: "maxNestingDepth",
-                width: 65
+                width: 65,
+                disabled: (note) => note.type === "search"
             }
         ]
     },

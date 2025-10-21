@@ -307,7 +307,12 @@
     "board_note_second": "Zweite Notiz",
     "board_note_third": "Dritte Notiz",
     "board_status_todo": "To-Do",
-    "board_status_progress": "In Bearbeitung"
+    "board_status_progress": "In Bearbeitung",
+    "presentation": "Präsentation",
+    "presentation_slide": "Präsentationsfolie",
+    "presentation_slide_first": "Erste Folie",
+    "presentation_slide_second": "Zweite Folie",
+    "background": "Hintergrund"
   },
   "keyboard_action_names": {
     "copy-notes-to-clipboard": "Notizen in Zwischenablage kopieren",
