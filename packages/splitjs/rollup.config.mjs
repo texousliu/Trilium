@@ -1,5 +1,4 @@
 import buble from '@rollup/plugin-buble'
-import { terser } from 'rollup-plugin-terser'
 import pkg from "./package.json" with { type: "json" };
 
 const output = {
@@ -22,14 +21,5 @@ export default [
             },
         ],
         plugins: [buble()],
-    },
-    {
-        input: 'src/split.js',
-        output: {
-            ...output,
-            sourcemap: true,
-            file: "dist/split.min.js",
-        },
-        plugins: [buble(), terser()],
-    },
+    }
 ]

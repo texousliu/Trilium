@@ -1371,9 +1371,6 @@ importers:
       karma-jasmine:
         specifier: 5.1.0
         version: 5.1.0(karma@6.4.4(bufferutil@4.0.9)(utf-8-validate@6.0.5))
-      rollup-plugin-terser:
-        specifier: 7.0.2
-        version: 7.0.2(rollup@4.52.0)
 
   packages/turndown-plugin-gfm:
     devDependencies:
@@ -12127,12 +12124,6 @@ packages:
     peerDependencies:
       rollup: ^3.0.0||^4.0.0
 
-  rollup-plugin-terser@7.0.2:
-    resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
-    deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
-    peerDependencies:
-      rollup: ^2.0.0
-
   rollup-plugin-webpack-stats@2.1.6:
     resolution: {integrity: sha512-njKotmo0lWIbrTKJ5CrIPk9DuDsQziOo73rE3aQIAhecJj5o0ECBbE0vxgMor37o6TQ/IEAK8pDxzs4CqLdIJw==}
     engines: {node: '>=18'}
@@ -12421,9 +12412,6 @@ packages:
   serialize-error@7.0.1:
     resolution: {integrity: sha512-8I8TjW5KMOKsZQTvoxjuSIa7foAwPWGOts+6o7sgjz41/qMD9VQHEDxi6PBvK2l0MXUmqZyNpUK+T2tQaaElvw==}
     engines: {node: '>=10'}
-
-  serialize-javascript@4.0.0:
-    resolution: {integrity: sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==}
 
   serialize-javascript@5.0.1:
     resolution: {integrity: sha512-SaaNal9imEO737H2c05Og0/8LUXG7EnsZyMa8MzkmuHoELfT6txuj0cMqRj6zfPKnmQ1yasR4PCJc8x+M4JSPA==}
@@ -15299,6 +15287,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@47.1.0':
     dependencies:
@@ -15326,6 +15316,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.1.0':
     dependencies:
@@ -15348,6 +15340,8 @@ snapshots:
       '@ckeditor/ckeditor5-table': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-emoji@47.1.0':
     dependencies:
@@ -28386,14 +28380,6 @@ snapshots:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.0)
       rollup: 4.40.0
 
-  rollup-plugin-terser@7.0.2(rollup@4.52.0):
-    dependencies:
-      '@babel/code-frame': 7.27.1
-      jest-worker: 26.6.2
-      rollup: 4.52.0
-      serialize-javascript: 4.0.0
-      terser: 5.44.0
-
   rollup-plugin-webpack-stats@2.1.6(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.11(@types/node@22.18.12)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
     dependencies:
       rollup-plugin-stats: 1.5.1(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.11(@types/node@22.18.12)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
@@ -28744,10 +28730,6 @@ snapshots:
     dependencies:
       type-fest: 0.13.1
     optional: true
-
-  serialize-javascript@4.0.0:
-    dependencies:
-      randombytes: 2.1.0
 
   serialize-javascript@5.0.1:
     dependencies:
