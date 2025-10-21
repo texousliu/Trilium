@@ -20,6 +20,10 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
     let hasSubtree = false;
     let rowNumber = childBranches.length;
 
+    if (parentNote.type === "search") {
+        maxDepth = 0;
+    }
+
     for (const branch of childBranches) {
         const note = await branch.getNote();
         if (!note || (!includeArchived && note.isArchived)) {

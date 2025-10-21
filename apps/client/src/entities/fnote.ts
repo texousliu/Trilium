@@ -1,6 +1,5 @@
 import server from "../services/server.js";
 import noteAttributeCache from "../services/note_attribute_cache.js";
-import ws from "../services/ws.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
@@ -586,7 +585,7 @@ export default class FNote {
         let childBranches = this.getChildBranches();
 
         if (!childBranches) {
-            ws.logError(`No children for '${this.noteId}'. This shouldn't happen.`);
+            console.error(`No children for '${this.noteId}'. This shouldn't happen.`);
             return [];
         }
 

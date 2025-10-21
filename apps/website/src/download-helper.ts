@@ -127,7 +127,7 @@ export const downloadMatrix: DownloadMatrix = {
             title: t("download_helper_server_docker.title"),
             description: t("download_helper_server_docker.description"),
             helpUrl: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.html",
-            quickStartCode: "docker pull triliumnext/trilium\ndocker run -p 8080:8080 -d ./data:/home/node/trilium-data triliumnext/trilium",
+            quickStartCode: "docker pull triliumnext/trilium\ndocker run -p 8080:8080 -d -v ./data:/home/node/trilium-data triliumnext/trilium",
             downloads: {
                 dockerhub: {
                     name: t("download_helper_server_docker.download_dockerhub"),

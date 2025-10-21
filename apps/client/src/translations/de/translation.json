@@ -646,7 +646,8 @@
     "about": "Über Trilium Notes",
     "logout": "Abmelden",
     "show-cheatsheet": "Cheatsheet anzeigen",
-    "toggle-zen-mode": "Zen Modus"
+    "toggle-zen-mode": "Zen Modus",
+    "new-version-available": "Neues Update verfügbar"
   },
   "sync_status": {
     "unknown": "<p>Der Synchronisations-Status wird bekannt, sobald der nächste Synchronisierungsversuch gestartet wird.</p><p>Klicke, um eine Synchronisierung jetzt auszulösen.</p>",
@@ -763,7 +764,8 @@
     "table": "Tabelle",
     "geo-map": "Weltkarte",
     "board": "Tafel",
-    "include_archived_notes": "Zeige archivierte Notizen"
+    "include_archived_notes": "Zeige archivierte Notizen",
+    "presentation": "Präsentation"
   },
   "edited_notes": {
     "no_edited_notes_found": "An diesem Tag wurden noch keine Notizen bearbeitet...",
@@ -2074,5 +2076,9 @@
   },
   "collections": {
     "rendering_error": "Aufgrund eines Fehlers können keine Inhalte angezeigt werden."
+  },
+  "presentation_view": {
+    "edit-slide": "Diese Folie bearbeiten",
+    "start-presentation": "Präsentation starten"
   }
 }

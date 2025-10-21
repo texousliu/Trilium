@@ -33,6 +33,13 @@ quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
+## ⏬ Stáhnout
+- [Nejnovější verze](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stabilní verze, doporučena pro většinu uživatelů.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
+
 ## 📚 Documentation
 
 **Visit our comprehensive documentation at
@@ -59,7 +66,7 @@ Our documentation is available in multiple formats:
 - [Patterns of Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Funkce
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed
   into multiple places in the tree (see

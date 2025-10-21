@@ -692,6 +692,14 @@
     "help_text_body3": "In alternativa, è possibile aggiungere etichette e relazioni utilizzando il pulsante <code>+</code> sul lato destro.",
     "save_attributes": "Salva attributi <enter>",
     "add_a_new_attribute": "Aggiungi un nuovo attributo",
-    "add_new_label": "Aggiungi nuova etichetta <kbd data-command=\"addNewLabel\"></kbd>"
+    "add_new_label": "Aggiungi nuova etichetta <kbd data-command=\"addNewLabel\"></kbd>",
+    "add_new_relation": "Aggiungi nuova relazione <kbd data-command=\"addNewRelation\"></kbd>",
+    "add_new_relation_definition": "Aggiungi una nuova definizione di relazione",
+    "placeholder": "Digitare qui le etichette e le relazioni"
+  },
+  "execute_script": {
+    "execute_script": "Esegui script",
+    "help_text": "È possibile eseguire semplici script sulle note abbinate.",
+    "example_1": "Ad esempio, per aggiungere una stringa al titolo di una nota, utilizzare questo piccolo script:"
   }
 }

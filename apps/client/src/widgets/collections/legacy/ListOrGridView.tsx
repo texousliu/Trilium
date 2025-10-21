@@ -74,7 +74,7 @@ function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: F
                 />
 
                 <Icon className="note-icon" icon={note.getIcon()} />
-                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={note.type === "search"} highlightedTokens={highlightedTokens} />
+                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={parentNote.type === "search"} highlightedTokens={highlightedTokens} />
                 <NoteAttributes note={note} />
             </h5>
 

@@ -26,7 +26,7 @@ export async function buildPresentationModel(note: FNote): Promise<PresentationM
     const slideNotes = await note.getChildNotes();
     const slides: PresentationSlideModel[] = await Promise.all(slideNotes.map(async slideNote => ({
         ...(await buildSlideModel(slideNote)),
-        verticalSlides: await buildVerticalSlides(slideNote)
+        verticalSlides: note.type !== "search" ? await buildVerticalSlides(slideNote) : undefined
     })));
 
     postProcessSlides(slides);

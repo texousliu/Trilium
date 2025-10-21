@@ -66,7 +66,7 @@ async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupB
         const note = await branch.getNote();
         if (!note || (!includeArchived && note.isArchived)) continue;
 
-        if (note.hasChildren()) {
+        if (note.type !== "search" && note.hasChildren()) {
             await recursiveGroupBy(note.getChildBranches(), byColumn, groupByColumn, includeArchived);
         }
 

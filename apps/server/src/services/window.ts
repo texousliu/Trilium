@@ -8,10 +8,12 @@ import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import electron from "electron";
-import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents } from "electron";
+import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents, IpcMainEvent } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 import { t } from "i18next";
 import { RESOURCE_DIR } from "./resource_dir.js";
+import { PerformanceObserverEntryList } from "perf_hooks";
+import options from "./options.js";
 
 // Prevent the window being garbage collected
 let mainWindow: BrowserWindow | null;
@@ -67,60 +69,101 @@ electron.ipcMain.on("create-extra-window", (event, arg) => {
     createExtraWindow(arg.extraWindowHash);
 });
 
+interface PrintOpts {
+    notePath: string;
+    printToPdf: boolean;
+}
+
 interface ExportAsPdfOpts {
+    notePath: string;
     title: string;
     landscape: boolean;
     pageSize: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "Legal" | "Letter" | "Tabloid" | "Ledger";
 }
 
-electron.ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
-    const browserWindow = electron.BrowserWindow.fromWebContents(e.sender);
-    if (!browserWindow) {
-        return;
-    }
-
-    const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
-        defaultPath: formatDownloadTitle(opts.title, "file", "application/pdf"),
-        filters: [
-            {
-                name: t("pdf.export_filter"),
-                extensions: ["pdf"]
-            }
-        ]
+electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
+    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
+    browserWindow.webContents.print({}, (success, failureReason) => {
+        if (!success) {
+            electron.dialog.showErrorBox(t("pdf.unable-to-print"), failureReason);
+        }
+        e.sender.send("print-done");
+        browserWindow.destroy();
     });
-    if (!filePath) {
-        return;
-    }
-
-    let buffer: Buffer;
-    try {
-        buffer = await browserWindow.webContents.printToPDF({
-            landscape: opts.landscape,
-            pageSize: opts.pageSize,
-            generateDocumentOutline: true,
-            generateTaggedPDF: true,
-            printBackground: true,
-            displayHeaderFooter: true,
-            headerTemplate: `<div></div>`,
-            footerTemplate: `
-                <div class="pageNumber" style="width: 100%; text-align: center; font-size: 10pt;">
-                </div>
-            `
-        });
-    } catch (e) {
-        electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
-        return;
-    }
-
-    try {
-        await fs.writeFile(filePath, buffer);
-    } catch (e) {
-        electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
-        return;
-    }
-
-    electron.shell.openPath(filePath);
 });
+
+electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pageSize }: ExportAsPdfOpts) => {
+    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
+
+    async function print() {
+        const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
+            defaultPath: formatDownloadTitle(title, "file", "application/pdf"),
+            filters: [
+                {
+                    name: t("pdf.export_filter"),
+                    extensions: ["pdf"]
+                }
+            ]
+        });
+        if (!filePath) return;
+
+        let buffer: Buffer;
+        try {
+            buffer = await browserWindow.webContents.printToPDF({
+                landscape,
+                pageSize,
+                generateDocumentOutline: true,
+                generateTaggedPDF: true,
+                printBackground: true,
+                displayHeaderFooter: true,
+                headerTemplate: `<div></div>`,
+                footerTemplate: `
+                    <div class="pageNumber" style="width: 100%; text-align: center; font-size: 10pt;">
+                    </div>
+                `
+            });
+        } catch (e) {
+            electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
+            return;
+        }
+
+        try {
+            await fs.writeFile(filePath, buffer);
+        } catch (e) {
+            electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
+            return;
+        }
+
+        electron.shell.openPath(filePath);
+    }
+
+    try {
+        await print();
+    } finally {
+        e.sender.send("print-done");
+        browserWindow.destroy();
+    }
+});
+
+async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string) {
+    const browserWindow = new electron.BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            offscreen: true,
+            session: e.sender.session
+        },
+    });
+    await browserWindow.loadURL(`http://127.0.0.1:${port}/?print#${notePath}`);
+    await browserWindow.webContents.executeJavaScript(`
+        new Promise(resolve => {
+            if (window._noteReady) return resolve();
+            window.addEventListener("note-ready", () => resolve());
+        });
+    `);
+    return browserWindow;
+}
 
 async function createMainWindow(app: App) {
     if ("setUserTasks" in app) {

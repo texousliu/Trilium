@@ -29,38 +29,44 @@ Trilium Notes ist eine freie, open-source, plattformfreie, hierarchische
 Notiz-Anwendung mit Fokus auf die Erstellung großer persönlicher
 Wissenssammlungen.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Siehe [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) für
+einen schnellen Überblick:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
+## ⏬ Download
+- [Neueste Version](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stabile Version, für die meisten Benutzer empfohlen.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  instabile Entwicklungsversion, die täglich mit den neuesten Funktionen und
+  Fehlerbehebungen aktualisiert wird.
+
 ## 📚 Dokumentation
 
-**Visit our comprehensive documentation at
+**Besuche unsere umfassende Dokumentation unter
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
 Unsere Dokumentation ist verfügbar in mehreren Formaten:
-- **Online Documentation**: Browse the full documentation at
+- **Online-Dokumentation**: Die vollständige Dokumentation finden man unter
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
   directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **GitHub**: Durchsuche das
+  [Benutzerhandbuch](./docs/User%20Guide/User%20Guide/) in diesem Repository
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+### Schnellzugriff
+- [Erste Schritte](https://docs.triliumnotes.org/)
+- [Installationsanleitung](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
   Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+- [TriliumNext
+  aktualisieren](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [Grundkonzepte und
+  Funktionen](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Muster persönlicher
+  Wissensdatenbanken](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Funktionen
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed
   into multiple places in the tree (see

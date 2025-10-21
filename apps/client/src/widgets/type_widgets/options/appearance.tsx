@@ -294,7 +294,7 @@ function MaxContentWidth() {
                 <FormGroup name="max-content-width" label={t("max_content_width.max_width_label")}>
                     <FormTextBoxWithUnit
                         type="number" min={MIN_CONTENT_WIDTH} step="10"
-                        currentValue={maxContentWidth} onChange={setMaxContentWidth}
+                        currentValue={maxContentWidth} onBlur={setMaxContentWidth}
                         unit={t("max_content_width.max_width_unit")}
                     />
                 </FormGroup>

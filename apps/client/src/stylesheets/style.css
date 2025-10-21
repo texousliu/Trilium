@@ -2423,3 +2423,13 @@ footer.webview-footer button {
     background: rgba(255, 100, 100, 0.5);
     text-decoration: line-through;
 }
+
+iframe.print-iframe {
+    position: absolute;
+    top: 0;
+    left: -600px;
+    right: -600px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+}

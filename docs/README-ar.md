@@ -33,6 +33,13 @@ quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
+## ⏬ Download
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
+
 ## 📚توثيق
 
 **Visit our comprehensive documentation at
@@ -132,7 +139,7 @@ The original Trilium developer ([Zadam](https://github.com/zadam)) has
 graciously given the Trilium repository to the community project which resides
 at https://github.com/TriliumNext
 
-### ⬆️Migrating from Zadam/Trilium?
+### ⬆️ الهجرة من Zadam الى تريليوم؟
 
 There are no special migration steps to migrate from a zadam/Trilium instance to
 a TriliumNext/Trilium instance. Simply [install
