@@ -75,6 +75,13 @@ class NoteContentFulltextExp extends Expression {
             return inputNoteSet;
         }
 
+        // Add tokens to highlightedTokens so snippet extraction knows what to look for
+        for (const token of this.tokens) {
+            if (!searchContext.highlightedTokens.includes(token)) {
+                searchContext.highlightedTokens.push(token);
+            }
+        }
+
         const resultNoteSet = new NoteSet();
 
         // Search through notes with content
