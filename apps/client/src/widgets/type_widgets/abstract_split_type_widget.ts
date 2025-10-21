@@ -229,6 +229,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
         if (!this.isReadOnly) {
             this.splitInstance = Split(elements, {
+                rtl: glob.isRtl,
                 sizes: [ 50, 50 ],
                 direction: this.layoutOrientation,
                 gutterSize: DEFAULT_GUTTER_SIZE,
