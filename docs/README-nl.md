@@ -21,7 +21,7 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [Engels](./README.md) [Chinees (Versimpeld)](./docs/README-ZH_CN.md) [Chinees
-(Traditioneel)](./docs/README-ZH_TW.md) {Russisch](./docs/README-ru.md)
+(Traditioneel)](./docs/README-ZH_TW.md) [Russisch](./docs/README-ru.md)
 [Japans](./docs/README-ja.md) [Italiaans](./docs/README-it.md)
 [Spaans](./docs/README-es.md)
 
