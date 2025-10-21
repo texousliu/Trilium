@@ -182,6 +182,7 @@ const Split = (idsOption, options = {}) => {
         defaultElementStyleFn,
     )
     const gutterStyle = getOption(options, 'gutterStyle', defaultGutterStyleFn)
+    const rtl = getOption(options, 'rtl', false)
 
     // 2. Initialize a bunch of strings based on the direction we're splitting.
     // A lot of the behavior in the rest of the library is paramatized down to
@@ -621,6 +622,7 @@ const Split = (idsOption, options = {}) => {
 
             // if the parent has a reverse flex-direction, switch the pair elements.
             if (
+                (direction === HORIZONTAL && rtl) ||
                 parentFlexDirection === 'row-reverse' ||
                 parentFlexDirection === 'column-reverse'
             ) {

@@ -44,6 +44,9 @@ declare namespace Split {
         // Direction to split: horizontal or vertical.
         direction?: 'horizontal' | 'vertical'
 
+        // If the UI is right-to-left. Affects the drag direction.
+        rtl?: boolean
+
         // Cursor to display while dragging.
         cursor?: string
 
