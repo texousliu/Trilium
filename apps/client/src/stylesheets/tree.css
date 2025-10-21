@@ -17,8 +17,6 @@ span.fancytree-node.fancytree-hide {
     overflow: hidden;
     margin-inline-start: 7px;
     outline: none;
-    position: relative;
-    top: 2px;
 }
 
 .fancytree-expander {
@@ -42,6 +40,7 @@ span.fancytree-node.fancytree-hide {
     text-overflow: ellipsis;
     user-select: none !important;
     -webkit-user-select: none !important;
+    color: var(--custom-color, inherit);
 }
 
 .fancytree-node:not(.fancytree-loading) .fancytree-expander {
@@ -181,7 +180,7 @@ span.fancytree-node.fancytree-active-clone:not(.fancytree-active) .fancytree-tit
 }
 
 span.fancytree-active {
-    color: var(--active-item-text-color) !important;
+    color: var(--active-item-text-color);
     background-color: var(--active-item-background-color) !important;
     border-color: transparent; /* invisible border */
     border-radius: 5px;

@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "p
 import { ViewModeProps } from "../interface";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
-import { useLegacyWidget, useNoteLabelBoolean, useNoteLabelInt, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
+import { useLegacyWidget, useNoteLabelBoolean, useNoteLabelInt, useTriliumEvent } from "../../react/hooks";
 import Tabulator from "./tabulator";
 import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
@@ -17,6 +17,7 @@ import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attributes from "../../../services/attributes";
 import { RefObject } from "preact";
 import SpacedUpdate from "../../../services/spaced_update";
+import froca from "../../../services/froca";
 
 interface TableConfig {
     tableData: {
@@ -132,25 +133,27 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
     const [ isSorted ] = useNoteLabelBoolean(note, "sorted");
     const [ movableRows, setMovableRows ] = useState(false);
 
-    function refresh() {
+    async function refresh() {
         const info = getAttributeDefinitionInformation(note);
 
-        buildRowDefinitions(note, info, includeArchived, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
-            const columnDefs = buildColumnDefinitions({
-                info,
-                movableRows,
-                existingColumnData: viewConfig?.tableData?.columns,
-                rowNumberHint: rowNumber,
-                position: newAttributePosition.current ?? undefined
-            });
-            setColumnDefs(columnDefs);
-            setRowData(rowData);
-            setHasChildren(hasChildren);
-            resetNewAttributePosition();
+        // Ensure all note IDs are loaded.
+        await froca.getNotes(noteIds);
+
+        const { definitions: rowData, hasSubtree: hasChildren, rowNumber } = await buildRowDefinitions(note, info, includeArchived, maxDepth);
+        const columnDefs = buildColumnDefinitions({
+            info,
+            movableRows,
+            existingColumnData: viewConfig?.tableData?.columns,
+            rowNumberHint: rowNumber,
+            position: newAttributePosition.current ?? undefined
         });
+        setColumnDefs(columnDefs);
+        setRowData(rowData);
+        setHasChildren(hasChildren);
+        resetNewAttributePosition();
     }
 
-    useEffect(refresh, [ note, noteIds, maxDepth, movableRows ]);
+    useEffect(() => { refresh() }, [ note, noteIds, maxDepth, movableRows ]);
 
     useTriliumEvent("entitiesReloaded", ({ loadResults}) => {
         // React to column changes.

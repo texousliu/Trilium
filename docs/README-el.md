@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
@@ -14,13 +25,21 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 | [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
 [Spanish](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Το Trilium Notes είναι μια δωρεάν και ανοιχτού κώδικα, ιεραρχική εφαρμογή
+σημειώσεων πολλαπλών πλατφορμών με έμφαση στη δημιουργία μεγάλων προσωπικών
+βάσεων γνώσεων.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+
+## ⏬ Download
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
 
 ## 📚 Documentation
 

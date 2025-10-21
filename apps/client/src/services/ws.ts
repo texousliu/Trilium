@@ -304,6 +304,8 @@ async function sendPing() {
 }
 
 setTimeout(() => {
+    if (glob.device === "print") return;
+
     ws = connectWebSocket();
 
     lastPingTs = Date.now();

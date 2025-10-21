@@ -1,13 +1,23 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
+![GitHub Downloads (所有 assets 及
 releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![翻譯狀態](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [英文](./README.md) | [簡體中文](./docs/README-ZH_CN.md) |
 [正體中文](./docs/README-ZH_TW.md) | [俄文](./docs/README-ru.md) |
@@ -20,16 +30,20 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
+## ⏬ 下載
+- [最新版本](https://github.com/TriliumNext/Trilium/releases/latest) –
+  穩定版本，推薦給大多數使用者。
+- [夜間構建](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  不穩定開發版本，每日更新最新功能與修復內容。
+
 ## 📚 文件
 
 **可以在 [docs.triliumnotes.org](https://docs.triliumnotes.org/) 查看完整使用說明**
 
 我們的使用說明包含多種格式：
 - **線上文件**：可於 [docs.triliumnotes.org](https://docs.triliumnotes.org/) 查看完整使用說明
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **應用程式內說明**：在 Trilium 中按下 `F1` 即可直接於應用程式內存取相同文件
+- **GitHub**：請參閱此儲存庫中的[使用說明](./docs/User%20Guide/User%20Guide/)
 
 ### 快速連結
 - [上手指南](https://docs.triliumnotes.org/)
@@ -39,8 +53,7 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 - [升級
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [基礎觀念與功能](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+- [個人知識庫的模式](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 功能
 
@@ -84,9 +97,8 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 
 ## ❓為什麼是 TriliumNext？
 
-The original Trilium developer ([Zadam](https://github.com/zadam)) has
-graciously given the Trilium repository to the community project which resides
-at https://github.com/TriliumNext
+原始的 Trilium 開發者 ([Zadam](https://github.com/zadam)) 已慷慨地將 Trilium
+儲存庫移交給社群專案，該專案現存放於 https://github.com/TriliumNext
 
 ### ⬆️從 Zadam/Trilium 遷移？
 
@@ -138,12 +150,10 @@ TriliumNext 也提供 Flatpak，惟尚未發佈到 FlatHub。
 
 更多關於行動應用支援的資訊，請見議題：https://github.com/TriliumNext/Trilium/issues/4962。
 
-If you prefer a native Android app, you can use
-[TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid).
-Report bugs and missing features at [their
-repository](https://github.com/FliegendeWurst/TriliumDroid). Note: It is best to
-disable automatic updates on your server installation (see below) when using
-TriliumDroid since the sync version must match between Trilium and TriliumDroid.
+若您偏好原生 Android 應用程式，可使用
+[TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid)。請至
+[其儲存庫](https://github.com/FliegendeWurst/TriliumDroid) 回報錯誤與功能缺失。注意：使用
+TriliumDroid 時，建議停用伺服器安裝版本的自動更新功能（詳見下文），因 Trilium 與 TriliumDroid 間的同步版本必須保持一致。
 
 ### 伺服器
 
@@ -200,44 +210,33 @@ pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 
 ## 👏 鳴謝
 
-* [zadam](https://github.com/zadam) for the original concept and implementation
-  of the application.
-* [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
-  application icon.
-* [nriver](https://github.com/nriver) for his work on internationalization.
-* [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
-* [antoniotejada](https://github.com/nriver) for the original syntax highlight
-  widget.
-* [Dosu](https://dosu.dev/) for providing us with the automated responses to
-  GitHub issues and discussions.
-* [Tabler Icons](https://tabler.io/icons) for the system tray icons.
+* [zadam](https://github.com/zadam) 為本應用程式的原始概念與實作。
+* [Sarah Hussein](https://github.com/Sarah-Hussein) 為應用程式設計圖示。
+* [nriver](https://github.com/nriver) 對其在國際化方面的貢獻。
+* [Thomas Frei](https://github.com/thfrei) 對 Canvas 原始作品的貢獻。
+* [antoniotejada](https://github.com/nriver) 為原始語法高亮小工具的貢獻。
+* [Dosu](https://dosu.dev/) 為我們提供 GitHub 問題與討論的自動化回應。
+* [Tabler Icons](https://tabler.io/icons) 用於系統匣圖示。
 
-Trilium would not be possible without the technologies behind it:
+若無其背後的技術支撐，Trilium 便無法開發完成：
 
-* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind
-  text notes. We are grateful for being offered a set of the premium features.
+* [CKEditor 5](https://github.com/ckeditor/ckeditor5) -
+  文字筆記背後的視覺化編輯器。我們衷心感謝獲贈這套進階功能套件。
 * [CodeMirror](https://github.com/codemirror/CodeMirror) —— 支援大量語言的程式碼編輯器。
-* [Excalidraw](https://github.com/excalidraw/excalidraw) - the infinite
-  whiteboard used in Canvas notes.
-* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - providing the
-  mind map functionality.
-* [Leaflet](https://github.com/Leaflet/Leaflet) - for rendering geographical
-  maps.
-* [Tabulator](https://github.com/olifolkerd/tabulator) - for the interactive
-  table used in collections.
+* [Excalidraw](https://github.com/excalidraw/excalidraw) - 畫布筆記中使用的無限白板。
+* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - 提供心智圖功能。
+* [Leaflet](https://github.com/Leaflet/Leaflet) - 用於渲染地理地圖。
+* [Tabulator](https://github.com/olifolkerd/tabulator) - 用於集合中的互動式表格。
 * [FancyTree](https://github.com/mar10/fancytree) —— 功能非常豐富的樹狀元件，幾乎沒有對手。
 * [jsPlumb](https://github.com/jsplumb/jsplumb) ——
   視覺連線函式庫。用於[關聯圖](https://triliumnext.github.io/Docs/Wiki/relation-map.html)與[連結圖](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 
 ## 🤝 支援我們
 
-Trilium is built and maintained with [hundreds of hours of
-work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
-support keeps it open-source, improves features, and covers costs such as
-hosting.
+Trilium
+的開發與維護耗費了[數百小時的工作時間](https://github.com/TriliumNext/Trilium/graphs/commit-activity)。您的支持能確保其開源性質、提升功能品質，並支付伺服器託管等相關成本。
 
-Consider supporting the main developer
-([eliandoran](https://github.com/eliandoran)) of the application via:
+請考慮透過以下方式支持本應用程式的主要開發者 ([eliandoran](https://github.com/eliandoran))：
 
 - [GitHub Sponsors](https://github.com/sponsors/eliandoran)
 - [PayPal](https://paypal.me/eliandoran)

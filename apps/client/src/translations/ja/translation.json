@@ -68,7 +68,8 @@
     "switch_to_desktop_version": "デスクトップ版に切り替え",
     "configure_launchbar": "ランチャーバーの設定",
     "show_shared_notes_subtree": "共有ノートのサブツリーを表示",
-    "update_available": "バージョン {{latestVersion}} が利用可能です。クリックしてダウンロードしてください。"
+    "new-version-available": "新しいアップデートが利用可能",
+    "download-update": "{{latestVersion}} をバージョンを入手"
   },
   "left_pane_toggle": {
     "show_panel": "パネルを表示",
@@ -80,7 +81,7 @@
   },
   "clone_to": {
     "notes_to_clone": "クローンするノート",
-    "target_parent_note": "ターゲットの親ノート",
+    "target_parent_note": "対象の親ノート",
     "search_for_note_by_its_name": "ノート名で検索",
     "cloned_note_prefix_title": "クローンされたノートは、指定された接頭辞を付けてノートツリーに表示されます",
     "prefix_optional": "接頭辞（任意）",
@@ -164,7 +165,12 @@
     "first-week-info": "最初の週は、その年の最初の木曜日を含む週を指し、<a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a>規格に基づいています。",
     "first-week-warning": "最初の週のオプションを変更すると、既存のウィークノートと重複する可能性があり、既存のウィークノートはそれに応じて更新されません。",
     "formatting-locale": "日付と数値のフォーマット",
-    "formatting-locale-auto": "アプリケーションの言語に基づいて"
+    "formatting-locale-auto": "アプリケーションの言語に基づいて",
+    "tuesday": "火曜日",
+    "wednesday": "水曜日",
+    "thursday": "木曜日",
+    "friday": "金曜日",
+    "saturday": "土曜日"
   },
   "tab_row": {
     "close_tab": "タブを閉じる",
@@ -276,11 +282,11 @@
     "selectAllNotes": "現在のレベルのノートをすべて選択",
     "selectNote": "ノートを選択",
     "copyNotes": "アクティブなノート（または現在の選択範囲）をクリップボードにコピーする（<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">クローン</a>に使用）",
-    "cutNotes": "アクティブなノート（または現在の選択範囲）をクリップボードにカットする（ノートの移動に使用）",
-    "pasteNotes": "ノートをサブノートとしてアクティブノートに貼り付ける（コピーされたかカットされたかに よって、移動またはクローンになる）",
+    "cutNotes": "アクティブなノート（または現在の選択範囲）をクリップボードに切り取り（ノートの移動に使用）",
+    "pasteNotes": "ノートをサブノートとしてアクティブノートに貼り付ける（コピーされたか切り取りされたかに よって、移動またはクローンになる）",
     "deleteNotes": "ノート/サブツリーを削除",
     "editingNotes": "ノート編集",
-    "editNoteTitle": "押下するとツリーペインからタイトルの編集に移ります。タイトルの編集からEnterキーを押すと、本文の編集に移動します。<kbd>Ctrl+.</kbd> で本文の編集からツリーペインに戻ります。",
+    "editNoteTitle": "ツリーペインでEnterキーを押すと、ツリーペインからノートタイトルに切り替わります。ノートタイトルだとテキストエディタにフォーカスが切り替わります。<kbd>Ctrl+.</kbd> を押すと、エディタからツリーペインに戻ります。",
     "createEditLink": "外部リンクの作成/編集",
     "createInternalLink": "内部リンクの作成",
     "followLink": "カーソル下のリンクをたどる",
@@ -296,7 +302,7 @@
     "showDevTools": "開発者ツールを表示",
     "showSQLConsole": "SQLコンソールを表示",
     "other": "その他",
-    "quickSearch": "クイックサーチにフォーカス",
+    "quickSearch": "クイック検索にフォーカス",
     "inPageSearch": "ページ内検索",
     "showJumpToNoteDialog": "<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">「ジャンプ先」ダイアログ</a>を表示",
     "moveNoteUpDown": "ノートリストでノートを上/下に移動",
@@ -328,7 +334,8 @@
     "import-status": "インポート状況",
     "in-progress": "インポート中: {{progress}}",
     "successful": "インポートは正常に終了しました。",
-    "explodeArchives": "<code>.zip</code>, <code>.enex</code> および <code>.opml</code> アーカイブの内容を読み取ります。"
+    "explodeArchives": "<code>.zip</code>, <code>.enex</code> および <code>.opml</code> アーカイブの内容を読み取ります。",
+    "importZipRecommendation": "ZIP ファイルをインポートすると、ノートの階層はアーカイブ内のサブディレクトリ構造を反映します。"
   },
   "password_not_set": {
     "title": "パスワードが設定されていない",
@@ -346,18 +353,18 @@
   },
   "sort_child_notes": {
     "sort_children_by": "子ノートの並び替え...",
-    "sorting_criteria": "ソート基準",
+    "sorting_criteria": "並べ替えの基準",
     "title": "タイトル",
     "date_created": "作成日",
     "date_modified": "更新日",
-    "sorting_direction": "ソート方向",
+    "sorting_direction": "並べ替えの方向",
     "ascending": "昇順",
     "descending": "降順",
     "folders": "フォルダ",
-    "sort_folders_at_top": "フォルダーを一番上にソートする",
+    "sort_folders_at_top": "フォルダーを上にして並べ替える",
     "natural_sort": "自然順",
-    "sort_with_respect_to_different_character_sorting": "言語や地域によって異なる文字の並べ替えや照合順序の規則に従ってソートする。",
-    "sort": "ソート",
+    "sort_with_respect_to_different_character_sorting": "言語や地域によって異なる文字の並べ替えや照合順序の規則に従って並べ替える。",
+    "sort": "並べ替え",
     "natural_sort_language": "自然順言語",
     "the_language_code_for_natural_sort": "自然順の言語コード。例えば、中国語の場合は \"zh-CN\"。"
   },
@@ -398,9 +405,9 @@
     "protect-subtree": "サブツリーを保護",
     "unprotect-subtree": "サブツリーの保護を解除",
     "copy-clone": "コピー/クローン",
-    "clone-to": "クローン先...",
-    "cut": "カット",
-    "move-to": "移動先...",
+    "clone-to": "クローン...",
+    "cut": "切り取り",
+    "move-to": "移動...",
     "paste-into": "貼り付け",
     "paste-after": "後ろに貼り付け",
     "duplicate": "複製",
@@ -410,7 +417,7 @@
     "converted-to-attachments": "{{count}}ノートが添付ファイルに変換されました。",
     "convert-to-attachment": "添付ファイルに変換",
     "convert-to-attachment-confirm": "選択したノートを親ノートの添付ファイルに変換しますか？",
-    "open-in-popup": "クイックエディット",
+    "open-in-popup": "クイック編集",
     "hoist-note": "ホイストノート",
     "unhoist-note": "ノートをホイストしない",
     "edit-branch-prefix": "ブランチの接頭辞を編集",
@@ -528,7 +535,8 @@
     "table": "テーブル",
     "geo-map": "ジオマップ",
     "board": "ボード",
-    "include_archived_notes": "アーカイブされたノートを表示"
+    "include_archived_notes": "アーカイブされたノートを表示",
+    "presentation": "プレゼンテーション"
   },
   "note_types": {
     "geo-map": "ジオマップ",
@@ -1047,7 +1055,7 @@
     "inheritable": "継承",
     "related_notes_title": "このラベルが付いた他のノート",
     "attr_detail_title": "属性の詳細なタイトル",
-    "target_note_title": "リレーションは、ソースノートとターゲットノート間の名前付き接続です。",
+    "target_note_title": "リレーションは、ソースノートと対象のノート間の名前付き接続です。",
     "target_note": "対象のノート",
     "promoted_title": "プロモート属性はノートに目立つように表示されます。",
     "promoted": "プロモート",
@@ -1070,7 +1078,7 @@
     "sorted": "子ノートをアルファベット順に並べ替える",
     "sort_direction": "ASC（デフォルト）または DESC",
     "sort_folders_first": "フォルダ（子を持つノート）を上にして並べる",
-    "top": "指定されたノートをその親ノートの一番上に表示します（ソートされた親ノートにのみ適用されます）",
+    "top": "指定されたノートをその親ノートの一番上に表示します（並べ替えらた親ノートにのみ適用されます）",
     "hide_promoted_attributes": "このノートのプロモート属性を非表示にする",
     "read_only": "エディターは読み取り専用モードです。テキストとコードノートのみ機能します。",
     "auto_read_only_disabled": "テキスト/コードノートは、サイズが大きすぎる場合、自動的に読み取りモードに設定されます。このラベルをノートに追加することで、ノートごとにこの動作を無効にすることができます",
@@ -1144,13 +1152,13 @@
     "print_page_size": "PDF にエクスポートするときに、ページのサイズを変更します。サポートされる値: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>。"
   },
   "link_context_menu": {
-    "open_note_in_popup": "クイックエディット",
+    "open_note_in_popup": "クイック編集",
     "open_note_in_new_tab": "新しいタブでノートを開く",
     "open_note_in_new_split": "新しく分割してノートを開く",
     "open_note_in_new_window": "新しいウィンドウでノートを開く"
   },
   "note_tooltip": {
-    "quick-edit": "クイックエディット",
+    "quick-edit": "クイック編集",
     "note-has-been-deleted": "ノートは削除されました。"
   },
   "protect_note": {
@@ -1182,7 +1190,7 @@
     "options": "オプション"
   },
   "quick-search": {
-    "placeholder": "クイックサーチ",
+    "placeholder": "クイック検索",
     "searching": "検索中...",
     "no-results": "結果は見つかりませんでした",
     "more-results": "... および {{number}} 件の他の結果。",
@@ -1206,7 +1214,7 @@
   },
   "bulk_actions": {
     "bulk_actions": "一括操作",
-    "affected_notes": "影響されたノート",
+    "affected_notes": "影響されるノート",
     "include_descendants": "選択したノートの子ノートを含む",
     "available_actions": "利用可能なアクション",
     "chosen_actions": "選択されたアクション",
@@ -1238,7 +1246,7 @@
     "duplicated": "ノート \"{{title}}\" は複製されました。"
   },
   "clipboard": {
-    "cut": "ノートはクリップボードにカットされました。",
+    "cut": "ノートはクリップボードに切り取りとられました。",
     "copied": "ノートはクリップボードにコピーされました。",
     "copy_failed": "権限の問題で、クリップボードにコピーできません。",
     "copy_success": "クリップボードにコピーしました。"
@@ -1289,7 +1297,7 @@
   },
   "electron_context_menu": {
     "add-term-to-dictionary": "辞書に \"{{term}}\" を追加",
-    "cut": "カット",
+    "cut": "切り取り",
     "copy": "コピー",
     "copy-link": "リンクをコピー",
     "paste": "貼り付け",
@@ -1752,7 +1760,7 @@
     "target_parent_note": "対象の親ノート",
     "move_note_new_parent": "ノートに親が 1 つしかない場合は、ノートを新しい親に移動します (つまり、古いブランチが削除され、新しい親に新しいブランチが作成されます)",
     "clone_note_new_parent": "ノートに複数のクローン/ブランチがある場合、ノートを新しい親にクローンします（どのブランチを削除すべきか不明なため）",
-    "nothing_will_happen": "ノートをターゲットノートに移動できない場合は何も起こりません（つまり、ツリーサイクルが生じるため）",
+    "nothing_will_happen": "ノートを対象のノートに移動できない場合は何も起こりません（つまり、ツリーサイクルが生じるため）",
     "to": "次へ"
   },
   "onclick_button": {
@@ -1875,7 +1883,9 @@
     "window-on-top": "ウィンドウを最前面に維持"
   },
   "note_detail": {
-    "could_not_find_typewidget": "タイプ {{type}} の typeWidget が見つかりませんでした"
+    "could_not_find_typewidget": "タイプ {{type}} の typeWidget が見つかりませんでした",
+    "printing": "印刷中です...",
+    "printing_pdf": "PDF へのエクスポート中です..."
   },
   "watched_file_update_status": {
     "ignore_this_change": "この変更を無視する",
@@ -2068,5 +2078,10 @@
     "role_and_size": "ロール: {{role}},サイズ: {{size}}",
     "link_copied": "添付ファイルのリンクをクリップボードにコピーしました。",
     "unrecognized_role": "添付ファイルのロール「{{role}}」は認識されません。"
+  },
+  "presentation_view": {
+    "edit-slide": "このスライドを編集",
+    "start-presentation": "プレゼンテーションを開始",
+    "slide-overview": "スライドの概要を切り替え"
   }
 }

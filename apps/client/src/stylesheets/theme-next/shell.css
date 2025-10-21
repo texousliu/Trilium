@@ -18,7 +18,7 @@
 
 body {
     --native-titlebar-darwin-x-offset: 10;
-    --native-titlebar-darwin-y-offset: 17 !important;
+    --native-titlebar-darwin-y-offset: 12 !important;
 }
 
 body.layout-horizontal {
@@ -100,7 +100,7 @@ body.layout-horizontal > .horizontal {
     align-items: center;
 }
 
-#launcher-container {
+body[dir=ltr] #launcher-container {
     scrollbar-gutter: stable both-edges;
 }
 
@@ -279,14 +279,11 @@ body.layout-horizontal > .horizontal {
     animation: sync-status-pulse 1s ease-in-out alternate-reverse infinite;
 }
 
-#launcher-pane .global-menu-button {
-    --hover-item-background-color: transparent;
-}
+#launcher-pane button.global-menu-button {
+    --update-badge-x-offset: 3%;
+    --update-badge-y-offset: -12%;
 
-#launcher-pane.horizontal .global-menu-button .global-menu-button-update-available {
-    inset-inline-end: -23px;
-    bottom: -22px;
-    transform: scale(0.85);
+    --hover-item-background-color: transparent;
 }
 
 .tooltip .tooltip-arrow {
@@ -642,7 +639,7 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
 #left-pane span.fancytree-node.fancytree-active {
     position: relative;
     background: transparent !important;
-    color: var(--left-pane-item-selected-color) !important;
+    color: var(--custom-color, var(--left-pane-item-selected-color));
 }
 
 @keyframes left-pane-item-select {
@@ -661,7 +658,7 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
     inset-inline-start: var(--left-pane-item-selected-shadow-size);
     bottom: var(--left-pane-item-selected-shadow-size);
     inset-inline-end: var(--left-pane-item-selected-shadow-size);
-    background: var(--left-pane-item-selected-background) !important;
+    background: var(--custom-bg-color, var(--left-pane-item-selected-background)) !important;
     box-shadow: var(--left-pane-item-selected-shadow);
     border-radius: 6px;
     animation: left-pane-item-select 200ms ease-out;
@@ -721,9 +718,6 @@ body.mobile .fancytree-node > span {
     margin-top: 0; /* Use this to align the icon with the tree view item's caption */
 }
 
-#left-pane span .fancytree-title {
-    margin-top: -5px;
-}
 
 #left-pane span.fancytree-active .fancytree-title {
     font-weight: normal;
@@ -1788,10 +1782,6 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
 
 .excalidraw {
     --border-radius-lg: 6px;
-}
-
-.excalidraw .Island {
-    backdrop-filter: var(--dropdown-backdrop-filter);
 }
 
 .excalidraw .Island.App-toolbar {

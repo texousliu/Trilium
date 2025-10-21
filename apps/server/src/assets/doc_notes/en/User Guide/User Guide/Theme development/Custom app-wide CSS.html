@@ -24,7 +24,7 @@
       <td>
         <img src="3_Custom app-wide CSS_image.png">
       </td>
-      <td>Type the desired CSS.&nbsp;
+      <td>Type the desired CSS.&nbsp;&nbsp;
         <br>
         <br>Generally it's a good idea to append <code>!important</code> for the styles
         that are being changed, in order to prevent other</td>
@@ -88,3 +88,9 @@
     opacity: 0.5;
     z-index: 0;
 }</code></pre>
+<h2>Limitations</h2>
+<p>Some parts of the application can't be styled directly via custom CSS
+  because they are rendered in an isolated mode (shadow DOM), more specifically:</p>
+<ul>
+  <li>The slides in a&nbsp;<a class="reference-link" href="#root/_help_zP3PMqaG71Ct">Presentation View</a>.</li>
+</ul>

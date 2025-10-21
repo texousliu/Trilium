@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![Sponsori prin GitHub](https://img.shields.io/github/sponsors/eliandoran)
@@ -22,6 +33,13 @@ Prezentare generală prin [capturi de
 ecran](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+
+## ⏬ Download
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
 
 ## 📚 Documentație
 
@@ -143,7 +161,7 @@ Participați la canalele noastre oficiale. Ne-ar plăcea să știm ce funcții,
 sugestii sau probleme aveți!
 
 - [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (pentru discuții în timp
-  real).
+  real.)
   - Camera de chat `General` se partajează și prin
     [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
 - [Discuții pe GitHub](https://github.com/TriliumNext/Trilium/discussions)
@@ -263,8 +281,8 @@ legăturile descrise în secțiunea „Discutați cu noi” de mai sus.
 
 * [zadam](https://github.com/zadam) pentru conceptul și implementarea originală
   a aplicației.
-* [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
-  application icon.
+* [Sarah Hussein](https://github.com/Sarah-Hussein) pentru proiectarea
+  pictogramei aplicației.
 * [nriver](https://github.com/nriver) pentru sistemul de internaționalizare.
 * [Thomas Frei](https://github.com/thfrei) pentru munca sa originală pentru
   notițele de tip schiță.

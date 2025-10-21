@@ -19,12 +19,14 @@ const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
   calendar: t("book_properties.calendar"),
   table: t("book_properties.table"),
   geoMap: t("book_properties.geo-map"),
-  board: t("book_properties.board")
+  board: t("book_properties.board"),
+  presentation: t("book_properties.presentation")
 };
 
 export default function CollectionPropertiesTab({ note }: TabContext) {
   const [ viewType, setViewType ] = useNoteLabel(note, "viewType");
-  const viewTypeWithDefault = (viewType ?? "grid") as ViewTypeOptions;
+  const defaultViewType = (note?.type === "search" ? "list" : "grid");
+  const viewTypeWithDefault = (viewType ?? defaultViewType) as ViewTypeOptions;
   const properties = bookPropertiesConfig[viewTypeWithDefault].properties;
 
   return (
@@ -120,6 +122,7 @@ function CheckboxPropertyView({ note, property }: { note: FNote, property: Check
 function NumberPropertyView({ note, property }: { note: FNote, property: NumberProperty }) {
     //@ts-expect-error Interop with text box which takes in string values even for numbers.
     const [ value, setValue ] = useNoteLabel(note, property.bindToLabel);
+    const disabled = property.disabled?.(note);
 
     return (
         <LabelledEntry label={property.label}>
@@ -128,6 +131,7 @@ function NumberPropertyView({ note, property }: { note: FNote, property: NumberP
                 currentValue={value ?? ""} onChange={setValue}
                 style={{ width: (property.width ?? 100) + "px" }}
                 min={property.min ?? 0}
+                disabled={disabled}
             />
         </LabelledEntry>
     )

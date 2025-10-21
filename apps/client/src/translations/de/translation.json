@@ -646,7 +646,8 @@
     "about": "Über Trilium Notes",
     "logout": "Abmelden",
     "show-cheatsheet": "Cheatsheet anzeigen",
-    "toggle-zen-mode": "Zen Modus"
+    "toggle-zen-mode": "Zen Modus",
+    "new-version-available": "Neues Update verfügbar"
   },
   "sync_status": {
     "unknown": "<p>Der Synchronisations-Status wird bekannt, sobald der nächste Synchronisierungsversuch gestartet wird.</p><p>Klicke, um eine Synchronisierung jetzt auszulösen.</p>",
@@ -733,7 +734,8 @@
     "insert_child_note": "Untergeordnete Notiz einfügen",
     "delete_this_note": "Diese Notiz löschen",
     "error_cannot_get_branch_id": "BranchId für notePath „{{notePath}}“ kann nicht abgerufen werden",
-    "error_unrecognized_command": "Unbekannter Befehl {{command}}"
+    "error_unrecognized_command": "Unbekannter Befehl {{command}}",
+    "note_revisions": "Notiz Revisionen"
   },
   "note_icon": {
     "change_note_icon": "Notiz-Icon ändern",
@@ -762,7 +764,8 @@
     "table": "Tabelle",
     "geo-map": "Weltkarte",
     "board": "Tafel",
-    "include_archived_notes": "Zeige archivierte Notizen"
+    "include_archived_notes": "Zeige archivierte Notizen",
+    "presentation": "Präsentation"
   },
   "edited_notes": {
     "no_edited_notes_found": "An diesem Tag wurden noch keine Notizen bearbeitet...",
@@ -1255,7 +1258,13 @@
     "min-days-in-first-week": "Mindestanzahl an Tagen in erster Woche",
     "first-week-info": "Die erste Woche, die den ersten Donnerstag des Jahres enthält, basiert auf dem Standard <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a>.",
     "first-week-warning": "Das Ändern der Optionen für die erste Woche kann zu Duplikaten mit bestehenden Wochen-Notizen führen. Bestehende Wochen-Notizen werden nicht entsprechend aktualisiert.",
-    "formatting-locale": "Datums- und Zahlenformat"
+    "formatting-locale": "Datums- und Zahlenformat",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch",
+    "thursday": "Donnerstag",
+    "friday": "Freitag",
+    "saturday": "Samstag",
+    "formatting-locale-auto": "Basierend auf die Anwendungssprache"
   },
   "backup": {
     "automatic_backup": "Automatische Sicherung",
@@ -2067,5 +2076,9 @@
   },
   "collections": {
     "rendering_error": "Aufgrund eines Fehlers können keine Inhalte angezeigt werden."
+  },
+  "presentation_view": {
+    "edit-slide": "Folie bearbeiten",
+    "start-presentation": "Präsentation starten"
   }
 }

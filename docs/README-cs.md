@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
@@ -21,6 +32,13 @@ See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+
+## ⏬ Stáhnout
+- [Nejnovější verze](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stabilní verze, doporučena pro většinu uživatelů.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
 
 ## 📚 Documentation
 
@@ -48,7 +66,7 @@ Our documentation is available in multiple formats:
 - [Patterns of Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Funkce
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed
   into multiple places in the tree (see

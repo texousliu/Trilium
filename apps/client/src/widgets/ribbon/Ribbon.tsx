@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useNoteContext, useNoteProperty, useStaticTooltip, useStaticTooltipWithKeyboardShortcut, useTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
@@ -24,7 +24,6 @@ import InheritedAttributesTab from "./InheritedAttributesTab";
 import CollectionPropertiesTab from "./CollectionPropertiesTab";
 import SearchDefinitionTab from "./SearchDefinitionTab";
 import NoteActions from "./NoteActions";
-import keyboard_actions from "../../services/keyboard_actions";
 import { KeyboardActionNames } from "@triliumnext/commons";
 
 interface TitleContext {
@@ -81,7 +80,7 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         title: t("book_properties.book_properties"),
         icon: "bx bx-book",
         content: CollectionPropertiesTab,
-        show: ({ note }) => note?.type === "book",
+        show: ({ note }) => note?.type === "book" || note?.type === "search",
         toggleCommand: "toggleRibbonTabBookProperties"
     },
     {

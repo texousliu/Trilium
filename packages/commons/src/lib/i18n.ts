@@ -32,7 +32,7 @@ const UNSORTED_LOCALES = [
      */
     {
         id: "en_rtl",
-        name: "English (right-to-left) [dev]",
+        name: "English RTL",
         electronLocale: "en",
         rtl: true,
         devOnly: true
@@ -47,7 +47,6 @@ const UNSORTED_LOCALES = [
         id: "ar",
         name: "اَلْعَرَبِيَّةُ",
         rtl: true,
-        devOnly: true,
         electronLocale: "ar"
     },
     { // Hebrew

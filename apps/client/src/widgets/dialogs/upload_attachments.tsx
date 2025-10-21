@@ -40,14 +40,17 @@ export default function UploadAttachmentsDialog() {
                 if (!files || !parentNoteId) {
                     return;
                 }
-                
+
                 setIsUploading(true);
                 const filesCopy = Array.from(files);
                 await importService.uploadFiles("attachments", parentNoteId, filesCopy, { shrinkImages });
                 setIsUploading(false);
                 setShown(false);
             }}
-            onHidden={() => setShown(false)}
+            onHidden={() => {
+                setShown(false);
+                setFiles(null);
+            }}
             show={shown}
         >
             <FormGroup name="files" label={t("upload_attachments.choose_files")} description={description}>
@@ -55,7 +58,7 @@ export default function UploadAttachmentsDialog() {
             </FormGroup>
 
             <FormGroup name="shrink-images" label={t("upload_attachments.options")}>
-                <FormCheckbox                    
+                <FormCheckbox
                     hint={t("upload_attachments.tooltip")} label={t("upload_attachments.shrink_images")}
                     currentValue={shrinkImages} onChange={setShrinkImages}
                 />

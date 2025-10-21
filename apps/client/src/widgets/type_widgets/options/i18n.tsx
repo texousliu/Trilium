@@ -5,13 +5,14 @@ import OptionsRow from "./components/OptionsRow";
 import OptionsSection from "./components/OptionsSection";
 import { useTriliumOption, useTriliumOptionJson } from "../../react/hooks";
 import type { Locale } from "@triliumnext/commons";
-import { isElectron, restartDesktopApp } from "../../../services/utils";
-import FormRadioGroup, { FormInlineRadioGroup } from "../../react/FormRadioGroup";
+import { restartDesktopApp } from "../../../services/utils";
+import FormRadioGroup from "../../react/FormRadioGroup";
 import FormText from "../../react/FormText";
 import RawHtml from "../../react/RawHtml";
 import Admonition from "../../react/Admonition";
 import Button from "../../react/Button";
 import CheckboxList from "./components/CheckboxList";
+import { LocaleSelector } from "./components/LocaleSelector";
 
 export default function InternationalizationOptions() {
     return (
@@ -32,8 +33,11 @@ function LocalizationOptions() {
                 return true;
             }),
             formattingLocales: [
-                { id: "", name: t("i18n.formatting-locale-auto") },
-                ...allLocales.filter(locale => locale.electronLocale)
+                ...allLocales.filter(locale => {
+                    if (!locale.electronLocale) return false;
+                    if (locale.devOnly && !glob.isDev) return false;
+                    return true;
+                })
             ]
         }
     }, []);
@@ -48,21 +52,12 @@ function LocalizationOptions() {
             </OptionsRow>
 
             {<OptionsRow name="formatting-locale" label={t("i18n.formatting-locale")}>
-                <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} />
+                <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} defaultLocale={{ id: "", name: t("i18n.formatting-locale-auto") }} />
             </OptionsRow>}
 
             <DateSettings />
         </OptionsSection>
     )
-}
-
-function LocaleSelector({ id, locales, currentValue, onChange }: { id?: string; locales: Locale[], currentValue: string, onChange: (newLocale: string) => void }) {
-    return <FormSelect
-        id={id}
-        values={locales}
-        keyProperty="id" titleProperty="name"
-        currentValue={currentValue} onChange={onChange}
-    />;
 }
 
 function DateSettings() {
@@ -73,13 +68,21 @@ function DateSettings() {
     return (
         <>
             <OptionsRow name="first-day-of-week" label={t("i18n.first-day-of-the-week")}>
-                <FormInlineRadioGroup
+                <FormSelect
                     name="first-day-of-week"
+                    currentValue={firstDayOfWeek}
+                    onChange={setFirstDayOfWeek}
+                    keyProperty="value"
+                    titleProperty="label"
                     values={[
-                        { value: "0", label: t("i18n.sunday") },
-                        { value: "1", label: t("i18n.monday") }
+                        { value: "1", label: t("i18n.monday") },
+                        { value: "2", label: t("i18n.tuesday") },
+                        { value: "3", label: t("i18n.wednesday") },
+                        { value: "4", label: t("i18n.thursday") },
+                        { value: "5", label: t("i18n.friday") },
+                        { value: "6", label: t("i18n.saturday") },
+                        { value: "7", label: t("i18n.sunday") },
                     ]}
-                    currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
                 />
             </OptionsRow>
 

@@ -36,7 +36,12 @@ Now the text will be displayed above while still maintaining the collection view
 
 ### Using saved search
 
-Since collections are based on the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> mechanism, it's possible to apply the same configuration to <a class="reference-link" href="Saved%20Search.md">Saved Search</a> to do advanced querying and presenting the result in an adequate matter such as a calendar, a table or even a map.
+Collections, by default, only display the child notes. However, it is possible to use the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Navigation/Search.md">Search</a> functionality to display notes all across the tree, with advanced querying functionality.
+
+To do so, simply start a <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Navigation/Search.md">Search</a> and go to the _Collection Properties_ tab in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and select a desired type of collection. To keep the search-based collection, use a <a class="reference-link" href="Saved%20Search.md">Saved Search</a>.
+
+> [!IMPORTANT]
+> While in search, none of the collections will not display the child notes of the search results. The reason is that the search might hit a note multiple times, causing an exponential rise in the number of results.
 
 ### Creating a collection from scratch
 
