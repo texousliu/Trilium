@@ -10,7 +10,7 @@ export function formatDateTime(date: string | Date | number | null | undefined, 
         return "";
     }
 
-    const locale = options.get("formattingLocale") || options.get("locale") || navigator.language;
+    const locale = normalizeLocale(options.get("formattingLocale") || options.get("locale") || navigator.language);
 
     let parsedDate;
     if (typeof date === "string" || typeof date === "number") {
@@ -50,4 +50,13 @@ export function formatDateTime(date: string | Date | number | null | undefined, 
     }
 
     throw new Error("Incorrect state.");
+}
+
+export function normalizeLocale(locale: string) {
+    locale = locale.replaceAll("_", "-");
+    switch (locale) {
+        case "cn": return "zh-CN";
+        case "tw": return "zh-TW";
+        default: return locale;
+    }
 }
