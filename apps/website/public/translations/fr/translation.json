@@ -3,6 +3,47 @@
         "title": "Commencer",
         "desktop_title": "Télécharger l'application de bureau (v{{version}})",
         "architecture": "Architecture:",
-        "older_releases": "Voir les versions plus anciennes"
+        "older_releases": "Voir les versions plus anciennes",
+        "server_title": "Configurer un serveur pour accéder à plusieurs appareils"
+    },
+    "hero_section": {
+        "github": "GitHub",
+        "get_started": "Commencer",
+        "title": "Organisez vos pensées. Construisez votre base de connaissances personnelles.",
+        "subtitle": "Trilium est une solution open source pour la prise de notes et l'organisation de votre base de connaissances personnelle. Utilisez-la localement sur votre ordinateur ou synchronisez-la avec votre serveur auto-hébergé pour conserver vos notes où que vous soyez.",
+        "dockerhub": "Docker Hub",
+        "screenshot_alt": "Capture d'écran de l'application de bureau Trilium Notes"
+    },
+    "organization_benefits": {
+        "title": "Organisation",
+        "note_structure_title": "Structure des notes",
+        "note_structure_description": "Les notes peuvent être organisées hiérarchiquement. Il n'est pas nécessaire de créer des dossiers, car chaque note peut contenir des sous-notes. Une même note peut être ajoutée à plusieurs endroits de la hiérarchie.",
+        "attributes_title": "Noter les étiquettes et les relations",
+        "attributes_description": "Utilisez des relations entre les notes ou ajoutez des étiquettes pour faciliter la catégorisation. Utilisez les attributs promus pour saisir des informations structurées utilisables dans des tableaux et des tableaux de bord.",
+        "hoisting_title": "Espaces de travail et focalisation",
+        "hoisting_description": "Séparez facilement vos notes personnelles et professionnelles en les regroupant sous un espace de travail, ce qui concentre votre arborescence de notes pour afficher uniquement l'ensemble spécifique de celles-ci."
+    },
+    "productivity_benefits": {
+        "title": "Productivité et sécurité",
+        "revisions_title": "Révisions de note",
+        "revisions_content": "Les notes sont sauvegardées périodiquement en arrière-plan, et les révisions peuvent être utilisées pour consulter l’historique ou annuler des modifications accidentelles. Il est également possible de créer des révisions à la demande.",
+        "sync_title": "Synchronisation",
+        "sync_content": "Utilisez une instance auto-hébergée ou cloud pour synchroniser facilement vos notes sur plusieurs appareils, et pour y accéder à partir de votre téléphone mobile en utilisant un PWA.",
+        "protected_notes_title": "Notes protégées",
+        "protected_notes_content": "Protégez les informations personnelles sensibles en chiffrant les notes et en les verrouillant dans une session protégée par mot de passe.",
+        "jump_to_title": "Recherche rapide et commandes",
+        "jump_to_content": "Accédez rapidement à des notes ou commandes de l’interface dans toute la hiérarchie en recherchant leur titre, avec une correspondance approximative pour gérer les fautes de frappe ou légères variations.",
+        "search_title": "Recherche puissante",
+        "search_content": "Ou recherchez du texte à l’intérieur des notes et affinez les résultats en filtrant par note parente ou par profondeur.",
+        "web_clipper_title": "Web clipper",
+        "web_clipper_content": "Récupérez des pages Web (ou des captures d'écran) et placez-les directement dans Trilium à l'aide de l'extension de navigateur \"Web Clipper\"."
+    },
+    "note_types": {
+        "text_title": "Notes de texte",
+        "text_description": "Les notes sont éditées à l'aide d'un éditeur visuel (WYSIWYG) prenant en charge les tableaux, les images, les expressions mathématiques et les blocs de code avec coloration syntaxique. Formatez rapidement le texte grâce à une syntaxe de type Markdown ou à des commandes slash.",
+        "code_title": "Notes de code"
+    },
+    "faq": {
+        "database_question": "Où sont les données stockées?"
     }
 }
