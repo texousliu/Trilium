@@ -192,9 +192,9 @@
     --badge-background-color: #ffffff1a;
     --badge-text-color: var(--muted-text-color);
 
-    --promoted-attribute-card-background-color: var(--card-background-color);
-    --promoted-attribute-card-shadow-color: #000000b3;
-
+    --promoted-attribute-card-background-color: #ffffff21;
+    --promoted-attribute-card-shadow: none;
+    
     --floating-button-shadow-color: #00000080;
     --floating-button-background-color: #494949d2;
     --floating-button-color: var(--button-text-color);
