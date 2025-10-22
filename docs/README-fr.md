@@ -207,7 +207,7 @@ Actuellement, seules les dernières versions de Chrome & Firefox sont supportée
 ### Mobile
 
 Pour utiliser TriliumNext sur un appareil mobile, vous pouvez utiliser un
-navigateur Web afin d'accéder à l'interface d'une installation serveur (voir
+navigateur Web afin d' accéder à l'interface d'une installation serveur (voir
 ci-dessous).
 
 Pour plus d’informations sur le support de l’application mobile, consultez le
