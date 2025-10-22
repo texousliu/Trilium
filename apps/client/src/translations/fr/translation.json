@@ -1846,7 +1846,7 @@
     "reprocessing_index": "Mise à jour...",
     "reprocess_index_started": "L'optimisation de l'indice de recherche à commencer en arrière-plan",
     "reprocess_index_error": "Erreur dans le rafraichissement de l'indice de recherche",
-    "failed_notes": "Notes échouées",
+    "failed_notes": "Notes en erreur",
     "last_processed": "Dernier traitement",
     "restore_provider": "Restaurer le fournisseur de recherche",
     "index_rebuild_progress": "Progression de la reconstruction de l'index",
