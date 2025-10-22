@@ -87,6 +87,7 @@ html {
 }
 
 :root .reference-link,
-.ck-content a.reference-link > span {
+.ck-content a.reference-link > span,
+.board-note {
     color: var(--light-theme-custom-color, inherit);
 }
