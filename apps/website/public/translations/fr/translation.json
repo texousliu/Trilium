@@ -2,7 +2,7 @@
     "get-started": {
         "title": "Commencer",
         "desktop_title": "Télécharger l'application de bureau (v{{version}})",
-        "architecture": "Architecture:",
+        "architecture": "Architecture :",
         "older_releases": "Voir les versions plus anciennes",
         "server_title": "Configurer un serveur pour accéder à plusieurs appareils"
     },
@@ -41,7 +41,17 @@
     "note_types": {
         "text_title": "Notes de texte",
         "text_description": "Les notes sont éditées à l'aide d'un éditeur visuel (WYSIWYG) prenant en charge les tableaux, les images, les expressions mathématiques et les blocs de code avec coloration syntaxique. Formatez rapidement le texte grâce à une syntaxe de type Markdown ou à des commandes slash.",
-        "code_title": "Notes de code"
+        "code_title": "Notes de code",
+        "code_description": "De grands échantillons de code source ou de scripts utilisent un éditeur dédié, avec une coloration syntaxique pour de nombreux langages de programmation et avec différents thèmes de couleurs.",
+        "file_title": "Notes de fichier",
+        "file_description": "Intégrez des fichiers multimédias tels que des PDF, des images, des vidéos avec un aperçu intégré à l'application.",
+        "canvas_title": "Canvas",
+        "canvas_description": "Agencez formes, images et textes sur une surface infinie grâce à la même technologie qu'excalidraw.com. Idéal pour les diagrammes, les croquis et la planification visuelle.",
+        "mermaid_title": "Diagrammes Mermaid",
+        "mermaid_description": "Créez des diagrammes tels que des organigrammes, des diagrammes de classes et de séquences, des diagrammes de Gantt et bien d'autres, en utilisant la syntaxe Mermaid.",
+        "mindmap_title": "Carte mentale",
+        "mindmap_description": "Organisez vos pensées visuellement ou faites une séance de brainstorming.",
+        "others_list": "et autres : <0>carte de notes</0>, <1>carte de relations</1>, <2>recherches enregistrées</2>, <3>note de rendu</3> et <4>vues Web</4>."
     },
     "faq": {
         "database_question": "Où sont les données stockées?",
@@ -64,15 +74,17 @@
         "get_started": "Commencer"
     },
     "components": {
-        "link_learn_more": "En savoir plus..."
+        "link_learn_more": "En savoir plus...",
+        "list_with_screenshot_alt": "Capture d'écran de la fonctionnalité sélectionnée"
     },
     "support_us": {
         "financial_donations_title": "Dons financiers",
-        "financial_donations_description": "Trilium est développé et maintenu grâce à <Link>des centaines d'heures de travail</Link>. Votre soutien permet de maintenir son open-source, d'améliorer ses fonctionnalités et de couvrir des coûts tels que l'hébergement.",
+        "financial_donations_description": "Trilium est développé et maintenu grâce à <Link>hundreds of hours of work</Link>. Votre soutien permet de maintenir son open-source, d'améliorer ses fonctionnalités et de couvrir des coûts tels que l'hébergement.",
         "financial_donations_cta": "Envisagez de soutenir le développeur principal (<Link>eliandoran</Link>) de l'application via :",
         "github_sponsors": "Sponsors GitHub",
         "paypal": "PayPal",
-        "buy_me_a_coffee": "Offrez-moi un café"
+        "buy_me_a_coffee": "Offrez-moi un café",
+        "title": "Soutenez-nous"
     },
     "contribute": {
         "title": "Autres façons de contribuer",
@@ -137,5 +149,44 @@
         "description": "Notes Trilium hébergées sur PikaPods, un service payant pour un accès et une gestion simplifiés. Non affilié directement à l'équipe Trilium.",
         "download_pikapod": "Installé sur PikaPods",
         "download_triliumcc": "Voir également trilium.cc"
+    },
+    "extensibility_benefits": {
+        "title": "Partage et extensibilité",
+        "import_export_title": "Import/export",
+        "import_export_description": "Interagissez facilement avec d'autres applications utilisant les formats Markdown, ENEX, OML.",
+        "share_title": "Partager des notes sur le Web",
+        "share_description": "Si vous disposez d'un serveur, vous pouvez l'utiliser pour partager un sous-ensemble de vos notes avec d'autres personnes.",
+        "scripting_title": "Scripts avancés",
+        "scripting_description": "Créez vos propres intégrations dans Trilium avec des widgets personnalisés ou une logique côté serveur.",
+        "api_title": "REST API",
+        "api_description": "Interagissez avec Trilium par programmation à l'aide de son API REST intégrée."
+    },
+    "collections": {
+        "calendar_title": "Calendrier",
+        "calendar_description": "Organisez vos événements personnels ou professionnels grâce à un calendrier compatible avec les événements d'une journée ou de plusieurs jours. Visualisez vos événements en un coup d'œil grâce aux vues hebdomadaire, mensuelle et annuelle. Ajoutez ou déplacez facilement des événements.",
+        "table_title": "Tableau",
+        "table_description": "Affichez et modifiez les informations relatives aux notes dans une structure tabulaire, avec différents types de colonnes (texte, nombre, cases à cocher, date et heure, liens, couleurs) et la prise en charge des relations. Vous pouvez également afficher les notes sous forme d'arborescence à l'intérieur du tableau.",
+        "board_title": "Tableau de bord",
+        "board_description": "Organisez vos tâches ou l'état de vos projets dans un tableau Kanban avec un moyen simple de créer de nouveaux éléments et colonnes et de modifier simplement leur état en les faisant glisser sur le tableau.",
+        "geomap_title": "Géocarte",
+        "geomap_description": "Planifiez vos vacances ou marquez vos points d'intérêt directement sur une carte géographique grâce à des marqueurs personnalisables. Affichez les traces GPX enregistrées pour suivre vos itinéraires."
+    },
+    "download_now": {
+        "text": "Télécharger maintenant. ",
+        "platform_big": "v{{version}} pour {{platform}}",
+        "platform_small": "pour {{platform}}",
+        "linux_big": "v{{version}} pour Linux",
+        "linux_small": "pour Linux",
+        "more_platforms": "Plus de plateformes et de configuration de serveur"
+    },
+    "footer": {
+        "copyright_and_the": " et le ",
+        "copyright_community": "communauté"
+    },
+    "social_buttons": {
+        "github": "GitHub",
+        "github_discussions": "Discussions GitHub",
+        "matrix": "Matrix",
+        "reddit": "Reddit"
     }
 }
