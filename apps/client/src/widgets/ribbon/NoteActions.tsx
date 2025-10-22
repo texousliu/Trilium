@@ -5,6 +5,7 @@ import { ParentComponent } from "../react/react_utils";
 import { t } from "../../services/i18n"
 import { useContext } from "preact/hooks";
 import { useIsNoteReadOnly } from "../react/hooks";
+import { useTriliumOption } from "../react/hooks";
 import ActionButton from "../react/ActionButton"
 import appContext, { CommandNames } from "../../components/app_context";
 import branches from "../../services/branches";
@@ -53,6 +54,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
   const isMac = getIsMac();
   const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(note.type);
   const isSearchOrBook = ["search", "book"].includes(note.type);
+  const [ syncServerHost ] = useTriliumOption("syncServerHost");
   const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
 
   return (
@@ -68,7 +70,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
                      command={() => enableEditing()} />
         <FormDropdownDivider />
       </>}
-    
+
       {canBeConvertedToAttachment && <ConvertToAttachment note={note} /> }
       {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} />}
       <CommandItem command="findInText" icon="bx bx-search" disabled={!isSearchable} text={t("note_actions.search_in_note")} />
@@ -90,6 +92,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       <CommandItem command="openNoteExternally" icon="bx bx-file-find" disabled={isSearchOrBook || !isElectron} text={t("note_actions.open_note_externally")} title={t("note_actions.open_note_externally_title")} />
       <CommandItem command="openNoteCustom" icon="bx bx-customize" disabled={isSearchOrBook || isMac || !isElectron} text={t("note_actions.open_note_custom")} />
       <CommandItem command="showNoteSource" icon="bx bx-code" disabled={!hasSource} text={t("note_actions.note_source")} />
+      <CommandItem command="openNoteOnServer" icon="bx bx-world" disabled={!syncServerHost} text={t("note_actions.open_note_on_server")} />
       <FormDropdownDivider />
 
       <CommandItem command="forceSaveRevision" icon="bx bx-save" disabled={isInOptionsOrHelp} text={t("note_actions.save_revision")} />
