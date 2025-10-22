@@ -223,12 +223,12 @@
 
     --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
 
-    --card-background-color: var(--accented-background-color);
+    --card-background-color: #0000000d;
     --card-background-hover-color: #f9f9f9;
     --card-background-press-color: #efefef;
-    --card-border-color: #eaeaea;
+    --card-border-color: transparent;
     --card-shadow-color: rgba(0, 0, 0, 0.1);
-    --card-box-shadow: 0 0 12px var(--card-shadow-color);
+    --card-box-shadow: none;
 
     --calendar-color: var(--menu-text-color);
     --calendar-weekday-labels-color: var(--muted-text-color);

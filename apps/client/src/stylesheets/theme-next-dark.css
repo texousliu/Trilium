@@ -227,8 +227,8 @@
     --card-background-color: #ffffff12;
     --card-background-hover-color: #3c3c3c;
     --card-background-press-color: #464646;
-    --card-border-color: #222222;
-    --card-box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+    --card-border-color: transparent;
+    --card-box-shadow: none;
 
     --calendar-color: var(--menu-text-color);
     --calendar-weekday-labels-color: var(--muted-text-color);
