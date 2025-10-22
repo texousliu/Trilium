@@ -84,7 +84,10 @@ const config: ForgeConfig = {
             config: {
                 options: {
                     ...baseLinuxMakerConfigOptions,
-                    desktopTemplate: undefined,
+                    desktopTemplate: undefined, // otherwise it would put in the wrong exec
+                    icon: {
+                        "128x128": path.join(APP_ICON_PATH, "png/128x128.png"),
+                    },
                     id: "com.triliumnext.notes",
                     runtimeVersion: "24.08",
                     base: "org.electronjs.Electron2.BaseApp",
