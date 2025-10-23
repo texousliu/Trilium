@@ -8,7 +8,7 @@
 }
 
 :root {
-    --dropdown-backdrop-filter: blur(10px) saturate(6);
+    --dropdown-backdrop-filter: blur(20px) saturate(6);
     --dropdown-border-radius: 10px;
 }
 
