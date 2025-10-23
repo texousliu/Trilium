@@ -128,7 +128,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         const customHue = getComputedStyle(wrapperElement).getPropertyValue("--custom-color-hue");
         if (customHue) {
             /* Apply the tinted-dialog class only if the custom color CSS class specifies a hue */
-            wrapperElement.classList.add("tinted-dialog");
+            wrapperElement.classList.add("tinted-quick-edit-dialog");
         }
 
         const activeEl = document.activeElement;
