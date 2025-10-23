@@ -166,6 +166,9 @@
     --protected-session-active-icon-color: #8edd8e;
     --sync-status-error-pulse-color: #f47871;
 
+    --center-pane-vert-layout-background-color-bgfx: #0c0c0c69;
+    --center-pane-horiz-layout-background-color-bgfx: #1e1e1ec7;
+
     --right-pane-heading-color: gray;
 
     --root-background: var(--left-pane-background-color);
