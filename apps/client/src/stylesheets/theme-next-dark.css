@@ -297,7 +297,7 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
 }
 
 .tinted-quick-edit-dialog {
-    --modal-background-color: hsl(var(--custom-color-hue), 30.3%, 17.5%);
-    --modal-border-color: hsl(var(--custom-color-hue), 33%, 41%);
-    --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 23.9%, 32%);
+    --modal-background-color: hsl(var(--custom-color-hue), 19.2%, 10.2%);
+    --modal-border-color: hsl(var(--custom-color-hue), 17.6%, 25.7%);
+    --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 21.1%, 27.8%);
 }
