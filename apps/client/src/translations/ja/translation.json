@@ -73,7 +73,7 @@
   },
   "left_pane_toggle": {
     "show_panel": "パネルを表示",
-    "hide_panel": "パネルを隠す"
+    "hide_panel": "パネルを非表示"
   },
   "move_pane_button": {
     "move_left": "左に移動",
@@ -741,7 +741,7 @@
     "new-column": "新しい列",
     "sort-column-by": "\"{{title}}\" で並べ替え",
     "sort-column-clear": "並べ替えをクリア",
-    "hide-column": "列 \"{{title}}\" を隠す",
+    "hide-column": "列 \"{{title}}\" を非表示",
     "show-hide-columns": "列を表示/非表示",
     "row-insert-above": "上に行を挿入",
     "row-insert-below": "下に行を挿入",
@@ -1200,7 +1200,7 @@
     "collapse-title": "ノートツリーを折りたたむ",
     "scroll-active-title": "アクティブノートまでスクロール",
     "tree-settings-title": "ツリーの設定",
-    "hide-archived-notes": "アーカイブノートを隠す",
+    "hide-archived-notes": "アーカイブノートを非表示",
     "automatically-collapse-notes": "ノートを自動的に折りたたむ",
     "automatically-collapse-notes-title": "一定期間使用されないと、ツリーを整理するためにノートは折りたたまれます。",
     "save-changes": "変更を保存して適用",

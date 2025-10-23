@@ -274,7 +274,8 @@
     "export_filter": "Document PDF (*.pdf)",
     "unable-to-export-message": "La note actuelle n'a pas pu être exportée en format PDF.",
     "unable-to-export-title": "Impossible d'exporter au format PDF",
-    "unable-to-save-message": "Le fichier sélectionné n'a pas pu être écrit. Réessayez ou sélectionnez une autre destination."
+    "unable-to-save-message": "Le fichier sélectionné n'a pas pu être écrit. Réessayez ou sélectionnez une autre destination.",
+    "unable-to-print": "Impossible d'imprimer la note"
   },
   "tray": {
     "tooltip": "Trilium Notes",
@@ -283,7 +284,8 @@
     "bookmarks": "Signets",
     "today": "Ouvrir la note du journal du jour",
     "new-note": "Nouvelle note",
-    "show-windows": "Afficher les fenêtres"
+    "show-windows": "Afficher les fenêtres",
+    "open_new_window": "Ouvrir une nouvelle fenêtre"
   },
   "migration": {
     "old_version": "La migration directe à partir de votre version actuelle n'est pas prise en charge. Veuillez d'abord mettre à jour vers la version v0.60.4, puis vers cette nouvelle version.",
@@ -398,5 +400,42 @@
     "instance_already_running": "Une instance est déjà en cours d'execution, ouverture de cette instance à la place."
   },
   "weekdayNumber": "Semaine {weekNumber}",
-  "quarterNumber": "Trimestre {quarterNumber}"
+  "quarterNumber": "Trimestre {quarterNumber}",
+  "share_theme": {
+    "site-theme": "Thème du site",
+    "search_placeholder": "Recherche...",
+    "image_alt": "Image de l'article",
+    "last-updated": "Dernière mise à jour le {{- date}}",
+    "subpages": "Sous-pages:",
+    "on-this-page": "Sur cette page",
+    "expand": "Développer"
+  },
+  "hidden_subtree_templates": {
+    "text-snippet": "Extrait de texte",
+    "description": "Description",
+    "list-view": "Vue en liste",
+    "grid-view": "Vue en grille",
+    "calendar": "Calendrier",
+    "table": "Tableau",
+    "geo-map": "Carte géographique",
+    "start-date": "Date de début",
+    "end-date": "Date de fin",
+    "start-time": "Heure de début",
+    "end-time": "Heure de fin",
+    "geolocation": "Géolocalisation",
+    "built-in-templates": "Modèles intégrés",
+    "board": "Tableau de bord",
+    "status": "État",
+    "board_note_first": "Première note",
+    "board_note_second": "Deuxième note",
+    "board_note_third": "Troisième note",
+    "board_status_todo": "A faire",
+    "board_status_progress": "En cours",
+    "board_status_done": "Terminé",
+    "presentation": "Présentation",
+    "presentation_slide": "Diapositive de présentation",
+    "presentation_slide_first": "Première diapositive",
+    "presentation_slide_second": "Deuxième diapositive",
+    "background": "Arrière-plan"
+  }
 }

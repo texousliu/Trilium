@@ -655,7 +655,11 @@
     "google": "جوجل",
     "save_button": "حفظ",
     "baidu": "Baidu",
-    "title": "محرك البحث"
+    "title": "محرك البحث",
+    "predefined_templates_label": "قوالب محرك البحث المعرفة مسبقا",
+    "custom_name_label": "اسم محرك البحث المخصص",
+    "custom_name_placeholder": "اسم محرك البحث المخصص",
+    "custom_url_placeholder": "تخصيص عنوان URL لمحرك البحث"
   },
   "heading_style": {
     "plain": "بسيط",
@@ -676,7 +680,8 @@
     "wednesday": "الاربعاء",
     "thursday": "الخميس",
     "friday": "الجمعة",
-    "saturday": "السبت"
+    "saturday": "السبت",
+    "formatting-locale": "تنسيق التاريخ والارقام"
   },
   "backup": {
     "path": "مسار",
@@ -699,7 +704,8 @@
     "token_name": "اسم الرمز",
     "default_token_name": "رمز جديد",
     "rename_token_title": "اعادة تسمية الرمز",
-    "rename_token": "اعادة تسمية هذا الرمز"
+    "rename_token": "اعادة تسمية هذا الرمز",
+    "create_token": "انشاء رمز PEAPI جديد"
   },
   "password": {
     "heading": "كلمة المرور",
@@ -731,7 +737,8 @@
     "timeout": "انتهاء مهلة المزامنة",
     "test_title": "اختبار المزامنة",
     "test_button": "اختبار المزامنة",
-    "server_address": "عنوان نسخة الخادم"
+    "server_address": "عنوان نسخة الخادم",
+    "proxy_label": "خادم وكيل المزامنة (اخياري)"
   },
   "api_log": {
     "close": "أغلاق"
@@ -751,7 +758,8 @@
     "new_tab": "تبويب جديد",
     "close_all_tabs": "اغلاق كل علامات التبويب",
     "add_new_tab": "اضافة علامة تبويب جديدة",
-    "close_other_tabs": "اغلاق علامات التبويب الاخرى"
+    "close_other_tabs": "اغلاق علامات التبويب الاخرى",
+    "reopen_last_tab": "اعادة فتح اخر علامة تبويب مغلقة"
   },
   "toc": {
     "options": "خيارات",
@@ -791,7 +799,8 @@
   },
   "call_to_action": {
     "dismiss": "تجاهل",
-    "background_effects_button": "تفعيل مؤثرات الخلفية"
+    "background_effects_button": "تفعيل مؤثرات الخلفية",
+    "next_theme_button": "جرب النسق الجديد"
   },
   "units": {
     "percentage": "%"
@@ -835,7 +844,8 @@
     "search-in-subtree": "‍البحث في الشجرة الفرعية",
     "edit-branch-prefix": "تعديل بادئة الفرع",
     "convert-to-attachment": "التحويل الى مرفق",
-    "apply-bulk-actions": "‌تطبيق الاجراءات الجماعية"
+    "apply-bulk-actions": "‌تطبيق الاجراءات الجماعية",
+    "recent-changes-in-subtree": "التغييرات الاخيرة في الشجرة الفرعية"
   },
   "note_types": {
     "text": "نص",
@@ -884,7 +894,8 @@
   "quick-search": {
     "searching": "جار البحث...",
     "placeholder": "البحث السريع",
-    "no-results": "لم يتم العثور على نتائج"
+    "no-results": "لم يتم العثور على نتائج",
+    "show-in-full-search": "عرض في البحث الكامل"
   },
   "note_tree": {
     "unhoist": "ارجاع الى الترتيب الطبيعي",
@@ -893,7 +904,12 @@
     "collapse-title": "طي شجرة الملاحظة",
     "hide-archived-notes": "اخفاء الملاحظات المؤرشفة",
     "automatically-collapse-notes": "طي الملاحظات تلقائيا",
-    "create-child-note": "انشاء ملاحظة فرعية"
+    "create-child-note": "انشاء ملاحظة فرعية",
+    "scroll-active-title": "تمرير الى الملاحظة النشطة",
+    "save-changes": "حفظ وتطبيق التغييرات",
+    "saved-search-note-refreshed": "تم تحديث ملاحظة البحث المحفوظة.",
+    "hoist-this-note-workspace": "تثبيت هذه الملاحظة (مساحة العمل)",
+    "refresh-saved-search-results": "تحديث نتائج البحث المحفوظة"
   },
   "sql_table_schemas": {
     "tables": "جداول"
@@ -901,7 +917,13 @@
   "launcher_context_menu": {
     "reset": "اعادة ضبط",
     "add-spacer": "اضافة فاصل",
-    "delete": "حذف\n<kbd data-command=\"deleteNotes\">"
+    "delete": "حذف\n<kbd data-command=\"deleteNotes\">",
+    "add-note-launcher": "اضافة مشغل الملاحظة",
+    "add-script-launcher": "اضافة مشغل السكريبت",
+    "add-custom-widget": "اضافة عنصر واجهة مخصص",
+    "move-to-visible-launchers": "نقل الى المشغلات المرئية",
+    "move-to-available-launchers": "نقل الى المشغلات المتوفرة",
+    "duplicate-launcher": "تكرار المشغل <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
     "auto-detect-language": "تم اكتشافه تلقائيا"
@@ -927,7 +949,9 @@
     "cut": "قص",
     "copy": "نسخ",
     "paste": "لصق",
-    "copy-link": "نسخ الرابط"
+    "copy-link": "نسخ الرابط",
+    "add-term-to-dictionary": "اضافة \"{{term}}\" الى القاموس",
+    "paste-as-plain-text": "لصق كنص عادي"
   },
   "promoted_attributes": {
     "url_placeholder": "http://website...",
@@ -977,7 +1001,11 @@
     "totp_secret_regenerate": "اعادة توليد TOTP السري",
     "totp_secret_generated": "تم انشاء TOTP السري",
     "oauth_missing_vars": "اعدادات مفقودة: {{-variables}}",
-    "totp_secret_title": "توليد TOTP سري"
+    "totp_secret_title": "توليد TOTP سري",
+    "totp_title": "كلمة مرور لمرة واحدة معتمدة على الوقت (TOTP)",
+    "recovery_keys_title": "مفاتيح استرداد تسجيل الدخول الاحادي",
+    "recovery_keys_error": "حدث خطأ اثناء توليد رموز الاسترجاع",
+    "recovery_keys_no_key_set": "لاتوجد رموز استرجاع معينة"
   },
   "execute_script": {
     "execute_script": "تنفيذ السكريبت"
@@ -1119,7 +1147,12 @@
     "title": "اخفاء هوية البيانات",
     "full_anonymization": "الاخفاء الكامل للهوية",
     "light_anonymization": "الاخفاء الجزئي للهوية",
-    "existing_anonymized_databases": "قواعد البيانات المجهولة الحالية"
+    "existing_anonymized_databases": "قواعد البيانات المجهولة الحالية",
+    "save_fully_anonymized_database": "حفظ قاعدة البيانات بعد اخفاء كل الهويات",
+    "save_lightly_anonymized_database": "حفظ قاعدةةبيانات مخفية جزئيا",
+    "creating_fully_anonymized_database": "انشاء قاعدة بيانات مجهولة بالكامل",
+    "creating_lightly_anonymized_database": "انشاء قاعدةة بيانات مجهولة جزئيا...",
+    "no_anonymized_database_yet": "لاتوجد قاعدة بيانات مجهولة بعد."
   },
   "vacuum_database": {
     "title": "تحرير مساحة قاعدة البيانات",
@@ -1146,7 +1179,8 @@
     "italic": "نص مائل",
     "underline": "خط تحت النص",
     "color": "نص ملون",
-    "visibility_title": "اظهار قائمة التضليلات"
+    "visibility_title": "اظهار قائمة التضليلات",
+    "bg_color": "نص مع لون خلفية"
   },
   "revisions_button": {
     "note_revisions": "مراجعات الملاحظة"
@@ -1163,7 +1197,8 @@
     "title": "التدقيق الاملائي",
     "enable": "تفعيل التدقيق الاملائي",
     "language_code_label": "رمز اللغة او رموز اللغات",
-    "available_language_codes_label": "رموز اللغات المتاحة:"
+    "available_language_codes_label": "رموز اللغات المتاحة:",
+    "language_code_placeholder": "على سبيل المثال \"en-US\", \"de-AI\""
   },
   "note-map": {
     "button-link-map": "خريطة الروابط",
@@ -1177,7 +1212,9 @@
   },
   "branches": {
     "delete-status": "حالة الحذف",
-    "delete-finished-successfully": "تم الحذف بنجاح."
+    "delete-finished-successfully": "تم الحذف بنجاح.",
+    "cannot-move-notes-here": "لايمكن نقل الملاحظات الى هنا.",
+    "undeleting-notes-finished-successfully": "تم استرجاع الملاحظات بنجاح."
   },
   "highlighting": {
     "title": "كتل الكود",
@@ -1199,14 +1236,16 @@
     "native-title-bar": "شريط العنوان الاصلي"
   },
   "note_tooltip": {
-    "quick-edit": "التحرير السريع"
+    "quick-edit": "التحرير السريع",
+    "note-has-been-deleted": "تم حذف الملاحظة."
   },
   "geo-map-context": {
     "open-location": "فتح الموقع",
     "remove-from-map": "ازالة من الخريطة"
   },
   "share": {
-    "title": "اعدادات المشاركة"
+    "title": "اعدادات المشاركة",
+    "check_share_root": "التحقق من حالة جذر المشاركة"
   },
   "note_language": {
     "not_set": "غير محدد",
@@ -1251,7 +1290,8 @@
     "search_subtree_title": "بحث في الشجرة الفرعية",
     "search_history_title": "عرص سجل البحث",
     "search_history_description": "عرض البحث السابق",
-    "configure_launch_bar_title": "تكوين شريط الاطلاق"
+    "configure_launch_bar_title": "تكوين شريط الاطلاق",
+    "search_subtree_description": "البحث ضمن الشجرة الفرعية الحالية"
   },
   "content_renderer": {
     "open_externally": "فتح خارجيا"
@@ -1295,7 +1335,8 @@
   "database_integrity_check": {
     "title": "فحص سلامة قاعدة البيانات",
     "check_button": "التحقق من سلامة قاعدة البيانات",
-    "checking_integrity": "جار التحقق من سلامة قاعدة البيانات..."
+    "checking_integrity": "جار التحقق من سلامة قاعدة البيانات...",
+    "integrity_check_failed": "فشل التحقق من السلامة: {{results}}"
   },
   "watched_file_update_status": {
     "upload_modified_file": "رفع الملف المعدل",
@@ -1328,7 +1369,8 @@
     "button_exit": "الخروج من وضع Zen"
   },
   "attachment_erasure_timeout": {
-    "attachment_erasure_timeout": "مهلة مسح المرفقات"
+    "attachment_erasure_timeout": "مهلة مسح المرفقات",
+    "erase_attachments_after": "حذف المرفقات الغير مستخدمة بعد:"
   },
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "مهلة مسح الملاحظة",
@@ -1366,5 +1408,31 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "الفاصل الزمني لنسخ الملاحظات الاحتياطية"
+  },
+  "note_detail": {
+    "printing": "جار الطباعة ..."
+  },
+  "attachment_detail_2": {
+    "role_and_size": "الدور: {{role}}، الحجم: {{size}}",
+    "unrecognized_role": "دور المرفق '{{role}}'الغير معروف."
+  },
+  "title_bar_buttons": {
+    "window-on-top": "ابقاء النافذة في الاعلى"
+  },
+  "note_title": {
+    "placeholder": "اكتب عنوان الملاحظة هنا..."
+  },
+  "image_context_menu": {
+    "copy_reference_to_clipboard": "نسخ المرجع الى الحافظة",
+    "copy_image_to_clipboard": "نسخ الصورة الى الحافظة"
+  },
+  "geo-map": {
+    "unable-to-load-map": "تعذر تحميل الخريطة."
+  },
+  "content_widget": {
+    "unknown_widget": "عنصر واجهة غير معروف للمعرف \"{{id}}\"."
+  },
+  "png_export_button": {
+    "button_title": "تصدير المخطط كملف PNG"
   }
 }

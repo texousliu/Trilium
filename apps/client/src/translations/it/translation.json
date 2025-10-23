@@ -221,7 +221,7 @@
     "emoji_completion_description": "Se abilitata, è possibile inserire facilmente gli emoji nel testo digitando `:`, seguito dal nome dell'emoji.",
     "note_completion_description": "Se abilitato, è possibile creare collegamenti alle note digitando `@` seguito dal titolo di una nota.",
     "slash_commands_enabled": "Abilita i comandi slash",
-    "slash_commands_description": "Se abilitato, i comandi di modifica come l'inserimento di interruzioni di riga o intestazioni possono essere attivati ​​digitando `/`."
+    "slash_commands_description": "Se abilitato, i comandi di modifica come l'inserimento di interruzioni di riga o intestazioni possono essere attivati digitando `/`."
   },
   "table_view": {
     "new-row": "Nuova riga",
@@ -381,8 +381,8 @@
   },
   "attachment_detail": {
     "open_help_page": "Apri la pagina di aiuto sugli allegati",
-    "owning_note": "Nota di proprietà:",
-    "you_can_also_open": ", puoi anche aprire il",
+    "owning_note": "Nota di proprietà: ",
+    "you_can_also_open": ", puoi anche aprire il ",
     "list_of_all_attachments": "Elenco di tutti gli allegati",
     "attachment_deleted": "Questo allegato è stato eliminato."
   },
@@ -703,7 +703,7 @@
     "last_attempt": "Ultimo tentativo",
     "actions": "Azioni",
     "retry": "Riprova",
-    "partial": "{{ percentuale }}% completato",
+    "partial": "{{ percentage }}% completato",
     "retry_queued": "Nota in coda per un nuovo tentativo",
     "retry_failed": "Impossibile mettere in coda la nota per un nuovo tentativo",
     "max_notes_per_llm_query": "Numero massimo di note per query",
@@ -719,12 +719,12 @@
     "reprocess_index_started": "Ottimizzazione dell'indice di ricerca avviata in background",
     "reprocess_index_error": "Errore durante la ricostruzione dell'indice di ricerca",
     "index_rebuild_progress": "Progresso nella ricostruzione dell'indice",
-    "index_rebuilding": "Indice di ottimizzazione ({{percentuale}}%)",
+    "index_rebuilding": "Indice di ottimizzazione ({{percentage}}%)",
     "index_rebuild_complete": "Ottimizzazione dell'indice completata",
     "index_rebuild_status_error": "Errore durante il controllo dello stato di ricostruzione dell'indice",
     "never": "Mai",
-    "processing": "Elaborazione ({{percentuale}}%)",
-    "incomplete": "Incompleto ({{percentuale}}%)",
+    "processing": "Elaborazione ({{percentage}}%)",
+    "incomplete": "Incompleto ({{percentage}}%)",
     "complete": "Completato (100%)",
     "refreshing": "Rinfrescante...",
     "auto_refresh_notice": "Si aggiorna automaticamente ogni {{seconds}} secondi",
@@ -761,9 +761,7 @@
     "indexing_stopped": "Indicizzazione interrotta",
     "indexing_in_progress": "Indicizzazione in corso...",
     "last_indexed": "Ultimo indicizzato",
-    "n_notes_queued": "{{ count }} nota in coda per l'indicizzazione",
     "note_chat": "Nota Chat",
-    "notes_indexed": "{{ count }} nota indicizzata",
     "sources": "Fonti",
     "start_indexing": "Avvia l'indicizzazione",
     "use_advanced_context": "Usa contesto avanzato",
@@ -811,7 +809,8 @@
     "codeImportedAsCode": "Importa i file di codice riconosciuti (ad esempio <code>.json</code>) come note di codice se non è chiaro dai metadati",
     "replaceUnderscoresWithSpaces": "Sostituisci i trattini bassi con spazi nei nomi delle note importate",
     "import": "Importa",
-    "failed": "Importazione fallita: {{message}}."
+    "failed": "Importazione fallita: {{message}}.",
+    "importZipRecommendation": "Quando si importa un file ZIP, la gerarchia delle note rifletterà la struttura delle sottodirectory all'interno dell'archivio."
   },
   "include_note": {
     "dialog_title": "Includi nota",
@@ -1478,7 +1477,7 @@
   },
   "attachment_list": {
     "open_help_page": "Apri la pagina di aiuto sugli allegati",
-    "owning_note": "Nota di proprietà:",
+    "owning_note": "Nota di proprietà: ",
     "upload_attachments": "Carica allegati",
     "no_attachments": "Questa nota non ha allegati."
   },
@@ -1710,7 +1709,7 @@
     "for_more_info": "per maggiori informazioni.",
     "protected_session_timeout_label": "Timeout della sessione protetta:",
     "reset_confirmation": "Reimpostando la password perderai per sempre l'accesso a tutte le tue note protette. Vuoi davvero reimpostare la password?",
-    "reset_success_message": "La password è stata reimpostata. Imposta una nuova password.",
+    "reset_success_message": "La password è stata resettata. Imposta una nuova password",
     "change_password_heading": "Cambiare la password",
     "set_password_heading": "Imposta password",
     "set_password": "Imposta password",
@@ -1740,14 +1739,14 @@
     "recovery_keys_no_key_set": "Nessun codice di ripristino impostato",
     "recovery_keys_generate": "Genera codici di recupero",
     "recovery_keys_regenerate": "Rigenera i codici di recupero",
-    "recovery_keys_used": "Utilizzato: {{data}}",
+    "recovery_keys_used": "Utilizzato: {{date}}",
     "recovery_keys_unused": "Il codice di ripristino {{index}} non è utilizzato",
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID è un metodo standardizzato che ti consente di accedere ai siti web utilizzando un account di un altro servizio, come Google, per verificare la tua identità. L'emittente predefinito è Google, ma puoi cambiarlo con qualsiasi altro provider OpenID. Per ulteriori informazioni, consulta <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">qui</a>. Segui queste <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">istruzioni</a> per configurare un servizio OpenID tramite Google.",
     "oauth_description_warning": "Per abilitare OAuth/OpenID, è necessario impostare l'URL di base di OAuth/OpenID, l'ID client e il segreto client nel file config.ini e riavviare l'applicazione. Per impostare le variabili d'ambiente, impostare TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID e TRILIUM_OAUTH_CLIENT_SECRET.",
-    "oauth_missing_vars": "Impostazioni mancanti: {{-variabili}}",
-    "oauth_user_account": "Account utente:",
-    "oauth_user_email": "Email utente:",
+    "oauth_missing_vars": "Impostazioni mancanti: {{-variables}}",
+    "oauth_user_account": "Account utente: ",
+    "oauth_user_email": "Email utente: ",
     "oauth_user_not_logged_in": "Non hai effettuato l'accesso!"
   },
   "spellcheck": {
@@ -1756,7 +1755,7 @@
     "enable": "Abilita il controllo ortografico",
     "language_code_label": "Codice/i della lingua",
     "language_code_placeholder": "ad esempio \"en-US\", \"de-AT\"",
-    "multiple_languages_info": "È possibile separare più lingue con una virgola, ad esempio \"en-US, de-DE, cs\".",
+    "multiple_languages_info": "È possibile separare più lingue con una virgola, ad esempio \"en-US, de-DE, cs\". ",
     "available_language_codes_label": "Codici lingua disponibili:",
     "restart-required": "Le modifiche alle opzioni di controllo ortografico avranno effetto dopo il riavvio dell'applicazione."
   },
@@ -1858,7 +1857,9 @@
     "window-on-top": "Mantieni la finestra in primo piano"
   },
   "note_detail": {
-    "could_not_find_typewidget": "Impossibile trovare typeWidget per il tipo '{{type}}'"
+    "could_not_find_typewidget": "Impossibile trovare typeWidget per il tipo '{{type}}'",
+    "printing": "Stampa in corso...",
+    "printing_pdf": "Esportazione in PDF in corso..."
   },
   "note_title": {
     "placeholder": "scrivi qui il titolo della nota..."
@@ -1909,7 +1910,7 @@
   },
   "frontend_script_api": {
     "async_warning": "Stai passando una funzione asincrona a `api.runOnBackend()` che probabilmente non funzionerà come previsto.\\nRendi la funzione sincrona (rimuovendo la parola chiave `async`) oppure usa `api.runAsyncOnBackendWithManualTransactionHandling()`.",
-    "sync_warning": "Stai passando una funzione sincrona a `api.runAsyncOnBackendWithManualTransactionHandling()`, mentre probabilmente dovresti usare `api.runOnBackend()`."
+    "sync_warning": "Stai passando una funzione sincrona a `api.runAsyncOnBackendWithManualTransactionHandling()`, \\nmentre probabilmente dovresti usare `api.runOnBackend()`."
   },
   "ws": {
     "sync-check-failed": "Controllo di sincronizzazione fallito!",
@@ -2044,7 +2045,7 @@
     "slide-overview": "Attiva/disattiva una panoramica delle diapositive"
   },
   "command_palette": {
-    "tree-action-name": "Albero: {{nome}}",
+    "tree-action-name": "Albero: {{name}}",
     "export_note_title": "Nota di esportazione",
     "export_note_description": "Esporta la nota corrente",
     "show_attachments_title": "Mostra allegati",
