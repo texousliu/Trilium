@@ -111,10 +111,10 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
               })}
             </tbody>
             <BulkActionsList note={note} />
-            <tbody>
+            <tbody className="search-actions">
               <tr>
                 <td colSpan={3}>
-                  <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                  <div className="search-actions-container">
                     <Button
                       icon="bx bx-search"
                       text={t("search_definition.search_button")}
