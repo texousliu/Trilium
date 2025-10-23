@@ -499,7 +499,8 @@ export function formatSize(size: number | null | undefined) {
 
 function slugify(text: string) {
     return text
-        .normalize("NFKD") // handles accents like é → e
+        .normalize("NFKD") // decompose accents
+        .replace(/\p{Mark}/gu, "") // remove diacritics cleanly
         .toLowerCase()
         .replace(/[^\p{Letter}\p{Number}]+/gu, "-") // keep Unicode letters/numbers
         .replace(/(^-|-$)+/g, ""); // trim leading/trailing dashes
