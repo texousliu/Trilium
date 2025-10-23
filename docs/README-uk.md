@@ -98,17 +98,17 @@ Trilium Notes — це безкоштовний кросплатформний �
     синхронізації](https://trilium.cc/paid-hosting)
 * [Спільне використання](https://triliumnext.github.io/Docs/Wiki/sharing)
   (публікація) нотаток у загальнодоступному інтернеті
-* Strong [note
-  encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
-  per-note granularity
-* Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type
-  "canvas")
-* [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
-  [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
-  notes and their relations
-* Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
-  location pins and GPX tracks
+* Надійне [шифрування
+  нотаток](https://triliumnext.github.io/Docs/Wiki/protected-notes) з
+  деталізацією для кожної нотатки
+* Створення ескізних схем на основі [Excalidraw](https://excalidraw.com/) (тип
+  нотатки "полотно")
+* [Карти зв'язків](https://triliumnext.github.io/Docs/Wiki/relation-map) та
+  [карти посилань](https://triliumnext.github.io/Docs/Wiki/link-map) для
+  візуалізації нотаток та їх зв'язків
+* Інтелект-карти, засновані на [Mind Elixir](https://docs.mind-elixir.com/)
+* [Геокарти](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) з
+  географічними позначками та GPX-треками
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
   showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
 * [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
