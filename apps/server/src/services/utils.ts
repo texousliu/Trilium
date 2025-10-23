@@ -497,7 +497,7 @@ export function formatSize(size: number | null | undefined) {
     }
 }
 
-export function slugify(text: string) {
+function slugify(text: string) {
     return text
         .normalize("NFKD") // handles accents like é → e
         .toLowerCase()
@@ -540,6 +540,7 @@ export default {
     safeExtractMessageAndStackFromError,
     sanitizeSqlIdentifier,
     stripTags,
+    slugify,
     timeLimit,
     toBase64,
     toMap,
