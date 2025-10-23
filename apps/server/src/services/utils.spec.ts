@@ -704,9 +704,10 @@ describe("#slugify", () => {
         expect(result).toBe(expectedSlug);
     });
 
-    it("removes diacritic marks from characters", () => {
+    // preserves diacritic marks
+    it("preserves diacritic marks", () => {
         const testString = "Café naïve façade jalapeño";
-        const expectedSlug = "cafe-naive-facade-jalapeno";
+        const expectedSlug = "café-naïve-façade-jalapeño";
         const result = utils.slugify(testString);
         expect(result).toBe(expectedSlug);
     });

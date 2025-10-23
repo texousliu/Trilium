@@ -499,11 +499,10 @@ export function formatSize(size: number | null | undefined) {
 
 function slugify(text: string) {
     return text
-        .normalize("NFKD") // decompose accents
-        .replace(/\p{Mark}/gu, "") // remove diacritics cleanly
+        .normalize("NFC") // keep composed form, preserves accents
         .toLowerCase()
-        .replace(/[^\p{Letter}\p{Number}]+/gu, "-") // keep Unicode letters/numbers
-        .replace(/(^-|-$)+/g, ""); // trim leading/trailing dashes
+        .replace(/[^\p{Letter}\p{Number}]+/gu, "-") // replace non-letter/number with "-"
+        .replace(/(^-|-$)+/g, ""); // trim dashes
 }
 
 export default {
