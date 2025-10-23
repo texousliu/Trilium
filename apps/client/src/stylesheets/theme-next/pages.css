@@ -63,7 +63,7 @@
 
  /* Button bar */
  .search-definition-widget .search-setting-table tbody:last-child div {
-    justify-content: flex-end !important;
+    justify-content: flex-end;
     gap: 8px;
  }
 

@@ -13,5 +13,12 @@
         "github": "Github",
         "dockerhub": "Kho Docker",
         "screenshot_alt": "Ảnh chụp màn hình ứng dụng Trilium Notes (desktop)"
+    },
+    "organization_benefits": {
+        "title": "Tổ chức",
+        "note_structure_title": "Cấu trúc ghi chú",
+        "note_structure_description": "Ghi chú có thể được sắp xếp theo thứ bậc. Không cần thư mục, vì mỗi ghi chú có thể chứa các ghi chú phụ. Một ghi chú có thể được thêm vào nhiều vị trí trong hệ thống phân cấp.",
+        "attributes_title": "Các nhãn ghi chú và các mối quan hệ",
+        "attributes_description": "Sử dụng mối quan hệ giữa các ghi chú hoặc thêm nhãn để phân loại dễ dàng. Sử dụng các thuộc tính được khuyến khích để nhập thông tin có cấu trúc có thể được sử dụng trong bảng, bảng biểu."
     }
 }
