@@ -1932,7 +1932,7 @@
     "formatted_time": "Date/heure formatée :"
   },
   "table_view": {
-    "delete_column_confirmation": "Êtes-vous sûr de vouloir supprimer cette colonne? L'attribut correspondant sera supprimé de toutes les notes.",
+    "delete_column_confirmation": "Êtes-vous sûr de vouloir supprimer cette colonne ? L'attribut correspondant sera supprimé de toutes les notes.",
     "delete-column": "Supprimer la colonne",
     "new-column-label": "Étiquette",
     "new-column-relation": "Relation",
