@@ -79,7 +79,7 @@
     },
     "support_us": {
         "financial_donations_title": "Dons financiers",
-        "financial_donations_description": "Trilium est développé et maintenu grâce à <Link>hundreds of hours of work</Link>. Votre soutien permet de maintenir son open-source, d'améliorer ses fonctionnalités et de couvrir des coûts tels que l'hébergement.",
+        "financial_donations_description": "Trilium est développé et maintenu grâce à <Link>des centaines d'heures de travail</Link>. Votre soutien permet de maintenir son open-source, d'améliorer ses fonctionnalités et de couvrir des coûts tels que l'hébergement.",
         "financial_donations_cta": "Envisagez de soutenir le développeur principal (<Link>eliandoran</Link>) de l'application via :",
         "github_sponsors": "Sponsors GitHub",
         "paypal": "PayPal",
