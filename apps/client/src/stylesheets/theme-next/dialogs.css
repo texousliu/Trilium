@@ -422,3 +422,11 @@ div.tn-tool-dialog {
 .note-type-chooser-dialog div.note-type-dropdown .dropdown-item span.bx {
     margin-inline-end: .25em;
 }
+
+/* QUICK EDIT DIALOG */
+
+.quick-edit-dialog-wrapper.tinted-dialog {
+    --modal-background-color: hsl(var(--custom-color-hue), 56%, 96%);
+    --modal-border-color: hsl(var(--custom-color-hue), 33%, 41%);
+    --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 40%, 88%);
+}
