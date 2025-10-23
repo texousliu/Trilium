@@ -120,9 +120,15 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         const wrapperElement = this.$wrapper.get(0)!;
 
         if (colorClass) {
-            wrapperElement.className = "quick-edit-dialog-wrapper tinted-dialog " + colorClass;
+            wrapperElement.className = "quick-edit-dialog-wrapper " + colorClass;
         } else {
             wrapperElement.className = "quick-edit-dialog-wrapper";
+        }
+
+        const customHue = getComputedStyle(wrapperElement).getPropertyValue("--custom-color-hue");
+        if (customHue) {
+            /* Apply the tinted-dialog class only if the custom color CSS class specifies a hue */
+            wrapperElement.classList.add("tinted-dialog");
         }
 
         const activeEl = document.activeElement;
