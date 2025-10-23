@@ -295,3 +295,9 @@ body ::-webkit-calendar-picker-indicator {
 body .todo-list input[type="checkbox"]:not(:checked):before {
     border-color: var(--muted-text-color) !important;
 }
+
+.tinted-quick-edit-dialog {
+    --modal-background-color: hsl(var(--custom-color-hue), 30.3%, 17.5%);
+    --modal-border-color: hsl(var(--custom-color-hue), 33%, 41%);
+    --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 23.9%, 32%);
+}
