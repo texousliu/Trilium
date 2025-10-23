@@ -175,7 +175,8 @@ function register(router: Router) {
             appPath: isDev ? appPath : `../${appPath}`,
             showLoginInShareTheme,
             t,
-            isDev
+            isDev,
+            utils
         };
         let useDefaultView = true;
 

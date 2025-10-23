@@ -152,14 +152,14 @@ function restoreRevision(req: Request) {
 }
 
 function getEditedNotesOnDate(req: Request) {
-    const noteIds = sql.getColumn<string>(
-        `
+    const noteIds = sql.getColumn<string>(/*sql*/`\
         SELECT notes.*
         FROM notes
         WHERE noteId IN (
                 SELECT noteId FROM notes
-                WHERE notes.dateCreated LIKE :date
-                    OR notes.dateModified LIKE :date
+                WHERE
+                    (notes.dateCreated LIKE :date OR notes.dateModified LIKE :date)
+                    AND (noteId NOT LIKE '_%')
             UNION ALL
                 SELECT noteId FROM revisions
                 WHERE revisions.dateLastEdited LIKE :date
