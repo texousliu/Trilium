@@ -115,7 +115,7 @@ function SearchOption({ note, title, titleIcon, children, help, attributeName, a
   additionalAttributesToDelete?: { type: "label" | "relation", name: string }[]
 }) {
   return (
-    <tr>
+    <tr className={attributeName}>
       <td className="title-column">
         {titleIcon && <><Icon icon={titleIcon} />{" "}</>}
         {title}

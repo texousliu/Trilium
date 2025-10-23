@@ -20,6 +20,7 @@ import bulk_action, { ACTION_GROUPS } from "../../services/bulk_action";
 import { FormListHeader, FormListItem } from "../react/FormList";
 import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
 import { getErrorMessage } from "../../services/utils";
+import "./SearchDefinitionTab.css";
 
 export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   const parentComponent = useContext(ParentComponent);
