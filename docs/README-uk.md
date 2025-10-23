@@ -11,14 +11,14 @@
 
 # Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
-![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
+![Спонсори GitHub](https://img.shields.io/github/sponsors/eliandoran)
+![Користувачі LiberaPay](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![Завантаження GitHub (всі ресурси, всі
+релізи)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Статус
+перекладу](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
 [Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
@@ -29,7 +29,7 @@ Trilium Notes — це безкоштовний кросплатформний �
 нотаток з відкритим кодом, орієнтований на створення великих персональних баз
 знань.
 
-Див. [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) для
+Див. [скріншоти](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) для
 швидкого перегляду:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
@@ -94,10 +94,10 @@ Trilium Notes — це безкоштовний кросплатформний �
   для безпечнішого входу
 * [Синхронізація](https://triliumnext.github.io/Docs/Wiki/synchronization) із
   власним сервером синхронізації
-  * there's a [3rd party service for hosting synchronisation
-    server](https://trilium.cc/paid-hosting)
-* [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes
-  to public internet
+  * існує [сторонній сервіс для розміщення сервера
+    синхронізації](https://trilium.cc/paid-hosting)
+* [Спільне використання](https://triliumnext.github.io/Docs/Wiki/sharing)
+  (публікація) нотаток у загальнодоступному інтернеті
 * Strong [note
   encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
   per-note granularity
