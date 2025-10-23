@@ -14,7 +14,7 @@ import log from "../services/log.js";
 import type SNote from "./shaca/entities/snote.js";
 import type SBranch from "./shaca/entities/sbranch.js";
 import type SAttachment from "./shaca/entities/sattachment.js";
-import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
+import utils, { isDev, safeExtractMessageAndStackFromError, slugify } from "../services/utils.js";
 import options from "../services/options.js";
 import { t } from "i18next";
 import ejs from "ejs";
@@ -175,7 +175,8 @@ function register(router: Router) {
             appPath: isDev ? appPath : `../${appPath}`,
             showLoginInShareTheme,
             t,
-            isDev
+            isDev,
+            slugify
         };
         let useDefaultView = true;
 

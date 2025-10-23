@@ -497,6 +497,14 @@ export function formatSize(size: number | null | undefined) {
     }
 }
 
+export function slugify(text: string) {
+    return text
+        .normalize("NFKD") // handles accents like é → e
+        .toLowerCase()
+        .replace(/[^\p{Letter}\p{Number}]+/gu, "-") // keep Unicode letters/numbers
+        .replace(/(^-|-$)+/g, ""); // trim leading/trailing dashes
+}
+
 export default {
     compareVersions,
     crash,
