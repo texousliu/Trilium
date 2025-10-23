@@ -22,7 +22,7 @@ import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
 import { getErrorMessage } from "../../services/utils";
 import "./SearchDefinitionTab.css";
 
-export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
+export default function SearchDefinitionTab({ note, ntxId, hidden }: TabContext) {
   const parentComponent = useContext(ParentComponent);
   const [ searchOptions, setSearchOptions ] = useState<{ availableOptions: SearchOption[], activeOptions: SearchOption[] }>();
   const [ error, setError ] = useState<{ message: string }>();
@@ -76,7 +76,7 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   return (
     <div className="search-definition-widget">
       <div className="search-settings">
-        {note &&
+        {note && !hidden &&
           <table className="search-setting-table">
             <tbody>
                 <tr>
