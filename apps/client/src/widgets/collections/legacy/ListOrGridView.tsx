@@ -141,7 +141,11 @@ function NoteContent({ note, trim, noChildrenList, highlightedTokens }: { note: 
         })
             .then(({ $renderedContent, type }) => {
                 if (!contentRef.current) return;
-                contentRef.current.replaceChildren(...$renderedContent);
+                if ($renderedContent[0].innerHTML) {
+                    contentRef.current.replaceChildren(...$renderedContent);
+                } else {
+                    contentRef.current.replaceChildren();
+                }
                 contentRef.current.classList.add(`type-${type}`);
                 highlightSearch(contentRef.current);
             })
