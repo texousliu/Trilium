@@ -2433,3 +2433,7 @@ iframe.print-iframe {
     width: 0;
     height: 0;
 }
+
+.excalidraw.theme--dark canvas {
+    --theme-filter: invert(100%) hue-rotate(180deg);
+}
