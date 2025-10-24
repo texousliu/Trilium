@@ -32,9 +32,6 @@ async function formatCodeBlocks() {
 async function setupTextNote() {
     formatCodeBlocks();
     applyMath();
-
-    const setupMermaid = (await import("./share/mermaid.js")).default;
-    setupMermaid();
 }
 
 /**

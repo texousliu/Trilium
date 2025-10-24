@@ -3,6 +3,7 @@ import setupExpanders from "./modules/expanders";
 import setupMobileMenu from "./modules/mobile";
 import setupSearch from "./modules/search";
 import setupThemeSelector from "./modules/theme";
+import setupMermaid from "./modules/mermaid";
 
 function $try<T extends (...a: unknown[]) => unknown>(func: T, ...args: Parameters<T>) {
     try {
@@ -18,3 +19,4 @@ $try(setupToC);
 $try(setupExpanders);
 $try(setupMobileMenu);
 $try(setupSearch);
+$try(setupMermaid);
