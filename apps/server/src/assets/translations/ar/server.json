@@ -84,7 +84,9 @@
     "show-backend-log": "فتح صفحة \"سجل الخلفية\"",
     "edit-readonly-note": "تعديل ملاحظة القراءة فقط",
     "attributes-labels-and-relations": "سمات ( تسميات و علاقات)",
-    "render-active-note": "عرض ( اعادة عرض) الملاحظة المؤرشفة"
+    "render-active-note": "عرض ( اعادة عرض) الملاحظة المؤرشفة",
+    "show-help": "فتح دليل التعليمات",
+    "copy-without-formatting": "نسخ النص المحدد بدون تنسيق"
   },
   "setup_sync-from-server": {
     "note": "ملاحظة:",
@@ -339,7 +341,14 @@
     "toggle-system-tray-icon": "تبديل ايقونة علبة النظام",
     "switch-to-first-tab": "التبديل الى التبويب الاول",
     "follow-link-under-cursor": "اتبع الرابط اسفل المؤشر",
-    "paste-markdown-into-text": "لصق نص بتنسبق Markdown"
+    "paste-markdown-into-text": "لصق نص بتنسبق Markdown",
+    "move-note-up-in-hierarchy": "نقل الملاحظة للاعلى في الهيكل",
+    "move-note-down-in-hierarchy": "نقل الملاحظة للاسفل في الهيكل",
+    "select-all-notes-in-parent": "تحديد جميع الملاحظات التابعة للملاحظة الاصل",
+    "add-note-above-to-selection": "اضافة ملاحظة فوق الملاحظة المحددة",
+    "add-note-below-to-selection": "اصافة ملاحظة اسفل الملاحظة المحددة",
+    "add-include-note-to-text": "اضافة الملاحظة الى النص",
+    "toggle-ribbon-tab-image-properties": "اظهار/ اخفاء صورة علامة التبويب في الشريط."
   },
   "share_404": {
     "title": "غير موجود",

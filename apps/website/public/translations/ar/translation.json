@@ -73,7 +73,8 @@
         "download_exe": "تحميل ملف التثبيت (exe.)",
         "title_x64": "ويندوز 64 بت",
         "download_zip": "النسخة المحمولة بصيغة zip",
-        "title_arm64": "نظام ويندوز عاى ARM"
+        "title_arm64": "نظام ويندوز عاى ARM",
+        "quick_start": "للتثبيت باستخدام Winget:"
     },
     "download_helper_desktop_linux": {
         "download_deb": ".deb",
@@ -112,6 +113,11 @@
         "download_dmg": "تحميل ملف التثبيت (dmg.)",
         "download_homebrew_cask": "Homebrew Cask",
         "download_zip": "النسخة المحمولة بصيغة zip",
-        "title_x64": "نظام macOS لاصدار intel"
+        "title_x64": "نظام macOS لاصدار intel",
+        "title_arm64": "نظام macOS لمعالجة اجهزة Apple Silicon",
+        "quick_start": "للتثبيت بواسطة Homebrew:"
+    },
+    "contribute": {
+        "title": "طرق اخرى للمساهمة"
     }
 }
