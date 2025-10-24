@@ -9,15 +9,13 @@ import type BBranch from "../becca/entities/bbranch.js";
 import { t } from "i18next";
 import SBranch from "./shaca/entities/sbranch.js";
 import options from "../services/options.js";
-import utils, { getResourceDir, isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
-import app_path from "../services/app_path.js";
+import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import ejs from "ejs";
 import log from "../services/log.js";
 import { join } from "path";
 import { readFileSync } from "fs";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
-const shareAdjustedAppPath = isDev ? app_path : `../${app_path}`;
 const templateCache: Map<string, string> = new Map();
 
 /**
@@ -99,9 +97,9 @@ export function renderNoteContent(note: SNote) {
 
     // Determine CSS to load.
     const cssToLoad: string[] = [];
-    if (!isDev && !note.isLabelTruthy("shareOmitDefaultCss")) {
-        cssToLoad.push(`${shareAdjustedAssetPath}/src/share.css`);
-        cssToLoad.push(`${shareAdjustedAssetPath}/src/boxicons.css`);
+    if (!note.isLabelTruthy("shareOmitDefaultCss")) {
+        cssToLoad.push(`assets/styles.css`);
+        cssToLoad.push(`assets/boxicons.css`);
     }
     for (const cssRelation of note.getRelations("shareCss")) {
         cssToLoad.push(`api/notes/${cssRelation.value}/download`);
@@ -109,7 +107,7 @@ export function renderNoteContent(note: SNote) {
 
     // Determine JS to load.
     const jsToLoad: string[] = [
-        `${shareAdjustedAppPath}/share.js`
+        "assets/scripts.js"
     ];
     for (const jsRelation of note.getRelations("shareJs")) {
         jsToLoad.push(`api/notes/${jsRelation.value}/download`);
@@ -147,7 +145,6 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
         isEmpty,
         assetPath: shareAdjustedAssetPath,
         assetUrlFragment,
-        appPath: shareAdjustedAppPath,
         showLoginInShareTheme,
         t,
         isDev,

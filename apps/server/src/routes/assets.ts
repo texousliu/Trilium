@@ -32,6 +32,7 @@ async function register(app: express.Application) {
             req.url = `/${assetUrlFragment}` + req.url;
             vite.middlewares(req, res, next);
         });
+        app.use(`/share/assets/`, express.static(path.join(srcRoot, "../../packages/share-theme/dist")));
     } else {
         const publicDir = path.join(resourceDir, "public");
         if (!existsSync(publicDir)) {
@@ -42,6 +43,7 @@ async function register(app: express.Application) {
         app.use(`/${assetUrlFragment}/stylesheets`, persistentCacheStatic(path.join(publicDir, "stylesheets")));
         app.use(`/${assetUrlFragment}/fonts`, persistentCacheStatic(path.join(publicDir, "fonts")));
         app.use(`/${assetUrlFragment}/translations/`, persistentCacheStatic(path.join(publicDir, "translations")));
+        app.use(`/share/assets/`, persistentCacheStatic(path.join(resourceDir, "share-theme/assets")));
         app.use(`/node_modules/`, persistentCacheStatic(path.join(publicDir, "node_modules")));
     }
     app.use(`/${assetUrlFragment}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
