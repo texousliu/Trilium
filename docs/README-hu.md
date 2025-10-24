@@ -105,11 +105,12 @@ Dokumentációink többféle formátumban is elérhetők:
 * [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
   [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
   notes and their relations
-* Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
-  location pins and GPX tracks
-* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
-  showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
+* Elmetérképek, [Mind Elixir](https://docs.mind-elixir.com/) alapján
+* [Geo térképek](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+  helymeghatározó tűkkel és GPX nyomokkal
+* [Szkriptelés](https://triliumnext.github.io/Docs/Wiki/scripts) - lásd:
+  [Speciális
+  bemutatók](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
 * [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
 * Scales well in both usability and performance upwards of 100 000 notes
 * Touch optimized [mobile
