@@ -189,13 +189,20 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
     }
 
     // Render with the default view otherwise.
-    const templatePath = join(getResourceDir(), "share-theme", "templates", "page.ejs");
+    const templatePath = getDefaultTemplatePath("page");
     return ejs.render(readTemplate(templatePath), opts, {
         includer: (path) => {
-            const templatePath = join(getResourceDir(), "share-theme", "templates", `${path}.ejs`);
-            return { template: readTemplate(templatePath) };
+            // Path is relative to apps/server/dist/assets/views
+            return { template: readTemplate(getDefaultTemplatePath(path)) };
         }
     });
+}
+
+function getDefaultTemplatePath(template: string) {
+    // Path is relative to apps/server/dist/assets/views
+    return process.env.NODE_ENV === "development"
+        ? join(__dirname, `../../../../packages/share-theme/src/templates/${template}.ejs`)
+        : `../../share-theme/templates/${template}.ejs`;
 }
 
 function readTemplate(path: string) {

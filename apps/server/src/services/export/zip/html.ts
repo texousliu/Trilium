@@ -1,8 +1,9 @@
 import type NoteMeta from "../../meta/note_meta.js";
-import { escapeHtml } from "../../utils";
-import cssContent from "@triliumnext/ckeditor5/content.css";
+import { escapeHtml, getResourceDir, isDev } from "../../utils";
 import html from "html";
 import { ZipExportProvider } from "./abstract_provider.js";
+import path from "path";
+import fs from "fs";
 
 export default class HtmlExportProvider extends ZipExportProvider {
 
@@ -164,6 +165,10 @@ export default class HtmlExportProvider extends ZipExportProvider {
             return;
         }
 
+        const cssFile = isDev
+            ? path.join(__dirname, "../../../../../node_modules/ckeditor5/dist/ckeditor5-content.css")
+            : path.join(getResourceDir(), "ckeditor5-content.css");
+        const cssContent = fs.readFileSync(cssFile, "utf-8");
         this.archive.append(cssContent, { name: cssMeta.dataFileName });
     }
 
