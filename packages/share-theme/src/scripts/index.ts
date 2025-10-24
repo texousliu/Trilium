@@ -6,6 +6,7 @@ import setupThemeSelector from "./modules/theme";
 import setupMermaid from "./modules/mermaid";
 import setupMath from "./modules/math";
 import api from "./modules/api";
+import "boxicons/css/boxicons.min.css";
 
 function $try<T extends (...a: unknown[]) => unknown>(func: T, ...args: Parameters<T>) {
     try {

@@ -60,6 +60,8 @@ async function runBuild() {
             ".woff": "dataurl",
             ".woff2": "dataurl",
             ".ttf": "dataurl",
+            ".eot": "empty",
+            ".svg": "empty",
             ".html": "text",
             ".css": "css"
         },
