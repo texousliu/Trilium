@@ -99,6 +99,7 @@ export function renderNoteContent(note: SNote) {
     const cssToLoad: string[] = [];
     if (!note.isLabelTruthy("shareOmitDefaultCss")) {
         cssToLoad.push(`assets/styles.css`);
+        cssToLoad.push(`assets/scripts.css`);
         cssToLoad.push(`assets/boxicons.css`);
     }
     for (const cssRelation of note.getRelations("shareCss")) {

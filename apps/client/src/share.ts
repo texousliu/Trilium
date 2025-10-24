@@ -9,15 +9,7 @@ async function ensureJQuery() {
     (window as any).$ = $;
 }
 
-async function applyMath() {
-    const anyMathBlock = document.querySelector("#content .math-tex");
-    if (!anyMathBlock) {
-        return;
-    }
 
-    const renderMathInElement = (await import("./services/math.js")).renderMathInElement;
-    renderMathInElement(document.getElementById("content"));
-}
 
 async function formatCodeBlocks() {
     const anyCodeBlock = document.querySelector("#content pre");
@@ -31,7 +23,6 @@ async function formatCodeBlocks() {
 
 async function setupTextNote() {
     formatCodeBlocks();
-    applyMath();
 }
 
 /**
