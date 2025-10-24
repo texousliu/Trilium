@@ -27,14 +27,14 @@ import { NoteType } from "@triliumnext/commons";
 
 async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, format: ExportFormat, res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
     if (!["html", "markdown", "share"].includes(format)) {
-        throw new ValidationError(`Only 'html' and 'markdown' allowed as export format, '${format}' given`);
+        throw new ValidationError(`Only 'html', 'markdown' and 'share' allowed as export format, '${format}' given`);
     }
 
     const archive = archiver("zip", {
         zlib: { level: 9 } // Sets the compression level.
     });
     const rewriteFn = (zipExportOptions?.customRewriteLinks ? zipExportOptions?.customRewriteLinks(rewriteLinks, getNoteTargetUrl) : rewriteLinks);
-    const provider= buildProvider();
+    const provider = buildProvider();
 
     const noteIdToMeta: Record<string, NoteMeta> = {};
 
