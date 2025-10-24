@@ -10,7 +10,7 @@ runs:
   steps:
   - uses: pnpm/action-setup@v4
   - name: Set up node & dependencies
-    uses: actions/setup-node@v4
+    uses: actions/setup-node@v6
     with:
       node-version: 22
       cache: "pnpm"
@@ -23,11 +23,11 @@ runs:
     shell: bash
     run: |
       pnpm run chore:update-build-info
-      pnpm nx --project=server package
+      pnpm run --filter server package
   - name: Prepare artifacts
     shell: bash
     run: |
       mkdir -p upload
       file=$(find ./apps/server/out -name '*.tar.xz' -print -quit)
       name=${{ github.ref_name }}
-      cp "$file" "upload/TriliumNextNotes-Server-${name//\//-}-${{ inputs.os }}-${{ inputs.arch }}.tar.xz"
+      cp "$file" "upload/TriliumNotes-Server-${name//\//-}-${{ inputs.os }}-${{ inputs.arch }}.tar.xz"

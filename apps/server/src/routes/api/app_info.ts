@@ -8,7 +8,7 @@ import appInfo from "../../services/app_info.js";
  *     operationId: app-info
  *     externalDocs:
  *       description: Server implementation
- *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/services/app_info.ts
+ *       url: https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/services/app_info.ts
  *     responses:
  *       '200':
  *         description: Installation info

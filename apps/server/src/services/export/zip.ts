@@ -3,7 +3,7 @@
 import dateUtils from "../date_utils.js";
 import path from "path";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition } from "../utils.js";
+import { getContentDisposition, escapeHtml, getResourceDir, isDev } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -25,7 +25,7 @@ import ShareThemeExportProvider from "./zip/share_theme.js";
 import type BNote from "../../becca/entities/bnote.js";
 import { NoteType } from "@triliumnext/commons";
 
-async function exportToZip(taskContext: TaskContext, branch: BBranch, format: ExportFormat, res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
+async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, format: ExportFormat, res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
     if (!["html", "markdown", "share"].includes(format)) {
         throw new ValidationError(`Only 'html' and 'markdown' allowed as export format, '${format}' given`);
     }
@@ -80,6 +80,9 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: Ex
 
     function getDataFileName(type: NoteType | null, mime: string, baseFileName: string, existingFileNames: Record<string, number>): string {
         let fileName = baseFileName.trim();
+        if (!fileName) {
+            fileName = "note";
+        }
 
         // Crop fileName to avoid its length exceeding 30 and prevent cutting into the extension.
         if (fileName.length > 30) {
@@ -313,7 +316,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: Ex
     function saveNote(noteMeta: NoteMeta, filePathPrefix: string) {
         log.info(`Exporting note '${noteMeta.noteId}'`);
 
-        if (!noteMeta.noteId || !noteMeta.title) {
+        if (!noteMeta.noteId || noteMeta.title === undefined) {
             throw new Error("Missing note meta.");
         }
 
@@ -388,28 +391,58 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: Ex
 
     provider.prepareMeta(metaFile);
 
-    for (const noteMeta of Object.values(noteIdToMeta)) {
-        // filter out relations which are not inside this export
-        noteMeta.attributes = (noteMeta.attributes || []).filter((attr) => {
-            if (attr.type !== "relation") {
-                return true;
-            } else if (attr.value in noteIdToMeta) {
-                return true;
-            } else if (attr.value === "root" || attr.value?.startsWith("_")) {
-                // relations to "named" noteIds can be preserved
-                return true;
-            } else {
-                return false;
-            }
-        });
-    }
-
-    if (!rootMeta) {
-        // corner case of disabled export for exported note
-        if ("sendStatus" in res) {
-            res.sendStatus(400);
+    try {
+        for (const noteMeta of Object.values(noteIdToMeta)) {
+            // filter out relations which are not inside this export
+            noteMeta.attributes = (noteMeta.attributes || []).filter((attr) => {
+                if (attr.type !== "relation") {
+                    return true;
+                } else if (attr.value in noteIdToMeta) {
+                    return true;
+                } else if (attr.value === "root" || attr.value?.startsWith("_")) {
+                    // relations to "named" noteIds can be preserved
+                    return true;
+                } else {
+                    return false;
+                }
+            });
         }
-        return;
+
+        if (!rootMeta) {
+            // corner case of disabled export for exported note
+            if ("sendStatus" in res) {
+                res.sendStatus(400);
+            }
+            return;
+        }
+
+        const metaFileJson = JSON.stringify(metaFile, null, "\t");
+
+        archive.append(metaFileJson, { name: "!!!meta.json" });
+
+        saveNote(rootMeta, "");
+
+        const note = branch.getNote();
+        const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected() || "note"}.zip`;
+
+        if (setHeaders && "setHeader" in res) {
+            res.setHeader("Content-Disposition", getContentDisposition(zipFileName));
+            res.setHeader("Content-Type", "application/zip");
+        }
+
+        archive.pipe(res);
+        await archive.finalize();
+        taskContext.taskSucceeded(null);
+    } catch (e: unknown) {
+        const message = `Export failed with error: ${e instanceof Error ? e.message : String(e)}`;
+        log.error(message);
+        taskContext.reportError(message);
+
+        if ("sendStatus" in res) {
+            res.removeHeader("Content-Disposition");
+            res.removeHeader("Content-Type");
+            res.status(500).send(message);
+        }
     }
 
     const metaFileJson = JSON.stringify(metaFile, null, "\t");
@@ -431,12 +464,12 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: Ex
     archive.pipe(res);
     await archive.finalize();
 
-    taskContext.taskSucceeded();
+    taskContext.taskSucceeded(null);
 }
 
 async function exportToZipFile(noteId: string, format: ExportFormat, zipFilePath: string, zipExportOptions?: AdvancedExportOptions) {
     const fileOutputStream = fs.createWriteStream(zipFilePath);
-    const taskContext = new TaskContext("no-progress-reporting");
+    const taskContext = new TaskContext("no-progress-reporting", "export", null);
 
     const note = becca.getNote(noteId);
 

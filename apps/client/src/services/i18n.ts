@@ -3,14 +3,21 @@ import i18next from "i18next";
 import i18nextHttpBackend from "i18next-http-backend";
 import server from "./server.js";
 import type { Locale } from "@triliumnext/commons";
+import { initReactI18next } from "react-i18next";
 
 let locales: Locale[] | null;
+
+/**
+ * A deferred promise that resolves when translations are initialized.
+ */
+export let translationsInitializedPromise = $.Deferred();
 
 export async function initLocale() {
     const locale = (options.get("locale") as string) || "en";
 
     locales = await server.get<Locale[]>("options/locales");
 
+    i18next.use(initReactI18next);
     await i18next.use(i18nextHttpBackend).init({
         lng: locale,
         fallbackLng: "en",
@@ -19,6 +26,8 @@ export async function initLocale() {
         },
         returnEmptyString: false
     });
+
+    translationsInitializedPromise.resolve();
 }
 
 export function getAvailableLocales() {

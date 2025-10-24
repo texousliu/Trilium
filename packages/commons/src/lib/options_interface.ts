@@ -85,6 +85,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     minTocHeadings: number;
     eraseUnusedAttachmentsAfterSeconds: number;
     eraseUnusedAttachmentsAfterTimeScale: number;
+    logRetentionDays: number;
     firstDayOfWeek: number;
     firstWeekOfYear: number;
     minDaysInFirstWeek: number;
@@ -92,9 +93,14 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
 
     // Appearance
     splitEditorOrientation: "horziontal" | "vertical";
+    motionEnabled: boolean;
+    shadowsEnabled: boolean;
+    backdropEffectsEnabled: boolean;
+    smoothScrollEnabled: boolean;
     codeNoteTheme: string;
 
     initialized: boolean;
+    databaseReadonly: boolean;
     isPasswordSet: boolean;
     overrideThemeFonts: boolean;
     spellCheckEnabled: boolean;
@@ -118,6 +124,12 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     editedNotesOpenInRibbon: boolean;
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
+    /** Whether keyboard auto-completion for emojis is triggered when typing `:`. */
+    textNoteEmojiCompletionEnabled: boolean;
+    /** Whether keyboard auto-completion for notes is triggered when typing `@` in text notes (attribute editing is not affected). */
+    textNoteCompletionEnabled: boolean;
+    /** Whether keyboard auto-completion for editing commands is triggered when typing `/`. */
+    textNoteSlashCommandsEnabled: boolean;
     backgroundEffects: boolean;
 
     // Share settings
@@ -127,6 +139,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     // AI/LLM integration options
     aiEnabled: boolean;
     aiProvider: string;
+    aiProviderPrecedence: string; // TODO: Is this still supported?
     aiSystemPrompt: string;
     aiTemperature: string;
     openaiApiKey: string;
@@ -141,7 +154,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     ollamaDefaultModel: string;
     codeOpenAiModel: string;
     aiSelectedProvider: string;
-
+    seenCallToActions: string;
 }
 
 export type OptionNames = keyof OptionDefinitions;

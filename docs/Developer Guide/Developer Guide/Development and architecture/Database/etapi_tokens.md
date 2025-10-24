@@ -1,2 +1,9 @@
 # etapi_tokens
-<figure class="table"><table><thead><tr><th>Column Name</th><th>Data Type</th><th>Nullity</th><th>Default value</th><th>Description</th></tr></thead><tbody><tr><th><code>etapiTokenId</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>A unique ID of the token (e.g. <code>aHmLr5BywvfJ</code>).</td></tr><tr><th><code>name</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>The name of the token, as is set by the user.</td></tr><tr><th><code>tokenHash</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>The token itself.</td></tr><tr><th><code>utcDateCreated</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>Creation date in UTC format (e.g. <code>2023-11-08 16:43:44.204Z</code>)</td></tr><tr><th><code>utcDateModified</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>Modification date in UTC format (e.g. <code>2023-11-08 16:43:44.204Z</code>)</td></tr><tr><th><code>isDeleted</code></th><td>Integer</td><td>Non-null</td><td>0</td><td><code>1</code> if the entity is <a href="../Deleted%20notes.md">deleted</a>, <code>0</code> otherwise.</td></tr></tbody></table></figure>
+| Column Name | Data Type | Nullity | Default value | Description |
+| --- | --- | --- | --- | --- |
+| `etapiTokenId` | Text | Non-null |     | A unique ID of the token (e.g. `aHmLr5BywvfJ`). |
+| `name` | Text | Non-null |     | The name of the token, as is set by the user. |
+| `tokenHash` | Text | Non-null |     | The token itself. |
+| `utcDateCreated` | Text | Non-null |     | Creation date in UTC format (e.g. `2023-11-08 16:43:44.204Z`) |
+| `utcDateModified` | Text | Non-null |     | Modification date in UTC format (e.g. `2023-11-08 16:43:44.204Z`) |
+| `isDeleted` | Integer | Non-null | 0   | `1` if the entity is [deleted](../Deleted%20notes.md), `0` otherwise. |

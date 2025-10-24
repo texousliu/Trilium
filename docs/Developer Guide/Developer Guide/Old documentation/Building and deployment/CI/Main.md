@@ -13,7 +13,7 @@ The main workflow of the CI runs on `develop` branches as well as any branch tha
 
 ## Downloading the artifacts from the main branch
 
-Simply go to the [`develop` branch on GitHub](https://github.com/TriliumNext/Notes) and look at the commit bar:
+Simply go to the [`develop` branch on GitHub](https://github.com/TriliumNext/Trilium) and look at the commit bar:
 
 <figure class="image"><img src="Main_image.png"></figure>
 

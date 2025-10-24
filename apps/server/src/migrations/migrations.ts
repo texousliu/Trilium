@@ -6,6 +6,11 @@
 
 // Migrations should be kept in descending order, so the latest migration is first.
 const MIGRATIONS: (SqlMigration | JsMigration)[] = [
+    // Migrate geo map to collection
+    {
+        version: 233,
+        module: async () => import("./0233__migrate_geo_map_to_collection.js")
+    },
     // Remove embedding tables since LLM embedding functionality has been removed
     {
         version: 232,

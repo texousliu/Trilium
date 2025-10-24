@@ -14,12 +14,13 @@ import type { OptionRow } from "@triliumnext/commons";
 import BNote from "../becca/entities/bnote.js";
 import BBranch from "../becca/entities/bbranch.js";
 import zipImportService from "./import/zip.js";
-import becca_loader from "../becca/becca_loader.js";
 import password from "./encryption/password.js";
 import backup from "./backup.js";
 import eventService from "./events.js";
+import { t } from "i18next";
+import hidden_subtree from "./hidden_subtree.js";
 
-const dbReady = deferred<void>();
+export const dbReady = deferred<void>();
 
 function schemaExists() {
     return !!sql.getValue(/*sql*/`SELECT name FROM sqlite_master
@@ -38,7 +39,11 @@ function isDbInitialized() {
 
 async function initDbConnection() {
     if (!isDbInitialized()) {
-        log.info(`DB not initialized, please visit setup page` + (isElectron ? "" : ` - http://[your-server-host]:${port} to see instructions on how to initialize Trilium.`));
+        if (isElectron) {
+            log.info(t("sql_init.db_not_initialized_desktop"));
+        } else {
+            log.info(t("sql_init.db_not_initialized_server", { port }));
+        }
 
         return;
     }
@@ -83,6 +88,7 @@ async function createInitialDatabase(skipDemoDb?: boolean) {
 
     // We have to import async since options init requires keyboard actions which require translations.
     const optionsInitService = (await import("./options_init.js")).default;
+    const becca_loader = (await import("../becca/becca_loader.js")).default;
 
     sql.transactional(() => {
         log.info("Creating database schema ...");
@@ -115,14 +121,21 @@ async function createInitialDatabase(skipDemoDb?: boolean) {
         password.resetPassword();
     });
 
-    log.info("Importing demo content ...");
+    // Check hidden subtree.
+    // This ensures the existence of system templates, for the demo content.
+    console.log("Checking hidden subtree at first start.");
+    cls.init(() => hidden_subtree.checkHiddenSubtree());
 
-    const dummyTaskContext = new TaskContext("no-progress-reporting", "import", false);
+    // Import demo content.
+    log.info("Importing demo content...");
+
+    const dummyTaskContext = new TaskContext("no-progress-reporting", "importNotes", null);
 
     if (demoFile) {
         await zipImportService.importZip(dummyTaskContext, demoFile, rootNote);
     }
 
+    // Post-demo.
     sql.transactional(() => {
         // this needs to happen after ZIP import,
         // the previous solution was to move option initialization here, but then the important parts of initialization
@@ -197,14 +210,12 @@ function optimize() {
     log.info(`Optimization finished in ${Date.now() - start}ms.`);
 }
 
-function getDbSize() {
+export function getDbSize() {
     return sql.getValue<number>("SELECT page_count * page_size / 1000 as size FROM pragma_page_count(), pragma_page_size()");
 }
 
 function initializeDb() {
     cls.init(initDbConnection);
-
-    log.info(`DB size: ${getDbSize()} KB`);
 
     dbReady.then(() => {
         if (config.General && config.General.noBackup === true) {

@@ -5,13 +5,15 @@ import { BalloonEditor, DecoupledEditor, FindAndReplaceEditing, FindCommand } fr
 import "./translation_overrides.js";
 export { EditorWatchdog } from "ckeditor5";
 export { PREMIUM_PLUGINS } from "./plugins.js";
-export type { EditorConfig, MentionFeed, MentionFeedObjectItem, Node, Position, Element, WatchdogConfig } from "ckeditor5";
+export type { EditorConfig, MentionFeed, MentionFeedObjectItem, ModelNode, ModelPosition, ModelElement, WatchdogConfig } from "ckeditor5";
 export type { TemplateDefinition } from "ckeditor5-premium-features";
 export { default as buildExtraCommands } from "./extra_slash_commands.js";
 
 // Import with sideffects to ensure that type augmentations are present.
 import "@triliumnext/ckeditor5-math";
 import "@triliumnext/ckeditor5-mermaid";
+
+window[Symbol.for("cke distribution")] = "trilium";
 
 /**
  * Short-hand for the CKEditor classes supported by Trilium for text editing.

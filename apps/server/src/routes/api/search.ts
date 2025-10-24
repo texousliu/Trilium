@@ -40,7 +40,7 @@ function searchAndExecute(req: Request) {
 
     const { searchResultNoteIds } = searchService.searchFromNote(note);
 
-    bulkActionService.executeActions(note, searchResultNoteIds);
+    bulkActionService.executeActionsFromNote(note, searchResultNoteIds);
 }
 
 function quickSearch(req: Request) {
@@ -52,10 +52,15 @@ function quickSearch(req: Request) {
         fuzzyAttributeSearch: false
     });
 
-    const resultNoteIds = searchService.findResultsWithQuery(searchString, searchContext).map((sr) => sr.noteId);
+    // Use the same highlighting logic as autocomplete for consistency
+    const searchResults = searchService.searchNotesForAutocomplete(searchString, false);
+    
+    // Extract note IDs for backward compatibility
+    const resultNoteIds = searchResults.map((result) => result.notePath.split("/").pop()).filter(Boolean) as string[];
 
     return {
         searchResultNoteIds: resultNoteIds,
+        searchResults: searchResults,
         error: searchContext.getError()
     };
 }

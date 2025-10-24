@@ -16,7 +16,8 @@ function getItems(): MenuItem<CommandNames>[] {
     return [
         { title: t("link_context_menu.open_note_in_new_tab"), command: "openNoteInNewTab", uiIcon: "bx bx-link-external" },
         { title: t("link_context_menu.open_note_in_new_split"), command: "openNoteInNewSplit", uiIcon: "bx bx-dock-right" },
-        { title: t("link_context_menu.open_note_in_new_window"), command: "openNoteInNewWindow", uiIcon: "bx bx-window-open" }
+        { title: t("link_context_menu.open_note_in_new_window"), command: "openNoteInNewWindow", uiIcon: "bx bx-window-open" },
+        { title: t("link_context_menu.open_note_in_popup"), command: "openNoteInPopup", uiIcon: "bx bx-edit" }
     ];
 }
 
@@ -40,6 +41,8 @@ function handleLinkContextMenuItem(command: string | undefined, notePath: string
         appContext.triggerCommand("openNewNoteSplit", { ntxId, notePath, hoistedNoteId, viewScope });
     } else if (command === "openNoteInNewWindow") {
         appContext.triggerCommand("openInWindow", { notePath, hoistedNoteId, viewScope });
+    } else if (command === "openNoteInPopup") {
+        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath })
     }
 }
 

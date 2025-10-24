@@ -13,7 +13,8 @@ let openTooltipElements: JQuery<HTMLElement>[] = [];
 let dismissTimer: ReturnType<typeof setTimeout>;
 
 function setupGlobalTooltip() {
-    $(document).on("mouseenter", "a", mouseEnterHandler);
+    $(document).on("mouseenter", "a:not(.no-tooltip-preview)", mouseEnterHandler);
+    $(document).on("mouseenter", "[data-href]:not(.no-tooltip-preview)", mouseEnterHandler);
 
     // close any note tooltip after click, this fixes the problem that sometimes tooltips remained on the screen
     $(document).on("click", (e) => {
@@ -167,7 +168,10 @@ async function renderTooltip(note: FNote | null) {
         if (isContentEmpty) {
             classes.push("note-no-content");
         }
-        content = `<h5 class="${classes.join(" ")}"><a href="#${note.noteId}" data-no-context-menu="true">${noteTitleWithPathAsSuffix.prop("outerHTML")}</a></h5>`;
+        content = `\
+            <h5 class="${classes.join(" ")}">
+                <a href="#${note.noteId}" data-no-context-menu="true">${noteTitleWithPathAsSuffix.prop("outerHTML")}</a>
+            </h5>`;
     }
 
     content = `${content}<div class="note-tooltip-attributes">${$renderedAttributes[0].outerHTML}</div>`;
@@ -175,6 +179,7 @@ async function renderTooltip(note: FNote | null) {
         content += $renderedContent[0].outerHTML;
     }
 
+    content += `<a class="open-popup-button" title="${t("note_tooltip.quick-edit")}" href="#${note.noteId}?popup"><span class="bx bx-edit" /></a>`;
     return content;
 }
 

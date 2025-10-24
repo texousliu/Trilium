@@ -7,6 +7,12 @@ import utils from "../../services/utils.js";
 
 const TPL = /*html*/`
 <div class="note-detail-web-view note-detail-printable" style="height: 100%">
+    <style>
+        .note-detail-web-view-content {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
     <div class="note-detail-web-view-help alert alert-warning" style="margin: 50px; padding: 20px 20px 0px 20px;">
         <h4>${t("web_view.web_view")}</h4>
 
@@ -20,7 +26,7 @@ const TPL = /*html*/`
 
 function buildElement() {
     if (!utils.isElectron()) {
-        return `<iframe class="note-detail-web-view-content" sandbox="allow-same-origin allow-scripts"></iframe>`;
+        return `<iframe class="note-detail-web-view-content" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>`;
     } else {
         return `<webview class="note-detail-web-view-content"></webview>`;
     }
@@ -39,8 +45,6 @@ export default class WebViewTypeWidget extends TypeWidget {
         this.$widget = $(TPL);
         this.$noteDetailWebViewHelp = this.$widget.find(".note-detail-web-view-help");
         this.$noteDetailWebViewContent = this.$widget.find(".note-detail-web-view-content");
-
-        window.addEventListener("resize", () => this.setDimensions(), false);
 
         super.doRender();
     }
@@ -62,22 +66,10 @@ export default class WebViewTypeWidget extends TypeWidget {
             this.$noteDetailWebViewContent.hide();
             this.$noteDetailWebViewHelp.show();
         }
-
-        this.setDimensions();
-
-        setTimeout(() => this.setDimensions(), 1000);
     }
 
     cleanup() {
         this.$noteDetailWebViewContent.removeAttr("src");
-    }
-
-    setDimensions() {
-        const $parent = this.$widget;
-
-        this.$noteDetailWebViewContent
-            .height($parent.height() ?? 0)
-            .width($parent.width() ?? 0);
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

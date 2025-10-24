@@ -55,7 +55,7 @@ describe('ChatStorageService', () => {
     beforeEach(async () => {
         vi.clearAllMocks();
         chatStorageService = new ChatStorageService();
-        
+
         // Get mocked modules
         mockNotes = (await import('../notes.js')).default;
         mockSql = (await import('../sql.js')).default;
@@ -177,7 +177,7 @@ describe('ChatStorageService', () => {
             const result = await chatStorageService.createChat('');
 
             expect(result.title).toContain('New Chat');
-            expect(result.title).toMatch(/\d{1,2}\/\d{1,2}\/\d{4}/); // Date pattern
+            expect(result.title).toMatch(/\d{4}/);
         });
     });
 

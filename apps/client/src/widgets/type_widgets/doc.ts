@@ -16,6 +16,10 @@ const TPL = /*html*/`<div class="note-detail-doc note-detail-printable">
             border-radius: 5px;
         }
 
+        .note-detail-doc-content code {
+            font-variant: none;
+        }
+
         .note-detail-doc-content pre:not(.hljs) {
             background-color: var(--accented-background-color);
             border: 1px solid var(--main-border-color);

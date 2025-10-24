@@ -39,7 +39,7 @@ function executeNoteNoException(note: BNote, apiParams: ApiParams) {
     }
 }
 
-function executeBundle(bundle: Bundle, apiParams: ApiParams = {}) {
+export function executeBundle(bundle: Bundle, apiParams: ApiParams = {}) {
     if (!apiParams.startNote) {
         // this is the default case, the only exception is when we want to preserve frontend startNote
         apiParams.startNote = bundle.note;
@@ -140,7 +140,7 @@ function getScriptBundleForFrontend(note: BNote, script?: string, params?: Scrip
     return bundle;
 }
 
-function getScriptBundle(note: BNote, root: boolean = true, scriptEnv: string | null = null, includedNoteIds: string[] = [], overrideContent: string | null = null): Bundle | undefined {
+export function getScriptBundle(note: BNote, root: boolean = true, scriptEnv: string | null = null, includedNoteIds: string[] = [], overrideContent: string | null = null): Bundle | undefined {
     if (!note.isContentAvailable()) {
         return;
     }

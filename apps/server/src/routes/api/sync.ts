@@ -12,12 +12,12 @@ import syncOptions from "../../services/sync_options.js";
 import utils, { safeExtractMessageAndStackFromError } from "../../services/utils.js";
 import ws from "../../services/ws.js";
 import type { Request } from "express";
-import type { EntityChange } from "../../services/entity_changes_interface.js";
 import ValidationError from "../../errors/validation_error.js";
 import consistencyChecksService from "../../services/consistency_checks.js";
 import { t } from "i18next";
+import { SyncTestResponse, type EntityChange } from "@triliumnext/commons";
 
-async function testSync() {
+async function testSync(): Promise<SyncTestResponse> {
     try {
         if (!syncOptions.isSyncSetup()) {
             return { success: false, message: t("test_sync.not-configured") };
@@ -34,7 +34,7 @@ async function testSync() {
         const [errMessage] = safeExtractMessageAndStackFromError(e);
         return {
             success: false,
-            error: errMessage
+            message: errMessage
         };
     }
 }
@@ -95,7 +95,7 @@ function forceFullSync() {
  *     operationId: sync-changed
  *     externalDocs:
  *       description: Server implementation
- *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/api/sync.ts
+ *       url: https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/routes/api/sync.ts
  *     parameters:
  *       - in: query
  *         name: instanceId
@@ -214,7 +214,7 @@ const partialRequests: Record<
  *     operationId: sync-update
  *     externalDocs:
  *       description: Server implementation
- *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/api/sync.ts
+ *       url: https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/routes/api/sync.ts
  *     parameters:
  *       - in: header
  *         name: pageCount

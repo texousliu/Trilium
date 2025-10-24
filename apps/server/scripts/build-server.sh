@@ -48,7 +48,7 @@ chmod 755 $BUILD_DIR/trilium.sh
 
 VERSION=`jq -r ".version" package.json`
 
-ARCHIVE_NAME="TriliumNextNotes-Server-${VERSION}-linux-${ARCH}"
+ARCHIVE_NAME="TriliumNotes-Server-${VERSION}-linux-${ARCH}"
 echo "Creating Archive $ARCHIVE_NAME..."
 
 mkdir $DIST_DIR

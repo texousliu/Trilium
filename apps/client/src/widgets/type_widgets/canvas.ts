@@ -6,6 +6,9 @@ import type { LibraryItem } from "@excalidraw/excalidraw/types";
 import type { Theme } from "@excalidraw/excalidraw/element/types";
 import type Canvas from "./canvas_el.js";
 import { CanvasContent } from "./canvas_el.js";
+import { renderReactWidget } from "../react/react_utils.jsx";
+import SpacedUpdate from "../../services/spaced_update.js";
+import protected_session_holder from "../../services/protected_session_holder.js";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -127,6 +130,25 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         //every libraryitem is saved on its own json file in the attachments of the note.
         this.librarycache = [];
         this.attachmentMetadata = [];
+
+        // TODO: We are duplicating the logic of note_detail.ts because it switches note ID mid-save, causing overwrites.
+        // This problem will get solved by itself once type widgets will be rewritten in React without the use of dangerous singletons.
+        this.spacedUpdate = new SpacedUpdate(async () => {
+            if (!this.noteContext) return;
+
+            const { note } = this.noteContext;
+            if (!note) return;
+
+            const { noteId } = note;
+            const data = await this.getData();
+
+            // for read only notes
+            if (data === undefined) return;
+
+            protected_session_holder.touchProtectedSessionIfNecessary(note);
+            await server.put(`notes/${noteId}/data`, data, this.componentId);
+            this.dataSaved();
+        });
     }
 
     static getType() {
@@ -166,7 +188,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             onChange: () => this.onChangeHandler(),
             viewModeEnabled: options.is("databaseReadonly"),
             zenModeEnabled: false,
-            gridModeEnabled: false,
             isCollaborating: false,
             detectScroll: false,
             handleKeyboardGlobally: false,
@@ -185,7 +206,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         });
 
         await setupFonts();
-        this.canvasInstance.renderCanvas(renderElement);
+        const canvasEl = renderReactWidget(this, this.canvasInstance.createCanvasElement())[0];
+        renderElement.replaceChildren(canvasEl);
     }
 
     /**
@@ -356,6 +378,9 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         if (options.is("databaseReadonly")) {
             return;
         }
+
+        if (!this.canvasInstance.isInitialized()) return;
+
         // changeHandler is called upon any tiny change in excalidraw. button clicked, hover, etc.
         // make sure only when a new element is added, we actually save something.
         const isNewSceneVersion = this.canvasInstance.isNewSceneVersion();
@@ -387,7 +412,7 @@ async function setupFonts() {
     if (!glob.isDev) {
         path = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
     } else {
-        path = (await import("../../../node_modules/@excalidraw/excalidraw/dist/prod/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2?url")).default;
+        path = (await import("../../../../../node_modules/@excalidraw/excalidraw/dist/prod/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2?url")).default;
         let pathComponents = path.split("/");
         path = pathComponents.slice(0, pathComponents.length - 2).join("/");
     }

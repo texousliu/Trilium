@@ -1,4 +1,4 @@
-import { Command, Element, LinkEditing, Plugin, toWidget, viewToModelPositionOutsideModelElement, Widget } from "ckeditor5";
+import { Command, ModelElement, LinkEditing, Plugin, toWidget, viewToModelPositionOutsideModelElement, Widget } from "ckeditor5";
 
 export default class ReferenceLink extends Plugin {
 	static get requires() {
@@ -32,7 +32,7 @@ class ReferenceLinkCommand extends Command {
 	override refresh() {
 		const model = this.editor.model;
 		const selection = model.document.selection;
-        this.isEnabled = selection.focus !== null && model.schema.checkChild(selection.focus.parent as Element, 'reference');
+        this.isEnabled = selection.focus !== null && model.schema.checkChild(selection.focus.parent as ModelElement, 'reference');
 	}
 }
 

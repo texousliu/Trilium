@@ -1,2 +1,6 @@
 # recent_notes
-<figure class="table"><table><thead><tr><th>Column Name</th><th>Data Type</th><th>Nullity</th><th>Default value</th><th>Description</th></tr></thead><tbody><tr><th><code>noteId</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>Unique ID of the note (e.g. <code>yRRTLlqTbGoZ</code>).</td></tr><tr><th><code>notePath</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>The path (IDs) to the <a href="notes.md">note</a> from root to the note itself, separated by slashes.</td></tr><tr><th><code>utcDateCreated</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>Creation date in UTC format (e.g. <code>2023-11-08 16:43:44.204Z</code>)</td></tr></tbody></table></figure>
+| Column Name | Data Type | Nullity | Default value | Description |
+| --- | --- | --- | --- | --- |
+| `noteId` | Text | Non-null |     | Unique ID of the note (e.g. `yRRTLlqTbGoZ`). |
+| `notePath` | Text | Non-null |     | The path (IDs) to the [note](notes.md) from root to the note itself, separated by slashes. |
+| `utcDateCreated` | Text | Non-null |     | Creation date in UTC format (e.g. `2023-11-08 16:43:44.204Z`) |

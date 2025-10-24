@@ -1,6 +1,5 @@
 import server from "../services/server.js";
 import noteAttributeCache from "../services/note_attribute_cache.js";
-import ws from "../services/ws.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
@@ -27,7 +26,6 @@ const NOTE_TYPE_ICONS = {
     doc: "bx bxs-file-doc",
     contentWidget: "bx bxs-widget",
     mindMap: "bx bx-sitemap",
-    geoMap: "bx bx-map-alt",
     aiChat: "bx bx-bot"
 };
 
@@ -36,7 +34,7 @@ const NOTE_TYPE_ICONS = {
  * end user. Those types should be used only for checking against, they are
  * not for direct use.
  */
-export type NoteType = "file" | "image" | "search" | "noteMap" | "launcher" | "doc" | "contentWidget" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "book" | "webView" | "code" | "mindMap" | "geoMap" | "aiChat";
+export type NoteType = "file" | "image" | "search" | "noteMap" | "launcher" | "doc" | "contentWidget" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "book" | "webView" | "code" | "mindMap" | "aiChat";
 
 export interface NotePathRecord {
     isArchived: boolean;
@@ -65,7 +63,7 @@ export interface NoteMetaData {
 /**
  * Note is the main node and concept in Trilium.
  */
-class FNote {
+export default class FNote {
     private froca: Froca;
 
     noteId!: string;
@@ -255,6 +253,22 @@ class FNote {
 
     getChildNoteIds() {
         return this.children;
+    }
+
+    async getSubtreeNoteIds(includeArchived = false) {
+        let noteIds: (string | string[])[] = [];
+        for (const child of await this.getChildNotes()) {
+            if (child.isArchived && !includeArchived) continue;
+
+            noteIds.push(child.noteId);
+            noteIds.push(await child.getSubtreeNoteIds(includeArchived));
+        }
+        return noteIds.flat();
+    }
+
+    async getSubtreeNotes() {
+        const noteIds = await this.getSubtreeNoteIds();
+        return (await this.froca.getNotes(noteIds));
     }
 
     async getChildNotes() {
@@ -571,7 +585,7 @@ class FNote {
         let childBranches = this.getChildBranches();
 
         if (!childBranches) {
-            ws.logError(`No children for '${this.noteId}'. This shouldn't happen.`);
+            console.error(`No children for '${this.noteId}'. This shouldn't happen.`);
             return [];
         }
 
@@ -892,8 +906,8 @@ class FNote {
         return this.getBlob();
     }
 
-    async getBlob() {
-        return await this.froca.getBlob("notes", this.noteId);
+    getBlob() {
+        return this.froca.getBlob("notes", this.noteId);
     }
 
     toString() {
@@ -1007,6 +1021,14 @@ class FNote {
         return this.noteId.startsWith("_options");
     }
 
+    isTriliumSqlite() {
+        return this.mime === "text/x-sqlite;schema=trilium";
+    }
+
+    isTriliumScript() {
+        return this.mime.startsWith("application/javascript");
+    }
+
     /**
      * Provides note's date metadata.
      */
@@ -1014,5 +1036,3 @@ class FNote {
         return await server.get<NoteMetaData>(`notes/${this.noteId}/metadata`);
     }
 }
-
-export default FNote;

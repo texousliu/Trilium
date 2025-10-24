@@ -22,7 +22,8 @@ const TPL = /*html*/`
             padding: 0;
         }
 
-        .note-split.full-content-width .note-detail-file[data-preview-type="video"] {
+        .note-detail.full-height .note-detail-file[data-preview-type="pdf"],
+        .note-detail.full-height .note-detail-file[data-preview-type="video"] {
             overflow: hidden;
         }
 

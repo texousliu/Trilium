@@ -1,24 +1,11 @@
 import utils from "../../services/utils.js";
-import contextMenu from "../../menus/context_menu.js";
+import contextMenu, { MenuCommandItem } from "../../menus/context_menu.js";
 import treeService from "../../services/tree.js";
 import ButtonFromNoteWidget from "./button_from_note.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandNames } from "../../components/app_context.js";
-
-interface WebContents {
-    history: string[];
-    getActiveIndex(): number;
-    clearHistory(): void;
-    canGoBack(): boolean;
-    canGoForward(): boolean;
-    goToIndex(index: string): void;
-}
-
-interface ContextMenuItem {
-    title: string;
-    idx: string;
-    uiIcon: string;
-}
+import type { WebContents } from "electron";
+import link from "../../services/link.js";
 
 export default class HistoryNavigationButton extends ButtonFromNoteWidget {
     private webContents?: WebContents;
@@ -51,28 +38,24 @@ export default class HistoryNavigationButton extends ButtonFromNoteWidget {
     async showContextMenu(e: JQuery.ContextMenuEvent) {
         e.preventDefault();
 
-        if (!this.webContents || this.webContents.history.length < 2) {
+        if (!this.webContents || this.webContents.navigationHistory.length() < 2) {
             return;
         }
 
-        let items: ContextMenuItem[] = [];
+        let items: MenuCommandItem<string>[] = [];
 
-        const activeIndex = this.webContents.getActiveIndex();
-        const history = this.webContents.history;
+        const history = this.webContents.navigationHistory.getAllEntries();
+        const activeIndex = this.webContents.navigationHistory.getActiveIndex();
 
         for (const idx in history) {
-            const url = history[idx];
-            const parts = url.split("#");
-            if (parts.length < 2) continue;
-
-            const notePathWithTab = parts[1];
-            const notePath = notePathWithTab.split("-")[0];
+            const { notePath } = link.parseNavigationStateFromUrl(history[idx].url);
+            if (!notePath) continue;
 
             const title = await treeService.getNotePathTitle(notePath);
 
             items.push({
                 title,
-                idx,
+                command: idx,
                 uiIcon:
                     parseInt(idx) === activeIndex
                         ? "bx bx-radio-circle-marked" // compare with type coercion!
@@ -92,9 +75,10 @@ export default class HistoryNavigationButton extends ButtonFromNoteWidget {
             x: e.pageX,
             y: e.pageY,
             items,
-            selectMenuItemHandler: (item: any) => {
-                if (item && item.idx && this.webContents) {
-                    this.webContents.goToIndex(item.idx);
+            selectMenuItemHandler: (item: MenuCommandItem<string>) => {
+                if (item && item.command && this.webContents) {
+                    const idx = parseInt(item.command, 10);
+                    this.webContents.navigationHistory.goToIndex(idx);
                 }
             }
         });

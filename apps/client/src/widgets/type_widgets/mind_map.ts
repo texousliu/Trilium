@@ -1,11 +1,12 @@
 import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
-import type { MindElixirCtor, MindElixirInstance } from "mind-elixir";
+import type { MindElixirInstance } from "mind-elixir";
 import nodeMenu from "@mind-elixir/node-menu";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 
 // allow node-menu plugin css to be bundled by webpack
+import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 
 const NEW_TOPIC_NAME = "";
@@ -28,7 +29,7 @@ const TPL = /*html*/`
         .map-container .node-menu {
             position: absolute;
             top: 60px;
-            right: 20px;
+            inset-inline-end: 20px;
             bottom: 80px;
             overflow: auto;
             background: var(--panel-bgcolor);

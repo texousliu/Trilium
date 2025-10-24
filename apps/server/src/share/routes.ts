@@ -8,8 +8,8 @@ import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
 import type SNote from "./shaca/entities/snote.js";
 import type SAttachment from "./shaca/entities/sattachment.js";
-import utils from "../services/utils.js";
 import { renderNoteContent } from "./content_renderer.js";
+import utils from "../services/utils.js";
 
 function addNoIndexHeader(note: SNote, res: Response) {
     if (note.isLabelTruthy("shareDisallowRobotIndexing")) {

@@ -8,6 +8,7 @@ import appContext, { type CommandNames, type CommandListenerData, type EventData
 import froca from "../services/froca.js";
 import attributeService from "../services/attributes.js";
 import type NoteContext from "../components/note_context.js";
+import { setupHorizontalScrollViaWheel } from "./widget_utils.js";
 
 const isDesktop = utils.isDesktop();
 
@@ -154,8 +155,8 @@ const TAB_ROW_TPL = `
     }
 
     .tab-row-widget .note-tab[is-mini] .note-tab-wrapper {
-        padding-left: 2px;
-        padding-right: 2px;
+        padding-inline-start: 2px;
+        padding-inline-end: 2px;
     }
 
     .tab-row-widget .note-tab .note-tab-title {
@@ -167,12 +168,11 @@ const TAB_ROW_TPL = `
 
     .tab-row-widget .note-tab .note-tab-icon {
         position: relative;
-        top: -1px;
-        padding-right: 3px;
+        padding-inline-end: 3px;
     }
 
     .tab-row-widget .note-tab[is-small] .note-tab-title {
-        margin-left: 0;
+        margin-inline-start: 0;
     }
 
     .tab-row-widget .note-tab .note-tab-drag-handle {
@@ -240,14 +240,14 @@ const TAB_ROW_TPL = `
     }
 
     .tab-row-widget .note-tab[is-smaller] .note-tab-close {
-        margin-left: auto;
+        margin-inline-start: auto;
     }
     .tab-row-widget .note-tab[is-mini]:not([active]) .note-tab-close {
         display: none;
     }
     .tab-row-widget .note-tab[is-mini][active] .note-tab-close {
-        margin-left: auto;
-        margin-right: auto;
+        margin-inline-start: auto;
+        margin-inline-end: auto;
     }
     @-moz-keyframes note-tab-was-just-added {
         to {
@@ -355,11 +355,11 @@ export default class TabRowWidget extends BasicWidget {
                     { title: t("tab_row.close_right_tabs"), command: "closeRightTabs", uiIcon: "bx bx-empty", enabled: appContext.tabManager.noteContexts?.at(-1)?.ntxId !== ntxId },
                     { title: t("tab_row.close_all_tabs"), command: "closeAllTabs", uiIcon: "bx bx-empty" },
 
-                    { title: "----" },
+                    { kind: "separator" },
 
                     { title: t("tab_row.reopen_last_tab"), command: "reopenLastTab", uiIcon: "bx bx-undo", enabled: appContext.tabManager.recentlyClosedTabs.length !== 0 },
 
-                    { title: "----" },
+                    { kind: "separator" },
 
                     { title: t("tab_row.move_tab_to_new_window"), command: "moveTabToNewWindow", uiIcon: "bx bx-window-open" },
                     { title: t("tab_row.copy_tab_to_new_window"), command: "copyTabToNewWindow", uiIcon: "bx bx-empty" }
@@ -386,15 +386,7 @@ export default class TabRowWidget extends BasicWidget {
     };
 
     setupScrollEvents() {
-        this.$tabScrollingContainer.on('wheel', (event) => {
-            const wheelEvent = event.originalEvent as WheelEvent;
-            if (utils.isCtrlKey(event) || event.altKey || event.shiftKey) {
-                return;
-            }
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            event.currentTarget.scrollLeft += wheelEvent.deltaY + wheelEvent.deltaX;
-        });
+        setupHorizontalScrollViaWheel(this.$tabScrollingContainer);
 
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-210));
         this.$scrollButtonRight[0].addEventListener('click', () => this.scrollTabContainer(210));
@@ -508,6 +500,9 @@ export default class TabRowWidget extends BasicWidget {
         position -= MARGIN_WIDTH; // the last margin should not be applied
 
         const anchorPosition = position;
+        if (glob.isRtl) {
+            tabPositions.reverse();
+        }
 
         return { tabPositions, anchorPosition };
     }

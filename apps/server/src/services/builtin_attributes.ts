@@ -45,6 +45,8 @@ export default [
     { type: "label", name: "pageSize" },
     { type: "label", name: "viewType" },
     { type: "label", name: "mapRootNoteId" },
+    { type: "label", name: "mapExcludeRelation" },
+    { type: "label", name: "mapIncludeRelation" },
     { type: "label", name: "bookmarkFolder" },
     { type: "label", name: "sorted" },
     { type: "label", name: "sortDirection" },
@@ -64,6 +66,7 @@ export default [
     { type: "label", name: "shareDisallowRobotIndexing" },
     { type: "label", name: "shareCredentials" },
     { type: "label", name: "shareIndex" },
+    { type: "label", name: "shareHtmlLocation" },
     { type: "label", name: "displayRelations" },
     { type: "label", name: "hideRelations" },
     { type: "label", name: "titleTemplate", isDangerous: true },
@@ -103,6 +106,7 @@ export default [
     { type: "relation", name: "renderNote", isDangerous: true },
     { type: "relation", name: "shareCss" },
     { type: "relation", name: "shareJs" },
+    { type: "relation", name: "shareHtml" },
     { type: "relation", name: "shareTemplate" },
     { type: "relation", name: "shareFavicon" }
 ];

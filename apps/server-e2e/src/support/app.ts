@@ -9,6 +9,10 @@ interface GotoOpts {
 
 const BASE_URL = "http://127.0.0.1:8082";
 
+interface DropdownLocator extends Locator {
+    selectOptionByText: (text: string) => Promise<void>;
+}
+
 export default class App {
     readonly page: Page;
     readonly context: BrowserContext;
@@ -65,9 +69,12 @@ export default class App {
     async goToNoteInNewTab(noteTitle: string) {
         const autocomplete = this.currentNoteSplit.locator(".note-autocomplete");
         await autocomplete.fill(noteTitle);
-        await expect(this.currentNoteSplit.locator(".note-detail-empty-results")).toContainText(noteTitle);
-        await autocomplete.press("ArrowDown");
-        await autocomplete.press("Enter");
+
+        const resultsSelector = this.currentNoteSplit.locator(".note-detail-empty-results");
+        await expect(resultsSelector).toContainText(noteTitle);
+        await resultsSelector.locator(".aa-suggestion", { hasText: noteTitle })
+            .nth(1) // Select the second one, as the first one is "Create a new note"
+            .click();
     }
 
     async goToSettings() {
@@ -154,4 +161,14 @@ export default class App {
             })
         ).toBeOK();
     }
+
+    dropdown(_locator: Locator): DropdownLocator {
+        let locator = _locator as DropdownLocator;
+        locator.selectOptionByText = async (text: string) => {
+            await locator.locator(".dropdown-toggle").click();
+            await locator.locator(".dropdown-item", { hasText: text }).click();
+        };
+        return locator;
+    }
+
 }

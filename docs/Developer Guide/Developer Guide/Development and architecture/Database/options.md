@@ -1,2 +1,7 @@
 # options
-<figure class="table"><table><thead><tr><th>Column Name</th><th>Data Type</th><th>Nullity</th><th>Default value</th><th>Description</th></tr></thead><tbody><tr><th><code>name</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>The name of option (e.g. <code>maxContentWidth</code>)</td></tr><tr><th><code>value</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>The value of the option.</td></tr><tr><th><code>isSynced</code></th><td>Integer</td><td>Non-null</td><td>0</td><td><code>0</code> if the option is not synchronized and thus can differ between clients, <code>1</code> if the option is synchronized.</td></tr><tr><th><code>utcDateModified</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>Modification date in UTC format (e.g. <code>2023-11-08 16:43:44.204Z</code>)</td></tr></tbody></table></figure>
+| Column Name | Data Type | Nullity | Default value | Description |
+| --- | --- | --- | --- | --- |
+| `name` | Text | Non-null |     | The name of option (e.g. `maxContentWidth`) |
+| `value` | Text | Non-null |     | The value of the option. |
+| `isSynced` | Integer | Non-null | 0   | `0` if the option is not synchronized and thus can differ between clients, `1` if the option is synchronized. |
+| `utcDateModified` | Text | Non-null |     | Modification date in UTC format (e.g. `2023-11-08 16:43:44.204Z`) |

@@ -32,7 +32,7 @@ jobs:
           - dockerfile: Dockerfile
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set IMAGE_NAME to lowercase
         run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
@@ -44,7 +44,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: "pnpm"
@@ -82,7 +82,7 @@ jobs:
           require-healthy: true
 
       - name: Run Playwright tests
-        run: TRILIUM_DOCKER=1 TRILIUM_PORT=8082 pnpm exec nx run server-e2e:e2e
+        run: TRILIUM_DOCKER=1 TRILIUM_PORT=8082 pnpm --filter=server-e2e e2e
 
       - name: Upload Playwright trace
         if: failure()
@@ -141,10 +141,10 @@ jobs:
         run: echo "TEST_TAG=${TEST_TAG,,}" >> $GITHUB_ENV
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'pnpm'
@@ -152,11 +152,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run the TypeScript build
-        run: pnpm run server:build
-
       - name: Update build info
         run: pnpm run chore:update-build-info
+
+      - name: Run the TypeScript build
+        run: pnpm run server:build
 
       - name: Docker meta
         id: meta
@@ -211,7 +211,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ env.PLATFORM_PAIR }}
+          name: digests-${{ env.PLATFORM_PAIR }}-${{ matrix.dockerfile }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
@@ -223,7 +223,7 @@ jobs:
       - build
     steps:
       - name: Download digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: /tmp/digests
           pattern: digests-*

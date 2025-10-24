@@ -91,5 +91,5 @@ async function start() {
 }
 
 // @TriliumNextTODO sqlInit.dbReady never seems to resolve so program hangs
-// see https://github.com/TriliumNext/Notes/issues/1020
+// see https://github.com/TriliumNext/Trilium/issues/1020
 sqlInit.dbReady.then(cls.wrap(start)).catch((err) => console.error(err));

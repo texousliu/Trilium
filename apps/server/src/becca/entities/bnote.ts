@@ -14,12 +14,12 @@ import TaskContext from "../../services/task_context.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import eventService from "../../services/events.js";
-import type { AttachmentRow, AttributeType, NoteRow, NoteType, RevisionRow } from "@triliumnext/commons";
+import type { AttachmentRow, AttributeType, CloneResponse, NoteRow, NoteType, RevisionRow } from "@triliumnext/commons";
 import type BBranch from "./bbranch.js";
 import BAttribute from "./battribute.js";
 import type { NotePojo } from "../becca-interface.js";
 import searchService from "../../services/search/services/search.js";
-import cloningService, { type CloneResponse } from "../../services/cloning.js";
+import cloningService from "../../services/cloning.js";
 import noteService from "../../services/notes.js";
 import handlers from "../../services/handlers.js";
 dayjs.extend(utc);
@@ -1512,7 +1512,7 @@ class BNote extends AbstractBeccaEntity<BNote> {
      *
      * @param deleteId - optional delete identified
      */
-    deleteNote(deleteId: string | null = null, taskContext: TaskContext | null = null) {
+    deleteNote(deleteId: string | null = null, taskContext: TaskContext<"deleteNotes"> | null = null) {
         if (this.isDeleted) {
             return;
         }
@@ -1522,7 +1522,7 @@ class BNote extends AbstractBeccaEntity<BNote> {
         }
 
         if (!taskContext) {
-            taskContext = new TaskContext("no-progress-reporting");
+            taskContext = new TaskContext("no-progress-reporting", "deleteNotes", null);
         }
 
         // needs to be run before branches and attributes are deleted and thus attached relations disappear
@@ -1778,6 +1778,41 @@ class BNote extends AbstractBeccaEntity<BNote> {
         return this.noteId;
     }
 
+    /**
+     * Return an attribute by it's attributeId.  Requires the attribute cache to be available.
+     * @param attributeId - the id of the attribute owned by this note
+     * @returns - the BAttribute with the given id or undefined if not found.
+     */
+    getAttributeById(attributeId : string): BAttribute | undefined {
+        this.__ensureAttributeCacheIsAvailable();
+
+        if (!this.__attributeCache) {
+            throw new Error("Attribute cache not available.");
+        }
+
+        return this.__attributeCache.find((attr) => attr.attributeId === attributeId);
+    }
+
+    /**
+     * Sets an attribute's value by it's attributeId.
+     * @param attributeId - the id of the attribute owned by this note
+     * @param value - the new value to replace
+     */
+    setAttributeValueById(attributeId : string, value? : string) {
+        const attributes = this.getOwnedAttributes();
+        const attr = attributes.find((attr) => attr.attributeId === attributeId);
+
+        value = value?.toString() || "";
+
+        if (attr) {
+            if (attr.value !== value) {
+                attr.value = value;
+                attr.save();
+            }
+        } else {
+            throw new Error(`Attribute with id ${attributeId} not found.`);
+        }
+    }
 }
 
 export default BNote;

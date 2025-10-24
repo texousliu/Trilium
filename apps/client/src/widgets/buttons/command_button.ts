@@ -1,9 +1,10 @@
+import { ActionKeyboardShortcut } from "@triliumnext/commons";
 import type { CommandNames } from "../../components/app_context.js";
-import keyboardActionsService, { type Action } from "../../services/keyboard_actions.js";
+import keyboardActionsService from "../../services/keyboard_actions.js";
 import AbstractButtonWidget, { type AbstractButtonWidgetSettings } from "./abstract_button.js";
 import type { ButtonNoteIdProvider } from "./button_from_note.js";
 
-let actions: Action[];
+let actions: ActionKeyboardShortcut[];
 
 keyboardActionsService.getActions().then((as) => (actions = as));
 
@@ -49,7 +50,7 @@ export default class CommandButtonWidget extends AbstractButtonWidget<CommandBut
 
         const action = actions.find((act) => act.actionName === this._command);
 
-        if (action && action.effectiveShortcuts.length > 0) {
+        if (action?.effectiveShortcuts && action.effectiveShortcuts.length > 0) {
             return `${title} (${action.effectiveShortcuts.join(", ")})`;
         } else {
             return title;

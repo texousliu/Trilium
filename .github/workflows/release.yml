@@ -30,18 +30,30 @@ jobs:
             image: win-signing
             shell: cmd
             forge_platform: win32
+        # Exclude ARM64 Linux from default matrix to use native runner
+        exclude:
+          - arch: arm64
+            os:
+              name: linux
+        # Add ARM64 Linux with native ubuntu-24.04-arm runner for better-sqlite3 compatibility
+        include:
+          - arch: arm64
+            os:
+              name: linux
+              image: ubuntu-24.04-arm
+              shell: bash
+              forge_platform: linux
     runs-on: ${{ matrix.os.image }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
       - name: Run the build
         uses: ./.github/actions/build-electron
         with:
@@ -58,6 +70,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           WINDOWS_SIGN_EXECUTABLE: ${{ vars.WINDOWS_SIGN_EXECUTABLE }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGN_KEY }}
 
       - name: Upload the artifact
         uses: actions/upload-artifact@v4
@@ -78,7 +91,7 @@ jobs:
             runs-on: ubuntu-24.04-arm
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run the build
         uses: ./.github/actions/build-server
@@ -101,26 +114,26 @@ jobs:
     steps:
       - run: mkdir upload
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           sparse-checkout: |
             docs/Release Notes
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           merge-multiple: true
           pattern: release-*
           path: upload
 
       - name: Publish stable release
-        uses: softprops/action-gh-release@v2.3.2
+        uses: softprops/action-gh-release@v2.4.1
         with:
           draft: false
           body_path: docs/Release Notes/Release Notes/${{ github.ref_name }}.md
           fail_on_unmatched_files: true
           files: upload/*.*
-          discussion_category_name: Announcements
+          discussion_category_name: Releases
           make_latest: ${{ !contains(github.ref, 'rc') }}
           prerelease: ${{ contains(github.ref, 'rc') }}
           token: ${{ secrets.RELEASE_PAT }}

@@ -10,38 +10,16 @@ import bundleService from "../services/bundle.js";
 import froca from "../services/froca.js";
 import linkService from "../services/link.js";
 import { t } from "../services/i18n.js";
-import type FNote from "../entities/fnote.js";
-
-// TODO: Move somewhere else nicer.
-export type SqlExecuteResults = string[][][];
-
-// TODO: Deduplicate with server.
-interface SqlExecuteResponse {
-    success: boolean;
-    error?: string;
-    results: SqlExecuteResults;
-}
-
-// TODO: Deduplicate with server.
-interface CreateChildrenResponse {
-    note: FNote;
-}
+import { CreateChildrenResponse, SqlExecuteResponse } from "@triliumnext/commons";
 
 export default class Entrypoints extends Component {
     constructor() {
         super();
-
-        if (jQuery.hotkeys) {
-            // hot keys are active also inside inputs and content editables
-            jQuery.hotkeys.options.filterInputAcceptingElements = false;
-            jQuery.hotkeys.options.filterContentEditable = false;
-            jQuery.hotkeys.options.filterTextInputs = false;
-        }
     }
 
     openDevToolsCommand() {
         if (utils.isElectron()) {
-            utils.dynamicRequire("@electron/remote").getCurrentWindow().toggleDevTools();
+            utils.dynamicRequire("@electron/remote").getCurrentWindow().webContents.toggleDevTools();
         }
     }
 
@@ -113,7 +91,9 @@ export default class Entrypoints extends Component {
             if (win.isFullScreenable()) {
                 win.setFullScreen(!win.isFullScreen());
             }
-        } // outside of electron this is handled by the browser
+        } else {
+            document.documentElement.requestFullscreen();
+        }
     }
 
     reloadFrontendAppCommand() {
@@ -129,7 +109,7 @@ export default class Entrypoints extends Component {
         if (utils.isElectron()) {
             // standard JS version does not work completely correctly in electron
             const webContents = utils.dynamicRequire("@electron/remote").getCurrentWebContents();
-            const activeIndex = parseInt(webContents.navigationHistory.getActiveIndex());
+            const activeIndex = webContents.navigationHistory.getActiveIndex();
 
             webContents.goToIndex(activeIndex - 1);
         } else {
@@ -141,7 +121,7 @@ export default class Entrypoints extends Component {
         if (utils.isElectron()) {
             // standard JS version does not work completely correctly in electron
             const webContents = utils.dynamicRequire("@electron/remote").getCurrentWebContents();
-            const activeIndex = parseInt(webContents.navigationHistory.getActiveIndex());
+            const activeIndex = webContents.navigationHistory.getActiveIndex();
 
             webContents.goToIndex(activeIndex + 1);
         } else {

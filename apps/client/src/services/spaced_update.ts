@@ -51,6 +51,14 @@ export default class SpacedUpdate {
         this.lastUpdated = Date.now();
     }
 
+    /**
+     * Sets the update interval for the spaced update.
+     * @param interval The update interval in milliseconds.
+     */
+    setUpdateInterval(interval: number) {
+        this.updateInterval = interval;
+    }
+
     triggerUpdate() {
         if (!this.changed) {
             return;

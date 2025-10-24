@@ -24,7 +24,12 @@ Clicking on an image will reveal a popup with multiple options:
 
 The first set of options configure the alignment are, in order:
 
-<figure class="table"><table><thead><tr><th>Icon</th><th>Option</th><th>Preview</th><th>Description</th></tr></thead><tbody><tr><td><img src="5_Images_image.png"></td><td>Inline</td><td><img src="1_Images_image.png"></td><td>As the name suggests, the name can be put inside a paragraph and moved around similarly as if it was a block of text. Use drag &amp; drop or cut-paste to move it around.</td></tr><tr><td><img src="10_Images_image.png"></td><td>Centered image</td><td><img src="2_Images_image.png"></td><td>The image will be displayed as a block and centered, not allowing text in either the left or right of it.</td></tr><tr><td><img src="4_Images_image.png"></td><td>Wrap text</td><td><img src="7_Images_image.png"></td><td>The image will be displayed to the left or the right of the text.</td></tr><tr><td><img src="Images_image.png"></td><td>Block align</td><td><img src="3_Images_image.png"></td><td>Similarly to <em>Centered image</em>, the image will be displayed as a block and aligned either to the left or to the right, but not allowing text to flow on either of its sides.</td></tr></tbody></table></figure>
+| Icon | Option | Preview | Description |
+| --- | --- | --- | --- |
+| ![](5_Images_image.png) | Inline | ![](1_Images_image.png) | As the name suggests, the name can be put inside a paragraph and moved around similarly as if it was a block of text. Use drag & drop or cut-paste to move it around. |
+| ![](10_Images_image.png) | Centered image | ![](2_Images_image.png) | The image will be displayed as a block and centered, not allowing text in either the left or right of it. |
+| ![](4_Images_image.png) | Wrap text | ![](7_Images_image.png) | The image will be displayed to the left or the right of the text. |
+| ![](Images_image.png) | Block align | ![](3_Images_image.png) | Similarly to _Centered image_, the image will be displayed as a block and aligned either to the left or to the right, but not allowing text to flow on either of its sides. |
 
 ## Compression
 

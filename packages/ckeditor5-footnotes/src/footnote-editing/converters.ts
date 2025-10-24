@@ -1,4 +1,4 @@
-import { type Editor, type DowncastConversionApi, type ViewContainerElement, Element, toWidget, toWidgetEditable } from 'ckeditor5';
+import { type Editor, type DowncastConversionApi, type ViewContainerElement, ModelElement, toWidget, toWidgetEditable } from 'ckeditor5';
 
 import { ATTRIBUTES, CLASSES, ELEMENTS } from '../constants.js';
 import { viewQueryElement } from '../utils.js';
@@ -232,7 +232,7 @@ export const defineConverters = ( editor: Editor ): void => {
  * for both data and editing downcasts.
  */
 function createFootnoteBackLinkViewElement(
-	modelElement: Element,
+	modelElement: ModelElement,
 	conversionApi: DowncastConversionApi
 ): ViewContainerElement {
 	const viewWriter = conversionApi.writer;
@@ -264,7 +264,7 @@ function createFootnoteBackLinkViewElement(
  * data downcast and editing downcast conversions.
  */
 function createFootnoteReferenceViewElement(
-	modelElement: Element,
+	modelElement: ModelElement,
 	conversionApi: DowncastConversionApi
 ): ViewContainerElement {
 	const viewWriter = conversionApi.writer;
@@ -301,7 +301,7 @@ function createFootnoteReferenceViewElement(
  * data downcast and editing downcast conversions.
  */
 function createFootnoteItemViewElement(
-	modelElement: Element,
+	modelElement: ModelElement,
 	conversionApi: DowncastConversionApi
 ): ViewContainerElement {
 	const viewWriter = conversionApi.writer;
@@ -330,7 +330,7 @@ function createFootnoteItemViewElement(
  */
 function updateFootnoteReferenceView(
 	data: {
-    item: Element;
+    item: ModelElement;
     attributeOldValue: string;
     attributeNewValue: string;
   },
@@ -339,7 +339,7 @@ function updateFootnoteReferenceView(
 ) {
 	const { item, attributeNewValue: newIndex } = data;
 	if (
-		!( item instanceof Element ) ||
+		!( item instanceof ModelElement ) ||
     !conversionApi.consumable.consume( item, `attribute:${ ATTRIBUTES.footnoteIndex }:${ ELEMENTS.footnoteReference }` )
 	) {
 		return;

@@ -3,7 +3,6 @@ import TypeWidget from "./type_widget.js";
 import appContext from "../../components/app_context.js";
 import searchService from "../../services/search.js";
 import { t } from "../../services/i18n.js";
-import type FNote from "../../entities/fnote.js";
 
 const TPL = /*html*/`
 <div class="note-detail-empty note-detail-printable">

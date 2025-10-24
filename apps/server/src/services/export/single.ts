@@ -11,7 +11,7 @@ import type { Response } from "express";
 import type BNote from "../../becca/entities/bnote.js";
 import type { ExportFormat } from "./zip/abstract_provider.js";
 
-function exportSingleNote(taskContext: TaskContext, branch: BBranch, format: ExportFormat, res: Response) {
+function exportSingleNote(taskContext: TaskContext<"export">, branch: BBranch, format: ExportFormat, res: Response) {
     const note = branch.getNote();
 
     if (note.type === "image" || note.type === "file") {
@@ -31,7 +31,7 @@ function exportSingleNote(taskContext: TaskContext, branch: BBranch, format: Exp
     res.send(payload);
 
     taskContext.increaseProgressCount();
-    taskContext.taskSucceeded();
+    taskContext.taskSucceeded(null);
 }
 
 export function mapByNoteType(note: BNote, content: string | Buffer<ArrayBufferLike>, format: ExportFormat) {

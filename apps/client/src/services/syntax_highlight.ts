@@ -36,7 +36,9 @@ export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
     const $copyButton = $("<button>")
         .addClass("bx component icon-action tn-tool-button bx-copy copy-button")
         .attr("title", t("code_block.copy_title"))
-        .on("click", () => {
+        .on("click", (e) => {
+            e.stopPropagation();
+
             if (!isShare) {
                 copyTextWithToast($codeBlock.text());
             } else {
@@ -59,7 +61,11 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
         highlightedText = highlightAuto(text);
     } else if (normalizedMimeType) {
         await ensureMimeTypesForHighlighting(normalizedMimeType);
-        highlightedText = highlight(text, { language: normalizedMimeType });
+        try {
+            highlightedText = highlight(text, { language: normalizedMimeType });
+        } catch (e) {
+            console.warn("Unable to apply syntax highlight.", e);
+        }
     }
 
     if (highlightedText) {
@@ -74,7 +80,7 @@ export async function ensureMimeTypesForHighlighting(mimeTypeHint?: string) {
 
     // Load theme.
     const currentThemeName = String(options.get("codeBlockTheme"));
-    loadHighlightingTheme(currentThemeName);
+    await loadHighlightingTheme(currentThemeName);
 
     // Load mime types.
     let mimeTypes: MimeType[];
@@ -96,17 +102,16 @@ export async function ensureMimeTypesForHighlighting(mimeTypeHint?: string) {
     highlightingLoaded = true;
 }
 
-export function loadHighlightingTheme(themeName: string) {
+export async function loadHighlightingTheme(themeName: string) {
     const themePrefix = "default:";
     let theme: Theme | null = null;
-    if (themeName.includes(themePrefix)) {
+    if (glob.device === "print") {
+        theme = Themes.vs;
+    } else if (themeName.includes(themePrefix)) {
         theme = Themes[themeName.substring(themePrefix.length)];
     }
-    if (!theme) {
-        theme = Themes.default;
-    }
 
-    loadTheme(theme);
+    await loadTheme(theme ?? Themes.default);
 }
 
 /**

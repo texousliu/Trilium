@@ -2,10 +2,9 @@ import type FNote from "../../entities/fnote.js";
 import utils from "../../services/utils.js";
 import EditableCodeTypeWidget from "./editable_code.js";
 import TypeWidget from "./type_widget.js";
-import Split from "split.js";
+import Split from "@triliumnext/split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 import options from "../../services/options.js";
-import type SwitchSplitOrientationButton from "../floating_buttons/switch_layout_button.js";
 import type { EventData } from "../../components/app_context.js";
 import type OnClickButtonWidget from "../buttons/onclick_button.js";
 import type { EditorConfig } from "@triliumnext/codemirror";
@@ -64,7 +63,7 @@ const TPL = /*html*/`\
         /* Horizontal layout */
 
         .note-detail-split.split-horizontal > .note-detail-split-preview-col {
-            border-left: 1px solid var(--main-border-color);
+            border-inline-start: 1px solid var(--main-border-color);
         }
 
         .note-detail-split.split-horizontal > .note-detail-split-editor-col,
@@ -113,7 +112,7 @@ const TPL = /*html*/`\
  *
  * - The two panes are resizeable via a split, on desktop. The split can be optionally customized via {@link buildSplitExtraOptions}.
  * - Can display errors to the user via {@link setError}.
- * - Horizontal or vertical orientation for the editor/preview split, adjustable via {@link SwitchSplitOrientationButton}.
+ * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
 export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
@@ -130,7 +129,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     constructor() {
         super();
-        this.editorTypeWidget = new EditableCodeTypeWidget();
+
+        this.editorTypeWidget = new EditableCodeTypeWidget(true);
         this.editorTypeWidget.updateBackgroundColor = () => {};
         this.editorTypeWidget.isEnabled = () => true;
 
@@ -145,6 +145,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     doRender(): void {
         this.$widget = $(TPL);
+
+        this.spacedUpdate.setUpdateInterval(750);
 
         // Preview pane
         this.$previewCol = this.$widget.find(".note-detail-split-preview-col");
@@ -227,6 +229,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
         if (!this.isReadOnly) {
             this.splitInstance = Split(elements, {
+                rtl: glob.isRtl,
                 sizes: [ 50, 50 ],
                 direction: this.layoutOrientation,
                 gutterSize: DEFAULT_GUTTER_SIZE,

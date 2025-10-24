@@ -28,6 +28,28 @@
     --ck-mention-list-max-height: 500px;
 }
 
+body#trilium-app.motion-disabled *,
+body#trilium-app.motion-disabled *::before,
+body#trilium-app.motion-disabled *::after {
+    /* Disable transitions and animations */
+    transition: none !important;
+    animation: none !important;
+}
+
+body#trilium-app.shadows-disabled *,
+body#trilium-app.shadows-disabled *::before,
+body#trilium-app.shadows-disabled *::after {
+    /* Disable shadows */
+    box-shadow: none !important;
+}
+
+body#trilium-app.backdrop-effects-disabled *,
+body#trilium-app.backdrop-effects-disabled *::before,
+body#trilium-app.backdrop-effects-disabled *::after {
+    /* Disable backdrop effects */
+    backdrop-filter: none !important;
+}
+
 .table {
     --bs-table-bg: transparent !important;
 }
@@ -139,16 +161,25 @@ textarea,
     color: var(--muted-text-color);
 }
 
-/* Restore default apperance */
-input[type="number"],
-input[type="checkbox"] {
-    appearance: auto !important;
+.form-group.disabled,
+.form-checkbox.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
 }
 
 /* Add a gap between consecutive radios / check boxes */
 label.tn-radio + label.tn-radio,
 label.tn-checkbox + label.tn-checkbox {
-    margin-left: 12px;
+    margin-inline-start: 12px;
+}
+
+label.tn-radio input[type="radio"],
+label.tn-checkbox input[type="checkbox"] {
+    margin-inline-end: .5em;
 }
 
 #left-pane input,
@@ -192,6 +223,13 @@ samp {
     font-family: var(--monospace-font-family) !important;
 }
 
+.badge {
+    --bs-badge-color: var(--muted-text-color);
+
+    margin-inline-start: 8px;
+    background: var(--accented-background-color);
+}
+
 .input-group-text {
     background-color: var(--accented-background-color) !important;
     color: var(--muted-text-color) !important;
@@ -212,10 +250,6 @@ button.close:hover {
 .nav-link.active {
     background-color: inherit !important;
     color: var(--main-text-color) !important;
-}
-
-.note-title[readonly] {
-    background: inherit;
 }
 
 .tdialog {
@@ -254,6 +288,11 @@ button.close:hover {
     color: var(--muted-text-color) !important;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+.icon-action.btn {
+    padding: 0 8px;
+    min-width: unset !important;
 }
 
 .ui-widget-content a:not(.ui-tabs-anchor) {
@@ -299,8 +338,8 @@ button kbd {
 }
 
 .ui-menu kbd {
-    margin-left: 30px;
-    float: right;
+    margin-inline-start: 30px;
+    float: inline-end;
 }
 
 .suppressed {
@@ -320,25 +359,31 @@ button kbd {
     }
 }
 
-.dropdown-menu {
+.dropdown-menu,
+.tabulator-popup-container,
+:root .excalidraw .popover {
     color: var(--menu-text-color) !important;
     font-size: inherit;
-    background-color: var(--menu-background-color) !important;
+    background: var(--menu-background-color) !important;
     user-select: none;
     -webkit-user-select: none;
     --bs-dropdown-zindex: 999;
     --bs-dropdown-link-active-bg: var(--active-item-background-color) !important;
 }
 
-body.desktop .dropdown-menu {
+body.desktop .dropdown-menu,
+body.desktop .tabulator-popup-container,
+:root .excalidraw .dropdown-menu .dropdown-menu-container,
+:root .excalidraw .popover {
     border: 1px solid var(--dropdown-border-color);
+    column-rule: 1px solid var(--dropdown-border-color);
     box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
     animation: dropdown-menu-opening 100ms ease-in;
 }
 
 @supports (animation-fill-mode: forwards) {
     /* Delay the opening of submenus */
-    body.desktop .dropdown-submenu .dropdown-menu {
+    body.desktop:not(.motion-disabled) .dropdown-submenu .dropdown-menu {
         opacity: 0;
         animation-fill-mode: forwards;
         animation-delay: var(--submenu-opening-delay);
@@ -350,7 +395,7 @@ body.desktop .dropdown-menu {
 }
 
 .dropend .dropdown-toggle::after {
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
     color: var(--muted-text-color);
 }
 
@@ -361,7 +406,7 @@ body.desktop .dropdown-menu {
 
 .dropdown-menu .disabled .disabled-tooltip {
     pointer-events: all;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     font-size: 0.5em;
     color: var(--disabled-tooltip-icon-color);
     cursor: help;
@@ -373,16 +418,18 @@ body.desktop .dropdown-menu {
 }
 
 .dropdown-menu a:hover:not(.disabled),
-.dropdown-item:hover:not(.disabled, .dropdown-item-container) {
+.dropdown-item:hover:not(.disabled, .dropdown-container-item),
+.tabulator-menu-item:hover,
+:root .excalidraw .context-menu .context-menu-item:hover {
     color: var(--hover-item-text-color) !important;
     background-color: var(--hover-item-background-color) !important;
     border-color: var(--hover-item-border-color) !important;
     cursor: pointer;
 }
 
-.dropdown-item-container,
-.dropdown-item-container:hover,
-.dropdown-item-container:active {
+.dropdown-container-item,
+.dropdown-item.dropdown-container-item:hover,
+.dropdown-container-item:active {
     background: transparent;
     cursor: default;
 }
@@ -397,20 +444,33 @@ body #context-menu-container .dropdown-item > span {
     align-items: center;
 }
 
-.dropdown-menu kbd {
+.dropdown-item span.keyboard-shortcut,
+.dropdown-item *:not(.keyboard-shortcut) > kbd {
     flex-grow: 1;
-    text-align: right;
+    text-align: end;
+    padding-inline-start: 12px;
+}
+
+.dropdown-menu kbd {    
     color: var(--muted-text-color);
     border: none;
     background-color: transparent;
     box-shadow: none;
     padding-bottom: 0;
+    padding: 0;
 }
 
 .dropdown-item,
-.dropdown-header {
+.dropdown-header,
+:root .excalidraw .context-menu .context-menu-item:hover {
     color: var(--menu-text-color) !important;
     border: 1px solid transparent !important;
+}
+
+/*  This is a workaround for Firefox not supporting break-before / break-after: avoid on columns. 
+ *  It usually wraps a menu item followed by a separator / header and another menu item. */
+.dropdown-no-break {
+    break-inside: avoid;
 }
 
 .dropdown-item.disabled,
@@ -420,9 +480,9 @@ body #context-menu-container .dropdown-item > span {
 
 .dropdown-item.active,
 .dropdown-item:focus {
-    color: var(--active-item-text-color) !important;
-    background-color: var(--active-item-background-color) !important;
-    border-color: var(--active-item-border-color) !important;
+    color: var(--active-item-text-color);
+    background-color: var(--active-item-background-color);
+    border-color: var(--active-item-border-color);
     outline: none;
 }
 
@@ -449,7 +509,7 @@ body #context-menu-container .dropdown-item > span {
 
 body .cm-editor .cm-gutters {
     background-color: inherit !important;
-    border-right: none;
+    border-inline-end: none;
 }
 
 body .cm-editor .cm-placeholder {
@@ -528,6 +588,11 @@ button.btn-sm {
     /* Making this narrower because https://github.com/zadam/trilium/issues/502 (problem only in smaller font sizes) */
     min-width: 0;
     padding: 0;
+    z-index: 1000;
+}
+
+body[dir=rtl] .ck.ck-block-toolbar-button {
+    transform: translateX(-7px);
 }
 
 pre:not(.hljs) {
@@ -548,11 +613,11 @@ pre:not(.hljs) {
 pre > button.copy-button {
     position: absolute;
     top: var(--copy-button-margin-size);
-    right: var(--copy-button-margin-size);
+    inset-inline-end: var(--copy-button-margin-size);
 }
 
 :root pre:has(> button.copy-button) {
-    padding-right: calc(var(--copy-button-width) + (var(--copy-button-margin-size) * 2));
+    padding-inline-end: calc(var(--copy-button-width) + (var(--copy-button-margin-size) * 2));
 }
 
 pre > button.copy-button:hover {
@@ -578,31 +643,31 @@ pre > button.copy-button:active {
 .full-text-search-button {
     cursor: pointer;
     font-size: 1.3em;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-inline-start: 5px;
+    padding-inline-end: 5px;
 }
 
 .input-clearer-button {
     cursor: pointer;
     font-size: 1.3em;
     background: inherit !important;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-inline-start: 5px;
+    padding-inline-end: 5px;
 }
 
 .open-external-link-button {
     cursor: pointer;
     font-size: 1.3em;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-inline-start: 5px;
+    padding-inline-end: 5px;
     padding-top: 8px;
 }
 
 .go-to-selected-note-button {
     cursor: pointer;
     font-size: 1.3em;
-    padding-left: 4px;
-    padding-right: 3px;
+    padding-inline-start: 4px;
+    padding-inline-end: 3px;
 }
 
 .go-to-selected-note-button.disabled,
@@ -615,7 +680,7 @@ pre > button.copy-button:active {
 
 .note-autocomplete-input {
     /* this is for seamless integration of "input clearer" button */
-    border-right: 0;
+    border-inline-end: 0;
 }
 
 table.promoted-attributes-in-tooltip {
@@ -632,6 +697,10 @@ table.promoted-attributes-in-tooltip th {
     z-index: calc(var(--ck-z-panel) - 1) !important;
 }
 
+.tooltip.tooltip-top {
+    z-index: 32767 !important;
+}
+
 .tooltip-trigger {
     background: transparent;
     pointer-events: none;
@@ -644,10 +713,10 @@ table.promoted-attributes-in-tooltip th {
     border-top-color: var(--main-border-color) !important;
 }
 .bs-tooltip-left .tooltip-arrow::before {
-    border-left-color: var(--main-border-color) !important;
+    border-inline-start-color: var(--main-border-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::before {
-    border-right-color: var(--main-border-color) !important;
+    border-inline-end-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-bottom .tooltip-arrow::after {
@@ -657,17 +726,17 @@ table.promoted-attributes-in-tooltip th {
     border-top-color: var(--tooltip-background-color) !important;
 }
 .bs-tooltip-left .tooltip-arrow::after {
-    border-left-color: var(--tooltip-background-color) !important;
+    border-inline-start-color: var(--tooltip-background-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::after {
-    border-right-color: var(--tooltip-background-color) !important;
+    border-inline-end-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before,
 .bs-tooltip-left .tooltip-arrow::before {
-    left: -1px;
+    inset-inline-start: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
-    border-left-color: var(--main-border-color) !important;
+    border-inline-start-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before,
@@ -679,9 +748,9 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before,
 .bs-tooltip-right .tooltip-arrow::before {
-    right: -1px;
+    inset-inline-end: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
-    border-right-color: var(--main-border-color) !important;
+    border-inline-end-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before,
@@ -693,9 +762,9 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::after,
 .bs-tooltip-left .tooltip-arrow::after {
-    left: -1px;
+    inset-inline-start: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
-    border-left-color: var(--tooltip-background-color) !important;
+    border-inline-start-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::after,
@@ -707,9 +776,9 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::after,
 .bs-tooltip-right .tooltip-arrow::after {
-    right: -1px;
+    inset-inline-end: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
-    border-right-color: var(--tooltip-background-color) !important;
+    border-inline-end-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::after,
@@ -728,7 +797,7 @@ table.promoted-attributes-in-tooltip th {
     background-color: var(--tooltip-background-color) !important;
     border: 1px solid var(--main-border-color);
     border-radius: 5px;
-    text-align: left;
+    text-align: start;
     color: var(--main-text-color) !important;
     max-width: 500px;
     box-shadow: 10px 10px 93px -25px #aaaaaa;
@@ -759,6 +828,14 @@ table.promoted-attributes-in-tooltip th {
     font-size: small;
 }
 
+.note-tooltip-content .open-popup-button {
+    position: absolute;
+    inset-inline-end: 15px;
+    bottom: 8px;
+    font-size: 1.2em;
+    color: inherit;
+}
+
 .note-tooltip-attributes {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -773,7 +850,7 @@ table.promoted-attributes-in-tooltip th {
 }
 
 .tooltip-inner figure.image-style-side {
-    float: right;
+    float: inline-end;
 }
 
 .tooltip.show {
@@ -809,8 +886,32 @@ table.promoted-attributes-in-tooltip th {
 
 .aa-dropdown-menu .aa-suggestion {
     cursor: pointer;
-    padding: 5px;
+    padding: 6px 16px;
     margin: 0;
+}
+
+.aa-dropdown-menu .aa-suggestion .icon {
+    display: inline-block;
+    line-height: inherit;
+    vertical-align: top;
+}
+
+.aa-dropdown-menu .aa-suggestion .text {
+    display: inline-block;
+    width: calc(100% - 20px);
+    padding-inline-start: 4px;
+}
+
+.aa-dropdown-menu .aa-suggestion .search-result-title {
+    display: block;
+}
+
+.aa-dropdown-menu .aa-suggestion .search-result-attributes {
+    display: block;
+    font-size: 0.8em;
+    color: var(--muted-text-color);
+    opacity: 0.6;
+    line-height: 1;
 }
 
 .aa-dropdown-menu .aa-suggestion p {
@@ -824,7 +925,7 @@ table.promoted-attributes-in-tooltip th {
 }
 
 .help-button {
-    float: right;
+    float: inline-end;
     background: none;
     font-weight: 900;
     color: orange;
@@ -900,7 +1001,19 @@ div[data-notify="container"] {
     font-family: var(--monospace-font-family);
 }
 
-.ck-content .table table th {
+svg.ck-icon .note-icon {
+    color: var(--main-text-color);
+    font-size: 20px;
+}
+
+.ck-content {
+    --ck-content-font-family: var(--detail-font-family);
+    --ck-content-font-size: 1.1em;
+    --ck-content-font-color: var(--main-text-color);
+    --ck-content-line-height: var(--bs-body-line-height);
+}
+
+:root .ck-content .table table:not(.layout-table) th {
     background-color: var(--accented-background-color);
 }
 
@@ -929,7 +1042,7 @@ div[data-notify="container"] {
     counter-increment: footnote-counter;
     display: flex;
     list-style: none;
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
 }
 
 .ck-content .footnote-item > * {
@@ -937,13 +1050,13 @@ div[data-notify="container"] {
 }
 
 .ck-content .footnote-back-link {
-    margin-right: 0.1em;
+    margin-inline-end: 0.1em;
     position: relative;
     top: -0.2em;
 }
 
 .ck-content .footnotes .footnote-back-link > sup {
-    margin-right: 0;
+    margin-inline-end: 0;
 }
 
 .ck-content .footnote-item:before {
@@ -951,8 +1064,8 @@ div[data-notify="container"] {
     display: inline-block;
     min-width: fit-content;
     position: relative;
-    right: 0.2em;
-    text-align: right;
+    inset-inline-end: 0.2em;
+    text-align: end;
 }
 
 .ck-content .footnote-content {
@@ -968,11 +1081,11 @@ div[data-notify="container"] {
 }
 
 #options-dialog input[type="number"] {
-    text-align: right;
+    text-align: end;
 }
 
 .help-cards ul {
-    padding-left: 20px;
+    padding-inline-start: 20px;
 }
 
 .help-cards kbd {
@@ -1034,6 +1147,27 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 .toast-body {
     white-space: preserve-breaks;
+    overflow: hidden;
+}
+
+.toast.no-title {
+    display: flex;
+    flex-direction: row;
+}
+
+.toast.no-title .toast-icon {
+    display: flex;
+    align-items: center;
+    padding: var(--bs-toast-padding-y) var(--bs-toast-padding-x);
+}
+
+.toast.no-title .toast-body {
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+}
+
+.toast.no-title .toast-header {
+    background-color: unset !important;
 }
 
 .ck-mentions .ck-button {
@@ -1142,11 +1276,15 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     cursor: row-resize;
 }
 
+.hidden-ext.note-split + .gutter {
+    display: none;
+}
+
 #context-menu-cover.show {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: 0;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.1);
@@ -1159,8 +1297,8 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 body.mobile #context-menu-container.mobile-bottom-menu {
     position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
+    inset-inline-start: 0 !important;
+    inset-inline-end: 0 !important;
     bottom: 0 !important;
     top: unset !important;
     max-height: 70vh;
@@ -1186,12 +1324,14 @@ body.mobile .dropdown-submenu > .dropdown-menu {
 }
 
 #context-menu-container,
-#context-menu-container .dropdown-menu {
-    padding: 3px 0 0;
+#context-menu-container .dropdown-menu,
+.tabulator-popup-container {
+    padding: 3px 0;
     z-index: 2000;
 }
 
-#context-menu-container .dropdown-item {
+#context-menu-container .dropdown-item,
+.tabulator-menu .tabulator-menu-item {
     padding: 0 7px 0 10px;
     cursor: pointer;
     user-select: none;
@@ -1208,7 +1348,7 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
 
 .dropdown-submenu > .dropdown-menu {
     top: 0;
-    left: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
+    inset-inline-start: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
     margin-top: -10px;
     min-width: 15rem;
     /* to make submenu scrollable https://github.com/zadam/trilium/issues/3136 */
@@ -1217,7 +1357,7 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
 }
 
 body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
-    left: calc(-100% + 10px);
+    inset-inline-start: calc(-100% + 10px);
 }
 
 .right-dropdown-widget {
@@ -1283,7 +1423,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 .ck.ck-slash-command-button__text-part,
 .ck.ck-template-form__text-part {
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
     line-height: 1.2em !important;
 }
 
@@ -1314,8 +1454,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 .area-expander-text {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-inline-start: 20px;
+    padding-inline-end: 20px;
     white-space: nowrap;
 }
 
@@ -1361,7 +1501,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     cursor: pointer;
     border: none;
     color: var(--launcher-pane-text-color);
-    background-color: var(--launcher-pane-background-color);
+    background-color: transparent;
     flex-shrink: 0;
 }
 
@@ -1402,16 +1542,16 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         position: fixed !important;
         bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
         top: unset !important;
-        left: 0 !important;
-        right: 0 !important;
+        inset-inline-start: 0 !important;
+        inset-inline-end: 0 !important;
         transform: unset !important;
     }
 
     #mobile-sidebar-container {
         position: fixed;
         top: 0;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         bottom: 0;
         z-index: 1000;
         transition: background-color 250ms ease-in-out;
@@ -1426,7 +1566,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     #mobile-sidebar-wrapper {
         position: absolute;
         top: 0;
-        left: 0;
+        inset-inline-start: 0;
         bottom: 0;
         width: 85vw;
         padding-top: env(safe-area-inset-top);
@@ -1458,8 +1598,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     body.mobile .modal-dialog {
         position: fixed;
         bottom: 0;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         margin: 0 !important;
         max-height: 85vh;        
         display: flex;
@@ -1617,8 +1757,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     display: flex;
     flex-shrink: 0;
     flex-direction: column;
-    margin-left: 10px;
-    margin-right: 5px;
+    margin-inline-start: 10px;
+    margin-inline-end: 5px;
 }
 
 #right-pane .card-header {
@@ -1658,7 +1798,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 #right-pane .card-body ul {
-    padding-left: 25px;
+    padding-inline-start: 25px;
     margin-bottom: 5px;
 }
 
@@ -1669,9 +1809,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 .note-split {
-    flex-basis: 0; /* so that each split has same width */
-    margin-left: auto;
-    margin-right: auto;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
 }
 
 .note-split.full-content-width {
@@ -1690,7 +1829,7 @@ button.close:hover {
 .reference-link .bx {
     position: relative;
     top: 1px;
-    margin-right: 3px;
+    margin-inline-end: 3px;
 }
 
 .options-section:first-of-type h4 {
@@ -1707,14 +1846,10 @@ button.close:hover {
     margin-bottom: 10px;
 }
 
-.options-number-input {
+.options-section input[type="number"] {
     /* overriding settings from .form-control */
     width: 10em !important;
     flex-grow: 0 !important;
-}
-
-.options-mime-types {
-    column-width: 250px;
 }
 
 textarea {
@@ -1732,9 +1867,14 @@ textarea {
 
 .attachment-help-button {
     display: inline-block;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     vertical-align: middle;
     font-size: 1em;
+}
+
+.jump-to-note-dialog .modal-dialog {
+    max-width: 900px;
+    width: 90%;
 }
 
 .jump-to-note-dialog .modal-header {
@@ -1743,14 +1883,90 @@ textarea {
 
 .jump-to-note-dialog .modal-body {
     padding: 0;
+    min-height: 200px;
 }
 
 .jump-to-note-results .aa-dropdown-menu {
-    max-height: 40vh;
+    max-height: calc(80vh - 200px);
+    width: 100%;
+    max-width: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    box-shadow: none;
+}
+
+.jump-to-note-results {
+    width: 100%;
 }
 
 .jump-to-note-results .aa-suggestions {
-    padding: 1rem;
+    padding: 0;
+    width: 100%;
+}
+
+/* Command palette styling */
+.jump-to-note-dialog .command-suggestion {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9em;
+}
+
+.jump-to-note-dialog .aa-suggestion .command-suggestion,
+.jump-to-note-dialog .aa-suggestion .command-suggestion div {
+    padding: 0;
+}
+
+.jump-to-note-dialog .aa-cursor .command-suggestion,
+.jump-to-note-dialog .aa-suggestion:hover .command-suggestion {
+    background-color: transparent;
+}
+
+.jump-to-note-dialog .show-in-full-search,
+.jump-to-note-results .show-in-full-search {
+    border-top: 1px solid var(--main-border-color);
+    padding-top: 12px;
+    margin-top: 12px;
+}
+
+.jump-to-note-results .aa-suggestion .search-notes-action {
+    border-top: 1px solid var(--main-border-color);
+    margin-top: 8px;
+    padding-top: 8px;
+}
+
+.jump-to-note-results .aa-suggestion:has(.search-notes-action)::after {
+    display: none;
+}
+
+.jump-to-note-dialog .command-icon {
+    color: var(--muted-text-color);
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.jump-to-note-dialog .command-content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.jump-to-note-dialog .command-name {
+    font-weight: bold;
+}
+
+.jump-to-note-dialog .command-description {
+    font-size: 0.8em;
+    line-height: 1.3;
+    opacity: 0.75;
+}
+
+.jump-to-note-dialog kbd.command-shortcut {
+    background-color: transparent;
+    color: inherit;
+    opacity: 0.75;
+    font-family: inherit !important;
 }
 
 .empty-table-placeholder {
@@ -1759,7 +1975,7 @@ textarea {
 }
 
 body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
-    padding-left: 1em;
+    padding-inline-start: 1em;
 }
 
 #tab-row-left-spacer {
@@ -1767,8 +1983,12 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     -webkit-app-region: drag;
 }
 
+body.electron.platform-darwin:not(.native-titlebar) #tab-row-left-spacer {
+    width: 80px;
+}
+
 .tab-row-widget {
-    padding-right: calc(100vw - env(titlebar-area-width, 100vw));
+    padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw));
 }
 
 .tab-row-container .toggle-button {
@@ -1811,21 +2031,27 @@ body.zen #launcher-container,
 body.zen #launcher-pane,
 body.zen #left-pane,
 body.zen #right-pane,
+body.zen #mobile-sidebar-wrapper,
 body.zen .tab-row-container,
 body.zen .tab-row-widget,
 body.zen .ribbon-container:not(:has(.classic-toolbar-widget.visible)),
 body.zen .ribbon-container:has(.classic-toolbar-widget.visible) .ribbon-top-row,
 body.zen .ribbon-container .ribbon-body:not(:has(.classic-toolbar-widget.visible)),
 body.zen .note-icon-widget,
-body.zen .title-row .button-widget,
-body.zen .floating-buttons-children > *:not(.bx-edit-alt) {
+body.zen .title-row .icon-action,
+body.zen .floating-buttons-children > *:not(.bx-edit-alt),
+body.zen .action-button {
     display: none !important;
+}
+
+body.zen .split-note-container-widget > .gutter {
+    display: unset !important;
 }
 
 body.zen #launcher-pane {
     position: absolute !important;
     top: 0 !important;
-    right: 0 !important;
+    inset-inline-end: 0 !important;
     width: 64px !important;
     height: 64px !important;
     background: transparent !important;
@@ -1836,8 +2062,8 @@ body.zen .title-row {
     display: block !important;
     height: unset !important;
     -webkit-app-region: drag;
-    padding-left: env(titlebar-area-x);
-    padding-right: calc(100vw - env(titlebar-area-width, 100vw) + 2.5em);
+    padding-inline-start: env(titlebar-area-x);
+    padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw) + 2.5em);
 }
 
 body.zen .floating-buttons {
@@ -1845,7 +2071,7 @@ body.zen .floating-buttons {
 }
 
 body.zen .floating-buttons-children {
-    right: 0;
+    inset-inline-end: 0;
 }
 
 body.zen .floating-buttons-children .button-widget {
@@ -1860,14 +2086,20 @@ body.zen .note-title-widget input {
     background: transparent !important;
 }
 
+body.zen #detail-container {
+    width: 100%;
+}
+
 /* Content renderer */
 
-footer.file-footer {
+footer.file-footer,
+footer.webview-footer {
     display: flex;
     justify-content: center;
 }
 
-footer.file-footer button {
+footer.file-footer button,
+footer.webview-footer button {
     margin: 5px;
 }
 
@@ -1998,7 +2230,7 @@ footer.file-footer button {
 .chat-input {
     width: 100%;
     resize: none;
-    padding-right: 40px;
+    padding-inline-end: 40px;
 }
 
 .chat-buttons {
@@ -2054,14 +2286,13 @@ footer.file-footer button {
 
 .admonition {
     --accent-color: var(--card-border-color);
+    background: color-mix(in srgb, var(--accent-color) 15%, transparent);
     border: 1px solid var(--accent-color);
-    box-shadow: var(--card-box-shadow);
-    background: var(--card-background-color);
     border-radius: 0.5em;
     padding: 1em;
     margin: 1.25em 0;
     position: relative;
-    padding-left: 2.5em;
+    padding-inline-start: 2.5em;
     overflow: hidden;
 }
 
@@ -2074,7 +2305,7 @@ footer.file-footer button {
     font-family: boxicons !important;
     position: absolute;
     top: 1em;
-    left: 1em;
+    inset-inline-start: 1em;
 }
 
 .admonition.note { --accent-color: var(--admonition-note-accent-color); }
@@ -2100,18 +2331,18 @@ footer.file-footer button {
     display: flex;
     align-items: center;
     font-size: 0.9em;
-    margin-right: 15px;
+    margin-inline-end: 15px;
     cursor: pointer;
 }
 
 .chat-option input[type="checkbox"] {
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 /* Style for thinking process in chat responses */
 .thinking-process {
     background-color: rgba(0, 0, 0, 0.05);
-    border-left: 3px solid var(--main-text-color);
+    border-inline-start: 3px solid var(--main-text-color);
     padding: 10px;
     margin: 10px 0;
     border-radius: 4px;
@@ -2119,23 +2350,23 @@ footer.file-footer button {
 
 .thinking-step {
     margin-bottom: 8px;
-    padding-left: 10px;
+    padding-inline-start: 10px;
 }
 
 .thinking-step.observation {
-    border-left: 2px solid #69c7ff;
+    border-inline-start: 2px solid #69c7ff;
 }
 
 .thinking-step.hypothesis {
-    border-left: 2px solid #9839f7;
+    border-inline-start: 2px solid #9839f7;
 }
 
 .thinking-step.evidence {
-    border-left: 2px solid #40c025;
+    border-inline-start: 2px solid #40c025;
 }
 
 .thinking-step.conclusion {
-    border-left: 2px solid #e2aa03;
+    border-inline-start: 2px solid #e2aa03;
     font-weight: bold;
 }
 
@@ -2150,17 +2381,17 @@ footer.file-footer button {
 
 .content-floating-buttons.top-left {
     top: 10px;
-    left: 10px;
+    inset-inline-start: 10px;
 }
 
 .content-floating-buttons.bottom-left {
     bottom: 10px;
-    left: 10px;
+    inset-inline-start: 10px;
 }
 
 .content-floating-buttons.bottom-right {
     bottom: 10px;
-    right: 10px;
+    inset-inline-end: 10px;
 }
 
 .content-floating-buttons button.bx {
@@ -2173,4 +2404,36 @@ footer.file-footer button {
 .bx-tn-toc::before {
     content: "\ec24";
     transform: rotate(180deg);
+}
+
+/* CK Edito */
+
+/* Insert text snippet: limit the width of the listed items to avoid overly long names */
+:root body.desktop div.ck-template-form li.ck-list__item .ck-template-form__text-part > span {
+    max-width: 25vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.revision-diff-added {
+    background: rgba(100, 200, 100, 0.5);
+}
+
+.revision-diff-removed {
+    background: rgba(255, 100, 100, 0.5);
+    text-decoration: line-through;
+}
+
+iframe.print-iframe {
+    position: absolute;
+    top: 0;
+    left: -600px;
+    right: -600px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+}
+
+.excalidraw.theme--dark canvas {
+    --theme-filter: invert(100%) hue-rotate(180deg);
 }

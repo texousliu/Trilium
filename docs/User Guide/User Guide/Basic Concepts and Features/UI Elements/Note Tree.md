@@ -22,4 +22,8 @@ You can easily rearrange the note tree by dragging and dropping notes, as demons
 
 You can also move notes using the familiar cut and paste functions available in the context menu, or with the associated keyboard [shortcuts](../Keyboard%20Shortcuts.md): `CTRL-C` ( [copy](../Notes/Cloning%20Notes.md)), <kbd>Ctrl</kbd> + <kbd>X</kbd> (cut) and <kbd>Ctrl</kbd> + <kbd>V</kbd> (paste).
 
-See <a class="reference-link" href="Note%20Tree/Note%20tree%20contextual%20menu.md">Note Tree Menu</a> for more information.
+See <a class="reference-link" href="Note%20Tree/Note%20tree%20contextual%20menu.md">Note tree contextual menu</a> for more information.
+
+## Keyboard shortcuts
+
+The note tree comes with multiple keyboard shortcuts to make editing faster, consult the dedicated <a class="reference-link" href="Note%20Tree/Keyboard%20shortcuts.md">Keyboard shortcuts</a> section.

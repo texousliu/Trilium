@@ -3,8 +3,9 @@ import BasicWidget from "./basic_widget.js";
 import ws from "../services/ws.js";
 import options from "../services/options.js";
 import syncService from "../services/sync.js";
-import { escapeQuotes } from "../services/utils.js";
+import { escapeQuotes, handleRightToLeftPlacement } from "../services/utils.js";
 import { Tooltip } from "bootstrap";
+import { WebSocketMessage } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="sync-status-widget launcher-button">
@@ -26,7 +27,7 @@ const TPL = /*html*/`
     .sync-status .sync-status-sub-icon {
         font-size: 40%;
         position: absolute;
-        left: 0;
+        inset-inline-start: 0;
         top: 16px;
     }
 
@@ -108,8 +109,8 @@ export default class SyncStatusWidget extends BasicWidget {
 
         Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`)[0], {
             html: true,
-            placement: this.settings.titlePlacement,
-            fallbackPlacements: [this.settings.titlePlacement]
+            placement: handleRightToLeftPlacement(this.settings.titlePlacement),
+            fallbackPlacements: [ handleRightToLeftPlacement(this.settings.titlePlacement) ]
         });
 
         this.$widget.show();
@@ -117,8 +118,7 @@ export default class SyncStatusWidget extends BasicWidget {
         this.$widget.find(`.sync-status-${className}`).show();
     }
 
-    // TriliumNextTODO: Use Type Message from "services/ws.ts"
-    processMessage(message: { type: string; lastSyncedPush: number; data: { lastSyncedPush: number } }) {
+    processMessage(message: WebSocketMessage) {
         if (message.type === "sync-pull-in-progress") {
             this.syncState = "in-progress";
             this.lastSyncedPush = message.lastSyncedPush;

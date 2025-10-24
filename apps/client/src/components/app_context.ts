@@ -1,6 +1,6 @@
 import froca from "../services/froca.js";
 import RootCommandExecutor from "./root_command_executor.js";
-import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
+import Entrypoints from "./entrypoints.js";
 import options from "../services/options.js";
 import utils, { hasTouchBar } from "../services/utils.js";
 import zoomComponent from "./zoom.js";
@@ -28,16 +28,17 @@ import TouchBarComponent from "./touch_bar.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
 import { StartupChecks } from "./startup_checks.js";
+import type { CreateNoteOpts } from "../services/note_create.js";
+import { ColumnComponent } from "tabulator-tables";
+import { ChooseNoteTypeCallback } from "../widgets/dialogs/note_type_chooser.jsx";
+import type RootContainer from "../widgets/containers/root_container.js";
+import { SqlExecuteResults } from "@triliumnext/commons";
 
 interface Layout {
-    getRootWidget: (appContext: AppContext) => RootWidget;
+    getRootWidget: (appContext: AppContext) => RootContainer;
 }
 
-interface RootWidget extends Component {
-    render: () => JQuery<HTMLElement>;
-}
-
-interface BeforeUploadListener extends Component {
+export interface BeforeUploadListener extends Component {
     beforeUnloadEvent(): boolean;
 }
 
@@ -82,7 +83,6 @@ export type CommandMappings = {
     focusTree: CommandData;
     focusOnTitle: CommandData;
     focusOnDetail: CommandData;
-    focusOnSearchDefinition: Required<CommandData>;
     searchNotes: CommandData & {
         searchString?: string;
         ancestorNoteId?: string | null;
@@ -90,7 +90,14 @@ export type CommandMappings = {
     closeTocCommand: CommandData;
     closeHlt: CommandData;
     showLaunchBarSubtree: CommandData;
-    showRevisions: CommandData;
+    showHiddenSubtree: CommandData;
+    showSQLConsoleHistory: CommandData;
+    logout: CommandData;
+    switchToMobileVersion: CommandData;
+    switchToDesktopVersion: CommandData;
+    showRevisions: CommandData & {
+        noteId?: string | null;
+    };
     showLlmChat: CommandData;
     createAiChat: CommandData;
     showOptions: CommandData & {
@@ -109,7 +116,7 @@ export type CommandMappings = {
     openedFileUpdated: CommandData & {
         entityType: string;
         entityId: string;
-        lastModifiedMs: number;
+        lastModifiedMs?: number;
         filePath: string;
     };
     focusAndSelectTitle: CommandData & {
@@ -122,6 +129,7 @@ export type CommandMappings = {
     showImportDialog: CommandData & { noteId: string };
     openNewNoteSplit: NoteCommandData;
     openInWindow: NoteCommandData;
+    openInPopup: CommandData & { noteIdOrPath: string; };
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
@@ -130,6 +138,9 @@ export type CommandMappings = {
     hideLeftPane: CommandData;
     showCpuArchWarning: CommandData;
     showLeftPane: CommandData;
+    showAttachments: CommandData;
+    showSearchHistory: CommandData;
+    showShareSubtree: CommandData;
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
     enterProtectedSession: CommandData;
@@ -140,6 +151,7 @@ export type CommandMappings = {
     };
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
+    openNoteInPopup: ContextMenuCommandData;
     toggleNoteHoisting: ContextMenuCommandData;
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
@@ -169,7 +181,7 @@ export type CommandMappings = {
     deleteNotes: ContextMenuCommandData;
     importIntoNote: ContextMenuCommandData;
     exportNote: ContextMenuCommandData;
-    searchInSubtree: ContextMenuCommandData;
+    searchInSubtree: CommandData & { notePath: string; };
     moveNoteUp: ContextMenuCommandData;
     moveNoteDown: ContextMenuCommandData;
     moveNoteUpInHierarchy: ContextMenuCommandData;
@@ -258,10 +270,77 @@ export type CommandMappings = {
     closeThisNoteSplit: CommandData;
     moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
     jumpToNote: CommandData;
+    commandPalette: CommandData;
+
+    // Keyboard shortcuts
+    backInNoteHistory: CommandData;
+    forwardInNoteHistory: CommandData;
+    forceSaveRevision: CommandData;
+    scrollToActiveNote: CommandData;
+    quickSearch: CommandData;
+    collapseTree: CommandData;
+    createNoteAfter: CommandData;
+    createNoteInto: CommandData;
+    addNoteAboveToSelection: CommandData;
+    addNoteBelowToSelection: CommandData;
+    openNewTab: CommandData;
+    activateNextTab: CommandData;
+    activatePreviousTab: CommandData;
+    openNewWindow: CommandData;
+    toggleTray: CommandData;
+    firstTab: CommandData;
+    secondTab: CommandData;
+    thirdTab: CommandData;
+    fourthTab: CommandData;
+    fifthTab: CommandData;
+    sixthTab: CommandData;
+    seventhTab: CommandData;
+    eigthTab: CommandData;
+    ninthTab: CommandData;
+    lastTab: CommandData;
+    showNoteSource: CommandData;
+    showSQLConsole: CommandData;
+    showBackendLog: CommandData;
+    showCheatsheet: CommandData;
+    showHelp: CommandData;
+    addLinkToText: CommandData;
+    followLinkUnderCursor: CommandData;
+    insertDateTimeToText: CommandData;
+    pasteMarkdownIntoText: CommandData;
+    cutIntoNote: CommandData;
+    addIncludeNoteToText: CommandData;
+    editReadOnlyNote: CommandData;
+    toggleRibbonTabClassicEditor: CommandData;
+    toggleRibbonTabBasicProperties: CommandData;
+    toggleRibbonTabBookProperties: CommandData;
+    toggleRibbonTabFileProperties: CommandData;
+    toggleRibbonTabImageProperties: CommandData;
+    toggleRibbonTabOwnedAttributes: CommandData;
+    toggleRibbonTabInheritedAttributes: CommandData;
+    toggleRibbonTabPromotedAttributes: CommandData;
+    toggleRibbonTabNoteMap: CommandData;
+    toggleRibbonTabNoteInfo: CommandData;
+    toggleRibbonTabNotePaths: CommandData;
+    toggleRibbonTabSimilarNotes: CommandData;
+    toggleRightPane: CommandData;
+    printActiveNote: CommandData;
+    exportAsPdf: CommandData;
+    openNoteExternally: CommandData;
+    openNoteCustom: CommandData;
+    renderActiveNote: CommandData;
+    unhoist: CommandData;
+    reloadFrontendApp: CommandData;
+    openDevTools: CommandData;
+    findInText: CommandData;
+    toggleLeftPane: CommandData;
+    toggleFullscreen: CommandData;
+    zoomOut: CommandData;
+    zoomIn: CommandData;
+    zoomReset: CommandData;
+    copyWithoutFormatting: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string };
-    openGeoLocation: { noteId: string; event: JQuery.MouseDownEvent };
 
     toggleZenMode: CommandData;
 
@@ -275,12 +354,30 @@ export type CommandMappings = {
 
     geoMapCreateChildNote: CommandData;
 
+    // Table view
+    addNewRow: CommandData & {
+        customOpts: CreateNoteOpts;
+        parentNotePath?: string;
+    };
+    addNewTableColumn: CommandData & {
+        columnToEdit?: ColumnComponent;
+        referenceColumn?: ColumnComponent;
+        direction?: "before" | "after";
+        type?: "label" | "relation";
+    };
+    deleteTableColumn: CommandData & {
+        columnToDelete?: ColumnComponent;
+    };
+
     buildTouchBar: CommandData & {
         TouchBar: typeof TouchBar;
         buildIcon(name: string): NativeImage;
     };
     refreshTouchBar: CommandData;
     reloadTextEditor: CommandData;
+    chooseNoteType: CommandData & {
+        callback: ChooseNoteTypeCallback
+    }
 };
 
 type EventMappings = {
@@ -433,7 +530,7 @@ export type FilteredCommandNames<T extends CommandData> = keyof Pick<CommandMapp
 export class AppContext extends Component {
     isMainWindow: boolean;
     components: Component[];
-    beforeUnloadListeners: WeakRef<BeforeUploadListener>[];
+    beforeUnloadListeners: (WeakRef<BeforeUploadListener> | (() => boolean))[];
     tabManager!: TabManager;
     layout?: Layout;
     noteTreeWidget?: NoteTreeWidget;
@@ -526,7 +623,7 @@ export class AppContext extends Component {
             component.triggerCommand(commandName, { $el: $(this) });
         });
 
-        this.child(rootWidget);
+        this.child(rootWidget as Component);
 
         this.triggerEvent("initialRenderComplete", {});
     }
@@ -553,16 +650,20 @@ export class AppContext extends Component {
     }
 
     getComponentByEl(el: HTMLElement) {
-        return $(el).closest(".component").prop("component");
+        return $(el).closest("[data-component-id]").prop("component");
     }
 
-    addBeforeUnloadListener(obj: BeforeUploadListener) {
+    addBeforeUnloadListener(obj: BeforeUploadListener | (() => boolean)) {
         if (typeof WeakRef !== "function") {
             // older browsers don't support WeakRef
             return;
         }
 
-        this.beforeUnloadListeners.push(new WeakRef<BeforeUploadListener>(obj));
+        if (typeof obj === "object") {
+            this.beforeUnloadListeners.push(new WeakRef<BeforeUploadListener>(obj));
+        } else {
+            this.beforeUnloadListeners.push(obj);
+        }
     }
 }
 
@@ -572,25 +673,29 @@ const appContext = new AppContext(window.glob.isMainWindow);
 $(window).on("beforeunload", () => {
     let allSaved = true;
 
-    appContext.beforeUnloadListeners = appContext.beforeUnloadListeners.filter((wr) => !!wr.deref());
+    appContext.beforeUnloadListeners = appContext.beforeUnloadListeners.filter((wr) => typeof wr === "function" || !!wr.deref());
 
-    for (const weakRef of appContext.beforeUnloadListeners) {
-        const component = weakRef.deref();
+    for (const listener of appContext.beforeUnloadListeners) {
+        if (typeof listener === "object") {
+            const component = listener.deref();
 
-        if (!component) {
-            continue;
-        }
+            if (!component) {
+                continue;
+            }
 
-        if (!component.beforeUnloadEvent()) {
-            console.log(`Component ${component.componentId} is not finished saving its state.`);
-
-            toast.showMessage(t("app_context.please_wait_for_save"), 10000);
-
-            allSaved = false;
+            if (!component.beforeUnloadEvent()) {
+                console.log(`Component ${component.componentId} is not finished saving its state.`);
+                allSaved = false;
+            }
+        } else {
+            if (!listener()) {
+                allSaved = false;
+            }
         }
     }
 
     if (!allSaved) {
+        toast.showMessage(t("app_context.please_wait_for_save"), 10000);
         return "some string";
     }
 });

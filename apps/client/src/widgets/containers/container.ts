@@ -1,5 +1,5 @@
-import type { default as Component, TypedComponent } from "../../components/component.js";
-import BasicWidget, { TypedBasicWidget } from "../basic_widget.js";
+import type { TypedComponent } from "../../components/component.js";
+import { TypedBasicWidget } from "../basic_widget.js";
 
 export default class Container<T extends TypedComponent<any>> extends TypedBasicWidget<T> {
     doRender() {

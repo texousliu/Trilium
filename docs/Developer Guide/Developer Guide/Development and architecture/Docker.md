@@ -8,7 +8,7 @@ To run a Docker build:
 To run the built Docker image:
 
 ```
-sudo docker run -p 8081:8080 triliumnext/notes:v0.90.6-beta
+sudo docker run -p 8081:8080 triliumnext/trilium:v0.90.6-beta
 ```
 
 To enter a shell in the Docker container:

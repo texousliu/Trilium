@@ -8,7 +8,7 @@
  */
 
 import { Command, first } from 'ckeditor5';
-import type { DocumentFragment, Element, Position, Range, Schema, Writer } from 'ckeditor5';
+import type { ModelElement, ModelPosition, ModelRange, ModelSchema, ModelWriter, ModelDocumentFragment } from 'ckeditor5';
 
 /**
  * The block quote command plugin.
@@ -154,18 +154,18 @@ export default class AdmonitionCommand extends Command {
 	 * start it or end it, then the quote will be split (if needed) and the blocks
 	 * will be moved out of it, so other quoted blocks remained quoted.
 	 */
-	private _removeQuote( writer: Writer, blocks: Array<Element> ): void {
+	private _removeQuote( writer: ModelWriter, blocks: Array<ModelElement> ): void {
 		// Unquote all groups of block. Iterate in the reverse order to not break following ranges.
 		getRangesOfBlockGroups( writer, blocks ).reverse().forEach( groupRange => {
 			if ( groupRange.start.isAtStart && groupRange.end.isAtEnd ) {
-				writer.unwrap( groupRange.start.parent as Element );
+				writer.unwrap( groupRange.start.parent as ModelElement );
 
 				return;
 			}
 
 			// The group of blocks are at the beginning of an <bQ> so let's move them left (out of the <bQ>).
 			if ( groupRange.start.isAtStart ) {
-				const positionBefore = writer.createPositionBefore( groupRange.start.parent as Element );
+				const positionBefore = writer.createPositionBefore( groupRange.start.parent as ModelElement );
 
 				writer.move( groupRange, positionBefore );
 
@@ -180,7 +180,7 @@ export default class AdmonitionCommand extends Command {
 
 			// Now we are sure that groupRange.end.isAtEnd is true, so let's move the blocks right.
 
-			const positionAfter = writer.createPositionAfter( groupRange.end.parent as Element );
+			const positionAfter = writer.createPositionAfter( groupRange.end.parent as ModelElement );
 
 			writer.move( groupRange, positionAfter );
 		} );
@@ -189,9 +189,9 @@ export default class AdmonitionCommand extends Command {
 	/**
 	 * Applies the quote to given blocks.
 	 */
-	private _applyQuote( writer: Writer, blocks: Array<Element>, type?: AdmonitionType): void {
+	private _applyQuote( writer: ModelWriter, blocks: Array<ModelElement>, type?: AdmonitionType): void {
 		this._lastType = type;
-		const quotesToMerge: Array<Element | DocumentFragment> = [];
+		const quotesToMerge: Array<ModelElement | ModelDocumentFragment> = [];
 
 		// Quote all groups of block. Iterate in the reverse order to not break following ranges.
 		getRangesOfBlockGroups( writer, blocks ).reverse().forEach( groupRange => {
@@ -205,7 +205,7 @@ export default class AdmonitionCommand extends Command {
 				writer.wrap( groupRange, quote );
 			} else if (quote.is("element")) {
 				this.editor.model.change((writer) => {
-					writer.setAttribute(ADMONITION_TYPE_ATTRIBUTE, type, quote as Element);
+					writer.setAttribute(ADMONITION_TYPE_ATTRIBUTE, type, quote as ModelElement);
 				});
 			}
 
@@ -228,7 +228,7 @@ export default class AdmonitionCommand extends Command {
 	}
 }
 
-function findQuote( elementOrPosition: Element | Position ): Element | DocumentFragment | null {
+function findQuote( elementOrPosition: ModelElement | ModelPosition ): ModelElement | ModelDocumentFragment | null {
 	return elementOrPosition.parent!.name == 'aside' ? elementOrPosition.parent : null;
 }
 
@@ -239,7 +239,7 @@ function findQuote( elementOrPosition: Element | Position ): Element | DocumentF
  * blocks:          [ a, b, d, f, g, h ]
  * output ranges:   [ab]c[d]e[fgh]
  */
-function getRangesOfBlockGroups( writer: Writer, blocks: Array<Element> ): Array<Range> {
+function getRangesOfBlockGroups( writer: ModelWriter, blocks: Array<ModelElement> ): Array<ModelRange> {
 	let startPosition;
 	let i = 0;
 	const ranges = [];
@@ -266,9 +266,9 @@ function getRangesOfBlockGroups( writer: Writer, blocks: Array<Element> ): Array
 /**
  * Checks whether <bQ> can wrap the block.
  */
-function checkCanBeQuoted( schema: Schema, block: Element ): boolean {
+function checkCanBeQuoted( schema: ModelSchema, block: ModelElement ): boolean {
 	// TMP will be replaced with schema.checkWrap().
-	const isBQAllowed = schema.checkChild( block.parent as Element, 'aside' );
+	const isBQAllowed = schema.checkChild( block.parent as ModelElement, 'aside' );
 	const isBlockAllowedInBQ = schema.checkChild( [ '$root', 'aside' ], block );
 
 	return isBQAllowed && isBlockAllowedInBQ;

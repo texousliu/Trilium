@@ -4,8 +4,7 @@ import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
-import type { KeyboardShortcutWithRequiredActionName, OptionMap, OptionNames } from "@triliumnext/commons";
-import { DEFAULT_ALLOWED_TAGS } from "./html_sanitizer.js";
+import { SANITIZER_DEFAULT_ALLOWED_TAGS, type KeyboardShortcutWithRequiredActionName, type OptionMap, type OptionNames } from "@triliumnext/commons";
 
 function initDocumentOptions() {
     optionService.createOption("documentId", randomSecureToken(16), false);
@@ -121,11 +120,12 @@ const defaultOptions: DefaultOption[] = [
     { name: "compressImages", value: "true", isSynced: true },
     { name: "downloadImagesAutomatically", value: "true", isSynced: true },
     { name: "minTocHeadings", value: "5", isSynced: true },
-    { name: "highlightsList", value: '["bold","italic","underline","color","bgColor"]', isSynced: true },
+    { name: "highlightsList", value: '["underline","color","bgColor"]', isSynced: true },
     { name: "checkForUpdates", value: "true", isSynced: true },
     { name: "disableTray", value: "false", isSynced: false },
     { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days
     { name: "eraseUnusedAttachmentsAfterTimeScale", value: "86400", isSynced: true }, // default 86400 seconds = Day
+    { name: "logRetentionDays", value: "90", isSynced: false }, // default 90 days
     { name: "customSearchEngineName", value: "DuckDuckGo", isSynced: true },
     { name: "customSearchEngineUrl", value: "https://duckduckgo.com/?q={keyword}", isSynced: true },
     { name: "promotedAttributesOpenInRibbon", value: "true", isSynced: true },
@@ -152,10 +152,14 @@ const defaultOptions: DefaultOption[] = [
         },
         isSynced: false
     },
+    { name: "motionEnabled", value: "true", isSynced: false },
+    { name: "shadowsEnabled", value: "true", isSynced: false },
+    { name: "backdropEffectsEnabled", value: "true", isSynced: false },
+    { name: "smoothScrollEnabled", value: "true", isSynced: false },
 
     // Internationalization
     { name: "locale", value: "en", isSynced: true },
-    { name: "formattingLocale", value: "en", isSynced: true },
+    { name: "formattingLocale", value: "", isSynced: true }, // no value means auto-detect
     { name: "firstDayOfWeek", value: "1", isSynced: true },
     { name: "firstWeekOfYear", value: "0", isSynced: true },
     { name: "minDaysInFirstWeek", value: "4", isSynced: true },
@@ -178,13 +182,16 @@ const defaultOptions: DefaultOption[] = [
     // Text note configuration
     { name: "textNoteEditorType", value: "ckeditor-balloon", isSynced: true },
     { name: "textNoteEditorMultilineToolbar", value: "false", isSynced: true },
+    { name: "textNoteEmojiCompletionEnabled", value: "true", isSynced: true },
+    { name: "textNoteCompletionEnabled", value: "true", isSynced: true },
+    { name: "textNoteSlashCommandsEnabled", value: "true", isSynced: true },
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },
-    { name: "backgroundEffects", value: "false", isSynced: false },
+    { name: "backgroundEffects", value: "true", isSynced: false },
     {
         name: "allowedHtmlTags",
-        value: JSON.stringify(DEFAULT_ALLOWED_TAGS),
+        value: JSON.stringify(SANITIZER_DEFAULT_ALLOWED_TAGS),
         isSynced: true
     },
 
@@ -204,11 +211,11 @@ const defaultOptions: DefaultOption[] = [
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "", isSynced: true },
     { name: "ollamaBaseUrl", value: "http://localhost:11434", isSynced: true },
-
-    // Adding missing AI options
     { name: "aiTemperature", value: "0.7", isSynced: true },
     { name: "aiSystemPrompt", value: "", isSynced: true },
     { name: "aiSelectedProvider", value: "openai", isSynced: true },
+
+    { name: "seenCallToActions", value: "[]", isSynced: true }
 ];
 
 /**
@@ -249,7 +256,7 @@ function initStartupOptions() {
 }
 
 function getKeyboardDefaultOptions() {
-    return (keyboardActions.getDefaultKeyboardActions().filter((ka) => !!ka.actionName) as KeyboardShortcutWithRequiredActionName[]).map((ka) => ({
+    return (keyboardActions.getDefaultKeyboardActions().filter((ka) => "actionName" in ka) as KeyboardShortcutWithRequiredActionName[]).map((ka) => ({
         name: `keyboardShortcuts${ka.actionName.charAt(0).toUpperCase()}${ka.actionName.slice(1)}`,
         value: JSON.stringify(ka.defaultShortcuts),
         isSynced: false

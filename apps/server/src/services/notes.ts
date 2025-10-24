@@ -254,7 +254,7 @@ function createNewNote(params: NoteParams): {
     });
 }
 
-function createNewNoteWithTarget(target: "into" | "after", targetBranchId: string | undefined, params: NoteParams) {
+function createNewNoteWithTarget(target: "into" | "after" | "before", targetBranchId: string | undefined, params: NoteParams) {
     if (!params.type) {
         const parentNote = becca.notes[params.parentNoteId];
 
@@ -278,12 +278,25 @@ function createNewNoteWithTarget(target: "into" | "after", targetBranchId: strin
         entityChangesService.putNoteReorderingEntityChange(params.parentNoteId);
 
         return retObject;
+    } else if (target === "before" && targetBranchId) {
+        const beforeBranch = becca.branches[targetBranchId];
+
+        // not updating utcDateModified to avoid having to sync whole rows
+        sql.execute("UPDATE branches SET notePosition = notePosition - 10 WHERE parentNoteId = ? AND notePosition < ? AND isDeleted = 0", [params.parentNoteId, beforeBranch.notePosition]);
+
+        params.notePosition = beforeBranch.notePosition - 10;
+
+        const retObject = createNewNote(params);
+
+        entityChangesService.putNoteReorderingEntityChange(params.parentNoteId);
+
+        return retObject;
     } else {
         throw new Error(`Unknown target '${target}'`);
     }
 }
 
-function protectNoteRecursively(note: BNote, protect: boolean, includingSubTree: boolean, taskContext: TaskContext) {
+function protectNoteRecursively(note: BNote, protect: boolean, includingSubTree: boolean, taskContext: TaskContext<"protectNotes">) {
     protectNote(note, protect);
 
     taskContext.increaseProgressCount();
@@ -752,7 +765,7 @@ function updateNoteData(noteId: string, content: string, attachments: Attachment
     }
 }
 
-function undeleteNote(noteId: string, taskContext: TaskContext) {
+function undeleteNote(noteId: string, taskContext: TaskContext<"undeleteNotes">) {
     const noteRow = sql.getRow<NoteRow>("SELECT * FROM notes WHERE noteId = ?", [noteId]);
 
     if (!noteRow.isDeleted || !noteRow.deleteId) {
@@ -772,7 +785,7 @@ function undeleteNote(noteId: string, taskContext: TaskContext) {
     }
 }
 
-function undeleteBranch(branchId: string, deleteId: string, taskContext: TaskContext) {
+function undeleteBranch(branchId: string, deleteId: string, taskContext: TaskContext<"undeleteNotes">) {
     const branchRow = sql.getRow<BranchRow>("SELECT * FROM branches WHERE branchId = ?", [branchId]);
 
     if (!branchRow.isDeleted) {
@@ -918,10 +931,6 @@ function duplicateSubtree(origNoteId: string, newParentNoteId: string) {
 
     const noteIdMapping = getNoteIdMapping(origNote);
 
-    if (!origBranch) {
-        throw new Error("Unable to find original branch to duplicate.");
-    }
-
     const res = duplicateSubtreeInner(origNote, origBranch, newParentNoteId, noteIdMapping);
 
     const duplicateNoteSuffix = t("notes.duplicate-note-suffix");
@@ -953,7 +962,7 @@ function duplicateSubtreeWithoutRoot(origNoteId: string, newNoteId: string) {
     }
 }
 
-function duplicateSubtreeInner(origNote: BNote, origBranch: BBranch, newParentNoteId: string, noteIdMapping: Record<string, string>) {
+function duplicateSubtreeInner(origNote: BNote, origBranch: BBranch | null | undefined, newParentNoteId: string, noteIdMapping: Record<string, string>) {
     if (origNote.isProtected && !protectedSessionService.isProtectedSessionAvailable()) {
         throw new Error(`Cannot duplicate note '${origNote.noteId}' because it is protected and protected session is not available. Enter protected session and try again.`);
     }

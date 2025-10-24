@@ -7,9 +7,9 @@ Installation of Nix on Mac or Linux ([download page](https://nixos.org/download/
 
 ## Run directly
 
-Using [nix run](https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-run.html), the desktop app can be started as: `nix run github:TriliumNext/Notes/v0.95.0`
+Using [nix run](https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-run.html), the desktop app can be started as: `nix run github:TriliumNext/Trilium/v0.95.0`
 
-Running the server requires explicitly specifying the desired package: `nix run github:TriliumNext/Notes/v0.95.0#server`
+Running the server requires explicitly specifying the desired package: `nix run github:TriliumNext/Trilium/v0.95.0#server`
 
 Instead of a version (`v0.95.0` above), you can also specify a commit hash (or a branch name). This makes it easy to test development builds.
 
@@ -22,7 +22,7 @@ Add to your `flake.nix`:
   inputs = {
     nixpkgs.url = # ...;
     trilium-notes = {
-      url = "github:TriliumNext/Notes/v0.95.0";
+      url = "github:TriliumNext/Trilium/v0.95.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

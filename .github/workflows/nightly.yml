@@ -19,7 +19,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GITHUB_UPLOAD_URL: https://uploads.github.com/repos/TriliumNext/Notes/releases/179589950/assets{?name,label}
   GITHUB_RELEASE_ID: 179589950
 
 permissions:
@@ -27,6 +26,7 @@ permissions:
 
 jobs:
   nightly-electron:
+    if: github.repository == ${{ vars.REPO_MAIN }}
     name: Deploy nightly
     strategy:
       fail-fast: false
@@ -47,16 +47,15 @@ jobs:
             forge_platform: win32
     runs-on: ${{ matrix.os.image }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
       - name: Update nightly version
         run: npm run chore:ci-update-nightly-version
       - name: Run the build
@@ -75,9 +74,10 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           WINDOWS_SIGN_EXECUTABLE: ${{ vars.WINDOWS_SIGN_EXECUTABLE }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGN_KEY }}
 
       - name: Publish release
-        uses: softprops/action-gh-release@v2.3.2
+        uses: softprops/action-gh-release@v2.4.1
         if: ${{ github.event_name != 'pull_request' }}
         with:
           make_latest: false
@@ -92,10 +92,11 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ github.event_name == 'pull_request' }}
         with:
-          name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}
+          name: TriliumNotes ${{ matrix.os.name }} ${{ matrix.arch }}
           path: apps/desktop/upload
 
   nightly-server:
+    if: github.repository == ${{ vars.REPO_MAIN }}
     name: Deploy server nightly
     strategy:
       fail-fast: false
@@ -108,7 +109,7 @@ jobs:
             runs-on: ubuntu-24.04-arm
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run the build
         uses: ./.github/actions/build-server
@@ -117,7 +118,7 @@ jobs:
           arch: ${{ matrix.arch }}
 
       - name: Publish release
-        uses: softprops/action-gh-release@v2.3.2
+        uses: softprops/action-gh-release@v2.4.1
         if: ${{ github.event_name != 'pull_request' }}
         with:
           make_latest: false

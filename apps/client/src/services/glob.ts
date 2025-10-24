@@ -49,6 +49,13 @@ function setupGlobs() {
         const string = e?.reason?.message?.toLowerCase();
 
         let message = "Uncaught error: ";
+        let errorObjectString;
+
+        try {
+            errorObjectString = JSON.stringify(e.reason)
+        } catch (error: any) {
+            errorObjectString = error.toString();
+        }
 
         if (string?.includes("script error")) {
             message += "No details available";
@@ -57,7 +64,7 @@ function setupGlobs() {
                 `Message: ${e.reason.message}`,
                 `Line: ${e.reason.lineNumber}`,
                 `Column: ${e.reason.columnNumber}`,
-                `Error object: ${JSON.stringify(e.reason)}`,
+                `Error object: ${errorObjectString}`,
                 `Stack: ${e.reason && e.reason.stack}`
             ].join(", ");
         }

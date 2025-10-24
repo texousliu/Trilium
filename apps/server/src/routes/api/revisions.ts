@@ -12,6 +12,7 @@ import type { Request, Response } from "express";
 import type BRevision from "../../becca/entities/brevision.js";
 import type BNote from "../../becca/entities/bnote.js";
 import type { NotePojo } from "../../becca/becca-interface.js";
+import { EditedNotesResponse, RevisionItem, RevisionPojo, RevisionRow } from "@triliumnext/commons";
 
 interface NotePath {
     noteId: string;
@@ -41,7 +42,7 @@ function getRevisions(req: Request) {
         WHERE revisions.noteId = ?
         ORDER BY revisions.utcDateCreated DESC`,
         [req.params.noteId]
-    );
+    ) satisfies RevisionItem[];
 }
 
 function getRevision(req: Request) {
@@ -59,7 +60,7 @@ function getRevision(req: Request) {
         }
     }
 
-    return revision;
+    return revision satisfies RevisionPojo;
 }
 
 function getRevisionFilename(revision: BRevision) {
@@ -151,14 +152,14 @@ function restoreRevision(req: Request) {
 }
 
 function getEditedNotesOnDate(req: Request) {
-    const noteIds = sql.getColumn<string>(
-        `
+    const noteIds = sql.getColumn<string>(/*sql*/`\
         SELECT notes.*
         FROM notes
         WHERE noteId IN (
                 SELECT noteId FROM notes
-                WHERE notes.dateCreated LIKE :date
-                    OR notes.dateModified LIKE :date
+                WHERE
+                    (notes.dateCreated LIKE :date OR notes.dateModified LIKE :date)
+                    AND (noteId NOT LIKE '_%')
             UNION ALL
                 SELECT noteId FROM revisions
                 WHERE revisions.dateLastEdited LIKE :date
@@ -183,7 +184,7 @@ function getEditedNotesOnDate(req: Request) {
         notePojo.notePath = notePath ? notePath.notePath : null;
 
         return notePojo;
-    });
+    }) satisfies EditedNotesResponse;
 }
 
 function getNotePathData(note: BNote): NotePath | undefined {

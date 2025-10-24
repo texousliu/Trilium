@@ -23,11 +23,13 @@ interface Options {
     tooltip?: boolean;
     trim?: boolean;
     imageHasZoom?: boolean;
+    /** If enabled, it will prevent the default behavior in which an empty note would display a list of children. */
+    noChildrenList?: boolean;
 }
 
 const CODE_MIME_TYPES = new Set(["application/json"]);
 
-async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FAttachment, options: Options = {}) {
+export async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FAttachment, options: Options = {}) {
 
     options = Object.assign(
         {
@@ -42,7 +44,7 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
     const $renderedContent = $('<div class="rendered-content">');
 
     if (type === "text" || type === "book") {
-        await renderText(entity, $renderedContent);
+        await renderText(entity, $renderedContent, options);
     } else if (type === "code") {
         await renderCode(entity, $renderedContent);
     } else if (["image", "canvas", "mindMap"].includes(type)) {
@@ -65,6 +67,9 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
 
         $renderedContent.append($("<div>").append("<div>This note is protected and to access it you need to enter password.</div>").append("<br/>").append($button));
     } else if (entity instanceof FNote) {
+        $renderedContent
+            .css("display", "flex")
+            .css("flex-direction", "column");
         $renderedContent.append(
             $("<div>")
                 .css("display", "flex")
@@ -72,8 +77,33 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
                 .css("align-items", "center")
                 .css("height", "100%")
                 .css("font-size", "500%")
+                .css("flex-grow", "1")
                 .append($("<span>").addClass(entity.getIcon()))
         );
+
+        if (entity.type === "webView" && entity.hasLabel("webViewSrc")) {
+            const $footer = $("<footer>")
+                .addClass("webview-footer");
+            const $openButton = $(`
+                <button class="file-open btn btn-primary" type="button">
+                    <span class="bx bx-link-external"></span>
+                    ${t("content_renderer.open_externally")}
+                </button>
+            `)
+                .appendTo($footer)
+                .on("click", () => {
+                    const webViewSrc = entity.getLabelValue("webViewSrc");
+                    if (webViewSrc) {
+                        if (utils.isElectron()) {
+                            const electron = utils.dynamicRequire("electron");
+                            electron.shell.openExternal(webViewSrc);
+                        } else {
+                            window.open(webViewSrc, '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                });
+            $footer.appendTo($renderedContent);
+        }
     }
 
     if (entity instanceof FNote) {
@@ -86,7 +116,7 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
     };
 }
 
-async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>) {
+async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>, options: Options = {}) {
     // entity must be FNote
     const blob = await note.getBlob();
 
@@ -107,7 +137,7 @@ async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HT
         }
 
         await formatCodeBlocks($renderedContent);
-    } else if (note instanceof FNote) {
+    } else if (note instanceof FNote && !options.noChildrenList) {
         await renderChildrenList($renderedContent, note);
     }
 }
@@ -118,8 +148,17 @@ async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HT
 async function renderCode(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>) {
     const blob = await note.getBlob();
 
+    let content = blob?.content || "";
+    if (note.mime === "application/json") {
+        try {
+            content = JSON.stringify(JSON.parse(content), null, 4);
+        } catch (e) {
+            // Ignore JSON parsing errors.
+        }
+    }
+
     const $codeBlock = $("<code>");
-    $codeBlock.text(blob?.content || "");
+    $codeBlock.text(content);
     $renderedContent.append($("<pre>").append($codeBlock));
     await applySingleBlockSyntaxHighlight($codeBlock, normalizeMimeTypeForCKEditor(note.mime));
 }
@@ -219,8 +258,19 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
             </button>
         `);
 
-        $downloadButton.on("click", () => openService.downloadFileNote(entity.noteId));
-        $openButton.on("click", () => openService.openNoteExternally(entity.noteId, entity.mime));
+        $downloadButton.on("click", (e) => {
+            e.stopPropagation();
+            openService.downloadFileNote(entity.noteId)
+        });
+        $openButton.on("click", async (e) => {
+            const iconEl = $openButton.find("> .bx");
+            iconEl.removeClass("bx bx-link-external");
+            iconEl.addClass("bx bx-loader spin");
+            e.stopPropagation();
+            await openService.openNoteExternally(entity.noteId, entity.mime)
+            iconEl.removeClass("bx bx-loader spin");
+            iconEl.addClass("bx bx-link-external");
+        });
         // open doesn't work for protected notes since it works through a browser which isn't in protected session
         $openButton.toggle(!entity.isProtected);
 
@@ -301,7 +351,7 @@ function getRenderingType(entity: FNote | FAttachment) {
 
     if (type === "file" && mime === "application/pdf") {
         type = "pdf";
-    } else if (type === "file" && mime && CODE_MIME_TYPES.has(mime)) {
+    } else if ((type === "file" || type === "viewConfig") && mime && CODE_MIME_TYPES.has(mime)) {
         type = "code";
     } else if (type === "file" && mime && mime.startsWith("audio/")) {
         type = "audio";

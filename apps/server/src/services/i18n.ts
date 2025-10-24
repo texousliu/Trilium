@@ -7,18 +7,25 @@ import hidden_subtree from "./hidden_subtree.js";
 import { LOCALES, type Locale, type LOCALE_IDS } from "@triliumnext/commons";
 import dayjs, { Dayjs } from "dayjs";
 
-const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs/locale/en.js")>> = {
+export const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs/locale/en.js")>> = {
     "ar": () => import("dayjs/locale/ar.js"),
     "cn": () => import("dayjs/locale/zh-cn.js"),
     "de": () => import("dayjs/locale/de.js"),
     "en": () => import("dayjs/locale/en.js"),
+    "en_rtl": () => import("dayjs/locale/en.js"),
     "es": () => import("dayjs/locale/es.js"),
     "fa": () => import("dayjs/locale/fa.js"),
     "fr": () => import("dayjs/locale/fr.js"),
+    "it": () => import("dayjs/locale/it.js"),
     "he": () => import("dayjs/locale/he.js"),
+    "ja": () => import("dayjs/locale/ja.js"),
     "ku": () => import("dayjs/locale/ku.js"),
+    "pt_br": () => import("dayjs/locale/pt-br.js"),
+    "pt": () => import("dayjs/locale/pt.js"),
     "ro": () => import("dayjs/locale/ro.js"),
-    "tw": () => import("dayjs/locale/zh-tw.js")
+    "ru": () => import("dayjs/locale/ru.js"),
+    "tw": () => import("dayjs/locale/zh-tw.js"),
+    "uk": () => import("dayjs/locale/uk.js"),
 }
 
 export async function initializeTranslations() {
@@ -37,8 +44,10 @@ export async function initializeTranslations() {
     });
 
     // Initialize dayjs locale.
-    const dayjsLocale = await DAYJS_LOADER[locale]();
-    dayjs.locale(dayjsLocale);
+    const dayjsLocale = DAYJS_LOADER[locale];
+    if (dayjsLocale) {
+        dayjs.locale(await dayjsLocale());
+    }
 }
 
 export function ordinal(date: Dayjs) {
@@ -67,4 +76,11 @@ function getCurrentLanguage(): LOCALE_IDS {
 export async function changeLanguage(locale: string) {
     await i18next.changeLanguage(locale);
     hidden_subtree.checkHiddenSubtree(true, { restoreNames: true });
+}
+
+export function getCurrentLocale() {
+    const localeId = options.getOptionOrNull("locale") ?? "en";
+    const currentLocale = LOCALES.find(l => l.id === localeId);
+    if (!currentLocale) return LOCALES.find(l => l.id === "en")!;
+    return currentLocale;
 }

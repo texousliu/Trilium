@@ -28,6 +28,16 @@ const TPL = /*html*/`
 
 export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
+    private debounceUpdate: boolean;
+
+    /**
+     * @param debounceUpdate if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
+     */
+    constructor(debounceUpdate: boolean = false) {
+        super();
+        this.debounceUpdate = debounceUpdate;
+    }
+
     static getType() {
         return "editableCode";
     }
@@ -46,7 +56,13 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         return {
             placeholder: t("editable_code.placeholder"),
             vimKeybindings: options.is("vimKeymapEnabled"),
-            onContentChanged: () => this.spacedUpdate.scheduleUpdate(),
+            onContentChanged: () => {
+                if (this.debounceUpdate) {
+                    this.spacedUpdate.resetUpdateTimer();
+                }
+
+                this.spacedUpdate.scheduleUpdate();
+            },
             tabIndex: 300
         }
     }

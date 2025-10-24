@@ -3,7 +3,6 @@ import path from "path";
 import express from "express";
 import { getResourceDir, isDev } from "../services/utils.js";
 import type serveStatic from "serve-static";
-import proxy from "express-http-proxy";
 import { existsSync } from "fs";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
@@ -17,17 +16,22 @@ const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOp
 };
 
 async function register(app: express.Application) {
-    const srcRoot = path.join(__dirname, "..");
+    const srcRoot = path.join(__dirname, "..", "..");
     const resourceDir = getResourceDir();
 
-    if (isDev) {
-        const publicUrl = process.env.TRILIUM_PUBLIC_SERVER;
-        if (!publicUrl) {
-            throw new Error("Missing TRILIUM_PUBLIC_SERVER");
-        }
-        app.use("/" + assetUrlFragment + `/@fs`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => "/" + assetUrlFragment + `/@fs` + req.url
-        }));
+    if (process.env.NODE_ENV === "development") {
+        const { createServer: createViteServer } = await import("vite");
+        const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: "custom",
+            cacheDir: path.join(srcRoot, "../../.cache/vite"),
+            base: `/${assetUrlFragment}/`,
+            root: path.join(srcRoot, "../client")
+        });
+        app.use(`/${assetUrlFragment}/`, (req, res, next) => {
+            req.url = `/${assetUrlFragment}` + req.url;
+            vite.middlewares(req, res, next);
+        });
     } else {
         const publicDir = path.join(resourceDir, "public");
         if (!existsSync(publicDir)) {

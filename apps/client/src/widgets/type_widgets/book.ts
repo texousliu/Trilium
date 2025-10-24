@@ -36,7 +36,21 @@ export default class BookTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: FNote) {
-        this.$helpNoChildren.toggle(!this.note?.hasChildren() && this.note?.getAttributeValue("label", "viewType") !== "calendar");
+        this.$helpNoChildren.toggle(this.shouldDisplayNoChildrenWarning());
+    }
+
+    shouldDisplayNoChildrenWarning() {
+        if (this.note?.hasChildren()) {
+            return false;
+        }
+
+        switch (this.note?.getAttributeValue("label", "viewType")) {
+            case "list":
+            case "grid":
+                return true;
+            default:
+                return false;
+        }
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
