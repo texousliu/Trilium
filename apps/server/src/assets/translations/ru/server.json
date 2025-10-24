@@ -424,5 +424,12 @@
   },
   "content_renderer": {
     "note-cannot-be-displayed": "Этот тип заметки не может быть отображен."
+  },
+  "sql_init": {
+    "db_not_initialized_desktop": "База данных не инициализирована, следуйте инструкциям на экране.",
+    "db_not_initialized_server": "База данных не инициализирована, пожалуйста, посетите страницу настройки - http://[your-server-host]:{{port}}, чтобы увидеть инструкции по инициализации Trilium."
+  },
+  "desktop": {
+    "instance_already_running": "Приложение уже запущено, фокус переключен на него."
   }
 }

@@ -18,7 +18,7 @@
   <li>Create a new column by pressing <em>Add Column</em> near the last column.
     <ul>
       <li>Once pressed, a text box will be displayed to set the name of the column.
-        Press Enter to confirm.</li>
+        Press <kbd>Enter</kbd> to confirm, or <kbd>Escape</kbd> to dismiss.</li>
     </ul>
   </li>
   <li>To reorder a column, simply hold the mouse over the title and drag it
@@ -37,11 +37,16 @@
 <ul>
   <li>Create a new note in any column by pressing <em>New item</em>
     <ul>
-      <li>Enter the name of the note and press <em>Enter</em>.</li>
-      <li>Doing so will create a new note. The new note will have an attribute (<code>status</code> label
+      <li>Enter the name of the note and press <kbd>Enter</kbd> or click away. To
+        dismiss the creation of a new note, simply press <kbd>Escape</kbd> or leave
+        the name empty.</li>
+      <li>Once created, the new note will have an attribute (<code>status</code> label
         by default) set to the name of the column.</li>
     </ul>
   </li>
+  <li>To open the note, simply click on it.</li>
+  <li>To change the title of the note directly from the board, hover the mouse
+    over its card and press the edit button on the right.</li>
   <li>To change the state of a note, simply drag a note from one column to the
     other to change its state.</li>
   <li>The order of the notes in each column corresponds to their position in
@@ -58,11 +63,23 @@
       <li>Open the note in a new tab/split/window or quick edit.</li>
       <li>Move the note to any column.</li>
       <li>Insert a new note above/below the current one.</li>
+      <li>Archive/unarchive the current note.</li>
       <li>Delete the current note.</li>
     </ul>
   </li>
   <li>If there are many notes within the column, move the mouse over the column
     and use the mouse wheel to scroll.</li>
+</ul>
+<h2>Keyboard interaction</h2>
+<p>The board view has mild support for keyboard-based navigation:</p>
+<ul>
+  <li>Use <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> to navigate between
+    column titles, notes and the “New item” button for each of the columns,
+    in sequential order.</li>
+  <li>To rename a column or a note, press <kbd>F2</kbd> while it is focused.</li>
+  <li>To open a specific note or create a new item, press <kbd>Enter</kbd> while
+    it is focused.</li>
+  <li>To dismiss a rename of a note or a column, press <kbd>Escape</kbd>.</li>
 </ul>
 <h2>Configuration</h2>
 <h3>Grouping by another attribute</h3>

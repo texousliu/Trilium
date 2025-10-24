@@ -12,12 +12,17 @@ import path from "path";
 import type NoteMeta from "./meta/note_meta.js";
 import log from "./log.js";
 import { t } from "i18next";
+import { release as osRelease } from "os";
+
+const osVersion = osRelease().split('.').map(Number);
 
 const randtoken = generator({ source: "crypto" });
 
 export const isMac = process.platform === "darwin";
 
 export const isWindows = process.platform === "win32";
+
+export const isWindows11 = isWindows && osVersion[0] === 10 && osVersion[2] >= 22000;
 
 export const isElectron = !!process.versions["electron"];
 
@@ -473,6 +478,32 @@ export function normalizeCustomHandlerPattern(pattern: string | null | undefined
     }
 }
 
+export function formatUtcTime(time: string) {
+    return time.replace("T", " ").substring(0, 19)
+}
+
+// TODO: Deduplicate with client utils
+export function formatSize(size: number | null | undefined) {
+    if (size === null || size === undefined) {
+        return "";
+    }
+
+    size = Math.max(Math.round(size / 1024), 1);
+
+    if (size < 1024) {
+        return `${size} KiB`;
+    } else {
+        return `${Math.round(size / 102.4) / 10} MiB`;
+    }
+}
+
+function slugify(text: string) {
+    return text
+        .normalize("NFC") // keep composed form, preserves accents
+        .toLowerCase()
+        .replace(/[^\p{Letter}\p{Number}]+/gu, "-") // replace non-letter/number with "-"
+        .replace(/(^-|-$)+/g, ""); // trim dashes
+}
 
 export default {
     compareVersions,
@@ -509,6 +540,7 @@ export default {
     safeExtractMessageAndStackFromError,
     sanitizeSqlIdentifier,
     stripTags,
+    slugify,
     timeLimit,
     toBase64,
     toMap,

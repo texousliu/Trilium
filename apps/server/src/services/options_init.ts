@@ -120,7 +120,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "compressImages", value: "true", isSynced: true },
     { name: "downloadImagesAutomatically", value: "true", isSynced: true },
     { name: "minTocHeadings", value: "5", isSynced: true },
-    { name: "highlightsList", value: '["bold","italic","underline","color","bgColor"]', isSynced: true },
+    { name: "highlightsList", value: '["underline","color","bgColor"]', isSynced: true },
     { name: "checkForUpdates", value: "true", isSynced: true },
     { name: "disableTray", value: "false", isSynced: false },
     { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days
@@ -155,11 +155,11 @@ const defaultOptions: DefaultOption[] = [
     { name: "motionEnabled", value: "true", isSynced: false },
     { name: "shadowsEnabled", value: "true", isSynced: false },
     { name: "backdropEffectsEnabled", value: "true", isSynced: false },
-
+    { name: "smoothScrollEnabled", value: "true", isSynced: false },
 
     // Internationalization
     { name: "locale", value: "en", isSynced: true },
-    { name: "formattingLocale", value: "en", isSynced: true },
+    { name: "formattingLocale", value: "", isSynced: true }, // no value means auto-detect
     { name: "firstDayOfWeek", value: "1", isSynced: true },
     { name: "firstWeekOfYear", value: "0", isSynced: true },
     { name: "minDaysInFirstWeek", value: "4", isSynced: true },
@@ -184,6 +184,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "textNoteEditorMultilineToolbar", value: "false", isSynced: true },
     { name: "textNoteEmojiCompletionEnabled", value: "true", isSynced: true },
     { name: "textNoteCompletionEnabled", value: "true", isSynced: true },
+    { name: "textNoteSlashCommandsEnabled", value: "true", isSynced: true },
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },

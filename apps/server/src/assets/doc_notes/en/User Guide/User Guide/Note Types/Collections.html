@@ -49,11 +49,19 @@
 <p>Now the text will be displayed above while still maintaining the collection
   view.</p>
 <h3>Using saved search</h3>
-<p>Since collections are based on the&nbsp;<a class="reference-link" href="#root/_help_0ESUbbAxVnoK">Note List</a>&nbsp;mechanism,
-  it's possible to apply the same configuration to&nbsp;<a class="reference-link"
-  href="#root/_help_m523cpzocqaD">Saved Search</a>&nbsp;to do advanced querying
-  and presenting the result in an adequate matter such as a calendar, a table
-  or even a map.</p>
+<p>Collections, by default, only display the child notes. However, it is
+  possible to use the&nbsp;<a class="reference-link" href="#root/_help_eIg8jdvaoNNd">Search</a>&nbsp;functionality
+  to display notes all across the tree, with advanced querying functionality.</p>
+<p>To do so, simply start a&nbsp;<a class="reference-link" href="#root/_help_eIg8jdvaoNNd">Search</a>&nbsp;and
+  go to the <em>Collection Properties</em> tab in the&nbsp;<a class="reference-link"
+  href="#root/_help_BlN9DFI679QC">Ribbon</a>&nbsp;and select a desired type
+  of collection. To keep the search-based collection, use a&nbsp;<a class="reference-link"
+  href="#root/_help_m523cpzocqaD">Saved Search</a>.</p>
+<aside class="admonition important">
+  <p>While in search, none of the collections will not display the child notes
+    of the search results. The reason is that the search might hit a note multiple
+    times, causing an exponential rise in the number of results.</p>
+</aside>
 <h3>Creating a collection from scratch</h3>
 <p>By default, collections come with a default configuration and sometimes
   even sample notes. To create a collection completely from scratch:</p>
@@ -67,6 +75,13 @@
   <li>Consult the help page of the corresponding view type in order to understand
     how to configure them.</li>
 </ol>
+<h2>Archived notes</h2>
+<p>By default, archived notes will not be shown in collections. This behaviour
+  can be changed by going to <em>Collection Properties</em> in the&nbsp;
+  <a
+  class="reference-link" href="#root/_help_BlN9DFI679QC">Ribbon</a>&nbsp;and checking <em>Show archived notes</em>.</p>
+<p>Archived notes will be generally indicated by being greyed out as opposed
+  to the normal ones.</p>
 <h2>Under the hood</h2>
 <p>Collections by themselves are simply notes with no content that rely on
   the&nbsp;<a class="reference-link" href="#root/_help_0ESUbbAxVnoK">Note List</a>&nbsp;mechanism

@@ -2,9 +2,9 @@ import BasicWidget from "./basic_widget.js";
 import server from "../services/server.js";
 import linkService from "../services/link.js";
 import froca from "../services/froca.js";
-import utils from "../services/utils.js";
+import utils, { handleRightToLeftPlacement } from "../services/utils.js";
 import appContext from "../components/app_context.js";
-import shortcutService from "../services/shortcuts.js";
+import shortcutService, { isIMEComposing } from "../services/shortcuts.js";
 import { t } from "../services/i18n.js";
 import { Dropdown, Tooltip } from "bootstrap";
 
@@ -22,6 +22,8 @@ const TPL = /*html*/`
     }
 
     .quick-search .dropdown-menu {
+        --quick-search-item-delimiter-color: var(--dropdown-border-color);
+
         max-height: 80vh;
         min-width: 400px;
         max-width: 720px;
@@ -30,40 +32,40 @@ const TPL = /*html*/`
         text-overflow: ellipsis;
         box-shadow: -30px 50px 93px -50px black;
     }
-    
+
     .quick-search .dropdown-item {
         white-space: normal;
         padding: 12px 16px;
         line-height: 1.4;
         position: relative;
     }
-    
-    .quick-search .dropdown-item:not(:last-child)::after {
+
+    .quick-search .dropdown-item + .dropdown-item::after {
         content: '';
         position: absolute;
-        left: 0;
-        bottom: 0;
+        inset-inline-start: 0;
+        top: 0;
         width: 100%;
         height: 1px;
-        background: var(--dropdown-border-color);
+        border-bottom: 1px solid var(--quick-search-item-delimiter-color);
     }
-    
+
     .quick-search .dropdown-item:last-child::after {
         display: none;
     }
-    
+
     .quick-search .dropdown-item.disabled::after {
         display: none;
     }
-    
+
     .quick-search .dropdown-item.show-in-full-search::after {
         display: none;
     }
-    
+
     .quick-search-item.dropdown-item:hover {
         background-color: #f8f9fa;
     }
-    
+
      .quick-search .quick-search-item {
         width: 100%;
     }
@@ -92,6 +94,8 @@ const TPL = /*html*/`
         background-color: var(--accented-background-color);
         color: var(--main-text-color);
         font-size: .85em;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     /* Search result highlighting */
@@ -104,6 +108,10 @@ const TPL = /*html*/`
 
     .quick-search .dropdown-divider {
         margin: 0;
+    }
+
+    .quick-search .bx-loader {
+        margin-inline-end: 4px;
     }
 
   </style>
@@ -143,7 +151,7 @@ export default class QuickSearchWidget extends BasicWidget {
     private dropdown!: bootstrap.Dropdown;
     private $searchString!: JQuery<HTMLElement>;
     private $dropdownMenu!: JQuery<HTMLElement>;
-    
+
     // State for infinite scrolling
     private allSearchResults: Array<any> = [];
     private allSearchResultNoteIds: string[] = [];
@@ -164,7 +172,7 @@ export default class QuickSearchWidget extends BasicWidget {
         });
 
         this.$widget.find(".input-group-prepend").on("shown.bs.dropdown", () => this.search());
-        
+
         // Add scroll event listener for infinite scrolling
         this.$dropdownMenu.on("scroll", () => {
             this.handleScroll();
@@ -172,6 +180,14 @@ export default class QuickSearchWidget extends BasicWidget {
 
         if (utils.isMobile()) {
             this.$searchString.keydown((e) => {
+                // Skip processing if IME is composing to prevent interference
+                // with text input in CJK languages
+                // Note: jQuery wraps the native event, so we access originalEvent
+                const originalEvent = e.originalEvent as KeyboardEvent;
+                if (originalEvent && isIMEComposing(originalEvent)) {
+                    return;
+                }
+
                 if (e.which === 13) {
                     if (this.$dropdownMenu.is(":visible")) {
                         this.search(); // just update already visible dropdown
@@ -220,7 +236,11 @@ export default class QuickSearchWidget extends BasicWidget {
         this.isLoadingMore = false;
 
         this.$dropdownMenu.empty();
-        this.$dropdownMenu.append(`<span class="dropdown-item disabled"><span class="bx bx-loader bx-spin"></span>${t("quick-search.searching")}</span>`);
+        this.$dropdownMenu.append(`
+            <span class="dropdown-item disabled">
+                <span class="bx bx-loader bx-spin"></span>
+                ${t("quick-search.searching")}
+            </span>`);
 
         const { searchResultNoteIds, searchResults, error } = await server.get<QuickSearchResponse>(`quick-search/${encodeURIComponent(searchString)}`);
 
@@ -228,7 +248,7 @@ export default class QuickSearchWidget extends BasicWidget {
             let tooltip = new Tooltip(this.$searchString[0], {
                 trigger: "manual",
                 title: `Search error: ${error}`,
-                placement: "right"
+                placement: handleRightToLeftPlacement("right")
             });
 
             tooltip.show();
@@ -273,40 +293,40 @@ export default class QuickSearchWidget extends BasicWidget {
                 if (!noteId) continue;
 
                 const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
-                
+
                 // Build the display HTML with content snippet below the title
                 let itemHtml = `<div class="quick-search-item">
                     <div class="quick-search-item-header">
                         <span class="quick-search-item-icon ${result.icon}"></span>
                         <span class="search-result-title">${result.highlightedNotePathTitle}</span>
                     </div>`;
-                
+
                 // Add attribute snippet (tags/attributes) below the title if available
                 if (result.highlightedAttributeSnippet) {
                     // Replace <br> with a blank space to join the atributes on the same single line
                     const snippet = (result.highlightedAttributeSnippet as string).replace(/<br\s?\/?>/g, " ");
                     itemHtml += `<div class="search-result-attributes">${snippet}</div>`;
                 }
-                
+
                 // Add content snippet below the attributes if available
                 if (result.highlightedContentSnippet) {
                     itemHtml += `<div class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
-                
+
                 itemHtml += `</div>`;
-                
+
                 $item.html(itemHtml);
-                
+
                 $item.on("click", (e) => {
                     this.dropdown.hide();
                     e.preventDefault();
-                    
+
                     const activeContext = appContext.tabManager.getActiveContext();
                     if (activeContext) {
                         activeContext.setNote(noteId);
                     }
                 });
-                
+
                 shortcutService.bindElShortcut($item, "return", () => {
                     this.dropdown.hide();
 
@@ -370,7 +390,7 @@ export default class QuickSearchWidget extends BasicWidget {
         // Trigger loading more when user scrolls near the bottom (within 50px)
         if (scrollTop + clientHeight >= scrollHeight - 50) {
             const totalResults = this.allSearchResults.length > 0 ? this.allSearchResults.length : this.allSearchResultNoteIds.length;
-            
+
             if (this.currentDisplayedCount < totalResults) {
                 this.displayMoreResults(LOAD_MORE_BATCH_SIZE).then(() => {
                     this.addShowInFullSearchButton();

@@ -4,7 +4,6 @@ import type LoadResults from "../../../services/load_results.js";
 import search from "../../../services/search.js";
 import type { TemplateDefinition } from "@triliumnext/ckeditor5";
 import appContext from "../../../components/app_context.js";
-import TemplateIcon from "@ckeditor/ckeditor5-icons/theme/icons/template.svg?raw";
 import type FNote from "../../../entities/fnote.js";
 
 interface TemplateData {
@@ -31,7 +30,7 @@ export default async function getTemplates() {
         definitions.push({
             title: snippet.title,
             data: () => templateCache.get(snippet.noteId)?.content ?? "",
-            icon: TemplateIcon,
+            icon: buildIcon(snippet),
             description
         });
     }
@@ -47,6 +46,15 @@ async function invalidateCacheFor(snippet: FNote) {
     };
     templateCache.set(snippet.noteId, data);
     return data;
+}
+
+function buildIcon(snippet: FNote) {
+    return /*xml*/`\
+<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="20" height="20">
+    <span class="note-icon ${snippet.getIcon()} ${snippet.getColorClass()}" xmlns="http://www.w3.org/1999/xhtml"></span>
+  </foreignObject>
+</svg>`
 }
 
 function handleFullReload() {

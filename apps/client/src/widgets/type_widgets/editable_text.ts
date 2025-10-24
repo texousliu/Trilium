@@ -12,15 +12,16 @@ import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, BuildEditorOptions, OPEN_SOURCE_LICENSE_KEY } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig, EditorConfig } from "@triliumnext/ckeditor5";
-import "@triliumnext/ckeditor5/index.css";
 import { updateTemplateCache } from "./ckeditor/snippets.js";
+
+export type BoxSize = "small" | "medium" | "full";
 
 const TPL = /*html*/`
 <div class="note-detail-editable-text note-detail-printable">
     <style>
     .note-detail-editable-text {
         font-family: var(--detail-font-family);
-        padding-left: 14px;
+        padding-inline-start: 14px;
         padding-top: 10px;
         height: 100%;
     }
@@ -31,7 +32,7 @@ const TPL = /*html*/`
     }
 
     body.mobile .note-detail-editable-text {
-        padding-left: 4px;
+        padding-inline-start: 4px;
     }
 
     .note-detail-editable-text a:hover {
@@ -435,7 +436,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.triggerCommand("showIncludeNoteDialog", { textTypeWidget: this });
     }
 
-    addIncludeNote(noteId: string, boxSize?: string) {
+    addIncludeNote(noteId: string, boxSize?: BoxSize) {
         this.watchdog.editor?.model.change((writer) => {
             // Insert <includeNote>*</includeNote> at the current selection position
             // in a way that will result in creating a valid model structure

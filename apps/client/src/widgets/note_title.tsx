@@ -8,16 +8,17 @@ import "./note_title.css";
 import { isLaunchBarConfig } from "../services/utils";
 import appContext from "../components/app_context";
 import branches from "../services/branches";
+import { isIMEComposing } from "../services/shortcuts";
 
 export default function NoteTitleWidget() {
-    const { note, noteId, componentId, viewScope, noteContext, parentComponent } = useNoteContext();    
-    const title = useNoteProperty(note, "title", componentId);    
+    const { note, noteId, componentId, viewScope, noteContext, parentComponent } = useNoteContext();
+    const title = useNoteProperty(note, "title", componentId);
     const isProtected = useNoteProperty(note, "isProtected");
     const newTitle = useRef("");
-    
+
     const [ isReadOnly, setReadOnly ] = useState<boolean>(false);
-    const [ navigationTitle, setNavigationTitle ] = useState<string | null>(null);    
-    
+    const [ navigationTitle, setNavigationTitle ] = useState<string | null>(null);
+
     // Manage read-only
     useEffect(() => {
         const isReadOnly = note === null
@@ -33,7 +34,7 @@ export default function NoteTitleWidget() {
         if (isReadOnly) {
             noteContext?.getNavigationTitle().then(setNavigationTitle);
         }
-    }, [isReadOnly]);
+    }, [note, isReadOnly]);
 
     // Save changes to title.
     const spacedUpdate = useSpacedUpdate(async () => {
@@ -42,11 +43,11 @@ export default function NoteTitleWidget() {
         }
         protected_session_holder.touchProtectedSessionIfNecessary(note);
         await server.put<void>(`notes/${noteId}/title`, { title: newTitle.current }, componentId);
-    });    
+    });
 
     // Prevent user from navigating away if the spaced update is not done.
     useEffect(() => {
-        appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());        
+        appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());
     }, []);
     useTriliumEvents([ "beforeNoteSwitch", "beforeNoteContextRemove" ], () => spacedUpdate.updateNowIfNecessary());
 
@@ -78,6 +79,12 @@ export default function NoteTitleWidget() {
                     spacedUpdate.scheduleUpdate();
                 }}
                 onKeyDown={(e) => {
+                    // Skip processing if IME is composing to prevent interference
+                    // with text input in CJK languages
+                    if (isIMEComposing(e)) {
+                        return;
+                    }
+
                     // Focus on the note content when pressing enter.
                     if (e.key === "Enter") {
                         e.preventDefault();

@@ -55,7 +55,7 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
      * @param components the components to be added as children to this component provided the condition is truthy.
      * @returns self for chaining.
      */
-    optChild(condition: boolean, ...components: T[]) {
+    optChild(condition: boolean, ...components: (T | VNode)[]) {
         if (condition) {
             return this.child(...components);
         } else {
@@ -76,7 +76,7 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
     /**
      * Sets the CSS attribute of the given name to the given value.
      *
-     * @param name the name of the CSS attribute to set (e.g. `padding-left`).
+     * @param name the name of the CSS attribute to set (e.g. `padding-inline-start`).
      * @param value the value of the CSS attribute to set (e.g. `12px`).
      * @returns self for chaining.
      */
@@ -89,7 +89,7 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
      * Sets the CSS attribute of the given name to the given value, but only if the condition provided is truthy.
      *
      * @param condition `true` in order to apply the CSS, `false` to ignore it.
-     * @param name the name of the CSS attribute to set (e.g. `padding-left`).
+     * @param name the name of the CSS attribute to set (e.g. `padding-inline-start`).
      * @param value the value of the CSS attribute to set (e.g. `12px`).
      * @returns self for chaining.
      */

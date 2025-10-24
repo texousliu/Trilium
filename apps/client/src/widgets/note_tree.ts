@@ -61,7 +61,7 @@ const TPL = /*html*/`
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
-        right: 17px;
+        inset-inline-end: 17px;
         border-radius: 7px;
         border: 1px solid var(--main-border-color);
     }
@@ -82,15 +82,15 @@ const TPL = /*html*/`
     }
 
     .collapse-tree-button {
-        right: 100px;
+        inset-inline-end: 100px;
     }
 
     .scroll-to-active-note-button {
-        right: 55px;
+        inset-inline-end: 55px;
     }
 
     .tree-settings-button {
-        right: 10px;
+        inset-inline-end: 10px;
     }
 
     .tree-settings-popup {
@@ -195,6 +195,8 @@ export interface DragData {
     title: string;
 }
 
+export const TREE_CLIPBOARD_TYPE = "application/x-fancytree-node";
+
 export default class NoteTreeWidget extends NoteContextAwareWidget {
     private $tree!: JQuery<HTMLElement>;
     private $treeActions!: JQuery<HTMLElement>;
@@ -219,21 +221,22 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.$tree = this.$widget.find(".tree");
         this.$treeActions = this.$widget.find(".tree-actions");
 
-        this.$tree.on("mousedown", ".unhoist-button", () => hoistedNoteService.unhoist());
-        this.$tree.on("mousedown", ".refresh-search-button", (e) => this.refreshSearch(e));
-        this.$tree.on("mousedown", ".add-note-button", (e) => {
-            const node = $.ui.fancytree.getNode(e as unknown as Event);
-            const parentNotePath = treeService.getNotePath(node);
+        this.$tree.on("mousedown", (e: JQuery.MouseDownEvent) => {
+            const target = e.target as HTMLElement;
+            if (e.button !== 0) return;
 
-            noteCreateService.createNote(parentNotePath, {
-                isProtected: node.data.isProtected
-            });
-        });
-
-        this.$tree.on("mousedown", ".enter-workspace-button", (e) => {
-            const node = $.ui.fancytree.getNode(e as unknown as Event);
-
-            this.triggerCommand("hoistNote", { noteId: node.data.noteId });
+            if (target.classList.contains("unhoist-button")) {
+                hoistedNoteService.unhoist();
+            } else if (target.classList.contains("refresh-search-button")) {
+                this.refreshSearch(e);
+            } else if (target.classList.contains("add-note-button")) {
+                const node = $.ui.fancytree.getNode(e as unknown as Event);
+                const parentNotePath = treeService.getNotePath(node);
+                noteCreateService.createNote(parentNotePath, { isProtected: node.data.isProtected });
+            } else if (target.classList.contains("enter-workspace-button")) {
+                const node = $.ui.fancytree.getNode(e as unknown as Event);
+                this.triggerCommand("hoistNote", { noteId: node.data.noteId });
+            }
         });
 
         // fancytree doesn't support middle click, so this is a way to support it
@@ -382,7 +385,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                     if (event.shiftKey && !ctrlKey) {
                         const activeNode = this.getActiveNode();
 
-                        if (activeNode.getParent() !== node.getParent()) {
+                        if (activeNode?.getParent() !== node.getParent()) {
                             return true;
                         }
 
@@ -729,7 +732,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
                     shortcutService.bindElShortcut($(this.tree.$container), key, () => {
                         const node = this.tree.getActiveNode();
-                        return handler(node, {} as JQuery.KeyDownEvent);
+                        return node && handler(node, {} as JQuery.KeyDownEvent);
                         // return false from the handler will stop default handling.
                     });
                 }
@@ -902,7 +905,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const colorClass = note.getColorClass();
 
         if (colorClass) {
-            extraClasses.push(colorClass);
+            extraClasses.push(...["tinted", colorClass]);
         }
 
         return extraClasses.join(" ");
@@ -921,8 +924,9 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             nodes.push(node);
         }
 
-        if (nodes.length === 0) {
-            nodes.push(this.getActiveNode());
+        const activeNode = this.getActiveNode();
+        if (nodes.length === 0 && activeNode) {
+            nodes.push(activeNode);
         }
 
         // hidden subtree is hackily hidden via CSS when hoisted to root
@@ -967,9 +971,6 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.collapseTree();
     }
 
-    /**
-     * @returns {FancytreeNode|null}
-     */
     getActiveNode() {
         return this.tree.getActiveNode();
     }
@@ -1219,7 +1220,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         }
 
         const activeNode = this.getActiveNode();
-        const activeNodeFocused = activeNode?.hasFocus();
+        const activeNodeFocused = !!activeNode?.hasFocus();
         const activeNotePath = activeNode ? treeService.getNotePath(activeNode) : null;
 
         const refreshCtx: RefreshContext = {
@@ -1531,7 +1532,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
             // Automatically expand the hoisted note by default
             const node = this.getActiveNode();
-            if (node.data.noteId === this.noteContext.hoistedNoteId){
+            if (node?.data.noteId === this.noteContext.hoistedNoteId){
                 this.setExpanded(node.data.branchId, true);
             }
         }
@@ -1809,6 +1810,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
         const triggerCommand = (command: TreeCommandNames) => {
             const node = this.getActiveNode();
+            if (!node) return;
             const notePath = treeService.getNotePath(node);
 
             this.triggerCommand<TreeCommandNames>(command, {
@@ -1825,6 +1827,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 icon: buildIcon("NSImageNameTouchBarAddTemplate"),
                 click: () => {
                     const node = this.getActiveNode();
+                    if (!node) return;
                     const notePath = treeService.getNotePath(node);
                     noteCreateService.createNote(notePath, {
                         isProtected: node.data.isProtected

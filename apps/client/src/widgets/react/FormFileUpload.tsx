@@ -1,6 +1,6 @@
 import { Ref } from "preact";
 import Button, { ButtonProps } from "./Button";
-import { useRef } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 
 interface FormFileUploadProps {
     name?: string;
@@ -11,6 +11,11 @@ interface FormFileUploadProps {
 }
 
 export default function FormFileUpload({ inputRef, name, onChange, multiple, hidden }: FormFileUploadProps) {
+    // Prevent accidental reuse of a file selected in a previous instance of the upload form.
+    useEffect(() => {
+        onChange(null);
+    }, []);
+
     return (
         <label class="tn-file-input tn-input-field" style={hidden ? { display: "none" } : undefined}>
             <input
@@ -18,7 +23,7 @@ export default function FormFileUpload({ inputRef, name, onChange, multiple, hid
                 name={name}
                 type="file"
                 class="form-control-file"
-                multiple={multiple}                
+                multiple={multiple}
                 onChange={e => onChange((e.target as HTMLInputElement).files)} />
         </label>
     )
@@ -26,7 +31,7 @@ export default function FormFileUpload({ inputRef, name, onChange, multiple, hid
 
 /**
  * Combination of a button with a hidden file upload field.
- * 
+ *
  * @param param the change listener for the file upload and the properties for the button.
  */
 export function FormFileUploadButton({ onChange, ...buttonProps }: Omit<ButtonProps, "onClick"> & Pick<FormFileUploadProps, "onChange">) {
@@ -39,7 +44,7 @@ export function FormFileUploadButton({ onChange, ...buttonProps }: Omit<ButtonPr
                 onClick={() => inputRef.current?.click()}
             />
             <FormFileUpload
-                inputRef={inputRef} 
+                inputRef={inputRef}
                 hidden
                 onChange={onChange}
             />

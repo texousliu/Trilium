@@ -20,8 +20,9 @@ import bulk_action, { ACTION_GROUPS } from "../../services/bulk_action";
 import { FormListHeader, FormListItem } from "../react/FormList";
 import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
 import { getErrorMessage } from "../../services/utils";
+import "./SearchDefinitionTab.css";
 
-export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
+export default function SearchDefinitionTab({ note, ntxId, hidden }: TabContext) {
   const parentComponent = useContext(ParentComponent);
   const [ searchOptions, setSearchOptions ] = useState<{ availableOptions: SearchOption[], activeOptions: SearchOption[] }>();
   const [ error, setError ] = useState<{ message: string }>();
@@ -33,7 +34,7 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
     const activeOptions: SearchOption[] = [];
 
     for (const searchOption of SEARCH_OPTIONS) {
-      const attr = note.getAttribute(searchOption.attributeType, searchOption.attributeName);      
+      const attr = note.getAttribute(searchOption.attributeType, searchOption.attributeName);
       if (attr) {
         activeOptions.push(searchOption);
       } else {
@@ -75,24 +76,26 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   return (
     <div className="search-definition-widget">
       <div className="search-settings">
-        {note && 
+        {note && !hidden &&
           <table className="search-setting-table">
-            <tr>
-              <td className="title-column">{t("search_definition.add_search_option")}</td>
-              <td colSpan={2} className="add-search-option">
-                {searchOptions?.availableOptions.map(({ icon, label, tooltip, attributeName, attributeType, defaultValue }) => (
-                  <Button
-                    size="small"
-                    icon={icon}
-                    text={label}
-                    title={tooltip}
-                    onClick={() => attributes.setAttribute(note, attributeType, attributeName, defaultValue ?? "")}
-                  />
-                ))}
+            <tbody>
+                <tr>
+                    <td className="title-column">{t("search_definition.add_search_option")}</td>
+                    <td colSpan={2} className="add-search-option">
+                        {searchOptions?.availableOptions.map(({ icon, label, tooltip, attributeName, attributeType, defaultValue }) => (
+                        <Button
+                            size="small"
+                            icon={icon}
+                            text={label}
+                            title={tooltip}
+                            onClick={() => attributes.setAttribute(note, attributeType, attributeName, defaultValue ?? "")}
+                        />
+                        ))}
 
-                <AddBulkActionButton note={note} />
-              </td>
-            </tr>
+                        <AddBulkActionButton note={note} />
+                    </td>
+                </tr>
+            </tbody>
             <tbody className="search-options">
               {searchOptions?.activeOptions.map(({ attributeType, attributeName, component, additionalAttributesToDelete, defaultValue }) => {
                 const Component = component;
@@ -108,10 +111,10 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
               })}
             </tbody>
             <BulkActionsList note={note} />
-            <tbody>
+            <tbody className="search-actions">
               <tr>
                 <td colSpan={3}>
-                  <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                  <div className="search-actions-container">
                     <Button
                       icon="bx bx-search"
                       text={t("search_definition.search_button")}
@@ -125,7 +128,7 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
                       onClick={async () => {
                         await server.post(`search-and-execute-note/${note.noteId}`);
                         refreshResults();
-                        toast.showMessage(t("search_definition.actions_executed"), 3000);                        
+                        toast.showMessage(t("search_definition.actions_executed"), 3000);
                       }}
                     />
 
@@ -196,7 +199,7 @@ function AddBulkActionButton({ note }: { note: FNote }) {
 
             {actions.map(({ actionName, actionTitle }) => (
               <FormListItem onClick={() => bulk_action.addAction(note.noteId, actionName)}>{actionTitle}</FormListItem>
-            ))}          
+            ))}
           </>
         ))}
     </Dropdown>

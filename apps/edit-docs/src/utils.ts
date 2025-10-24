@@ -52,7 +52,7 @@ export function startElectron(callback: () => void): DeferredPromise<void> {
 export async function importData(path: string) {
     const buffer = await createImportZip(path);
     const importService = (await import("@triliumnext/server/src/services/import/zip.js")).default;
-    const context = new TaskContext("no-progress-reporting", "import", false);
+    const context = new TaskContext("no-progress-reporting", "importNotes", null);
     const becca = (await import("@triliumnext/server/src/becca/becca.js")).default;
 
     const rootNote = becca.getRoot();

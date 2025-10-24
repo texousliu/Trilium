@@ -47,27 +47,6 @@ function parseDate(str: string) {
     }
 }
 
-// Source: https://stackoverflow.com/a/30465299/4898894
-function getMonthsInDateRange(startDate: string, endDate: string) {
-    const start = startDate.split("-");
-    const end = endDate.split("-");
-    const startYear = parseInt(start[0]);
-    const endYear = parseInt(end[0]);
-    const dates: string[] = [];
-
-    for (let i = startYear; i <= endYear; i++) {
-        const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
-        const startMon = i === startYear ? parseInt(start[1]) - 1 : 0;
-
-        for (let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
-            const month = j + 1;
-            const displayMonth = month < 10 ? "0" + month : month;
-            dates.push([i, displayMonth].join("-"));
-        }
-    }
-    return dates;
-}
-
 function padNum(num: number) {
     return `${num <= 9 ? "0" : ""}${num}`;
 }
@@ -147,6 +126,18 @@ function now() {
  */
 export function isElectron() {
     return !!(window && window.process && window.process.type);
+}
+
+/**
+ * Returns `true` if the client is running as a PWA, otherwise `false`.
+ */
+export function isPWA() {
+    return (
+        window.matchMedia('(display-mode: standalone)').matches
+        || window.matchMedia('(display-mode: window-controls-overlay)').matches
+        || window.navigator.standalone
+        || window.navigator.windowControlsOverlay
+    );
 }
 
 export function isMac() {
@@ -297,6 +288,54 @@ function isHtmlEmpty(html: string) {
     );
 }
 
+function formatHtml(html: string) {
+    let indent = "\n";
+    const tab = "\t";
+    let i = 0;
+    let pre: { indent: string; tag: string }[] = [];
+
+    html = html
+        .replace(new RegExp("<pre>([\\s\\S]+?)?</pre>"), function (x) {
+            pre.push({ indent: "", tag: x });
+            return "<--TEMPPRE" + i++ + "/-->";
+        })
+        .replace(new RegExp("<[^<>]+>[^<]?", "g"), function (x) {
+            let ret;
+            const tagRegEx = /<\/?([^\s/>]+)/.exec(x);
+            let tag = tagRegEx ? tagRegEx[1] : "";
+            let p = new RegExp("<--TEMPPRE(\\d+)/-->").exec(x);
+
+            if (p) {
+                const pInd = parseInt(p[1]);
+                pre[pInd].indent = indent;
+            }
+
+            if (["area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "menuitem", "meta", "param", "source", "track", "wbr"].indexOf(tag) >= 0) {
+                // self closing tag
+                ret = indent + x;
+            } else {
+                if (x.indexOf("</") < 0) {
+                    //open tag
+                    if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + tab + x.substr(x.length - 1, x.length);
+                    else ret = indent + x;
+                    !p && (indent += tab);
+                } else {
+                    //close tag
+                    indent = indent.substr(0, indent.length - 1);
+                    if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + x.substr(x.length - 1, x.length);
+                    else ret = indent + x;
+                }
+            }
+            return ret;
+        });
+
+    for (i = pre.length; i--;) {
+        html = html.replace("<--TEMPPRE" + i + "/-->", pre[i].tag.replace("<pre>", "<pre>\n").replace("</pre>", pre[i].indent + "</pre>"));
+    }
+
+    return html.charAt(0) === "\n" ? html.substr(1, html.length - 1) : html;
+}
+
 export async function clearBrowserCache() {
     if (isElectron()) {
         const win = dynamicRequire("@electron/remote").getCurrentWindow();
@@ -311,7 +350,13 @@ function copySelectionToClipboard() {
     }
 }
 
-export function dynamicRequire(moduleName: string) {
+type dynamicRequireMappings = {
+    "@electron/remote": typeof import("@electron/remote"),
+    "electron": typeof import("electron"),
+    "child_process": typeof import("child_process")
+};
+
+export function dynamicRequire<T extends keyof dynamicRequireMappings>(moduleName: T): Awaited<dynamicRequireMappings[T]>{
     if (typeof __non_webpack_require__ !== "undefined") {
         return __non_webpack_require__(moduleName);
     } else {
@@ -442,7 +487,7 @@ function sleep(time_ms: number) {
     });
 }
 
-function escapeRegExp(str: string) {
+export function escapeRegExp(str: string) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
@@ -824,12 +869,23 @@ export function getErrorMessage(e: unknown) {
     }
 }
 
+/**
+ * Handles left or right placement of e.g. tooltips in case of right-to-left languages. If the current language is a RTL one, then left and right are swapped. Other directions are unaffected.
+ * @param placement a string optionally containing a "left" or "right" value.
+ * @returns a left/right value swapped if needed, or the same as input otherwise.
+ */
+export function handleRightToLeftPlacement<T extends string>(placement: T) {
+    if (!glob.isRtl) return placement;
+    if (placement === "left") return "right";
+    if (placement === "right") return "left";
+    return placement;
+}
+
 export default {
     reloadFrontendApp,
     restartDesktopApp,
     reloadTray,
     parseDate,
-    getMonthsInDateRange,
     formatDateISO,
     formatDateTime,
     formatTimeInterval,
@@ -837,6 +893,7 @@ export default {
     localNowDateTime,
     now,
     isElectron,
+    isPWA,
     isMac,
     isCtrlKey,
     assertArguments,
@@ -849,6 +906,7 @@ export default {
     getNoteTypeClass,
     getMimeTypeClass,
     isHtmlEmpty,
+    formatHtml,
     clearBrowserCache,
     copySelectionToClipboard,
     dynamicRequire,

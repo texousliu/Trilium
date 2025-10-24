@@ -19,7 +19,7 @@ import { getHelpUrlForNote } from "../services/in_app_help";
 import froca from "../services/froca";
 import NoteLink from "./react/NoteLink";
 import RawHtml from "./react/RawHtml";
-import { ViewTypeOptions } from "../services/note_list_renderer";
+import { ViewTypeOptions } from "./collections/interface";
 
 export interface FloatingButtonContext {
     parentComponent: Component;
@@ -218,8 +218,8 @@ function SaveToNoteButton({ note }: FloatingButtonContext) {
     />
 }
 
-function RelationMapButtons({ note, triggerEvent }: FloatingButtonContext) {
-    const isEnabled = (note.type === "relationMap");
+function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingButtonContext) {
+    const isEnabled = (note.type === "relationMap" && isDefaultViewMode);
     return isEnabled && (
         <>
             <FloatingButton

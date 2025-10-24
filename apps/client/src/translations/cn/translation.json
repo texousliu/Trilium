@@ -276,7 +276,12 @@
     "mime": "MIME 类型： ",
     "file_size": "文件大小：",
     "preview": "预览：",
-    "preview_not_available": "无法预览此类型的笔记。"
+    "preview_not_available": "无法预览此类型的笔记。",
+    "diff_on": "显示差异",
+    "diff_off": "显示内容",
+    "diff_on_hint": "点击以显示笔记源代码差异",
+    "diff_off_hint": "点击以显示笔记内容",
+    "diff_not_available": "差异不可用。"
   },
   "sort_child_notes": {
     "sort_children_by": "按...排序子笔记",
@@ -577,7 +582,7 @@
     "cannot_find_day_note": "无法找到日记",
     "cannot_find_week_note": "无法找到周记",
     "january": "一月",
-    "febuary": "二月",
+    "february": "二月",
     "march": "三月",
     "april": "四月",
     "may": "五月",
@@ -587,7 +592,18 @@
     "september": "九月",
     "october": "十月",
     "november": "十一月",
-    "december": "十二月"
+    "december": "十二月",
+    "week_previous": "上周",
+    "week_next": "下周",
+    "month_previous": "上个月",
+    "month_next": "下个月",
+    "year": "年",
+    "year_previous": "上一年",
+    "year_next": "明年",
+    "today": "今天",
+    "week": "周",
+    "month": "月",
+    "list": "列表"
   },
   "close_pane_button": {
     "close_this_pane": "关闭此面板"
@@ -630,7 +646,9 @@
     "about": "关于 TriliumNext 笔记",
     "logout": "登出",
     "show-cheatsheet": "显示快捷帮助",
-    "toggle-zen-mode": "禅模式"
+    "toggle-zen-mode": "禅模式",
+    "new-version-available": "新更新可用",
+    "download-update": "取得版本 {{latestVersion}}"
   },
   "zen_mode": {
     "button_exit": "退出禅模式"
@@ -720,7 +738,8 @@
     "insert_child_note": "插入子笔记",
     "delete_this_note": "删除此笔记",
     "error_cannot_get_branch_id": "无法获取 notePath '{{notePath}}' 的 branchId",
-    "error_unrecognized_command": "无法识别的命令 {{command}}"
+    "error_unrecognized_command": "无法识别的命令 {{command}}",
+    "note_revisions": "笔记历史版本"
   },
   "note_icon": {
     "change_note_icon": "更改笔记图标",
@@ -732,7 +751,8 @@
     "note_type": "笔记类型",
     "editable": "可编辑",
     "basic_properties": "基本属性",
-    "language": "语言"
+    "language": "语言",
+    "configure_code_notes": "配置代码笔记…"
   },
   "book_properties": {
     "view_type": "视图类型",
@@ -747,7 +767,9 @@
     "book_properties": "集合属性",
     "table": "表格",
     "geo-map": "地理地图",
-    "board": "看板"
+    "board": "看板",
+    "include_archived_notes": "展示归档笔记",
+    "presentation": "演示"
   },
   "edited_notes": {
     "no_edited_notes_found": "今天还没有编辑过的笔记...",
@@ -948,7 +970,9 @@
     "no_attachments": "此笔记没有附件。"
   },
   "book": {
-    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。"
+    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。",
+    "drag_locked_title": "锁定编辑",
+    "drag_locked_message": "无法拖拽，因为集合已被锁定编辑。"
   },
   "editable_code": {
     "placeholder": "在这里输入您的代码笔记内容..."
@@ -1238,7 +1262,13 @@
     "min-days-in-first-week": "第一周的最小天数",
     "first-week-info": "第一周包含一年的第一个周四，基于 <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> 标准。",
     "first-week-warning": "更改第一周选项可能会导致与现有周笔记重复，已创建的周笔记将不会相应更新。",
-    "formatting-locale": "日期和数字格式"
+    "formatting-locale": "日期和数字格式",
+    "tuesday": "周二",
+    "wednesday": "周三",
+    "thursday": "周四",
+    "friday": "周五",
+    "saturday": "周六",
+    "formatting-locale-auto": "依应用的语言设置"
   },
   "backup": {
     "automatic_backup": "自动备份",
@@ -1333,7 +1363,7 @@
     "oauth_title": "OAuth/OpenID 认证",
     "oauth_description": "OpenID 是一种标准化方式，允许您使用其他服务（如 Google）的账号登录网站来验证您的身份。默认的身份提供者是 Google，但您可以更改为任何其他 OpenID 提供者。点击<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">这里</a>了解更多信息。请参阅这些 <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">指南</a> 通过 Google 设置 OpenID 服务。",
     "oauth_description_warning": "要启用 OAuth/OpenID，您需要设置 config.ini 文件中的 OAuth/OpenID 基础 URL、客户端 ID 和客户端密钥，并重新启动应用程序。如果要从环境变量设置，请设置 TRILIUM_OAUTH_BASE_URL、TRILIUM_OAUTH_CLIENT_ID 和 TRILIUM_OAUTH_CLIENT_SECRET 环境变量。",
-    "oauth_missing_vars": "缺少以下设置项：{{variables}}",
+    "oauth_missing_vars": "缺少以下设置项：{{-variables}}",
     "oauth_user_account": "用户账号： ",
     "oauth_user_email": "用户邮箱： ",
     "oauth_user_not_logged_in": "未登录！"
@@ -1406,7 +1436,7 @@
     "button-tree-map": "树形地图"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "在新标签页中打开 <kbd>Ctrl+Click</kbd>",
+    "open-in-a-new-tab": "在新标签页中打开",
     "open-in-a-new-split": "在新分栏中打开",
     "insert-note-after": "在后面插入笔记",
     "insert-child-note": "插入子笔记",
@@ -1436,12 +1466,14 @@
     "converted-to-attachments": "{{count}} 个笔记已被转换为附件。",
     "convert-to-attachment-confirm": "确定要将选中的笔记转换为其父笔记的附件吗？",
     "duplicate": "复制",
-    "open-in-popup": "快速编辑"
+    "open-in-popup": "快速编辑",
+    "archive": "归档",
+    "unarchive": "解压"
   },
   "shared_info": {
-    "shared_publicly": "此笔记已公开分享于",
-    "shared_locally": "此笔记已在本地分享于",
-    "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。"
+    "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。",
+    "shared_publicly": "该笔记已在 {{- link}} 上公开分享。",
+    "shared_locally": "此笔记在本地通过 {{- link}} 进行共享。"
   },
   "note_types": {
     "text": "文本",
@@ -1519,7 +1551,8 @@
     "hoist-this-note-workspace": "聚焦此笔记（工作区）",
     "refresh-saved-search-results": "刷新保存的搜索结果",
     "create-child-note": "创建子笔记",
-    "unhoist": "取消聚焦"
+    "unhoist": "取消聚焦",
+    "toggle-sidebar": "切换侧边栏"
   },
   "title_bar_buttons": {
     "window-on-top": "保持此窗口置顶"
@@ -1600,7 +1633,9 @@
   "ws": {
     "sync-check-failed": "同步检查失败！",
     "consistency-checks-failed": "一致性检查失败！请查看日志了解详细信息。",
-    "encountered-error": "遇到错误 \"{{message}}\"，请查看控制台。"
+    "encountered-error": "遇到错误 \"{{message}}\"，请查看控制台。",
+    "lost-websocket-connection-title": "与服务器的连线中断",
+    "lost-websocket-connection-message": "检查您的反向代理（如 nginx 或 Apache）设置以确保 Websocket 连线没有被阻挡。"
   },
   "hoisted_note": {
     "confirm_unhoisting": "请求的笔记 '{{requestedNote}}' 位于聚焦的笔记 '{{hoistedNote}}' 的子树之外，您必须取消聚焦才能访问该笔记。是否继续取消聚焦？"
@@ -1676,7 +1711,7 @@
     "native-title-bar": "原生标题栏",
     "native-title-bar-description": "对于 Windows 和 macOS，关闭原生标题栏可使应用程序看起来更紧凑。在 Linux 上，保留原生标题栏可以更好地与系统集成。",
     "background-effects": "启用背景效果（仅适用于 Windows 11）",
-    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。",
+    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。「原生标题栏」必須被禁用。",
     "restart-app-button": "重启应用程序以查看更改",
     "zoom-factor": "缩放系数"
   },
@@ -1929,7 +1964,11 @@
   "editorfeatures": {
     "title": "功能",
     "emoji_completion_enabled": "启用表情自动补全",
-    "note_completion_enabled": "启用笔记自动补全"
+    "note_completion_enabled": "启用笔记自动补全",
+    "emoji_completion_description": "如果启用，表情可以轻易地经由输入 `:` 加上表情名称来插入。",
+    "note_completion_description": "如果启用，导向笔记的链接可以经由输入 `@` 加上笔记标题来创建。",
+    "slash_commands_enabled": "启用斜杠命令",
+    "slash_commands_description": "如果启用，可以经由输入 `/` 来触发命令，如插入换行符或标题。"
   },
   "table_view": {
     "new-row": "新增行",
@@ -1965,14 +2004,21 @@
     "delete_row": "删除行"
   },
   "board_view": {
-    "delete-note": "删除笔记",
+    "delete-note": "删除笔记...",
     "move-to": "移动到",
     "insert-above": "在上方插入",
     "insert-below": "在下方插入",
     "delete-column": "删除列",
     "delete-column-confirmation": "确定要删除此列吗？此列下所有笔记中对应的属性也将被删除。",
     "new-item": "新增项目",
-    "add-column": "添加列"
+    "add-column": "添加列",
+    "archive-note": "存档笔记",
+    "unarchive-note": "解压笔记",
+    "new-item-placeholder": "输入笔记标题...",
+    "add-column-placeholder": "请输入列名...",
+    "edit-note-title": "点击编辑笔记标题",
+    "edit-column-title": "点击编辑列标题",
+    "remove-from-board": "从看板上移除"
   },
   "command_palette": {
     "tree-action-name": "树形：{{name}}",
@@ -2019,6 +2065,20 @@
     "title": "性能",
     "enable-motion": "启用过渡和动画",
     "enable-shadows": "启用阴影",
-    "enable-backdrop-effects": "启用菜单、弹窗和面板的背景效果"
+    "enable-backdrop-effects": "启用菜单、弹窗和面板的背景效果",
+    "enable-smooth-scroll": "启用平滑滚动",
+    "app-restart-required": "（需重启程序以应用更改）"
+  },
+  "pagination": {
+    "page_title": "第 {{startIndex}} 页 - 第 {{endIndex}} 页",
+    "total_notes": "{{count}} 笔记"
+  },
+  "collections": {
+    "rendering_error": "出现错误无法显示内容。"
+  },
+  "presentation_view": {
+    "edit-slide": "编辑此幻灯片",
+    "start-presentation": "开始演示",
+    "slide-overview": "切换幻灯片概览"
   }
 }

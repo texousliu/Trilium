@@ -18,6 +18,7 @@ import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/u
 import options from "../services/options.js";
 import { t } from "i18next";
 import ejs from "ejs";
+import { join } from "path";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
     if (note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
@@ -174,7 +175,8 @@ function register(router: Router) {
             appPath: isDev ? appPath : `../${appPath}`,
             showLoginInShareTheme,
             t,
-            isDev
+            isDev,
+            utils
         };
         let useDefaultView = true;
 
@@ -401,7 +403,9 @@ function register(router: Router) {
 
 function renderDefault(res: Response<any, Record<string, any>>, template: "page" | "404", opts: any = {}) {
     // Path is relative to apps/server/dist/assets/views
-    const shareThemePath = `../../share-theme/templates/${template}.ejs`;
+    const shareThemePath = process.env.NODE_ENV === "development"
+        ? join(__dirname, `../../../../packages/share-theme/src/templates/${template}.ejs`)
+        : `../../share-theme/templates/${template}.ejs`;
     res.render(shareThemePath, opts);
 }
 

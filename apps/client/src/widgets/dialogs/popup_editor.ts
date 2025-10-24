@@ -46,8 +46,8 @@ const TPL = /*html*/`\
         .modal.popup-editor-dialog .classic-toolbar-widget {
             position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
             background: var(--modal-background-color);
             z-index: 998;
         }
@@ -151,7 +151,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
     handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
         // Avoid events related to the current tab interfere with our popup.
-        if (["noteSwitched", "noteSwitchedAndActivated"].includes(name)) {
+        if (["noteSwitched", "noteSwitchedAndActivated", "exportAsPdf", "printActiveNote"].includes(name)) {
             return Promise.resolve();
         }
 

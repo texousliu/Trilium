@@ -307,7 +307,12 @@
     "board_note_second": "Zweite Notiz",
     "board_note_third": "Dritte Notiz",
     "board_status_todo": "To-Do",
-    "board_status_progress": "In Bearbeitung"
+    "board_status_progress": "In Bearbeitung",
+    "presentation": "Präsentation",
+    "presentation_slide": "Präsentationsfolie",
+    "presentation_slide_first": "Erste Folie",
+    "presentation_slide_second": "Zweite Folie",
+    "background": "Hintergrund"
   },
   "keyboard_action_names": {
     "copy-notes-to-clipboard": "Notizen in Zwischenablage kopieren",
@@ -424,5 +429,12 @@
     "subpages": "Unterseiten:",
     "on-this-page": "Auf dieser Seite",
     "expand": "Erweitern"
+  },
+  "sql_init": {
+    "db_not_initialized_desktop": "Datenbank nicht initialisiert, bitte folge den Anweisungen auf dem Bildschirm.",
+    "db_not_initialized_server": "DB nicht initialisiert, bitte besuche die Einrichtungsseite - http://[Server-Host]:{{port}}, um Anweisungen zur Initialisierung von Trilium zu erhalten."
+  },
+  "desktop": {
+    "instance_already_running": "Es läuft bereits eine Instanz, bitte beachte stattdessen diese Instanz."
   }
 }

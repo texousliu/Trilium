@@ -3,11 +3,8 @@ import NoteTitleWidget from "../widgets/note_title.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import ToggleSidebarButtonWidget from "../widgets/mobile_widgets/toggle_sidebar_button.js";
-import MobileDetailMenuWidget from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
-import NoteListWidget from "../widgets/note_list.js";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
@@ -18,11 +15,18 @@ import type AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
 import MobileEditorToolbar from "../widgets/type_widgets/ckeditor/mobile_editor_toolbar.js";
 import { applyModals } from "./layout_commons.js";
-import CloseZenButton from "../widgets/close_zen_button.js";
 import FilePropertiesTab from "../widgets/ribbon/FilePropertiesTab.jsx";
 import { useNoteContext } from "../widgets/react/hooks.jsx";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { MOBILE_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
+import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button.jsx";
+import CloseZenModeButton from "../widgets/close_zen_button.js";
+import NoteWrapperWidget from "../widgets/note_wrapper.js";
+import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
+import NoteList from "../widgets/collections/NoteList.jsx";
+import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
+import SearchDefinitionTab from "../widgets/ribbon/SearchDefinitionTab.jsx";
+import SearchResult from "../widgets/search_result.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -39,8 +43,8 @@ kbd {
     border: none;
     cursor: pointer;
     font-size: 1.25em;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+    padding-inline-start: 0.5em;
+    padding-inline-end: 0.5em;
     color: var(--main-text-color);
 }
 .quick-search {
@@ -58,7 +62,7 @@ const FANCYTREE_CSS = `
     margin-top: 0px;
     overflow-y: auto;
     contain: content;
-    padding-left: 10px;
+    padding-inline-start: 10px;
 }
 
 .fancytree-custom-icon {
@@ -67,7 +71,7 @@ const FANCYTREE_CSS = `
 
 .fancytree-title {
     font-size: 1.5em;
-    margin-left: 0.6em !important;
+    margin-inline-start: 0.6em !important;
 }
 
 .fancytree-node {
@@ -80,7 +84,7 @@ const FANCYTREE_CSS = `
 
 span.fancytree-expander {
     width: 24px !important;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .fancytree-loading span.fancytree-expander {
@@ -100,7 +104,7 @@ span.fancytree-expander {
 .tree-wrapper .scroll-to-active-note-button,
 .tree-wrapper .tree-settings-button {
     position: fixed;
-    margin-right: 16px;
+    margin-inline-end: 16px;
     display: none;
 }
 
@@ -125,36 +129,41 @@ export default class MobileLayout {
                             .class("d-md-flex d-lg-flex d-xl-flex col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3")
                             .id("mobile-sidebar-wrapper")
                             .css("max-height", "100%")
-                            .css("padding-left", "0")
-                            .css("padding-right", "0")
+                            .css("padding-inline-start", "0")
+                            .css("padding-inline-end", "0")
                             .css("contain", "content")
                             .child(new FlexContainer("column").filling().id("mobile-sidebar-wrapper").child(new QuickSearchWidget()).child(new NoteTreeWidget().cssBlock(FANCYTREE_CSS)))
                     )
                     .child(
-                        new ScreenContainer("detail", "column")
+                        new ScreenContainer("detail", "row")
                             .id("detail-container")
                             .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-7 col-md-8 col-lg-9")
                             .child(
-                                new FlexContainer("row")
-                                    .contentSized()
-                                    .css("font-size", "larger")
-                                    .css("align-items", "center")
-                                    .child(new ToggleSidebarButtonWidget().contentSized())
-                                    .child(<NoteTitleWidget />)
-                                    .child(new MobileDetailMenuWidget(true).contentSized())
+                                new NoteWrapperWidget()
+                                    .child(
+                                        new FlexContainer("row")
+                                            .contentSized()
+                                            .css("font-size", "larger")
+                                            .css("align-items", "center")
+                                            .child(<ToggleSidebarButton />)
+                                            .child(<NoteTitleWidget />)
+                                            .child(<MobileDetailMenu />)
+                                    )
+                                    .child(<SharedInfoWidget />)
+                                    .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
+                                    .child(new PromotedAttributesWidget())
+                                    .child(
+                                        new ScrollingContainer()
+                                            .filling()
+                                            .contentSized()
+                                            .child(new NoteDetailWidget())
+                                            .child(<NoteList media="screen" />)
+                                            .child(<StandaloneRibbonAdapter component={SearchDefinitionTab} />)
+                                            .child(<SearchResult />)
+                                            .child(<FilePropertiesWrapper />)
+                                    )
+                                    .child(<MobileEditorToolbar />)
                             )
-                            .child(new SharedInfoWidget())
-                            .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
-                            .child(new PromotedAttributesWidget())
-                            .child(
-                                new ScrollingContainer()
-                                    .filling()
-                                    .contentSized()
-                                    .child(new NoteDetailWidget())
-                                    .child(new NoteListWidget(false))
-                                    .child(<FilePropertiesWrapper />)
-                            )
-                            .child(new MobileEditorToolbar())
                     )
             )
             .child(
@@ -162,9 +171,14 @@ export default class MobileLayout {
                     .contentSized()
                     .id("mobile-bottom-bar")
                     .child(new TabRowWidget().css("height", "40px"))
-                    .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
+                    .child(new FlexContainer("row")
+                        .class("horizontal")
+                        .css("height", "53px")
+                        .child(new LauncherContainer(true))
+                        .child(<GlobalMenuWidget isHorizontalLayout />)
+                        .id("launcher-pane"))
             )
-            .child(new CloseZenButton());
+            .child(<CloseZenModeButton />);
         applyModals(rootContainer);
         return rootContainer;
     }

@@ -1,6 +1,11 @@
 <p>Trilium supports configuration via a file named <code>config.ini</code> and
   environment variables. This document provides a comprehensive reference
   for all configuration options.</p>
+<h2>Location of the configuration file</h2>
+<p>The configuration file is not located in the same directory as the application.
+  Instead, the <code>config.ini</code> is located in the&nbsp;<a class="reference-link"
+  href="#root/_help_tAassRL4RSQL">Data directory</a>. As such, the configuration
+  file is only available after starting the application and creating a database.</p>
 <h2>Configuration Precedence</h2>
 <p>Configuration values are loaded in the following order of precedence (highest
   to lowest):</p>
@@ -332,7 +337,7 @@
 <h2>Examples</h2>
 <h3>Docker Compose Example</h3><pre><code class="language-text-x-yaml">services:
   trilium:
-    image: triliumnext/notes
+    image: triliumnext/trilium
     environment:
       # Using full format
       TRILIUM_GENERAL_INSTANCENAME: "My Trilium Instance"
@@ -345,7 +350,7 @@
       # TRILIUM_NETWORK_CORS_ALLOW_ORIGIN: "https://myapp.com"
       # TRILIUM_SYNC_SERVER_HOST: "https://sync.example.com"
       # TRILIUM_OAUTH_BASE_URL: "https://auth.example.com"</code></pre>
-<h3>Shell Export Example</h3><pre><code class="language-text-x-sh"># Using either format
+<h3>Shell Export Example</h3><pre><code class="language-text-x-trilium-auto"># Using either format
 export TRILIUM_GENERAL_NOAUTHENTICATION=false
 export TRILIUM_NETWORK_HTTPS=true
 export TRILIUM_NETWORK_CERTPATH=/path/to/cert.pem

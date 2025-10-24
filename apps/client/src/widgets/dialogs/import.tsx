@@ -8,15 +8,16 @@ import FormGroup, { FormMultiGroup } from "../react/FormGroup";
 import Modal from "../react/Modal";
 import RawHtml from "../react/RawHtml";
 import importService, { UploadFilesOptions } from "../../services/import";
-import { useTriliumEvent } from "../react/hooks";
+import { useTriliumEvent, useTriliumOptionBool } from "../react/hooks";
 
 export default function ImportDialog() {
+    const [ compressImages ] = useTriliumOptionBool("compressImages");
     const [ parentNoteId, setParentNoteId ] = useState<string>();
     const [ noteTitle, setNoteTitle ] = useState<string>();
     const [ files, setFiles ] = useState<FileList | null>(null);
     const [ safeImport, setSafeImport ] = useState(true);
     const [ explodeArchives, setExplodeArchives ] = useState(true);
-    const [ shrinkImages, setShrinkImages ] = useState(true);
+    const [ shrinkImages, setShrinkImages ] = useState(compressImages);
     const [ textImportedAsText, setTextImportedAsText ] = useState(true);
     const [ codeImportedAsCode, setCodeImportedAsCode ] = useState(true);
     const [ replaceUnderscoresWithSpaces, setReplaceUnderscoresWithSpaces ] = useState(true);
@@ -36,7 +37,7 @@ export default function ImportDialog() {
             onSubmit={async () => {
                 if (!files || !parentNoteId) {
                     return;
-                }                
+                }
 
                 const options: UploadFilesOptions = {
                     safeImport: boolToString(safeImport),
@@ -50,11 +51,19 @@ export default function ImportDialog() {
                 setShown(false);
                 await importService.uploadFiles("notes", parentNoteId, Array.from(files), options);
             }}
-            onHidden={() => setShown(false)}
+            onHidden={() => {
+                setShown(false);
+                setFiles(null);
+            }}
             footer={<Button text={t("import.import")} primary disabled={!files} />}
             show={shown}
         >
-            <FormGroup name="files" label={t("import.chooseImportFile")} description={<>{t("import.importDescription")} <strong>{ noteTitle }</strong></>}>
+            <FormGroup name="files" label={t("import.chooseImportFile")} description={
+                <>
+                    {t("import.importDescription")} <strong>{ noteTitle }</strong>.<br />
+                    {t("import.importZipRecommendation")}
+                </>
+            }>
                 <FormFileUpload multiple onChange={setFiles} />
             </FormGroup>
 
@@ -69,7 +78,8 @@ export default function ImportDialog() {
                 />
                 <FormCheckbox
                     name="shrink-images" hint={t("import.shrinkImagesTooltip")} label={t("import.shrinkImages")}
-                    currentValue={shrinkImages} onChange={setShrinkImages}
+                    currentValue={compressImages && shrinkImages} onChange={setShrinkImages}
+                    disabled={!compressImages}
                 />
                 <FormCheckbox
                     name="text-imported-as-text" label={t("import.textImportedAsText")}
@@ -80,7 +90,7 @@ export default function ImportDialog() {
                     currentValue={codeImportedAsCode} onChange={setCodeImportedAsCode}
                 />
                 <FormCheckbox
-                    name="replace-underscores-with-spaces" label={t("import.replaceUnderscoresWithSpaces")} 
+                    name="replace-underscores-with-spaces" label={t("import.replaceUnderscoresWithSpaces")}
                     currentValue={replaceUnderscoresWithSpaces} onChange={setReplaceUnderscoresWithSpaces}
                 />
             </FormMultiGroup>

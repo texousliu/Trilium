@@ -14,7 +14,7 @@ import FBranch from "../../entities/fbranch.js";
 export default function BranchPrefixDialog() {
     const [ shown, setShown ] = useState(false);
     const [ branch, setBranch ] = useState<FBranch>();
-    const [ prefix, setPrefix ] = useState(branch?.prefix ?? "");
+    const [ prefix, setPrefix ] = useState("");
     const branchInput = useRef<HTMLInputElement>(null);
 
     useTriliumEvent("editBranchPrefix", async () => {
@@ -32,13 +32,15 @@ export default function BranchPrefixDialog() {
         const newBranchId = await froca.getBranchId(parentNoteId, noteId);
         if (!newBranchId) {
             return;
-        }    
+        }
         const parentNote = await froca.getNote(parentNoteId);
         if (!parentNote || parentNote.type === "search") {
             return;
         }
 
-        setBranch(froca.getBranch(newBranchId));
+        const newBranch = froca.getBranch(newBranchId);
+        setBranch(newBranch);
+        setPrefix(newBranch?.prefix ?? "");
         setShown(true);
     });
 

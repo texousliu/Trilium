@@ -57,7 +57,7 @@ export const SEARCH_OPTIONS: SearchOption[] = [
     defaultValue: "root",
     icon: "bx bx-filter-alt",
     label: t("search_definition.ancestor"),
-    component: AncestorOption,    
+    component: AncestorOption,
     additionalAttributesToDelete: [ { type: "label", name: "ancestorDepth" } ]
   },
   {
@@ -115,7 +115,7 @@ function SearchOption({ note, title, titleIcon, children, help, attributeName, a
   additionalAttributesToDelete?: { type: "label" | "relation", name: string }[]
 }) {
   return (
-    <tr>
+    <tr className={attributeName}>
       <td className="title-column">
         {titleIcon && <><Icon icon={titleIcon} />{" "}</>}
         {title}
@@ -173,7 +173,7 @@ function SearchStringOption({ note, refreshResults, error, ...restProps }: Searc
     }
   }, [ error ]);
 
-  return <SearchOption    
+  return <SearchOption
     title={t("search_string.title_column")}
     help={<>
       <strong>{t("search_string.search_syntax")}</strong> - {t("search_string.also_see")} <a href="#" data-help-page="search.html">{t("search_string.complete_help")}</a>
@@ -243,7 +243,7 @@ function AncestorOption({ note, ...restProps}: SearchOptionProps) {
     const options: { value: string | undefined; label: string }[] = [
       { value: "", label: t("ancestor.depth_doesnt_matter") },
       { value: "eq1", label: `${t("ancestor.depth_eq", { count: 1 })} (${t("ancestor.direct_children")})` }
-    ];    
+    ];
 
     for (let i=2; i<=9; i++) options.push({ value: "eq" + i, label: t("ancestor.depth_eq", { count: i }) });
     for (let i=0; i<=9; i++) options.push({ value: "gt" + i, label: t("ancestor.depth_gt", { count: i }) });
@@ -253,7 +253,7 @@ function AncestorOption({ note, ...restProps}: SearchOptionProps) {
   }, []);
 
   return <SearchOption
-    title={t("ancestor.label")}    
+    title={t("ancestor.label")}
     note={note} {...restProps}
   >
     <div style={{display: "flex", alignItems: "center"}}>
@@ -263,7 +263,7 @@ function AncestorOption({ note, ...restProps}: SearchOptionProps) {
         placeholder={t("ancestor.placeholder")}
       />
 
-      <div style="margin-left: 10px; margin-right: 10px">{t("ancestor.depth_label")}:</div>
+      <div style="margin-inline-start: 10px; margin-inline-end: 10px">{t("ancestor.depth_label")}:</div>
       <FormSelect
         values={options}
         keyProperty="value" titleProperty="label"

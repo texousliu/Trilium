@@ -1,4 +1,4 @@
-import { AttachmentRow, AttributeRow, NoteType } from "./rows.js";
+import { AttachmentRow, AttributeRow, BranchRow, NoteRow, NoteType } from "./rows.js";
 
 type Response = {
     success: true,
@@ -220,3 +220,25 @@ export type BacklinksResponse = ({
     noteId: string;
     excerpts: string[]
 })[];
+
+
+export type SqlExecuteResults = (object[] | object)[];
+
+export interface SqlExecuteResponse {
+    success: boolean;
+    error?: string;
+    results: SqlExecuteResults;
+}
+
+export interface CreateChildrenResponse {
+    note: NoteRow;
+    branch: BranchRow;
+}
+
+export interface SchemaResponse {
+    name: string;
+    columns: {
+        name: string;
+        type: string;
+    }[];
+}

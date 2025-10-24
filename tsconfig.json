@@ -22,6 +22,9 @@
       "path": "./apps/desktop"
     },
     {
+      "path": "./apps/website"
+    },
+    {
       "path": "./apps/dump-db"
     },
     {
@@ -59,12 +62,6 @@
     },
     {
       "path": "./packages/share-theme"
-    },
-    {
-      "path": "./apps/website"
-    },
-    {
-      "path": "./apps/desktop-e2e"
     }
   ]
 }

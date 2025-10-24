@@ -6,7 +6,7 @@ import path from "path";
 import mimeTypes from "mime-types";
 import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition, escapeHtml, getResourceDir } from "../utils.js";
+import { getContentDisposition, escapeHtml, getResourceDir, isDev } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -21,7 +21,6 @@ import type AttributeMeta from "../meta/attribute_meta.js";
 import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
-import cssContent from "@triliumnext/ckeditor5/content.css";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -41,7 +40,7 @@ export interface AdvancedExportOptions {
     customRewriteLinks?: (originalRewriteLinks: RewriteLinksFn, getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null) => RewriteLinksFn;
 }
 
-async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown", res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
+async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, format: "html" | "markdown", res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
     if (!["html", "markdown"].includes(format)) {
         throw new ValidationError(`Only 'html' and 'markdown' allowed as export format, '${format}' given`);
     }
@@ -515,7 +514,11 @@ ${markdownContent}`;
             return;
         }
 
-        archive.append(cssContent, { name: cssMeta.dataFileName });
+        const cssFile = isDev
+            ? path.join(__dirname, "../../../../../node_modules/ckeditor5/dist/ckeditor5-content.css")
+            : path.join(getResourceDir(), "ckeditor5-content.css");
+
+        archive.append(fs.readFileSync(cssFile, "utf-8"), { name: cssMeta.dataFileName });
     }
 
     try {
@@ -608,7 +611,7 @@ ${markdownContent}`;
 
         archive.pipe(res);
         await archive.finalize();
-        taskContext.taskSucceeded();
+        taskContext.taskSucceeded(null);
     } catch (e: unknown) {
         const message = `Export failed with error: ${e instanceof Error ? e.message : String(e)}`;
         log.error(message);
@@ -624,7 +627,7 @@ ${markdownContent}`;
 
 async function exportToZipFile(noteId: string, format: "markdown" | "html", zipFilePath: string, zipExportOptions?: AdvancedExportOptions) {
     const fileOutputStream = fs.createWriteStream(zipFilePath);
-    const taskContext = new TaskContext("no-progress-reporting");
+    const taskContext = new TaskContext("no-progress-reporting", "export", null);
 
     const note = becca.getNote(noteId);
 

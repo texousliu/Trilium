@@ -1,9 +1,11 @@
 import { t } from "i18next";
 import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
-import { ViewTypeOptions } from "../../services/note_list_renderer"
 import NoteContextAwareWidget from "../note_context_aware_widget";
-import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS, type MapLayer } from "../view_widgets/geo_view/map_layer";
+import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS, type MapLayer } from "../collections/geomap/map_layer";
+import { ViewTypeOptions } from "../collections/interface";
+import { FilterLabelsByType } from "@triliumnext/commons";
+import { DEFAULT_THEME, getPresentationThemes } from "../collections/presentation/themes";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -12,7 +14,7 @@ interface BookConfig {
 export interface CheckBoxProperty {
     type: "checkbox",
     label: string;
-    bindToLabel: string
+    bindToLabel: FilterLabelsByType<boolean>
 }
 
 export interface ButtonProperty {
@@ -26,9 +28,10 @@ export interface ButtonProperty {
 export interface NumberProperty {
     type: "number",
     label: string;
-    bindToLabel: string;
+    bindToLabel: FilterLabelsByType<number>;
     width?: number;
     min?: number;
+    disabled?: (note: FNote) => boolean;
 }
 
 interface ComboBoxItem {
@@ -44,7 +47,7 @@ interface ComboBoxGroup {
 export interface ComboBoxProperty {
     type: "combobox",
     label: string;
-    bindToLabel: string;
+    bindToLabel: FilterLabelsByType<string>;
     /**
      * The default value is used when the label is not set.
      */
@@ -152,12 +155,27 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 label: t("book_properties_config.max-nesting-depth"),
                 type: "number",
                 bindToLabel: "maxNestingDepth",
-                width: 65
+                width: 65,
+                disabled: (note) => note.type === "search"
             }
         ]
     },
     board: {
         properties: []
+    },
+    presentation: {
+        properties: [
+            {
+                label: "Theme",
+                type: "combobox",
+                bindToLabel: "presentation:theme",
+                defaultValue: DEFAULT_THEME,
+                options: getPresentationThemes().map(theme => ({
+                    value: theme.id,
+                    label: theme.name
+                }))
+            }
+        ]
     }
 };
 

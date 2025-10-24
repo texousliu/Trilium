@@ -304,7 +304,7 @@ function createNewNoteWithTarget(target: "into" | "after" | "before", targetBran
     }
 }
 
-function protectNoteRecursively(note: BNote, protect: boolean, includingSubTree: boolean, taskContext: TaskContext) {
+function protectNoteRecursively(note: BNote, protect: boolean, includingSubTree: boolean, taskContext: TaskContext<"protectNotes">) {
     protectNote(note, protect);
 
     taskContext.increaseProgressCount();
@@ -773,7 +773,7 @@ function updateNoteData(noteId: string, content: string, attachments: Attachment
     }
 }
 
-function undeleteNote(noteId: string, taskContext: TaskContext) {
+function undeleteNote(noteId: string, taskContext: TaskContext<"undeleteNotes">) {
     const noteRow = sql.getRow<NoteRow>("SELECT * FROM notes WHERE noteId = ?", [noteId]);
 
     if (!noteRow.isDeleted || !noteRow.deleteId) {
@@ -793,7 +793,7 @@ function undeleteNote(noteId: string, taskContext: TaskContext) {
     }
 }
 
-function undeleteBranch(branchId: string, deleteId: string, taskContext: TaskContext) {
+function undeleteBranch(branchId: string, deleteId: string, taskContext: TaskContext<"undeleteNotes">) {
     const branchRow = sql.getRow<BranchRow>("SELECT * FROM branches WHERE branchId = ?", [branchId]);
 
     if (!branchRow.isDeleted) {

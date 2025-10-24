@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran) ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)  
@@ -5,13 +16,34 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)  
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp) [![Translation status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) | [Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README.ru.md) | [Japanese](./docs/README.ja.md) | [Italian](./docs/README.it.md) | [Spanish](./docs/README.es.md)
+[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) | [Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md) | [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) | [Spanish](./docs/README-es.md)
 
 Trilium Notes is a free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+
+## ⏬ Download
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) – stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) – unstable development version, updated daily with the latest features and fixes.
+
+## 📚 Documentation
+
+**Visit our comprehensive documentation at [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
+
+Our documentation is available in multiple formats:
+- **Online Documentation**: Browse the full documentation at [docs.triliumnotes.org](https://docs.triliumnotes.org/)
+- **In-App Help**: Press `F1` within Trilium to access the same documentation directly in the application
+- **GitHub**: Navigate through the [User Guide](./docs/User%20Guide/User%20Guide/) in this repository
+
+### Quick Links
+- [Getting Started Guide](https://docs.triliumnotes.org/)
+- [Installation Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Docker Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Upgrading TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [Basic Concepts and Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Patterns of Personal Knowledge Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 Features
 
@@ -55,19 +87,6 @@ The original Trilium developer ([Zadam](https://github.com/zadam)) has graciousl
 There are no special migration steps to migrate from a zadam/Trilium instance to a TriliumNext/Trilium instance. Simply [install TriliumNext/Trilium](#-installation) as usual and it will use your existing database.
 
 Versions up to and including [v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) are compatible with the latest zadam/trilium version of [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Any later versions of TriliumNext/Trilium have their sync versions incremented which prevents direct migration.
-
-## 📖 Documentation
-
-We're currently in the progress of moving the documentation to in-app (hit the `F1` key within Trilium). As a result, there may be some missing parts until we've completed the migration. If you'd prefer to navigate through the documentation within GitHub, you can navigate the [User Guide](./docs/User%20Guide/User%20Guide/) documentation. 
-
-Below are some quick links for your convenience to navigate the documentation:
-- [Server installation](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-  - [Docker installation](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Concepts and Features - Note](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of personal knowledge base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
-
-Until we finish reorganizing the documentation, you may also want to [browse the old documentation](https://triliumnext.github.io/Docs).
 
 ## 💬 Discuss with us
 
@@ -142,7 +161,7 @@ Download the repository, install dependencies using `pnpm` and then run the envi
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
 pnpm install
-pnpm nx run edit-docs:edit-docs
+pnpm edit-docs:edit-docs
 ```
 
 ### Building the Executable
@@ -151,7 +170,7 @@ Download the repository, install dependencies using `pnpm` and then build the de
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
 pnpm install
-pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
+pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 ```
 
 For more details, see the [development docs](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).
@@ -162,16 +181,34 @@ Please view the [documentation guide](https://github.com/TriliumNext/Trilium/blo
 
 ## 👏 Shoutouts
 
-* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - best WYSIWYG editor on the market, very interactive and listening team
-* [FancyTree](https://github.com/mar10/fancytree) - very feature rich tree library without real competition. Trilium Notes would not be the same without it.
-* [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with support for huge amount of languages
-* [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library without competition. Used in [relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+* [zadam](https://github.com/zadam) for the original concept and implementation of the application.
+* [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the application icon.
+* [nriver](https://github.com/nriver) for his work on internationalization.
+* [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
+* [antoniotejada](https://github.com/nriver) for the original syntax highlight widget.
+* [Dosu](https://dosu.dev/) for providing us with the automated responses to GitHub issues and discussions.
+* [Tabler Icons](https://tabler.io/icons) for the system tray icons.
+
+Trilium would not be possible without the technologies behind it:
+
+* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind text notes. We are grateful for being offered a set of the premium features.
+* [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with support for huge amount of languages.
+* [Excalidraw](https://github.com/excalidraw/excalidraw) - the infinite whiteboard used in Canvas notes.
+* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - providing the mind map functionality.
+* [Leaflet](https://github.com/Leaflet/Leaflet) - for rendering geographical maps.
+* [Tabulator](https://github.com/olifolkerd/tabulator) - for the interactive table used in collections.
+* [FancyTree](https://github.com/mar10/fancytree) - feature-rich tree library without real competition. 
+* [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library. Used in [relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 
 ## 🤝 Support
 
-Support for the TriliumNext organization will be possible in the near future. For now, you can:
-- Support continued development on TriliumNext by supporting our developers: [eliandoran](https://github.com/sponsors/eliandoran) (See the [repository insights]([developers]([url](https://github.com/TriliumNext/trilium/graphs/contributors))) for a full list)
-- Show a token of gratitude to the original Trilium developer ([zadam](https://github.com/sponsors/zadam)) via [PayPal](https://paypal.me/za4am) or Bitcoin (bitcoin:bc1qv3svjn40v89mnkre5vyvs2xw6y8phaltl385d2).
+Trilium is built and maintained with [hundreds of hours of work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your support keeps it open-source, improves features, and covers costs such as hosting.
+
+Consider supporting the main developer ([eliandoran](https://github.com/eliandoran)) of the application via:
+
+- [GitHub Sponsors](https://github.com/sponsors/eliandoran)
+- [PayPal](https://paypal.me/eliandoran)
+- [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
 
 ## 🔑 License

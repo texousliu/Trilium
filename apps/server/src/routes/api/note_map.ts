@@ -1,10 +1,10 @@
 "use strict";
 
 import becca from "../../becca/becca.js";
-import { JSDOM } from "jsdom";
 import type BNote from "../../becca/entities/bnote.js";
 import type BAttribute from "../../becca/entities/battribute.js";
 import type { Request } from "express";
+import { HTMLElement, parse, TextNode } from "node-html-parser";
 import { BacklinkCountResponse, BacklinksResponse } from "@triliumnext/commons";
 
 interface TreeLink {
@@ -241,25 +241,26 @@ function updateDescendantCountMapForSearch(noteIdToDescendantCountMap: Record<st
     }
 }
 
-function removeImages(document: Document) {
+function removeImages(document: HTMLElement) {
     const images = document.getElementsByTagName("img");
-    while (images && images.length > 0) {
-        images[0]?.parentNode?.removeChild(images[0]);
+    for (const image of images) {
+        image.remove();
     }
 }
 
 const EXCERPT_CHAR_LIMIT = 200;
-type ElementOrText = Element | Text;
+type ElementOrText = HTMLElement | TextNode;
 
-function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
+export function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
     const html = sourceNote.getContent();
-    const document = new JSDOM(html).window.document;
+    const document = parse(html.toString());
 
     const excerpts: string[] = [];
 
     removeImages(document);
 
     for (const linkEl of document.querySelectorAll("a")) {
+        console.log("Got ", linkEl.innerHTML);
         const href = linkEl.getAttribute("href");
 
         if (!href || !href.endsWith(referencedNoteId)) {
@@ -270,8 +271,8 @@ function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
 
         let centerEl: HTMLElement = linkEl;
 
-        while (centerEl.tagName !== "BODY" && centerEl.parentElement && (centerEl.parentElement?.textContent?.length || 0) <= EXCERPT_CHAR_LIMIT) {
-            centerEl = centerEl.parentElement;
+        while (centerEl.tagName !== "BODY" && centerEl.parentNode && (centerEl.parentNode?.textContent?.length || 0) <= EXCERPT_CHAR_LIMIT) {
+            centerEl = centerEl.parentNode;
         }
 
         const excerptEls: ElementOrText[] = [centerEl];
@@ -282,7 +283,7 @@ function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
         while (excerptLength < EXCERPT_CHAR_LIMIT) {
             let added = false;
 
-            const prev: Element | null = left.previousElementSibling;
+            const prev: HTMLElement | null = left.previousElementSibling;
 
             if (prev) {
                 const prevText = prev.textContent || "";
@@ -290,7 +291,7 @@ function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
                 if (prevText.length + excerptLength > EXCERPT_CHAR_LIMIT) {
                     const prefix = prevText.substr(prevText.length - (EXCERPT_CHAR_LIMIT - excerptLength));
 
-                    const textNode = document.createTextNode(`…${prefix}`);
+                    const textNode = new TextNode(`…${prefix}`);
                     excerptEls.unshift(textNode);
 
                     break;
@@ -302,7 +303,7 @@ function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
                 added = true;
             }
 
-            const next: Element | null = right.nextElementSibling;
+            const next: HTMLElement | null = right.nextElementSibling;
 
             if (next) {
                 const nextText = next.textContent;
@@ -310,7 +311,7 @@ function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
                 if (nextText && nextText.length + excerptLength > EXCERPT_CHAR_LIMIT) {
                     const suffix = nextText.substr(nextText.length - (EXCERPT_CHAR_LIMIT - excerptLength));
 
-                    const textNode = document.createTextNode(`${suffix}…`);
+                    const textNode = new TextNode(`${suffix}…`);
                     excerptEls.push(textNode);
 
                     break;
@@ -327,7 +328,7 @@ function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
             }
         }
 
-        const excerptWrapper = document.createElement("div");
+        const excerptWrapper = new HTMLElement("div", {});
         excerptWrapper.classList.add("ck-content");
         excerptWrapper.classList.add("backlink-excerpt");
 

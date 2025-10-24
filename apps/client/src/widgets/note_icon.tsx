@@ -129,7 +129,7 @@ function NoteIconList({ note }: { note: FNote }) {
                 class="icon-list"
                 onClick={(e) => {
                     const clickedTarget = e.target as HTMLElement;
-                    
+
                     if (!clickedTarget.classList.contains("bx")) {
                         return;
                     }
@@ -152,9 +152,9 @@ function NoteIconList({ note }: { note: FNote }) {
                                 for (const label of getIconLabels(note)) {
                                     attributes.removeAttributeById(note.noteId, label.attributeId);
                                 }
-                            }}                    
+                            }}
                         />
-                    </div> 
+                    </div>
                 )}
 
                 {(iconData?.icons ?? []).map(({className, name}) => (

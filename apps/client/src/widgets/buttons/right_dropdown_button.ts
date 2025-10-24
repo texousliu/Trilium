@@ -1,3 +1,4 @@
+import { handleRightToLeftPlacement } from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { Tooltip, Dropdown } from "bootstrap";
 type PopoverPlacement = Tooltip.PopoverPlacement;
@@ -46,18 +47,17 @@ export default class RightDropdownButtonWidget extends BasicWidget {
             }
         });
 
-        this.$tooltip = this.$widget.find(".tooltip-trigger").attr("title", this.title);
-        this.tooltip = new Tooltip(this.$tooltip[0], {
-            placement: this.settings.titlePlacement,
-            fallbackPlacements: [this.settings.titlePlacement]
+        this.$widget.attr("title", this.title);
+        this.tooltip = Tooltip.getOrCreateInstance(this.$widget[0], {
+            trigger: "hover",
+            placement: handleRightToLeftPlacement(this.settings.titlePlacement),
+            fallbackPlacements: [ handleRightToLeftPlacement(this.settings.titlePlacement) ]
         });
 
         this.$widget
             .find(".right-dropdown-button")
             .addClass(this.iconClass)
-            .on("click", () => this.tooltip.hide())
-            .on("mouseenter", () => this.tooltip.show())
-            .on("mouseleave", () => this.tooltip.hide());
+            .on("click", () => this.tooltip.hide());
 
         this.$widget.on("show.bs.dropdown", async () => {
             await this.dropdownShown();

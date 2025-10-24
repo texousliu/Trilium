@@ -28,11 +28,12 @@ import ContentWidgetTypeWidget from "./type_widgets/content_widget.js";
 import AttachmentListTypeWidget from "./type_widgets/attachment_list.js";
 import AttachmentDetailTypeWidget from "./type_widgets/attachment_detail.js";
 import MindMapWidget from "./type_widgets/mind_map.js";
-import utils from "../services/utils.js";
+import utils, { isElectron } from "../services/utils.js";
 import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 import AiChatTypeWidget from "./type_widgets/ai_chat.js";
+import toast from "../services/toast.js";
 
 const TPL = /*html*/`
 <div class="note-detail">
@@ -140,6 +141,13 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
         this.contentSized();
+
+        if (utils.isElectron()) {
+            const { ipcRenderer } = utils.dynamicRequire("electron");
+            ipcRenderer.on("print-done", () => {
+                toast.closePersistent("printing");
+            });
+        }
     }
 
     async refresh() {
@@ -195,7 +203,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         // https://github.com/zadam/trilium/issues/2522
         const isBackendNote = this.noteContext?.noteId === "_backendLog";
         const isSqlNote = this.mime === "text/x-sqlite;schema=trilium";
-        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "mermaid", "file"].includes(this.type ?? "");
+        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "mermaid", "file", "aiChat"].includes(this.type ?? "");
         const isFullHeight = (!this.noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
             || this.noteContext?.viewScope?.viewMode === "attachments"
             || isBackendNote;
@@ -297,17 +305,53 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
-        window.print();
+        toast.showPersistent({
+            icon: "bx bx-loader-circle bx-spin",
+            message: t("note_detail.printing"),
+            id: "printing"
+        });
+
+        if (isElectron()) {
+            const { ipcRenderer } = utils.dynamicRequire("electron");
+            ipcRenderer.send("print-note", {
+                notePath: this.notePath
+            });
+        } else {
+            const iframe = document.createElement('iframe');
+            iframe.src = `?print#${this.notePath}`;
+            iframe.className = "print-iframe";
+            document.body.appendChild(iframe);
+            iframe.onload = () => {
+                if (!iframe.contentWindow) {
+                    toast.closePersistent("printing");
+                    document.body.removeChild(iframe);
+                    return;
+                }
+
+                iframe.contentWindow.addEventListener("note-ready", () => {
+                    toast.closePersistent("printing");
+                    iframe.contentWindow?.print();
+                    document.body.removeChild(iframe);
+                });
+            };
+        }
     }
 
     async exportAsPdfEvent() {
-        if (!this.noteContext?.isActive() || !this.note) {
+        if (!this.noteContext?.isActive() || !this.note || !this.notePath) {
             return;
         }
+
+        toast.showPersistent({
+            icon: "bx bx-loader-circle bx-spin",
+            message: t("note_detail.printing_pdf"),
+            id: "printing"
+        });
 
         const { ipcRenderer } = utils.dynamicRequire("electron");
         ipcRenderer.send("export-as-pdf", {
             title: this.note.title,
+            notePath: this.notePath,
             pageSize: this.note.getAttributeValue("label", "printPageSize") ?? "Letter",
             landscape: this.note.hasAttribute("label", "printLandscape")
         });

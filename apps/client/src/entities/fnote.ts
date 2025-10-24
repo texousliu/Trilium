@@ -1,6 +1,5 @@
 import server from "../services/server.js";
 import noteAttributeCache from "../services/note_attribute_cache.js";
-import ws from "../services/ws.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
@@ -256,18 +255,20 @@ export default class FNote {
         return this.children;
     }
 
-    async getSubtreeNoteIds() {
+    async getSubtreeNoteIds(includeArchived = false) {
         let noteIds: (string | string[])[] = [];
         for (const child of await this.getChildNotes()) {
+            if (child.isArchived && !includeArchived) continue;
+
             noteIds.push(child.noteId);
-            noteIds.push(await child.getSubtreeNoteIds());
+            noteIds.push(await child.getSubtreeNoteIds(includeArchived));
         }
         return noteIds.flat();
     }
 
     async getSubtreeNotes() {
         const noteIds = await this.getSubtreeNoteIds();
-        return this.froca.getNotes(noteIds);
+        return (await this.froca.getNotes(noteIds));
     }
 
     async getChildNotes() {
@@ -584,7 +585,7 @@ export default class FNote {
         let childBranches = this.getChildBranches();
 
         if (!childBranches) {
-            ws.logError(`No children for '${this.noteId}'. This shouldn't happen.`);
+            console.error(`No children for '${this.noteId}'. This shouldn't happen.`);
             return [];
         }
 
@@ -905,8 +906,8 @@ export default class FNote {
         return this.getBlob();
     }
 
-    async getBlob() {
-        return await this.froca.getBlob("notes", this.noteId);
+    getBlob() {
+        return this.froca.getBlob("notes", this.noteId);
     }
 
     toString() {

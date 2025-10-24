@@ -164,6 +164,7 @@
     "importIntoNote": "Import into note",
     "chooseImportFile": "Choose import file",
     "importDescription": "Content of the selected file(s) will be imported as child note(s) into",
+    "importZipRecommendation": "When importing a ZIP file, the note hierarchy will reflect the subdirectory structure within the archive.",
     "options": "Options",
     "safeImportTooltip": "Trilium <code>.zip</code> export files can contain executable scripts which may contain harmful behavior. Safe import will deactivate automatic execution of all imported scripts. Uncheck \"Safe import\" only if the imported archive is supposed to contain executable scripts and you completely trust the contents of the import file.",
     "safeImport": "Safe import",
@@ -263,6 +264,11 @@
     "confirm_delete_all": "Do you want to delete all revisions of this note?",
     "no_revisions": "No revisions for this note yet...",
     "restore_button": "Restore",
+    "diff_on": "Show diff",
+    "diff_off": "Show content",
+    "diff_on_hint": "Click to show note source diff",
+    "diff_off_hint": "Click to show note content",
+    "diff_not_available": "Diff isn't available.",
     "confirm_restore": "Do you want to restore this revision? This will overwrite the current title and content of the note with this revision.",
     "delete_button": "Delete",
     "confirm_delete": "Do you want to delete this revision?",
@@ -577,7 +583,7 @@
     "cannot_find_day_note": "Cannot find day note",
     "cannot_find_week_note": "Cannot find week note",
     "january": "January",
-    "febuary": "February",
+    "february": "February",
     "march": "March",
     "april": "April",
     "may": "May",
@@ -587,7 +593,18 @@
     "september": "September",
     "october": "October",
     "november": "November",
-    "december": "December"
+    "december": "December",
+    "week": "Week",
+    "week_previous": "Previous week",
+    "week_next": "Next week",
+    "month": "Month",
+    "month_previous": "Previous month",
+    "month_next": "Next month",
+    "year": "Year",
+    "year_previous": "Previous year",
+    "year_next": "Next year",
+    "list": "List",
+    "today": "Today"
   },
   "close_pane_button": {
     "close_this_pane": "Close this pane"
@@ -630,7 +647,9 @@
     "about": "About Trilium Notes",
     "logout": "Logout",
     "show-cheatsheet": "Show Cheatsheet",
-    "toggle-zen-mode": "Zen Mode"
+    "toggle-zen-mode": "Zen Mode",
+    "new-version-available": "New Update Available",
+    "download-update": "Get Version {{latestVersion}}"
   },
   "zen_mode": {
     "button_exit": "Exit Zen Mode"
@@ -719,6 +738,7 @@
   "mobile_detail_menu": {
     "insert_child_note": "Insert child note",
     "delete_this_note": "Delete this note",
+    "note_revisions": "Note revisions",
     "error_cannot_get_branch_id": "Cannot get branchId for notePath '{{notePath}}'",
     "error_unrecognized_command": "Unrecognized command {{command}}"
   },
@@ -748,7 +768,9 @@
     "calendar": "Calendar",
     "table": "Table",
     "geo-map": "Geo Map",
-    "board": "Board"
+    "board": "Board",
+    "presentation": "Presentation",
+    "include_archived_notes": "Show archived notes"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
@@ -949,7 +971,9 @@
     "no_attachments": "This note has no attachments."
   },
   "book": {
-    "no_children_help": "This collection doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details."
+    "no_children_help": "This collection doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details.",
+    "drag_locked_title": "Locked for editing",
+    "drag_locked_message": "Dragging not allowed since the collection is locked for editing."
   },
   "editable_code": {
     "placeholder": "Type the content of your code note here..."
@@ -1118,7 +1142,9 @@
     "title": "Performance",
     "enable-motion": "Enable transitions and animations",
     "enable-shadows": "Enable shadows",
-    "enable-backdrop-effects": "Enable background effects for menus, popups and panels"
+    "enable-backdrop-effects": "Enable background effects for menus, popups and panels",
+    "enable-smooth-scroll": "Enable smooth scrolling",
+    "app-restart-required": "(a restart of the application is required for the change to take effect)"
   },
   "ai_llm": {
     "not_started": "Not started",
@@ -1392,8 +1418,13 @@
     "title": "Localization",
     "language": "Language",
     "first-day-of-the-week": "First day of the week",
-    "sunday": "Sunday",
     "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
     "first-week-of-the-year": "First week of the year",
     "first-week-contains-first-day": "First week contains first day of the year",
     "first-week-contains-first-thursday": "First week contains first Thursday of the year",
@@ -1401,7 +1432,8 @@
     "min-days-in-first-week": "Minimum days in first week",
     "first-week-info": "First week contains first Thursday of the year is based on <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> standard.",
     "first-week-warning": "Changing first week options may cause duplicate with existing Week Notes and the existing Week Notes will not be updated accordingly.",
-    "formatting-locale": "Date & number format"
+    "formatting-locale": "Date & number format",
+    "formatting-locale-auto": "Based on the application's language"
   },
   "backup": {
     "automatic_backup": "Automatic backup",
@@ -1496,7 +1528,7 @@
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity. The default issuer is Google, but you can change it to any other OpenID provider. Check <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">here</a> for more information. Follow these <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">instructions</a> to setup an OpenID service through Google.",
     "oauth_description_warning": "To enable OAuth/OpenID, you need to set the OAuth/OpenID base URL, client ID and client secret in the config.ini file and restart the application. If you want to set from environment variables, please set TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID and TRILIUM_OAUTH_CLIENT_SECRET.",
-    "oauth_missing_vars": "Missing settings: {{variables}}",
+    "oauth_missing_vars": "Missing settings: {{-variables}}",
     "oauth_user_account": "User Account: ",
     "oauth_user_email": "User Email: ",
     "oauth_user_not_logged_in": "Not logged in!"
@@ -1569,10 +1601,12 @@
     "button-tree-map": "Tree map"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Open in a new tab <kbd>Ctrl+Click</kbd>",
+    "open-in-a-new-tab": "Open in a new tab",
     "open-in-a-new-split": "Open in a new split",
     "insert-note-after": "Insert note after",
     "insert-child-note": "Insert child note",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
     "delete": "Delete",
     "search-in-subtree": "Search in subtree",
     "hoist-note": "Hoist note",
@@ -1602,8 +1636,8 @@
     "open-in-popup": "Quick edit"
   },
   "shared_info": {
-    "shared_publicly": "This note is shared publicly on",
-    "shared_locally": "This note is shared locally on",
+    "shared_publicly": "This note is shared publicly on {{- link}}.",
+    "shared_locally": "This note is shared locally on {{- link}}.",
     "help_link": "For help visit <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
   "note_types": {
@@ -1682,13 +1716,16 @@
     "hoist-this-note-workspace": "Hoist this note (workspace)",
     "refresh-saved-search-results": "Refresh saved search results",
     "create-child-note": "Create child note",
-    "unhoist": "Unhoist"
+    "unhoist": "Unhoist",
+    "toggle-sidebar": "Toggle sidebar"
   },
   "title_bar_buttons": {
     "window-on-top": "Keep Window on Top"
   },
   "note_detail": {
-    "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'"
+    "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'",
+    "printing": "Printing in progress...",
+    "printing_pdf": "Exporting to PDF in progress..."
   },
   "note_title": {
     "placeholder": "type note's title here..."
@@ -1763,7 +1800,9 @@
   "ws": {
     "sync-check-failed": "Sync check failed!",
     "consistency-checks-failed": "Consistency checks failed! See logs for details.",
-    "encountered-error": "Encountered error \"{{message}}\", check out the console."
+    "encountered-error": "Encountered error \"{{message}}\", check out the console.",
+    "lost-websocket-connection-title": "Lost connection to the server",
+    "lost-websocket-connection-message": "Check your reverse proxy (e.g. nginx or Apache) configuration to ensure WebSocket connections are properly allowed and not being blocked."
   },
   "hoisted_note": {
     "confirm_unhoisting": "Requested note '{{requestedNote}}' is outside of hoisted note '{{hoistedNote}}' subtree and you must unhoist to access the note. Do you want to proceed with unhoisting?"
@@ -1839,7 +1878,7 @@
     "native-title-bar": "Native title bar",
     "native-title-bar-description": "For Windows and macOS, keeping the native title bar off makes the application look more compact. On Linux, keeping the native title bar on integrates better with the rest of the system.",
     "background-effects": "Enable background effects (Windows 11 only)",
-    "background-effects-description": "The Mica effect adds a blurred, stylish background to app windows, creating depth and a modern look.",
+    "background-effects-description": "The Mica effect adds a blurred, stylish background to app windows, creating depth and a modern look. \"Native title bar\" must be disabled.",
     "restart-app-button": "Restart the application to view the changes",
     "zoom-factor": "Zoom factor"
   },
@@ -1938,7 +1977,11 @@
   "editorfeatures": {
     "title": "Features",
     "emoji_completion_enabled": "Enable Emoji auto-completion",
-    "note_completion_enabled": "Enable note auto-completion"
+    "emoji_completion_description": "If enabled, emojis can be easily inserted into text by typing `:`, followed by the name of an emoji.",
+    "note_completion_enabled": "Enable note auto-completion",
+    "note_completion_description": "If enabled, links to notes can be created by typing `@` followed by the title of a note.",
+    "slash_commands_enabled": "Enable slash commands",
+    "slash_commands_description": "If enabled, editing commands such as inserting line breaks or headings can be toggled by typing `/`."
   },
   "table_view": {
     "new-row": "New row",
@@ -1974,14 +2017,26 @@
     "delete_row": "Delete row"
   },
   "board_view": {
-    "delete-note": "Delete Note",
+    "delete-note": "Delete note...",
+    "remove-from-board": "Remove from board",
+    "archive-note": "Archive note",
+    "unarchive-note": "Unarchive note",
     "move-to": "Move to",
     "insert-above": "Insert above",
     "insert-below": "Insert below",
     "delete-column": "Delete column",
     "delete-column-confirmation": "Are you sure you want to delete this column? The corresponding attribute will be deleted in the notes under this column as well.",
     "new-item": "New item",
-    "add-column": "Add Column"
+    "new-item-placeholder": "Enter note title...",
+    "add-column": "Add Column",
+    "add-column-placeholder": "Enter column name...",
+    "edit-note-title": "Click to edit note title",
+    "edit-column-title": "Click to edit column title"
+  },
+  "presentation_view": {
+    "edit-slide": "Edit this slide",
+    "start-presentation": "Start presentation",
+    "slide-overview": "Toggle an overview of the slides"
   },
   "command_palette": {
     "tree-action-name": "Tree: {{name}}",
@@ -2023,5 +2078,12 @@
   },
   "units": {
     "percentage": "%"
+  },
+  "pagination": {
+    "page_title": "Page of {{startIndex}} - {{endIndex}}",
+    "total_notes": "{{count}} notes"
+  },
+  "collections": {
+    "rendering_error": "Unable to show content due to an error."
   }
 }

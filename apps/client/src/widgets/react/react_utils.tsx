@@ -24,11 +24,11 @@ export function refToJQuerySelector<T extends HTMLElement>(ref: RefObject<T> | n
  * @param el the JSX element to render.
  * @returns the rendered wrapped DOM element.
  */
-export function renderReactWidget(parentComponent: Component, el: JSX.Element) {
+export function renderReactWidget(parentComponent: Component | null, el: JSX.Element) {
     return renderReactWidgetAtElement(parentComponent, el, new DocumentFragment()).children();
 }
 
-export function renderReactWidgetAtElement(parentComponent: Component, el: JSX.Element, container: Element | DocumentFragment) {
+export function renderReactWidgetAtElement(parentComponent: Component | null, el: JSX.Element, container: Element | DocumentFragment) {
     render((
         <ParentComponent.Provider value={parentComponent}>
             {el}
@@ -41,7 +41,9 @@ export function disposeReactWidget(container: Element) {
     render(null, container);
 }
 
-export function joinElements(components: ComponentChild[], separator = ", ") {
+export function joinElements(components: ComponentChild[] | undefined, separator = ", ") {
+    if (!components) return <></>;
+
     const joinedComponents: ComponentChild[] = [];
     for (let i=0; i<components.length; i++) {
         joinedComponents.push(components[i]);
@@ -50,5 +52,5 @@ export function joinElements(components: ComponentChild[], separator = ", ") {
         }
     }
 
-    return joinedComponents;
+    return <>{joinedComponents}</>;
 }

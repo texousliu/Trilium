@@ -1,6 +1,6 @@
 import { NoteType } from "@triliumnext/commons";
-import { ViewTypeOptions } from "./note_list_renderer";
 import FNote from "../entities/fnote";
+import { ViewTypeOptions } from "../widgets/collections/interface";
 
 export const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
     canvas: null,
@@ -27,7 +27,8 @@ export const byBookType: Record<ViewTypeOptions, string | null> = {
     calendar: "xWbu3jpNWapp",
     table: "2FvYrpmOXm29",
     geoMap: "81SGnPGMk7Xc",
-    board: "CtBQqbwXDx1w"
+    board: "CtBQqbwXDx1w",
+    presentation: null
 };
 
 export function getHelpUrlForNote(note: FNote | null | undefined) {

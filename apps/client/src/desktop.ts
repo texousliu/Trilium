@@ -10,7 +10,6 @@ import { t } from "./services/i18n.js";
 import options from "./services/options.js";
 import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
-import "./stylesheets/bootstrap.scss";
 import "boxicons/css/boxicons.min.css";
 import "autocomplete.js/index_jquery.js";
 
@@ -43,6 +42,10 @@ noteAutocompleteService.init();
 
 if (utils.isElectron()) {
     electronContextMenu.setupContextMenu();
+}
+
+if (utils.isPWA()) {
+    initPWATopbarColor();
 }
 
 function initOnElectron() {
@@ -112,4 +115,21 @@ function initDarkOrLightMode(style: CSSStyleDeclaration) {
 
     const { nativeTheme } = utils.dynamicRequire("@electron/remote") as typeof ElectronRemote;
     nativeTheme.themeSource = themeSource;
+}
+
+function initPWATopbarColor() {
+    const tracker = $("#background-color-tracker");
+
+    if (tracker.length) {
+        const applyThemeColor = () => {
+            let meta = $("meta[name='theme-color']");
+            if (!meta.length) {
+                meta = $(`<meta name="theme-color">`).appendTo($("head"));
+            }
+            meta.attr("content", tracker.css("color"));
+        };
+
+        tracker.on("transitionend", applyThemeColor);
+        applyThemeColor();
+    }
 }

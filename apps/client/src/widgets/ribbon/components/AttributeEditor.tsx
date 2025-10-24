@@ -4,7 +4,7 @@ import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import note_autocomplete, { Suggestion } from "../../../services/note_autocomplete";
 import CKEditor, { CKEditorApi } from "../../react/CKEditor";
-import { useLegacyImperativeHandlers, useLegacyWidget, useTooltip, useTriliumEvent } from "../../react/hooks";
+import { useLegacyImperativeHandlers, useLegacyWidget, useTooltip, useTriliumEvent, useTriliumOption } from "../../react/hooks";
 import FAttribute from "../../../entities/fattribute";
 import attribute_renderer from "../../../services/attribute_renderer";
 import FNote from "../../../entities/fnote";
@@ -13,6 +13,7 @@ import attribute_parser, { Attribute } from "../../../services/attribute_parser"
 import ActionButton from "../../react/ActionButton";
 import { escapeQuotes, getErrorMessage } from "../../../services/utils";
 import link from "../../../services/link";
+import { isIMEComposing } from "../../../services/shortcuts";
 import froca from "../../../services/froca";
 import contextMenu from "../../../menus/context_menu";
 import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
@@ -99,6 +100,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
     const currentValueRef = useRef(currentValue);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const editorRef = useRef<CKEditorApi>();
+    const [ locale ] = useTriliumOption("locale");
 
     const { showTooltip, hideTooltip } = useTooltip(wrapperRef, {
         trigger: "focus",
@@ -131,7 +133,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
 
         if (htmlAttrs.length > 0) {
             htmlAttrs += "&nbsp;";
-        }        
+        }
 
         editorRef.current?.setText(htmlAttrs);
         setCurrentValue(htmlAttrs);
@@ -232,7 +234,6 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
     useEffect(() => refresh(), [ note ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, note))) {
-            console.log("Trigger due to entities reloaded");
             refresh();
         }
     });
@@ -261,8 +262,8 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
             }
 
             return result?.note?.getBestNotePathString();
-        }   
-    }), [ notePath ]));    
+        }
+    }), [ notePath ]));
 
     // Keyboard shortcuts
     useTriliumEvent("addNewLabel", ({ ntxId: eventNtxId }) => {
@@ -280,13 +281,18 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
         refresh,
         renderOwnedAttributes: (attributes) => renderOwnedAttributes(attributes as FAttribute[], false)
     }), [ save, refresh, renderOwnedAttributes ]);
-    
+
     return (
         <>
             {!hidden && <div
                 ref={wrapperRef}
                 style="position: relative; padding-top: 10px; padding-bottom: 10px"
                 onKeyDown={(e) => {
+                    // Skip processing during IME composition
+                    if (isIMEComposing(e)) {
+                        return;
+                    }
+
                     if (e.key === "Enter") {
                         // allow autocomplete to fill the result textarea
                         setTimeout(() => save(), 100);
@@ -303,13 +309,14 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                         toolbar: { items: [] },
                         placeholder: t("attribute_editor.placeholder"),
                         mention: { feeds: mentionSetup },
-                        licenseKey: "GPL"
+                        licenseKey: "GPL",
+                        language: "en"
                     }}
                     onChange={(currentValue) => {
                         currentValueRef.current = currentValue ?? "";
-                        
+
                         const oldValue = getPreprocessedData(lastSavedContent.current ?? "").trimEnd();
-                        const newValue = getPreprocessedData(currentValue ?? "").trimEnd();                
+                        const newValue = getPreprocessedData(currentValue ?? "").trimEnd();
                         setNeedsSaving(oldValue !== newValue);
                         setError(undefined);
                     }}
@@ -345,7 +352,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                                         x: e.pageX,
                                         y: e.pageY
                                     });
-                                    setState("showAttributeDetail");                                    
+                                    setState("showAttributeDetail");
                                 } else {
                                     setState("showHelpTooltip");
                                 }
@@ -367,7 +374,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                         onClick={save}
                     /> }
 
-                    <ActionButton 
+                    <ActionButton
                         icon="bx bx-plus"
                         className="add-new-attribute-button tn-tool-button"
                         text={escapeQuotes(t("attribute_editor.add_a_new_attribute"))}
@@ -382,7 +389,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                                 items: [
                                     { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
                                     { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
-                                    { title: "----" },
+                                    { kind: "separator" },
                                     { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
                                     { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
                                 ],
@@ -401,7 +408,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
 
             {attributeDetailWidgetEl}
         </>
-    )   
+    )
 }
 
 function getPreprocessedData(currentValue: string) {

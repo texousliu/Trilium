@@ -52,6 +52,10 @@ The contextual menu can operate:
     *   Creates a copy of the note and its descendants.
     *   This process is different from <a class="reference-link" href="../../Notes/Cloning%20Notes.md">Cloning Notes</a> since the duplicated note can be edited independently from the original.
     *   An alternative to this, if done regularly, would be <a class="reference-link" href="../../../Advanced%20Usage/Templates.md">Templates</a>.
+*   **Archive/Unarchive**
+    *   Marks a note as [archived](../../Notes/Archived%20Notes.md).
+    *   If the note is already archived, it will be unarchived instead.
+    *   Multiple notes can be selected as well. However, all the selected notes must be in the same state (archived or not), otherwise the option will be disabled.
 *   **Delete**
     *   Will delete the given notes, asking for confirmation first.
     *   In the dialog, the following options can be configured:

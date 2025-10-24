@@ -276,7 +276,12 @@
     "preview": "Vorschau:",
     "preview_not_available": "Für diesen Notiztyp ist keine Vorschau verfügbar.",
     "restore_button": "Wiederherstellen",
-    "delete_button": "Löschen"
+    "delete_button": "Löschen",
+    "diff_on": "Zeige Differenz",
+    "diff_off": "Zeige Inhalt",
+    "diff_on_hint": "Klicke, um die Differenz des Notiz-Quellcodes zu zeigen",
+    "diff_off_hint": "Klicke, um den Notizinhalt zu zeigen",
+    "diff_not_available": "Differenz-Abgleich ist nicht verfügbar."
   },
   "sort_child_notes": {
     "sort_children_by": "Unternotizen sortieren nach...",
@@ -576,7 +581,7 @@
     "sun": "So",
     "cannot_find_day_note": "Tagesnotiz kann nicht gefunden werden",
     "january": "Januar",
-    "febuary": "Februar",
+    "february": "Februar",
     "march": "März",
     "april": "April",
     "may": "Mai",
@@ -587,7 +592,18 @@
     "october": "Oktober",
     "november": "November",
     "december": "Dezember",
-    "cannot_find_week_note": "Wochennotiz kann nicht gefunden werden"
+    "cannot_find_week_note": "Wochennotiz kann nicht gefunden werden",
+    "week": "Woche",
+    "week_previous": "vorherige Woche",
+    "week_next": "nächste Woche",
+    "month": "Monat",
+    "month_previous": "vorheriger Monat",
+    "month_next": "nächster Monat",
+    "year": "Jahr",
+    "year_previous": "vorheriges Jahr",
+    "year_next": "nächstes Jahr",
+    "list": "Liste",
+    "today": "Heute"
   },
   "close_pane_button": {
     "close_this_pane": "Schließe diesen Bereich"
@@ -630,7 +646,8 @@
     "about": "Über Trilium Notes",
     "logout": "Abmelden",
     "show-cheatsheet": "Cheatsheet anzeigen",
-    "toggle-zen-mode": "Zen Modus"
+    "toggle-zen-mode": "Zen Modus",
+    "new-version-available": "Neues Update verfügbar"
   },
   "sync_status": {
     "unknown": "<p>Der Synchronisations-Status wird bekannt, sobald der nächste Synchronisierungsversuch gestartet wird.</p><p>Klicke, um eine Synchronisierung jetzt auszulösen.</p>",
@@ -717,7 +734,8 @@
     "insert_child_note": "Untergeordnete Notiz einfügen",
     "delete_this_note": "Diese Notiz löschen",
     "error_cannot_get_branch_id": "BranchId für notePath „{{notePath}}“ kann nicht abgerufen werden",
-    "error_unrecognized_command": "Unbekannter Befehl {{command}}"
+    "error_unrecognized_command": "Unbekannter Befehl {{command}}",
+    "note_revisions": "Notiz Revisionen"
   },
   "note_icon": {
     "change_note_icon": "Notiz-Icon ändern",
@@ -745,7 +763,9 @@
     "book_properties": "Sammlungseigenschaften",
     "table": "Tabelle",
     "geo-map": "Weltkarte",
-    "board": "Tafel"
+    "board": "Tafel",
+    "include_archived_notes": "Zeige archivierte Notizen",
+    "presentation": "Präsentation"
   },
   "edited_notes": {
     "no_edited_notes_found": "An diesem Tag wurden noch keine Notizen bearbeitet...",
@@ -946,7 +966,9 @@
     "no_attachments": "Diese Notiz enthält keine Anhänge."
   },
   "book": {
-    "no_children_help": "Diese Notiz mit dem Notiztyp Buch besitzt keine Unternotizen, deshalb ist nichts zum Anzeigen vorhanden. Siehe <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">Wiki</a> für mehr Details."
+    "no_children_help": "Diese Notiz mit dem Notiztyp Buch besitzt keine Unternotizen, deshalb ist nichts zum Anzeigen vorhanden. Siehe <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">Wiki</a> für mehr Details.",
+    "drag_locked_title": "Für Bearbeitung gesperrt",
+    "drag_locked_message": "Das Ziehen ist nicht möglich, da die Sammlung für die Bearbeitung gesperrt ist."
   },
   "editable_code": {
     "placeholder": "Gebe hier den Inhalt deiner Codenotiz ein..."
@@ -1236,7 +1258,13 @@
     "min-days-in-first-week": "Mindestanzahl an Tagen in erster Woche",
     "first-week-info": "Die erste Woche, die den ersten Donnerstag des Jahres enthält, basiert auf dem Standard <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a>.",
     "first-week-warning": "Das Ändern der Optionen für die erste Woche kann zu Duplikaten mit bestehenden Wochen-Notizen führen. Bestehende Wochen-Notizen werden nicht entsprechend aktualisiert.",
-    "formatting-locale": "Datums- und Zahlenformat"
+    "formatting-locale": "Datums- und Zahlenformat",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch",
+    "thursday": "Donnerstag",
+    "friday": "Freitag",
+    "saturday": "Samstag",
+    "formatting-locale-auto": "Basierend auf die Anwendungssprache"
   },
   "backup": {
     "automatic_backup": "Automatische Sicherung",
@@ -1371,7 +1399,7 @@
     "button-tree-map": "Baumkarte"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "In neuem Tab öffnen <kbd>Strg+Klick</kbd>",
+    "open-in-a-new-tab": "In neuem Tab öffnen",
     "open-in-a-new-split": "In neuem Split öffnen",
     "insert-note-after": "Notiz dahinter einfügen",
     "insert-child-note": "Unternotiz einfügen",
@@ -1401,11 +1429,13 @@
     "apply-bulk-actions": "Massenaktionen anwenden",
     "converted-to-attachments": "{{count}} Notizen wurden als Anhang konvertiert.",
     "convert-to-attachment-confirm": "Bist du sicher, dass du die ausgewählten Notizen in Anhänge ihrer übergeordneten Notizen umwandeln möchtest?",
-    "open-in-popup": "Schnellbearbeitung"
+    "open-in-popup": "Schnellbearbeitung",
+    "archive": "Archiviere",
+    "unarchive": "Entarchivieren"
   },
   "shared_info": {
-    "shared_publicly": "Diese Notiz ist öffentlich geteilt auf",
-    "shared_locally": "Diese Notiz ist lokal geteilt auf",
+    "shared_publicly": "Diese Notiz ist öffentlich geteilt auf {{- link}}.",
+    "shared_locally": "Diese Notiz ist lokal geteilt auf {{- link}}.",
     "help_link": "Für Hilfe besuche <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
   "note_types": {
@@ -1484,7 +1514,8 @@
     "hoist-this-note-workspace": "Diese Notiz fokussieren (Arbeitsbereich)",
     "refresh-saved-search-results": "Gespeicherte Suchergebnisse aktualisieren",
     "create-child-note": "Unternotiz anlegen",
-    "unhoist": "Fokus verlassen"
+    "unhoist": "Fokus verlassen",
+    "toggle-sidebar": "Seitenleiste ein-/ausblenden"
   },
   "title_bar_buttons": {
     "window-on-top": "Dieses Fenster immer oben halten"
@@ -1565,7 +1596,9 @@
   "ws": {
     "sync-check-failed": "Synchronisationsprüfung fehlgeschlagen!",
     "consistency-checks-failed": "Konsistenzprüfung fehlgeschlagen! Siehe Logs für Details.",
-    "encountered-error": "Fehler „{{message}}“ aufgetreten, siehe Konsole für Details."
+    "encountered-error": "Fehler „{{message}}“ aufgetreten, siehe Konsole für Details.",
+    "lost-websocket-connection-title": "Verbindung zum Server verloren",
+    "lost-websocket-connection-message": "Überprüfe die Konfiguration des Reverse-Proxys (z. B. nginx oder Apache), um sicherzustellen, dass WebSocket-Verbindungen zugelassen und nicht blockiert werden."
   },
   "hoisted_note": {
     "confirm_unhoisting": "Die angeforderte Notiz ‚{{requestedNote}}‘ befindet sich außerhalb des hoisted Bereichs der Notiz ‚{{hoistedNote}}‘. Du musst sie unhoisten, um auf die Notiz zuzugreifen. Möchtest du mit dem Unhoisting fortfahren?"
@@ -1641,7 +1674,7 @@
     "native-title-bar": "Native Anwendungsleiste",
     "native-title-bar-description": "In Windows und macOS, sorgt das Deaktivieren der nativen Anwendungsleiste für ein kompakteres Aussehen. Unter Linux, sorgt das Aktivieren der nativen Anwendungsleiste für eine bessere Integration mit anderen Teilen des Systems.",
     "background-effects": "Hintergrundeffekte aktivieren (nur Windows 11)",
-    "background-effects-description": "Der Mica Effekt fügt einen unscharfen, stylischen Hintergrund in Anwendungsfenstern ein. Dieser erzeugt Tiefe und ein modernes Auftreten.",
+    "background-effects-description": "Der Mica Effekt fügt einen unscharfen, stylischen Hintergrund in Anwendungsfenstern ein. Dieser erzeugt Tiefe und ein modernes Auftreten. \"Native Titelleiste\" muss deaktiviert sein.",
     "restart-app-button": "Anwendung neustarten um Änderungen anzuwenden",
     "zoom-factor": "Zoomfaktor"
   },
@@ -1838,7 +1871,9 @@
     "title": "Leistung",
     "enable-motion": "Aktiviere Übergänge und Animationen",
     "enable-shadows": "Aktiviere Schatten",
-    "enable-backdrop-effects": "Aktiviere Hintergrundeffekte für Menüs, Pop-up Fenster und Panele"
+    "enable-backdrop-effects": "Aktiviere Hintergrundeffekte für Menüs, Pop-up Fenster und Panele",
+    "enable-smooth-scroll": "Aktiviere sanftes Scrollen",
+    "app-restart-required": "(Ein Neustart der Anwendung ist erforderlich, damit die Änderungen wirksam werden)"
   },
   "code-editor-options": {
     "title": "Editor"
@@ -1877,7 +1912,7 @@
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID ist ein standardisiertes Verfahren, mit dem Sie sich über ein Konto eines anderen Dienstes, beispielsweise Google, bei Websites anmelden können, um Ihre Identität zu bestätigen. Der Standardaussteller ist Google, Sie können jedoch jeden anderen OpenID-Anbieter auswählen. Weitere Informationen finden Sie <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">hier</a>. Befolgen Sie diese <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">Anweisungen</a>, um einen OpenID-Dienst über Google einzurichten.",
     "oauth_description_warning": "Um OAuth/OpenID zu aktivieren, müssen Sie die OAuth/OpenID-Basis-URL, die Client-ID und den Client-Secret in der Datei config.ini festlegen und die Anwendung neu starten. Wenn Sie die Einstellungen über Umgebungsvariablen vornehmen möchten, legen Sie bitte TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID und TRILIUM_OAUTH_CLIENT_SECRET fest.",
-    "oauth_missing_vars": "Fehlende Einstellung: {{variables}}",
+    "oauth_missing_vars": "Fehlende Einstellung: {{-variables}}",
     "oauth_user_account": "Benutzerkonto: ",
     "oauth_user_email": "Benutzer E-Mail: ",
     "oauth_user_not_logged_in": "Nicht eingeloggt!"
@@ -1942,7 +1977,11 @@
   "editorfeatures": {
     "title": "Funktionen",
     "emoji_completion_enabled": "Emoji-Autovervollständigung aktivieren",
-    "note_completion_enabled": "Automatisches Vervollständigen von Notizen aktivieren"
+    "note_completion_enabled": "Automatisches Vervollständigen von Notizen aktivieren",
+    "emoji_completion_description": "Wenn aktiviert, können Emojis ganz einfach in den Text eingefügt werden, indem man \":\" gefolgt vom Namen eines Emojis eingibt.",
+    "note_completion_description": "Wenn aktiviert, können Links zu Notizen erstellt werden, indem man \"@\" gefolgt vom Titel einer Notiz eingibt.",
+    "slash_commands_enabled": "Aktiviere Slash-Befehle",
+    "slash_commands_description": "Wenn aktiviert, können Bearbeitungsbefehle wie das Einfügen von Zeilenumbrüchen oder Überschriften durch Eingabe von \"/\" aktiviert werden."
   },
   "table_view": {
     "new-row": "Neue Zeile",
@@ -1978,14 +2017,21 @@
     "delete_row": "Zeile entfernen"
   },
   "board_view": {
-    "delete-note": "Lösche Notiz",
+    "delete-note": "Lösche Notiz...",
     "move-to": "Verschiebe zu",
     "insert-above": "Oberhalb einfügen",
     "insert-below": "Unterhalb einfügen",
     "delete-column": "Spalte entfernen",
     "delete-column-confirmation": "Soll die Spalte wirklich gelöscht werden? Abhängige Attribute werden auch in den Notizen unter dieser Spalte gelöscht.",
     "new-item": "Neuer Artikel",
-    "add-column": "Spalte hinzufügen"
+    "add-column": "Spalte hinzufügen",
+    "remove-from-board": "Entferne von Tafel",
+    "archive-note": "archiviere Notiz",
+    "unarchive-note": "entarchiviere Notiz",
+    "new-item-placeholder": "Notiz Titel eingeben...",
+    "add-column-placeholder": "Spaltenname eingeben...",
+    "edit-note-title": "Klicke zum Editieren des Notiz-Titels",
+    "edit-column-title": "Klicke zum Editieren des Spalten-Titels"
   },
   "command_palette": {
     "tree-action-name": "Struktur: {{name}}",
@@ -2023,5 +2069,16 @@
   },
   "units": {
     "percentage": "%"
+  },
+  "pagination": {
+    "page_title": "Seite {{startIndex}} von {{endIndex}}",
+    "total_notes": "{{count}} Notizen"
+  },
+  "collections": {
+    "rendering_error": "Aufgrund eines Fehlers können keine Inhalte angezeigt werden."
+  },
+  "presentation_view": {
+    "edit-slide": "Folie bearbeiten",
+    "start-presentation": "Präsentation starten"
   }
 }
