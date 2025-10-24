@@ -35,5 +35,10 @@
         "jump_to_content": "Ugorj gyorsan a jegyzetekhez vagy a felhasználói felület parancsaihoz a hierarchia területén, keresve a címüket, a fuzzy illesztéssel, hogy megmagyarázza az elírásokat vagy az enyhe különbségeket.",
         "search_title": "Erőteljes keresés",
         "search_content": "Vagy keressen szöveget a jegyzetekben, és szűkítse le a keresést a szülői jegyzet szűrésével vagy mélységével."
+    },
+    "note_types": {
+        "file_description": "Beágyazott multimédiás fájlokat, például PDF-eket, képeket, videókat, alkalmazáson belüli előnézettel.",
+        "canvas_title": "Vászon",
+        "canvas_description": "Rendezzen formákat, képeket és szöveget egy végtelen vászonra, ugyanazzal a technológiával mint ami excalidraw.com mögött van. Ideális diagramokhoz, vázlatokhoz és vizuális tervezéshez."
     }
 }
