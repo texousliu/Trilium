@@ -3,7 +3,7 @@
 import dateUtils from "../date_utils.js";
 import path from "path";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition, escapeHtml, getResourceDir, isDev } from "../utils.js";
+import { getContentDisposition } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -415,24 +415,6 @@ async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, 
             }
             return;
         }
-
-        const metaFileJson = JSON.stringify(metaFile, null, "\t");
-
-        archive.append(metaFileJson, { name: "!!!meta.json" });
-
-        saveNote(rootMeta, "");
-
-        const note = branch.getNote();
-        const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected() || "note"}.zip`;
-
-        if (setHeaders && "setHeader" in res) {
-            res.setHeader("Content-Disposition", getContentDisposition(zipFileName));
-            res.setHeader("Content-Type", "application/zip");
-        }
-
-        archive.pipe(res);
-        await archive.finalize();
-        taskContext.taskSucceeded(null);
     } catch (e: unknown) {
         const message = `Export failed with error: ${e instanceof Error ? e.message : String(e)}`;
         log.error(message);
