@@ -8,7 +8,7 @@ import Footer from './components/Footer.js';
 import GetStarted from './pages/GetStarted/get-started.js';
 import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
-import { useEffect, useLayoutEffect, useState } from 'preact/hooks';
+import { useLayoutEffect, useState } from 'preact/hooks';
 import { default as i18next, changeLanguage } from 'i18next';
 import { LOCALES } from './i18n';
 import HttpApi from 'i18next-http-backend';
@@ -23,10 +23,13 @@ export function App(props: {repoStargazersCount: number}) {
                 <Header repoStargazersCount={props.repoStargazersCount} />
                 <main>
                     <Router>
+                        <Route path="/" component={Home} />
+
                         <Route path="/:locale:/" component={Home} />
-                        <Route default component={NotFound} />
                         <Route path="/:locale:/get-started" component={GetStarted} />
                         <Route path="/:locale:/support-us" component={SupportUs} />
+
+                        <Route default component={NotFound} />
                     </Router>
                 </main>
                 <Footer />
@@ -37,7 +40,7 @@ export function App(props: {repoStargazersCount: number}) {
 
 export function LocaleProvider({ children }) {
   const { path } = useLocation();
-  const localeId = path.split('/')[1] || 'en';
+  const localeId = path.split('/')[1] || navigator.language;
   const [ loaded, setLoaded ] = useState(false);
 
   useLayoutEffect(() => {
