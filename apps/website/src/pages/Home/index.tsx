@@ -131,7 +131,7 @@ function ProductivityBenefitsSection() {
 function NoteTypesSection() {
     const { t } = useTranslation();
     return (
-        <Section className="note-types" title="Multiple ways to represent your information">
+        <Section className="note-types" title={t("note_types.title")}>
             <ListWithScreenshot horizontal items={[
                 {
                     title: t("note_types.text_title"),

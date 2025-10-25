@@ -39,6 +39,7 @@
     "web_clipper_content": "Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension."
   },
   "note_types": {
+    "title": "Multiple ways to represent your information",
     "text_title": "Text notes",
     "text_description": "The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.",
     "code_title": "Code notes",
