@@ -300,8 +300,8 @@ importers:
         specifier: 5.2.1
         version: 5.2.1
       '@types/tabulator-tables':
-        specifier: 6.2.11
-        version: 6.2.11
+        specifier: 6.3.0
+        version: 6.3.0
       copy-webpack-plugin:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.11))
@@ -5159,8 +5159,8 @@ packages:
   '@types/swagger-ui@5.21.1':
     resolution: {integrity: sha512-DUmUH59eeOtvAqcWwBduH2ws0cc5i95KHsXCS4FsOfbUq/clW8TN+HqRBj7q5p9MSsSNK43RziIGItNbrAGLxg==}
 
-  '@types/tabulator-tables@6.2.11':
-    resolution: {integrity: sha512-vDyUwAsrMYH17YvkTuEPUx2Rp98JK0p3B74EsUlvYr08bP4l0NgXL+0tcDIon8Rd2GJeOFC0gW+/3MZ5a9nvSg==}
+  '@types/tabulator-tables@6.3.0':
+    resolution: {integrity: sha512-/mQzrThCdSQXc2lz2SUZglIG+vWQ1sb1CEiVxw9SFGKPulaj1543zrL2qABeJIKjKPxcSgmWUyDA9e8CMaI2cQ==}
 
   '@types/through2@2.0.41':
     resolution: {integrity: sha512-ryQ0tidWkb1O1JuYvWKyMLYEtOWDqF5mHerJzKz/gQpoAaJq2l/dsMPBF0B5BNVT34rbARYJ5/tsZwLfUi2kwQ==}
@@ -15335,6 +15335,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.1.0':
     dependencies:
@@ -15831,6 +15833,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@47.1.0':
     dependencies:
@@ -19774,7 +19778,7 @@ snapshots:
 
   '@types/swagger-ui@5.21.1': {}
 
-  '@types/tabulator-tables@6.2.11': {}
+  '@types/tabulator-tables@6.3.0': {}
 
   '@types/through2@2.0.41':
     dependencies:
