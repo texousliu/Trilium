@@ -1,13 +1,14 @@
 import "./Header.css";
 import { Link } from "./Button.js";
 import { SocialButtons, SocialButton } from "./Footer.js";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { useLocation } from 'preact-iso';
 import DownloadButton from './DownloadButton.js';
 import githubIcon from "../assets/boxicons/bx-github.svg?raw";
 import Icon from "./Icon.js";
 import logoPath from "../assets/icon-color.svg";
 import menuIcon from "../assets/boxicons/bx-menu.svg?raw";
+import { LocaleContext } from "..";
 
 interface HeaderLink {
     url: string;
@@ -23,6 +24,7 @@ const HEADER_LINKS: HeaderLink[] = [
 
 export function Header(props: {repoStargazersCount: number}) {
 	const { url } = useLocation();
+    const locale = useContext(LocaleContext);
     const [ mobileMenuShown, setMobileMenuShown ] = useState(false);
 
 	return (
@@ -48,7 +50,7 @@ export function Header(props: {repoStargazersCount: number}) {
                 <nav className={`${mobileMenuShown ? "mobile-shown" : ""}`}>
                     {HEADER_LINKS.map(link => (
                         <Link
-                            href={link.url}
+                            href={link.external ? link.url : `/${locale}${link.url}`}
                             className={url === link.url ? "active" : ""}
                             openExternally={link.external}
                             onClick={() => {
