@@ -1,9 +1,9 @@
 /**
  * FTS5 Search Service
- * 
+ *
  * Encapsulates all FTS5-specific operations for full-text searching.
  * Provides efficient text search using SQLite's FTS5 extension with:
- * - Porter stemming for better matching
+ * - Trigram tokenization for fast substring matching
  * - Snippet extraction for context
  * - Highlighting of matched terms
  * - Query syntax conversion from Trilium to FTS5
@@ -115,7 +115,7 @@ class FTSSearchService {
 
     /**
      * Converts Trilium search syntax to FTS5 MATCH syntax
-     * 
+     *
      * @param tokens - Array of search tokens
      * @param operator - Trilium search operator
      * @returns FTS5 MATCH query string
@@ -125,8 +125,18 @@ class FTSSearchService {
             throw new Error("No search tokens provided");
         }
 
+        // Trigram tokenizer requires minimum 3 characters
+        const shortTokens = tokens.filter(token => token.length < 3);
+        if (shortTokens.length > 0) {
+            const shortList = shortTokens.join(', ');
+            log.info(`Tokens shorter than 3 characters detected (${shortList}) - cannot use trigram FTS5`);
+            throw new FTSNotAvailableError(
+                `Trigram tokenizer requires tokens of at least 3 characters. Short tokens: ${shortList}`
+            );
+        }
+
         // Sanitize tokens to prevent FTS5 syntax injection
-        const sanitizedTokens = tokens.map(token => 
+        const sanitizedTokens = tokens.map(token =>
             this.sanitizeFTS5Token(token)
         );
 

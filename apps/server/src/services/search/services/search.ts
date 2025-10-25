@@ -19,9 +19,6 @@ import sql from "../../sql.js";
 import scriptService from "../../script.js";
 import striptags from "striptags";
 import protectedSessionService from "../../protected_session.js";
-import performanceMonitor from "../performance_monitor.js";
-import type { DetailedMetrics } from "../performance_monitor.js";
-import abTestingService from "../ab_testing.js";
 
 export interface SearchNoteResult {
     searchResultNoteIds: string[];
@@ -405,14 +402,6 @@ function parseQueryToExpression(query: string, searchContext: SearchContext) {
 
 function searchNotes(query: string, params: SearchParams = {}): BNote[] {
     const searchContext = new SearchContext(params);
-    
-    // Run A/B test in background (non-blocking)
-    setImmediate(() => {
-        abTestingService.runComparison(query, params).catch(err => {
-            log.info(`A/B test failed: ${err}`);
-        });
-    });
-    
     const searchResults = findResultsWithQuery(query, searchContext);
 
     return searchResults.map((sr) => becca.notes[sr.noteId]);
@@ -422,49 +411,25 @@ function findResultsWithQuery(query: string, searchContext: SearchContext): Sear
     query = query || "";
     searchContext.originalQuery = query;
 
-    // Start performance monitoring
-    const totalTimer = performanceMonitor.startTimer();
-    const phases: { name: string; duration: number }[] = [];
-
-    // Parse query
-    const parseTimer = performanceMonitor.startTimer();
     const expression = parseQueryToExpression(query, searchContext);
-    phases.push({ name: "parse", duration: parseTimer() });
 
     if (!expression) {
         return [];
     }
 
     // If the query starts with '#', it's a pure expression query.
-    // Don't use progressive search for these as they may have complex 
+    // Don't use progressive search for these as they may have complex
     // ordering or other logic that shouldn't be interfered with.
     const isPureExpressionQuery = query.trim().startsWith('#');
-    
+
     let results: SearchResult[];
-    const searchTimer = performanceMonitor.startTimer();
-    
+
     if (isPureExpressionQuery) {
         // For pure expression queries, use standard search without progressive phases
         results = performSearch(expression, searchContext, searchContext.enableFuzzyMatching);
     } else {
         results = findResultsWithExpression(expression, searchContext);
     }
-    
-    phases.push({ name: "search", duration: searchTimer() });
-
-    // Record metrics
-    const metrics: DetailedMetrics = {
-        query: query.substring(0, 200), // Truncate long queries
-        backend: searchContext.searchBackend,
-        totalTime: totalTimer(),
-        parseTime: phases[0].duration,
-        searchTime: phases[1].duration,
-        resultCount: results.length,
-        phases,
-        error: searchContext.error || undefined
-    };
-
-    performanceMonitor.recordDetailedMetrics(metrics);
 
     return results;
 }

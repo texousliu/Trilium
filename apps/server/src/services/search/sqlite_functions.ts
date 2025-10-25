@@ -1,19 +1,17 @@
 /**
  * SQLite Custom Functions Service
- * 
- * This service manages custom SQLite functions that enhance search capabilities.
+ *
+ * This service manages custom SQLite functions for general database operations.
  * Functions are registered with better-sqlite3 to provide native-speed operations
- * directly within SQL queries, enabling efficient search indexing and querying.
- * 
+ * directly within SQL queries.
+ *
  * These functions are used by:
- * - Database triggers for automatic search index maintenance
- * - Direct SQL queries for search operations
- * - Migration scripts for initial data population
+ * - Fuzzy search fallback (edit_distance)
+ * - Regular expression matching (regex_match)
  */
 
 import type { Database } from "better-sqlite3";
 import log from "../log.js";
-import { normalize as utilsNormalize, stripTags } from "../utils.js";
 
 /**
  * Configuration for fuzzy search operations
@@ -67,15 +65,7 @@ export class SqliteFunctionsService {
         // Bind all methods to preserve 'this' context
         this.functions = [
             {
-                name: "normalize_text",
-                implementation: this.normalizeText.bind(this),
-                options: {
-                    deterministic: true,
-                    varargs: false
-                }
-            },
-            {
-                name: "edit_distance", 
+                name: "edit_distance",
                 implementation: this.editDistance.bind(this),
                 options: {
                     deterministic: true,
@@ -85,30 +75,6 @@ export class SqliteFunctionsService {
             {
                 name: "regex_match",
                 implementation: this.regexMatch.bind(this),
-                options: {
-                    deterministic: true,
-                    varargs: true  // Changed to true to handle variable arguments
-                }
-            },
-            {
-                name: "tokenize_text",
-                implementation: this.tokenizeText.bind(this),
-                options: {
-                    deterministic: true,
-                    varargs: false
-                }
-            },
-            {
-                name: "strip_html",
-                implementation: this.stripHtml.bind(this),
-                options: {
-                    deterministic: true,
-                    varargs: false
-                }
-            },
-            {
-                name: "fuzzy_match",
-                implementation: this.fuzzyMatch.bind(this),
                 options: {
                     deterministic: true,
                     varargs: true  // Changed to true to handle variable arguments
@@ -181,22 +147,6 @@ export class SqliteFunctionsService {
     }
 
     // ===== Function Implementations =====
-
-    /**
-     * Normalize text by removing diacritics and converting to lowercase
-     * Matches the behavior of utils.normalize() exactly
-     * 
-     * @param text Text to normalize
-     * @returns Normalized text
-     */
-    private normalizeText(text: string | null | undefined): string {
-        if (!text || typeof text !== 'string') {
-            return '';
-        }
-        
-        // Use the exact same normalization as the rest of the codebase
-        return utilsNormalize(text);
-    }
 
     /**
      * Calculate Levenshtein edit distance between two strings
@@ -313,186 +263,6 @@ export class SqliteFunctionsService {
             log.error(`Invalid regex pattern in SQL: ${pattern} - ${error}`);
             return null;
         }
-    }
-
-    /**
-     * Tokenize text into searchable words
-     * Handles punctuation, camelCase, and snake_case
-     * 
-     * @param text Text to tokenize
-     * @returns JSON array string of tokens
-     */
-    private tokenizeText(text: string | null | undefined): string {
-        if (!text || typeof text !== 'string') {
-            return '[]';
-        }
-
-        try {
-            // Use a Set to avoid duplicates from the start
-            const expandedTokens: Set<string> = new Set();
-            
-            // Split on word boundaries, preserving apostrophes within words
-            // But we need to handle underscore separately for snake_case
-            const tokens = text
-                .split(/[\s\n\r\t,;.!?()[\]{}"'`~@#$%^&*+=|\\/<>:-]+/)
-                .filter(token => token.length > 0);
-            
-            // Process each token
-            for (const token of tokens) {
-                // Add the original token in lowercase
-                expandedTokens.add(token.toLowerCase());
-                
-                // Handle snake_case first (split on underscore)
-                const snakeParts = token.split('_').filter(part => part.length > 0);
-                if (snakeParts.length > 1) {
-                    // We have snake_case
-                    for (const snakePart of snakeParts) {
-                        // Add each snake part
-                        expandedTokens.add(snakePart.toLowerCase());
-                        
-                        // Also check for camelCase within each snake part
-                        const camelParts = this.splitCamelCase(snakePart);
-                        for (const camelPart of camelParts) {
-                            if (camelPart.length > 0) {
-                                expandedTokens.add(camelPart.toLowerCase());
-                            }
-                        }
-                    }
-                } else {
-                    // No snake_case, just check for camelCase
-                    const camelParts = this.splitCamelCase(token);
-                    for (const camelPart of camelParts) {
-                        if (camelPart.length > 0) {
-                            expandedTokens.add(camelPart.toLowerCase());
-                        }
-                    }
-                }
-            }
-            
-            // Convert Set to Array for JSON serialization
-            const uniqueTokens = Array.from(expandedTokens);
-            
-            // Return as JSON array string for SQL processing
-            return JSON.stringify(uniqueTokens);
-        } catch (error) {
-            log.error(`Error tokenizing text in SQL: ${error}`);
-            return '[]';
-        }
-    }
-    
-    /**
-     * Helper method to split camelCase strings
-     * @param str String to split
-     * @returns Array of parts
-     */
-    private splitCamelCase(str: string): string[] {
-        // Split on transitions from lowercase to uppercase
-        // Also handle sequences of uppercase letters (e.g., "XMLParser" -> ["XML", "Parser"])
-        return str.split(/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/);
-    }
-
-    /**
-     * Strip HTML tags from content
-     * Removes script and style content, then strips tags and decodes entities
-     * 
-     * @param html HTML content
-     * @returns Plain text without HTML tags
-     */
-    private stripHtml(html: string | null | undefined): string {
-        if (!html || typeof html !== 'string') {
-            return '';
-        }
-
-        try {
-            let text = html;
-            
-            // First remove script and style content entirely (including the tags)
-            // This needs to happen before stripTags to remove the content
-            text = text.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-            text = text.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
-            
-            // Now use stripTags to remove remaining HTML tags
-            text = stripTags(text);
-            
-            // Decode common HTML entities
-            text = text.replace(/&lt;/g, '<');
-            text = text.replace(/&gt;/g, '>');
-            text = text.replace(/&amp;/g, '&');
-            text = text.replace(/&quot;/g, '"');
-            text = text.replace(/&#39;/g, "'");
-            text = text.replace(/&apos;/g, "'");
-            text = text.replace(/&nbsp;/g, ' ');
-            
-            // Normalize whitespace - reduce multiple spaces to single space
-            // But don't trim leading/trailing space if it was from &nbsp;
-            text = text.replace(/\s+/g, ' ');
-            
-            return text;
-        } catch (error) {
-            log.error(`Error stripping HTML in SQL: ${error}`);
-            return html; // Return original on error
-        }
-    }
-
-    /**
-     * Fuzzy match with configurable edit distance
-     * Combines exact and fuzzy matching for optimal performance
-     * 
-     * SQLite will pass 2 or 3 arguments:
-     * - 2 args: needle, haystack (uses default maxDistance)
-     * - 3 args: needle, haystack, maxDistance
-     * 
-     * @returns 1 if match found, 0 otherwise
-     */
-    private fuzzyMatch(...args: any[]): number {
-        // Handle variable arguments from SQLite
-        let needle: string | null | undefined = args[0];
-        let haystack: string | null | undefined = args[1];
-        let maxDistance: number = args.length > 2 ? args[2] : FUZZY_CONFIG.MAX_EDIT_DISTANCE;
-        
-        // Validate input types
-        if (!needle || !haystack) {
-            return 0;
-        }
-
-        if (typeof needle !== 'string' || typeof haystack !== 'string') {
-            return 0;
-        }
-        
-        // Validate and sanitize maxDistance
-        if (typeof maxDistance !== 'number' || !Number.isFinite(maxDistance)) {
-            maxDistance = FUZZY_CONFIG.MAX_EDIT_DISTANCE;
-        } else {
-            // Ensure it's a positive integer
-            maxDistance = Math.max(0, Math.floor(maxDistance));
-        }
-
-        // Normalize for comparison
-        const normalizedNeedle = needle.toLowerCase();
-        const normalizedHaystack = haystack.toLowerCase();
-
-        // Check exact match first (most common case)
-        if (normalizedHaystack.includes(normalizedNeedle)) {
-            return 1;
-        }
-
-        // For fuzzy matching, check individual words
-        const words = normalizedHaystack.split(/\s+/).filter(w => w.length > 0);
-        
-        for (const word of words) {
-            // Skip if word length difference is too large
-            if (Math.abs(word.length - normalizedNeedle.length) > maxDistance) {
-                continue;
-            }
-
-            // Check edit distance - call with all 3 args since we're calling internally
-            const distance = this.editDistance(normalizedNeedle, word, maxDistance);
-            if (distance <= maxDistance) {
-                return 1;
-            }
-        }
-
-        return 0;
     }
 }
 

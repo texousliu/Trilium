@@ -13,7 +13,6 @@ import AttributeExistsExp from "../expressions/attribute_exists.js";
 import LabelComparisonExp from "../expressions/label_comparison.js";
 import NoteFlatTextExp from "../expressions/note_flat_text.js";
 import NoteContentFulltextExp from "../expressions/note_content_fulltext.js";
-import NoteContentSqliteExp from "../expressions/note_content_sqlite.js";
 import OrderByAndLimitExp from "../expressions/order_by_and_limit.js";
 import AncestorExp from "../expressions/ancestor.js";
 import buildComparator from "./build_comparator.js";
@@ -38,20 +37,15 @@ function getFulltext(_tokens: TokenData[], searchContext: SearchContext, leading
     const operator = leadingOperator === "=" ? "=" : "*=*";
 
     if (!searchContext.fastSearch) {
-        // Choose between SQLite and TypeScript backend
-        const ContentExp = searchContext.searchBackend === "sqlite" 
-            ? NoteContentSqliteExp 
-            : NoteContentFulltextExp;
-        
         // For exact match with "=", we need different behavior
         if (leadingOperator === "=" && tokens.length === 1) {
             // Exact match on title OR exact match on content
             return new OrExp([
                 new PropertyComparisonExp(searchContext, "title", "=", tokens[0]),
-                new ContentExp("=", { tokens, flatText: false })
+                new NoteContentFulltextExp("=", { tokens, flatText: false })
             ]);
         }
-        return new OrExp([new NoteFlatTextExp(tokens), new ContentExp(operator, { tokens, flatText: true })]);
+        return new OrExp([new NoteFlatTextExp(tokens), new NoteContentFulltextExp(operator, { tokens, flatText: true })]);
     } else {
         return new NoteFlatTextExp(tokens);
     }
@@ -154,12 +148,7 @@ function getExpression(tokens: TokenData[], searchContext: SearchContext, level 
 
             i++;
 
-            // Choose between SQLite and TypeScript backend
-            const ContentExp = searchContext.searchBackend === "sqlite" 
-                ? NoteContentSqliteExp 
-                : NoteContentFulltextExp;
-
-            return new ContentExp(operator.token, { tokens: [tokens[i].token], raw });
+            return new NoteContentFulltextExp(operator.token, { tokens: [tokens[i].token], raw });
         }
 
         if (tokens[i].token === "parents") {
@@ -222,12 +211,7 @@ function getExpression(tokens: TokenData[], searchContext: SearchContext, level 
 
             i += 2;
 
-            // Choose between SQLite and TypeScript backend
-            const ContentExp = searchContext.searchBackend === "sqlite" 
-                ? NoteContentSqliteExp 
-                : NoteContentFulltextExp;
-
-            return new OrExp([new PropertyComparisonExp(searchContext, "title", "*=*", tokens[i].token), new ContentExp("*=*", { tokens: [tokens[i].token] })]);
+            return new OrExp([new PropertyComparisonExp(searchContext, "title", "*=*", tokens[i].token), new NoteContentFulltextExp("*=*", { tokens: [tokens[i].token] })]);
         }
 
         if (PropertyComparisonExp.isProperty(tokens[i].token)) {
