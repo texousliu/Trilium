@@ -162,7 +162,7 @@
     "download_helper_desktop_macos": {
         "title_x64": "macOS pentru Intel",
         "title_arm64": "macOS pentru Apple Silicon",
-        "description_x64": "Pentru Mac-uri bazate pe Intel ce rulează macOS Big Sur sau mai nou.",
+        "description_x64": "Pentru Mac-uri bazate pe Intel ce rulează macOS Monterey sau mai nou.",
         "description_arm64": "Pentru Mac-uri bazate pe Apple Silicon, precum cele cu chip-uri M1, M2.",
         "quick_start": "Instalați prin Homebrew:",
         "download_dmg": "Descarcă instalatorul (.dmg)",

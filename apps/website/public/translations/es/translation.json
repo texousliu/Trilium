@@ -163,7 +163,7 @@
     "download_helper_desktop_macos": {
         "title_x64": "macOS para Intel",
         "title_arm64": "macOS para Apple Silicon",
-        "description_x64": "Para Macs con procesador Intel que ejecuten macOS Big Sur o posterior.",
+        "description_x64": "Para Macs con procesador Intel que ejecuten macOS Monterey o posterior.",
         "description_arm64": "Para Macs con Apple Silicon, como los que tienen chips M1 y M2.",
         "quick_start": "Para instalar mediante Homebrew:",
         "download_dmg": "Descargar instalador (.dmg)",

@@ -163,7 +163,7 @@
     "download_helper_desktop_macos": {
         "title_x64": "macOS 適用於 Intel",
         "title_arm64": "macOS 適用於 Apple Silicon",
-        "description_x64": "適用於搭載 Intel 處理器的 Mac，並運行 macOS Big Sur 或更新版本。",
+        "description_x64": "適用於搭載 Intel 處理器的 Mac，並運行 macOS Monterey 或更新版本。",
         "description_arm64": "適用於搭載 Apple Silicon 的 Mac，例如配備 M1 和 M2 晶片的機型。",
         "quick_start": "透過 Homebrew 安裝：",
         "download_dmg": "下載安裝程式 (.dmg)",
