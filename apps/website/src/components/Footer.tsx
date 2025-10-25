@@ -5,9 +5,12 @@ import githubDiscussionsIcon from "../assets/boxicons/bx-discussion.svg?raw";
 import matrixIcon from "../assets/boxicons/bx-message-dots.svg?raw";
 import redditIcon from "../assets/boxicons/bx-reddit.svg?raw";
 import { Link } from "./Button.js";
-import { LOCALES, t } from "../i18n";
+import { LOCALES } from "../i18n";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+    const { t } = useTranslation();
+
     return (
         <footer>
             <div class="content-wrapper">
@@ -33,6 +36,8 @@ export default function Footer() {
 }
 
 export function SocialButtons({ className, withText }: { className?: string, withText?: boolean }) {
+    const { t } = useTranslation();
+
     return (
         <div className={`social-buttons ${className}`}>
             <SocialButton

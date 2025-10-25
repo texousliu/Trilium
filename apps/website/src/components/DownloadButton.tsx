@@ -4,16 +4,17 @@ import Button from "./Button.js";
 import downloadIcon from "../assets/boxicons/bx-arrow-in-down-square-half.svg?raw";
 import packageJson from "../../../../package.json" with { type: "json" };
 import { useEffect, useState } from "preact/hooks";
-import { t } from "../i18n.js";
+import { useTranslation } from "react-i18next";
 
 interface DownloadButtonProps {
     big?: boolean;
 }
 
 export default function DownloadButton({ big }: DownloadButtonProps) {
+    const { t } = useTranslation();
     const [ recommendedDownload, setRecommendedDownload ] = useState<RecommendedDownload | null>();
     useEffect(() => {
-        getRecommendedDownload()?.then(setRecommendedDownload);
+        getRecommendedDownload(t)?.then(setRecommendedDownload);
     }, []);
 
     return (recommendedDownload &&

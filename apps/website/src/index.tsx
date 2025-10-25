@@ -8,6 +8,8 @@ import Footer from './components/Footer.js';
 import GetStarted from './pages/GetStarted/get-started.js';
 import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
+import { useEffect } from 'preact/hooks';
+import { changeLanguage } from 'i18next';
 
 export const LocaleContext = createContext('en');
 
@@ -33,6 +35,10 @@ export function App(props: {repoStargazersCount: number}) {
 export function LocaleProvider({ children }) {
   const { path } = useLocation();
   const locale = path.split('/')[1] || 'en';
+
+  useEffect(() => {
+    changeLanguage(locale);
+  }, [ locale ]);
 
   return (
     <LocaleContext.Provider value={locale}>

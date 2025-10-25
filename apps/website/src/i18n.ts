@@ -33,5 +33,3 @@ await i18next.init({
     },
     returnEmptyString: false
 });
-
-export const t = i18next.t;
