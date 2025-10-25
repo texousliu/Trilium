@@ -31,3 +31,13 @@ export function mapLocale(locale: string) {
     // Default for everything else
     return locale.split('-')[0]; // e.g. "en-US" -> "en"
 }
+
+export function swapLocaleInUrl(url: string, newLocale: string) {
+    const components = url.split("/");
+    if (components.length === 2) {
+        return `/${newLocale}${url}`;
+    } else {
+        components[1] = newLocale;
+        return components.join("/");
+    }
+}
