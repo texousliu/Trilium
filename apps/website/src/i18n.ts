@@ -17,4 +17,17 @@ export const LOCALES: Locale[] = [
     { id: "ar", name: "اَلْعَرَبِيَّةُ", rtl: true },
 ].toSorted((a, b) => a.name.localeCompare(b.name));
 
+export function mapLocale(locale: string) {
+    if (!locale) return 'en';
+    const lower = locale.toLowerCase();
 
+    if (lower.startsWith('zh')) {
+        if (lower.includes('tw') || lower.includes('hk') || lower.includes('mo') || lower.includes('hant')) {
+            return 'zh-Hant';
+        }
+        return 'zh-Hans';
+    }
+
+    // Default for everything else
+    return locale.split('-')[0]; // e.g. "en-US" -> "en"
+}
