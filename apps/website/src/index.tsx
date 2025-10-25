@@ -7,6 +7,7 @@ import { NotFound } from './pages/_404.jsx';
 import Footer from './components/Footer.js';
 import GetStarted from './pages/GetStarted/get-started.js';
 import SupportUs from './pages/SupportUs/SupportUs.js';
+import { LOCALES } from './i18n';
 
 export function App(props: {repoStargazersCount: number}) {
 	return (
@@ -14,7 +15,7 @@ export function App(props: {repoStargazersCount: number}) {
 			<Header repoStargazersCount={props.repoStargazersCount} />
 			<main>
 				<Router>
-					<Route path="/" component={Home} />
+                    <Route path="/" component={Home} />
 					<Route default component={NotFound} />
                     <Route path="/get-started" component={GetStarted} />
                     <Route path="/support-us" component={SupportUs} />
@@ -35,6 +36,17 @@ export async function prerender(data) {
 	// This ensures the GitHub API is not called on every page load in the client.
 	const stargazersCount = await getRepoStargazersCount();
 
-	return await ssr(<App repoStargazersCount={stargazersCount} {...data} />);
+	const result = await ssr(<App repoStargazersCount={stargazersCount} {...data} />);
+    console.log("Got links ", result.links);
+    const links: string[] = [];
+    for (const locale of LOCALES) {
+        for (const link of result.links?.values() ?? []) {
+            links.push(locale.id + link);
+        }
+    }
+    return {
+        ...result,
+        links
+    };
 }
 
