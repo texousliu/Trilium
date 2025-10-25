@@ -9,6 +9,7 @@ import Icon from "./Icon.js";
 import logoPath from "../assets/icon-color.svg";
 import menuIcon from "../assets/boxicons/bx-menu.svg?raw";
 import { LocaleContext } from "..";
+import { useTranslation } from "react-i18next";
 
 interface HeaderLink {
     url: string;
@@ -16,16 +17,17 @@ interface HeaderLink {
     external?: boolean;
 }
 
-const HEADER_LINKS: HeaderLink[] = [
-    { url: "/get-started/", text: "Get started" },
-    { url: "https://docs.triliumnotes.org/", text: "Documentation", external: true },
-    { url: "/support-us/", text: "Support us" }
-]
-
 export function Header(props: {repoStargazersCount: number}) {
 	const { url } = useLocation();
+    const { t } = useTranslation();
     const locale = useContext(LocaleContext);
     const [ mobileMenuShown, setMobileMenuShown ] = useState(false);
+
+    const HEADER_LINKS = useMemo<HeaderLink[]>(() => [
+        { url: "/get-started/", text: t("header.get-started") },
+        { url: "https://docs.triliumnotes.org/", text: t("header.documentation"), external: true },
+        { url: "/support-us/", text: t("header.support-us") }
+    ], [ locale ]);
 
 	return (
 		<header>
