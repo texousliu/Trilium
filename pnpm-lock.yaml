@@ -544,8 +544,8 @@ importers:
         specifier: 2.5.7
         version: 2.5.7
       '@types/serve-static':
-        specifier: 1.15.9
-        version: 1.15.9
+        specifier: 1.15.10
+        version: 1.15.10
       '@types/session-file-store':
         specifier: 1.2.5
         version: 1.2.5
@@ -5143,8 +5143,8 @@ packages:
   '@types/serve-index@1.9.4':
     resolution: {integrity: sha512-qLpGZ/c2fhSs5gnYsQxtDEq3Oy8SXPClIXkW5ghvAvsNuVSA8k+gCONcUCS/UjLEYvYps+e8uBtfgXgvhwfNug==}
 
-  '@types/serve-static@1.15.9':
-    resolution: {integrity: sha512-dOTIuqpWLyl3BBXU3maNQsS4A3zuuoYRNIvYSxxhebPfXg2mzWQEPne/nlJ37yOse6uGgR386uTpdsx4D0QZWA==}
+  '@types/serve-static@1.15.10':
+    resolution: {integrity: sha512-tRs1dB+g8Itk72rlSI2ZrW6vZg0YrLI81iQSTkMmOqnqCaNr/8Ek4VwWcN5vZgCYWbg/JJSGBlUaYGAOP73qBw==}
 
   '@types/session-file-store@1.2.5':
     resolution: {integrity: sha512-xjIyh40IznXLrvbAY/nmxu5cMcPcE3ZoDrSDvd02m6p8UjUgOtZAGI7Os5DDd6THuxClLWNhFo/awy1tYp64Bg==}
@@ -14964,6 +14964,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-upload': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-ai@47.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -19604,13 +19606,13 @@ snapshots:
       '@types/body-parser': 1.19.6
       '@types/express-serve-static-core': 5.1.0
       '@types/qs': 6.14.0
-      '@types/serve-static': 1.15.9
+      '@types/serve-static': 1.15.10
 
   '@types/express@5.0.3':
     dependencies:
       '@types/body-parser': 1.19.6
       '@types/express-serve-static-core': 5.1.0
-      '@types/serve-static': 1.15.9
+      '@types/serve-static': 1.15.10
 
   '@types/fs-extra@11.0.4':
     dependencies:
@@ -19813,10 +19815,10 @@ snapshots:
     dependencies:
       '@types/express': 5.0.3
 
-  '@types/serve-static@1.15.9':
+  '@types/serve-static@1.15.10':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.18.8
+      '@types/node': 22.18.12
       '@types/send': 0.17.5
 
   '@types/session-file-store@1.2.5':
@@ -19858,7 +19860,7 @@ snapshots:
   '@types/swagger-ui-express@4.1.8':
     dependencies:
       '@types/express': 5.0.3
-      '@types/serve-static': 1.15.9
+      '@types/serve-static': 1.15.10
 
   '@types/swagger-ui@5.21.1': {}
 
@@ -30725,7 +30727,7 @@ snapshots:
       '@types/express': 4.17.23
       '@types/express-serve-static-core': 5.1.0
       '@types/serve-index': 1.9.4
-      '@types/serve-static': 1.15.9
+      '@types/serve-static': 1.15.10
       '@types/sockjs': 0.3.36
       '@types/ws': 8.18.1
       ansi-html-community: 0.0.8
