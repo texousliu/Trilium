@@ -10,6 +10,7 @@ import logoPath from "../assets/icon-color.svg";
 import menuIcon from "../assets/boxicons/bx-menu.svg?raw";
 import { LocaleContext } from "..";
 import { useTranslation } from "react-i18next";
+import { swapLocaleInUrl } from "../i18n";
 
 interface HeaderLink {
     url: string;
@@ -53,16 +54,17 @@ export function Header(props: {repoStargazersCount: number}) {
                 </div>
 
                 <nav className={`${mobileMenuShown ? "mobile-shown" : ""}`}>
-                    {headerLinks.map(link => (
-                        <Link
-                            href={link.external ? link.url : `/${locale}${link.url}`}
-                            className={url === link.url ? "active" : ""}
+                    {headerLinks.map(link => {
+                        const linkHref = link.external ? link.url : swapLocaleInUrl(link.url, locale);
+                        return (<Link
+                            href={linkHref}
+                            className={url === linkHref ? "active" : ""}
                             openExternally={link.external}
                             onClick={() => {
                                 setMobileMenuShown(false);
                             }}
-                        >{link.text}</Link>
-                    ))}
+                        >{link.text}</Link>)
+                    })}
 
                     <SocialButtons className="mobile-only" withText />
                 </nav>
