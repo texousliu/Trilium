@@ -21,8 +21,9 @@ footer {
     nav.languages {
         flex-grow: 1;
         justify-content: center;
+        flex-wrap: wrap;
         display: flex;
-        gap: 1em;
+        gap: 0.5em 1em;
     }
 }
 
