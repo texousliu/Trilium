@@ -17,7 +17,7 @@ export default function DownloadButton({ big }: DownloadButtonProps) {
     const [ recommendedDownload, setRecommendedDownload ] = useState<RecommendedDownload | null>();
     useEffect(() => {
         getRecommendedDownload(t)?.then(setRecommendedDownload);
-    }, []);
+    }, [ t ]);
 
     return (recommendedDownload &&
         <>
