@@ -17,7 +17,7 @@ export const LOCALES: Locale[] = [
     { id: "pl", name: "Polski" },
     { id: "es", name: "Español" },
     { id: "ar", name: "اَلْعَرَبِيَّةُ", rtl: true },
-];
+].toSorted((a, b) => a.name.localeCompare(b.name));
 
 i18next
     .use(HttpApi)

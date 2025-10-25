@@ -5,18 +5,28 @@ import githubDiscussionsIcon from "../assets/boxicons/bx-discussion.svg?raw";
 import matrixIcon from "../assets/boxicons/bx-message-dots.svg?raw";
 import redditIcon from "../assets/boxicons/bx-reddit.svg?raw";
 import { Link } from "./Button.js";
-import { t } from "../i18n";
+import { LOCALES, t } from "../i18n";
 
 export default function Footer() {
     return (
         <footer>
             <div class="content-wrapper">
-                <div class="footer-text">
-                    © 2024-2025 <Link href="https://github.com/eliandoran" openExternally>Elian Doran</Link>{t("footer.copyright_and_the")}<Link href="https://github.com/TriliumNext/Trilium/graphs/contributors" openExternally>{t("footer.copyright_community")}</Link>.<br />
-                    © 2017-2024 <Link href="https://github.com/zadam" openExternally>zadam</Link>.
+                <div class="row">
+                    <div class="footer-text">
+                        © 2024-2025 <Link href="https://github.com/eliandoran" openExternally>Elian Doran</Link>{t("footer.copyright_and_the")}<Link href="https://github.com/TriliumNext/Trilium/graphs/contributors" openExternally>{t("footer.copyright_community")}</Link>.<br />
+                        © 2017-2024 <Link href="https://github.com/zadam" openExternally>zadam</Link>.
+                    </div>
+
+                    <SocialButtons />
                 </div>
 
-                <SocialButtons />
+                <div class="row">
+                    <nav class="languages">
+                        {LOCALES.map(locale => (
+                            <Link href={"/" + locale.id + "/"}>{locale.name}</Link>
+                        ))}
+                    </nav>
+                </div>
             </div>
         </footer>
     )
