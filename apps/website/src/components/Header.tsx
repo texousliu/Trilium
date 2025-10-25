@@ -23,11 +23,14 @@ export function Header(props: {repoStargazersCount: number}) {
     const locale = useContext(LocaleContext);
     const [ mobileMenuShown, setMobileMenuShown ] = useState(false);
 
-    const HEADER_LINKS = useMemo<HeaderLink[]>(() => [
-        { url: "/get-started/", text: t("header.get-started") },
-        { url: "https://docs.triliumnotes.org/", text: t("header.documentation"), external: true },
-        { url: "/support-us/", text: t("header.support-us") }
-    ], [ locale ]);
+    const [ headerLinks, setHeaderLinks ] = useState<HeaderLink[]>([]);
+    useEffect(() => {
+        setHeaderLinks([
+            { url: "/get-started/", text: t("header.get-started") },
+            { url: "https://docs.triliumnotes.org/", text: t("header.documentation"), external: true },
+            { url: "/support-us/", text: t("header.support-us") }
+        ]);
+    }, [ locale ]);
 
 	return (
 		<header>
@@ -50,7 +53,7 @@ export function Header(props: {repoStargazersCount: number}) {
                 </div>
 
                 <nav className={`${mobileMenuShown ? "mobile-shown" : ""}`}>
-                    {HEADER_LINKS.map(link => (
+                    {headerLinks.map(link => (
                         <Link
                             href={link.external ? link.url : `/${locale}${link.url}`}
                             className={url === link.url ? "active" : ""}

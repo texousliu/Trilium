@@ -52,14 +52,15 @@ export function LocaleProvider({ children }) {
         },
         returnEmptyString: false
     }).then(() => setLoaded(true))
-  }, []);
+}, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!loaded) return;
     changeLanguage(localeId);
     const correspondingLocale = LOCALES.find(l => l.id === localeId);
     document.documentElement.lang = localeId;
     document.documentElement.dir = correspondingLocale?.rtl ? "rtl" : "ltr";
-  }, [ localeId ]);
+  }, [ loaded, localeId ]);
 
   return (
     <LocaleContext.Provider value={localeId}>
