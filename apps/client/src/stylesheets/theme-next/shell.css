@@ -67,9 +67,9 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
 }
 
 /* TODO: optimize */
-body.background-effects.platform-win32 #center-pane:has(.type-contentWidget.visible .note-detail-content-widget-content.options) {
+body.background-effects.platform-win32 #center-pane .note-split.type-contentWidget.visible:has(.note-detail-content-widget-content.options) {
     /* Settings page */
-    --center-pane-background-color: var(--center-pane-background-color-bgfx);
+    --note-split-background-color: var(--center-pane-background-color-bgfx);
 }
 /* #endregion */
 
@@ -1183,21 +1183,19 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
  * CENTER PANE
  */
 
-#center-pane {
-    background: var(--center-pane-background-color, var(--main-background-color));
-}
-
-.vertical-layout #center-pane {
+ /* The first visible note split */
+.vertical-layout #center-pane .note-split:not(.visible ~ .visible) {
     border-radius: var(--center-pane-border-radius) 0 0 0;
 }
 
-.note-split {
+#center-pane .note-split {
     padding-top: 2px;
+    background-color: var(--note-split-background-color, var(--main-background-color));
     animation: note-entrance 100ms linear;
     /* will-change: opacity; -- causes some weird artifacts to the note menu in split view */
 }
 
-.split-note-container-widget > .gutter {
+#center-pane .split-note-container-widget > .gutter {
     background: var(--root-background) !important;
     transition: background 150ms ease-out;
 }
