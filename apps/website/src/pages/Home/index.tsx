@@ -31,8 +31,7 @@ import boardIcon from "../../assets/boxicons/bx-columns-3.svg?raw";
 import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
 import { getPlatform } from '../../download-helper.js';
 import { useEffect, useState } from 'preact/hooks';
-import { t } from '../../i18n.js';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 export function Home() {
     usePageTitle("");
@@ -52,6 +51,7 @@ export function Home() {
 }
 
 function HeroSection() {
+    const { t } = useTranslation();
     const platform = getPlatform();
     const colorScheme = useColorScheme();
     const [ screenshotUrl, setScreenshotUrl ] = useState<string>();
@@ -96,6 +96,7 @@ function HeroSection() {
 }
 
 function OrganizationBenefitsSection() {
+    const { t } = useTranslation();
     return (
         <>
             <Section className="benefits" title={t("organization_benefits.title")}>
@@ -110,6 +111,7 @@ function OrganizationBenefitsSection() {
 }
 
 function ProductivityBenefitsSection() {
+    const { t } = useTranslation();
     return (
         <>
             <Section className="benefits accented" title={t("productivity_benefits.title")}>
@@ -127,8 +129,9 @@ function ProductivityBenefitsSection() {
 }
 
 function NoteTypesSection() {
+    const { t } = useTranslation();
     return (
-        <Section className="note-types" title="Multiple ways to represent your information">
+        <Section className="note-types" title={t("note_types.title")}>
             <ListWithScreenshot horizontal items={[
                 {
                     title: t("note_types.text_title"),
@@ -190,6 +193,7 @@ function NoteTypesSection() {
 }
 
 function ExtensibilityBenefitsSection() {
+    const { t } = useTranslation();
     return (
         <>
             <Section className="benefits accented" title={t("extensibility_benefits.title")}>
@@ -205,8 +209,9 @@ function ExtensibilityBenefitsSection() {
 }
 
 function CollectionsSection() {
+    const { t } = useTranslation();
     return (
-        <Section className="collections" title="Collections">
+        <Section className="collections" title={t("collections.title")}>
             <ListWithScreenshot items={[
                 {
                     title: t("collections.calendar_title"),
@@ -247,6 +252,7 @@ function ListWithScreenshot({ items, horizontal, cardExtra }: {
     cardExtra?: ComponentChildren;
 }) {
     const [ selectedItem, setSelectedItem ] = useState(items[0]);
+    const { t } = useTranslation();
 
     return (
         <div className={`list-with-screenshot ${horizontal ? "horizontal" : ""}`}>
@@ -278,6 +284,7 @@ function ListWithScreenshot({ items, horizontal, cardExtra }: {
 }
 
 function FaqSection() {
+    const { t } = useTranslation();
     return (
         <Section className="faq" title={t("faq.title")}>
             <div class="grid-2-cols">
@@ -301,6 +308,7 @@ function FaqItem({ question, children }: { question: string; children: Component
 }
 
 function FinalCta() {
+    const { t } = useTranslation();
     return (
         <Section className="final-cta accented" title={t("final_cta.title")}>
             <p>{t("final_cta.description")}</p>

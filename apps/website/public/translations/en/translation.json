@@ -39,6 +39,7 @@
     "web_clipper_content": "Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension."
   },
   "note_types": {
+    "title": "Multiple ways to represent your information",
     "text_title": "Text notes",
     "text_description": "The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.",
     "code_title": "Code notes",
@@ -65,6 +66,7 @@
     "api_description": "Interact with Trilium programatically using its builtin REST API."
   },
   "collections": {
+    "title": "Collections",
     "calendar_title": "Calendar",
     "calendar_description": "Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.",
     "table_title": "Table",
@@ -105,6 +107,11 @@
     "linux_big": "v{{version}} for Linux",
     "linux_small": "for Linux",
     "more_platforms": "More platforms & server setup"
+  },
+  "header": {
+    "get-started": "Get started",
+    "documentation": "Documentation",
+    "support-us": "Support us"
   },
   "footer": {
     "copyright_and_the": " and the ",
