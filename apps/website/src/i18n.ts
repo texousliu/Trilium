@@ -9,6 +9,7 @@ interface Locale {
 }
 
 export const LOCALES: Locale[] = [
+    { id: "en", name: "English" },
     { id: "ro", name: "Română" },
     { id: "zh_TW", name: "繁體中文" },
     { id: "fr", name: "Français" },
