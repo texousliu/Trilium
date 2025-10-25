@@ -10,6 +10,7 @@ import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { changeLanguage } from 'i18next';
+import { LOCALES } from './i18n';
 
 export const LocaleContext = createContext('en');
 
@@ -34,14 +35,17 @@ export function App(props: {repoStargazersCount: number}) {
 
 export function LocaleProvider({ children }) {
   const { path } = useLocation();
-  const locale = path.split('/')[1] || 'en';
+  const localeId = path.split('/')[1] || 'en';
 
   useEffect(() => {
-    changeLanguage(locale);
-  }, [ locale ]);
+    changeLanguage(localeId);
+    const correspondingLocale = LOCALES.find(l => l.id === localeId);
+    document.documentElement.lang = localeId;
+    document.documentElement.dir = correspondingLocale?.rtl ? "rtl" : "ltr";
+  }, [ localeId ]);
 
   return (
-    <LocaleContext.Provider value={locale}>
+    <LocaleContext.Provider value={localeId}>
       {children}
     </LocaleContext.Provider>
   );
