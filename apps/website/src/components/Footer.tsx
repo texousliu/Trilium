@@ -8,10 +8,13 @@ import { Link } from "./Button.js";
 import { LOCALES, swapLocaleInUrl } from "../i18n";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "preact-iso";
+import { useContext } from "preact/hooks";
+import { LocaleContext } from "..";
 
 export default function Footer() {
     const { t } = useTranslation();
     const { url } = useLocation();
+    const currentLocale = useContext(LocaleContext);
 
     return (
         <footer>
@@ -28,7 +31,9 @@ export default function Footer() {
                 <div class="row">
                     <nav class="languages">
                         {LOCALES.map(locale => (
-                            <Link href={swapLocaleInUrl(url, locale.id)}>{locale.name}</Link>
+                            locale.id !== currentLocale
+                            ? <Link href={swapLocaleInUrl(url, locale.id)}>{locale.name}</Link>
+                            : <span className="active">{locale.name}</span>
                         ))}
                     </nav>
                 </div>
