@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mapLocale, swapLocaleInUrl } from "./i18n";
+import { extractLocaleFromUrl, mapLocale, swapLocaleInUrl } from "./i18n";
 
 describe("mapLocale", () => {
     it("maps Chinese", () => {
@@ -19,5 +19,13 @@ describe("swapLocale", () => {
         expect(swapLocaleInUrl("/ro/get-started", "ro")).toStrictEqual("/ro/get-started");
         expect(swapLocaleInUrl("/en/get-started", "ro")).toStrictEqual("/ro/get-started");
         expect(swapLocaleInUrl("/ro/", "en")).toStrictEqual("/en/");
+    });
+});
+
+describe("extractLocaleFromUrl", () => {
+    it("properly extracts locale", () => {
+        expect(extractLocaleFromUrl("/en/get-started")).toStrictEqual("en");
+        expect(extractLocaleFromUrl("/get-started")).toStrictEqual(undefined);
+        expect(extractLocaleFromUrl("/")).toStrictEqual(undefined);
     });
 });

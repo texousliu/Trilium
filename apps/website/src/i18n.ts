@@ -41,3 +41,10 @@ export function swapLocaleInUrl(url: string, newLocale: string) {
         return components.join("/");
     }
 }
+
+export function extractLocaleFromUrl(url: string) {
+    const localeId = url.split('/')[1];
+    const correspondingLocale = LOCALES.find(l => l.id === localeId);
+    if (!correspondingLocale) return undefined;
+    return localeId;
+}

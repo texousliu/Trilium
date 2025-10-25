@@ -10,7 +10,7 @@ import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
 import { useLayoutEffect, useState } from 'preact/hooks';
 import { default as i18next, changeLanguage } from 'i18next';
-import { LOCALES, mapLocale } from './i18n';
+import { extractLocaleFromUrl, LOCALES, mapLocale } from './i18n';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from "react-i18next";
 
@@ -24,6 +24,8 @@ export function App(props: {repoStargazersCount: number}) {
                 <main>
                     <Router>
                         <Route path="/" component={Home} />
+                        <Route path="/get-started" component={GetStarted} />
+                        <Route path="/support-us" component={SupportUs} />
 
                         <Route path="/:locale:/" component={Home} />
                         <Route path="/:locale:/get-started" component={GetStarted} />
@@ -40,7 +42,7 @@ export function App(props: {repoStargazersCount: number}) {
 
 export function LocaleProvider({ children }) {
   const { path } = useLocation();
-  const localeId = mapLocale(path.split('/')[1] || navigator.language);
+  const localeId = mapLocale(extractLocaleFromUrl(path) || navigator.language);
   const [ loaded, setLoaded ] = useState(false);
 
   useLayoutEffect(() => {
