@@ -31,7 +31,7 @@ export function Header(props: {repoStargazersCount: number}) {
 		<header>
             <div class="content-wrapper">
                 <div class="first-row">
-                    <a class="banner" href="/">
+                    <a class="banner" href={`/${locale}/`}>
                         <img src={logoPath} width="300" height="300" alt="Trilium Notes logo" />&nbsp;<span>Trilium Notes</span>
                     </a>
 
