@@ -7,7 +7,8 @@
     },
     "download_helper_server_hosted": {
         "title": "استضافة مدفوعة",
-        "download_triliumcc": "بدلا من ذلك، راجع trillum. cc"
+        "download_triliumcc": "بدلا من ذلك، راجع trillum. cc",
+        "download_pikapod": "اعدلد على PikaPods"
     },
     "get-started": {
         "architecture": "المعمارية:",
@@ -22,7 +23,8 @@
     "organization_benefits": {
         "title": "تنظيم",
         "note_structure_title": "هيكيلية الملاحظة",
-        "hoisting_title": "مساحات العمل والتركيز على الملاحظة"
+        "hoisting_title": "مساحات العمل والتركيز على الملاحظة",
+        "attributes_title": "العلاقات وجداول الملاحظة"
     },
     "productivity_benefits": {
         "sync_title": "‎المزامنة",
@@ -30,7 +32,8 @@
         "protected_notes_title": "الملاحظات المحمية",
         "search_title": "البحث القوي",
         "web_clipper_title": "اداة قص الويب",
-        "title": "الانتاجية والسلامة"
+        "title": "الانتاجية والسلامة",
+        "jump_to_title": "الاوامر والبحث السريع"
     },
     "note_types": {
         "canvas_title": "مساحة العمل",
@@ -66,7 +69,8 @@
         "paypal": "PayPal",
         "title": "ادعمنا",
         "financial_donations_title": "التبرعات المالية",
-        "github_sponsors": "الرعاة على GitHub"
+        "github_sponsors": "الرعاة على GitHub",
+        "buy_me_a_coffee": "Buy Me A Coffee"
     },
     "download_helper_desktop_windows": {
         "download_scoop": "Scoop",
