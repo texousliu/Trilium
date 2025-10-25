@@ -87,7 +87,8 @@
     "workspace_calendar_root": "‎تحديد جذر التقويم لكل مساحة عمل",
     "hide_highlight_widget": "اخفاء عنصر واجهة قائمة التمييزات",
     "is_owned_by_note": "تخص الملاحظة",
-    "and_more": "... و {{count}}مرات اكثر."
+    "and_more": "... و {{count}}مرات اكثر.",
+    "related_notes_title": "ملاحظات اخرى بنفس التسمية"
   },
   "rename_label": {
     "to": "الى",
@@ -131,7 +132,9 @@
     "delete_attachment": "حذف المرفق",
     "upload_new_revision": "رفع مراجعة جديدة",
     "copy_link_to_clipboard": "نسخ الرابط الى الحافظة",
-    "convert_attachment_into_note": "تحويل المرفق الى ملاحظة"
+    "convert_attachment_into_note": "تحويل المرفق الى ملاحظة",
+    "delete_success": "تم حذف المرفق \"{{title}}\" .",
+    "enter_new_name": "ادخل اسم مرفق جديد"
   },
   "calendar": {
     "week": "أسبوع",
@@ -263,7 +266,8 @@
   "note_paths": {
     "search": "بحث",
     "archived": "مؤرشف",
-    "title": "مسارات الملاحظة"
+    "title": "مسارات الملاحظة",
+    "clone_button": "جار نسخ الملاحظة الى مكان جديد..."
   },
   "script_executor": {
     "query": "استعلام",
@@ -477,7 +481,9 @@
     "diff_off_hint": "انقر لعرض محتويات الملاحظة",
     "revisions_deleted": "تم حذف جميع نسخ المراجعات للملاحظة.",
     "revision_restored": "تم استعادة نسخ المراجعة للملاحظة.",
-    "revision_deleted": "تم حذف مراجعة الملاحظة."
+    "revision_deleted": "تم حذف مراجعة الملاحظة.",
+    "snapshot_interval": "فاصل زمني لحفظ لقطات اصدارات المراجعة: {{seconds}}",
+    "maximum_revisions": "حد عدد لقطات اصدارات الملاحظة: {{number}}"
   },
   "sort_child_notes": {
     "title": "عنوان",
@@ -491,7 +497,8 @@
     "sorting_direction": "اتجاه الترتيب",
     "natural_sort": "الترتيب الطبيعي",
     "natural_sort_language": "لغات الترتيب الطبيعي",
-    "sort_children_by": "ترتيب العناصر الفرعية حسب..."
+    "sort_children_by": "ترتيب العناصر الفرعية حسب...",
+    "sort_folders_at_top": "ترتيب المجلدات في الاعلى"
   },
   "recent_changes": {
     "undelete_link": "الغاء الحذف",
@@ -718,7 +725,9 @@
     "default_token_name": "رمز جديد",
     "rename_token_title": "اعادة تسمية الرمز",
     "rename_token": "اعادة تسمية هذا الرمز",
-    "create_token": "انشاء رمز PEAPI جديد"
+    "create_token": "انشاء رمز PEAPI جديد",
+    "new_token_title": "رمز ETAPI جديد",
+    "token_created_title": "انشاء رمز ETAPI"
   },
   "password": {
     "heading": "كلمة المرور",
@@ -1043,7 +1052,8 @@
   },
   "delete_note": {
     "delete_note": "حذف الملاحظة",
-    "delete_matched_notes": "حف الملاحظات المطابقة"
+    "delete_matched_notes": "حف الملاحظات المطابقة",
+    "delete_matched_notes_description": "سوف يؤدي هذا الى حذف الملاحظات المطابقة."
   },
   "rename_note": {
     "rename_note": "اعادة تسمية الملاحظة",
@@ -1378,7 +1388,8 @@
     "save_attributes": "حفظ السمات <enter>",
     "add_a_new_attribute": "اضافة سمة جديدة",
     "add_new_label_definition": "اضافة تعريف لتسمية جديدة",
-    "add_new_relation_definition": "اضافة تعريف لعلاقة جديدة"
+    "add_new_relation_definition": "اضافة تعريف لعلاقة جديدة",
+    "add_new_relation": "اضافة علاقة جديدة <kbd data-command=\"addNewRelation\">"
   },
   "zen_mode": {
     "button_exit": "الخروج من وضع Zen"
@@ -1449,5 +1460,8 @@
   },
   "png_export_button": {
     "button_title": "تصدير المخطط كملف PNG"
+  },
+  "protected_session_status": {
+    "inactive": "انقر للدخول الى جلسة محمية"
   }
 }
