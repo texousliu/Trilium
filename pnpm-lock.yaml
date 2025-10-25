@@ -334,7 +334,7 @@ importers:
     dependencies:
       '@electron/remote':
         specifier: 2.1.3
-        version: 2.1.3(electron@38.3.0)
+        version: 2.1.3(electron@38.4.0)
       better-sqlite3:
         specifier: 12.4.1
         version: 12.4.1
@@ -391,8 +391,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.11))
       electron:
-        specifier: 38.3.0
-        version: 38.3.0
+        specifier: 38.4.0
+        version: 38.4.0
       prebuild-install:
         specifier: 7.1.3
         version: 7.1.3
@@ -447,8 +447,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.11))
       electron:
-        specifier: 38.3.0
-        version: 38.3.0
+        specifier: 38.4.0
+        version: 38.4.0
       fs-extra:
         specifier: 11.3.2
         version: 11.3.2
@@ -470,7 +470,7 @@ importers:
         version: 7.1.1
       '@electron/remote':
         specifier: 2.1.3
-        version: 2.1.3(electron@38.3.0)
+        version: 2.1.3(electron@38.4.0)
       '@preact/preset-vite':
         specifier: 2.10.2
         version: 2.10.2(@babel/core@7.28.0)(preact@10.27.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
@@ -619,8 +619,8 @@ importers:
         specifier: 3.1.10
         version: 3.1.10
       electron:
-        specifier: 38.3.0
-        version: 38.3.0
+        specifier: 38.4.0
+        version: 38.4.0
       electron-debug:
         specifier: 4.1.0
         version: 4.1.0
@@ -5066,9 +5066,6 @@ packages:
   '@types/node@20.19.18':
     resolution: {integrity: sha512-KeYVbfnbsBCyKG8e3gmUqAfyZNcoj/qpEbHRkQkfZdKOBrU7QQ+BsTdfqLSWX9/m1ytYreMhpKvp+EZi3UFYAg==}
 
-  '@types/node@20.19.22':
-    resolution: {integrity: sha512-hRnu+5qggKDSyWHlnmThnUqg62l29Aj/6vcYgUaSFL9oc7DVjeWEQN3PRgdSc6F8d9QRMWkf36CLMch1Do/+RQ==}
-
   '@types/node@20.19.23':
     resolution: {integrity: sha512-yIdlVVVHXpmqRhtyovZAcSy0MiPcYWGkoO4CGe/+jpP0hmNuihm4XhHbADpK++MsiLHP5MVlv+bcgdF99kSiFQ==}
 
@@ -5077,9 +5074,6 @@ packages:
 
   '@types/node@22.15.30':
     resolution: {integrity: sha512-6Q7lr06bEHdlfplU6YRbgG1SFBdlsfNC4/lX+SkhiTs0cpJkOElmWls8PxDFv4yY/xKb8Y6SO0OmSX4wgqTZbA==}
-
-  '@types/node@22.18.10':
-    resolution: {integrity: sha512-anNG/V/Efn/YZY4pRzbACnKxNKoBng2VTFydVu8RRs5hQjikP8CQfaeAV59VFSCzKNp90mXiVXW2QzV56rwMrg==}
 
   '@types/node@22.18.12':
     resolution: {integrity: sha512-BICHQ67iqxQGFSzfCFTT7MRQ5XcBjG5aeKh5Ok38UBbPe5fxTyE+aHFxwVrGyr8GNlqFMLKD1D3P2K/1ks8tog==}
@@ -7367,8 +7361,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@38.3.0:
-    resolution: {integrity: sha512-Wij4AzX4SAV0X/ktq+NrWrp5piTCSS8F6YWh1KAcG+QRtNzyns9XLKERP68nFHIwfprhxF2YCN2uj7nx9DaeJw==}
+  electron@38.4.0:
+    resolution: {integrity: sha512-9CsXKbGf2qpofVe2pQYSgom2E//zLDJO2rGLLbxgy9tkdTOs7000Gte+d/PUtzLjI/DS95jDK0ojYAeqjLvpYg==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -14867,8 +14861,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-upload': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-ai@47.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15015,6 +15007,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-code-block@47.1.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)':
     dependencies:
@@ -15269,6 +15263,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.1.0':
     dependencies:
@@ -15318,8 +15314,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-engine': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-essentials@47.1.0':
     dependencies:
@@ -15612,6 +15606,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       '@ckeditor/ckeditor5-widget': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-mention@47.1.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)':
     dependencies:
@@ -15853,6 +15849,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@47.1.0':
     dependencies:
@@ -16427,7 +16425,7 @@ snapshots:
       '@malept/cross-spawn-promise': 2.0.0
       debug: 4.4.3(supports-color@6.0.0)
       fs-extra: 10.1.0
-      semver: 7.7.2
+      semver: 7.7.3
       username: 5.1.0
     transitivePeerDependencies:
       - bluebird
@@ -16522,7 +16520,7 @@ snapshots:
       make-fetch-happen: 10.2.1
       nopt: 6.0.0
       proc-log: 2.0.1
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -16567,7 +16565,7 @@ snapshots:
       plist: 3.1.0
       resedit: 2.0.3
       resolve: 1.22.10
-      semver: 7.7.2
+      semver: 7.7.3
       yargs-parser: 21.1.1
     transitivePeerDependencies:
       - supports-color
@@ -16585,7 +16583,7 @@ snapshots:
       node-api-version: 0.2.1
       ora: 5.4.1
       read-binary-file-arch: 1.0.6
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 6.2.1
       yargs: 17.7.2
     transitivePeerDependencies:
@@ -16611,9 +16609,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/remote@2.1.3(electron@38.3.0)':
+  '@electron/remote@2.1.3(electron@38.4.0)':
     dependencies:
-      electron: 38.3.0
+      electron: 38.4.0
 
   '@electron/universal@2.0.2':
     dependencies:
@@ -17873,7 +17871,7 @@ snapshots:
   '@npmcli/fs@2.1.2':
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.7.2
+      semver: 7.7.3
 
   '@npmcli/fs@4.0.0':
     dependencies:
@@ -19254,7 +19252,7 @@ snapshots:
 
   '@types/appdmg@0.5.5':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
     optional: true
 
   '@types/archiver@6.0.4':
@@ -19276,7 +19274,7 @@ snapshots:
 
   '@types/bonjour@3.5.13':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/bootstrap@5.2.10':
     dependencies:
@@ -19290,7 +19288,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
       '@types/responselike': 1.0.3
 
   '@types/chai@5.2.2':
@@ -19315,7 +19313,7 @@ snapshots:
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
       '@types/express-serve-static-core': 5.1.0
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/connect@3.4.38':
     dependencies:
@@ -19332,7 +19330,7 @@ snapshots:
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/cssnano@5.1.3(postcss@8.5.6)':
     dependencies:
@@ -19520,7 +19518,7 @@ snapshots:
 
   '@types/fs-extra@9.0.13':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
     optional: true
 
   '@types/geojson-vt@3.2.5':
@@ -19532,7 +19530,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/hast@3.0.4':
     dependencies:
@@ -19546,7 +19544,7 @@ snapshots:
 
   '@types/http-proxy@1.17.16':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/ini@4.1.1': {}
 
@@ -19564,7 +19562,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/leaflet-gpx@1.3.8':
     dependencies:
@@ -19618,15 +19616,11 @@ snapshots:
 
   '@types/node-forge@1.3.14':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/node@16.9.1': {}
 
   '@types/node@20.19.18':
-    dependencies:
-      undici-types: 6.21.0
-
-  '@types/node@20.19.22':
     dependencies:
       undici-types: 6.21.0
 
@@ -19642,10 +19636,6 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@22.18.10':
-    dependencies:
-      undici-types: 6.21.0
-
   '@types/node@22.18.12':
     dependencies:
       undici-types: 6.21.0
@@ -19657,6 +19647,7 @@ snapshots:
   '@types/node@24.9.1':
     dependencies:
       undici-types: 7.16.0
+    optional: true
 
   '@types/parse-json@4.0.2': {}
 
@@ -19688,7 +19679,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/retry@0.12.2': {}
 
@@ -19734,7 +19725,7 @@ snapshots:
 
   '@types/sockjs@0.3.36':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/statuses@2.0.6':
     optional: true
@@ -19770,7 +19761,7 @@ snapshots:
 
   '@types/through2@2.0.41':
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
 
   '@types/tmp@0.2.6': {}
 
@@ -19808,7 +19799,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 22.18.10
+      '@types/node': 22.18.12
     optional: true
 
   '@typescript-eslint/eslint-plugin@8.46.2(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3)':
@@ -20120,11 +20111,11 @@ snapshots:
 
   '@wdio/repl@9.16.2':
     dependencies:
-      '@types/node': 20.19.22
+      '@types/node': 20.19.23
 
   '@wdio/types@9.20.0':
     dependencies:
-      '@types/node': 20.19.22
+      '@types/node': 20.19.23
 
   '@wdio/utils@9.20.0':
     dependencies:
@@ -22460,7 +22451,7 @@ snapshots:
       glob: 7.2.3
       lodash: 4.17.21
       parse-author: 2.0.0
-      semver: 7.7.2
+      semver: 7.7.3
       tmp-promise: 3.0.3
     optionalDependencies:
       '@types/fs-extra': 9.0.13
@@ -22547,10 +22538,10 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@38.3.0:
+  electron@38.4.0:
     dependencies:
       '@electron/get': 2.0.3
-      '@types/node': 22.18.10
+      '@types/node': 22.18.12
       extract-zip: 2.0.1
     transitivePeerDependencies:
       - supports-color
@@ -22609,7 +22600,7 @@ snapshots:
   engine.io@6.6.4(bufferutil@4.0.9)(utf-8-validate@6.0.5):
     dependencies:
       '@types/cors': 2.8.19
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -23847,7 +23838,7 @@ snapshots:
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
-      semver: 7.7.2
+      semver: 7.7.3
       serialize-error: 7.0.1
     optional: true
 
@@ -24733,13 +24724,13 @@ snapshots:
 
   jest-worker@26.6.2:
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
       merge-stream: 2.0.0
       supports-color: 7.2.0
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -27706,7 +27697,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 24.9.1
+      '@types/node': 22.18.12
       long: 5.3.2
 
   protocol-buffers-schema@3.6.0: {}
@@ -29951,7 +29942,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.16.0: {}
+  undici-types@7.16.0:
+    optional: true
 
   undici@6.21.3: {}
 
@@ -30395,7 +30387,7 @@ snapshots:
 
   webdriver@9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5):
     dependencies:
-      '@types/node': 20.19.22
+      '@types/node': 20.19.23
       '@types/ws': 8.18.1
       '@wdio/config': 9.20.0
       '@wdio/logger': 9.18.0
