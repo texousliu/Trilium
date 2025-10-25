@@ -211,7 +211,7 @@ function ExtensibilityBenefitsSection() {
 function CollectionsSection() {
     const { t } = useTranslation();
     return (
-        <Section className="collections" title="Collections">
+        <Section className="collections" title={t("collections.title")}>
             <ListWithScreenshot items={[
                 {
                     title: t("collections.calendar_title"),

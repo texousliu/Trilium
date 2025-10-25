@@ -66,6 +66,7 @@
     "api_description": "Interact with Trilium programatically using its builtin REST API."
   },
   "collections": {
+    "title": "Collections",
     "calendar_title": "Calendar",
     "calendar_description": "Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.",
     "table_title": "Table",
