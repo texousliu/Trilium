@@ -26,11 +26,11 @@ export function Header(props: {repoStargazersCount: number}) {
     const [ headerLinks, setHeaderLinks ] = useState<HeaderLink[]>([]);
     useEffect(() => {
         setHeaderLinks([
-            { url: "/get-started/", text: t("header.get-started") },
+            { url: "/get-started", text: t("header.get-started") },
             { url: "https://docs.triliumnotes.org/", text: t("header.documentation"), external: true },
-            { url: "/support-us/", text: t("header.support-us") }
+            { url: "/support-us", text: t("header.support-us") }
         ]);
-    }, [ locale ]);
+    }, [ locale, t ]);
 
 	return (
 		<header>
