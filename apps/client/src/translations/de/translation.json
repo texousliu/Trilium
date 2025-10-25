@@ -184,7 +184,8 @@
     },
     "import-status": "Importstatus",
     "in-progress": "Import läuft: {{progress}}",
-    "successful": "Import erfolgreich abgeschlossen."
+    "successful": "Import erfolgreich abgeschlossen.",
+    "importZipRecommendation": "Beim Import einer ZIP-Datei wird die Notizhierarchie aus der Ordnerstruktur im Archiv übernommen."
   },
   "include_note": {
     "dialog_title": "Notiz beifügen",
@@ -1521,7 +1522,9 @@
     "window-on-top": "Dieses Fenster immer oben halten"
   },
   "note_detail": {
-    "could_not_find_typewidget": "Konnte typeWidget für Typ ‚{{type}}‘ nicht finden"
+    "could_not_find_typewidget": "Konnte typeWidget für Typ ‚{{type}}‘ nicht finden",
+    "printing": "Druckvorgang läuft…",
+    "printing_pdf": "PDF-Export läuft…"
   },
   "note_title": {
     "placeholder": "Titel der Notiz hier eingeben…"
