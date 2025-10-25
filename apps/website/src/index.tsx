@@ -8,9 +8,11 @@ import Footer from './components/Footer.js';
 import GetStarted from './pages/GetStarted/get-started.js';
 import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
-import { useEffect } from 'preact/hooks';
-import { changeLanguage } from 'i18next';
+import { useEffect, useLayoutEffect, useState } from 'preact/hooks';
+import { default as i18next, changeLanguage } from 'i18next';
 import { LOCALES } from './i18n';
+import HttpApi from 'i18next-http-backend';
+import { initReactI18next } from "react-i18next";
 
 export const LocaleContext = createContext('en');
 
@@ -36,6 +38,21 @@ export function App(props: {repoStargazersCount: number}) {
 export function LocaleProvider({ children }) {
   const { path } = useLocation();
   const localeId = path.split('/')[1] || 'en';
+  const [ loaded, setLoaded ] = useState(false);
+
+  useLayoutEffect(() => {
+      i18next
+        .use(HttpApi)
+        .use(initReactI18next);
+      i18next.init({
+        lng: localeId,
+        fallbackLng: "en",
+        backend: {
+            loadPath: "/translations/{{lng}}/{{ns}}.json",
+        },
+        returnEmptyString: false
+    }).then(() => setLoaded(true))
+  }, []);
 
   useEffect(() => {
     changeLanguage(localeId);
@@ -46,7 +63,7 @@ export function LocaleProvider({ children }) {
 
   return (
     <LocaleContext.Provider value={localeId}>
-      {children}
+      {loaded && children}
     </LocaleContext.Provider>
   );
 }
