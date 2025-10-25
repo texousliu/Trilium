@@ -751,8 +751,8 @@ importers:
         specifier: 0.2.5
         version: 0.2.5
       turndown:
-        specifier: 7.2.1
-        version: 7.2.1
+        specifier: 7.2.2
+        version: 7.2.2
       unescape:
         specifier: 1.0.1
         version: 1.0.1
@@ -1378,8 +1378,8 @@ importers:
   packages/turndown-plugin-gfm:
     devDependencies:
       turndown:
-        specifier: 7.2.1
-        version: 7.2.1
+        specifier: 7.2.2
+        version: 7.2.2
       turndown-attendant:
         specifier: 0.0.3
         version: 0.0.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -13345,8 +13345,8 @@ packages:
   turndown-attendant@0.0.3:
     resolution: {integrity: sha512-j0LH9oWLiZuv8ZonU4ZkLvQYumfWIZri4Aetbx+NSQ4jLgERZvkwDjA2woLRbPKR7UQtI9/I0AsZVk06+geXNw==}
 
-  turndown@7.2.1:
-    resolution: {integrity: sha512-7YiPJw6rLClQL3oUKN3KgMaXeJJ2lAyZItclgKDurqnH61so4k4IH/qwmMva0zpuJc/FhRExBBnk7EbeFANlgQ==}
+  turndown@7.2.2:
+    resolution: {integrity: sha512-1F7db8BiExOKxjSMU2b7if62D/XOyQyZbPKq/nUwopfgnHlqXHqQ0lvfUTeUIr1lZJzOPFn43dODyMSIfvWRKQ==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -15335,6 +15335,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.1.0':
     dependencies:
@@ -15831,6 +15833,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@47.1.0':
     dependencies:
@@ -29996,7 +30000,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  turndown@7.2.1:
+  turndown@7.2.2:
     dependencies:
       '@mixmark-io/domino': 2.2.0
 
