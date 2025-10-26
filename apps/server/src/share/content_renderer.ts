@@ -9,7 +9,7 @@ import type BBranch from "../becca/entities/bbranch.js";
 import { t } from "i18next";
 import SBranch from "./shaca/entities/sbranch.js";
 import options from "../services/options.js";
-import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
+import utils, { getResourceDir, isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import ejs from "ejs";
 import log from "../services/log.js";
 import { join } from "path";
@@ -199,7 +199,7 @@ function getDefaultTemplatePath(template: string) {
     // Path is relative to apps/server/dist/assets/views
     return process.env.NODE_ENV === "development"
         ? join(__dirname, `../../../../packages/share-theme/src/templates/${template}.ejs`)
-        : `../../share-theme/templates/${template}.ejs`;
+        : join(getResourceDir(), `share-theme/templates/${template}.ejs`);
 }
 
 function readTemplate(path: string) {
