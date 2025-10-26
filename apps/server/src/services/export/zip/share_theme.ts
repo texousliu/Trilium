@@ -3,10 +3,13 @@ import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
 import { ExportFormat, ZipExportProvider } from "./abstract_provider.js";
 import { RESOURCE_DIR } from "../../resource_dir";
 import { getResourceDir, isDev } from "../../utils";
-import fs from "fs";
+import fs, { readdirSync } from "fs";
 import { renderNoteForExport } from "../../../share/content_renderer";
 import type BNote from "../../../becca/entities/bnote.js";
 import type BBranch from "../../../becca/entities/bbranch.js";
+import { getShareThemeAssetDir } from "../../../routes/assets";
+
+const shareThemeAssetDir = getShareThemeAssetDir();
 
 export default class ShareThemeExportProvider extends ZipExportProvider {
 
@@ -14,6 +17,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     private indexMeta: NoteMeta | null = null;
 
     prepareMeta(metaFile: NoteMetaFile): void {
+
         const assets = [
             "style.css",
             "script.js",
@@ -25,6 +29,10 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             "boxicons.svg",
             "icon-color.svg"
         ];
+
+        for (const file of readdirSync(shareThemeAssetDir)) {
+            assets.push(`assets/${file}`);
+        }
 
         for (const asset of assets) {
             const assetMeta = {
@@ -107,6 +115,8 @@ function getShareThemeAssets(nameWithExtension: string) {
     let path: string | undefined;
     if (nameWithExtension === "icon-color.svg") {
         path = join(RESOURCE_DIR, "images", nameWithExtension);
+    } else if (nameWithExtension.startsWith("assets")) {
+        path = join(shareThemeAssetDir, nameWithExtension.replace(/^assets\//, ""));
     } else if (isDev) {
         path = join(getResourceDir(), "..", "..", "client", "dist", "src", nameWithExtension);
     } else {
