@@ -44,18 +44,99 @@ const TPL = /*html*/`
             background-color: var(--main-background-color) !important;
         }
 
-        /* Dark theme support */
-        body.theme-dark .vditor-toolbar {
+        /* Dark theme support - multiple theme class variations */
+        body.theme-dark .vditor-toolbar,
+        body.dark .vditor-toolbar,
+        body.theme-next-dark .vditor-toolbar,
+        body[data-theme="dark"] .vditor-toolbar {
             background-color: var(--accented-background-color) !important;
             border-color: var(--main-border-color) !important;
+            color: var(--main-text-color) !important;
         }
 
         body.theme-dark .vditor-content,
         body.theme-dark .vditor-preview,
         body.theme-dark .vditor-ir,
-        body.theme-dark .vditor-wysiwyg {
+        body.theme-dark .vditor-wysiwyg,
+        body.dark .vditor-content,
+        body.dark .vditor-preview,
+        body.dark .vditor-ir,
+        body.dark .vditor-wysiwyg,
+        body.theme-next-dark .vditor-content,
+        body.theme-next-dark .vditor-preview,
+        body.theme-next-dark .vditor-ir,
+        body.theme-next-dark .vditor-wysiwyg,
+        body[data-theme="dark"] .vditor-content,
+        body[data-theme="dark"] .vditor-preview,
+        body[data-theme="dark"] .vditor-ir,
+        body[data-theme="dark"] .vditor-wysiwyg {
             background-color: var(--main-background-color) !important;
             color: var(--main-text-color) !important;
+        }
+
+        /* Dark theme toolbar buttons */
+        body.theme-dark .vditor-toolbar .vditor-tooltipped,
+        body.dark .vditor-toolbar .vditor-tooltipped,
+        body.theme-next-dark .vditor-toolbar .vditor-tooltipped,
+        body[data-theme="dark"] .vditor-toolbar .vditor-tooltipped {
+            color: var(--main-text-color) !important;
+        }
+
+        body.theme-dark .vditor-toolbar .vditor-tooltipped:hover,
+        body.dark .vditor-toolbar .vditor-tooltipped:hover,
+        body.theme-next-dark .vditor-toolbar .vditor-tooltipped:hover,
+        body[data-theme="dark"] .vditor-toolbar .vditor-tooltipped:hover {
+            background-color: var(--button-background-color-hover) !important;
+        }
+
+        /* Dark theme editor text */
+        body.theme-dark .vditor-ir .vditor-ir__node,
+        body.dark .vditor-ir .vditor-ir__node,
+        body.theme-next-dark .vditor-ir .vditor-ir__node,
+        body[data-theme="dark"] .vditor-ir .vditor-ir__node {
+            color: var(--main-text-color) !important;
+        }
+
+        /* Dark theme scrollbars */
+        body.theme-dark .vditor-ir::-webkit-scrollbar,
+        body.dark .vditor-ir::-webkit-scrollbar,
+        body.theme-next-dark .vditor-ir::-webkit-scrollbar,
+        body[data-theme="dark"] .vditor-ir::-webkit-scrollbar {
+            background-color: var(--main-background-color) !important;
+        }
+
+        body.theme-dark .vditor-ir::-webkit-scrollbar-thumb,
+        body.dark .vditor-ir::-webkit-scrollbar-thumb,
+        body.theme-next-dark .vditor-ir::-webkit-scrollbar-thumb,
+        body[data-theme="dark"] .vditor-ir::-webkit-scrollbar-thumb {
+            background-color: var(--main-border-color) !important;
+        }
+
+        /* Force dark theme for vditor when body has dark theme */
+        body.theme-dark .vditor,
+        body.dark .vditor,
+        body.theme-next-dark .vditor,
+        body[data-theme="dark"] .vditor {
+            --vditor-background-color: var(--main-background-color) !important;
+            --vditor-text-color: var(--main-text-color) !important;
+            --vditor-border-color: var(--main-border-color) !important;
+        }
+
+        /* Dark theme for vditor counter */
+        body.theme-dark .vditor-counter,
+        body.dark .vditor-counter,
+        body.theme-next-dark .vditor-counter,
+        body[data-theme="dark"] .vditor-counter {
+            color: var(--muted-text-color) !important;
+            background-color: var(--accented-background-color) !important;
+        }
+
+        /* Dark theme for vditor resize handle */
+        body.theme-dark .vditor-resize,
+        body.dark .vditor-resize,
+        body.theme-next-dark .vditor-resize,
+        body[data-theme="dark"] .vditor-resize {
+            background-color: var(--main-border-color) !important;
         }
     </style>
 
@@ -104,6 +185,9 @@ export default class MarkdownTypeWidget extends TypeWidget {
         // 确保DOM元素已经添加到页面中
         this.initialized = Promise.resolve();
 
+        // 监听主题变化
+        this.setupThemeObserver();
+
         return this.$widget;
     }
 
@@ -122,7 +206,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
         const Vditor = (await import("vditor")).default;
         await import("vditor/dist/index.css");
 
-        const isDarkTheme = document.body.classList.contains("theme-dark");
+        const isDarkTheme = this.isDarkTheme();
 
         return new Promise<void>((resolve, reject) => {
             try {
@@ -242,6 +326,12 @@ export default class MarkdownTypeWidget extends TypeWidget {
     }
 
     cleanup() {
+        // 清理主题观察器
+        if ((this as any).themeObserver) {
+            (this as any).themeObserver.disconnect();
+            (this as any).themeObserver = null;
+        }
+
         if (this.vditor) {
             try {
                 this.vditor.destroy();
@@ -258,13 +348,8 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
     // 支持主题切换
     async themeChangedEvent() {
-        if (this.vditor) {
-            // 重新初始化编辑器以应用新主题
-            const content = this.vditor.getValue();
-            this.cleanup();
-            await this.initVditor();
-            await this.safeSetValue(content);
-        }
+        // 使用统一的主题变化处理方法
+        await this.handleThemeChange();
     }
 
     // 导出功能
@@ -303,6 +388,66 @@ export default class MarkdownTypeWidget extends TypeWidget {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+
+    // 检测是否为暗色主题
+    private isDarkTheme(): boolean {
+        // 检查多种可能的暗色主题标识
+        const body = document.body;
+        return body.classList.contains("theme-dark") ||
+               body.classList.contains("dark") ||
+               body.classList.contains("theme-next-dark") ||
+               body.getAttribute('data-theme') === 'dark' ||
+               getComputedStyle(body).getPropertyValue('--theme-style')?.trim() === 'dark';
+    }
+
+    // 设置主题观察器
+    private setupThemeObserver() {
+        // 使用MutationObserver监听body类名变化
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' &&
+                    (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme')) {
+                    // 延迟一点执行，确保CSS变量已更新
+                    setTimeout(() => {
+                        this.handleThemeChange();
+                    }, 100);
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class', 'data-theme']
+        });
+
+        // 保存observer引用以便清理
+        (this as any).themeObserver = observer;
+    }
+
+    // 处理主题变化
+    private async handleThemeChange() {
+        if (this.vditor) {
+            const currentTheme = this.isDarkTheme() ? 'dark' : 'classic';
+            const currentPreviewTheme = this.isDarkTheme() ? 'dark' : 'light';
+
+            // 检查是否需要更新主题
+            const vditorInstance = (this.vditor as any).vditor;
+            if (vditorInstance && vditorInstance.options) {
+                const needsUpdate = vditorInstance.options.theme !== currentTheme ||
+                                  vditorInstance.options.preview?.theme?.current !== currentPreviewTheme;
+
+                if (needsUpdate) {
+                    // 保存当前内容
+                    const content = this.vditor.getValue();
+
+                    // 重新初始化编辑器
+                    this.cleanup();
+                    await this.initVditor();
+                    await this.safeSetValue(content);
+                }
+            }
+        }
     }
 
     // 更新只读模式

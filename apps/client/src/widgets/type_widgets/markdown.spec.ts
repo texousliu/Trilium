@@ -45,4 +45,23 @@ describe("MarkdownTypeWidget", () => {
         const data = widget.getData();
         expect(data).toBeUndefined();
     });
+
+    it("should detect dark theme correctly", () => {
+        // Test various dark theme class combinations
+        document.body.className = "theme-dark";
+        expect((widget as any).isDarkTheme()).toBe(true);
+
+        document.body.className = "dark";
+        expect((widget as any).isDarkTheme()).toBe(true);
+
+        document.body.className = "theme-next-dark";
+        expect((widget as any).isDarkTheme()).toBe(true);
+
+        document.body.setAttribute("data-theme", "dark");
+        expect((widget as any).isDarkTheme()).toBe(true);
+
+        document.body.className = "theme-light";
+        document.body.removeAttribute("data-theme");
+        expect((widget as any).isDarkTheme()).toBe(false);
+    });
 });
