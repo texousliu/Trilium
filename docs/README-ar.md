@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # ملاحظات تريليوم
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
@@ -22,6 +33,13 @@ quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
+## ⬇️ تنزيل
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
+
 ## 📚توثيق
 
 **Visit our comprehensive documentation at
@@ -37,14 +55,14 @@ quick overview:
 
 ### روابط سريعة
 - [دليل البدء السريع](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [تعليمات
+  التثبيت](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [اعداد
+  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [ترقية تريليوم
+  للملاحظات](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [مفاهيم ومميزات
+  اساسية](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Patterns of Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -92,7 +110,7 @@ quick overview:
   location pins and GPX tracks
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
   showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
+* [واجهة REST API](https://triliumnext.github.io/Docs/Wiki/etapi) للأتمتة
 * Scales well in both usability and performance upwards of 100 000 notes
 * Touch optimized [mobile
   frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) for
@@ -115,13 +133,13 @@ related goodies:
   themes, scripts, plugins and more.
 - [TriliumRocks!](https://trilium.rocks/) for tutorials, guides, and much more.
 
-## ❓Why TriliumNext?
+## ❓لماذا تريليوم التالي؟
 
 The original Trilium developer ([Zadam](https://github.com/zadam)) has
 graciously given the Trilium repository to the community project which resides
 at https://github.com/TriliumNext
 
-### ⬆️Migrating from Zadam/Trilium?
+### ⬆️ الهجرة من Zadam الى تريليوم؟
 
 There are no special migration steps to migrate from a zadam/Trilium instance to
 a TriliumNext/Trilium instance. Simply [install
@@ -149,9 +167,9 @@ features, suggestions, or issues you may have!
 - [Github Issues](https://github.com/TriliumNext/Trilium/issues) (For bug
   reports and feature requests.)
 
-## 🏗 Installation
+## 🏗️ تثبيت
 
-### Windows / MacOS
+### ويندوز / نظام تشغيل ماك
 
 Download the binary release for your platform from the [latest release
 page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
@@ -171,7 +189,7 @@ package and run the `trilium` executable.
 
 TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
 
-### Browser (any OS)
+### مستعرض( اي نظام تشغيل)
 
 If you use a server installation (see below), you can directly access the web
 interface (which is almost identical to the desktop app).
@@ -235,7 +253,7 @@ pnpm install
 pnpm edit-docs:edit-docs
 ```
 
-### Building the Executable
+### بناء الملف التنفيذي
 Download the repository, install dependencies using `pnpm` and then build the
 desktop app for Windows:
 ```shell
@@ -255,7 +273,7 @@ guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/D
 for details. If you have more questions, feel free to reach out via the links
 described in the "Discuss with us" section above.
 
-## 👏 اختصارات
+## 👏 اشادات
 
 * [zadam](https://github.com/zadam) for the original concept and implementation
   of the application.

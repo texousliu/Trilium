@@ -164,6 +164,7 @@
     "importIntoNote": "Import into note",
     "chooseImportFile": "Choose import file",
     "importDescription": "Content of the selected file(s) will be imported as child note(s) into",
+    "importZipRecommendation": "When importing a ZIP file, the note hierarchy will reflect the subdirectory structure within the archive.",
     "options": "Options",
     "safeImportTooltip": "Trilium <code>.zip</code> export files can contain executable scripts which may contain harmful behavior. Safe import will deactivate automatic execution of all imported scripts. Uncheck \"Safe import\" only if the imported archive is supposed to contain executable scripts and you completely trust the contents of the import file.",
     "safeImport": "Safe import",
@@ -647,7 +648,8 @@
     "logout": "Logout",
     "show-cheatsheet": "Show Cheatsheet",
     "toggle-zen-mode": "Zen Mode",
-    "update_available": "Version {{latestVersion}} is available, click to download."
+    "new-version-available": "New Update Available",
+    "download-update": "Get Version {{latestVersion}}"
   },
   "zen_mode": {
     "button_exit": "Exit Zen Mode"
@@ -767,6 +769,7 @@
     "table": "Table",
     "geo-map": "Geo Map",
     "board": "Board",
+    "presentation": "Presentation",
     "include_archived_notes": "Show archived notes"
   },
   "edited_notes": {
@@ -1720,7 +1723,9 @@
     "window-on-top": "Keep Window on Top"
   },
   "note_detail": {
-    "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'"
+    "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'",
+    "printing": "Printing in progress...",
+    "printing_pdf": "Exporting to PDF in progress..."
   },
   "note_title": {
     "placeholder": "type note's title here..."
@@ -2027,6 +2032,11 @@
     "add-column-placeholder": "Enter column name...",
     "edit-note-title": "Click to edit note title",
     "edit-column-title": "Click to edit column title"
+  },
+  "presentation_view": {
+    "edit-slide": "Edit this slide",
+    "start-presentation": "Start presentation",
+    "slide-overview": "Toggle an overview of the slides"
   },
   "command_palette": {
     "tree-action-name": "Tree: {{name}}",

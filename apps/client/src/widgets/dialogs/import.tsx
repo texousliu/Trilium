@@ -37,7 +37,7 @@ export default function ImportDialog() {
             onSubmit={async () => {
                 if (!files || !parentNoteId) {
                     return;
-                }                
+                }
 
                 const options: UploadFilesOptions = {
                     safeImport: boolToString(safeImport),
@@ -51,11 +51,19 @@ export default function ImportDialog() {
                 setShown(false);
                 await importService.uploadFiles("notes", parentNoteId, Array.from(files), options);
             }}
-            onHidden={() => setShown(false)}
+            onHidden={() => {
+                setShown(false);
+                setFiles(null);
+            }}
             footer={<Button text={t("import.import")} primary disabled={!files} />}
             show={shown}
         >
-            <FormGroup name="files" label={t("import.chooseImportFile")} description={<>{t("import.importDescription")} <strong>{ noteTitle }</strong></>}>
+            <FormGroup name="files" label={t("import.chooseImportFile")} description={
+                <>
+                    {t("import.importDescription")} <strong>{ noteTitle }</strong>.<br />
+                    {t("import.importZipRecommendation")}
+                </>
+            }>
                 <FormFileUpload multiple onChange={setFiles} />
             </FormGroup>
 
@@ -82,7 +90,7 @@ export default function ImportDialog() {
                     currentValue={codeImportedAsCode} onChange={setCodeImportedAsCode}
                 />
                 <FormCheckbox
-                    name="replace-underscores-with-spaces" label={t("import.replaceUnderscoresWithSpaces")} 
+                    name="replace-underscores-with-spaces" label={t("import.replaceUnderscoresWithSpaces")}
                     currentValue={replaceUnderscoresWithSpaces} onChange={setReplaceUnderscoresWithSpaces}
                 />
             </FormMultiGroup>

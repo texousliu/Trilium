@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
@@ -20,6 +31,12 @@ Trilium Notes
 を参照してください:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+
+## ⏬ ダウンロード
+- [最新リリース](https://github.com/TriliumNext/Trilium/releases/latest) –
+  安定バージョン。ほとんどのユーザーに推奨されます。
+- [ナイトリービルド](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  不安定な開発バージョン。最新の機能と修正が毎日更新されます。
 
 ## 📚 ドキュメント
 

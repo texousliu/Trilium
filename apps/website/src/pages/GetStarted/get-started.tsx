@@ -1,30 +1,33 @@
 import { useLayoutEffect, useState } from "preact/hooks";
 import Card from "../../components/Card.js";
 import Section from "../../components/Section.js";
-import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntry, getArchitecture, getPlatform, Platform } from "../../download-helper.js";
+import { App, Architecture, buildDownloadUrl, DownloadMatrixEntry, getArchitecture, getDownloadMatrix, getPlatform, Platform } from "../../download-helper.js";
 import { usePageTitle } from "../../hooks.js";
 import Button, { Link } from "../../components/Button.js";
 import Icon from "../../components/Icon.js";
 import helpIcon from "../../assets/boxicons/bx-help-circle.svg?raw";
 import "./get-started.css";
 import packageJson from "../../../../../package.json" with { type: "json" };
+import { useTranslation } from "react-i18next";
 
 export default function DownloadPage() {
+    const { t } = useTranslation();
     const [ currentArch, setCurrentArch ] = useState<Architecture>("x64");
     const [ userPlatform, setUserPlatform ] = useState<Platform>();
+    const downloadMatrix = getDownloadMatrix(t);
 
     useLayoutEffect(() => {
         getArchitecture().then((arch) => setCurrentArch(arch ?? "x64"));
         setUserPlatform(getPlatform() ?? "windows");
     }, []);
 
-    usePageTitle("Get started");
+    usePageTitle(t("get-started.title"));
 
     return (
         <>
-            <Section title={`Download the desktop application (v${packageJson.version})`} className="fill accented download-desktop">
+            <Section title={t("get-started.desktop_title", { version: packageJson.version })} className="fill accented download-desktop">
                 <div className="architecture-switch">
-                    <span>Architecture:</span>
+                    <span>{t("get-started.architecture")}</span>
 
                     <div class="toggle-wrapper">
                         {(["x64", "arm64"] as const).map(arch => (
@@ -45,11 +48,11 @@ export default function DownloadPage() {
                 </div>
 
                 <div class="download-footer">
-                    <Link href="https://github.com/TriliumNext/Trilium/releases/" openExternally>See older releases</Link>
+                    <Link href="https://github.com/TriliumNext/Trilium/releases/" openExternally>{t("get-started.older_releases")}</Link>
                 </div>
             </Section>
 
-            <Section title="Set up a server for access on multiple devices">
+            <Section title={t("get-started.server_title")}>
                 <div className="grid-2-cols download-server">
                     {Object.entries(downloadMatrix.server).map(entry => (
                         <DownloadCard app="server" arch={currentArch} entry={entry} />
@@ -70,6 +73,7 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ], isRecommen
         return (typeof text === "string" ? text : text[arch]);
     }
 
+    const { t } = useTranslation();
     const allDownloads = Object.entries(entry.downloads);
     const recommendedDownloads = allDownloads.filter(download => download[1].recommended);
     const restDownloads = allDownloads.filter(download => !download[1].recommended);
@@ -106,7 +110,7 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ], isRecommen
                     {recommendedDownloads.map(recommendedDownload => (
                         <Button
                             className="recommended"
-                            href={buildDownloadUrl(app, platform as Platform, recommendedDownload[0], arch)}
+                            href={buildDownloadUrl(t, app, platform as Platform, recommendedDownload[0], arch)}
                             text={recommendedDownload[1].name}
                             openExternally={!!recommendedDownload[1].url}
                         />
@@ -116,7 +120,7 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ], isRecommen
                 <div class="other-options">
                     {restDownloads.map(download => (
                         <Link
-                            href={buildDownloadUrl(app, platform as Platform, download[0], arch)}
+                            href={buildDownloadUrl(t, app, platform as Platform, download[0], arch)}
                             openExternally={!!download[1].url}
                         >
                             {download[1].name}

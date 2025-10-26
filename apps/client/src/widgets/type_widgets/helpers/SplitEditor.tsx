@@ -3,7 +3,7 @@ import utils, { isMobile } from "../../../services/utils";
 import Admonition from "../../react/Admonition";
 import { useNoteLabelBoolean, useTriliumOption } from "../../react/hooks";
 import "./SplitEditor.css";
-import Split from "split.js";
+import Split from "@triliumnext/split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../../services/resizer";
 import { EditableCode, EditableCodeProps } from "../code/Code";
 import { ComponentChildren } from "preact";
@@ -63,7 +63,8 @@ export default function SplitEditor({ note, error, splitOptions, previewContent,
         if (!utils.isDesktop() || !containerRef.current || readOnly) return;
         const elements = Array.from(containerRef.current?.children) as HTMLElement[];
         const splitInstance = Split(elements, {
-            sizes: [ 50, 50],
+            rtl: glob.isRtl,
+            sizes: [ 50, 50 ],
             direction: splitEditorOrientation,
             gutterSize: DEFAULT_GUTTER_SIZE,
             ...splitOptions

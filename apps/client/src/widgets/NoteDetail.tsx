@@ -8,7 +8,9 @@ import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
 import attributes from "../services/attributes";
 import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
-import { dynamicRequire, isMobile } from "../services/utils";
+import { dynamicRequire, isElectron, isMobile } from "../services/utils";
+import toast from "../services/toast.js";
+import { t } from "../services/i18n";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -107,6 +109,17 @@ export default function NoteDetail() {
         document.body.classList.toggle("force-fixed-tree", hasFixedTree);
     }, [ note ]);
 
+    // Handle toast notifications.
+    useEffect(() => {
+        if (!isElectron()) return;
+        const { ipcRenderer } = dynamicRequire("electron");
+        const listener = () => {
+            toast.closePersistent("printing");
+        };
+        ipcRenderer.on("print-done", listener);
+        return () => ipcRenderer.off("print-done", listener);
+    }, []);
+
     useTriliumEvent("executeInActiveNoteDetailWidget", ({ callback }) => {
         if (!noteContext?.isActive()) return;
         callback(parentComponent);
@@ -126,15 +139,50 @@ export default function NoteDetail() {
     useTriliumEvent("printActiveNote", () => {
         if (!noteContext?.isActive() || !note) return;
 
-        // Trigger in timeout to dismiss the menu while printing.
-        setTimeout(window.print, 0);
+        toast.showPersistent({
+            icon: "bx bx-loader-circle bx-spin",
+            message: t("note_detail.printing"),
+            id: "printing"
+        });
+
+        if (isElectron()) {
+            const { ipcRenderer } = dynamicRequire("electron");
+            ipcRenderer.send("print-note", {
+                notePath: noteContext.notePath
+            });
+        } else {
+            const iframe = document.createElement('iframe');
+            iframe.src = `?print#${noteContext.notePath}`;
+            iframe.className = "print-iframe";
+            document.body.appendChild(iframe);
+            iframe.onload = () => {
+                if (!iframe.contentWindow) {
+                    toast.closePersistent("printing");
+                    document.body.removeChild(iframe);
+                    return;
+                }
+
+                iframe.contentWindow.addEventListener("note-ready", () => {
+                    toast.closePersistent("printing");
+                    iframe.contentWindow?.print();
+                    document.body.removeChild(iframe);
+                });
+            };
+        }
     });
 
     useTriliumEvent("exportAsPdf", () => {
         if (!noteContext?.isActive() || !note) return;
+        toast.showPersistent({
+            icon: "bx bx-loader-circle bx-spin",
+            message: t("note_detail.printing_pdf"),
+            id: "printing"
+        });
+
         const { ipcRenderer } = dynamicRequire("electron");
         ipcRenderer.send("export-as-pdf", {
             title: note.title,
+            notePath: noteContext.notePath,
             pageSize: note.getAttributeValue("label", "printPageSize") ?? "Letter",
             landscape: note.hasAttribute("label", "printLandscape")
         });

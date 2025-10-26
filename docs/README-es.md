@@ -1,222 +1,252 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
-![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
-![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![Patrocinadores en GitHub](https://img.shields.io/github/sponsors/eliandoran)
+![Patrocinadores en
+LiberaPay](https://img.shields.io/liberapay/patrons/ElianDoran)\
+![Descargas en Docker](https://img.shields.io/docker/pulls/triliumnext/trilium)
+![Descargas en GitHub (todos los recursos, todas las
+versiones)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Estado de la
+traducción](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[Inglés](./README.md) | [Chino (simplificado)](./docs/README-ZH_CN.md) | [Chino
+(tradicional)](./docs/README-ZH_TW.md) | [Ruso](./docs/README-ru.md) |
+[Japonés](./docs/README-ja.md) | [Italiano](./docs/README-it.md) |
+[Español](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes es una aplicación gratuita, de código abierto y multiplataforma
+para notas jerárquicas, orientada a crear amplias bases de conocimiento
+personal.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Ver [capturas de
+pantalla](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) para un
+resumen rápido:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## ⏬ Download
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
 
-**Visit our comprehensive documentation at
+## 📚 Documentación
+
+**Accede a la documentación completa en
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+La documentación está disponible en varios formatos:
+- **Documentación en línea**: Consulta la documentación completa en
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **Ayuda en la aplicación**: Presiona `F1` dentro de Trilium para acceder a la
+  misma documentación directamente en la aplicación
+- **GitHub**: Navega por la [Guía del
+  Usuario](./docs/User%20Guide/User%20Guide/) en este repositorio
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
+### Enlaces rápidos
+- [Guía de inicio](https://docs.triliumnotes.org/)
+- [Instrucciones de
+  instalación](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Configuración de
+  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Actualización de
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+- [Conceptos básicos y
+  funciones](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Patrones para una base de conocimiento
+  personal](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Características
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
-  [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
-  [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
-  highlighting
-* Fast and easy [navigation between
-  notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
-  search and [note
-  hoisting](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* Seamless [note
-  versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
-  used for note organization, querying and advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
-* Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  for more secure login
-* [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
-  with self-hosted sync server
-  * there's a [3rd party service for hosting synchronisation
-    server](https://trilium.cc/paid-hosting)
-* [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes
-  to public internet
-* Strong [note
-  encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
-  per-note granularity
-* Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type
-  "canvas")
-* [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
-  [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
-  notes and their relations
-* Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
-  location pins and GPX tracks
-* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
-  showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
-* Scales well in both usability and performance upwards of 100 000 notes
-* Touch optimized [mobile
-  frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) for
-  smartphones and tablets
-* Built-in [dark theme](https://triliumnext.github.io/Docs/Wiki/themes), support
-  for user themes
-* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) and
-  [Markdown import & export](https://triliumnext.github.io/Docs/Wiki/markdown)
-* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
-  saving of web content
-* Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* Las notas se pueden organizar en un árbol de profundidad arbitraria. Una sola
+  nota puede colocarse en varios lugares del árbol (ver
+  [clonado](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
+* Editor de notas WYSIWYG completo, que incluye, por ejemplo, tablas, imágenes y
+  [matemáticas](https://triliumnext.github.io/Docs/Wiki/text-notes) con
+  [autoformato](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
+  en Markdown
+* Soporte para editar [notas con código
+  fuente](https://triliumnext.github.io/Docs/Wiki/code-notes), incluyendo
+  resaltado de sintaxis
+* [Navegación entre
+  notas](https://triliumnext.github.io/Docs/Wiki/note-navigation) rápida y
+  sencilla, búsqueda de texto completo y [elevación de
+  notas](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+* Flujo continuo de [versionado de
+  notas](https://triliumnext.github.io/Docs/Wiki/note-revisions)
+* Los [atributos](https://triliumnext.github.io/Docs/Wiki/attributes) de las
+  notas se pueden usar para organización, consultas y
+  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts) avanzado
+* Interfaz disponible en inglés, alemán, español, francés, rumano y chino
+  (simplificado y tradicional)
+* Integración directa de [OpenID y
+  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  para un inicio de sesión más seguro
+* [Sincronización](https://triliumnext.github.io/Docs/Wiki/synchronization) con
+  servidor de sincronización autohospedado
+  * existe un [servicio de terceros para alojar el servidor de
+    sincronización](https://trilium.cc/paid-hosting)
+* [Compartir](https://triliumnext.github.io/Docs/Wiki/sharing) (publicar) notas
+  en Internet público
+* Fuerte [cifrado de
+  notas](https://triliumnext.github.io/Docs/Wiki/protected-notes) con
+  granularidad por nota
+* Esbozo de diagramas, basado en [Excalidraw](https://excalidraw.com/) (tipo de
+  nota "lienzo")
+* [Mapas de relaciones](https://triliumnext.github.io/Docs/Wiki/relation-map) y
+  [mapas de enlaces](https://triliumnext.github.io/Docs/Wiki/link-map) para
+  visualizar las notas y sus relaciones
+* Mapas mentales, basados en [Mind Elixir](https://docs.mind-elixir.com/)
+* [Mapas
+  geográficos](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) con
+  marcadores de ubicación y rutas GPX
+* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - ver [Casos de
+  uso avanzados](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
+* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) para automatización
+* Escala bien tanto en usabilidad como en rendimiento, incluso con más de
+  100.000 notas
+* [Interfaz móvil](https://triliumnext.github.io/Docs/Wiki/mobile-frontend)
+  optimizada para pantallas táctiles, móviles y tabletas
+* [Tema oscuro](https://triliumnext.github.io/Docs/Wiki/themes) integrado, con
+  soporte para temas personalizados
+* Importación y exportación de
+  [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) y
+  [Markdown](https://triliumnext.github.io/Docs/Wiki/markdown)
+* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) para
+  guardar fácilmente contenido web
+* Interfaz personalizable (botones de la barra lateral, widgets definidos por el
+  usuario, …)
+* [Métricas](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md),
+  junto con un [Dashboard de
+  Grafana](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
-✨ Check out the following third-party resources/communities for more TriliumNext
-related goodies:
+✨ Consulta los siguientes recursos y comunidades de terceros para obtener más
+contenido relacionado con TriliumNext:
 
-- [awesome-trilium](https://github.com/Nriver/awesome-trilium) for 3rd party
-  themes, scripts, plugins and more.
-- [TriliumRocks!](https://trilium.rocks/) for tutorials, guides, and much more.
+- [awesome-trilium](https://github.com/Nriver/awesome-trilium) para acceder a
+  temas, scripts, complementos y otros recursos de terceros.
+- [TriliumRocks!](https://trilium.rocks/) para tutoriales, guías y mucho más.
 
-## ❓Why TriliumNext?
+## ❓¿Por qué TriliumNext?
 
-The original Trilium developer ([Zadam](https://github.com/zadam)) has
-graciously given the Trilium repository to the community project which resides
-at https://github.com/TriliumNext
+El desarrollador original de Trilium ([Zadam](https://github.com/zadam)) ha
+cedido amablemente el repositorio de Trilium al proyecto comunitario, disponible
+en https://github.com/TriliumNext
 
-### ⬆️Migrating from Zadam/Trilium?
+### ⬆️ ¿Migrando desde Zadam/Trilium?
 
-There are no special migration steps to migrate from a zadam/Trilium instance to
-a TriliumNext/Trilium instance. Simply [install
-TriliumNext/Trilium](#-installation) as usual and it will use your existing
-database.
+No se requieren pasos especiales para migrar de una instancia de Zadam/Trilium a
+TriliumNext/Trilium. Simplemente [instala TriliumNext/Trilium](#-installation)
+como de costumbre, y utilizará la base de datos existente.
 
-Versions up to and including
-[v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) are
-compatible with the latest zadam/trilium version of
-[v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Any later
-versions of TriliumNext/Trilium have their sync versions incremented which
-prevents direct migration.
+Las versiones hasta
+[v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4),
+inclusive, son compatibles con la última versión de Zadam/Trilium
+[v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Las versiones
+posteriores de TriliumNext/Trilium incrementan su versión de sincronización, lo
+que impide migrar directamente.
 
-## 💬 Discuss with us
+## 💬 Únete a la conversación
 
-Feel free to join our official conversations. We would love to hear what
-features, suggestions, or issues you may have!
+Siéntete libre de unirte a nuestras conversaciones oficiales. ¡Nos interesa
+mucho conocer tus funciones favoritas, sugerencias o posibles incidencias!
 
-- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (For synchronous
-  discussions.)
-  - The `General` Matrix room is also bridged to
+- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (Para discusiones
+  síncronas.)
+  - La sala `General` de Matrix también está enlazada con
     [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
-- [Github Discussions](https://github.com/TriliumNext/Trilium/discussions) (For
-  asynchronous discussions.)
-- [Github Issues](https://github.com/TriliumNext/Trilium/issues) (For bug
-  reports and feature requests.)
+- [Discusiones de GitHub](https://github.com/TriliumNext/Trilium/discussions)
+  (para discusiones asincrónicas.)
+- [Github Issues](https://github.com/TriliumNext/Trilium/issues) (para reportes
+  de errores y solicitudes de funciones.)
 
-## 🏗 Installation
+## 🏗 Instalación
 
-### Windows / MacOS
+### Windows / macOS
 
-Download the binary release for your platform from the [latest release
-page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
-and run the `trilium` executable.
+Descarga la versión binaria para tu plataforma desde la [página de la última
+versión](https://github.com/TriliumNext/Trilium/releases/latest), descomprime el
+paquete y ejecuta el archivo `trilium`.
 
 ### Linux
 
-If your distribution is listed in the table below, use your distribution's
-package.
+Si tu distribución aparece en la siguiente tabla, utiliza el paquete
+correspondiente a tu distribución.
 
-[![Packaging
-status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
+[![Estado del
+paquete](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
-You may also download the binary release for your platform from the [latest
-release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the
-package and run the `trilium` executable.
+También puedes descargar la versión binaria para la plataforma correspondiente
+desde la [página de la última
+versión](https://github.com/TriliumNext/Trilium/releases/latest), descomprimir
+el paquete y ejecutar el archivo `trilium`.
 
-TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
+TriliumNext también está disponible como paquete Flatpak, aunque aún no se ha
+publicado en FlatHub.
 
-### Browser (any OS)
+### Navegador (cualquier sistema operativo)
 
-If you use a server installation (see below), you can directly access the web
-interface (which is almost identical to the desktop app).
+Si utilizas una instalación en servidor (ver más abajo), puedes acceder
+directamente a la interfaz web (que es prácticamente idéntica a la aplicación de
+escritorio).
 
-Currently only the latest versions of Chrome & Firefox are supported (and
-tested).
+Actualmente, solo se soportan (y han sido probadas) las últimas versiones de
+Chrome y Firefox.
 
-### Mobile
+### Móvil
 
-To use TriliumNext on a mobile device, you can use a mobile web browser to
-access the mobile interface of a server installation (see below).
+Para usar TriliumNext en un dispositivo móvil, puedes utilizar un navegador web
+móvil para acceder a la interfaz móvil de una instalación en servidor (ver más
+abajo).
 
-See issue https://github.com/TriliumNext/Trilium/issues/4962 for more
-information on mobile app support.
+Consulta el issue https://github.com/TriliumNext/Trilium/issues/4962 para más
+información sobre el soporte de la aplicación móvil.
 
-If you prefer a native Android app, you can use
+Si prefieres una aplicación nativa para Android, puedes usar
 [TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid).
-Report bugs and missing features at [their
-repository](https://github.com/FliegendeWurst/TriliumDroid). Note: It is best to
-disable automatic updates on your server installation (see below) when using
-TriliumDroid since the sync version must match between Trilium and TriliumDroid.
+Puedes reportar errores y funciones faltantes en [su
+repositorio](https://github.com/FliegendeWurst/TriliumDroid). Nota: al usar
+TriliumDroid, es recomendable desactivar las actualizaciones automáticas en la
+instalación del servidor (ver más abajo), ya que la versión de sincronización
+debe coincidir entre Trilium y TriliumDroid.
 
-### Server
+### Servidor
 
-To install TriliumNext on your own server (including via Docker from
-[Dockerhub](https://hub.docker.com/r/triliumnext/trilium)) follow [the server
-installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
+Para instalar TriliumNext en tu propio servidor (incluido mediante Docker desde
+[Dockerhub](https://hub.docker.com/r/triliumnext/trilium)), sigue las
+[instrucciones de instalación del
+servidor](https://triliumnext.github.io/Docs/Wiki/server-installation).
 
 
-## 💻 Contribute
+## 💻 Contribuir
 
-### Translations
+### Traducciones
 
-If you are a native speaker, help us translate Trilium by heading over to our
-[Weblate page](https://hosted.weblate.org/engage/trilium/).
+Si eres hablante nativo, puedes ayudar a traducir Trilium visitando nuestra
+[página de Weblate](https://hosted.weblate.org/engage/trilium/).
 
-Here's the language coverage we have so far:
+Cobertura de idiomas hasta el momento:
 
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Estado de la
+traducción](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
 
-### Code
+### Código
 
-Download the repository, install dependencies using `pnpm` and then run the
-server (available at http://localhost:8080):
+Descarga el repositorio, instala las dependencias usando `pnpm` y luego ejecuta
+el servidor (disponible en http://localhost:8080):
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -224,10 +254,10 @@ pnpm install
 pnpm run server:start
 ```
 
-### Documentation
+### Documentación
 
-Download the repository, install dependencies using `pnpm` and then run the
-environment required to edit the documentation:
+Descarga el repositorio, instala las dependencias usando `pnpm` y luego ejecuta
+el entorno necesario para editar la documentación:
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -235,9 +265,9 @@ pnpm install
 pnpm edit-docs:edit-docs
 ```
 
-### Building the Executable
-Download the repository, install dependencies using `pnpm` and then build the
-desktop app for Windows:
+### Compilación del ejecutable
+Descarga el repositorio, instala las dependencias usando `pnpm` y luego compila
+la aplicación de escritorio para Windows:
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -245,70 +275,73 @@ pnpm install
 pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 ```
 
-For more details, see the [development
-docs](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).
+Para más información, consulta la [documentación de
+desarrollo](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).
 
-### Developer Documentation
+### Documentación para desarrolladores
 
-Please view the [documentation
-guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
-for details. If you have more questions, feel free to reach out via the links
-described in the "Discuss with us" section above.
+Consulta la [guía de
+documentación](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
+para más información. Si tienes más preguntas, siéntete libre de contactarnos a
+través de los enlaces de la sección "Únete a la conversación" más arriba.
 
-## 👏 Shoutouts
+## 👏 Reconocimientos
 
-* [zadam](https://github.com/zadam) for the original concept and implementation
-  of the application.
-* [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
-  application icon.
-* [nriver](https://github.com/nriver) for his work on internationalization.
-* [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
-* [antoniotejada](https://github.com/nriver) for the original syntax highlight
-  widget.
-* [Dosu](https://dosu.dev/) for providing us with the automated responses to
-  GitHub issues and discussions.
-* [Tabler Icons](https://tabler.io/icons) for the system tray icons.
+* [Zadam](https://github.com/zadam) por la idea original y la implementación de
+  la aplicación.
+* [Sarah Hussein](https://github.com/Sarah-Hussein) por diseñar el icono de la
+  aplicación.
+* [nriver](https://github.com/nriver) por su trabajo en la internacionalización.
+* [Thomas Frei](https://github.com/thfrei) por su trabajo original en el Canvas.
+* [antoniotejada](https://github.com/nriver) por el widget original de resaltado
+  de sintaxis.
+* [Dosu](https://dosu.dev/) por ofrecernos las respuestas automáticas para los
+  issues y discusiones de GitHub.
+* [Tabler Icons](https://tabler.io/icons) por los iconos de la bandeja del
+  sistema.
 
-Trilium would not be possible without the technologies behind it:
+Trilium no sería posible sin las tecnologías que lo sustentan:
 
-* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind
-  text notes. We are grateful for being offered a set of the premium features.
-* [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with
-  support for huge amount of languages.
-* [Excalidraw](https://github.com/excalidraw/excalidraw) - the infinite
-  whiteboard used in Canvas notes.
-* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - providing the
-  mind map functionality.
-* [Leaflet](https://github.com/Leaflet/Leaflet) - for rendering geographical
-  maps.
-* [Tabulator](https://github.com/olifolkerd/tabulator) - for the interactive
-  table used in collections.
-* [FancyTree](https://github.com/mar10/fancytree) - feature-rich tree library
-  without real competition.
-* [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library.
-  Used in [relation
-  maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
-  maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - el editor visual detrás
+  de las notas de texto. Agradecemos que se nos haya ofrecido un conjunto de
+  funciones premium.
+* [CodeMirror](https://github.com/codemirror/CodeMirror) - editor de código con
+  soporte para numerosos lenguajes.
+* [Excalidraw](https://github.com/excalidraw/excalidraw) - la pizarra infinita
+  utilizada en las notas tipo Canvas.
+* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - proporciona la
+  funcionalidad de mapas mentales.
+* [Leaflet](https://github.com/Leaflet/Leaflet) - para mostrar mapas
+  geográficos.
+* [Tabulator](https://github.com/olifolkerd/tabulator) - para la tabla
+  interactiva utilizada en las colecciones.
+* [FancyTree](https://github.com/mar10/fancytree) - biblioteca de árboles con
+  muchas funcionalidades y sin competencia destacable.
+* [jsPlumb](https://github.com/jsplumb/jsplumb) - biblioteca de conectividad
+  visual. Usada en [mapas de
+  relaciones](https://triliumnext.github.io/Docs/Wiki/relation-map.html) y
+  [mapas de
+  enlaces](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 
-## 🤝 Support
+## 🤝 Soporte
 
-Trilium is built and maintained with [hundreds of hours of
-work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
-support keeps it open-source, improves features, and covers costs such as
-hosting.
+Trilium se desarrolla y mantiene con [cientos de horas de
+trabajo](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Tu
+apoyo ayuda a mantenerlo de código abierto, mejorar sus funciones y cubrir
+gastos como el alojamiento.
 
-Consider supporting the main developer
-([eliandoran](https://github.com/eliandoran)) of the application via:
+Considera apoyar al desarrollador principal
+([eliandoran](https://github.com/eliandoran)) de la aplicación a través de:
 
-- [GitHub Sponsors](https://github.com/sponsors/eliandoran)
+- [Patrocinadores de GitHub](https://github.com/sponsors/eliandoran)
 - [PayPal](https://paypal.me/eliandoran)
-- [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
+- [Compra un café](https://buymeacoffee.com/eliandoran)
 
-## 🔑 License
+## 🔑 Licencia
 
-Copyright 2017-2025 zadam, Elian Doran, and other contributors
+Copyright 2017-2025 zadam, Elian Doran y otros colaboradores
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU Affero General Public License as published by the Free
-Software Foundation, either version 3 of the License, or (at your option) any
-later version.
+Este programa es software libre: puede redistribuirse, modificarse o ambas
+acciones bajo los términos de la Licencia Pública General Affero de GNU,
+publicada por la Free Software Foundation, ya sea la versión 3 de la licencia o,
+a elección del usuario, cualquier versión posterior.

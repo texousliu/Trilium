@@ -74,12 +74,12 @@ function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: F
                 />
 
                 <Icon className="note-icon" icon={note.getIcon()} />
-                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={note.type === "search"} highlightedTokens={highlightedTokens} />
+                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={parentNote.type === "search"} highlightedTokens={highlightedTokens} />
                 <NoteAttributes note={note} />
             </h5>
 
             {isExpanded && <>
-                <NoteContent note={note} highlightedTokens={highlightedTokens} />
+                <NoteContent note={note} highlightedTokens={highlightedTokens} noChildrenList />
                 <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} />
             </>}
         </div>
@@ -110,7 +110,11 @@ function GridNoteCard({ note, parentNote, highlightedTokens }: { note: FNote, pa
                 <span ref={titleRef} className="note-book-title">{noteTitle}</span>
                 <NoteAttributes note={note} />
             </h5>
-            <NoteContent note={note} trim highlightedTokens={highlightedTokens} />
+            <NoteContent
+                note={note}
+                trim
+                highlightedTokens={highlightedTokens}
+            />
         </div>
     )
 }
@@ -126,15 +130,22 @@ function NoteAttributes({ note }: { note: FNote }) {
     return <span className="note-list-attributes" ref={ref} />
 }
 
-function NoteContent({ note, trim, highlightedTokens }: { note: FNote, trim?: boolean, highlightedTokens }) {
+function NoteContent({ note, trim, noChildrenList, highlightedTokens }: { note: FNote, trim?: boolean, noChildrenList?: boolean, highlightedTokens: string[] | null | undefined }) {
     const contentRef = useRef<HTMLDivElement>(null);
     const highlightSearch = useImperativeSearchHighlighlighting(highlightedTokens);
 
     useEffect(() => {
-        content_renderer.getRenderedContent(note, { trim })
+        content_renderer.getRenderedContent(note, {
+            trim,
+            noChildrenList
+        })
             .then(({ $renderedContent, type }) => {
                 if (!contentRef.current) return;
-                contentRef.current.replaceChildren(...$renderedContent);
+                if ($renderedContent[0].innerHTML) {
+                    contentRef.current.replaceChildren(...$renderedContent);
+                } else {
+                    contentRef.current.replaceChildren();
+                }
                 contentRef.current.classList.add(`type-${type}`);
                 highlightSearch(contentRef.current);
             })

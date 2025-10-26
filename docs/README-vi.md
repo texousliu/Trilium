@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
@@ -21,6 +32,15 @@ Xem [ảnh chụp màn hình](https://triliumnext.github.io/Docs/Wiki/screenshot
 để tổng quan nhanh:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+
+## ⏬ Tải xuống
+- [Bản phát hành mới
+  nhất](https://github.com/TriliumNext/Trilium/releases/latest) – phiên bản ổn
+  định, được khuyên dùng cho hầu hết người dùng.
+- [Bản dựng
+  nightly](https://github.com/TriliumNext/Trilium/releases/tag/nightly) – phiên
+  bản phát triển kém ổn định, được cập nhật hàng ngày với các tính năng mới nhất
+  và sửa lỗi.
 
 ## 📚 Tài Liệu
 

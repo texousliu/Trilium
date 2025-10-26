@@ -354,6 +354,7 @@
     align-items: center;
     width: 100%;
     margin: 4px;
+    background: color-mix(in srgb, var(--accent) 15%, var(--main-background-color));
     padding-inline-end: 2em;
     border: 1px solid var(--accent);
     border-radius: 6px;
@@ -665,4 +666,17 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 .ck-content .table > figcaption {
     background: var(--accented-background-color);
     color: var(--main-text-color);
+}
+
+/* Reference link */
+
+.ck-content a.reference-link,
+.ck-content a.reference-link:hover {
+    /* Apply underline only to the span inside the link so it can follow the
+     * target note's user defined color */
+    text-decoration: none;
+}
+
+.ck-content a.reference-link > span {
+    text-decoration: underline;
 }

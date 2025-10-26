@@ -38,6 +38,8 @@ type Labels = {
     "board:groupBy": string;
     maxNestingDepth: number;
     includeArchived: boolean;
+    "presentation:theme": string;
+    "slide:background": string;
 
     // Note-type specific
     webViewSrc: string;

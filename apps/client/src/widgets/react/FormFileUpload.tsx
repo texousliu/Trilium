@@ -1,6 +1,6 @@
 import { Ref } from "preact";
 import Button, { ButtonProps } from "./Button";
-import { useRef } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 
 interface FormFileUploadProps {
     name?: string;
@@ -11,6 +11,11 @@ interface FormFileUploadProps {
 }
 
 export default function FormFileUpload({ inputRef, name, onChange, multiple, hidden }: FormFileUploadProps) {
+    // Prevent accidental reuse of a file selected in a previous instance of the upload form.
+    useEffect(() => {
+        onChange(null);
+    }, []);
+
     return (
         <label class="tn-file-input tn-input-field" style={hidden ? { display: "none" } : undefined}>
             <input
@@ -19,10 +24,7 @@ export default function FormFileUpload({ inputRef, name, onChange, multiple, hid
                 type="file"
                 class="form-control-file"
                 multiple={multiple}
-                onChange={e => {
-                    onChange((e.target as HTMLInputElement).files);
-                    e.currentTarget.value = "";
-                }} />
+                onChange={e => onChange((e.target as HTMLInputElement).files)} />
         </label>
     )
 }

@@ -274,7 +274,8 @@
     "export_filter": "PDF Dokument (*.pdf)",
     "unable-to-export-message": "Die aktuelle Notiz konnte nicht als PDF exportiert werden.",
     "unable-to-export-title": "Export als PDF fehlgeschlagen",
-    "unable-to-save-message": "Die ausgewählte Datei konnte nicht beschrieben werden. Erneut versuchen oder ein anderes Ziel auswählen."
+    "unable-to-save-message": "Die ausgewählte Datei konnte nicht beschrieben werden. Erneut versuchen oder ein anderes Ziel auswählen.",
+    "unable-to-print": "Notiz kann nicht gedruckt werden"
   },
   "tray": {
     "tooltip": "Trilium Notes",
@@ -307,7 +308,12 @@
     "board_note_second": "Zweite Notiz",
     "board_note_third": "Dritte Notiz",
     "board_status_todo": "To-Do",
-    "board_status_progress": "In Bearbeitung"
+    "board_status_progress": "In Bearbeitung",
+    "presentation": "Präsentation",
+    "presentation_slide": "Präsentationsfolie",
+    "presentation_slide_first": "Erste Folie",
+    "presentation_slide_second": "Zweite Folie",
+    "background": "Hintergrund"
   },
   "keyboard_action_names": {
     "copy-notes-to-clipboard": "Notizen in Zwischenablage kopieren",
