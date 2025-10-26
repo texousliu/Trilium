@@ -59,7 +59,7 @@ const TPL = /*html*/`
         }
     </style>
 
-    <div class="vditor-container" id="vditor-editor"></div>
+    <div class="vditor-container"></div>
 </div>
 `;
 
@@ -68,7 +68,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
     private vditor?: IVditor;
     private $container!: JQuery<HTMLElement>;
     private currentNoteId?: string;
-    private isInitialized = false;
+    private isVditorReady = false;
 
     constructor() {
         super();
@@ -99,150 +99,110 @@ export default class MarkdownTypeWidget extends TypeWidget {
         this.$widget = $(TPL);
         this.$container = this.$widget.find(".vditor-container");
 
-        this.initialized = this.initVditor();
-
         super.doRender();
+
+        // 确保DOM元素已经添加到页面中
+        this.initialized = Promise.resolve();
+
         return this.$widget;
     }
 
-    async initVditor() {
+    async initVditor(): Promise<void> {
+        if (this.vditor) {
+            return;
+        }
+
+        // 确保DOM容器存在且已添加到页面
+        if (!this.$container || !this.$container.length || !this.$container[0].isConnected) {
+            console.warn("Vditor container not ready");
+            return;
+        }
+
         // 动态导入Vditor
         const Vditor = (await import("vditor")).default;
-
-        // 导入Vditor样式
         await import("vditor/dist/index.css");
 
         const isDarkTheme = document.body.classList.contains("theme-dark");
 
-        this.vditor = new Vditor(this.$container[0], {
-            height: "100%",
-            mode: "ir", // 即时渲染模式，类似于Typora
-            theme: isDarkTheme ? "dark" : "classic",
-            preview: {
-                theme: {
-                    current: isDarkTheme ? "dark" : "light"
-                }
-            },
-            toolbar: [
-                "emoji",
-                "headings",
-                "bold",
-                "italic",
-                "strike",
-                "link",
-                "|",
-                "list",
-                "ordered-list",
-                "check",
-                "outdent",
-                "indent",
-                "|",
-                "quote",
-                "line",
-                "code",
-                "inline-code",
-                "insert-before",
-                "insert-after",
-                "|",
-                "table",
-                "upload",
-                "|",
-                "undo",
-                "redo",
-                "|",
-                "edit-mode",
-                "content-theme",
-                "code-theme",
-                "export",
-                {
-                    name: "more",
-                    toolbar: [
-                        "fullscreen",
-                        "both",
-                        "preview",
-                        "info",
-                        "help"
-                    ]
-                }
-            ],
-            counter: {
-                enable: true,
-                type: "text"
-            },
-            cache: {
-                enable: false // 禁用缓存，使用Trilium自己的保存机制
-            },
-            input: (value: string) => {
-                // 当内容变化时触发保存
-                if (this.isInitialized && !options.is("databaseReadonly")) {
-                    this.saveData();
-                }
-            },
-            focus: (value: string) => {
-                // 获得焦点时的处理
-            },
-            blur: (value: string) => {
-                // 失去焦点时的处理
-            },
-            upload: {
-                accept: "image/*,.mp3,.wav,.ogg,.mp4,.webm,.pdf,.txt,.md",
-                handler: async (files: File[]) => {
-                    // 处理文件上传
-                    const results: string[] = [];
-
-                    for (const file of files) {
-                        try {
-                            const formData = new FormData();
-                            formData.append("upload", file);
-
-                            const response = await server.post(`notes/${this.noteId}/attachments`, formData);
-
-                            if (response.attachmentId) {
-                                const attachment = await server.get(`attachments/${response.attachmentId}`);
-                                if (file.type.startsWith("image/")) {
-                                    results.push(`![${file.name}](api/attachments/${response.attachmentId}/download)`);
-                                } else {
-                                    results.push(`[${file.name}](api/attachments/${response.attachmentId}/download)`);
-                                }
-                            }
-                        } catch (error) {
-                            console.error("Upload failed:", error);
-                            results.push(`Upload failed: ${file.name}`);
+        return new Promise<void>((resolve, reject) => {
+            try {
+                this.vditor = new Vditor(this.$container[0], {
+                    height: "100%",
+                    mode: "ir",
+                    theme: isDarkTheme ? "dark" : "classic",
+                    preview: {
+                        theme: {
+                            current: isDarkTheme ? "dark" : "light"
                         }
+                    },
+                    toolbar: [
+                        "headings", "bold", "italic", "strike", "|",
+                        "list", "ordered-list", "check", "|",
+                        "quote", "line", "code", "table", "|",
+                        "undo", "redo", "|",
+                        "edit-mode", "both", "preview"
+                    ],
+                    counter: {
+                        enable: true,
+                        type: "text"
+                    },
+                    cache: {
+                        enable: false
+                    },
+                    input: (value: string) => {
+                        if (this.isVditorReady && !options.is("databaseReadonly")) {
+                            this.saveData();
+                        }
+                    },
+                    after: () => {
+                        this.isVditorReady = true;
+                        this.updateReadOnlyMode();
+                        resolve(); // 确保Promise在初始化完成后resolve
                     }
-
-                    return results.join("\n");
-                }
-            },
-            hint: {
-                emojiPath: "https://cdn.jsdelivr.net/npm/vditor@3.10.4/dist/images/emoji"
+                });
+            } catch (error) {
+                console.error("Error initializing Vditor:", error);
+                reject(error);
             }
         });
-
-        this.isInitialized = true;
     }
 
     async doRefresh(note: FNote) {
-        if (!this.vditor) {
-            await this.initVditor();
+        if (note.type !== "markdown") {
+            return;
         }
 
-        // 检查是否切换了笔记
         const noteChanged = this.currentNoteId !== note.noteId;
         this.currentNoteId = note.noteId;
 
         const blob = await note.getBlob();
         const content = blob?.content || "";
 
-        // 暂时禁用自动保存，避免在加载内容时触发保存
-        this.isInitialized = false;
+        // 等待DOM准备好
+        await this.initialized;
 
-        // 设置内容
-        this.vditor?.setValue(content);
+        // 如果vditor不存在，先初始化
+        if (!this.vditor) {
+            try {
+                await this.initVditor();
+            } catch (error) {
+                console.error("Failed to initialize Vditor:", error);
+                return;
+            }
+        }
+
+        // 暂时禁用自动保存
+        this.isVditorReady = false;
+
+        // 安全地设置内容
+        await this.safeSetValue(content);
+
+        // 更新只读模式
+        await this.updateReadOnlyMode();
 
         // 重新启用自动保存
         setTimeout(() => {
-            this.isInitialized = true;
+            this.isVditorReady = true;
         }, 100);
     }
 
@@ -283,25 +243,27 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
     cleanup() {
         if (this.vditor) {
-            this.vditor.destroy();
+            try {
+                this.vditor.destroy();
+            } catch (e) {
+                console.warn("Error destroying vditor:", e);
+            }
             this.vditor = undefined;
         }
 
-        this.isInitialized = false;
+        this.isVditorReady = false;
+        this.currentNoteId = undefined;
         super.cleanup();
     }
 
     // 支持主题切换
     async themeChangedEvent() {
         if (this.vditor) {
-            const isDarkTheme = document.body.classList.contains("theme-dark");
-
             // 重新初始化编辑器以应用新主题
             const content = this.vditor.getValue();
-            this.vditor.destroy();
-
+            this.cleanup();
             await this.initVditor();
-            this.vditor?.setValue(content);
+            await this.safeSetValue(content);
         }
     }
 
@@ -341,5 +303,51 @@ export default class MarkdownTypeWidget extends TypeWidget {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+
+    // 更新只读模式
+    async updateReadOnlyMode() {
+        if (!this.vditor || !this.noteContext) {
+            return;
+        }
+
+        const isReadOnly = await this.noteContext.isReadOnly();
+
+        if (isReadOnly) {
+            this.vditor.disabled();
+        } else {
+            this.vditor.enable();
+        }
+    }
+
+    // 安全地设置Vditor内容
+    private async safeSetValue(content: string) {
+        if (!this.vditor) {
+            return;
+        }
+
+        // 等待Vditor完全准备好
+        let retries = 0;
+        const maxRetries = 20;
+
+        while (retries < maxRetries) {
+            try {
+                // 检查Vditor是否有必要的内部属性
+                if ((this.vditor as any).vditor && (this.vditor as any).vditor.ir) {
+                    this.vditor.setValue(content);
+                    return; // 成功设置，退出
+                }
+            } catch (error) {
+                // 继续重试
+            }
+
+            retries++;
+            if (retries >= maxRetries) {
+                console.error("Failed to set vditor value after retries, vditor may not be fully initialized");
+                return;
+            }
+            // 等待100ms后重试
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
     }
 }

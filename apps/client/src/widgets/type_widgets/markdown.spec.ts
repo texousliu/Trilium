@@ -1,5 +1,19 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import MarkdownTypeWidget from "./markdown.js";
+
+// Mock vditor
+vi.mock("vditor", () => ({
+    default: vi.fn().mockImplementation(() => ({
+        setValue: vi.fn(),
+        getValue: vi.fn(() => ""),
+        focus: vi.fn(),
+        destroy: vi.fn(),
+        disabled: vi.fn(),
+        enable: vi.fn()
+    }))
+}));
+
+vi.mock("vditor/dist/index.css", () => ({}));
 
 describe("MarkdownTypeWidget", () => {
     let widget: MarkdownTypeWidget;
@@ -27,8 +41,8 @@ describe("MarkdownTypeWidget", () => {
         expect($widget.hasClass("note-detail-markdown")).toBe(true);
     });
 
-    it("should handle empty content", () => {
+    it("should handle empty content when no vditor", () => {
         const data = widget.getData();
-        expect(data).toEqual({ content: "" });
+        expect(data).toBeUndefined();
     });
 });

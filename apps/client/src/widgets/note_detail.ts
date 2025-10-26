@@ -238,8 +238,11 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             resultingType = viewScope.attachmentId ? "attachmentDetail" : "attachmentList";
         } else if (type === "text" && (await this.noteContext?.isReadOnly())) {
             resultingType = "readOnlyText";
-        } else if ((type === "code" || type === "mermaid" || type === "markdown") && (await this.noteContext?.isReadOnly())) {
+        } else if ((type === "code" || type === "mermaid") && (await this.noteContext?.isReadOnly())) {
             resultingType = "readOnlyCode";
+        } else if (type === "markdown" && (await this.noteContext?.isReadOnly())) {
+            // Markdown notes should use readOnlyCode when readonly, but we need to handle this in the markdown widget
+            resultingType = "markdown";
         } else if (type === "text") {
             resultingType = "editableText";
         } else if (type === "code") {
