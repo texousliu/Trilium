@@ -29,6 +29,7 @@ import calendarIcon from "../../assets/boxicons/bx-calendar.svg?raw";
 import tableIcon from "../../assets/boxicons/bx-table.svg?raw";
 import boardIcon from "../../assets/boxicons/bx-columns-3.svg?raw";
 import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
+import presentationIcon from "../../assets/boxicons/bx-slideshow.svg?raw";
 import { getPlatform } from '../../download-helper.js';
 import { useEffect, useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
@@ -240,6 +241,13 @@ function CollectionsSection() {
                     imageUrl: "/collection_geomap.webp",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Geo%20Map%20View.html",
                     description: t("collections.geomap_description")
+                },
+                {
+                    title: t("collections.presentation_title"),
+                    iconSvg: presentationIcon,
+                    imageUrl: "/collection_presentation.webp",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Presentation%20View.html",
+                    description: t("collections.presentation_description")
                 }
             ]} />
         </Section>

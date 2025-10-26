@@ -74,7 +74,9 @@
     "board_title": "Board",
     "board_description": "Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board.",
     "geomap_title": "Geomap",
-    "geomap_description": "Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries."
+    "geomap_description": "Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries.",
+    "presentation_title": "Presentation",
+    "presentation_description": "Organize information into slides and present them in full-screen with smooth transitions. The slides can also be exported to PDF for easy sharing."
   },
   "faq": {
     "title": "Frequently Asked Questions",
