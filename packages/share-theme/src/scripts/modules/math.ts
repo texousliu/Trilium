@@ -9,6 +9,8 @@ export default async function setupMath() {
     const renderMathInElement = (await import("katex/contrib/auto-render")).default;
     await import("katex/contrib/mhchem");
 
-    renderMathInElement(document.getElementById("content"));
+    const contentEl = document.getElementById("content");
+    if (!contentEl) return;
+    renderMathInElement(contentEl);
     document.body.classList.add("math-loaded");
 }
