@@ -11,13 +11,13 @@ import protectedSessionService from "../../protected_session.js";
 import striptags from "striptags";
 import { normalize } from "../../utils.js";
 import sql from "../../sql.js";
-import { 
-    normalizeSearchText, 
-    calculateOptimizedEditDistance, 
-    validateFuzzySearchTokens, 
+import {
+    normalizeSearchText,
+    calculateOptimizedEditDistance,
+    validateFuzzySearchTokens,
     validateAndPreprocessContent,
     fuzzyMatchWord,
-    FUZZY_SEARCH_CONFIG 
+    FUZZY_SEARCH_CONFIG
 } from "../utils/text_utils.js";
 
 const ALLOWED_OPERATORS = new Set(["=", "!=", "*=*", "*=", "=*", "%=", "~=", "~*"]);
@@ -80,8 +80,8 @@ class NoteContentFulltextExp extends Expression {
         for (const row of sql.iterateRows<SearchRow>(`
                 SELECT noteId, type, mime, content, isProtected
                 FROM notes JOIN blobs USING (blobId)
-                WHERE type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap') 
-                  AND isDeleted = 0 
+                WHERE type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                  AND isDeleted = 0
                   AND LENGTH(content) < ${MAX_SEARCH_CONTENT_SIZE}`)) {
             this.findInText(row, inputNoteSet, resultNoteSet);
         }
@@ -112,7 +112,7 @@ class NoteContentFulltextExp extends Expression {
         }
 
         content = this.preprocessContent(content, type, mime);
-        
+
         // Apply content size validation and preprocessing
         const processedContent = validateAndPreprocessContent(content, noteId);
         if (!processedContent) {
@@ -166,6 +166,10 @@ class NoteContentFulltextExp extends Expression {
             }
 
             content = content.replace(/&nbsp;/g, " ");
+        } else if (type === "markdown" && mime === "text/markdown") {
+            // Markdown content is already plain text, no need to strip tags
+            // Just normalize whitespace
+            content = content.replace(/\s+/g, " ");
         } else if (type === "mindMap" && mime === "application/json") {
             content = processMindmapContent(content);
         } else if (type === "canvas" && mime === "application/json") {
@@ -194,16 +198,16 @@ class NoteContentFulltextExp extends Expression {
     private tokenMatchesContent(token: string, content: string, noteId: string): boolean {
         const normalizedToken = normalizeSearchText(token);
         const normalizedContent = normalizeSearchText(content);
-        
+
         if (normalizedContent.includes(normalizedToken)) {
             return true;
         }
-        
+
         // Check flat text for default fulltext search
         if (!this.flatText || !becca.notes[noteId].getFlatText().includes(token)) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -214,15 +218,15 @@ class NoteContentFulltextExp extends Expression {
         try {
             const normalizedContent = normalizeSearchText(content);
             const flatText = this.flatText ? normalizeSearchText(becca.notes[noteId].getFlatText()) : "";
-            
+
             // For phrase matching, check if tokens appear within reasonable proximity
             if (this.tokens.length > 1) {
                 return this.matchesPhrase(normalizedContent, flatText);
             }
-            
+
             // Single token fuzzy matching
             const token = normalizeSearchText(this.tokens[0]);
-            return this.fuzzyMatchToken(token, normalizedContent) || 
+            return this.fuzzyMatchToken(token, normalizedContent) ||
                    (this.flatText && this.fuzzyMatchToken(token, flatText));
         } catch (error) {
             log.error(`Error in fuzzy matching for note ${noteId}: ${error}`);
@@ -235,45 +239,45 @@ class NoteContentFulltextExp extends Expression {
      */
     private matchesPhrase(content: string, flatText: string): boolean {
         const searchText = this.flatText ? `${content} ${flatText}` : content;
-        
+
         // Apply content size limits for phrase matching
         const limitedText = validateAndPreprocessContent(searchText);
         if (!limitedText) {
             return false;
         }
-        
+
         const words = limitedText.toLowerCase().split(/\s+/);
-        
+
         // Only skip phrase matching for truly extreme word counts that could crash the system
         if (words.length > FUZZY_SEARCH_CONFIG.ABSOLUTE_MAX_WORD_COUNT) {
             console.error(`Phrase matching skipped due to extreme word count that could cause system instability: ${words.length} words`);
             return false;
         }
-        
+
         // Warn about large word counts but still attempt matching
         if (words.length > FUZZY_SEARCH_CONFIG.PERFORMANCE_WARNING_WORDS) {
             console.info(`Large word count for phrase matching: ${words.length} words - may take longer but will attempt full matching`);
         }
-        
+
         // Find positions of each token
         const tokenPositions: number[][] = this.tokens.map(token => {
             const normalizedToken = normalizeSearchText(token);
             const positions: number[] = [];
-            
+
             words.forEach((word, index) => {
                 if (this.fuzzyMatchSingle(normalizedToken, word)) {
                     positions.push(index);
                 }
             });
-            
+
             return positions;
         });
-        
+
         // Check if we found all tokens
         if (tokenPositions.some(positions => positions.length === 0)) {
             return false;
         }
-        
+
         // Check for phrase proximity using configurable distance
         return this.hasProximityMatch(tokenPositions, FUZZY_SEARCH_CONFIG.MAX_PHRASE_PROXIMITY);
     }
@@ -287,18 +291,18 @@ class NoteContentFulltextExp extends Expression {
             const [pos1, pos2] = tokenPositions;
             return pos1.some(p1 => pos2.some(p2 => Math.abs(p1 - p2) <= maxDistance));
         }
-        
+
         // For more tokens, check if we can find a sequence where all tokens are within range
         const findSequence = (remaining: number[][], currentPos: number): boolean => {
             if (remaining.length === 0) return true;
-            
+
             const [nextPositions, ...rest] = remaining;
-            return nextPositions.some(pos => 
-                Math.abs(pos - currentPos) <= maxDistance && 
+            return nextPositions.some(pos =>
+                Math.abs(pos - currentPos) <= maxDistance &&
                 findSequence(rest, pos)
             );
         };
-        
+
         const [firstPositions, ...rest] = tokenPositions;
         return firstPositions.some(startPos => findSequence(rest, startPos));
     }
@@ -311,12 +315,12 @@ class NoteContentFulltextExp extends Expression {
             // For short tokens, require exact match to avoid too many false positives
             return content.includes(token);
         }
-        
+
         const words = content.split(/\s+/);
-        
+
         // Only limit word processing for truly extreme cases to prevent system instability
         const limitedWords = words.slice(0, FUZZY_SEARCH_CONFIG.ABSOLUTE_MAX_WORD_COUNT);
-        
+
         return limitedWords.some(word => this.fuzzyMatchSingle(token, word));
     }
 

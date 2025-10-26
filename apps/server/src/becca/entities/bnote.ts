@@ -44,7 +44,8 @@ export const NOTE_TYPE_ICONS = {
     doc: "bx bxs-file-doc",
     contentWidget: "bx bxs-widget",
     mindMap: "bx bx-sitemap",
-    geoMap: "bx bx-map-alt"
+    geoMap: "bx bx-map-alt",
+    markdown: "bx bxl-markdown"
 };
 
 interface NotePathRecord {

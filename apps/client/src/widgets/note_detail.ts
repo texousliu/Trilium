@@ -33,6 +33,7 @@ import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 import AiChatTypeWidget from "./type_widgets/ai_chat.js";
+import MarkdownTypeWidget from "./type_widgets/markdown.js";
 import toast from "../services/toast.js";
 
 const TPL = /*html*/`
@@ -72,6 +73,7 @@ const typeWidgetClasses = {
     attachmentList: AttachmentListTypeWidget,
     mindMap: MindMapWidget,
     aiChat: AiChatTypeWidget,
+    markdown: MarkdownTypeWidget,
 
     // Split type editors
     mermaid: MermaidTypeWidget
@@ -91,7 +93,8 @@ type ExtendedNoteType =
     | "attachmentDetail"
     | "attachmentList"
     | "protectedSession"
-    | "aiChat";
+    | "aiChat"
+    | "markdown";
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
 
@@ -235,7 +238,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             resultingType = viewScope.attachmentId ? "attachmentDetail" : "attachmentList";
         } else if (type === "text" && (await this.noteContext?.isReadOnly())) {
             resultingType = "readOnlyText";
-        } else if ((type === "code" || type === "mermaid") && (await this.noteContext?.isReadOnly())) {
+        } else if ((type === "code" || type === "mermaid" || type === "markdown") && (await this.noteContext?.isReadOnly())) {
             resultingType = "readOnlyCode";
         } else if (type === "text") {
             resultingType = "editableText";

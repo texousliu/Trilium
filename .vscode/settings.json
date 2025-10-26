@@ -36,5 +36,6 @@
         "docs/**/*.png": true,
         "apps/server/src/assets/doc_notes/**": true,
         "apps/edit-docs/demo/**": true
-    }
+    },
+    "kiroAgent.configureMCP": "Disabled"
 }

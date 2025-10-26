@@ -46,6 +46,7 @@ export const NOTE_TYPES: NoteTypeMapping[] = [
 
     // Code notes
     { type: "code", mime: "text/plain", title: t("note_types.code"), icon: "bx-code" },
+    { type: "markdown", mime: "text/markdown", title: t("note_types.markdown"), icon: "bxl-markdown" },
 
     // Reserved types (cannot be created by the user)
     { type: "contentWidget", mime: "", title: t("note_types.widget"), reserved: true },
