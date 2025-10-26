@@ -95,8 +95,7 @@
         "get_started": "Inizia ora"
     },
     "components": {
-        "link_learn_more": "Per saperne di più...",
-        "list_with_screenshot_alt": "Screenshot della funzione selezionata"
+        "link_learn_more": "Per saperne di più..."
     },
     "download_now": {
         "text": "Scarica ora ",

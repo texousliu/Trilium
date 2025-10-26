@@ -95,8 +95,7 @@
         "get_started": "はじめる"
     },
     "components": {
-        "link_learn_more": "さらに詳しく...",
-        "list_with_screenshot_alt": "選択中の機能のスクリーンショット"
+        "link_learn_more": "さらに詳しく..."
     },
     "download_now": {
         "text": "今すぐダウンロード ",
