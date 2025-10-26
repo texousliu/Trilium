@@ -57,9 +57,9 @@ async function runBuild() {
         loader: {
             ".png": "dataurl",
             ".gif": "dataurl",
-            ".woff": "dataurl",
-            ".woff2": "dataurl",
-            ".ttf": "dataurl",
+            ".woff": "file",
+            ".woff2": "file",
+            ".ttf": "file",
             ".eot": "empty",
             ".svg": "empty",
             ".html": "text",

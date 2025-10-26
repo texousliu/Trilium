@@ -71,6 +71,7 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         rootNoteId: parentBranch.noteId,
         cssToLoad: [
             `${basePath}assets/styles.css`,
+            `${basePath}assets/scripts.css`,
         ],
         jsToLoad: [
             `${basePath}assets/scripts.js`
