@@ -52,7 +52,10 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         if (note) {
             content = renderNoteForExport(note, branch, basePath, noteMeta.notePath.slice(0, -1));
             if (typeof content === "string") {
-                content = content.replace(/href="[^"]*\.\/([a-zA-Z0-9_\/]{12})[^"]*"/g, "href=\"#root/$1\"");
+                content = content.replace(/href="[^"]*\.\/([a-zA-Z0-9_\/]{12})[^"]*"/g, (match, id) => {
+                    if (match.includes("/assets/")) return match;
+                    return `href="#root/${id}"`;
+                });
                 content = this.rewriteFn(content, noteMeta);
             }
         }
