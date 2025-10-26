@@ -70,11 +70,10 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         subRoot,
         rootNoteId: parentBranch.noteId,
         cssToLoad: [
-            `${basePath}style.css`,
-            `${basePath}boxicons.css`
+            `${basePath}assets/styles.css`,
         ],
         jsToLoad: [
-            `${basePath}script.js`
+            `${basePath}assets/scripts.js`
         ],
         logoUrl: `${basePath}icon-color.svg`,
         ancestors

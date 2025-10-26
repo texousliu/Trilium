@@ -19,8 +19,6 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     prepareMeta(metaFile: NoteMetaFile): void {
 
         const assets = [
-            "style.css",
-            "script.js",
             "boxicons.css",
             "boxicons.eot",
             "boxicons.woff2",
