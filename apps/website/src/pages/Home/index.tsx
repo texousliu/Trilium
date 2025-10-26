@@ -132,7 +132,7 @@ function NoteTypesSection() {
     const { t } = useTranslation();
     return (
         <Section className="note-types" title={t("note_types.title")}>
-            <ListWithScreenshot horizontal items={[
+            <ListWithScreenshot items={[
                 {
                     title: t("note_types.text_title"),
                     imageUrl: "/type_text.webp",
@@ -246,39 +246,26 @@ function CollectionsSection() {
     );
 }
 
-function ListWithScreenshot({ items, horizontal, cardExtra }: {
+function ListWithScreenshot({ items, cardExtra }: {
     items: { title: string, imageUrl: string, description: string, moreInfo: string, iconSvg?: string }[];
-    horizontal?: boolean;
     cardExtra?: ComponentChildren;
 }) {
-    const [ selectedItem, setSelectedItem ] = useState(items[0]);
-    const { t } = useTranslation();
-
     return (
-        <div className={`list-with-screenshot ${horizontal ? "horizontal" : ""}`}>
+        <div className={`list-with-screenshot`}>
             <ul>
                 {items.map(item => (
-                    <li className={`${item === selectedItem ? "selected" : ""}`}>
+                    <li>
                         <Card
                             title={item.title}
-                            onMouseEnter={() => setSelectedItem(item)}
-                            onClick={() => setSelectedItem(item)}
                             moreInfoUrl={item.moreInfo}
                             iconSvg={item.iconSvg}
+                            imageUrl={item.imageUrl}
                         >
                             {item.description}
                         </Card>
                     </li>
                 ))}
             </ul>
-
-            <div className="details">
-                {selectedItem && (
-                    <>
-                        <img src={selectedItem.imageUrl} alt={t("components.list_with_screenshot_alt")} loading="lazy" />
-                    </>
-                )}
-            </div>
         </div>
     )
 }
