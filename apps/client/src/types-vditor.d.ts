@@ -77,6 +77,7 @@ declare module "vditor" {
         cdn?: string;
         value?: string;
         after?: () => void;
+        customWysiwygToolbar?: () => void;
     }
 
     export default class Vditor {

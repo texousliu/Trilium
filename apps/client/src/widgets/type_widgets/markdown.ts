@@ -242,7 +242,10 @@ export default class MarkdownTypeWidget extends TypeWidget {
                         this.isVditorReady = true;
                         this.updateReadOnlyMode();
                         resolve(); // 确保Promise在初始化完成后resolve
-                    }
+                    },
+                    customWysiwygToolbar: () => {
+
+                    },
                 });
             } catch (error) {
                 console.error("Error initializing Vditor:", error);
