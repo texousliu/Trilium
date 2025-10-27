@@ -74,8 +74,7 @@
         "get_started": "Commencer"
     },
     "components": {
-        "link_learn_more": "En savoir plus...",
-        "list_with_screenshot_alt": "Capture d'écran de la fonctionnalité sélectionnée"
+        "link_learn_more": "En savoir plus..."
     },
     "support_us": {
         "financial_donations_title": "Dons financiers",
