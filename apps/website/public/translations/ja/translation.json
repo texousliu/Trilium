@@ -191,5 +191,10 @@
         "description": "Trilium Notesは、アクセスと管理を容易にする有料サービス PikaPods でホストされています。Trilium チームとは直接関係ありません。",
         "download_pikapod": "PikaPods にセットアップする",
         "download_triliumcc": "または、trilium.cc を参照してください"
+    },
+    "header": {
+        "get-started": "はじめる",
+        "documentation": "ドキュメント",
+        "support-us": "サポート"
     }
 }
