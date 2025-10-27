@@ -4,7 +4,7 @@
     "homepage": "Startseite:",
     "app_version": "App-Version:",
     "db_version": "DB-Version:",
-    "sync_version": "Synch-version:",
+    "sync_version": "Sync-Version:",
     "build_date": "Build-Datum:",
     "build_revision": "Build-Revision:",
     "data_directory": "Datenverzeichnis:"
@@ -991,7 +991,7 @@
     "enter_password_instruction": "Um die geschützte Notiz anzuzeigen, musst du dein Passwort eingeben:",
     "start_session_button": "Starte eine geschützte Sitzung <kbd>Eingabetaste</kbd>",
     "started": "Geschützte Sitzung gestartet.",
-    "wrong_password": "Passwort flasch.",
+    "wrong_password": "Passwort falsch.",
     "protecting-finished-successfully": "Geschützt erfolgreich beendet.",
     "unprotecting-finished-successfully": "Ungeschützt erfolgreich beendet.",
     "protecting-in-progress": "Schützen läuft: {{count}}",
