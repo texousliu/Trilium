@@ -8,7 +8,7 @@ import Footer from './components/Footer.js';
 import GetStarted from './pages/GetStarted/get-started.js';
 import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useLayoutEffect, useRef } from 'preact/hooks';
 import { changeLanguage } from 'i18next';
 import { extractLocaleFromUrl, initTranslations, LOCALES, mapLocale } from './i18n';
 
@@ -49,6 +49,13 @@ export function LocaleProvider({ children }) {
   } else {
     changeLanguage(localeId);
   }
+
+  // Update html lang and dir attributes
+  useLayoutEffect(() => {
+    const correspondingLocale = LOCALES.find(l => l.id === localeId);
+    document.documentElement.lang = localeId;
+    document.documentElement.dir = correspondingLocale?.rtl ? "rtl" : "ltr";
+  }, [localeId]);
 
   return (
     <LocaleContext.Provider value={localeId}>
