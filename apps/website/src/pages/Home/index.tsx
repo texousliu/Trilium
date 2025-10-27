@@ -33,6 +33,7 @@ import presentationIcon from "../../assets/boxicons/bx-slideshow.svg?raw";
 import { getPlatform } from '../../download-helper.js';
 import { useEffect, useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
+import { Suspense } from 'preact/compat';
 
 export function Home() {
     usePageTitle("");
@@ -79,7 +80,9 @@ function HeroSection() {
                 <p>{t("hero_section.subtitle")}</p>
 
                 <div className="download-wrapper">
-                    <DownloadButton big />
+                    <Suspense fallback={<div class="loading-screen">Loading...</div>}>
+                        <DownloadButton big />
+                    </Suspense>
                     <Button href="./get-started/" className="mobile-only" text={t("hero_section.get_started")} />
                     <div className="additional-options">
                         <Button iconSvg={gitHubIcon} outline text={t("hero_section.github")} href="https://github.com/TriliumNext/Trilium/" openExternally />
