@@ -8,11 +8,9 @@ import Footer from './components/Footer.js';
 import GetStarted from './pages/GetStarted/get-started.js';
 import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
-import { useLayoutEffect, useRef, useState } from 'preact/hooks';
-import { default as i18next, changeLanguage } from 'i18next';
+import { useRef } from 'preact/hooks';
+import { changeLanguage } from 'i18next';
 import { extractLocaleFromUrl, initTranslations, LOCALES, mapLocale } from './i18n';
-import HttpApi from 'i18next-http-backend';
-import { initReactI18next } from "react-i18next";
 
 export const LocaleContext = createContext('en');
 
@@ -42,7 +40,7 @@ export function App(props: {repoStargazersCount: number}) {
 
 export function LocaleProvider({ children }) {
   const { path } = useLocation();
-  const localeId = mapLocale(extractLocaleFromUrl(path) || navigator.language);
+  const localeId = getLocaleId(path);
   const loadedRef = useRef(false);
 
   if (!loadedRef.current) {
@@ -63,6 +61,13 @@ if (typeof window !== 'undefined') {
 	hydrate(<App repoStargazersCount={FALLBACK_STARGAZERS_COUNT} />, document.getElementById('app')!);
 }
 
+function getLocaleId(path: string) {
+    const extractedLocale = extractLocaleFromUrl(path);
+    if (extractedLocale) return mapLocale(extractedLocale);
+    if (typeof window === "undefined") return 'en';
+    return mapLocale(navigator.language);
+}
+
 export async function prerender(data) {
 	// Fetch the stargazer count of the Trilium's GitHub repo on prerender to pass
 	// it to the App component for SSR.
@@ -70,12 +75,11 @@ export async function prerender(data) {
 	const stargazersCount = await getRepoStargazersCount();
 
 	const { html, links } = await ssr(<App repoStargazersCount={stargazersCount} {...data} />);
-    const lang = extractLocaleFromUrl(data.url);
     return {
         html,
         links,
         head: {
-            lang
+            lang: extractLocaleFromUrl(data.url) ?? "en"
         }
     }
 }
