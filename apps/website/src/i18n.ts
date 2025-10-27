@@ -35,7 +35,13 @@ export function mapLocale(locale: string) {
 export function swapLocaleInUrl(url: string, newLocale: string) {
     const components = url.split("/");
     if (components.length === 2) {
-        return `/${newLocale}${url}`;
+        const potentialLocale = components[1];
+        const correspondingLocale = LOCALES.find(l => l.id === potentialLocale);
+        if (correspondingLocale) {
+            return `/${newLocale}`;
+        } else {
+            return `/${newLocale}${url}`;
+        }
     } else {
         components[1] = newLocale;
         return components.join("/");
