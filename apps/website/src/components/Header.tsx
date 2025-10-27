@@ -11,7 +11,6 @@ import menuIcon from "../assets/boxicons/bx-menu.svg?raw";
 import { LocaleContext } from "..";
 import { useTranslation } from "react-i18next";
 import { swapLocaleInUrl } from "../i18n";
-import { Suspense } from "preact/compat";
 
 interface HeaderLink {
     url: string;
@@ -79,9 +78,7 @@ export function Header(props: {repoStargazersCount: number}) {
                     />
                 </div>
 
-                <Suspense fallback={<div class="loading-screen">Loading...</div>}>
-                    <DownloadButton />
-                </Suspense>
+                <DownloadButton />
 
             </div>
 		</header>

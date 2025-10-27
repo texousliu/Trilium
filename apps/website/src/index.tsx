@@ -13,33 +13,30 @@ import { default as i18next, changeLanguage } from 'i18next';
 import { extractLocaleFromUrl, LOCALES, mapLocale } from './i18n';
 import HttpApi from 'i18next-http-backend';
 import { initReactI18next } from "react-i18next";
-import { Suspense } from 'preact/compat';
 
 export const LocaleContext = createContext('en');
 
 export function App(props: {repoStargazersCount: number}) {
 	return (
-        <LocationProvider>
-                <LocaleProvider>
-                    <Suspense fallback={<div class="loading-screen">Loading...</div>}>
-                        <Header repoStargazersCount={props.repoStargazersCount} />
-                        <main>
-                            <Router>
-                                <Route path="/" component={Home} />
-                                <Route path="/get-started" component={GetStarted} />
-                                <Route path="/support-us" component={SupportUs} />
+		<LocationProvider>
+            <LocaleProvider>
+                <Header repoStargazersCount={props.repoStargazersCount} />
+                <main>
+                    <Router>
+                        <Route path="/" component={Home} />
+                        <Route path="/get-started" component={GetStarted} />
+                        <Route path="/support-us" component={SupportUs} />
 
-                                <Route path="/:locale:/" component={Home} />
-                                <Route path="/:locale:/get-started" component={GetStarted} />
-                                <Route path="/:locale:/support-us" component={SupportUs} />
+                        <Route path="/:locale:/" component={Home} />
+                        <Route path="/:locale:/get-started" component={GetStarted} />
+                        <Route path="/:locale:/support-us" component={SupportUs} />
 
-                                <Route default component={NotFound} />
-                            </Router>
-                        </main>
-                        <Footer />
-                    </Suspense>
-                </LocaleProvider>
-            </LocationProvider>
+                        <Route default component={NotFound} />
+                    </Router>
+                </main>
+                <Footer />
+            </LocaleProvider>
+		</LocationProvider>
 	);
 }
 
