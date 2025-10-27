@@ -212,7 +212,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
             try {
                 this.vditor = new Vditor(this.$container[0], {
                     height: "100%",
-                    mode: "ir",
+                    mode: "sv",
                     theme: isDarkTheme ? "dark" : "classic",
                     preview: {
                         theme: {

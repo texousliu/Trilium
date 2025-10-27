@@ -5,6 +5,7 @@ import dateUtils from "../date_utils.js";
 import path from "path";
 import mimeTypes from "mime-types";
 import mdService from "./markdown.js";
+import markdownService from "../import/markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
 import { getContentDisposition, escapeHtml, getResourceDir, isDev } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
@@ -98,6 +99,9 @@ async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, 
             newExtension = "md";
         } else if (type === "text" && format === "html") {
             newExtension = "html";
+        } else if (type === "markdown") {
+            // Handle markdown note type
+            newExtension = format === "html" ? "html" : "md";
         } else if (mime === "application/x-javascript" || mime === "text/javascript") {
             newExtension = "js";
         } else if (type === "canvas" || mime === "application/json") {
@@ -184,7 +188,7 @@ async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, 
 
         taskContext.increaseProgressCount();
 
-        if (note.type === "text") {
+        if (note.type === "text" || note.type === "markdown") {
             meta.format = format;
         }
 
@@ -360,6 +364,43 @@ ${markdownContent}`;
             }
 
             return markdownContent;
+        } else if (noteMeta.type === "markdown" && typeof content === "string") {
+            // Handle markdown note type
+            if (noteMeta.format === "html") {
+                // Convert markdown to HTML for HTML export
+                let htmlContent = markdownService.renderToHtml(content, title);
+
+                if (!htmlContent.substr(0, 100).toLowerCase().includes("<html") && !zipExportOptions?.skipHtmlTemplate) {
+                    if (!noteMeta?.notePath?.length) {
+                        throw new Error("Missing note path.");
+                    }
+
+                    const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
+                    const htmlTitle = escapeHtml(title);
+
+                    htmlContent = `<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="${cssUrl}">
+    <base target="_parent">
+    <title data-trilium-title>${htmlTitle}</title>
+</head>
+<body>
+  <div class="content">
+    <h1 data-trilium-h1>${htmlTitle}</h1>
+
+    <div class="ck-content">${htmlContent}</div>
+  </div>
+</body>
+</html>`;
+                }
+
+                return htmlContent.length < 100_000 ? html.prettyPrint(htmlContent, { indent_size: 2 }) : htmlContent;
+            } else {
+                // Keep as markdown for markdown export
+                return content;
+            }
         } else {
             return content;
         }

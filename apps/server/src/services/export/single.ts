@@ -4,6 +4,7 @@ import mimeTypes from "mime-types";
 import html from "html";
 import { getContentDisposition, escapeHtml } from "../utils.js";
 import mdService from "./markdown.js";
+import markdownService from "../import/markdown.js";
 import becca from "../../becca/becca.js";
 import type TaskContext from "../task_context.js";
 import type BBranch from "../../becca/entities/bbranch.js";
@@ -69,6 +70,18 @@ export function mapByNoteType(note: BNote, content: string | Buffer<ArrayBufferL
         payload = content;
         extension = "mermaid";
         mime = "text/vnd.mermaid";
+    } else if (note.type === "markdown") {
+        if (format === "html") {
+            // Convert markdown to HTML for HTML export
+            payload = markdownService.renderToHtml(content, note.title);
+            extension = "html";
+            mime = "text/html";
+        } else if (format === "markdown") {
+            // Keep as markdown for markdown export
+            payload = content;
+            extension = "md";
+            mime = "text/markdown";
+        }
     } else if (note.type === "relationMap" || note.type === "search") {
         payload = content;
         extension = "json";
