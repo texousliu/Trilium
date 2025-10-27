@@ -1,7 +1,34 @@
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
+
 interface Locale {
     id: string;
     name: string;
     rtl?: boolean;
+}
+
+i18next.use(initReactI18next);
+const localeFiles = import.meta.glob("./translations/*/translation.json", { eager: true });
+const resources: Record<string, Record<string, Record<string, string>>> = {};
+for (const [path, module] of Object.entries(localeFiles)) {
+    const id = path.split("/").at(-2);
+    if (!id) continue;
+
+    const translations = (module as any).default ?? module;
+    resources[id] = { translation: translations };
+}
+
+export function initTranslations(lng: string) {
+    i18next.init({
+        fallbackLng: "en",
+        lng,
+        returnEmptyString: false,
+        resources,
+        initAsync: false,
+        react: {
+            useSuspense: false
+        }
+    });
 }
 
 export const LOCALES: Locale[] = [
@@ -35,7 +62,13 @@ export function mapLocale(locale: string) {
 export function swapLocaleInUrl(url: string, newLocale: string) {
     const components = url.split("/");
     if (components.length === 2) {
-        return `/${newLocale}${url}`;
+        const potentialLocale = components[1];
+        const correspondingLocale = LOCALES.find(l => l.id === potentialLocale);
+        if (correspondingLocale) {
+            return `/${newLocale}`;
+        } else {
+            return `/${newLocale}${url}`;
+        }
     } else {
         components[1] = newLocale;
         return components.join("/");
