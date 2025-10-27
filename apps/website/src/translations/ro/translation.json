@@ -95,8 +95,7 @@
         "get_started": "Începe"
     },
     "components": {
-        "link_learn_more": "Mai multe detalii...",
-        "list_with_screenshot_alt": "Captură de ecran a funcției selectate"
+        "link_learn_more": "Mai multe detalii..."
     },
     "download_now": {
         "text": "Descărcați acum ",
@@ -107,9 +106,9 @@
         "more_platforms": "Mai multe platforme și instalarea server-ului"
     },
     "header": {
-      "get-started": "Primii pași",
-      "documentation": "Documentație",
-      "support-us": "Sprijină-ne"
+        "get-started": "Primii pași",
+        "documentation": "Documentație",
+        "support-us": "Sprijină-ne"
     },
     "footer": {
         "copyright_and_the": " și ",
