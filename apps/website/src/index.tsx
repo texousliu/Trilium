@@ -69,7 +69,7 @@ export function LocaleProvider({ children }) {
 
   return (
     <LocaleContext.Provider value={localeId}>
-      {loaded && children}
+      {children}
     </LocaleContext.Provider>
   );
 }
