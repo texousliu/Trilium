@@ -1,4 +1,4 @@
-import { parse, HTMLElement, TextNode } from "node-html-parser";
+import { parse, HTMLElement, TextNode, Options } from "node-html-parser";
 import shaca from "./shaca/shaca.js";
 import assetPath, { assetUrlFragment } from "../services/asset_path.js";
 import shareRoot from "./share_root.js";
@@ -14,6 +14,7 @@ import ejs from "ejs";
 import log from "../services/log.js";
 import { join } from "path";
 import { readFileSync } from "fs";
+import { highlightAuto } from "@triliumnext/highlightjs";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const templateCache: Map<string, string> = new Map();
@@ -264,7 +265,10 @@ function renderIndex(result: Result) {
 
 function renderText(result: Result, note: SNote | BNote) {
     if (typeof result.content !== "string") return;
-    const document = parse(result.content || "");
+    const parseOpts: Partial<Options> = {
+        blockTextElements: {}
+    }
+    const document = parse(result.content || "", parseOpts);
 
     // Process include notes.
     for (const includeNoteEl of document.querySelectorAll("section.include-note")) {
@@ -277,7 +281,7 @@ function renderText(result: Result, note: SNote | BNote) {
         const includedResult = getContent(note);
         if (typeof includedResult.content !== "string") continue;
 
-        const includedDocument = parse(includedResult.content).childNodes;
+        const includedDocument = parse(includedResult.content, parseOpts).childNodes;
         if (includedDocument) {
             includeNoteEl.replaceWith(...includedDocument);
         }
@@ -286,6 +290,7 @@ function renderText(result: Result, note: SNote | BNote) {
     result.isEmpty = document.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
 
     if (!result.isEmpty) {
+        // Process attachment links.
         for (const linkEl of document.querySelectorAll("a")) {
             const href = linkEl.getAttribute("href");
 
@@ -297,6 +302,13 @@ function renderText(result: Result, note: SNote | BNote) {
             if (href?.startsWith("#")) {
                 handleAttachmentLink(linkEl, href);
             }
+        }
+
+        // Apply syntax highlight.
+        for (const codeEl of document.querySelectorAll("pre code")) {
+            const highlightResult = highlightAuto(codeEl.innerText);
+            codeEl.innerHTML = highlightResult.value;
+            codeEl.classList.add("hljs");
         }
 
         result.content = document.innerHTML ?? "";
