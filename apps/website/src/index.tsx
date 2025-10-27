@@ -52,12 +52,6 @@ export function LocaleProvider({ children }) {
     changeLanguage(localeId);
   }
 
-  useLayoutEffect(() => {
-    const correspondingLocale = LOCALES.find(l => l.id === localeId);
-    document.documentElement.lang = localeId;
-    document.documentElement.dir = correspondingLocale?.rtl ? "rtl" : "ltr";
-  }, [ localeId ]);
-
   return (
     <LocaleContext.Provider value={localeId}>
       {children}
@@ -75,6 +69,14 @@ export async function prerender(data) {
 	// This ensures the GitHub API is not called on every page load in the client.
 	const stargazersCount = await getRepoStargazersCount();
 
-	return await ssr(<App repoStargazersCount={stargazersCount} {...data} />);
+	const { html, links } = await ssr(<App repoStargazersCount={stargazersCount} {...data} />);
+    const lang = extractLocaleFromUrl(data.url);
+    return {
+        html,
+        links,
+        head: {
+            lang
+        }
+    }
 }
 
