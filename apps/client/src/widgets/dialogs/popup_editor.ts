@@ -150,6 +150,11 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     }
 
     handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
+        // Avoid not showing recent notes when creating a new empty tab.
+        if (name === 'activeContextChanged' && "noteContext" in data && data.noteContext.isEmpty()) {
+            return Promise.resolve();
+        }
+
         // Avoid events related to the current tab interfere with our popup.
         if (["noteSwitched", "noteSwitchedAndActivated", "exportAsPdf", "printActiveNote"].includes(name)) {
             return Promise.resolve();
