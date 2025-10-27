@@ -10,16 +10,12 @@ interface Locale {
 i18next.use(initReactI18next);
 const localeFiles = import.meta.glob("./translations/*/translation.json", { eager: true });
 const resources: Record<string, Record<string, Record<string, string>>> = {};
-for (const [ path, _translations ] of Object.entries(localeFiles)) {
+for (const [path, module] of Object.entries(localeFiles)) {
     const id = path.split("/").at(-2);
     if (!id) continue;
-    if (!resources[id]) resources[id] = {};
-    const translations = _translations as { default: Record<string, string> } | Record<string, string>;
-    if ("default" in translations) {
-        resources[id].translation = translations.default as Record<string, string>;
-    } else {
-        resources[id].translation = translations;
-    }
+
+    const translations = (module as any).default ?? module;
+    resources[id] = { translation: translations };
 }
 
 export function initTranslations(lng: string) {
