@@ -211,6 +211,7 @@
     --floating-button-hide-button-background: #00000029;
     --floating-button-hide-button-color: #ffffff63;
 
+    --right-pane-background-color: var(--main-background-color);
     --right-pane-item-hover-background: #ffffff26;
     --right-pane-item-hover-color: white;
 

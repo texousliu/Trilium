@@ -210,6 +210,7 @@
     --new-tab-button-hover-background: white;
     --new-tab-button-hover-color: black;
 
+    --right-pane-background-color: var(--main-background-color);
     --right-pane-item-hover-background: #ececec;
     --right-pane-item-hover-color: inherit;
 
