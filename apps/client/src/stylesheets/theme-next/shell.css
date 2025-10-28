@@ -67,8 +67,8 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
     background-color: var(--root-background);
 }
 
-/* Settings page */
-body.background-effects.platform-win32 #center-pane .note-split.options {
+/* Note split with background effects */
+body.background-effects.platform-win32 #center-pane .note-split.bgfx {
     --note-split-background-color: var(--center-pane-background-color-bgfx);
 }
 

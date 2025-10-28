@@ -52,6 +52,7 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
 
         const note = this.noteContext?.note;
         if (!note) {
+            this.$widget.addClass("bgfx");
             return;
         }
 
@@ -61,7 +62,7 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
 
         this.$widget.addClass(utils.getNoteTypeClass(note.type));
         this.$widget.addClass(utils.getMimeTypeClass(note.mime));
-        this.$widget.toggleClass("options", note.isOptions());
+        this.$widget.toggleClass("bgfx", note.isOptions());
         this.$widget.toggleClass("protected", note.isProtected);
 
         const noteLanguage = note?.getLabelValue("language");
