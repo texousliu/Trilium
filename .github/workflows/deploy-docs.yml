@@ -1,6 +1,4 @@
-# GitHub Actions workflow for deploying MkDocs documentation to Cloudflare Pages
-# This workflow builds and deploys your MkDocs site when changes are pushed to main
-name: Deploy MkDocs Documentation
+name: Deploy Documentation
 
 on:
   # Trigger on push to main branch
@@ -24,15 +22,12 @@ on:
       - master
     paths:
       - 'docs/**'
-      - 'README.md'  # README is synced to docs/index.md
-      - 'mkdocs.yml'
-      - 'requirements-docs.txt'
-      - '.github/workflows/deploy-docs.yml'
-      - 'scripts/fix-mkdocs-structure.ts'
+      - 'apps/edit-docs/**'
+      - 'packages/share-theme/**'
 
 jobs:
   build-and-deploy:
-    name: Build and Deploy MkDocs
+    name: Build and Deploy Documentation
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -46,8 +41,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0 # Fetch all history for git info and mkdocs-git-revision-date plugin
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
