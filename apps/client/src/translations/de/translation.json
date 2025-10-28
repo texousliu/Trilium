@@ -260,7 +260,6 @@
     "delete_all_revisions": "Lösche alle Revisionen dieser Notiz",
     "delete_all_button": "Alle Revisionen löschen",
     "help_title": "Hilfe zu Notizrevisionen",
-    "revision_last_edited": "Diese Revision wurde zuletzt am {{date}} bearbeitet",
     "confirm_delete_all": "Möchtest du alle Revisionen dieser Notiz löschen?",
     "no_revisions": "Für diese Notiz gibt es noch keine Revisionen...",
     "confirm_restore": "Möchtest du diese Revision wiederherstellen? Dadurch werden der aktuelle Titel und Inhalt der Notiz mit dieser Revision überschrieben.",
