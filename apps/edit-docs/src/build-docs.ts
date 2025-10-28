@@ -5,8 +5,8 @@ process.env.NODE_ENV = "development";
 import cls from "@triliumnext/server/src/services/cls.js";
 import { dirname, join, resolve } from "path";
 import fs, { copyFile } from "fs/promises";
-import fsExtra, { type WriteStream } from "fs-extra";
-import archiver, { type Archiver } from "archiver";
+import fsExtra, { createWriteStream, type WriteStream } from "fs-extra";
+import archiver from "archiver";
 
 const DOCS_ROOT = "../../../docs";
 const OUTPUT_DIR = "../../site";
@@ -23,8 +23,16 @@ async function main() {
     // Export
     const zipFilePath = "output.zip";
     try {
-        const { exportToZipFile } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
-        await exportToZipFile(note.noteId, "share", zipFilePath);
+        const { exportToZip } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
+        const branch = note.getParentBranches()[0];
+        const taskContext = new (await import("@triliumnext/server/src/services/task_context.js")).default(
+            "no-progress-reporting",
+            "export",
+            null
+        );
+        const fileOutputStream = createWriteStream(zipFilePath);
+        await exportToZip(taskContext, branch, "share", fileOutputStream);
+        await waitForStreamToFinish(fileOutputStream);
         await extractZip(zipFilePath, OUTPUT_DIR);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
@@ -65,7 +73,8 @@ async function createImportZip(path: string) {
 
     const outputStream = fsExtra.createWriteStream(inputFile);
     archive.pipe(outputStream);
-    await waitForEnd(archive, outputStream);
+    archive.finalize();
+    await waitForStreamToFinish(outputStream);
 
     try {
         return await fsExtra.readFile(inputFile);
@@ -74,35 +83,27 @@ async function createImportZip(path: string) {
     }
 }
 
-function waitForEnd(archive: Archiver, stream: WriteStream) {
-    return new Promise<void>(async (res, rej) => {
+function waitForStreamToFinish(stream: WriteStream) {
+    return new Promise<void>((res, rej) => {
         stream.on("finish", () => res());
-        await archive.finalize();
+        stream.on("error", (err) => rej(err));
     });
 }
 
 export async function extractZip(zipFilePath: string, outputPath: string, ignoredFiles?: Set<string>) {
-    const deferred = (await import("@triliumnext/server/src/services/utils.js")).deferred;
+    const { readZipFile, readContent } = (await import("@triliumnext/server/src/services/import/zip.js"));
+    await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
+        // We ignore directories since they can appear out of order anyway.
+        if (!entry.fileName.endsWith("/") && !ignoredFiles?.has(entry.fileName)) {
+            const destPath = join(outputPath, entry.fileName);
+            const fileContent = await readContent(zip, entry);
 
-    const promise = deferred<void>()
-    setTimeout(async () => {
-        // Then extract the zip.
-        const { readZipFile, readContent } = (await import("@triliumnext/server/src/services/import/zip.js"));
-        await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
-            // We ignore directories since they can appear out of order anyway.
-            if (!entry.fileName.endsWith("/") && !ignoredFiles?.has(entry.fileName)) {
-                const destPath = join(outputPath, entry.fileName);
-                const fileContent = await readContent(zip, entry);
+            await fsExtra.mkdirs(dirname(destPath));
+            await fs.writeFile(destPath, fileContent);
+        }
 
-                await fsExtra.mkdirs(dirname(destPath));
-                await fs.writeFile(destPath, fileContent);
-            }
-
-            zip.readEntry();
-        });
-        promise.resolve();
-    }, 1000);
-    await promise;
+        zip.readEntry();
+    });
 }
 
 cls.init(main);
