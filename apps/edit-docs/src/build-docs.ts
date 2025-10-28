@@ -3,10 +3,10 @@ process.env.TRILIUM_RESOURCE_DIR = "../server/src";
 process.env.NODE_ENV = "development";
 
 import cls from "@triliumnext/server/src/services/cls.js";
-import { join, resolve } from "path";
+import { dirname, join, resolve } from "path";
+import fs from "fs/promises";
 import fsExtra, { type WriteStream } from "fs-extra";
 import archiver, { type Archiver } from "archiver";
-import type { ExportFormat } from "@triliumnext/server/src/services/export/zip/abstract_provider.js";
 
 const DOCS_ROOT = "../../../docs";
 
@@ -39,8 +39,15 @@ export async function importData(path: string) {
 
     // Export
     const zipFilePath = "output.zip";
-    const { exportToZipFile } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
-    await exportToZipFile(note.noteId, "share", zipFilePath);
+    try {
+        const { exportToZipFile } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
+        await exportToZipFile(note.noteId, "share", zipFilePath);
+        await extractZip(zipFilePath, "../../site");
+    } finally {
+        if (await fsExtra.exists(zipFilePath)) {
+            await fsExtra.rm(zipFilePath);
+        }
+    }
 }
 
 async function createImportZip(path: string) {
@@ -68,6 +75,30 @@ function waitForEnd(archive: Archiver, stream: WriteStream) {
         stream.on("finish", () => res());
         await archive.finalize();
     });
+}
+
+export async function extractZip(zipFilePath: string, outputPath: string, ignoredFiles?: Set<string>) {
+    const deferred = (await import("@triliumnext/server/src/services/utils.js")).deferred;
+
+    const promise = deferred<void>()
+    setTimeout(async () => {
+        // Then extract the zip.
+        const { readZipFile, readContent } = (await import("@triliumnext/server/src/services/import/zip.js"));
+        await readZipFile(await fs.readFile(zipFilePath), async (zip, entry) => {
+            // We ignore directories since they can appear out of order anyway.
+            if (!entry.fileName.endsWith("/") && !ignoredFiles?.has(entry.fileName)) {
+                const destPath = join(outputPath, entry.fileName);
+                const fileContent = await readContent(zip, entry);
+
+                await fsExtra.mkdirs(dirname(destPath));
+                await fs.writeFile(destPath, fileContent);
+            }
+
+            zip.readEntry();
+        });
+        promise.resolve();
+    }, 1000);
+    await promise;
 }
 
 cls.init(main);
