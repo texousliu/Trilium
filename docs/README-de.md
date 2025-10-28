@@ -49,7 +49,7 @@ einen schnellen Überblick:
 Unsere Dokumentation ist verfügbar in mehreren Formaten:
 - **Online-Dokumentation**: Die vollständige Dokumentation finden man unter
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App-Hilfe**: Drücke `F1` in Trilium, um dieselbe Dokumentation direkt in
+- **In-App-Hilfe**: drücke `F1` in Trilium, um dieselbe Dokumentation direkt in
   der Anwendung aufzurufen
 - **GitHub**: Durchsuche das
   [Benutzerhandbuch](./docs/User%20Guide/User%20Guide/) in diesem Repository
@@ -98,7 +98,8 @@ Unsere Dokumentation ist verfügbar in mehreren Formaten:
     Synchronisationsservern](https://trilium.cc/paid-hosting)
 * [Freigabe](https://triliumnext.github.io/Docs/Wiki/sharing) (Veröffentlichung)
   von Notizen im öffentlichen Internet
-* Starke [Notizverschlüsselung](https://triliumnext.github.io/Docs/Wiki/protected-notes)
+* Starke
+  [Notizverschlüsselung](https://triliumnext.github.io/Docs/Wiki/protected-notes)
   mit Granularität pro Notiz
 * Skizzieren von Diagrammen basierend auf [Excalidraw](https://excalidraw.com/)
   (Notiztyp „Canvas“)
