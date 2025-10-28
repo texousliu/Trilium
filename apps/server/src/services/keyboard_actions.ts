@@ -320,6 +320,14 @@ function getDefaultKeyboardActions() {
             scope: "window"
         },
         {
+            actionName: "openTodayNote",
+            friendlyName: t("keyboard_action_names.open-today-note"),
+            iconClass: "bx bx-calendar",
+            defaultShortcuts: [],
+            description: t("keyboard_actions.open-today-note"),
+            scope: "window"
+        },
+        {
             actionName: "toggleTray",
             friendlyName: t("keyboard_action_names.toggle-system-tray-icon"),
             iconClass: "bx bx-show",
