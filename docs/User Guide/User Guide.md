@@ -20,9 +20,7 @@ This [wiki](https://github.com/zadam/trilium/wiki) contains additional and more 
 
 **Server with web only access** - Installs the application on the server and allows access from any web browser on any device, including mobile.
 
-1.  <a class="reference-link" href="/Server installation">[missing note]</a>
-    
-    <a class="reference-link" href="User%20Guide/Installation%20%26%20Setup/Server%20Installation.md">Server Installation</a>
+1.  <a class="reference-link" href="User%20Guide/Installation%20%26%20Setup/Server%20Installation.md">Server Installation</a>
 2.  <a class="reference-link" href="User%20Guide/Installation%20%26%20Setup/Mobile%20Frontend.md">Mobile Frontend</a> (optional)
 3.  <a class="reference-link" href="User%20Guide/Installation%20%26%20Setup/Server%20Installation/Third-party%20cloud%20hosting.md">Third-party cloud hosting</a>
 
