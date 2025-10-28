@@ -81,6 +81,7 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
             `${basePath}assets/scripts.js`
         ],
         logoUrl: `${basePath}icon-color.svg`,
+        faviconUrl: `${basePath}favicon.ico`,
         ancestors,
         isStatic: true
     });
@@ -128,7 +129,8 @@ export function renderNoteContent(note: SNote) {
         jsToLoad,
         logoUrl,
         ancestors,
-        isStatic: false
+        isStatic: false,
+        faviconUrl: note.hasRelation("shareFavicon") ? `api/notes/${note.getRelationValue("shareFavicon")}/download` : `../favicon.ico`
     });
 }
 
@@ -140,6 +142,7 @@ interface RenderArgs {
     logoUrl: string;
     ancestors: string[];
     isStatic: boolean;
+    faviconUrl: string;
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
