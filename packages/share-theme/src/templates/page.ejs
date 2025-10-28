@@ -167,7 +167,7 @@ content = content.replaceAll(headingRe, (...match) => {
             <% } %>
 
             <footer id="content-footer">
-                <% if (!isEmpty) { %>
+                <% if (!isEmpty && !isStatic) { %>
                     <div class="updated">
                         <% const lastUpdated = new Date(note.utcDateModified); %>
                         <%- t("share_theme.last-updated", { date: `<time datetime="${lastUpdated.toISOString()}">${lastUpdated.toLocaleDateString()}</time>`}) %>
