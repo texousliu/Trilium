@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.99.1",
+    "appVersion": "0.99.3",
     "files": [
         {
             "isClone": false,
@@ -14,7 +14,57 @@
             "isExpanded": false,
             "type": "text",
             "mime": "text/html",
-            "attributes": [],
+            "attributes": [
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "poXkQfguuA0U",
+                    "isInheritable": false,
+                    "position": 10
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "WOcw2SLH6tbX",
+                    "isInheritable": false,
+                    "position": 20
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "RDslemsQ6gCp",
+                    "isInheritable": false,
+                    "position": 30
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "cbkrhQjrkKrh",
+                    "isInheritable": false,
+                    "position": 40
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "BFs8mudNFgCS",
+                    "isInheritable": false,
+                    "position": 50
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "GTwFsgaA0lCt",
+                    "isInheritable": false,
+                    "position": 60
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "yeEaYqosGLSh",
+                    "isInheritable": false,
+                    "position": 70
+                }
+            ],
             "format": "markdown",
             "dataFileName": "User Guide.md",
             "attachments": [],
@@ -986,6 +1036,55 @@
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Multi-Factor Authentication.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "yeEaYqosGLSh",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "yeEaYqosGLSh"
+                                    ],
+                                    "title": "Third-party cloud hosting",
+                                    "notePosition": 130,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "Dgg7bR3b6K9j",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "cbkrhQjrkKrh",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "poXkQfguuA0U",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-cloud",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Third-party cloud hosting.md",
                                     "attachments": []
                                 }
                             ]
