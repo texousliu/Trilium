@@ -16,6 +16,8 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import { highlightAuto } from "@triliumnext/highlightjs";
 import becca from "../becca/becca.js";
+import { BAttachment } from "../services/backend_script_entrypoint.js";
+import SAttachment from "./shaca/entities/sattachment.js";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const templateCache: Map<string, string> = new Map();
@@ -290,6 +292,13 @@ function renderText(result: Result, note: SNote | BNote) {
 
     result.isEmpty = document.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
 
+    const getNote = note instanceof BNote
+        ? (noteId: string) => becca.getNote(noteId)
+        : (noteId: string) => shaca.getNote(noteId);
+    const getAttachment = note instanceof BNote
+        ? (attachmentId: string) => becca.getAttachment(attachmentId)
+        : (attachmentId: string) => shaca.getAttachment(attachmentId);
+
     if (!result.isEmpty) {
         // Process attachment links.
         for (const linkEl of document.querySelectorAll("a")) {
@@ -301,10 +310,7 @@ function renderText(result: Result, note: SNote | BNote) {
             }
 
             if (href?.startsWith("#")) {
-                const getNote = note instanceof BNote
-                    ? (noteId: string) => becca.getNote(noteId)
-                    : (noteId: string) => shaca.getNote(noteId);
-                handleAttachmentLink(linkEl, href, getNote);
+                handleAttachmentLink(linkEl, href, getNote, getAttachment);
             }
         }
 
@@ -323,12 +329,12 @@ function renderText(result: Result, note: SNote | BNote) {
     }
 }
 
-function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: string) => SNote | BNote | null) {
+function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: string) => SNote | BNote | null, getAttachment: (id: string) => BAttachment | SAttachment | null) {
     const linkRegExp = /attachmentId=([a-zA-Z0-9_]+)/g;
     let attachmentMatch;
     if ((attachmentMatch = linkRegExp.exec(href))) {
         const attachmentId = attachmentMatch[1];
-        const attachment = shaca.getAttachment(attachmentId);
+        const attachment = getAttachment(attachmentId);
 
         if (attachment) {
             linkEl.setAttribute("href", `api/attachments/${attachmentId}/download`);
@@ -338,6 +344,7 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: s
             linkEl.appendChild(new TextNode(attachment.title));
         } else {
             linkEl.removeAttribute("href");
+            log.error(`Broken attachment link detected in shared note: unable to find attachment with ID ${attachmentId}`);
         }
     } else {
         const [notePath] = href.split("?");
