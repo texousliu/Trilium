@@ -648,7 +648,8 @@
     "logout": "Abmelden",
     "show-cheatsheet": "Cheatsheet anzeigen",
     "toggle-zen-mode": "Zen Modus",
-    "new-version-available": "Neues Update verfügbar"
+    "new-version-available": "Neues Update verfügbar",
+    "download-update": "Version {{latestVersion}} herunterladen"
   },
   "sync_status": {
     "unknown": "<p>Der Synchronisations-Status wird bekannt, sobald der nächste Synchronisierungsversuch gestartet wird.</p><p>Klicke, um eine Synchronisierung jetzt auszulösen.</p>",
@@ -1657,7 +1658,7 @@
     "add-term-to-dictionary": "Begriff \"{{term}}\" zum Wörterbuch hinzufügen",
     "cut": "Ausschneiden",
     "copy": "Kopieren",
-    "copy-link": "Link opieren",
+    "copy-link": "Link kopieren",
     "paste": "Einfügen",
     "paste-as-plain-text": "Als unformatierten Text einfügen",
     "search_online": "Suche nach \"{{term}}\" mit {{searchEngine}} starten"
@@ -2082,6 +2083,7 @@
   },
   "presentation_view": {
     "edit-slide": "Folie bearbeiten",
-    "start-presentation": "Präsentation starten"
+    "start-presentation": "Präsentation starten",
+    "slide-overview": "Übersicht der Folien ein-/ausblenden"
   }
 }
