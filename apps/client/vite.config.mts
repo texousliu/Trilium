@@ -74,7 +74,6 @@ export default defineConfig(() => ({
                 mobile: join(__dirname, "src", "mobile.ts"),
                 login: join(__dirname, "src", "login.ts"),
                 setup: join(__dirname, "src", "setup.ts"),
-                share: join(__dirname, "src", "share.ts"),
                 set_password: join(__dirname, "src", "set_password.ts"),
                 runtime: join(__dirname, "src", "runtime.ts"),
                 print: join(__dirname, "src", "print.tsx")
