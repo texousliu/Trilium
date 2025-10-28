@@ -56,7 +56,7 @@
     "@types/sanitize-html": "2.16.0",
     "@types/sax": "1.2.7",
     "@types/serve-favicon": "2.5.7",
-    "@types/serve-static": "1.15.10",
+    "@types/serve-static": "2.2.0",
     "@types/stream-throttle": "0.1.4",
     "@types/supertest": "6.0.3",
     "@types/swagger-ui-express": "4.1.8",
