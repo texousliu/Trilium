@@ -117,6 +117,9 @@ async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, 
         const title = note.getTitleOrProtected();
         const completeTitle = branch.prefix ? `${branch.prefix} - ${title}` : title;
         let baseFileName = sanitize(completeTitle);
+        if (format === "share") {
+            baseFileName = sanitize(note.getOwnedLabelValue("shareAlias") || baseFileName);
+        }
 
         if (baseFileName.length > 200) {
             // the actual limit is 256 bytes(!) but let's be conservative
