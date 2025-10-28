@@ -211,6 +211,7 @@
     --new-tab-button-hover-color: black;
 
     --right-pane-background-color: var(--main-background-color);
+    --right-pane-background-color-bgfx: var(--center-pane-vert-layout-background-color-bgfx); /* Only for the vertical layout */
     --right-pane-item-hover-background: #ececec;
     --right-pane-item-hover-color: inherit;
 

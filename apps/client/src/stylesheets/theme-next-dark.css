@@ -212,6 +212,7 @@
     --floating-button-hide-button-color: #ffffff63;
 
     --right-pane-background-color: var(--main-background-color);
+    --right-pane-background-color-bgfx: #0c0c0c24; /* Only for the vertical layout */
     --right-pane-item-hover-background: #ffffff26;
     --right-pane-item-hover-color: white;
 
