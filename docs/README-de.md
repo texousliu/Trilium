@@ -72,7 +72,7 @@ Unsere Dokumentation ist verfügbar in mehreren Formaten:
   Notiz kann an mehreren Stellen im Baum existieren (siehe
   [Klonen](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
 * Umfangreicher WYSIWYG-Editor für Notizen, z. B. mit Tabellen, Bildern und
-  [Mathematik](https://triliumnext.github.io/Docs/Wiki/text-notes)mit
+  [Mathematik](https://triliumnext.github.io/Docs/Wiki/text-notes) mit
   Markdown-Autoformatierung
 * Unterstützung für das Bearbeiten von [Notizen mit
   Quellcode](https://triliumnext.github.io/Docs/Wiki/code-notes), inkl.
