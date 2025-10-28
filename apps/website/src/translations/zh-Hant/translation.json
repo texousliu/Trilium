@@ -51,7 +51,8 @@
         "mermaid_description": "使用 Mermaid 語法繪製流程圖、類別圖與序列圖、甘特圖等多種圖表。",
         "mindmap_title": "心智圖",
         "mindmap_description": "以視覺方式整理思緒，或進行腦力激盪。",
-        "others_list": "及其他項目：<0>筆記地圖</0>、<1>關聯地圖</1>、<2>儲存搜尋</2>、<3>渲染筆記</3>，以及<4>網頁檢視</4>。"
+        "others_list": "及其他項目：<0>筆記地圖</0>、<1>關聯地圖</1>、<2>儲存搜尋</2>、<3>渲染筆記</3>，以及<4>網頁檢視</4>。",
+        "title": "多種方式呈現您的資訊"
     },
     "extensibility_benefits": {
         "title": "分享及擴展性",
@@ -72,7 +73,10 @@
         "board_title": "看板",
         "board_description": "將您的任務或專案狀態整理成看板，輕鬆建立新項目與欄位，並透過在看板上拖曳即可簡單變更狀態。",
         "geomap_title": "地理地圖",
-        "geomap_description": "使用可自訂的標記，直接在地圖上規劃您的假期行程或標記感興趣的地點。顯示已記錄的GPX軌跡，以便追蹤行程路線。"
+        "geomap_description": "使用可自訂的標記，直接在地圖上規劃您的假期行程或標記感興趣的地點。顯示已記錄的GPX軌跡，以便追蹤行程路線。",
+        "title": "集合",
+        "presentation_title": "簡報",
+        "presentation_description": "將資訊整理成投影片，並以全螢幕模式及流暢的轉場效果呈現。投影片亦可匯出為 PDF 格式，方便分享。"
     },
     "faq": {
         "title": "常見問題",
@@ -95,8 +99,7 @@
         "get_started": "上手指南"
     },
     "components": {
-        "link_learn_more": "了解更多…",
-        "list_with_screenshot_alt": "已選擇功能的螢幕截圖"
+        "link_learn_more": "了解更多…"
     },
     "download_now": {
         "text": "馬上下載 ",
@@ -163,7 +166,7 @@
     "download_helper_desktop_macos": {
         "title_x64": "macOS 適用於 Intel",
         "title_arm64": "macOS 適用於 Apple Silicon",
-        "description_x64": "適用於搭載 Intel 處理器的 Mac，並運行 macOS Big Sur 或更新版本。",
+        "description_x64": "適用於搭載 Intel 處理器的 Mac，並運行 macOS Monterey 或更新版本。",
         "description_arm64": "適用於搭載 Apple Silicon 的 Mac，例如配備 M1 和 M2 晶片的機型。",
         "quick_start": "透過 Homebrew 安裝：",
         "download_dmg": "下載安裝程式 (.dmg)",
@@ -188,5 +191,10 @@
         "description": "Trilium Notes 託管於 PikaPods，此為付費服務，提供便捷存取與管理功能。與 Trilium 團隊無直接關聯。",
         "download_pikapod": "在 PikaPods 上設定",
         "download_triliumcc": "或參見 trilium.cc"
+    },
+    "header": {
+        "get-started": "上手指南",
+        "documentation": "文件",
+        "support-us": "支持我們"
     }
 }
