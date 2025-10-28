@@ -49,7 +49,7 @@ einen schnellen Überblick:
 Unsere Dokumentation ist verfügbar in mehreren Formaten:
 - **Online-Dokumentation**: Die vollständige Dokumentation finden man unter
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App-Hilfe**: drücke`F1` in Trilium, um dieselbe Dokumentation direkt in
+- **In-App-Hilfe**: Drücke `F1` in Trilium, um dieselbe Dokumentation direkt in
   der Anwendung aufzurufen
 - **GitHub**: Durchsuche das
   [Benutzerhandbuch](./docs/User%20Guide/User%20Guide/) in diesem Repository
