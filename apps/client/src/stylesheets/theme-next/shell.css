@@ -1195,10 +1195,7 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
     /* will-change: opacity; -- causes some weird artifacts to the note menu in split view */
 }
 
-#center-pane .split-note-container-widget > .gutter {
-    background: var(--root-background) !important;
-    transition: background 150ms ease-out;
-}
+
 
 /*
  * Ribbon & note header
