@@ -19,7 +19,7 @@ export default function MarkdownImportDialog() {
     const [ text, setText ] = useState("");
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("showMarkdownIntoTextDialog", ({ textTypeWidget }) => {
+    useTriliumEvent("showPasteMarkdownDialog", ({ textTypeWidget }) => {
         setTextTypeWidget(textTypeWidget);
         if (utils.isElectron()) {
             const { clipboard } = utils.dynamicRequire("electron");

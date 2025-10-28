@@ -410,7 +410,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     pasteMarkdownIntoTextCommand() {
-        this.triggerCommand("showMarkdownIntoTextDialog", { textTypeWidget: this });
+        this.triggerCommand("showPasteMarkdownDialog", { textTypeWidget: this });
     }
 
     getSelectedText() {

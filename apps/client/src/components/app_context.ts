@@ -223,6 +223,7 @@ export type CommandMappings = {
     showUploadAttachmentsDialog: CommandData & { noteId: string };
     showIncludeNoteDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
     showAddLinkDialog: CommandData & { textTypeWidget: EditableTextTypeWidget, text: string };
+    showPasteMarkdownDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
@@ -305,7 +306,7 @@ export type CommandMappings = {
     addLinkToText: CommandData;
     followLinkUnderCursor: CommandData;
     insertDateTimeToText: CommandData;
-    showMarkdownIntoTextDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
+    pasteMarkdownIntoText: CommandData;
     cutIntoNote: CommandData;
     addIncludeNoteToText: CommandData;
     editReadOnlyNote: CommandData;
