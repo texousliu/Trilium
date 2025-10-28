@@ -1342,6 +1342,9 @@ importers:
       '@digitak/esrun':
         specifier: 3.2.26
         version: 3.2.26
+      '@triliumnext/ckeditor5':
+        specifier: workspace:*
+        version: link:../ckeditor5
       '@types/swagger-ui':
         specifier: 5.21.1
         version: 5.21.1
@@ -1393,18 +1396,6 @@ importers:
       turndown-attendant:
         specifier: 0.0.3
         version: 0.0.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)
-
-  packages/uikit:
-    dependencies:
-      '@triliumnext/commons':
-        specifier: workspace:*
-        version: link:../commons
-      '@triliumnext/highlightjs':
-        specifier: workspace:*
-        version: link:../highlightjs
-      jquery:
-        specifier: 3.7.1
-        version: 3.7.1
 
 packages:
 
@@ -15281,8 +15272,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.1.0':
     dependencies:
