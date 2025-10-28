@@ -100,13 +100,6 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
 }
 
 function getShareThemeAssets(nameWithExtension: string) {
-    // Rename share.css to style.css.
-    if (nameWithExtension === "style.css") {
-        nameWithExtension = "share.css";
-    } else if (nameWithExtension === "script.js") {
-        nameWithExtension = "share.js";
-    }
-
     let path: string | undefined;
     if (nameWithExtension === "icon-color.svg") {
         path = join(RESOURCE_DIR, "images", nameWithExtension);

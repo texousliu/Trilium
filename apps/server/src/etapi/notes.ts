@@ -151,7 +151,7 @@ function register(router: Router) {
         const format = req.query.format || "html";
 
         if (typeof format !== "string" || !["html", "markdown", "share"].includes(format)) {
-            throw new eu.EtapiError(400, "UNRECOGNIZED_EXPORT_FORMAT", `Unrecognized export format '${format}', supported values are 'html' (default) or 'markdown'.`);
+            throw new eu.EtapiError(400, "UNRECOGNIZED_EXPORT_FORMAT", `Unrecognized export format '${format}', supported values are 'html' (default), 'markdown' or 'share'.`);
         }
 
         const taskContext = new TaskContext("no-progress-reporting", "export", null);

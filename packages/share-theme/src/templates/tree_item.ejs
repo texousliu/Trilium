@@ -7,8 +7,6 @@ if (isExternalLink) {
     linkHref = note.getLabelValue("shareExternal");
 } else if (note.shareId) {
     linkHref = `./${note.shareId}`;
-} else {
-    linkHref = `#${note.getBestNotePath().join("/")}`;
 }
 
 const target = isExternalLink ? ` target="_blank" rel="noopener noreferrer"` : "";
