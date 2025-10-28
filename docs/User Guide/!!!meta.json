@@ -69,7 +69,14 @@
                     "name": "shareAlias",
                     "value": "user-guide",
                     "isInheritable": false,
-                    "position": 80
+                    "position": 10
+                },
+                {
+                    "type": "label",
+                    "name": "label:shareAlias",
+                    "value": "promoted,alias=Slug,single,text",
+                    "isInheritable": true,
+                    "position": 20
                 }
             ],
             "format": "markdown",
