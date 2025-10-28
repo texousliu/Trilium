@@ -15,6 +15,7 @@ import log from "../services/log.js";
 import { join } from "path";
 import { readFileSync } from "fs";
 import { highlightAuto } from "@triliumnext/highlightjs";
+import becca from "../becca/becca.js";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const templateCache: Map<string, string> = new Map();
@@ -300,7 +301,10 @@ function renderText(result: Result, note: SNote | BNote) {
             }
 
             if (href?.startsWith("#")) {
-                handleAttachmentLink(linkEl, href);
+                const getNote = note instanceof BNote
+                    ? (noteId: string) => becca.getNote(noteId)
+                    : (noteId: string) => shaca.getNote(noteId);
+                handleAttachmentLink(linkEl, href, getNote);
             }
         }
 
@@ -319,7 +323,7 @@ function renderText(result: Result, note: SNote | BNote) {
     }
 }
 
-function handleAttachmentLink(linkEl: HTMLElement, href: string) {
+function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: string) => SNote | BNote | null) {
     const linkRegExp = /attachmentId=([a-zA-Z0-9_]+)/g;
     let attachmentMatch;
     if ((attachmentMatch = linkRegExp.exec(href))) {
@@ -339,7 +343,7 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string) {
         const [notePath] = href.split("?");
         const notePathSegments = notePath.split("/");
         const noteId = notePathSegments[notePathSegments.length - 1];
-        const linkedNote = shaca.getNote(noteId);
+        const linkedNote = getNote(noteId);
         if (linkedNote) {
             const isExternalLink = linkedNote.hasLabel("shareExternalLink");
             const href = isExternalLink ? linkedNote.getLabelValue("shareExternalLink") : `./${linkedNote.shareId}`;
@@ -352,6 +356,7 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string) {
             }
             linkEl.classList.add(`type-${linkedNote.type}`);
         } else {
+            log.error(`Broken link detected in shared note: unable to find note with ID ${noteId}`);
             linkEl.removeAttribute("href");
         }
     }
