@@ -218,7 +218,6 @@ export type CommandMappings = {
     /** Works only in the electron context menu. */
     replaceMisspelling: CommandData;
 
-    importMarkdownInline: CommandData;
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     showUploadAttachmentsDialog: CommandData & { noteId: string };
@@ -306,7 +305,7 @@ export type CommandMappings = {
     addLinkToText: CommandData;
     followLinkUnderCursor: CommandData;
     insertDateTimeToText: CommandData;
-    pasteMarkdownIntoText: CommandData;
+    showMarkdownIntoTextDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
     cutIntoNote: CommandData;
     addIncludeNoteToText: CommandData;
     editReadOnlyNote: CommandData;
