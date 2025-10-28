@@ -19,6 +19,7 @@ describe("swapLocale", () => {
         expect(swapLocaleInUrl("/ro/get-started", "ro")).toStrictEqual("/ro/get-started");
         expect(swapLocaleInUrl("/en/get-started", "ro")).toStrictEqual("/ro/get-started");
         expect(swapLocaleInUrl("/ro/", "en")).toStrictEqual("/en/");
+        expect(swapLocaleInUrl("/ro", "en")).toStrictEqual("/en");
     });
 });
 

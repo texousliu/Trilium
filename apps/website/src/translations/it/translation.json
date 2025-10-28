@@ -51,7 +51,8 @@
         "mermaid_description": "Crea diagrammi come diagrammi di flusso, diagrammi di classe e sequenza, diagrammi di Gantt e molti altri, utilizzando la sintassi Mermaid.",
         "mindmap_title": "Mappe mentali",
         "mindmap_description": "Organizza i tuoi pensieri visivamente o fai una sessione di brainstorming.",
-        "others_list": "e altri: <0>mappa delle note</0>, <1>mappa delle relazioni</1>, <2>ricerche salvate</2>, <3>renderizza nota</3> e <4>visualizzazioni web</4>."
+        "others_list": "e altri: <0>mappa delle note</0>, <1>mappa delle relazioni</1>, <2>ricerche salvate</2>, <3>renderizza nota</3> e <4>visualizzazioni web</4>.",
+        "title": "Diversi modi per rappresentare le tue informazioni"
     },
     "extensibility_benefits": {
         "title": "Condivisione ed estensibilità",
@@ -72,7 +73,10 @@
         "board_title": "Board",
         "board_description": "Organizza le tue attività o lo stato dei tuoi progetti in una lavagna Kanban con un modo semplice per creare nuovi elementi e colonne e modificare facilmente il loro stato trascinandoli sulla lavagna.",
         "geomap_title": "Geomappa",
-        "geomap_description": "Pianifica le tue vacanze o segna i tuoi punti di interesse direttamente su una mappa geografica utilizzando indicatori personalizzabili. Visualizza le tracce GPX registrate per seguire gli itinerari."
+        "geomap_description": "Pianifica le tue vacanze o segna i tuoi punti di interesse direttamente su una mappa geografica utilizzando indicatori personalizzabili. Visualizza le tracce GPX registrate per seguire gli itinerari.",
+        "title": "Collezioni",
+        "presentation_title": "Presentazione",
+        "presentation_description": "Organizza le informazioni in diapositive e presentale a schermo intero con transizioni fluide. Le diapositive possono anche essere esportate in formato PDF per una facile condivisione."
     },
     "faq": {
         "title": "Domande frequenti",
@@ -95,8 +99,7 @@
         "get_started": "Inizia ora"
     },
     "components": {
-        "link_learn_more": "Per saperne di più...",
-        "list_with_screenshot_alt": "Screenshot della funzione selezionata"
+        "link_learn_more": "Per saperne di più..."
     },
     "download_now": {
         "text": "Scarica ora ",
@@ -188,5 +191,10 @@
         "description": "Trilium Notes è ospitato su PikaPods, un servizio a pagamento che consente un facile accesso e una semplice gestione. Non è direttamente affiliato al team Trilium.",
         "download_pikapod": "Configurazione su PikaPods",
         "download_triliumcc": "In alternativa, consultare trilium.cc"
+    },
+    "header": {
+        "get-started": "Inizia",
+        "documentation": "Documentazione",
+        "support-us": "Sostienici"
     }
 }
