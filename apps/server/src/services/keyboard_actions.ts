@@ -321,10 +321,10 @@ function getDefaultKeyboardActions() {
         },
         {
             actionName: "openTodayNote",
-            friendlyName: t("keyboard_action_names.open-today-note"),
+            friendlyName: t("hidden-subtree.open-today-journal-note-title"),
             iconClass: "bx bx-calendar",
             defaultShortcuts: [],
-            description: t("keyboard_actions.open-today-note"),
+            description: t("hidden-subtree.open-today-journal-note-title"),
             scope: "window"
         },
         {
