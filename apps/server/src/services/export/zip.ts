@@ -43,8 +43,10 @@ async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, 
             getNoteTargetUrl,
             archive,
             branch,
-            rewriteFn
+            rewriteFn,
+            zipExportOptions
         };
+
         switch (format) {
             case "html":
                 return new HtmlExportProvider(providerData);
