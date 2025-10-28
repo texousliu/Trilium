@@ -42,6 +42,14 @@ function getDefaultKeyboardActions() {
             ignoreFromCommandPalette: true
         },
         {
+            actionName: "openTodayNote",
+            friendlyName: t("hidden-subtree.open-today-journal-note-title"),
+            iconClass: "bx bx-calendar",
+            defaultShortcuts: [],
+            description: t("hidden-subtree.open-today-journal-note-title"),
+            scope: "window"
+        },
+        {
             actionName: "commandPalette",
             friendlyName: t("keyboard_action_names.command-palette"),
             defaultShortcuts: ["CommandOrControl+Shift+J"],
@@ -317,14 +325,6 @@ function getDefaultKeyboardActions() {
             iconClass: "bx bx-window-open",
             defaultShortcuts: [],
             description: t("keyboard_actions.open-new-window"),
-            scope: "window"
-        },
-        {
-            actionName: "openTodayNote",
-            friendlyName: t("hidden-subtree.open-today-journal-note-title"),
-            iconClass: "bx bx-calendar",
-            defaultShortcuts: [],
-            description: t("hidden-subtree.open-today-journal-note-title"),
             scope: "window"
         },
         {
