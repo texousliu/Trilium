@@ -497,6 +497,14 @@ export function formatSize(size: number | null | undefined) {
     }
 }
 
+function slugify(text: string) {
+    return text
+        .normalize("NFC") // keep composed form, preserves accents
+        .toLowerCase()
+        .replace(/[^\p{Letter}\p{Number}]+/gu, "-") // replace non-letter/number with "-"
+        .replace(/(^-|-$)+/g, ""); // trim dashes
+}
+
 export default {
     compareVersions,
     crash,
@@ -532,6 +540,7 @@ export default {
     safeExtractMessageAndStackFromError,
     sanitizeSqlIdentifier,
     stripTags,
+    slugify,
     timeLimit,
     toBase64,
     toMap,

@@ -264,7 +264,6 @@
     position: absolute;
     inset-inline-end: 5px;
     bottom: 5px;
-    z-index: 1000;
 }
 
 .style-resolver {
@@ -373,67 +372,6 @@ body[dir=rtl] .attribute-list-editor {
     align-items: center;
     text-overflow: clip;
     white-space: nowrap;
-}
-/* #endregion */
-
-/* #region Search definition */
-.search-setting-table {
-    margin-top: 0;
-    margin-bottom: 7px;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 10px;
-}
-
-.search-setting-table div {
-    white-space: nowrap;
-}
-
-.search-setting-table .title-column {
-    /* minimal width so that table remains static sized and most space remains for middle column with settings */
-    width: 50px;
-    white-space: nowrap;
-}
-
-.search-setting-table .button-column {
-    /* minimal width so that table remains static sized and most space remains for middle column with settings */
-    width: 50px;
-    white-space: nowrap;
-    text-align: end;
-    vertical-align: middle;
-}
-
-.search-setting-table .button-column .dropdown {
-    display: inline-block !important;
-}
-
-.search-setting-table .button-column .dropdown-menu {
-    white-space: normal;
-}
-
-.search-setting-table .button-column > * {
-    vertical-align: middle;
-}
-
-.attribute-list hr {
-    height: 1px;
-    border-color: var(--main-border-color);
-    position: relative;
-    top: 4px;
-    margin-top: 5px;
-    margin-bottom: 0;
-}
-
-.search-definition-widget input:invalid {
-    border: 3px solid red;
-}
-
-.add-search-option button {
-    margin: 3px;
-}
-
-.dropdown-header {
-    background-color: var(--accented-background-color);
 }
 /* #endregion */
 

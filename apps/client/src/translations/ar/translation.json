@@ -12,6 +12,9 @@
   "toast": {
     "critical-error": {
       "title": "خطأ فادح"
+    },
+    "widget-error": {
+      "title": "فشل في البدء بعنصر الواجهة"
     }
   },
   "add_link": {
@@ -26,7 +29,8 @@
     "edit_branch_prefix": "تعديل بادئة الفرع",
     "prefix": "البادئة: ",
     "save": "حفظ",
-    "help_on_tree_prefix": "مساعدة حول بادئة الشجرة"
+    "help_on_tree_prefix": "مساعدة حول بادئة الشجرة",
+    "branch_prefix_saved": "تم حفظ بادئة الفرع."
   },
   "bulk_actions": {
     "bulk_actions": "اجراءات جماعية",
@@ -83,7 +87,8 @@
     "workspace_calendar_root": "‎تحديد جذر التقويم لكل مساحة عمل",
     "hide_highlight_widget": "اخفاء عنصر واجهة قائمة التمييزات",
     "is_owned_by_note": "تخص الملاحظة",
-    "and_more": "... و {{count}}مرات اكثر."
+    "and_more": "... و {{count}}مرات اكثر.",
+    "related_notes_title": "ملاحظات اخرى بنفس التسمية"
   },
   "rename_label": {
     "to": "الى",
@@ -127,7 +132,9 @@
     "delete_attachment": "حذف المرفق",
     "upload_new_revision": "رفع مراجعة جديدة",
     "copy_link_to_clipboard": "نسخ الرابط الى الحافظة",
-    "convert_attachment_into_note": "تحويل المرفق الى ملاحظة"
+    "convert_attachment_into_note": "تحويل المرفق الى ملاحظة",
+    "delete_success": "تم حذف المرفق \"{{title}}\" .",
+    "enter_new_name": "ادخل اسم مرفق جديد"
   },
   "calendar": {
     "week": "أسبوع",
@@ -259,7 +266,8 @@
   "note_paths": {
     "search": "بحث",
     "archived": "مؤرشف",
-    "title": "مسارات الملاحظة"
+    "title": "مسارات الملاحظة",
+    "clone_button": "جار نسخ الملاحظة الى مكان جديد..."
   },
   "script_executor": {
     "query": "استعلام",
@@ -372,7 +380,8 @@
     "export_note_title": "تصدير الملاحظة",
     "export_status": "حالة التصدير",
     "export_finished_successfully": "اكتمل التصدير بنجاح.",
-    "export_in_progress": "جار التصدير: {{progressCount}}"
+    "export_in_progress": "جار التصدير: {{progressCount}}",
+    "choose_export_type": "اختر نوع التصدير اولا من فضلك"
   },
   "help": {
     "troubleshooting": "أستكشاف الاخطاء واصلاحها",
@@ -402,7 +411,10 @@
     "movingCloningNotes": "نقل/ استنساخ الملاحظات",
     "deleteNotes": "حذف الملاحظة/ الشجرة الفرعية",
     "collapseWholeTree": "طي شجرة الملاحظة باكملها",
-    "followLink": "اتبع تلرابط تحت المؤشر"
+    "followLink": "اتبع تلرابط تحت المؤشر",
+    "onlyInDesktop": "في سطح المكتب فقط(Electron build)",
+    "createEditLink": "انشاء/ تحرير رابط خارجي",
+    "quickSearch": "الانتقال الى مربع البحث السريع"
   },
   "import": {
     "options": "خيارات",
@@ -465,7 +477,13 @@
     "delete_all_button": "حذف كل المراجعات",
     "settings": "اعدادات مراجعة الملاحظة",
     "diff_not_available": "المقارنة غير متوفرة.",
-    "help_title": "مساعدة حول مراجعات الملاحظة"
+    "help_title": "مساعدة حول مراجعات الملاحظة",
+    "diff_off_hint": "انقر لعرض محتويات الملاحظة",
+    "revisions_deleted": "تم حذف جميع نسخ المراجعات للملاحظة.",
+    "revision_restored": "تم استعادة نسخ المراجعة للملاحظة.",
+    "revision_deleted": "تم حذف مراجعة الملاحظة.",
+    "snapshot_interval": "فاصل زمني لحفظ لقطات اصدارات المراجعة: {{seconds}}",
+    "maximum_revisions": "حد عدد لقطات اصدارات الملاحظة: {{number}}"
   },
   "sort_child_notes": {
     "title": "عنوان",
@@ -479,13 +497,15 @@
     "sorting_direction": "اتجاه الترتيب",
     "natural_sort": "الترتيب الطبيعي",
     "natural_sort_language": "لغات الترتيب الطبيعي",
-    "sort_children_by": "ترتيب العناصر الفرعية حسب..."
+    "sort_children_by": "ترتيب العناصر الفرعية حسب...",
+    "sort_folders_at_top": "ترتيب المجلدات في الاعلى"
   },
   "recent_changes": {
     "undelete_link": "الغاء الحذف",
     "title": "التغيرات الاخيرة",
     "no_changes_message": "لايوجد تغيير لحد الان...",
-    "erase_notes_button": "مسح الملاحظات المحذوفة الان"
+    "erase_notes_button": "مسح الملاحظات المحذوفة الان",
+    "deleted_notes_message": "تم حذف الملاحظات نهائيا."
   },
   "edited_notes": {
     "deleted": "(حذف)",
@@ -655,7 +675,11 @@
     "google": "جوجل",
     "save_button": "حفظ",
     "baidu": "Baidu",
-    "title": "محرك البحث"
+    "title": "محرك البحث",
+    "predefined_templates_label": "قوالب محرك البحث المعرفة مسبقا",
+    "custom_name_label": "اسم محرك البحث المخصص",
+    "custom_name_placeholder": "اسم محرك البحث المخصص",
+    "custom_url_placeholder": "تخصيص عنوان URL لمحرك البحث"
   },
   "heading_style": {
     "plain": "بسيط",
@@ -676,7 +700,8 @@
     "wednesday": "الاربعاء",
     "thursday": "الخميس",
     "friday": "الجمعة",
-    "saturday": "السبت"
+    "saturday": "السبت",
+    "formatting-locale": "تنسيق التاريخ والارقام"
   },
   "backup": {
     "path": "مسار",
@@ -699,7 +724,10 @@
     "token_name": "اسم الرمز",
     "default_token_name": "رمز جديد",
     "rename_token_title": "اعادة تسمية الرمز",
-    "rename_token": "اعادة تسمية هذا الرمز"
+    "rename_token": "اعادة تسمية هذا الرمز",
+    "create_token": "انشاء رمز PEAPI جديد",
+    "new_token_title": "رمز ETAPI جديد",
+    "token_created_title": "انشاء رمز ETAPI"
   },
   "password": {
     "heading": "كلمة المرور",
@@ -731,7 +759,8 @@
     "timeout": "انتهاء مهلة المزامنة",
     "test_title": "اختبار المزامنة",
     "test_button": "اختبار المزامنة",
-    "server_address": "عنوان نسخة الخادم"
+    "server_address": "عنوان نسخة الخادم",
+    "proxy_label": "خادم وكيل المزامنة (اخياري)"
   },
   "api_log": {
     "close": "أغلاق"
@@ -751,7 +780,8 @@
     "new_tab": "تبويب جديد",
     "close_all_tabs": "اغلاق كل علامات التبويب",
     "add_new_tab": "اضافة علامة تبويب جديدة",
-    "close_other_tabs": "اغلاق علامات التبويب الاخرى"
+    "close_other_tabs": "اغلاق علامات التبويب الاخرى",
+    "reopen_last_tab": "اعادة فتح اخر علامة تبويب مغلقة"
   },
   "toc": {
     "options": "خيارات",
@@ -791,7 +821,8 @@
   },
   "call_to_action": {
     "dismiss": "تجاهل",
-    "background_effects_button": "تفعيل مؤثرات الخلفية"
+    "background_effects_button": "تفعيل مؤثرات الخلفية",
+    "next_theme_button": "جرب النسق الجديد"
   },
   "units": {
     "percentage": "%"
@@ -802,7 +833,8 @@
     "help_on_links": "مساعدة حول الارتباطات التشعبية",
     "notes_to_clone": "ملاحظات للنسخ",
     "target_parent_note": "الملاحظة الاصلية الهدف",
-    "clone_to_selected_note": "استنساخ الى الملاحظة المحددة"
+    "clone_to_selected_note": "استنساخ الى الملاحظة المحددة",
+    "no_path_to_clone_to": "لايوجد مسار لنسخ المحتوى الية."
   },
   "table_of_contents": {
     "unit": "عناوين",
@@ -835,7 +867,8 @@
     "search-in-subtree": "‍البحث في الشجرة الفرعية",
     "edit-branch-prefix": "تعديل بادئة الفرع",
     "convert-to-attachment": "التحويل الى مرفق",
-    "apply-bulk-actions": "‌تطبيق الاجراءات الجماعية"
+    "apply-bulk-actions": "‌تطبيق الاجراءات الجماعية",
+    "recent-changes-in-subtree": "التغييرات الاخيرة في الشجرة الفرعية"
   },
   "note_types": {
     "text": "نص",
@@ -884,7 +917,8 @@
   "quick-search": {
     "searching": "جار البحث...",
     "placeholder": "البحث السريع",
-    "no-results": "لم يتم العثور على نتائج"
+    "no-results": "لم يتم العثور على نتائج",
+    "show-in-full-search": "عرض في البحث الكامل"
   },
   "note_tree": {
     "unhoist": "ارجاع الى الترتيب الطبيعي",
@@ -893,7 +927,12 @@
     "collapse-title": "طي شجرة الملاحظة",
     "hide-archived-notes": "اخفاء الملاحظات المؤرشفة",
     "automatically-collapse-notes": "طي الملاحظات تلقائيا",
-    "create-child-note": "انشاء ملاحظة فرعية"
+    "create-child-note": "انشاء ملاحظة فرعية",
+    "scroll-active-title": "تمرير الى الملاحظة النشطة",
+    "save-changes": "حفظ وتطبيق التغييرات",
+    "saved-search-note-refreshed": "تم تحديث ملاحظة البحث المحفوظة.",
+    "hoist-this-note-workspace": "تثبيت هذه الملاحظة (مساحة العمل)",
+    "refresh-saved-search-results": "تحديث نتائج البحث المحفوظة"
   },
   "sql_table_schemas": {
     "tables": "جداول"
@@ -901,7 +940,13 @@
   "launcher_context_menu": {
     "reset": "اعادة ضبط",
     "add-spacer": "اضافة فاصل",
-    "delete": "حذف\n<kbd data-command=\"deleteNotes\">"
+    "delete": "حذف\n<kbd data-command=\"deleteNotes\">",
+    "add-note-launcher": "اضافة مشغل الملاحظة",
+    "add-script-launcher": "اضافة مشغل السكريبت",
+    "add-custom-widget": "اضافة عنصر واجهة مخصص",
+    "move-to-visible-launchers": "نقل الى المشغلات المرئية",
+    "move-to-available-launchers": "نقل الى المشغلات المتوفرة",
+    "duplicate-launcher": "تكرار المشغل <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
     "auto-detect-language": "تم اكتشافه تلقائيا"
@@ -927,7 +972,9 @@
     "cut": "قص",
     "copy": "نسخ",
     "paste": "لصق",
-    "copy-link": "نسخ الرابط"
+    "copy-link": "نسخ الرابط",
+    "add-term-to-dictionary": "اضافة \"{{term}}\" الى القاموس",
+    "paste-as-plain-text": "لصق كنص عادي"
   },
   "promoted_attributes": {
     "url_placeholder": "http://website...",
@@ -977,7 +1024,11 @@
     "totp_secret_regenerate": "اعادة توليد TOTP السري",
     "totp_secret_generated": "تم انشاء TOTP السري",
     "oauth_missing_vars": "اعدادات مفقودة: {{-variables}}",
-    "totp_secret_title": "توليد TOTP سري"
+    "totp_secret_title": "توليد TOTP سري",
+    "totp_title": "كلمة مرور لمرة واحدة معتمدة على الوقت (TOTP)",
+    "recovery_keys_title": "مفاتيح استرداد تسجيل الدخول الاحادي",
+    "recovery_keys_error": "حدث خطأ اثناء توليد رموز الاسترجاع",
+    "recovery_keys_no_key_set": "لاتوجد رموز استرجاع معينة"
   },
   "execute_script": {
     "execute_script": "تنفيذ السكريبت"
@@ -1001,7 +1052,8 @@
   },
   "delete_note": {
     "delete_note": "حذف الملاحظة",
-    "delete_matched_notes": "حف الملاحظات المطابقة"
+    "delete_matched_notes": "حف الملاحظات المطابقة",
+    "delete_matched_notes_description": "سوف يؤدي هذا الى حذف الملاحظات المطابقة."
   },
   "rename_note": {
     "rename_note": "اعادة تسمية الملاحظة",
@@ -1119,7 +1171,12 @@
     "title": "اخفاء هوية البيانات",
     "full_anonymization": "الاخفاء الكامل للهوية",
     "light_anonymization": "الاخفاء الجزئي للهوية",
-    "existing_anonymized_databases": "قواعد البيانات المجهولة الحالية"
+    "existing_anonymized_databases": "قواعد البيانات المجهولة الحالية",
+    "save_fully_anonymized_database": "حفظ قاعدة البيانات بعد اخفاء كل الهويات",
+    "save_lightly_anonymized_database": "حفظ قاعدةةبيانات مخفية جزئيا",
+    "creating_fully_anonymized_database": "انشاء قاعدة بيانات مجهولة بالكامل",
+    "creating_lightly_anonymized_database": "انشاء قاعدةة بيانات مجهولة جزئيا...",
+    "no_anonymized_database_yet": "لاتوجد قاعدة بيانات مجهولة بعد."
   },
   "vacuum_database": {
     "title": "تحرير مساحة قاعدة البيانات",
@@ -1146,7 +1203,8 @@
     "italic": "نص مائل",
     "underline": "خط تحت النص",
     "color": "نص ملون",
-    "visibility_title": "اظهار قائمة التضليلات"
+    "visibility_title": "اظهار قائمة التضليلات",
+    "bg_color": "نص مع لون خلفية"
   },
   "revisions_button": {
     "note_revisions": "مراجعات الملاحظة"
@@ -1163,7 +1221,8 @@
     "title": "التدقيق الاملائي",
     "enable": "تفعيل التدقيق الاملائي",
     "language_code_label": "رمز اللغة او رموز اللغات",
-    "available_language_codes_label": "رموز اللغات المتاحة:"
+    "available_language_codes_label": "رموز اللغات المتاحة:",
+    "language_code_placeholder": "على سبيل المثال \"en-US\", \"de-AI\""
   },
   "note-map": {
     "button-link-map": "خريطة الروابط",
@@ -1177,7 +1236,9 @@
   },
   "branches": {
     "delete-status": "حالة الحذف",
-    "delete-finished-successfully": "تم الحذف بنجاح."
+    "delete-finished-successfully": "تم الحذف بنجاح.",
+    "cannot-move-notes-here": "لايمكن نقل الملاحظات الى هنا.",
+    "undeleting-notes-finished-successfully": "تم استرجاع الملاحظات بنجاح."
   },
   "highlighting": {
     "title": "كتل الكود",
@@ -1199,14 +1260,16 @@
     "native-title-bar": "شريط العنوان الاصلي"
   },
   "note_tooltip": {
-    "quick-edit": "التحرير السريع"
+    "quick-edit": "التحرير السريع",
+    "note-has-been-deleted": "تم حذف الملاحظة."
   },
   "geo-map-context": {
     "open-location": "فتح الموقع",
     "remove-from-map": "ازالة من الخريطة"
   },
   "share": {
-    "title": "اعدادات المشاركة"
+    "title": "اعدادات المشاركة",
+    "check_share_root": "التحقق من حالة جذر المشاركة"
   },
   "note_language": {
     "not_set": "غير محدد",
@@ -1251,7 +1314,8 @@
     "search_subtree_title": "بحث في الشجرة الفرعية",
     "search_history_title": "عرص سجل البحث",
     "search_history_description": "عرض البحث السابق",
-    "configure_launch_bar_title": "تكوين شريط الاطلاق"
+    "configure_launch_bar_title": "تكوين شريط الاطلاق",
+    "search_subtree_description": "البحث ضمن الشجرة الفرعية الحالية"
   },
   "content_renderer": {
     "open_externally": "فتح خارجيا"
@@ -1272,7 +1336,8 @@
     "notes_to_move": "الملاحظات المراد نقلها",
     "target_parent_note": "ملاحظة الاصل الهدف",
     "dialog_title": "انقل الملاحظات الى...",
-    "move_button": "نقل الىالملاحظة المحددة"
+    "move_button": "نقل الىالملاحظة المحددة",
+    "error_no_path": "لايوجد مسار لنقل العنصر الية."
   },
   "delete_revisions": {
     "delete_note_revisions": "حذف مراجعات الملاحظة"
@@ -1295,7 +1360,8 @@
   "database_integrity_check": {
     "title": "فحص سلامة قاعدة البيانات",
     "check_button": "التحقق من سلامة قاعدة البيانات",
-    "checking_integrity": "جار التحقق من سلامة قاعدة البيانات..."
+    "checking_integrity": "جار التحقق من سلامة قاعدة البيانات...",
+    "integrity_check_failed": "فشل التحقق من السلامة: {{results}}"
   },
   "watched_file_update_status": {
     "upload_modified_file": "رفع الملف المعدل",
@@ -1322,13 +1388,15 @@
     "save_attributes": "حفظ السمات <enter>",
     "add_a_new_attribute": "اضافة سمة جديدة",
     "add_new_label_definition": "اضافة تعريف لتسمية جديدة",
-    "add_new_relation_definition": "اضافة تعريف لعلاقة جديدة"
+    "add_new_relation_definition": "اضافة تعريف لعلاقة جديدة",
+    "add_new_relation": "اضافة علاقة جديدة <kbd data-command=\"addNewRelation\">"
   },
   "zen_mode": {
     "button_exit": "الخروج من وضع Zen"
   },
   "attachment_erasure_timeout": {
-    "attachment_erasure_timeout": "مهلة مسح المرفقات"
+    "attachment_erasure_timeout": "مهلة مسح المرفقات",
+    "erase_attachments_after": "حذف المرفقات الغير مستخدمة بعد:"
   },
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "مهلة مسح الملاحظة",
@@ -1366,5 +1434,34 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "الفاصل الزمني لنسخ الملاحظات الاحتياطية"
+  },
+  "note_detail": {
+    "printing": "جار الطباعة ..."
+  },
+  "attachment_detail_2": {
+    "role_and_size": "الدور: {{role}}، الحجم: {{size}}",
+    "unrecognized_role": "دور المرفق '{{role}}'الغير معروف."
+  },
+  "title_bar_buttons": {
+    "window-on-top": "ابقاء النافذة في الاعلى"
+  },
+  "note_title": {
+    "placeholder": "اكتب عنوان الملاحظة هنا..."
+  },
+  "image_context_menu": {
+    "copy_reference_to_clipboard": "نسخ المرجع الى الحافظة",
+    "copy_image_to_clipboard": "نسخ الصورة الى الحافظة"
+  },
+  "geo-map": {
+    "unable-to-load-map": "تعذر تحميل الخريطة."
+  },
+  "content_widget": {
+    "unknown_widget": "عنصر واجهة غير معروف للمعرف \"{{id}}\"."
+  },
+  "png_export_button": {
+    "button_title": "تصدير المخطط كملف PNG"
+  },
+  "protected_session_status": {
+    "inactive": "انقر للدخول الى جلسة محمية"
   }
 }

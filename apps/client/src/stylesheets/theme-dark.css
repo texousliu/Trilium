@@ -86,6 +86,13 @@ body ::-webkit-calendar-picker-indicator {
     --custom-color: var(--dark-theme-custom-color);
 }
 
+:root .reference-link,
+:root .reference-link:hover,
+.ck-content a.reference-link > span,
+.board-note {
+    color: var(--dark-theme-custom-color, inherit);
+}
+
 .excalidraw.theme--dark {
     --theme-filter: invert(80%) hue-rotate(180deg) !important;
 }
@@ -101,3 +108,4 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
 .ck-content pre {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6) !important;
 }
+

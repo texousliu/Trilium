@@ -24,6 +24,9 @@ import CloseZenModeButton from "../widgets/close_zen_button.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import NoteList from "../widgets/collections/NoteList.jsx";
+import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
+import SearchDefinitionTab from "../widgets/ribbon/SearchDefinitionTab.jsx";
+import SearchResult from "../widgets/search_result.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -155,6 +158,8 @@ export default class MobileLayout {
                                             .contentSized()
                                             .child(new NoteDetailWidget())
                                             .child(<NoteList media="screen" />)
+                                            .child(<StandaloneRibbonAdapter component={SearchDefinitionTab} />)
+                                            .child(<SearchResult />)
                                             .child(<FilePropertiesWrapper />)
                                     )
                                     .child(<MobileEditorToolbar />)

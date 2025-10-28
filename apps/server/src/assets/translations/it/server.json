@@ -165,7 +165,8 @@
     "export_filter": "Documento PDF (*.pdf)",
     "unable-to-export-message": "La nota corrente non può essere esportata come PDF.",
     "unable-to-export-title": "Impossibile esportare come PDF",
-    "unable-to-save-message": "Il file selezionato non può essere salvato. Prova di nuovo o seleziona un'altra destinazione."
+    "unable-to-save-message": "Il file selezionato non può essere salvato. Prova di nuovo o seleziona un'altra destinazione.",
+    "unable-to-print": "Impossibile stampare la nota"
   },
   "tray": {
     "tooltip": "Trilium Notes",
@@ -430,7 +431,8 @@
     "presentation": "Presentazione",
     "presentation_slide": "Diapositiva di presentazione",
     "presentation_slide_first": "Prima diapositiva",
-    "presentation_slide_second": "Seconda diapositiva"
+    "presentation_slide_second": "Seconda diapositiva",
+    "background": "Contesto"
   },
   "sql_init": {
     "db_not_initialized_desktop": "Database non inizializzato, seguire le istruzioni a schermo.",

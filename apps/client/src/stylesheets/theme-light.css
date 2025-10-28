@@ -85,3 +85,10 @@ html {
 #left-pane .fancytree-node.tinted {
     --custom-color: var(--light-theme-custom-color);
 }
+
+:root .reference-link,
+:root .reference-link:hover,
+.ck-content a.reference-link > span,
+.board-note {
+    color: var(--light-theme-custom-color, inherit);
+}

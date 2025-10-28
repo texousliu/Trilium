@@ -33,12 +33,14 @@ Xem [ảnh chụp màn hình](https://triliumnext.github.io/Docs/Wiki/screenshot
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## ⏬ Download
-- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  stable version, recommended for most users.
-- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
-  unstable development version, updated daily with the latest features and
-  fixes.
+## ⏬ Tải xuống
+- [Bản phát hành mới
+  nhất](https://github.com/TriliumNext/Trilium/releases/latest) – phiên bản ổn
+  định, được khuyên dùng cho hầu hết người dùng.
+- [Bản dựng
+  nightly](https://github.com/TriliumNext/Trilium/releases/tag/nightly) – phiên
+  bản phát triển kém ổn định, được cập nhật hàng ngày với các tính năng mới nhất
+  và sửa lỗi.
 
 ## 📚 Tài Liệu
 
