@@ -98,8 +98,7 @@ Unsere Dokumentation ist verfügbar in mehreren Formaten:
     Synchronisationsservern](https://trilium.cc/paid-hosting)
 * [Freigabe](https://triliumnext.github.io/Docs/Wiki/sharing) (Veröffentlichung)
   von Notizen im öffentlichen Internet
-* Starke[
-  Notizverschlüsselung](https://triliumnext.github.io/Docs/Wiki/protected-notes)
+* Starke [Notizverschlüsselung](https://triliumnext.github.io/Docs/Wiki/protected-notes)
   mit Granularität pro Notiz
 * Skizzieren von Diagrammen basierend auf [Excalidraw](https://excalidraw.com/)
   (Notiztyp „Canvas“)
