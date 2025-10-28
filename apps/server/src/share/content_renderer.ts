@@ -81,7 +81,8 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
             `${basePath}assets/scripts.js`
         ],
         logoUrl: `${basePath}icon-color.svg`,
-        ancestors
+        ancestors,
+        isStatic: true
     });
 }
 
@@ -126,7 +127,8 @@ export function renderNoteContent(note: SNote) {
         cssToLoad,
         jsToLoad,
         logoUrl,
-        ancestors
+        ancestors,
+        isStatic: false
     });
 }
 
@@ -137,6 +139,7 @@ interface RenderArgs {
     jsToLoad: string[];
     logoUrl: string;
     ancestors: string[];
+    isStatic: boolean;
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
@@ -153,7 +156,7 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
         t,
         isDev,
         utils,
-        ...renderArgs
+        ...renderArgs,
     };
 
     // Check if the user has their own template.
