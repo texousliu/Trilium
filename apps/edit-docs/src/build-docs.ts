@@ -41,7 +41,7 @@ async function main() {
     }
 
     // Copy favicon.
-    copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "favicon.ico"));
+    await copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "favicon.ico"));
 
     console.log("Documentation built successfully!");
 }

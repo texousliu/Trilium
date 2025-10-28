@@ -44,7 +44,7 @@
 .admonition.caution { --accent-color: #ff2e2e; }
 .admonition.warning { --accent-color: #e2aa03; }
 
-.admonition::before {  
+.admonition::before {
     color: var(--accent-color);
     font-family: boxicons !important;
     position: absolute;
