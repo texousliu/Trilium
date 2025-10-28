@@ -9,7 +9,7 @@
 
 <hr />
 
-# Trilium Notes
+# ट्रिलियम नोट्स
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
