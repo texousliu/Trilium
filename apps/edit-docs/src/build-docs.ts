@@ -4,11 +4,12 @@ process.env.NODE_ENV = "development";
 
 import cls from "@triliumnext/server/src/services/cls.js";
 import { dirname, join, resolve } from "path";
-import fs from "fs/promises";
+import fs, { copyFile } from "fs/promises";
 import fsExtra, { type WriteStream } from "fs-extra";
 import archiver, { type Archiver } from "archiver";
 
 const DOCS_ROOT = "../../../docs";
+const OUTPUT_DIR = "../../site";
 
 async function main() {
     const i18n = await import("@triliumnext/server/src/services/i18n.js");
@@ -17,9 +18,24 @@ async function main() {
     const sqlInit = (await import("../../server/src/services/sql_init.js")).default;
     await sqlInit.createInitialDatabase(true);
 
-    await importData(join(__dirname, DOCS_ROOT, "User Guide"));
+    const note = await importData(join(__dirname, DOCS_ROOT, "User Guide"));
 
-    console.log("DB ready!");
+    // Export
+    const zipFilePath = "output.zip";
+    try {
+        const { exportToZipFile } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
+        await exportToZipFile(note.noteId, "share", zipFilePath);
+        await extractZip(zipFilePath, OUTPUT_DIR);
+    } finally {
+        if (await fsExtra.exists(zipFilePath)) {
+            await fsExtra.rm(zipFilePath);
+        }
+    }
+
+    // Copy favicon.
+    copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "favicon.ico"));
+
+    console.log("Documentation built successfully!");
 }
 
 export async function importData(path: string) {
@@ -33,21 +49,9 @@ export async function importData(path: string) {
     if (!rootNote) {
         throw new Error("Missing root note for import.");
     }
-    const note = await importService.importZip(context, buffer, rootNote, {
+    return await importService.importZip(context, buffer, rootNote, {
         preserveIds: true
     });
-
-    // Export
-    const zipFilePath = "output.zip";
-    try {
-        const { exportToZipFile } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
-        await exportToZipFile(note.noteId, "share", zipFilePath);
-        await extractZip(zipFilePath, "../../site");
-    } finally {
-        if (await fsExtra.exists(zipFilePath)) {
-            await fsExtra.rm(zipFilePath);
-        }
-    }
 }
 
 async function createImportZip(path: string) {
