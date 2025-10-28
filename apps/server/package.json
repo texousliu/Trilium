@@ -36,7 +36,7 @@
     "@triliumnext/commons": "workspace:*",
     "@triliumnext/express-partial-content": "workspace:*",
     "@triliumnext/turndown-plugin-gfm": "workspace:*",
-    "@types/archiver": "6.0.4",
+    "@types/archiver": "7.0.0",
     "@types/better-sqlite3": "7.6.13",
     "@types/cls-hooked": "4.3.9",
     "@types/compression": "1.8.1",
