@@ -31,21 +31,18 @@ export default function MarkdownImportDialog() {
         }
     });
 
-    async function sendForm() {
-        if (textTypeWidget) {
-            await convertMarkdownToHtml(text, textTypeWidget);
-        }
-        
-        setText("");
-        setShown(false);
-    }
-
     return (
         <Modal
             className="markdown-import-dialog" title={t("markdown_import.dialog_title")} size="lg"
-            footer={<Button className="markdown-import-button" text={t("markdown_import.import_button")} onClick={sendForm} keyboardShortcut="Ctrl+Enter" />}
+            footer={<Button className="markdown-import-button" text={t("markdown_import.import_button")} onClick={() => setShown(false)} keyboardShortcut="Ctrl+Enter" />}
             onShown={() => markdownImportTextArea.current?.focus()}
-            onHidden={() => setShown(false) }
+            onHidden={async () => {
+                if (textTypeWidget) {
+                    await convertMarkdownToHtml(text, textTypeWidget);
+                }
+                setShown(false);
+                setText("");
+            }}
             show={shown}
         >
             <p>{t("markdown_import.modal_body_text")}</p>
@@ -55,7 +52,7 @@ export default function MarkdownImportDialog() {
                 onKeyDown={(e) => {
                     if (e.key === "Enter" && e.ctrlKey) {
                         e.preventDefault();
-                        sendForm();
+                        setShown(false);
                     }
                 }}></textarea>
         </Modal>
