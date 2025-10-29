@@ -212,7 +212,7 @@ export function getDefaultTemplatePath(template: string) {
         : join(getResourceDir(), `share-theme/templates/${template}.ejs`);
 }
 
-function readTemplate(path: string) {
+export function readTemplate(path: string) {
     const cachedTemplate = templateCache.get(path);
     if (cachedTemplate) {
         return cachedTemplate;

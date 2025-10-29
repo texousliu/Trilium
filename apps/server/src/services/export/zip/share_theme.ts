@@ -2,14 +2,16 @@ import { join } from "path";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
 import { ExportFormat, ZipExportProvider } from "./abstract_provider.js";
 import { RESOURCE_DIR } from "../../resource_dir";
-import utils, { getResourceDir, isDev } from "../../utils";
+import { getResourceDir, isDev } from "../../utils";
 import fs, { readdirSync } from "fs";
-import { renderNoteForExport } from "../../../share/content_renderer";
+import { getDefaultTemplatePath, readTemplate, renderNoteForExport } from "../../../share/content_renderer";
 import type BNote from "../../../becca/entities/bnote.js";
 import type BBranch from "../../../becca/entities/bbranch.js";
 import { getShareThemeAssetDir } from "../../../routes/assets";
 import { convert as convertToText } from "html-to-text";
 import becca from "../../../becca/becca";
+import ejs from "ejs";
+import { t } from "i18next";
 
 const shareThemeAssetDir = getShareThemeAssetDir();
 
@@ -92,6 +94,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     afterDone(rootMeta: NoteMeta): void {
         this.#saveAssets(rootMeta, this.assetsMeta);
         this.#saveIndex(rootMeta);
+        this.#save404();
 
         // Search index
         for (const item of this.searchIndex.values()) {
@@ -129,6 +132,12 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             let cssContent = getShareThemeAssets(assetMeta.dataFileName);
             this.archive.append(cssContent, { name: assetMeta.dataFileName });
         }
+    }
+
+    #save404() {
+        const templatePath = getDefaultTemplatePath("404");
+        const content = ejs.render(readTemplate(templatePath), { t });
+        this.archive.append(content, { name: "404.html" });
     }
 
 }
