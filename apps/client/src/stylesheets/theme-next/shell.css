@@ -1192,8 +1192,10 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
 #center-pane .note-split {
     padding-top: 2px;
     background-color: var(--note-split-background-color, var(--main-background-color));
+}
+
+body:not(.background-effects) #center-pane .note-split {
     animation: note-entrance 100ms linear;
-    /* will-change: opacity; -- causes some weird artifacts to the note menu in split view */
 }
 
 /*
@@ -1206,9 +1208,9 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
 
 @keyframes note-entrance {
     from {
-        opacity: 0;
+        filter: opacity(0);
     } to {
-        opacity: 1;
+        filter: opacity(1);
     }
 }
 
