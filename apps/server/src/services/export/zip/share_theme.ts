@@ -14,7 +14,7 @@ import becca from "../../../becca/becca";
 const shareThemeAssetDir = getShareThemeAssetDir();
 
 interface SearchIndexEntry {
-    id: string;
+    id: string | null;
     title: string;
     content: string;
     path: string;
@@ -94,6 +94,11 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         this.#saveIndex(rootMeta);
 
         // Search index
+        for (const item of this.searchIndex.values()) {
+            if (!item.id) continue;
+            item.id = this.getNoteTargetUrl(item.id, rootMeta);
+        }
+
         this.archive.append(JSON.stringify(Array.from(this.searchIndex.values()), null, 4), { name: "search-index.json" });
     }
 

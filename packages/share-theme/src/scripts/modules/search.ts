@@ -70,12 +70,15 @@ async function fetchResults(query: string): Promise<SearchResults> {
             keys: [
                 "title",
                 "content"
-            ]
+            ],
+            includeScore: true
         });
 
-        const results = fuse.search<SearchResult>(query);
+        const results = fuse.search<SearchResult>(query, { limit: 5 });
+        console.debug("Search results:", results);
         const processedResults = results.map(({ item, score }) => ({
             ...item,
+            id: rootUrl + "/" + item.id,
             score
         }));
         return { results: processedResults };
