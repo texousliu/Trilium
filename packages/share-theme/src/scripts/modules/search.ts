@@ -63,7 +63,7 @@ export default function setupSearch() {
 async function fetchResults(query: string): Promise<SearchResults> {
     if ((window as any).glob.isStatic) {
         const linkHref = document.head.querySelector("link[rel=stylesheet]")?.getAttribute("href");
-        const rootUrl = linkHref?.split("/").slice(0, -2).join("/");
+        const rootUrl = linkHref?.split("/").slice(0, -2).join("/") || ".";
         const searchIndex = await (await fetch(`${rootUrl}/search-index.json`)).json();
         const Fuse = (await import("fuse.js")).default;
         const fuse = new Fuse(searchIndex, {
