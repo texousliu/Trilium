@@ -17,6 +17,7 @@ Apart from normal <a class="reference-link" href="../Sharing.md">Sharing</a>, e
 *   The URL structure is different. Where in normal sharing it's something along the way of `example.com/share/noteid`, the notes follow an hierarchical structure, such as `docs.triliumnotes.org/user-guide/concepts/navigation/tree-concepts`.
 *   The `favicon.ico` is not handled automatically, it needs to be manually added on the server after the export is generated.
 *   The “Last updated” for notes is not available.
+*   The search functionality works slightly different since the normal one requires an active API to work. In the static export, search still works but uses a different mechanism so results might be different.
 
 ## Differences from normal .zip export
 

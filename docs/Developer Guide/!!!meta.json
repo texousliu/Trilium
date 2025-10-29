@@ -1717,6 +1717,33 @@
                             "format": "markdown",
                             "dataFileName": "Hidden notes.md",
                             "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "vphziLmQeQHY",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "wbVIolLKDhe2",
+                                "vphziLmQeQHY"
+                            ],
+                            "title": "Share",
+                            "notePosition": 260,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-share-alt",
+                                    "isInheritable": false,
+                                    "position": 10
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Share.md",
+                            "attachments": []
                         }
                     ]
                 },
