@@ -6,7 +6,6 @@ import setupThemeSelector from "./modules/theme";
 import setupMermaid from "./modules/mermaid";
 import setupMath from "./modules/math";
 import api from "./modules/api";
-import "boxicons/css/boxicons.min.css";
 import "highlight.js/styles/default.css";
 import "@triliumnext/ckeditor5/src/theme/ck-content.css";
 
