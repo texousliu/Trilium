@@ -8,6 +8,7 @@ import { renderNoteForExport } from "../../../share/content_renderer";
 import type BNote from "../../../becca/entities/bnote.js";
 import type BBranch from "../../../becca/entities/bbranch.js";
 import { getShareThemeAssetDir } from "../../../routes/assets";
+import { convert as convertToText } from "html-to-text";
 
 const shareThemeAssetDir = getShareThemeAssetDir();
 
@@ -57,7 +58,9 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
 
         if (note) {
             // Prepare search index.
-            searchContent = typeof content === "string" ? utils.stripTags(content) : "";
+            searchContent = typeof content === "string" ? convertToText(content, {
+                whitespaceCharacters: "\t\r\n\f\u200b\u00a0\u2002"
+            }) : "";
 
             content = renderNoteForExport(note, branch, basePath, noteMeta.notePath.slice(0, -1));
             if (typeof content === "string") {
