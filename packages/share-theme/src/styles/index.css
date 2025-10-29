@@ -30,7 +30,7 @@ Accent Color Ideas
   --text-link: #FFB628;
 */
 
-body.theme-light {
+html.theme-light {
     --background-primary: #FFFFFF;
     --background-secondary: #F3F3F3;
     --background-highlight: #DDDDDD;
@@ -42,7 +42,7 @@ body.theme-light {
     color-scheme: light;
 }
 
-body.theme-dark {
+html.theme-dark {
     --background-primary: #333333;
     --background-secondary: #1F1F1F;
     --background-highlight: #484848;

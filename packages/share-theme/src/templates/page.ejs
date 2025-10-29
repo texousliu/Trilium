@@ -55,6 +55,13 @@
     %>
     <title><%= pageTitle %></title>
     <script>
+        // Load dark/light theme as soon as possible to avoid color flashes.
+        let theme = localStorage.getItem("theme");
+        if (!theme) {
+            theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+        }
+        document.documentElement.classList.add(`theme-${theme}`);
+
         window.glob = {
             isStatic: <%= !!isStatic %>
         };
