@@ -1,13 +1,13 @@
-import setupToC from "./modules/toc";
-import setupExpanders from "./modules/expanders";
-import setupMobileMenu from "./modules/mobile";
-import setupSearch from "./modules/search";
-import setupThemeSelector from "./modules/theme";
-import setupMermaid from "./modules/mermaid";
-import setupMath from "./modules/math";
-import api from "./modules/api";
-import "boxicons/css/boxicons.min.css";
+import setupToC from "./modules/toc.js";
+import setupExpanders from "./modules/expanders.js";
+import setupMobileMenu from "./modules/mobile.js";
+import setupSearch from "./modules/search.js";
+import setupThemeSelector from "./modules/theme.js";
+import setupMermaid from "./modules/mermaid.js";
+import setupMath from "./modules/math.js";
+import api from "./modules/api.js";
 import "highlight.js/styles/default.css";
+import "@triliumnext/ckeditor5/src/theme/ck-content.css";
 
 function $try<T extends (...a: unknown[]) => unknown>(func: T, ...args: Parameters<T>) {
     try {

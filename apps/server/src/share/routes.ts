@@ -8,7 +8,7 @@ import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
 import type SNote from "./shaca/entities/snote.js";
 import type SAttachment from "./shaca/entities/sattachment.js";
-import { renderNoteContent } from "./content_renderer.js";
+import { getDefaultTemplatePath, renderNoteContent } from "./content_renderer.js";
 import utils from "../services/utils.js";
 
 function addNoIndexHeader(note: SNote, res: Response) {
@@ -110,7 +110,7 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 
 function render404(res: Response) {
     res.status(404);
-    const shareThemePath = `../../share-theme/templates/404.ejs`;
+    const shareThemePath = getDefaultTemplatePath("404");
     res.render(shareThemePath);
 }
 

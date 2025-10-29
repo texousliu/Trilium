@@ -29,7 +29,7 @@ export interface ZipExportProviderData {
     branch: BBranch;
     getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null;
     archive: Archiver;
-    zipExportOptions?: AdvancedExportOptions;
+    zipExportOptions: AdvancedExportOptions | undefined;
     rewriteFn: RewriteLinksFn;
 }
 
