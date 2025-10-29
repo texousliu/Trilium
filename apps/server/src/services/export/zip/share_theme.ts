@@ -9,12 +9,15 @@ import type BNote from "../../../becca/entities/bnote.js";
 import type BBranch from "../../../becca/entities/bbranch.js";
 import { getShareThemeAssetDir } from "../../../routes/assets";
 import { convert as convertToText } from "html-to-text";
+import becca from "../../../becca/becca";
 
 const shareThemeAssetDir = getShareThemeAssetDir();
 
 interface SearchIndexEntry {
+    id: string;
     title: string;
     content: string;
+    path: string;
 }
 
 export default class ShareThemeExportProvider extends ZipExportProvider {
@@ -72,9 +75,14 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             }
 
             // Prepare search index.
-            this.searchIndex.set(note?.noteId, {
-                title: title,
-                content: searchContent
+            this.searchIndex.set(note.noteId, {
+                id: note.noteId,
+                title,
+                content: searchContent,
+                path: note.getBestNotePath()
+                    .map(noteId => noteId !== "root" && becca.getNote(noteId)?.title)
+                    .filter(noteId => noteId)
+                    .join(" / ")
             });
         }
 

@@ -22,12 +22,14 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "boxicons": "2.1.4",
+    "fuse.js": "7.1.0",
     "katex": "0.16.25",
-    "mermaid": "11.12.0",
-    "boxicons": "2.1.4"
+    "mermaid": "11.12.0"
   },
   "devDependencies": {
     "@digitak/esrun": "3.2.26",
+    "@triliumnext/ckeditor5": "workspace:*",
     "@types/swagger-ui": "5.21.1",
     "@typescript-eslint/eslint-plugin": "8.46.2",
     "@typescript-eslint/parser": "8.46.2",
@@ -35,7 +37,6 @@
     "esbuild": "0.25.11",
     "eslint": "9.38.0",
     "highlight.js": "11.11.1",
-    "typescript": "5.9.3",
-    "@triliumnext/ckeditor5": "workspace:*"
+    "typescript": "5.9.3"
   }
 }

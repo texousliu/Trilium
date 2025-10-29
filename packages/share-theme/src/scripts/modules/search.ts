@@ -2,7 +2,6 @@ import debounce from "../common/debounce";
 import parents from "../common/parents";
 import parseHTML from "../common/parsehtml";
 
-
 interface SearchResults {
     results: SearchResult[];
 }
@@ -10,7 +9,7 @@ interface SearchResults {
 interface SearchResult {
     id: string;
     title: string;
-    score: number;
+    score?: number;
     path: string;
 }
 
@@ -30,12 +29,10 @@ export default function setupSearch() {
 
     searchInput.addEventListener("keyup", debounce(async () => {
         // console.log("CHANGE EVENT");
-        const ancestor = document.body.dataset.ancestorNoteId;
         const query = searchInput.value;
         if (query.length < 3) return;
-        const resp = await fetch(`api/notes?search=${query}&ancestorNoteId=${ancestor}`);
-        const json = await resp.json() as SearchResults;
-        const results = json.results.slice(0, 5);
+        const resp = await fetchResults(query);
+        const results = resp.results.slice(0, 5);
         const lines = [`<div class="search-results">`];
         for (const result of results) {
             lines.push(buildResultItem(result));
@@ -61,4 +58,30 @@ export default function setupSearch() {
         if (parents(e.target as HTMLElement, ".search-results,.search-item").length) return;
         if (existing) existing.remove();
     });
+}
+
+async function fetchResults(query: string): Promise<SearchResults> {
+    if ((window as any).glob.isStatic) {
+        const linkHref = document.head.querySelector("link[rel=stylesheet]")?.getAttribute("href");
+        const rootUrl = linkHref?.split("/").slice(0, -2).join("/");
+        const searchIndex = await (await fetch(`${rootUrl}/search-index.json`)).json();
+        const Fuse = (await import("fuse.js")).default;
+        const fuse = new Fuse(searchIndex, {
+            keys: [
+                "title",
+                "content"
+            ]
+        });
+
+        const results = fuse.search<SearchResult>(query);
+        const processedResults = results.map(({ item, score }) => ({
+            ...item,
+            score
+        }));
+        return { results: processedResults };
+    } else {
+        const ancestor = document.body.dataset.ancestorNoteId;
+        const resp = await fetch(`api/notes?search=${query}&ancestorNoteId=${ancestor}`);
+        return await resp.json() as SearchResults;
+    }
 }
