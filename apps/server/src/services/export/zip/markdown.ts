@@ -8,18 +8,16 @@ export default class MarkdownExportProvider extends ZipExportProvider {
 
     prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer {
         if (noteMeta.format === "markdown" && typeof content === "string") {
-            let markdownContent = mdService.toMarkdown(content);
+            content = this.rewriteFn(content, noteMeta);
+            content = mdService.toMarkdown(content);
 
-            if (markdownContent.trim().length > 0 && !markdownContent.startsWith("# ")) {
-                markdownContent = `# ${title}\r
-${markdownContent}`;
+            if (content.trim().length > 0 && !content.startsWith("# ")) {
+                content = `\
+# ${title}\r
+${content}`;
             }
-
-            markdownContent = this.rewriteFn(markdownContent, noteMeta);
-            return markdownContent;
-        } else {
-            return content;
         }
+        return content;
     }
 
     afterDone() { }

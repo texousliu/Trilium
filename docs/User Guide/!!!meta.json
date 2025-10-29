@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.99.1",
+    "appVersion": "0.99.3",
     "files": [
         {
             "isClone": false,
@@ -14,7 +14,71 @@
             "isExpanded": false,
             "type": "text",
             "mime": "text/html",
-            "attributes": [],
+            "attributes": [
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "poXkQfguuA0U",
+                    "isInheritable": false,
+                    "position": 10
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "WOcw2SLH6tbX",
+                    "isInheritable": false,
+                    "position": 20
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "RDslemsQ6gCp",
+                    "isInheritable": false,
+                    "position": 30
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "cbkrhQjrkKrh",
+                    "isInheritable": false,
+                    "position": 40
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "BFs8mudNFgCS",
+                    "isInheritable": false,
+                    "position": 50
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "GTwFsgaA0lCt",
+                    "isInheritable": false,
+                    "position": 60
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "yeEaYqosGLSh",
+                    "isInheritable": false,
+                    "position": 70
+                },
+                {
+                    "type": "label",
+                    "name": "shareAlias",
+                    "value": "user-guide",
+                    "isInheritable": false,
+                    "position": 10
+                },
+                {
+                    "type": "label",
+                    "name": "label:shareAlias",
+                    "value": "promoted,alias=Slug,single,text",
+                    "isInheritable": true,
+                    "position": 20
+                }
+            ],
             "format": "markdown",
             "dataFileName": "User Guide.md",
             "attachments": [],
@@ -152,6 +216,13 @@
                             "value": "bx bx-star",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "feature-highlights",
+                            "isInheritable": false,
+                            "position": 170
                         }
                     ],
                     "format": "markdown",
@@ -178,6 +249,13 @@
                             "value": "bx bx-cog",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "setup",
+                            "isInheritable": false,
+                            "position": 20
                         }
                     ],
                     "format": "markdown",
@@ -223,7 +301,7 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "desktop-installation",
+                                    "value": "desktop",
                                     "isInheritable": false,
                                     "position": 30
                                 }
@@ -262,6 +340,13 @@
                                             "value": "WOcw2SLH6tbX",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "desktop-as-server",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -404,7 +489,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "installation",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "attachments": [],
                                     "dirFileName": "1. Installing the server",
@@ -443,7 +536,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "shareAlias",
-                                                    "value": "packaged-server-installation",
+                                                    "value": "packaged-server",
                                                     "isInheritable": false,
                                                     "position": 10
                                                 },
@@ -493,7 +586,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "shareAlias",
-                                                    "value": "docker-server-installation",
+                                                    "value": "docker",
                                                     "isInheritable": false,
                                                     "position": 30
                                                 },
@@ -529,7 +622,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "shareAlias",
-                                                    "value": "nixos-server-installation",
+                                                    "value": "nixos",
                                                     "isInheritable": false,
                                                     "position": 10
                                                 },
@@ -586,7 +679,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "shareAlias",
-                                                    "value": "manual-server-installation",
+                                                    "value": "manual",
                                                     "isInheritable": false,
                                                     "position": 20
                                                 },
@@ -622,7 +715,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "shareAlias",
-                                                    "value": "kubernetes-server-installation",
+                                                    "value": "kubernetes",
                                                     "isInheritable": false,
                                                     "position": 10
                                                 },
@@ -696,6 +789,13 @@
                                                     "value": "bx bxs-user-account",
                                                     "isInheritable": false,
                                                     "position": 60
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "multiple-instances",
+                                                    "isInheritable": false,
+                                                    "position": 70
                                                 }
                                             ],
                                             "format": "markdown",
@@ -719,7 +819,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "reverse-proxy",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "attachments": [],
                                     "dirFileName": "2. Reverse proxy",
@@ -751,7 +859,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "shareAlias",
-                                                    "value": "nginx-proxy-setup",
+                                                    "value": "nginx",
                                                     "isInheritable": false,
                                                     "position": 10
                                                 }
@@ -787,7 +895,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "shareAlias",
-                                                    "value": "apache-proxy-setup",
+                                                    "value": "apache",
                                                     "isInheritable": false,
                                                     "position": 10
                                                 }
@@ -826,6 +934,13 @@
                                                     "value": "Gzjqa934BdH4",
                                                     "isInheritable": false,
                                                     "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "trusted-proxy",
+                                                    "isInheritable": false,
+                                                    "position": 30
                                                 }
                                             ],
                                             "format": "markdown",
@@ -881,7 +996,7 @@
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "tls-configuration",
+                                            "value": "https",
                                             "isInheritable": false,
                                             "position": 20
                                         },
@@ -940,6 +1055,13 @@
                                             "value": "bx bx-user",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "auth",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -972,7 +1094,7 @@
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "multi-factor-authentication",
+                                            "value": "mfa",
                                             "isInheritable": false,
                                             "position": 10
                                         },
@@ -986,6 +1108,62 @@
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Multi-Factor Authentication.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "yeEaYqosGLSh",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "yeEaYqosGLSh"
+                                    ],
+                                    "title": "Third-party cloud hosting",
+                                    "notePosition": 130,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "Dgg7bR3b6K9j",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "cbkrhQjrkKrh",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "poXkQfguuA0U",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-cloud",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "cloud-hosting",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Third-party cloud hosting.md",
                                     "attachments": []
                                 }
                             ]
@@ -1243,7 +1421,7 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "upgrading-trilium",
+                                    "value": "upgrading",
                                     "isInheritable": false,
                                     "position": 20
                                 }
@@ -1386,6 +1564,13 @@
                             "value": "bx bx-help-circle",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "concepts",
+                            "isInheritable": false,
+                            "position": 20
                         }
                     ],
                     "format": "markdown",
@@ -1413,6 +1598,13 @@
                                     "value": "bx bx-window-alt",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "ui",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -1476,6 +1668,13 @@
                                             "value": "bx bxs-layout",
                                             "isInheritable": false,
                                             "position": 40
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "layouts",
+                                            "isInheritable": false,
+                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -1560,6 +1759,13 @@
                                             "value": "bx bx-menu",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "global-menu",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -1622,7 +1828,7 @@
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "tree-manipulation",
+                                            "value": "note-tree",
                                             "isInheritable": false,
                                             "position": 20
                                         },
@@ -1827,6 +2033,13 @@
                                                     "value": "bx bx-menu",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "context-menu",
+                                                    "isInheritable": false,
+                                                    "position": 210
                                                 }
                                             ],
                                             "format": "markdown",
@@ -1880,6 +2093,13 @@
                                                     "value": "bx bx-list-plus",
                                                     "isInheritable": false,
                                                     "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "multiple-selection",
+                                                    "isInheritable": false,
+                                                    "position": 30
                                                 }
                                             ],
                                             "format": "markdown",
@@ -1939,6 +2159,13 @@
                                                     "value": "bx bxs-keyboard",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "keyboard-shortcuts",
+                                                    "isInheritable": false,
+                                                    "position": 40
                                                 }
                                             ],
                                             "format": "markdown",
@@ -2123,6 +2350,13 @@
                                             "value": "bx bx-dots-horizontal",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "ribbon",
+                                            "isInheritable": false,
+                                            "position": 230
                                         }
                                     ],
                                     "format": "markdown",
@@ -2181,6 +2415,13 @@
                                             "value": "bx bx-dock-top",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "tabs",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -2290,6 +2531,13 @@
                                             "value": "bx bx-sidebar",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "launch-bar",
+                                            "isInheritable": false,
+                                            "position": 90
                                         }
                                     ],
                                     "format": "markdown",
@@ -2355,6 +2603,13 @@
                                             "value": "bx bx-dots-vertical-rounded",
                                             "isInheritable": false,
                                             "position": 50
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "note-buttons",
+                                            "isInheritable": false,
+                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -2434,6 +2689,13 @@
                                             "value": "bx bx-cog",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "options",
+                                            "isInheritable": false,
+                                            "position": 70
                                         }
                                     ],
                                     "format": "markdown",
@@ -2500,6 +2762,13 @@
                                             "value": "bx bx-dock-right",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "split-view",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -2604,6 +2873,13 @@
                                             "value": "bx bx-rectangle",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "floating-buttons",
+                                            "isInheritable": false,
+                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -2669,6 +2945,13 @@
                                             "value": "bx bxs-dock-right",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "right-sidebar",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -2734,6 +3017,13 @@
                                             "value": "bx bx-history",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "recent-changes",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -2779,6 +3069,27 @@
                                             "value": "bx bx-zoom-in",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "zoom",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "x3i7MxGccDuM",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "4TIF1oA4VQRO",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -2800,7 +3111,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "quick-edit",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Quick edit.md",
                                     "attachments": [
@@ -2892,6 +3211,13 @@
                                             "value": "bx bx-message-detail",
                                             "isInheritable": false,
                                             "position": 100
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "note-tooltip",
+                                            "isInheritable": false,
+                                            "position": 110
                                         }
                                     ],
                                     "format": "markdown",
@@ -2997,7 +3323,7 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "note",
+                                    "value": "notes",
                                     "isInheritable": false,
                                     "position": 30
                                 },
@@ -3169,7 +3495,7 @@
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "cloning-notes",
+                                            "value": "cloning",
                                             "isInheritable": false,
                                             "position": 20
                                         },
@@ -3232,6 +3558,13 @@
                                                     "value": "bx bx-rename",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "branch-prefix",
+                                                    "isInheritable": false,
+                                                    "position": 30
                                                 }
                                             ],
                                             "format": "markdown",
@@ -3555,6 +3888,13 @@
                                             "value": "bx bx-printer",
                                             "isInheritable": false,
                                             "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "printing-and-pdf-export",
+                                            "isInheritable": false,
+                                            "position": 110
                                         }
                                     ],
                                     "format": "markdown",
@@ -3667,7 +4007,7 @@
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "read-only-note",
+                                            "value": "read-only-notes",
                                             "isInheritable": false,
                                             "position": 30
                                         },
@@ -3735,6 +4075,13 @@
                                             "value": "bx bxs-grid",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "note-list",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -3773,6 +4120,13 @@
                                     "value": "bx bx-navigation",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "navigation",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -3936,6 +4290,13 @@
                                             "value": "bx bx-search-alt-2",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "quick-search",
+                                            "isInheritable": false,
+                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -3987,6 +4348,13 @@
                                             "value": "bx bx-send",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "jump-to",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -4374,6 +4742,13 @@
                                             "value": "bx bx-bar-chart",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "similar-notes",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -4439,6 +4814,13 @@
                                             "value": "bx bx-search-alt-2",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "search-in-note",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -4678,6 +5060,13 @@
                                     "value": "bx bx-import",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "import-export",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -4783,6 +5172,13 @@
                                                     "value": "bx bx-code-alt",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "supported-syntax",
+                                                    "isInheritable": false,
+                                                    "position": 20
                                                 }
                                             ],
                                             "format": "markdown",
@@ -4810,7 +5206,7 @@
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "evernote-import",
+                                            "value": "evernote",
                                             "isInheritable": false,
                                             "position": 10
                                         }
@@ -4870,6 +5266,13 @@
                                     "value": "bx bxs-yin-yang",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "zen-mode",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -5214,6 +5617,13 @@
                             "value": "bx bx-edit",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "note-types",
+                            "isInheritable": false,
+                            "position": 190
                         }
                     ],
                     "format": "markdown",
@@ -5395,7 +5805,7 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "text-notes",
+                                    "value": "text",
                                     "isInheritable": false,
                                     "position": 10
                                 },
@@ -5487,6 +5897,13 @@
                                             "value": "bx bx-info-circle",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "blockquotes",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -5554,6 +5971,13 @@
                                             "value": "bx bx-bookmark",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "bookmarks",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -5599,6 +6023,13 @@
                                             "value": "bx bx-align-right",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "content-language",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -5636,6 +6067,13 @@
                                             "value": "bx bx-cut",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "cut-to-subnote",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -5694,6 +6132,13 @@
                                             "value": "bx bx-code-alt",
                                             "isInheritable": false,
                                             "position": 40
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "developer-formatting",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -5816,6 +6261,13 @@
                                                     "value": "bx bx-code",
                                                     "isInheritable": false,
                                                     "position": 50
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "code-blocks",
+                                                    "isInheritable": false,
+                                                    "position": 60
                                                 }
                                             ],
                                             "format": "markdown",
@@ -5871,6 +6323,13 @@
                                             "value": "bx bx-bracket",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "footnotes",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -5937,6 +6396,13 @@
                                             "value": "bx bx-text",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "formatting-toolbar",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -6026,6 +6492,13 @@
                                             "value": "bx bx-bold",
                                             "isInheritable": false,
                                             "position": 50
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "general-formatting",
+                                            "isInheritable": false,
+                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -6130,6 +6603,13 @@
                                             "value": "bx bx-highlight",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "highlights-list",
+                                            "isInheritable": false,
+                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -6370,6 +6850,13 @@
                                                     "value": "bx bxs-file-image",
                                                     "isInheritable": false,
                                                     "position": 80
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "image-references",
+                                                    "isInheritable": false,
+                                                    "position": 90
                                                 }
                                             ],
                                             "format": "markdown",
@@ -6424,6 +6911,13 @@
                                             "value": "R9pX4DGra2Vt",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "include-note",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -6503,6 +6997,13 @@
                                             "value": "bx bx-plus",
                                             "isInheritable": false,
                                             "position": 60
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "insert-buttons",
+                                            "isInheritable": false,
+                                            "position": 70
                                         }
                                     ],
                                     "format": "markdown",
@@ -6648,6 +7149,13 @@
                                             "value": "bx bxs-keyboard",
                                             "isInheritable": false,
                                             "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "keyboard-shortcuts",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -6748,6 +7256,13 @@
                                                     "value": "bx bx-link-external",
                                                     "isInheritable": false,
                                                     "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "external-links",
+                                                    "isInheritable": false,
+                                                    "position": 30
                                                 }
                                             ],
                                             "format": "markdown",
@@ -6809,6 +7324,13 @@
                                                     "value": "bx bx-link",
                                                     "isInheritable": false,
                                                     "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "reference-links",
+                                                    "isInheritable": false,
+                                                    "position": 30
                                                 }
                                             ],
                                             "format": "markdown",
@@ -6855,6 +7377,13 @@
                                             "value": "bx bx-list-ul",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "lists",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -7028,6 +7557,13 @@
                                             "value": "bx bxl-markdown",
                                             "isInheritable": false,
                                             "position": 70
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "markdown-formatting",
+                                            "isInheritable": false,
+                                            "position": 90
                                         }
                                     ],
                                     "format": "markdown",
@@ -7077,6 +7613,13 @@
                                             "value": "bx bx-math",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "math-equations",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -7150,6 +7693,13 @@
                                             "value": "bx bxs-grid",
                                             "isInheritable": false,
                                             "position": 50
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "other-features",
+                                            "isInheritable": false,
+                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -7249,6 +7799,13 @@
                                             "value": "bx bx-star",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "premium-features",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -7314,6 +7871,13 @@
                                                     "value": "bx bx-menu",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "slash-commands",
+                                                    "isInheritable": false,
+                                                    "position": 60
                                                 }
                                             ],
                                             "format": "markdown",
@@ -7415,6 +7979,13 @@
                                                     "value": "bx bx-align-left",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "text-snippets",
+                                                    "isInheritable": false,
+                                                    "position": 100
                                                 }
                                             ],
                                             "format": "markdown",
@@ -7490,6 +8061,13 @@
                                             "value": "bx bx-heading",
                                             "isInheritable": false,
                                             "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "table-of-contents",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -7541,6 +8119,13 @@
                                             "value": "bx bx-table",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "tables",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -7714,7 +8299,7 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "code-notes",
+                                    "value": "code",
                                     "isInheritable": false,
                                     "position": 20
                                 },
@@ -7941,6 +8526,13 @@
                                     "value": "bx bxs-network-chart",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "note-map",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -8019,6 +8611,13 @@
                                     "value": "bx bx-extension",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "render-note",
+                                    "isInheritable": false,
+                                    "position": 70
                                 }
                             ],
                             "format": "markdown",
@@ -8150,7 +8749,7 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "book-note",
+                                    "value": "collections",
                                     "isInheritable": false,
                                     "position": 10
                                 },
@@ -8203,6 +8802,13 @@
                                             "value": "bx bx-calendar",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "calendar",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -8384,6 +8990,13 @@
                                             "value": "bx bx-map-alt",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "geomap",
+                                            "isInheritable": false,
+                                            "position": 90
                                         }
                                     ],
                                     "format": "markdown",
@@ -8601,6 +9214,13 @@
                                             "value": "bx bxs-grid",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "grid",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -8652,6 +9272,13 @@
                                             "value": "bx bx-list-ul",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "list",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -8738,6 +9365,13 @@
                                             "value": "bx bx-table",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "table",
+                                            "isInheritable": false,
+                                            "position": 80
                                         }
                                     ],
                                     "format": "markdown",
@@ -8782,6 +9416,13 @@
                                             "value": "bx bx-columns",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "board",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -8875,6 +9516,13 @@
                                             "value": "bx bx-slideshow",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "presentation",
+                                            "isInheritable": false,
+                                            "position": 90
                                         }
                                     ],
                                     "format": "markdown",
@@ -8996,6 +9644,13 @@
                                             "value": "bx bxs-network-chart",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "elk",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -9042,6 +9697,13 @@
                                     "value": "bx bx-pen",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "canvas",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -9085,6 +9747,13 @@
                                     "value": "bx bx-globe-alt",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "webview",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -9126,6 +9795,13 @@
                                     "value": "bx bx-sitemap",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "mindmap",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
@@ -9239,6 +9915,13 @@
                                     "value": "nBAXQFj20hS1",
                                     "isInheritable": false,
                                     "position": 120
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "file",
+                                    "isInheritable": false,
+                                    "position": 130
                                 }
                             ],
                             "format": "markdown",
@@ -9394,7 +10077,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "reporting-issues",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "dataFileName": "Reporting issues.md",
                             "attachments": []
@@ -9557,6 +10248,13 @@
                                             "value": "bx bx-server",
                                             "isInheritable": false,
                                             "position": 40
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "backend-logs",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
@@ -9585,6 +10283,13 @@
                                             "value": "bx bx-window-alt",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "frontend-logs",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -9631,6 +10336,13 @@
                                     "value": "ud6MShXL4WpO",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "sync-timeout",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -9651,7 +10363,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "refreshing-app",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "dataFileName": "Refreshing the application.md",
                             "attachments": []
@@ -9678,6 +10398,13 @@
                             "value": "bx bx-palette",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "theme-development",
+                            "isInheritable": false,
+                            "position": 20
                         }
                     ],
                     "format": "markdown",
@@ -9705,6 +10432,13 @@
                                     "value": "WFGzWeUK6arS",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "creating-custom-theme",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -9774,7 +10508,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "customize-next-theme",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "dataFileName": "Customize the Next theme.md",
                             "attachments": [
@@ -9809,6 +10551,13 @@
                                     "value": "d3fAXQ2diepH",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "reference",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -9850,6 +10599,13 @@
                                     "value": "zP3PMqaG71Ct",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "custom-appcss",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
@@ -9911,6 +10667,13 @@
                             "value": "bx bx-rocket",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "advanced-usage",
+                            "isInheritable": false,
+                            "position": 20
                         }
                     ],
                     "format": "markdown",
@@ -10235,6 +10998,13 @@
                                             "value": "bx bx-hash",
                                             "isInheritable": false,
                                             "position": 40
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "labels",
+                                            "isInheritable": false,
+                                            "position": 320
                                         }
                                     ],
                                     "format": "markdown",
@@ -10326,6 +11096,13 @@
                                             "value": "bx bx-transfer",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "relations",
+                                            "isInheritable": false,
+                                            "position": 100
                                         }
                                     ],
                                     "format": "markdown",
@@ -10835,7 +11612,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "serving-raw",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Serving directly the content o.md",
                                     "attachments": [
@@ -11315,7 +12100,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "custom-resource-providers",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "dataFileName": "Custom Resource Providers.md",
                             "attachments": []
@@ -11370,6 +12163,13 @@
                                             "value": "/etapi/docs",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "api-reference",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "dataFileName": "API Reference.dat",
@@ -11517,6 +12317,13 @@
                                             "value": "tAassRL4RSQL",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "manual-editing",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -11570,6 +12377,13 @@
                                                     "value": "bx bx-data",
                                                     "isInheritable": false,
                                                     "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "sql-console",
+                                                    "isInheritable": false,
+                                                    "position": 40
                                                 }
                                             ],
                                             "format": "markdown",
@@ -11668,6 +12482,13 @@
                                             "value": "bx bx-package",
                                             "isInheritable": false,
                                             "position": 110
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "demo-notes",
+                                            "isInheritable": false,
+                                            "position": 120
                                         }
                                     ],
                                     "format": "markdown",
@@ -11733,6 +12554,13 @@
                                             "value": "cbkrhQjrkKrh",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "trilium-instance",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -11754,7 +12582,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "cors",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Cross-Origin Resource Sharing .md",
                                     "attachments": []
@@ -11824,6 +12660,13 @@
                                     "value": "bx bx-list-plus",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "bulk-actions",
+                                    "isInheritable": false,
+                                    "position": 70
                                 }
                             ],
                             "format": "markdown",
@@ -11937,6 +12780,13 @@
                                     "value": "bx bx-code",
                                     "isInheritable": false,
                                     "position": 120
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "note-source",
+                                    "isInheritable": false,
+                                    "position": 130
                                 }
                             ],
                             "format": "markdown",
@@ -11980,6 +12830,13 @@
                                     "value": "bx bxs-component",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "technologies",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
@@ -12044,6 +12901,13 @@
                                             "value": "NwBbFdNZ9h7O",
                                             "isInheritable": false,
                                             "position": 60
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "ckeditor",
+                                            "isInheritable": false,
+                                            "position": 70
                                         }
                                     ],
                                     "format": "markdown",
@@ -12072,6 +12936,13 @@
                                             "value": "gBbsAeiuUxI5",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "mindelixir",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -12100,6 +12971,13 @@
                                             "value": "grjYqerjn243",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "excalidraw",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -12128,6 +13006,13 @@
                                             "value": "81SGnPGMk7Xc",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "leaflet",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
@@ -12164,6 +13049,13 @@
                                     "value": "bx bx-hash",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "note-id",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -12184,7 +13076,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "internal-api",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "attachments": [],
                             "dirFileName": "Internal API",
@@ -12211,6 +13111,13 @@
                                             "value": "/api/docs",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "api-reference",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "dataFileName": "API Reference.dat",
@@ -12435,6 +13342,13 @@
                                     "value": "bx bx-hide",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "hidden-notes",
+                                    "isInheritable": false,
+                                    "position": 290
                                 }
                             ],
                             "format": "markdown",
@@ -12478,6 +13392,13 @@
                                     "value": "bx bxs-data",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "metrics",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -12567,6 +13488,13 @@
                             "value": "",
                             "isInheritable": false,
                             "position": 30
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "llm",
+                            "isInheritable": false,
+                            "position": 40
                         }
                     ],
                     "attachments": [],
@@ -12593,6 +13521,13 @@
                                     "value": "vvUCN7FDkq7G",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "intro",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
@@ -12722,6 +13657,13 @@
                                     "value": "list",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "providers",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
@@ -12775,6 +13717,13 @@
                                             "value": "",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "ollama",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "attachments": [],
@@ -12796,7 +13745,15 @@
                                             "isExpanded": false,
                                             "type": "text",
                                             "mime": "text/html",
-                                            "attributes": [],
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "installation",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
                                             "format": "markdown",
                                             "dataFileName": "Installing Ollama.md",
                                             "attachments": [
@@ -12867,7 +13824,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "openai",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "OpenAI.md",
                                     "attachments": []
@@ -12887,7 +13852,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "anthropic",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Anthropic.md",
                                     "attachments": []
@@ -13041,7 +14014,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "examples",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "attachments": [],
                             "dirFileName": "Examples",
@@ -13117,6 +14098,13 @@
                                             "value": "bx bx-task",
                                             "isInheritable": false,
                                             "position": 80
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "new-task-button",
+                                            "isInheritable": false,
+                                            "position": 90
                                         }
                                     ],
                                     "format": "markdown",
@@ -13147,7 +14135,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "responses-from-google-forms",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Downloading responses from Goo.md",
                                     "attachments": []
@@ -13167,7 +14163,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "promoted-attributes-config",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Using promoted attributes to c.md",
                                     "attachments": [
@@ -13302,6 +14306,13 @@
                                             "value": "s8alTXmpFR61",
                                             "isInheritable": false,
                                             "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "word-count",
+                                            "isInheritable": false,
+                                            "position": 40
                                         }
                                     ],
                                     "format": "markdown",
@@ -13439,6 +14450,13 @@
                                             "value": "https://triliumnext.github.io/Notes/Script%20API/interfaces/Frontend_Script_API.Api.html",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "frontend-api",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "attachments": [],
@@ -13467,6 +14485,13 @@
                                                     "value": "https://triliumnext.github.io/Notes/Script%20API/classes/Frontend_Script_API.FNote.html",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "fnote",
+                                                    "isInheritable": false,
+                                                    "position": 20
                                                 }
                                             ],
                                             "dataFileName": "FNote.dat",
@@ -13496,6 +14521,13 @@
                                             "value": "https://triliumnext.github.io/Notes/Script%20API/interfaces/Backend_Script_API.Api.html",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "backend-api",
+                                            "isInheritable": false,
+                                            "position": 20
                                         }
                                     ],
                                     "dataFileName": "Backend API.dat",
@@ -13531,6 +14563,13 @@
                                     "value": "bx bx-terminal",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "logging",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",

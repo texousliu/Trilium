@@ -15,6 +15,9 @@ import log from "../services/log.js";
 import { join } from "path";
 import { readFileSync } from "fs";
 import { highlightAuto } from "@triliumnext/highlightjs";
+import becca from "../becca/becca.js";
+import { BAttachment } from "../services/backend_script_entrypoint.js";
+import SAttachment from "./shaca/entities/sattachment.js";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const templateCache: Map<string, string> = new Map();
@@ -78,7 +81,9 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
             `${basePath}assets/scripts.js`
         ],
         logoUrl: `${basePath}icon-color.svg`,
-        ancestors
+        faviconUrl: `${basePath}favicon.ico`,
+        ancestors,
+        isStatic: true
     });
 }
 
@@ -123,7 +128,9 @@ export function renderNoteContent(note: SNote) {
         cssToLoad,
         jsToLoad,
         logoUrl,
-        ancestors
+        ancestors,
+        isStatic: false,
+        faviconUrl: note.hasRelation("shareFavicon") ? `api/notes/${note.getRelationValue("shareFavicon")}/download` : `../favicon.ico`
     });
 }
 
@@ -134,6 +141,8 @@ interface RenderArgs {
     jsToLoad: string[];
     logoUrl: string;
     ancestors: string[];
+    isStatic: boolean;
+    faviconUrl: string;
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
@@ -150,7 +159,7 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
         t,
         isDev,
         utils,
-        ...renderArgs
+        ...renderArgs,
     };
 
     // Check if the user has their own template.
@@ -196,14 +205,14 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
     });
 }
 
-function getDefaultTemplatePath(template: string) {
+export function getDefaultTemplatePath(template: string) {
     // Path is relative to apps/server/dist/assets/views
     return process.env.NODE_ENV === "development"
         ? join(__dirname, `../../../../packages/share-theme/src/templates/${template}.ejs`)
         : join(getResourceDir(), `share-theme/templates/${template}.ejs`);
 }
 
-function readTemplate(path: string) {
+export function readTemplate(path: string) {
     const cachedTemplate = templateCache.get(path);
     if (cachedTemplate) {
         return cachedTemplate;
@@ -289,6 +298,13 @@ function renderText(result: Result, note: SNote | BNote) {
 
     result.isEmpty = document.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
 
+    const getNote = note instanceof BNote
+        ? (noteId: string) => becca.getNote(noteId)
+        : (noteId: string) => shaca.getNote(noteId);
+    const getAttachment = note instanceof BNote
+        ? (attachmentId: string) => becca.getAttachment(attachmentId)
+        : (attachmentId: string) => shaca.getAttachment(attachmentId);
+
     if (!result.isEmpty) {
         // Process attachment links.
         for (const linkEl of document.querySelectorAll("a")) {
@@ -300,7 +316,7 @@ function renderText(result: Result, note: SNote | BNote) {
             }
 
             if (href?.startsWith("#")) {
-                handleAttachmentLink(linkEl, href);
+                handleAttachmentLink(linkEl, href, getNote, getAttachment);
             }
         }
 
@@ -319,12 +335,12 @@ function renderText(result: Result, note: SNote | BNote) {
     }
 }
 
-function handleAttachmentLink(linkEl: HTMLElement, href: string) {
+function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: string) => SNote | BNote | null, getAttachment: (id: string) => BAttachment | SAttachment | null) {
     const linkRegExp = /attachmentId=([a-zA-Z0-9_]+)/g;
     let attachmentMatch;
     if ((attachmentMatch = linkRegExp.exec(href))) {
         const attachmentId = attachmentMatch[1];
-        const attachment = shaca.getAttachment(attachmentId);
+        const attachment = getAttachment(attachmentId);
 
         if (attachment) {
             linkEl.setAttribute("href", `api/attachments/${attachmentId}/download`);
@@ -334,12 +350,13 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string) {
             linkEl.appendChild(new TextNode(attachment.title));
         } else {
             linkEl.removeAttribute("href");
+            log.error(`Broken attachment link detected in shared note: unable to find attachment with ID ${attachmentId}`);
         }
     } else {
         const [notePath] = href.split("?");
         const notePathSegments = notePath.split("/");
         const noteId = notePathSegments[notePathSegments.length - 1];
-        const linkedNote = shaca.getNote(noteId);
+        const linkedNote = getNote(noteId);
         if (linkedNote) {
             const isExternalLink = linkedNote.hasLabel("shareExternalLink");
             const href = isExternalLink ? linkedNote.getLabelValue("shareExternalLink") : `./${linkedNote.shareId}`;
@@ -352,6 +369,7 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string) {
             }
             linkEl.classList.add(`type-${linkedNote.type}`);
         } else {
+            log.error(`Broken link detected in shared note: unable to find note with ID ${noteId}`);
             linkEl.removeAttribute("href");
         }
     }
