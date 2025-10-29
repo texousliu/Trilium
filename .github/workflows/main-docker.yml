@@ -116,10 +116,10 @@ jobs:
           - dockerfile: Dockerfile
             platform: linux/arm64
             image: ubuntu-24.04-arm
-          - dockerfile: Dockerfile
+          - dockerfile: Dockerfile.legacy
             platform: linux/arm/v7
             image: ubuntu-24.04-arm
-          - dockerfile: Dockerfile
+          - dockerfile: Dockerfile.legacy
             platform: linux/arm/v8
             image: ubuntu-24.04-arm
     runs-on: ${{ matrix.image }}
