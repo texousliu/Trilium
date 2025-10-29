@@ -45,9 +45,9 @@ for (const mod of modulesRequested) {
 if (!entryPoints.length) for (const mod of modules) entryPoints.push(makeEntry(mod));
 
 
-async function runBuild() {
+async function runBuild(watch: boolean) {
     const before = performance.now();
-    await esbuild.build({
+    const opts: esbuild.BuildOptions = {
         entryPoints: entryPoints,
         bundle: true,
         splitting: true,
@@ -68,9 +68,16 @@ async function runBuild() {
         logLevel: "info",
         metafile: true,
         minify: process.argv.includes("--minify")
-    });
-    const after = performance.now();
-    console.log(`Build actually took ${(after - before).toFixed(2)}ms`);
+    };
+    if (watch) {
+        const ctx = esbuild.context(opts);
+        (await ctx).watch();
+    } else {
+        await esbuild.build(opts);
+        const after = performance.now();
+        console.log(`Build actually took ${(after - before).toFixed(2)}ms`);
+    }
 }
 
-runBuild().catch(console.error);
+const watch = process.argv.includes("--watch");
+runBuild(watch).catch(console.error);
