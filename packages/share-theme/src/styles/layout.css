@@ -40,7 +40,6 @@ body {
     padding: 0 20px;
     box-sizing: border-box;
     width: 100%;
-    overflow: auto;
 }
 
 @media (min-width: 1200px) {
