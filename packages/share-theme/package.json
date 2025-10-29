@@ -2,6 +2,7 @@
   "name": "@triliumnext/share-theme",
   "version": "1.0.3",
   "description": "Adaptation of the trilium.rocks share theme",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "esrun scripts/build.ts",

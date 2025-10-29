@@ -1,6 +1,9 @@
 import debounce from "../common/debounce";
 import parents from "../common/parents";
 import parseHTML from "../common/parsehtml";
+import type { default as Fuse } from "fuse.js";
+
+let fuseInstance: Fuse<SearchResult> | null = null;
 
 interface SearchResults {
     results: SearchResult[];
@@ -61,25 +64,30 @@ export default function setupSearch() {
 }
 
 async function fetchResults(query: string): Promise<SearchResults> {
-    if ((window as any).glob.isStatic) {
-        const linkHref = document.head.querySelector("link[rel=stylesheet]")?.getAttribute("href");
-        const rootUrl = linkHref?.split("/").slice(0, -2).join("/") || ".";
-        const searchIndex = await (await fetch(`${rootUrl}/search-index.json`)).json();
-        const Fuse = (await import("fuse.js")).default;
-        const fuse = new Fuse(searchIndex, {
-            keys: [
-                "title",
-                "content"
-            ],
-            includeScore: true,
-            threshold: 0.65,
-            ignoreDiacritics: true,
-            ignoreLocation: true,
-            ignoreFieldNorm: true,
-            useExtendedSearch: true
-        });
+    const linkHref = document.head.querySelector("link[rel=stylesheet]")?.getAttribute("href");
+    const rootUrl = linkHref?.split("/").slice(0, -2).join("/") || ".";
 
-        const results = fuse.search<SearchResult>(query, { limit: 5 });
+    if ((window as any).glob.isStatic) {
+        // Load the search index.
+        if (!fuseInstance) {
+            const searchIndex = await (await fetch(`${rootUrl}/search-index.json`)).json();
+            const Fuse = (await import("fuse.js")).default;
+            fuseInstance = new Fuse(searchIndex, {
+                keys: [
+                    "title",
+                    "content"
+                ],
+                includeScore: true,
+                threshold: 0.65,
+                ignoreDiacritics: true,
+                ignoreLocation: true,
+                ignoreFieldNorm: true,
+                useExtendedSearch: true
+            });
+        }
+
+        // Do the search.
+        const results = fuseInstance.search(query, { limit: 5 });
         console.debug("Search results:", results);
         const processedResults = results.map(({ item, score }) => ({
             ...item,
