@@ -166,7 +166,7 @@ export default class Entrypoints extends Component {
             return;
         }
 
-        await appContext.tabManager.openTabWithNoteWithHoisting(todayNote.noteId, { activate: true });
+        await appContext.tabManager.openInSameTab(todayNote.noteId);
     }
 
     async runActiveNoteCommand() {
