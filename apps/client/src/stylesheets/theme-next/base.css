@@ -82,6 +82,7 @@
 
     /* Theme capabilities */
     --tab-note-icons: true;
+    --allow-background-effects: true;
 
     /* To ensure that a tree item's custom color remains sufficiently contrasted and readable,
      * the color is adjusted based on the current color scheme (light or dark). The lightness

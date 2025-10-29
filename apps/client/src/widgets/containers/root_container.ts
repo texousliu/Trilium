@@ -1,9 +1,10 @@
 import { EventData } from "../../components/app_context.js";
+import { LOCALES } from "@triliumnext/commons";
+import { readCssVar } from "../../utils/css-var.js";
 import FlexContainer from "./flex_container.js";
 import options from "../../services/options.js";
 import type BasicWidget from "../basic_widget.js";
 import utils from "../../services/utils.js";
-import { LOCALES } from "@triliumnext/commons";
 
 /**
  * The root container is the top-most widget/container, from which the entire layout derives.
@@ -33,6 +34,7 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
         this.#setMotion(options.is("motionEnabled"));
         this.#setShadows(options.is("shadowsEnabled"));
         this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
+        this.#setThemeCapabilities();
         this.#setLocaleAndDirection(options.get("locale"));
 
         return super.render();
@@ -69,6 +71,15 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
 
     #setBackdropEffects(enabled: boolean) {
         document.body.classList.toggle("backdrop-effects-disabled", !enabled);
+    }
+
+    #setThemeCapabilities() {
+        // Supports background effects
+
+        const useBgfx = readCssVar(document.documentElement, "allow-background-effects")
+                        .asBoolean(false);
+
+        document.body.classList.toggle("theme-supports-background-effects", useBgfx);
     }
 
     #setLocaleAndDirection(locale: string) {
