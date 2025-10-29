@@ -2,7 +2,7 @@ import { join } from "path";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
 import { ExportFormat, ZipExportProvider } from "./abstract_provider.js";
 import { RESOURCE_DIR } from "../../resource_dir";
-import { getResourceDir, isDev } from "../../utils";
+import utils, { getResourceDir, isDev } from "../../utils";
 import fs, { readdirSync } from "fs";
 import { renderNoteForExport } from "../../../share/content_renderer";
 import type BNote from "../../../becca/entities/bnote.js";
@@ -11,13 +11,18 @@ import { getShareThemeAssetDir } from "../../../routes/assets";
 
 const shareThemeAssetDir = getShareThemeAssetDir();
 
+interface SearchIndexEntry {
+    title: string;
+    content: string;
+}
+
 export default class ShareThemeExportProvider extends ZipExportProvider {
 
     private assetsMeta: NoteMeta[] = [];
     private indexMeta: NoteMeta | null = null;
+    private searchIndex: Map<string, SearchIndexEntry> = new Map();
 
     prepareMeta(metaFile: NoteMetaFile): void {
-
         const assets = [
             "icon-color.svg"
         ];
@@ -48,8 +53,12 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             throw new Error("Missing note path.");
         }
         const basePath = "../".repeat(noteMeta.notePath.length - 1);
+        let searchContent = "";
 
         if (note) {
+            // Prepare search index.
+            searchContent = typeof content === "string" ? utils.stripTags(content) : "";
+
             content = renderNoteForExport(note, branch, basePath, noteMeta.notePath.slice(0, -1));
             if (typeof content === "string") {
                 content = content.replace(/href="[^"]*\.\/([a-zA-Z0-9_\/]{12})[^"]*"/g, (match, id) => {
@@ -58,6 +67,12 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
                 });
                 content = this.rewriteFn(content, noteMeta);
             }
+
+            // Prepare search index.
+            this.searchIndex.set(note?.noteId, {
+                title: title,
+                content: searchContent
+            });
         }
 
         return content;
@@ -66,6 +81,9 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     afterDone(rootMeta: NoteMeta): void {
         this.#saveAssets(rootMeta, this.assetsMeta);
         this.#saveIndex(rootMeta);
+
+        // Search index
+        this.archive.append(JSON.stringify(Array.from(this.searchIndex.values()), null, 4), { name: "search-index.json" });
     }
 
     mapExtension(type: string | null, mime: string, existingExtension: string, format: ExportFormat): string | null {
