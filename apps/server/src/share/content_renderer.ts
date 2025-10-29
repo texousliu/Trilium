@@ -205,7 +205,7 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
     });
 }
 
-function getDefaultTemplatePath(template: string) {
+export function getDefaultTemplatePath(template: string) {
     // Path is relative to apps/server/dist/assets/views
     return process.env.NODE_ENV === "development"
         ? join(__dirname, `../../../../packages/share-theme/src/templates/${template}.ejs`)
