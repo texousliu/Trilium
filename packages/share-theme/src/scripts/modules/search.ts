@@ -71,7 +71,12 @@ async function fetchResults(query: string): Promise<SearchResults> {
                 "title",
                 "content"
             ],
-            includeScore: true
+            includeScore: true,
+            threshold: 0.65,
+            ignoreDiacritics: true,
+            ignoreLocation: true,
+            ignoreFieldNorm: true,
+            useExtendedSearch: true
         });
 
         const results = fuse.search<SearchResult>(query, { limit: 5 });
