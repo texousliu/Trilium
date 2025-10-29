@@ -1106,9 +1106,6 @@
     "title": "Largeur du contenu",
     "default_description": "Trilium limite par défaut la largeur maximale du contenu pour améliorer la lisibilité sur des écrans larges.",
     "max_width_label": "Largeur maximale du contenu en pixels",
-    "apply_changes_description": "Pour appliquer les modifications de largeur du contenu, cliquez sur",
-    "reload_button": "recharger l'interface",
-    "reload_description": "changements par rapport aux options d'apparence",
     "max_width_unit": "Pixels"
   },
   "native_title_bar": {

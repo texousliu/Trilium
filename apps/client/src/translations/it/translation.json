@@ -1573,10 +1573,7 @@
     "title": "Larghezza del contenuto",
     "default_description": "Per impostazione predefinita, Trilium limita la larghezza massima del contenuto per migliorare la leggibilità sugli schermi più grandi.",
     "max_width_label": "Larghezza massima del contenuto",
-    "max_width_unit": "pixel",
-    "apply_changes_description": "Per applicare le modifiche alla larghezza del contenuto, fare clic su",
-    "reload_button": "ricarica frontend",
-    "reload_description": "modifiche dalle opzioni di aspetto"
+    "max_width_unit": "pixel"
   },
   "native_title_bar": {
     "title": "Barra del titolo nativa (richiede il riavvio dell'app)",

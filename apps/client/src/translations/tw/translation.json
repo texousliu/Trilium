@@ -1103,9 +1103,6 @@
     "title": "內容寬度",
     "default_description": "Trilium 預設會限制內容的最大寬度以提高在寬螢幕中全螢幕時的可讀性。",
     "max_width_label": "內容最大寬度（像素）",
-    "apply_changes_description": "要套用內容寬度更改，請點擊",
-    "reload_button": "重新載入前端",
-    "reload_description": "來自外觀選項的更改",
     "max_width_unit": "像素"
   },
   "native_title_bar": {
