@@ -25,6 +25,7 @@
 .ck-content pre {
     overflow: auto;
     position: relative;
+    min-width: unset !important;
 }
 
 .ck-content pre .copy-button {
