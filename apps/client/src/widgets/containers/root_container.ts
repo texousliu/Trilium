@@ -31,6 +31,7 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
             window.visualViewport?.addEventListener("resize", () => this.#onMobileResize());
         }
 
+        this.#setMaxContentWidth(options.getInt("maxContentWidth") ?? 0);
         this.#setMotion(options.is("motionEnabled"));
         this.#setShadows(options.is("shadowsEnabled"));
         this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
@@ -52,12 +53,22 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
         if (loadResults.isOptionReloaded("backdropEffectsEnabled")) {
             this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
         }
+
+        if (loadResults.isOptionReloaded("maxContentWidth")) {
+            this.#setMaxContentWidth(options.getInt("maxContentWidth") ?? 0);
+        }
     }
+
 
     #onMobileResize() {
         const currentViewportHeight = getViewportHeight();
         const isKeyboardOpened = (currentViewportHeight < this.originalViewportHeight);
         this.$widget.toggleClass("virtual-keyboard-opened", isKeyboardOpened);
+    }
+
+    #setMaxContentWidth(width: number) {
+        width = Math.max(width, 640);
+        document.body.style.setProperty("--preferred-max-content-width", `${width}px`);
     }
 
     #setMotion(enabled: boolean) {

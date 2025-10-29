@@ -299,10 +299,6 @@ function MaxContentWidth() {
                     />
                 </FormGroup>
             </Column>
-
-            <p>
-                {t("max_content_width.apply_changes_description")} <Button text={t("max_content_width.reload_button")} size="micro" onClick={reloadFrontendApp} />
-            </p>
         </OptionsSection>
     )
 }
