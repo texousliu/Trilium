@@ -1809,12 +1809,15 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 .note-split {
+    /* Limits the maximum width of the note */
+    --max-content-width: var(--preferred-max-content-width);
+
     margin-inline-start: auto;
     margin-inline-end: auto;
 }
 
 .note-split.full-content-width {
-    max-width: 999999px;
+    --max-content-width: unset;
 }
 
 button.close:hover {

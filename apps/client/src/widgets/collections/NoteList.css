@@ -1,5 +1,6 @@
 .note-list-widget {
     min-height: 0;
+    max-width: var(--max-content-width); /* Inherited from .note-split */
     overflow: auto;
     contain: none !important;
 }

@@ -39,6 +39,7 @@ const TPL = /*html*/`
 <div class="note-detail">
     <style>
     .note-detail {
+        max-width: var(--max-content-width); /* Inherited from .note-split */
         font-family: var(--detail-font-family);
         font-size: var(--detail-font-size);
     }
