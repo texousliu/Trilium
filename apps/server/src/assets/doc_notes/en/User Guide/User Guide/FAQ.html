@@ -25,14 +25,14 @@
 <p>Common request is to allow multiple users collaborate, share notes etc.
   So far I'm resisting this because of these reasons:</p>
 <ul>
-  <li data-list-item-id="eb800113d8b3ab1905b710e9e8ee0f12a">it's a huge feature, or rather a Pandora's box of collaboration features
+  <li>it's a huge feature, or rather a Pandora's box of collaboration features
     like user management, permissions, conflict resolution, real-time editing
     of a note by multiple people etc. This would be a huge amount of work.
     Trilium Notes is project made mostly by one person in free time and that's
     unlikely to change in the future.</li>
-  <li data-list-item-id="ee44659e9fabe03f5392ad0d6a3d1c246">given its size it would probably pivot the attention away from my main
+  <li>given its size it would probably pivot the attention away from my main
     focus which is a personal note-taking</li>
-  <li data-list-item-id="e40e9d3e3682b4aa23621056270b76257">the assumption that only single person has access to the app simplifies
+  <li>the assumption that only single person has access to the app simplifies
     many things, or just outright makes them possible. In multi-user app, our
     <a
     href="#root/_help_CdNpE2pqjmI6">scripting</a>support would be a XSS security hole, while with the single
@@ -69,23 +69,21 @@
   with probably more problems.</p>
 <p>More detailed answer:</p>
 <ul>
-  <li data-list-item-id="ed6f42f2a9c3d02e70f8c562d961bb63d"><a href="#root/_help_IakOLONlIfGI">clones</a> are what you might call "hard directory
+  <li><a href="#root/_help_IakOLONlIfGI">clones</a> are what you might call "hard directory
     link" in filesystem lingo, but this concept is not implemented in any filesystem</li>
-  <li
-  data-list-item-id="ea08b9caa11abddfb48deb74d5b6f7388">filesystems make a distinction between directory and file while there's
+  <li>filesystems make a distinction between directory and file while there's
     intentionally no such difference in Trilium</li>
-    <li data-list-item-id="e9c3473810cd4fe860b5824b714ced189">files are stored in no particular order and user can't change this</li>
-    <li
-    data-list-item-id="e168be7c32aff67053f0095dcd583da0f">Trilium allows storing note <a href="#root/_help_zEY4DaJG4YT5">attributes</a> which
-      could be represented in extended user attributes but their support differs
-      greatly among different filesystems / operating systems</li>
-      <li data-list-item-id="e86308cf2302c48ae3684f817ef921e46">Trilium makes links / relations between different notes which can be quickly
-        retrieved / navigated (e.g. for <a href="#root/_help_BCkXAVs63Ttv">note map</a>).
-        There's no such support in file systems which means these would have to
-        be stored in some kind of side-car files (mini-databases).</li>
-      <li data-list-item-id="ea23fb3e81afba708ad7da44c2feeb9be">Filesystems are generally not transactional. While this is not completely
-        required for a note-taking application, having transactions make it way
-        easier to keep notes and their metadata in predictable and consistent state.</li>
+  <li>files are stored in no particular order and user can't change this</li>
+  <li>Trilium allows storing note <a href="#root/_help_zEY4DaJG4YT5">attributes</a> which
+    could be represented in extended user attributes but their support differs
+    greatly among different filesystems / operating systems</li>
+  <li>Trilium makes links / relations between different notes which can be quickly
+    retrieved / navigated (e.g. for <a href="#root/_help_BCkXAVs63Ttv">note map</a>).
+    There's no such support in file systems which means these would have to
+    be stored in some kind of side-car files (mini-databases).</li>
+  <li>Filesystems are generally not transactional. While this is not completely
+    required for a note-taking application, having transactions make it way
+    easier to keep notes and their metadata in predictable and consistent state.</li>
 </ul>
 <h2>Search-related Questions</h2>
 <h3>Why does search sometimes find results with typos?</h3>
@@ -98,9 +96,9 @@
 <h3>How can I search for notes when I'm not sure of the exact spelling?</h3>
 <p>Use the fuzzy search operators:</p>
 <ul>
-  <li data-list-item-id="e91e70fef9031d168e95d28af8eb4c8ed"><code>#title ~= "projct"</code> - finds notes with titles like "project"
+  <li><code>#title ~= "projct"</code> - finds notes with titles like "project"
     despite the typo</li>
-  <li data-list-item-id="ee1eddc61b08bb2497a4eed03784cb845"><code>note.content ~* "algoritm"</code> - finds content containing "algorithm"
+  <li><code>note.content ~* "algoritm"</code> - finds content containing "algorithm"
     or similar words</li>
 </ul>
 <h3>Why do some search results appear before others with lower scores?</h3>
@@ -110,9 +108,9 @@
   factors.</p>
 <h3>How can I make my searches faster?</h3>
 <ol>
-  <li data-list-item-id="e31e798496de72ab1d1c890e5143bdcf3">Use the "Fast search" option to search only titles and attributes (not
+  <li>Use the "Fast search" option to search only titles and attributes (not
     content)</li>
-  <li data-list-item-id="e8659a04d4b8d1ce16740520524f51dd1">Limit search scope using the "Ancestor" field</li>
-  <li data-list-item-id="e71c171a22ad97a012f3fe0b4934e9eed">Set a result limit to prevent loading too many results</li>
-  <li data-list-item-id="e345d6d8caa359211458da8597d0aeb07">For large databases, consider archiving old notes to reduce search scope</li>
+  <li>Limit search scope using the "Ancestor" field</li>
+  <li>Set a result limit to prevent loading too many results</li>
+  <li>For large databases, consider archiving old notes to reduce search scope</li>
 </ol>
