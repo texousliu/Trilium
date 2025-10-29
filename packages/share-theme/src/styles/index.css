@@ -30,19 +30,6 @@ Accent Color Ideas
   --text-link: #FFB628;
 */
 
-:root {
-    --background-primary: #333333;
-    --background-secondary: #1F1F1F;
-    --background-highlight: #484848;
-    --background-active: #777777;
-    --text-primary: #cccccc;
-    --text-heading: #cccccc;
-    --text-menu: #AAAAAA;
-    --text-link: #87CEFA;
-    --text-menu-active: #000000;
-    color-scheme: dark;
-}
-
 body.theme-light {
     --background-primary: #FFFFFF;
     --background-secondary: #F3F3F3;
@@ -53,6 +40,19 @@ body.theme-light {
     --text-menu: #333333;
     --text-link: #0000ff;
     color-scheme: light;
+}
+
+body.theme-dark {
+    --background-primary: #333333;
+    --background-secondary: #1F1F1F;
+    --background-highlight: #484848;
+    --background-active: #777777;
+    --text-primary: #cccccc;
+    --text-heading: #cccccc;
+    --text-menu: #AAAAAA;
+    --text-link: #87CEFA;
+    --text-menu-active: #000000;
+    color-scheme: dark;
 }
 
 body {
