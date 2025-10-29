@@ -104,7 +104,8 @@
     "export_in_progress": "正在匯出：{{progressCount}}",
     "export_finished_successfully": "成功匯出。",
     "format_html": "HTML - 推薦，因為它保留了所有格式",
-    "format_pdf": "PDF - 用於列印或與他人分享。"
+    "format_pdf": "PDF - 用於列印或與他人分享。",
+    "share-format": "HTML 網頁發佈——使用與共享筆記相同的佈景主題，但可發佈為靜態網站。"
   },
   "help": {
     "noteNavigation": "筆記導航",
