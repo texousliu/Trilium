@@ -104,7 +104,8 @@
     "export_status": "Exportstatus",
     "export_in_progress": "Export läuft: {{progressCount}}",
     "export_finished_successfully": "Der Export wurde erfolgreich abgeschlossen.",
-    "format_pdf": "PDF - für Ausdrucke oder Teilen."
+    "format_pdf": "PDF - für Ausdrucke oder Teilen.",
+    "share-format": "HTML für die Web-Veröffentlichung – verwendet dasselbe Theme wie bei freigegebenen Notizen, kann jedoch als statische Website veröffentlicht werden."
   },
   "help": {
     "noteNavigation": "Notiz Navigation",
