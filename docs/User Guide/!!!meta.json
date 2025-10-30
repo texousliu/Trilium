@@ -9476,7 +9476,7 @@
                                 "GTwFsgaA0lCt",
                                 "CtBQqbwXDx1w"
                             ],
-                            "title": "Board",
+                            "title": "Kanban Board",
                             "notePosition": 30,
                             "prefix": null,
                             "isExpanded": false,
@@ -9500,13 +9500,13 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "board",
+                                    "value": "kanban-board",
                                     "isInheritable": false,
                                     "position": 20
                                 }
                             ],
                             "format": "markdown",
-                            "dataFileName": "Board.md",
+                            "dataFileName": "Kanban Board.md",
                             "attachments": [
                                 {
                                     "attachmentId": "usSSa0WI6dDK",
@@ -9514,7 +9514,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "Board_image.png"
+                                    "dataFileName": "Kanban Board_image.png"
                                 }
                             ]
                         },

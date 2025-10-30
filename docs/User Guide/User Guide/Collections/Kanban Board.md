@@ -1,5 +1,5 @@
-# Board
-<figure class="image"><img style="aspect-ratio:918/248;" src="Board_image.png" width="918" height="248"></figure>
+# Kanban Board
+<figure class="image"><img style="aspect-ratio:918/248;" src="Kanban Board_image.png" width="918" height="248"></figure>
 
 The Board view presents sub-notes in columns for a Kanban-like experience. Each column represents a possible value for a status label, which can be adjusted.
 
