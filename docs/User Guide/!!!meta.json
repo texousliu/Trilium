@@ -15081,6 +15081,105 @@
                             "format": "markdown",
                             "dataFileName": "Privacy Policy.md",
                             "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "NcsmUYZRWEW4",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "Fm0j45KqyHpU",
+                                "NcsmUYZRWEW4"
+                            ],
+                            "title": "Patterns of personal knowledge",
+                            "notePosition": 20,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "xYjQUYhpbUEW",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "IakOLONlIfGI",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "CdNpE2pqjmI6",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "6f9hih2hXXZk",
+                                    "isInheritable": false,
+                                    "position": 60
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "R7abl2fc6Mxi",
+                                    "isInheritable": false,
+                                    "position": 70
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "bwg0e8ewQMak",
+                                    "isInheritable": false,
+                                    "position": 80
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "iRwzGnHPzonm",
+                                    "isInheritable": false,
+                                    "position": 90
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "OFXdgB2nNk1F",
+                                    "isInheritable": false,
+                                    "position": 100
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "cbkrhQjrkKrh",
+                                    "isInheritable": false,
+                                    "position": 110
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "patterns-of-personal-knowledge",
+                                    "isInheritable": false,
+                                    "position": 120
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Patterns of personal knowledge.md",
+                            "attachments": [
+                                {
+                                    "attachmentId": "amErpd38VEdQ",
+                                    "title": "relation-map-family.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "Patterns of personal knowl.png"
+                                }
+                            ]
                         }
                     ]
                 }
