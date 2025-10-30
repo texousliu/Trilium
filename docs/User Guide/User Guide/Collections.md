@@ -5,11 +5,11 @@ Collections are a unique type of notes that don't have a content, but instead di
 
 |     |     |
 | --- | --- |
-| <figure class="image"><img style="aspect-ratio:1651/810;" src="Collections_collection_ca.webp" width="1651" height="810"></figure> | <a class="reference-link" href="Collections/Calendar.md">Calendar View</a>  <br>which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar. |
-| <figure class="image"><img style="aspect-ratio:1643/647;" src="Collections_collection_ta.webp" width="1643" height="647"></figure> | <a class="reference-link" href="Collections/Table.md">Table View</a>  <br>displays each note as a row in a table, with <a class="reference-link" href="Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable. |
-| <figure class="image"><img style="aspect-ratio:1174/850;" src="Collections_collection_bo.webp" width="1174" height="850"></figure> | <a class="reference-link" href="Collections/Kanban%20Board.md">Board View</a>  <br>displays notes in columns, grouped by the value of a label. |
-| <figure class="image"><img style="aspect-ratio:844/639;" src="Collections_collection_ge.webp" width="844" height="639"></figure> | <a class="reference-link" href="Collections/Geo%20Map.md">Geo Map View</a>  <br>which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map. |
-| <figure class="image"><img style="aspect-ratio:1120/763;" src="Collections_collection_pr.webp" width="1120" height="763"></figure> | <a class="reference-link" href="Collections/Presentation.md">Presentation View</a>  <br>which shows each note as a slide and can be presented full-screen with smooth transitions or exported to PDF for sharing. |
+| <figure class="image"><img style="aspect-ratio:1651/810;" src="Collections_collection_ca.webp" width="1651" height="810"></figure> | <a class="reference-link" href="Collections/Calendar.md">Calendar</a>  <br>which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar. |
+| <figure class="image"><img style="aspect-ratio:1643/647;" src="Collections_collection_ta.webp" width="1643" height="647"></figure> | <a class="reference-link" href="Collections/Table.md">Table</a>  <br>displays each note as a row in a table, with <a class="reference-link" href="Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable. |
+| <figure class="image"><img style="aspect-ratio:1174/850;" src="Collections_collection_bo.webp" width="1174" height="850"></figure> | <a class="reference-link" href="Collections/Kanban%20Board.md">Kanban Board</a>  <br>displays notes in columns, grouped by the value of a label. Items and columns can easily be created or dragged around to change their status. |
+| <figure class="image"><img style="aspect-ratio:844/639;" src="Collections_collection_ge.webp" width="844" height="639"></figure> | <a class="reference-link" href="Collections/Geo%20Map.md">Geo Map</a>  <br>which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map. |
+| <figure class="image"><img style="aspect-ratio:1120/763;" src="Collections_collection_pr.webp" width="1120" height="763"></figure> | <a class="reference-link" href="Collections/Presentation.md">Presentation</a>  <br>which shows each note as a slide and can be presented full-screen with smooth transitions or exported to PDF for sharing. |
 
 ## Classic collections
 
@@ -18,15 +18,21 @@ Classic collections are read-only mode and compiles the contents of all child no
 *   <a class="reference-link" href="Collections/Grid%20View.md">Grid View</a> which is the default presentation method for child notes (see <a class="reference-link" href="Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>), where the notes are displayed as tiles with their title and content being visible.
 *   <a class="reference-link" href="Collections/List%20View.md">List View</a> is similar to <a class="reference-link" href="Collections/Grid%20View.md">Grid View</a>, but it displays the notes one under the other with the content being expandable/collapsible, but also works recursively.
 
-## Configuration
-
-To adjust the view type, see the dedicated _Collections_ tab in the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.
-
-## Use cases
-
-### Creating a new collection
+## Creating a new collection
 
 To create a new collections, right click in the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a> and look for the _Collections_ entry and select the desired type.
+
+## Configuration
+
+To change the configuration of a collection or even switch to a different collection (e.g. from Kanban Board to a Calendar), see the dedicated _Collections_ tab in the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.
+
+## Archived notes
+
+By default, [archived notes](Basic%20Concepts%20and%20Features/Notes/Archived%20Notes.md) will not be shown in collections. This behaviour can be changed by going to _Collection Properties_ in the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and checking _Show archived notes_.
+
+Archived notes will be generally indicated by being greyed out as opposed to the normal ones.
+
+## Advanced use cases
 
 ### Adding a description to a collection
 
@@ -54,12 +60,6 @@ By default, collections come with a default configuration and sometimes even sam
 2.  In the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>, go to _Basic Properties_ and select _Collection_ as the note type.
 3.  Still in the ribbon, go to _Collection Properties_ and select the desired view type.
 4.  Consult the help page of the corresponding view type in order to understand how to configure them.
-
-## Archived notes
-
-By default, archived notes will not be shown in collections. This behaviour can be changed by going to _Collection Properties_ in the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and checking _Show archived notes_.
-
-Archived notes will be generally indicated by being greyed out as opposed to the normal ones.
 
 ## Under the hood
 
