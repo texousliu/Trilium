@@ -38,4 +38,4 @@ Once installed simply:
 
 1.  Extract the exported .zip file.
 2.  Inside the extracted directory, run `http-server`.
-3.  Access the indicated address (e.g. http://localhost:8080).
+3.  Access the indicated address (e.g. [http://localhost:8080](http://localhost:8080)).

@@ -106,6 +106,10 @@ Shared notes typically have URLs like `http://domain.tld/share/knvU8aJy4dJ7`, wh
 1.  Ensure that aliases are unique.
 2.  Using slashes (`/`) within aliases to create subpaths is not supported.
 
+> [!TIP]
+> *   To easily identify pages that don't have a share alias, run a <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Navigation/Search.md">Search</a> with `#!shareAlias`.
+> *   To be able to enter the share alias faster, consider using <a class="reference-link" href="Attributes/Promoted%20Attributes.md">Promoted Attributes</a> (for example `#label:shareAlias(inheritable)="promoted,alias=Slug,single,text"`).
+
 ### Setting a custom favicon
 
 To customize the favicon for your shared pages, create a relation `~shareFavicon` pointing to a file note containing the favicon (e.g., in `.ico` format).

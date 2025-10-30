@@ -18,16 +18,23 @@
                 {
                     "type": "relation",
                     "name": "internalLink",
+                    "value": "s3YCWHBfmYuM",
+                    "isInheritable": false,
+                    "position": 10
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
                     "value": "BFs8mudNFgCS",
                     "isInheritable": false,
-                    "position": 60
+                    "position": 20
                 },
                 {
                     "type": "relation",
                     "name": "internalLink",
                     "value": "GTwFsgaA0lCt",
                     "isInheritable": false,
-                    "position": 70
+                    "position": 30
                 },
                 {
                     "type": "label",
@@ -42,13 +49,6 @@
                     "value": "promoted,alias=Slug,single,text",
                     "isInheritable": true,
                     "position": 20
-                },
-                {
-                    "type": "relation",
-                    "name": "internalLink",
-                    "value": "s3YCWHBfmYuM",
-                    "isInheritable": false,
-                    "position": 80
                 }
             ],
             "format": "markdown",
@@ -3083,7 +3083,15 @@
                                     "isExpanded": false,
                                     "type": "text",
                                     "mime": "text/html",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "quick-edit",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        }
+                                    ],
                                     "format": "markdown",
                                     "dataFileName": "Quick edit.md",
                                     "attachments": [
@@ -5314,6 +5322,20 @@
                             "position": 30
                         },
                         {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "yeEaYqosGLSh",
+                            "isInheritable": false,
+                            "position": 40
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "cbkrhQjrkKrh",
+                            "isInheritable": false,
+                            "position": 50
+                        },
+                        {
                             "type": "label",
                             "name": "shareAlias",
                             "value": "quick-start",
@@ -5326,20 +5348,6 @@
                             "value": "bx bx-run",
                             "isInheritable": false,
                             "position": 40
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "yeEaYqosGLSh",
-                            "isInheritable": false,
-                            "position": 50
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "cbkrhQjrkKrh",
-                            "isInheritable": false,
-                            "position": 60
                         }
                     ],
                     "format": "markdown",
@@ -11544,6 +11552,20 @@
                                     "value": "bx bx-share-alt",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "eIg8jdvaoNNd",
+                                    "isInheritable": false,
+                                    "position": 200
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "OFXdgB2nNk1F",
+                                    "isInheritable": false,
+                                    "position": 210
                                 }
                             ],
                             "format": "markdown",
@@ -11634,7 +11656,7 @@
                                             "name": "internalLink",
                                             "value": "R9pX4DGra2Vt",
                                             "isInheritable": false,
-                                            "position": 30
+                                            "position": 10
                                         },
                                         {
                                             "type": "label",
@@ -11642,6 +11664,13 @@
                                             "value": "bx bxs-file-html",
                                             "isInheritable": false,
                                             "position": 40
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "static-html",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",

@@ -1,4 +1,4 @@
-<p>As described in&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_R9pX4DGra2Vt">Sharing</a>,
+<p>As described in&nbsp;<a class="reference-link" href="#root/_help_R9pX4DGra2Vt">Sharing</a>,
   Trilium can act as a public server in which the shared notes are displayed
   in read-only mode. While this can work in most cases, it's generally not
   meant for high-traffic websites and since it's running on a Node.js server
@@ -7,7 +7,7 @@
   static site generators such as <a href="https://www.mkdocs.org/">MkDocs</a>).
   Since the normal HTML ZIP export does not contain any styling or additional
   functionality, Trilium provides a way to export the same layout and style
-  as the&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_R9pX4DGra2Vt">Sharing</a>&nbsp;function
+  as the&nbsp;<a class="reference-link" href="#root/_help_R9pX4DGra2Vt">Sharing</a>&nbsp;function
   into static HTML files.</p>
 <p>Apart from the enhanced security, these HTML files are also easy to deploy
   on “serverless” deployments such as GitHub Pages or CloudFlare Pages and
@@ -21,25 +21,24 @@
     static web format.</p>
 </aside>
 <h2>Differences from normal sharing and export</h2>
-<p>Apart from normal&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_R9pX4DGra2Vt">Sharing</a>,
+<p>Apart from normal&nbsp;<a class="reference-link" href="#root/_help_R9pX4DGra2Vt">Sharing</a>,
   exporting to static HTML files comes with a few subtle differences:</p>
 <ul>
-  <li data-list-item-id="e9e5a7d50e33698fb322f4dc65108f3a9">The URL structure is different. Where in normal sharing it's something
+  <li>The URL structure is different. Where in normal sharing it's something
     along the way of <code>example.com/share/noteid</code>, the notes follow
     an hierarchical structure, such as <code>docs.triliumnotes.org/user-guide/concepts/navigation/tree-concepts</code>.</li>
-  <li
-  data-list-item-id="e3995e60b9751ea177ac920a901635d4b">The <code>favicon.ico</code> is not handled automatically, it needs to be
+  <li>The <code>favicon.ico</code> is not handled automatically, it needs to be
     manually added on the server after the export is generated.</li>
-    <li data-list-item-id="e72c2a986808ce27eb3bb5001fe4710cb">The “Last updated” for notes is not available.</li>
-    <li data-list-item-id="e53e8959701206c7a064ba811c0123bef">The search functionality works slightly different since the normal one
-      requires an active API to work. In the static export, search still works
-      but uses a different mechanism so results might be different.</li>
+  <li>The “Last updated” for notes is not available.</li>
+  <li>The search functionality works slightly different since the normal one
+    requires an active API to work. In the static export, search still works
+    but uses a different mechanism so results might be different.</li>
 </ul>
 <h2>Differences from normal .zip export</h2>
 <ul>
-  <li data-list-item-id="e8a16c7135d6f6c4de3bc448bd8795289">The name of the files/URLs will prefer <code>shareAlias</code> to allow
+  <li>The name of the files/URLs will prefer <code>shareAlias</code> to allow
     for clean URLs.</li>
-  <li data-list-item-id="ef8bfdfc599c07ba70fbb4be97a3e26ab">The export requires a functional web server as the pages will not render
+  <li>The export requires a functional web server as the pages will not render
     properly if accessed locally via a web browser due to the use of module
     scripts.</li>
 </ul>
@@ -50,7 +49,7 @@
   can be installed via:</p><pre><code class="language-text-x-trilium-auto">npm i -g http-server</code></pre>
 <p>Once installed simply:</p>
 <ol>
-  <li data-list-item-id="ebc8d02c8cdcdb030c746f1fd5eccb5bd">Extract the exported .zip file.</li>
-  <li data-list-item-id="e1d20f408fb89d0af0c1003984373f808">Inside the extracted directory, run <code>http-server</code>.</li>
-  <li data-list-item-id="ecf0c59f3a26c8e766bb1d739f8355e33">Access the indicated address (e.g. http://localhost:8080).</li>
+  <li>Extract the exported .zip file.</li>
+  <li>Inside the extracted directory, run <code>http-server</code>.</li>
+  <li>Access the indicated address (e.g. <a href="http://localhost:8080">http://localhost:8080</a>).</li>
 </ol>
