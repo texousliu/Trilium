@@ -38,5 +38,5 @@ The following note types are supported by Trilium:
 | <a class="reference-link" href="Note%20Types/Canvas.md">Canvas</a> | Allows easy drawing of sketches, diagrams, handwritten content. Uses the same technology behind [excalidraw.com](https://excalidraw.com). |
 | <a class="reference-link" href="Note%20Types/Web%20View.md">Web View</a> | Displays the content of an external web page, similar to a browser. |
 | <a class="reference-link" href="Note%20Types/Mind%20Map.md">Mind Map</a> | Easy for brainstorming ideas, by placing them in a hierarchical layout. |
-| <a class="reference-link" href="Collections/Geo%20Map%20View.md">Geo Map View</a> | Displays the children of the note as a geographical map, one use-case would be to plan vacations. It even has basic support for tracks. Notes can also be created from it. |
+| <a class="reference-link" href="Collections/Geo%20Map.md">Geo Map View</a> | Displays the children of the note as a geographical map, one use-case would be to plan vacations. It even has basic support for tracks. Notes can also be created from it. |
 | <a class="reference-link" href="Note%20Types/File.md">File</a> | Represents an uploaded file such as PDFs, images, video or audio files. |

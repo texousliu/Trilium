@@ -1,5 +1,5 @@
-# Board View
-<figure class="image"><img style="aspect-ratio:918/248;" src="Board View_image.png" width="918" height="248"></figure>
+# Board
+<figure class="image"><img style="aspect-ratio:918/248;" src="Board_image.png" width="918" height="248"></figure>
 
 The Board view presents sub-notes in columns for a Kanban-like experience. Each column represents a possible value for a status label, which can be adjusted.
 
@@ -7,7 +7,7 @@ The Board view presents sub-notes in columns for a Kanban-like experience. Each 
 
 When first creating a collection of _Board_ type, a few subnotes will be created, each having a `#status` label set. The board then groups each note by the value of the status attribute.
 
-Notes are displayed recursively, so even the child notes of the child notes will be displayed. However, unlike the <a class="reference-link" href="Table%20View.md">Table View</a>, the notes are not displayed in a hierarchy.
+Notes are displayed recursively, so even the child notes of the child notes will be displayed. However, unlike the <a class="reference-link" href="Table.md">Table View</a>, the notes are not displayed in a hierarchy.
 
 ## Interaction with columns
 
