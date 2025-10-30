@@ -15021,6 +15021,68 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "isClone": false,
+                    "noteId": "Fm0j45KqyHpU",
+                    "notePath": [
+                        "pOsGYCXsbNQG",
+                        "Fm0j45KqyHpU"
+                    ],
+                    "title": "Miscellaneous",
+                    "notePosition": 370,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "misc",
+                            "isInheritable": false,
+                            "position": 30
+                        },
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bx-info-circle",
+                            "isInheritable": false,
+                            "position": 40
+                        }
+                    ],
+                    "format": "markdown",
+                    "attachments": [],
+                    "dirFileName": "Miscellaneous",
+                    "children": [
+                        {
+                            "isClone": false,
+                            "noteId": "WFbFXrgnDyyU",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "Fm0j45KqyHpU",
+                                "WFbFXrgnDyyU"
+                            ],
+                            "title": "Privacy Policy",
+                            "notePosition": 10,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "privacy-policy",
+                                    "isInheritable": false,
+                                    "position": 30
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Privacy Policy.md",
+                            "attachments": []
+                        }
+                    ]
                 }
             ]
         }
