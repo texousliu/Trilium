@@ -2043,7 +2043,8 @@ body.zen .ribbon-container .ribbon-body:not(:has(.classic-toolbar-widget)),
 body.zen .note-icon-widget,
 body.zen .title-row .icon-action,
 body.zen .floating-buttons-children > *:not(.bx-edit-alt),
-body.zen .action-button {
+body.zen .action-button,
+body.zen .note-list-widget {
     display: none !important;
 }
 
@@ -2097,6 +2098,7 @@ body.zen #detail-container {
 body.zen .note-split:not(.full-content-width) .scrolling-container {
     display: flex;
     flex-direction: column;
+    scroll-behavior: unset !important;
 }
 
 body.zen .note-split:not(.full-content-width) .note-detail {
