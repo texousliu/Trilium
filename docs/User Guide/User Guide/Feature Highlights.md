@@ -12,7 +12,7 @@ This section presents the most important changes by version. For a full set of c
 *   v0.95.0:
     *   A more friendly theme was introduced for <a class="reference-link" href="Advanced%20Usage/Sharing.md">Sharing</a>, with search, expandable tree, night mode and more.
 *   v0.94.0:
-    *   Added integration with <a class="reference-link" href="AI">AI</a> (using self-hosted LLMs such as Ollama or industry standards such as ChatGPT).
+    *   Added integration with <a class="reference-link" href="#root/LMAv4Uy3Wk6J">AI</a> (using self-hosted LLMs such as Ollama or industry standards such as ChatGPT).
 *   v0.92.5:
     *   Windows binaries are now signed.
     *   <a class="reference-link" href="Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md">Multi-Factor Authentication</a> was introduced.

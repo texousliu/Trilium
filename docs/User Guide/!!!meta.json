@@ -108,13 +108,6 @@
                         {
                             "type": "relation",
                             "name": "internalLink",
-                            "value": "LMAv4Uy3Wk6J",
-                            "isInheritable": false,
-                            "position": 50
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
                             "value": "NRnIZmSMc5sj",
                             "isInheritable": false,
                             "position": 60
@@ -13761,182 +13754,136 @@
                 },
                 {
                     "isClone": false,
-                    "noteId": "LMAv4Uy3Wk6J",
+                    "noteId": "GBBMSlVSOIGP",
                     "notePath": [
                         "pOsGYCXsbNQG",
-                        "LMAv4Uy3Wk6J"
+                        "GBBMSlVSOIGP"
                     ],
                     "title": "AI",
                     "notePosition": 340,
                     "prefix": null,
                     "isExpanded": false,
-                    "type": "book",
-                    "mime": "",
+                    "type": "text",
+                    "mime": "text/html",
                     "attributes": [
                         {
-                            "type": "label",
-                            "name": "iconClass",
-                            "value": "bx bx-bot",
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "vvUCN7FDkq7G",
                             "isInheritable": false,
                             "position": 10
-                        },
-                        {
-                            "type": "label",
-                            "name": "viewType",
-                            "value": "list",
-                            "isInheritable": false,
-                            "position": 20
-                        },
-                        {
-                            "type": "label",
-                            "name": "expanded",
-                            "value": "",
-                            "isInheritable": false,
-                            "position": 30
                         },
                         {
                             "type": "label",
                             "name": "shareAlias",
                             "value": "llm",
                             "isInheritable": false,
-                            "position": 40
+                            "position": 20
+                        },
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bx-bot",
+                            "isInheritable": false,
+                            "position": 30
                         }
                     ],
-                    "attachments": [],
+                    "format": "markdown",
+                    "dataFileName": "AI.md",
+                    "attachments": [
+                        {
+                            "attachmentId": "4UpXwA3WvbmA",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "AI_image.png"
+                        },
+                        {
+                            "attachmentId": "8Bn5IsE3Bv1k",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "1_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "ABN1rFIIJ8no",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "2_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "CK3z7sYw63XT",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "3_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "E6Y09N2t7vyA",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "4_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "JlIPeTtl5wlV",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "5_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "ur4TDJeRqpUC",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "6_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "UTH83LkQEA8u",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "7_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "V68TCCTUdyl7",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "8_AI_image.png"
+                        },
+                        {
+                            "attachmentId": "YbWoNq58T9kB",
+                            "title": "image.png",
+                            "role": "image",
+                            "mime": "image/png",
+                            "position": 10,
+                            "dataFileName": "9_AI_image.png"
+                        }
+                    ],
                     "dirFileName": "AI",
                     "children": [
-                        {
-                            "isClone": false,
-                            "noteId": "GBBMSlVSOIGP",
-                            "notePath": [
-                                "pOsGYCXsbNQG",
-                                "LMAv4Uy3Wk6J",
-                                "GBBMSlVSOIGP"
-                            ],
-                            "title": "Introduction",
-                            "notePosition": 10,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "vvUCN7FDkq7G",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "intro",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "iconClass",
-                                    "value": "bx bx-info-circle",
-                                    "isInheritable": false,
-                                    "position": 30
-                                }
-                            ],
-                            "format": "markdown",
-                            "dataFileName": "Introduction.md",
-                            "attachments": [
-                                {
-                                    "attachmentId": "4UpXwA3WvbmA",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "8Bn5IsE3Bv1k",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "1_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "ABN1rFIIJ8no",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "2_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "CK3z7sYw63XT",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "3_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "E6Y09N2t7vyA",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "4_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "JlIPeTtl5wlV",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "5_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "ur4TDJeRqpUC",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "6_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "UTH83LkQEA8u",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "7_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "V68TCCTUdyl7",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "8_Introduction_image.png"
-                                },
-                                {
-                                    "attachmentId": "YbWoNq58T9kB",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "9_Introduction_image.png"
-                                }
-                            ]
-                        },
                         {
                             "isClone": false,
                             "noteId": "WkM7gsEUyCXs",
                             "notePath": [
                                 "pOsGYCXsbNQG",
-                                "LMAv4Uy3Wk6J",
+                                "GBBMSlVSOIGP",
                                 "WkM7gsEUyCXs"
                             ],
-                            "title": "AI Provider Information",
-                            "notePosition": 20,
+                            "title": "Providers",
+                            "notePosition": 10,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -13986,7 +13933,7 @@
                                 }
                             ],
                             "format": "markdown",
-                            "dataFileName": "AI Provider Information.md",
+                            "dataFileName": "Providers.md",
                             "attachments": [
                                 {
                                     "attachmentId": "BNN9Vv3JEf2X",
@@ -13994,7 +13941,7 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "AI Provider Information_im.png"
+                                    "dataFileName": "Providers_image.png"
                                 },
                                 {
                                     "attachmentId": "diIollN3KEbn",
@@ -14002,17 +13949,17 @@
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
-                                    "dataFileName": "1_AI Provider Information_im.png"
+                                    "dataFileName": "1_Providers_image.png"
                                 }
                             ],
-                            "dirFileName": "AI Provider Information",
+                            "dirFileName": "Providers",
                             "children": [
                                 {
                                     "isClone": false,
                                     "noteId": "7EdTxPADv95W",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
-                                        "LMAv4Uy3Wk6J",
+                                        "GBBMSlVSOIGP",
                                         "WkM7gsEUyCXs",
                                         "7EdTxPADv95W"
                                     ],
@@ -14060,7 +14007,7 @@
                                             "noteId": "vvUCN7FDkq7G",
                                             "notePath": [
                                                 "pOsGYCXsbNQG",
-                                                "LMAv4Uy3Wk6J",
+                                                "GBBMSlVSOIGP",
                                                 "WkM7gsEUyCXs",
                                                 "7EdTxPADv95W",
                                                 "vvUCN7FDkq7G"
@@ -14140,7 +14087,7 @@
                                     "noteId": "ZavFigBX9AwP",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
-                                        "LMAv4Uy3Wk6J",
+                                        "GBBMSlVSOIGP",
                                         "WkM7gsEUyCXs",
                                         "ZavFigBX9AwP"
                                     ],
@@ -14175,7 +14122,7 @@
                                     "noteId": "e0lkirXEiSNc",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
-                                        "LMAv4Uy3Wk6J",
+                                        "GBBMSlVSOIGP",
                                         "WkM7gsEUyCXs",
                                         "e0lkirXEiSNc"
                                     ],
@@ -14217,7 +14164,7 @@
                         "CdNpE2pqjmI6"
                     ],
                     "title": "Scripting",
-                    "notePosition": 350,
+                    "notePosition": 360,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
