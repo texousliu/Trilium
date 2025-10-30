@@ -9068,13 +9068,6 @@
                         {
                             "type": "relation",
                             "name": "internalLink",
-                            "value": "8QqnMzx393bx",
-                            "isInheritable": false,
-                            "position": 10
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
                             "value": "0ESUbbAxVnoK",
                             "isInheritable": false,
                             "position": 20
@@ -9082,44 +9075,9 @@
                         {
                             "type": "relation",
                             "name": "internalLink",
-                            "value": "mULW0Q3VojwY",
-                            "isInheritable": false,
-                            "position": 30
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "xWbu3jpNWapp",
-                            "isInheritable": false,
-                            "position": 40
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "81SGnPGMk7Xc",
-                            "isInheritable": false,
-                            "position": 50
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "2FvYrpmOXm29",
-                            "isInheritable": false,
-                            "position": 60
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
                             "value": "OFXdgB2nNk1F",
                             "isInheritable": false,
                             "position": 70
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "CtBQqbwXDx1w",
-                            "isInheritable": false,
-                            "position": 80
                         },
                         {
                             "type": "relation",
@@ -9176,11 +9134,101 @@
                             "value": "bx bx-book",
                             "isInheritable": false,
                             "position": 20
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "xWbu3jpNWapp",
+                            "isInheritable": false,
+                            "position": 150
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "2FvYrpmOXm29",
+                            "isInheritable": false,
+                            "position": 170
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "CtBQqbwXDx1w",
+                            "isInheritable": false,
+                            "position": 180
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "8QqnMzx393bx",
+                            "isInheritable": false,
+                            "position": 190
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "mULW0Q3VojwY",
+                            "isInheritable": false,
+                            "position": 200
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "81SGnPGMk7Xc",
+                            "isInheritable": false,
+                            "position": 210
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "zP3PMqaG71Ct",
+                            "isInheritable": false,
+                            "position": 220
                         }
                     ],
                     "format": "markdown",
                     "dataFileName": "Collections.md",
-                    "attachments": [],
+                    "attachments": [
+                        {
+                            "attachmentId": "5NH7myDKSICZ",
+                            "title": "collection_geomap.webp",
+                            "role": "image",
+                            "mime": "image/webp",
+                            "position": 10,
+                            "dataFileName": "Collections_collection_ge.webp"
+                        },
+                        {
+                            "attachmentId": "7gL9zNsbyY4Z",
+                            "title": "collection_presentation.webp",
+                            "role": "image",
+                            "mime": "image/webp",
+                            "position": 10,
+                            "dataFileName": "Collections_collection_pr.webp"
+                        },
+                        {
+                            "attachmentId": "BA2BoJ7NuNrx",
+                            "title": "collection_table.webp",
+                            "role": "image",
+                            "mime": "image/webp",
+                            "position": 10,
+                            "dataFileName": "Collections_collection_ta.webp"
+                        },
+                        {
+                            "attachmentId": "tgdna1b1s44A",
+                            "title": "collection_calendar.webp",
+                            "role": "image",
+                            "mime": "image/webp",
+                            "position": 10,
+                            "dataFileName": "Collections_collection_ca.webp"
+                        },
+                        {
+                            "attachmentId": "vozq8xSO2HO7",
+                            "title": "collection_board.webp",
+                            "role": "image",
+                            "mime": "image/webp",
+                            "position": 10,
+                            "dataFileName": "Collections_collection_bo.webp"
+                        }
+                    ],
                     "dirFileName": "Collections",
                     "children": [
                         {

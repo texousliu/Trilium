@@ -1,19 +1,22 @@
 # Collections
 Collections are a unique type of notes that don't have a content, but instead display its child notes in various presentation methods.
 
+## Main collections
+
+|     |     |
+| --- | --- |
+| <figure class="image"><img style="aspect-ratio:1651/810;" src="Collections_collection_ca.webp" width="1651" height="810"></figure> | <a class="reference-link" href="Collections/Calendar%20View.md">Calendar View</a>  <br>which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar. |
+| <figure class="image"><img style="aspect-ratio:1643/647;" src="Collections_collection_ta.webp" width="1643" height="647"></figure> | <a class="reference-link" href="Collections/Table%20View.md">Table View</a>  <br>displays each note as a row in a table, with <a class="reference-link" href="Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable. |
+| <figure class="image"><img style="aspect-ratio:1174/850;" src="Collections_collection_bo.webp" width="1174" height="850"></figure> | <a class="reference-link" href="Collections/Board%20View.md">Board View</a>  <br>displays notes in columns, grouped by the value of a label. |
+| <figure class="image"><img style="aspect-ratio:844/639;" src="Collections_collection_ge.webp" width="844" height="639"></figure> | <a class="reference-link" href="Collections/Geo%20Map%20View.md">Geo Map View</a>  <br>which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map. |
+| <figure class="image"><img style="aspect-ratio:1120/763;" src="Collections_collection_pr.webp" width="1120" height="763"></figure> | <a class="reference-link" href="Collections/Presentation%20View.md">Presentation View</a>  <br>which shows each note as a slide and can be presented full-screen with smooth transitions or exported to PDF for sharing. |
+
+## Classic collections
+
 Classic collections are read-only mode and compiles the contents of all child notes into one continuous view. This makes it ideal for reading extensive information broken into smaller, manageable segments.
 
 *   <a class="reference-link" href="Collections/Grid%20View.md">Grid View</a> which is the default presentation method for child notes (see <a class="reference-link" href="Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>), where the notes are displayed as tiles with their title and content being visible.
 *   <a class="reference-link" href="Collections/List%20View.md">List View</a> is similar to <a class="reference-link" href="Collections/Grid%20View.md">Grid View</a>, but it displays the notes one under the other with the content being expandable/collapsible, but also works recursively.
-
-More specialized collections were introduced, such as the:
-
-*   <a class="reference-link" href="Collections/Calendar%20View.md">Calendar View</a> which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar.
-*   <a class="reference-link" href="Collections/Geo%20Map%20View.md">Geo Map View</a> which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map.
-*   <a class="reference-link" href="Collections/Table%20View.md">Table View</a> displays each note as a row in a table, with <a class="reference-link" href="Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable.
-*   <a class="reference-link" href="Collections/Board%20View.md">Board View</a> (Kanban) displays notes in columns, grouped by the value of a label.
-
-For a quick presentation of all the supported view types, see the child notes of this help page, including screenshots.
 
 ## Configuration
 
