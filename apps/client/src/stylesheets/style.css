@@ -2087,10 +2087,30 @@ body.zen .note-title-widget,
 body.zen .note-title-widget input {
     font-size: 1rem !important;
     background: transparent !important;
+    pointer-events: none;
 }
 
 body.zen #detail-container {
     width: 100%;
+}
+
+body.zen .note-split:not(.full-content-width) .scrolling-container {
+    display: flex;
+    flex-direction: column;
+}
+
+body.zen .note-split:not(.full-content-width) .note-detail {
+    margin: auto;
+    padding-bottom: 15%;
+    width: var(--max-content-width);
+}
+
+body.zen .note-split:not(.full-content-width) .scroll-padding-widget {
+    display: none;
+}
+
+body.zen .note-split.type-text {
+    font-size: 1.15em;
 }
 
 /* Content renderer */
