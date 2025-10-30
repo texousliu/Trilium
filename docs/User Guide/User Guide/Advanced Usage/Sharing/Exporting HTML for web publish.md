@@ -10,7 +10,7 @@ Apart from the enhanced security, these HTML files are also easy to deploy on �
 > 
 > The process is [automated](https://github.com/TriliumNext/Trilium/blob/main/apps/edit-docs/src/build-docs.ts) by importing the Markdown documentation and exporting it via a script to the static web format.
 
-## Differences from normal sharing and export
+## Differences from normal sharing
 
 Apart from normal <a class="reference-link" href="../Sharing.md">Sharing</a>, exporting to static HTML files comes with a few subtle differences:
 
@@ -39,3 +39,7 @@ Once installed simply:
 1.  Extract the exported .zip file.
 2.  Inside the extracted directory, run `http-server`.
 3.  Access the indicated address (e.g. [http://localhost:8080](http://localhost:8080)).
+
+## Automation
+
+<a class="reference-link" href="../ETAPI%20(REST%20API).md">ETAPI (REST API)</a> could potentially be used to automate an export on a scheduled task.

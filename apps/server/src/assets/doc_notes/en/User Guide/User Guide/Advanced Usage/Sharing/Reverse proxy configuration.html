@@ -1,0 +1,23 @@
+<p>It might be desirable to only expose the share functionality of Trilium
+  to the Internet, and keep the application accessible only within a local
+  network or via VPN.</p>
+<p>To do so, a reverse proxy is required.</p>
+<h2>Caddy</h2><pre><code class="language-text-x-trilium-auto">http://domain.com {
+  reverse_proxy /share http://localhost:8080/share
+}</code></pre>
+<p>This is for newer versions where the share functionality is isolated,
+  for older versions it's required to also include <code>/assets</code>.
+  <span
+  class="footnote-reference" data-footnote-reference="" data-footnote-index="1"
+  data-footnote-id="2b8mg20aol8" role="doc-noteref" id="fnref2b8mg20aol8"><sup><a href="#fn2b8mg20aol8">[1]</a></sup>
+    </span>
+</p>
+<ol class="footnote-section footnotes" data-footnote-section="" role="doc-endnotes">
+  <li class="footnote-item" data-footnote-item="" data-footnote-index="1"
+  data-footnote-id="2b8mg20aol8" role="doc-endnote" id="fn2b8mg20aol8"><span class="footnote-back-link" data-footnote-back-link="" data-footnote-id="2b8mg20aol8"><sup><strong><a href="#fnref2b8mg20aol8">^</a></strong></sup></span>
+    <div
+    class="footnote-content" data-footnote-content="">
+      <p><a href="https://github.com/orgs/TriliumNext/discussions/7341#discussioncomment-14679897">https://github.com/orgs/TriliumNext/discussions/7341#discussioncomment-14679897</a>&nbsp;</p>
+      </div>
+  </li>
+</ol>
