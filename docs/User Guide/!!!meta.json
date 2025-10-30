@@ -436,7 +436,7 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "server-installation",
+                                    "value": "server",
                                     "isInheritable": false,
                                     "position": 10
                                 }
