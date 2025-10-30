@@ -184,13 +184,13 @@ entpacke das Paket und führe die ausführbare Datei `trilium` aus.
 
 ### Linux
 
-Wenn deine Distribution in der folgenden Tabelle aufgeführt ist, verwenden das
+Wenn deine Distribution in der folgenden Tabelle aufgeführt ist, verwende das
 Paket deiner Distribution.
 
 [![Paketierungsstatus](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
 Du kannst auch die Binärversion für deine Plattform von der Seite mit der
-[neusten Version](https://github.com/TriliumNext/Trilium/releases/latest)
+[neuesten Version](https://github.com/TriliumNext/Trilium/releases/latest)
 herunterladen, das Paket entpacken und die ausführbare Datei `trilium`
 ausführen.
 
@@ -236,7 +236,7 @@ Server-Installationsanweisungen](https://triliumnext.github.io/Docs/Wiki/server-
 ### Übersetzungen
 
 Wenn du Trilium in einer weiteren Sprache unterstützen möchtest, kannst du über
-unsere [[Weblate-Seite](https://hosted.weblate.org/engage/trilium/) an den
+unsere [Weblate-Seite](https://hosted.weblate.org/engage/trilium/) an den
 Übersetzungen mitwirken.
 
 Hier ist die bisherige Sprachabdeckung:
