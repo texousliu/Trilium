@@ -31,7 +31,7 @@ Unlike other Collection view types, the Calendar view also allows some kind of i
 
 *   Hovering the mouse over an event will display information about the note.  
     ![](7_Calendar%20View_image.png)
-*   Left clicking the event will open a <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Quick%20edit.md">Quick edit</a> to edit the note in a popup while allowing easy return to the calendar by just dismissing the popup.
+*   Left clicking the event will open a <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Quick%20edit.md">Quick edit</a> to edit the note in a popup while allowing easy return to the calendar by just dismissing the popup.
     *   Middle clicking will open the note in a new tab.
     *   Right click will offer more options including opening the note in a new split or window.
 *   Drag and drop an event on the calendar to move it to another day.
@@ -39,7 +39,7 @@ Unlike other Collection view types, the Calendar view also allows some kind of i
 
 ## Configuring the calendar view
 
-In the _Collections_ tab in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>, it's possible to adjust the following:
+In the _Collections_ tab in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>, it's possible to adjust the following:
 
 *   Hide weekends from the week view.
 *   Display week numbers on the calendar.

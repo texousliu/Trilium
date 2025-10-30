@@ -10,4 +10,4 @@ For a quick overview of the application, visit our website at [triliumnotes.org]
 
 1.  See <a class="reference-link" href="User%20Guide/Quick%20Start.md">Quick Start</a>.
 2.  Understand <a class="reference-link" href="User%20Guide/Basic%20Concepts%20and%20Features/Notes.md">Notes</a>.
-3.  Browse through <a class="reference-link" href="User%20Guide/Note%20Types/Collections.md">Collections</a>.
+3.  Browse through <a class="reference-link" href="User%20Guide/Collections.md">Collections</a>.

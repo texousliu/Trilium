@@ -1,6 +1,6 @@
 # Geo Map View
 > [!IMPORTANT]
-> Starting with Trilium v0.97.0, the geo map has been converted from a standalone [note type](../../Note%20Types.md) to a type of view for the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>. 
+> Starting with Trilium v0.97.0, the geo map has been converted from a standalone [note type](../Note%20Types.md) to a type of view for the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>. 
 
 <figure class="image image-style-align-center"><img style="aspect-ratio:892/675;" src="9_Geo Map View_image.png" width="892" height="675"></figure>
 
@@ -26,7 +26,7 @@ The position on the map and the zoom are saved inside the map note and restored 
 
 |     |     |     |
 | --- | --- | --- |
-| 1   | To create a marker, first navigate to the desired point on the map. Then press the ![](10_Geo%20Map%20View_image.png) button in the [Floating buttons](../../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md) (top-right) area.     <br>  <br>If the button is not visible, make sure the button section is visible by pressing the chevron button (![](17_Geo%20Map%20View_image.png)) in the top-right of the map. |     |
+| 1   | To create a marker, first navigate to the desired point on the map. Then press the ![](10_Geo%20Map%20View_image.png) button in the [Floating buttons](../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md) (top-right) area.     <br>  <br>If the button is not visible, make sure the button section is visible by pressing the chevron button (![](17_Geo%20Map%20View_image.png)) in the top-right of the map. |     |
 | 2   | <img class="image_resized" style="aspect-ratio:1730/416;width:100%;" src="2_Geo Map View_image.png" width="1730" height="416"> | Once pressed, the map will enter in the insert mode, as illustrated by the notification.        <br>  <br>Simply click the point on the map where to place the marker, or the Escape key to cancel. |
 | 3   | <img class="image_resized" style="aspect-ratio:1586/404;width:100%;" src="7_Geo Map View_image.png" width="1586" height="404"> | Enter the name of the marker/note to be created. |
 | 4   | <img class="image_resized" style="aspect-ratio:1696/608;width:100%;" src="16_Geo Map View_image.png" width="1696" height="608"> | Once confirmed, the marker will show up on the map and it will also be displayed as a child note of the map. |
@@ -40,13 +40,13 @@ The position on the map and the zoom are saved inside the map note and restored 
 
 ### Adding an existing note on note from the note tree
 
-1.  Select the desired note in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>.
+1.  Select the desired note in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>.
 2.  Hold the mouse on the note and drag it to the map to the desired location.
 3.  The map should be updated with the new marker.
 
 This works for:
 
-*   Notes that are not part of the geo map, case in which a [clone](../../Basic%20Concepts%20and%20Features/Notes/Cloning%20Notes.md) will be created.
+*   Notes that are not part of the geo map, case in which a [clone](../Basic%20Concepts%20and%20Features/Notes/Cloning%20Notes.md) will be created.
 *   Notes that are a child of the geo map but not yet positioned on the map.
 *   Notes that are a child of the geo map and also positioned, case in which the marker will be relocated to the new position.
 
@@ -71,11 +71,11 @@ If moved by mistake, there is currently no way to undo the change. If the mouse 
 
 ## Interaction with the markers
 
-*   Hovering over a marker will display a <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tooltip.md">Note Tooltip</a> with the content of the note it belongs to.
+*   Hovering over a marker will display a <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tooltip.md">Note Tooltip</a> with the content of the note it belongs to.
     *   Clicking on the note title in the tooltip will navigate to the note in the current view.
 *   Middle-clicking the marker will open the note in a new tab.
 *   Right-clicking the marker will open a contextual menu (as described below).
-*   If the map is in read-only mode, clicking on a marker will open a <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Quick%20edit.md">Quick edit</a> popup for the corresponding note.
+*   If the map is in read-only mode, clicking on a marker will open a <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Quick%20edit.md">Quick edit</a> popup for the corresponding note.
 
 ## Contextual menu
 
@@ -142,17 +142,17 @@ Trilium has basic support for displaying GPS tracks on the geo map.
 
 When a map is in read-only all editing features will be disabled such as:
 
-*   The add button in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md">Floating buttons</a>.
+*   The add button in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md">Floating buttons</a>.
 *   Dragging markers.
 *   Editing from the contextual menu (removing locations or adding new items).
 
-To enable read-only mode simply press the _Lock_ icon from the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md">Floating buttons</a>. To disable it, press the button again.
+To enable read-only mode simply press the _Lock_ icon from the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Floating%20buttons.md">Floating buttons</a>. To disable it, press the button again.
 
 ## Configuration
 
 ### Map Style
 
-The styling of the map can be adjusted in the _Collection Properties_ tab in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> or manually via the `#map:style` attribute.
+The styling of the map can be adjusted in the _Collection Properties_ tab in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> or manually via the `#map:style` attribute.
 
 The geo map comes with two different types of styles:
 
@@ -171,7 +171,7 @@ The geo map comes with two different types of styles:
 
 ### Scale
 
-Activating this option via the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> or manually via `#map:scale` will display an indicator in the bottom-left of the scale of the map.
+Activating this option via the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> or manually via `#map:scale` will display an indicator in the bottom-left of the scale of the map.
 
 ## Troubleshooting
 
