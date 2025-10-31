@@ -53,3 +53,18 @@
 body:not(.math-loaded) .math-tex {
     visibility: hidden;
 }
+
+body.type-webView #main {
+    max-width: unset;
+}
+
+body.type-webView #content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+iframe.webview {
+    width: 100%;
+    flex-grow: 1;
+}

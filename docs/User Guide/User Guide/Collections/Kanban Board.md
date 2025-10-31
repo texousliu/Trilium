@@ -1,5 +1,5 @@
-# Board View
-<figure class="image"><img style="aspect-ratio:918/248;" src="Board View_image.png" width="918" height="248"></figure>
+# Kanban Board
+<figure class="image"><img style="aspect-ratio:918/248;" src="Kanban Board_image.png" width="918" height="248"></figure>
 
 The Board view presents sub-notes in columns for a Kanban-like experience. Each column represents a possible value for a status label, which can be adjusted.
 
@@ -7,9 +7,11 @@ The Board view presents sub-notes in columns for a Kanban-like experience. Each 
 
 When first creating a collection of _Board_ type, a few subnotes will be created, each having a `#status` label set. The board then groups each note by the value of the status attribute.
 
-Notes are displayed recursively, so even the child notes of the child notes will be displayed. However, unlike the <a class="reference-link" href="Table%20View.md">Table View</a>, the notes are not displayed in a hierarchy.
+Notes are displayed recursively, so even the child notes of the child notes will be displayed. However, unlike the <a class="reference-link" href="Table.md">Table</a>, the notes are not displayed in a hierarchy.
 
-## Interaction with columns
+## Interaction
+
+### Working with columns
 
 *   Create a new column by pressing _Add Column_ near the last column.
     *   Once pressed, a text box will be displayed to set the name of the column. Press <kbd>Enter</kbd> to confirm, or <kbd>Escape</kbd> to dismiss.
@@ -20,7 +22,7 @@ Notes are displayed recursively, so even the child notes of the child notes will
     *   Upon renaming a column, the corresponding status attribute of all its notes will be changed in bulk.
 *   If there are many columns, use the mouse wheel to scroll.
 
-## Interaction with notes
+### Working with notes
 
 *   Create a new note in any column by pressing _New item_
     *   Enter the name of the note and press <kbd>Enter</kbd> or click away. To dismiss the creation of a new note, simply press <kbd>Escape</kbd> or leave the name empty.
@@ -56,8 +58,6 @@ By default, the label used to group the notes is `#status`. It is possible to us
 
 > [!NOTE]
 > It's currently not possible to set a relation as the grouping criteria. There are plans to add support for it.
-
-## Interaction
 
 ## Limitations
 

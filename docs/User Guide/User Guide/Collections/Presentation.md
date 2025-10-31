@@ -1,5 +1,5 @@
-# Presentation View
-<figure class="image"><img style="aspect-ratio:1120/763;" src="Presentation View_image.png" width="1120" height="763"></figure>
+# Presentation
+<figure class="image"><img style="aspect-ratio:1120/763;" src="Presentation_image.png" width="1120" height="763"></figure>
 
 The Presentation view allows the creation of slideshows directly from within Trilium.
 
@@ -36,7 +36,7 @@ This horizontal/vertical organization affects transitions (especially on the “
 *   Pressing <kbd>Space</kbd> and <kbd>Shift</kbd> + <kbd>Space</kbd> will go to the next/previous slide in order, regardless of the direction. This is generally the key combination to use when presenting.
 *   The arrows on the bottom-right of the slide will also reflect this navigation scheme.
 
-<figure class="image image-style-align-right image_resized" style="width:55.57%;"><img style="aspect-ratio:890/569;" src="1_Presentation View_image.png" width="890" height="569"></figure>
+<figure class="image image-style-align-right image_resized" style="width:55.57%;"><img style="aspect-ratio:890/569;" src="1_Presentation_image.png" width="890" height="569"></figure>
 
 All direct children of the collection will be laid out horizontally. If a direct child also has children, those children will be placed as vertical slides.
 
@@ -55,21 +55,21 @@ In the following example, the note structure is as follows:
 
 At collection level, it's possible to adjust:
 
-*   The theme of the entire presentation to one of the predefined themes by going to the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and looking for the _Collection Properties_ tab.
+*   The theme of the entire presentation to one of the predefined themes by going to the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and looking for the _Collection Properties_ tab.
 *   It's currently not possible to create custom themes, although it is planned.
-*   Note that it is note possible to alter the CSS via <a class="reference-link" href="../../Theme%20development/Custom%20app-wide%20CSS.md">Custom app-wide CSS</a> because the slides are rendered isolated (in a shadow DOM).
+*   Note that it is note possible to alter the CSS via <a class="reference-link" href="../Theme%20development/Custom%20app-wide%20CSS.md">Custom app-wide CSS</a> because the slides are rendered isolated (in a shadow DOM).
 
 At slide level:
 
-*   It's possible to adjust the background color of a slide by using the [predefined promoted attribute](../../Advanced%20Usage/Attributes/Promoted%20Attributes.md) for the color or manually setting `#slide:background` to a hex color.
+*   It's possible to adjust the background color of a slide by using the [predefined promoted attribute](../Advanced%20Usage/Attributes/Promoted%20Attributes.md) for the color or manually setting `#slide:background` to a hex color.
 *   More complex backgrounds can be achieved via gradients. There's no UI for it; it has to be set via `#slide:background` to a CSS gradient definition such as: `linear-gradient(to bottom, #283b95, #17b2c3)`.
 
 ## Tips and tricks
 
 *   Text notes generally respect the formatting (bold, italic, foreground and background colors) and font size. Code blocks and tables also work.
-*   Try using more than just text notes, the presentation uses the same mechanism as [shared notes](../../Advanced%20Usage/Sharing.md) and <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> so it should be able to display <a class="reference-link" href="../Mermaid%20Diagrams.md">Mermaid Diagrams</a>, <a class="reference-link" href="../Canvas.md">Canvas</a> and <a class="reference-link" href="../Mind%20Map.md">Mind Map</a> in full-screen (without the interactivity).
-    *   Consider using a transparent background for <a class="reference-link" href="../Canvas.md">Canvas</a>, if the slides have a custom background (go to the hamburger menu in the Canvas, press the button select a custom color and write `transparent`).
-    *   For <a class="reference-link" href="../Mermaid%20Diagrams.md">Mermaid Diagrams</a>, some of them have a predefined background which can be changed via the frontmatter. For example, for XY-charts:
+*   Try using more than just text notes, the presentation uses the same mechanism as [shared notes](../Advanced%20Usage/Sharing.md) and <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> so it should be able to display <a class="reference-link" href="../Note%20Types/Mermaid%20Diagrams.md">Mermaid Diagrams</a>, <a class="reference-link" href="../Note%20Types/Canvas.md">Canvas</a> and <a class="reference-link" href="../Note%20Types/Mind%20Map.md">Mind Map</a> in full-screen (without the interactivity).
+    *   Consider using a transparent background for <a class="reference-link" href="../Note%20Types/Canvas.md">Canvas</a>, if the slides have a custom background (go to the hamburger menu in the Canvas, press the button select a custom color and write `transparent`).
+    *   For <a class="reference-link" href="../Note%20Types/Mermaid%20Diagrams.md">Mermaid Diagrams</a>, some of them have a predefined background which can be changed via the frontmatter. For example, for XY-charts:
         
         ```
         ---
