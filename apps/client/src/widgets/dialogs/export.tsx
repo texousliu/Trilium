@@ -79,8 +79,8 @@ export default function ExportDialog() {
                         values={[
                             { value: "html", label: t("export.format_html_zip") },
                             { value: "markdown", label: t("export.format_markdown") },
-                            { value: "opml", label: t("export.format_opml") },
-                            { value: "share", label: t("export.share-format") }
+                            { value: "share", label: t("export.share-format") },
+                            { value: "opml", label: t("export.format_opml") }
                         ]}
                     />
 
