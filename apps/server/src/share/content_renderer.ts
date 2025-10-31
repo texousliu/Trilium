@@ -421,7 +421,7 @@ function renderWebView(note: SNote | BNote, result: Result) {
     const url = note.getLabelValue("webViewSrc");
     if (!url) return;
 
-    result.content = `<iframe class="webview" src="${sanitizeUrl(url)}"></iframe>`;
+    result.content = `<iframe class="webview" src="${sanitizeUrl(url)}" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>`;
 }
 
 export default {
