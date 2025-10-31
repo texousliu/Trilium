@@ -331,6 +331,41 @@
                                     "format": "markdown",
                                     "dataFileName": "Using the desktop application .md",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "Rp0q8bSP6Ayl",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "poXkQfguuA0U",
+                                        "Rp0q8bSP6Ayl"
+                                    ],
+                                    "title": "System Requirements",
+                                    "notePosition": 20,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "system-requirements",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-chip",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "System Requirements.md",
+                                    "attachments": []
                                 }
                             ]
                         },
@@ -1150,6 +1185,41 @@
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Third-party cloud hosting.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "iGTnKjubbXkA",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "iGTnKjubbXkA"
+                                    ],
+                                    "title": "System Requirements",
+                                    "notePosition": 140,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "system-requirements",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-chip",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "System Requirements.md",
                                     "attachments": []
                                 }
                             ]
