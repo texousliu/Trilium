@@ -26,7 +26,7 @@ export default function buildSwagger({ baseDir, gitRootDir }: BuildContext) {
     for (const { specPath, outDir } of buildInfos) {
         const absSpecPath = join(gitRootDir, specPath);
         const targetDir = join(baseDir, outDir);
-        mkdirSync(outDir, { recursive: true });
+        mkdirSync(targetDir, { recursive: true });
         execSync(`pnpm redocly build-docs ${absSpecPath} -o ${targetDir}/index.html`, { stdio: "inherit" });
     }
 }
