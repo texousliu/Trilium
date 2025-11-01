@@ -1,6 +1,6 @@
 {
+  "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
-    "src/backend_script_entrypoint.ts",
     "src/frontend_script_entrypoint.ts"
   ],
   "plugin": [
@@ -9,7 +9,7 @@
   "outputs": [
     {
       "name": "html",
-      "path": "../../site/script-api"
+      "path": "../../site/script-api/backend"
     }
   ]
 }
