@@ -1,10 +1,10 @@
-import { getAbsoluteFSPath } from "swagger-ui-dist";
 import BuildContext from "./context";
-import { cpSync, mkdirSync } from "fs";
 import { join } from "path";
+import { execSync } from "child_process";
 
 export default function buildSwagger({ baseDir }: BuildContext) {
-    const absolutePath = getAbsoluteFSPath();
     const targetDir = join(baseDir, "api");
-    cpSync(absolutePath, targetDir, { recursive: true });
+    const specPath = join(__dirname, "../../server/src/assets/api-openapi.yaml");
+
+    execSync(`pnpm redocly build-docs ${specPath} -o ${targetDir}/internal-api.html`, { stdio: "inherit" });
 }
