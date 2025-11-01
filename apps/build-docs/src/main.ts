@@ -1,7 +1,7 @@
 import { join } from "path";
 import BuildContext from "./context";
 import buildSwagger from "./swagger";
-import { mkdirSync, rmSync } from "fs";
+import { existsSync, mkdirSync, rmSync } from "fs";
 import buildDocs from "./build-docs";
 
 const context: BuildContext = {
@@ -11,7 +11,9 @@ const context: BuildContext = {
 
 async function main() {
     // Clean input dir.
-    rmSync(context.baseDir, { recursive: true });
+    if (existsSync(context.baseDir)) {
+        rmSync(context.baseDir, { recursive: true });
+    }
     mkdirSync(context.baseDir);
 
     // Start building.
