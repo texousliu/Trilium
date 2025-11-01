@@ -15003,7 +15003,7 @@
                                                 {
                                                     "type": "label",
                                                     "name": "webViewSrc",
-                                                    "value": "https://triliumnext.github.io/Notes/Script%20API/classes/Frontend_Script_API.FNote.html",
+                                                    "value": "/script-api/frontend/interfaces/FNote.html",
                                                     "isInheritable": false,
                                                     "position": 10
                                                 },
