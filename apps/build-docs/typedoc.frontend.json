@@ -1,5 +1,6 @@
 {
   "$schema": "https://typedoc.org/schema.json",
+  "name": "Trilium Frontend API",
   "entryPoints": [
     "src/frontend_script_entrypoint.ts"
   ],
