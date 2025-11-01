@@ -15,7 +15,7 @@ async function main() {
     mkdirSync(context.baseDir);
 
     // Start building.
-    await buildDocs();
+    await buildDocs(context);
     buildSwagger(context);
 }
 

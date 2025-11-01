@@ -8,6 +8,8 @@ import * as fs from "fs/promises";
 import * as fsExtra from "fs-extra";
 import archiver from "archiver";
 import { WriteStream } from "fs";
+import { execSync } from "child_process";
+import BuildContext from "./context.js";
 
 const DOCS_ROOT = "../../../docs";
 const OUTPUT_DIR = "../../site";
@@ -107,8 +109,15 @@ export async function extractZip(zipFilePath: string, outputPath: string, ignore
     });
 }
 
-export default async function buildDocs() {
-    return new Promise((res, rej) => {
+export default async function buildDocs({ gitRootDir }: BuildContext) {
+    // Build the share theme.
+    execSync(`pnpm run --filter share-theme build`, {
+        stdio: "inherit",
+        cwd: gitRootDir
+    });
+
+    // Trigger the actual build.
+    await new Promise((res, rej) => {
         cls.init(() => {
             buildDocsInner()
                 .catch(rej)
