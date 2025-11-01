@@ -5,11 +5,5 @@
   ],
   "plugin": [
     "typedoc-plugin-missing-exports"
-  ],
-  "outputs": [
-    {
-      "name": "html",
-      "path": "../../site/script-api/frontend"
-    }
   ]
 }

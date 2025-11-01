@@ -1,11 +1,12 @@
 import { execSync } from "child_process";
 import BuildContext from "./context";
+import { join } from "path";
 
-export default function buildScriptApi({ }: BuildContext) {
+export default function buildScriptApi({ baseDir }: BuildContext) {
     for (const config of [ "backend", "frontend" ]) {
-        execSync(`pnpm typedoc --options typedoc.${config}.json`, {
+        const outDir = join(baseDir, "script-api", config);
+        execSync(`pnpm typedoc --options typedoc.${config}.json --html "${outDir}"`, {
             stdio: "inherit"
-            // * Output dir is set in typedoc.json.
         });
     }
 }
