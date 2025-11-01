@@ -2,13 +2,13 @@
   "name": "build-docs",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsx ."
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Elian Doran <contact@eliandoran.me>",
+  "license": "AGPL-3.0-only",
   "packageManager": "pnpm@10.19.0",
   "devDependencies": {
     "@redocly/cli": "2.10.0",
