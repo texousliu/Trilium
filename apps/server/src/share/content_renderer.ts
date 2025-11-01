@@ -18,6 +18,7 @@ import { highlightAuto } from "@triliumnext/highlightjs";
 import becca from "../becca/becca.js";
 import { BAttachment } from "../services/backend_script_entrypoint.js";
 import SAttachment from "./shaca/entities/sattachment.js";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const templateCache: Map<string, string> = new Map();
@@ -250,6 +251,8 @@ export function getContent(note: SNote | BNote) {
         renderFile(note, result);
     } else if (note.type === "book") {
         result.isEmpty = true;
+    } else if (note.type === "webView") {
+        renderWebView(note, result);
     } else {
         result.content = `<p>${t("content_renderer.note-cannot-be-displayed")}</p>`;
     }
@@ -412,6 +415,13 @@ function renderFile(note: SNote | BNote, result: Result) {
     } else {
         result.content = `<button type="button" onclick="location.href='api/notes/${note.noteId}/download'">Download file</button>`;
     }
+}
+
+function renderWebView(note: SNote | BNote, result: Result) {
+    const url = note.getLabelValue("webViewSrc");
+    if (!url) return;
+
+    result.content = `<iframe class="webview" src="${sanitizeUrl(url)}" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>`;
 }
 
 export default {

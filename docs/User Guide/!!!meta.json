@@ -331,6 +331,41 @@
                                     "format": "markdown",
                                     "dataFileName": "Using the desktop application .md",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "Rp0q8bSP6Ayl",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "poXkQfguuA0U",
+                                        "Rp0q8bSP6Ayl"
+                                    ],
+                                    "title": "System Requirements",
+                                    "notePosition": 20,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "system-requirements",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-chip",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "System Requirements.md",
+                                    "attachments": []
                                 }
                             ]
                         },
@@ -1150,6 +1185,41 @@
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Third-party cloud hosting.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "iGTnKjubbXkA",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "iGTnKjubbXkA"
+                                    ],
+                                    "title": "System Requirements",
+                                    "notePosition": 140,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "system-requirements",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-chip",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "System Requirements.md",
                                     "attachments": []
                                 }
                             ]
@@ -8281,7 +8351,7 @@
                                             "dataFileName": "8_Tables_image.png"
                                         },
                                         {
-                                            "attachmentId": "UdhsypjV4pzZ",
+                                            "attachmentId": "rrLM5BQCZ5ci",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/png",
@@ -8289,7 +8359,7 @@
                                             "dataFileName": "9_Tables_image.png"
                                         },
                                         {
-                                            "attachmentId": "VerzwlO9y6Na",
+                                            "attachmentId": "UdhsypjV4pzZ",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/png",
@@ -8297,7 +8367,7 @@
                                             "dataFileName": "10_Tables_image.png"
                                         },
                                         {
-                                            "attachmentId": "wYkQvargZlNF",
+                                            "attachmentId": "VerzwlO9y6Na",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/png",
@@ -8305,12 +8375,28 @@
                                             "dataFileName": "11_Tables_image.png"
                                         },
                                         {
-                                            "attachmentId": "YFGeAN41kvZY",
+                                            "attachmentId": "wYkQvargZlNF",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "12_Tables_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "YFGeAN41kvZY",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "13_Tables_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "zRLxHrKJiK8N",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "14_Tables_image.png"
                                         }
                                     ]
                                 }
@@ -15102,40 +15188,54 @@
                                     "name": "internalLink",
                                     "value": "xYjQUYhpbUEW",
                                     "isInheritable": false,
-                                    "position": 30
+                                    "position": 10
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
                                     "value": "IakOLONlIfGI",
                                     "isInheritable": false,
-                                    "position": 40
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "CdNpE2pqjmI6",
-                                    "isInheritable": false,
-                                    "position": 50
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "6f9hih2hXXZk",
-                                    "isInheritable": false,
-                                    "position": 60
+                                    "position": 20
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
                                     "value": "R7abl2fc6Mxi",
                                     "isInheritable": false,
-                                    "position": 70
+                                    "position": 30
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
                                     "value": "bwg0e8ewQMak",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "OFXdgB2nNk1F",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "cbkrhQjrkKrh",
+                                    "isInheritable": false,
+                                    "position": 60
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "CdNpE2pqjmI6",
+                                    "isInheritable": false,
+                                    "position": 70
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "6f9hih2hXXZk",
                                     "isInheritable": false,
                                     "position": 80
                                 },
@@ -15145,20 +15245,6 @@
                                     "value": "iRwzGnHPzonm",
                                     "isInheritable": false,
                                     "position": 90
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "OFXdgB2nNk1F",
-                                    "isInheritable": false,
-                                    "position": 100
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "cbkrhQjrkKrh",
-                                    "isInheritable": false,
-                                    "position": 110
                                 },
                                 {
                                     "type": "label",

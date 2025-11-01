@@ -112,7 +112,7 @@ For family specifically it's pretty useful to create [relation map](../Note%20Ty
 
 <figure class="image"><img style="aspect-ratio:941/758;" src="Patterns of personal knowl.png" width="941" height="758"></figure>
 
-<a class="reference-link" href="/images/relation-map-family.png|width=800">[missing note]</a>
+<a class="reference-link" href="#root/lQcnSv5DMSe1">[missing note]</a>
 
 ### Books
 
