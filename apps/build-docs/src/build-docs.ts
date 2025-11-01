@@ -4,14 +4,15 @@ process.env.NODE_ENV = "development";
 
 import cls from "@triliumnext/server/src/services/cls.js";
 import { dirname, join, resolve } from "path";
-import fs, { copyFile } from "fs/promises";
-import fsExtra, { createWriteStream, type WriteStream } from "fs-extra";
+import * as fs from "fs/promises";
+import * as fsExtra from "fs-extra";
 import archiver from "archiver";
+import { WriteStream } from "fs";
 
 const DOCS_ROOT = "../../../docs";
 const OUTPUT_DIR = "../../site";
 
-async function main() {
+async function buildDocsInner() {
     const i18n = await import("@triliumnext/server/src/services/i18n.js");
     await i18n.initializeTranslations();
 
@@ -30,7 +31,7 @@ async function main() {
             "export",
             null
         );
-        const fileOutputStream = createWriteStream(zipFilePath);
+        const fileOutputStream = fsExtra.createWriteStream(zipFilePath);
         await exportToZip(taskContext, branch, "share", fileOutputStream);
         await waitForStreamToFinish(fileOutputStream);
         await extractZip(zipFilePath, OUTPUT_DIR);
@@ -41,7 +42,7 @@ async function main() {
     }
 
     // Copy favicon.
-    await copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "favicon.ico"));
+    await fs.copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "favicon.ico"));
 
     console.log("Documentation built successfully!");
 }
@@ -106,4 +107,12 @@ export async function extractZip(zipFilePath: string, outputPath: string, ignore
     });
 }
 
-cls.init(main);
+export default async function buildDocs() {
+    return new Promise((res, rej) => {
+        cls.init(() => {
+            buildDocsInner()
+                .catch(rej)
+                .then(res);
+        });
+    });
+}

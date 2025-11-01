@@ -10,19 +10,21 @@ interface BuildInfo {
 
 const buildInfos: BuildInfo[] = [
     {
-        specPath: join(__dirname, "../../server/src/assets/api-openapi.yaml"),
+        // Paths are relative to Git root.
+        specPath: "apps/server/src/assets/api-openapi.yaml",
         outDir: "api/internal"
     },
     {
-        specPath: join(__dirname, "../../server/src/assets/etapi.openapi.yaml"),
+        specPath: "apps/server/src/assets/etapi.openapi.yaml",
         outDir: "api/etapi"
     }
 ];
 
-export default function buildSwagger({ baseDir }: BuildContext) {
+export default function buildSwagger({ baseDir, gitRootDir }: BuildContext) {
     for (const { specPath, outDir } of buildInfos) {
+        const absSpecPath = join(gitRootDir, specPath);
         const targetDir = join(baseDir, outDir);
         mkdirSync(outDir, { recursive: true });
-        execSync(`pnpm redocly build-docs ${specPath} -o ${targetDir}/index.html`, { stdio: "inherit" });
+        execSync(`pnpm redocly build-docs ${absSpecPath} -o ${targetDir}/index.html`, { stdio: "inherit" });
     }
 }
