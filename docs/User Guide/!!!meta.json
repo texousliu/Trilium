@@ -12594,7 +12594,7 @@
                                         {
                                             "type": "label",
                                             "name": "webViewSrc",
-                                            "value": "/api/etapi/",
+                                            "value": "/rest-api/etapi/",
                                             "isInheritable": false,
                                             "position": 10
                                         },
@@ -13612,7 +13612,7 @@
                                         {
                                             "type": "label",
                                             "name": "webViewSrc",
-                                            "value": "/api/internal/",
+                                            "value": "/rest-api/internal/",
                                             "isInheritable": false,
                                             "position": 10
                                         },
