@@ -14968,7 +14968,7 @@
                                         {
                                             "type": "label",
                                             "name": "webViewSrc",
-                                            "value": "https://triliumnext.github.io/Notes/Script%20API/interfaces/Frontend_Script_API.Api.html",
+                                            "value": "/script-api/frontend",
                                             "isInheritable": false,
                                             "position": 10
                                         },
@@ -15039,7 +15039,7 @@
                                         {
                                             "type": "label",
                                             "name": "webViewSrc",
-                                            "value": "https://triliumnext.github.io/Notes/Script%20API/interfaces/Backend_Script_API.Api.html",
+                                            "value": "/script-api/backend",
                                             "isInheritable": false,
                                             "position": 10
                                         },
