@@ -3,6 +3,7 @@ import BuildContext from "./context";
 import buildSwagger from "./swagger";
 import { existsSync, mkdirSync, rmSync } from "fs";
 import buildDocs from "./build-docs";
+import buildScriptApi from "./script-api";
 
 const context: BuildContext = {
     gitRootDir: join(__dirname, "../../../"),
@@ -19,6 +20,7 @@ async function main() {
     // Start building.
     await buildDocs(context);
     buildSwagger(context);
+    buildScriptApi(context);
 }
 
 main();

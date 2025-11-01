@@ -1,0 +1,15 @@
+{
+  "entryPoints": [
+    "src/backend_script_entrypoint.ts",
+    "src/frontend_script_entrypoint.ts"
+  ],
+  "plugin": [
+    "typedoc-plugin-missing-exports"
+  ],
+  "outputs": [
+    {
+      "name": "html",
+      "path": "../../site/script-api"
+    }
+  ]
+}
