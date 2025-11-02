@@ -8838,6 +8838,13 @@
                                     "value": "bx bx-selection",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "WWgeUaBb7UfC",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
@@ -8921,6 +8928,33 @@
                                             "dataFileName": "ELK layout_ELK on.svg"
                                         }
                                     ]
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "WWgeUaBb7UfC",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "KSZ04uQ2D1St",
+                                        "s1aBHPd79XYj",
+                                        "WWgeUaBb7UfC"
+                                    ],
+                                    "title": "Syntax reference",
+                                    "notePosition": 40,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "webView",
+                                    "mime": "",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "webViewSrc",
+                                            "value": "https://mermaid.js.org/intro/syntax-reference.html",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        }
+                                    ],
+                                    "dataFileName": "Syntax reference.dat",
+                                    "attachments": []
                                 }
                             ]
                         },
@@ -12568,6 +12602,13 @@
                                     "value": "bx bx-extension",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "9qPsTWBorUhQ",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
