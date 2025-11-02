@@ -1,5 +1,5 @@
 # Collections
-Collections are a unique type of notes that don't have content, but instead display their child notes in various presentation methods.
+Collections are a unique type of note that don't have content, but instead display their child notes in various presentation methods.
 
 ## Main collections
 
