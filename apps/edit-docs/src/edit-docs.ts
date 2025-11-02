@@ -158,6 +158,14 @@ async function cleanUpMeta(outputPath: string, minify: boolean) {
         }
 
         el.isExpanded = false;
+
+        // Rewrite web view URLs that point to root.
+        if (el.type === "webView" && minify) {
+            const srcAttr = el.attributes.find(attr => attr.name === "webViewSrc");
+            if (srcAttr.value.startsWith("/")) {
+                srcAttr.value = "docs.triliumnotes.org" + srcAttr.value;
+            }
+        }
     }
 
     if (minify) {
