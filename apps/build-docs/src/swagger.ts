@@ -13,11 +13,11 @@ const DIR_PREFIX = "rest-api"
 const buildInfos: BuildInfo[] = [
     {
         // Paths are relative to Git root.
-        specPath: "apps/server/src/assets/api-openapi.yaml",
+        specPath: "apps/server/internal.openapi.yaml",
         outDir: `${DIR_PREFIX}/internal`
     },
     {
-        specPath: "apps/server/src/assets/etapi.openapi.yaml",
+        specPath: "apps/server/etapi.openapi.yaml",
         outDir: `${DIR_PREFIX}/etapi`
     }
 ];
