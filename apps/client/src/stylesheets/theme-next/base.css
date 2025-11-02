@@ -132,7 +132,8 @@ body.mobile .dropdown-menu .dropdown-menu {
 
 body.desktop .dropdown-menu::before,
 :root .ck.ck-dropdown__panel::before,
-:root .excalidraw .popover::before {
+:root .excalidraw .popover::before,
+body.zen .note-split .ribbon-container .classic-toolbar-widget::before {
     content: "";
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);
