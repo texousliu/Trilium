@@ -278,18 +278,22 @@ function setPrefixBatch(req: Request) {
     }
 
     const normalizedPrefix = utils.isEmptyOrWhitespace(prefix) ? null : prefix;
+    let updatedCount = 0;
 
     for (const branchId of branchIds) {
         const branch = becca.getBranch(branchId);
         if (branch) {
             branch.prefix = normalizedPrefix;
             branch.save();
+            updatedCount++;
+        } else {
+            log.info(`Branch ${branchId} not found, skipping prefix update`);
         }
     }
 
     return {
         success: true,
-        count: branchIds.length
+        count: updatedCount
     };
 }
 

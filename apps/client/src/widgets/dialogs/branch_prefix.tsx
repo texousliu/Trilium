@@ -12,6 +12,9 @@ import { useTriliumEvent } from "../react/hooks.jsx";
 import FBranch from "../../entities/fbranch.js";
 import type { ContextMenuCommandData } from "../../components/app_context.js";
 
+// Virtual branches (e.g., from search results) start with this prefix
+const VIRTUAL_BRANCH_PREFIX = "virt-";
+
 export default function BranchPrefixDialog() {
     const [ shown, setShown ] = useState(false);
     const [ branches, setBranches ] = useState<FBranch[]>([]);
@@ -23,7 +26,7 @@ export default function BranchPrefixDialog() {
 
         if (data?.selectedOrActiveBranchIds && data.selectedOrActiveBranchIds.length > 0) {
             // Multi-select mode from tree context menu
-            branchIds = data.selectedOrActiveBranchIds.filter((branchId) => !branchId.startsWith("virt-"));
+            branchIds = data.selectedOrActiveBranchIds.filter((branchId) => !branchId.startsWith(VIRTUAL_BRANCH_PREFIX));
         } else {
             // Single branch mode from keyboard shortcut or when no selection
             const notePath = appContext.tabManager.getActiveContextNotePath();
