@@ -160,11 +160,10 @@ function startHttpServer(app: Express) {
                 // should simply focus on the existing window or open a new one, without displaying an error message.
                 if ("code" in error && error.code === "EADDRINUSE" && (process.argv.includes("--new-window") || !app.requestSingleInstanceLock())) {
                     console.error(message);
-                    process.exit(1);
                 } else {
                     dialog.showErrorBox("Error while initializing the server", message);
-                    process.exit(1);
                 }
+                process.exit(1);
             });
         } else {
             console.error(message);
