@@ -17,7 +17,9 @@ const OUTPUT_DIR = "../../site";
 async function importAndExportDocs(sourcePath: string, outputSubDir: string) {
     const note = await importData(sourcePath);
     
-    const zipFilePath = `output-${outputSubDir}.zip`;
+    // Use a meaningful name for the temporary zip file
+    const zipName = outputSubDir || "user-guide";
+    const zipFilePath = `output-${zipName}.zip`;
     try {
         const { exportToZip } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
         const branch = note.getParentBranches()[0];
@@ -30,7 +32,8 @@ async function importAndExportDocs(sourcePath: string, outputSubDir: string) {
         await exportToZip(taskContext, branch, "share", fileOutputStream);
         await waitForStreamToFinish(fileOutputStream);
         
-        const outputPath = join(OUTPUT_DIR, outputSubDir);
+        // Output to root directory if outputSubDir is empty, otherwise to subdirectory
+        const outputPath = outputSubDir ? join(OUTPUT_DIR, outputSubDir) : OUTPUT_DIR;
         await extractZip(zipFilePath, outputPath);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
