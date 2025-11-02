@@ -158,14 +158,13 @@ function startHttpServer(app: Express) {
                 // Not all situations require showing an error dialog. When Trilium is already open,
                 // clicking the shortcut, the software icon, or the taskbar icon, or when creating a new window,
                 // should simply focus on the existing window or open a new one, without displaying an error message.
-                if ("code" in error && error.code == "EADDRINUSE") {
-                    if (process.argv.includes("--new-window") || !app.requestSingleInstanceLock()) {
-                        console.error(message);
-                        process.exit(1);
-                    }
+                if ("code" in error && error.code === "EADDRINUSE" && (process.argv.includes("--new-window") || !app.requestSingleInstanceLock())) {
+                    console.error(message);
+                    process.exit(1);
+                } else {
+                    dialog.showErrorBox("Error while initializing the server", message);
+                    process.exit(1);
                 }
-                dialog.showErrorBox("Error while initializing the server", message);
-                process.exit(1);
             });
         } else {
             console.error(message);
