@@ -2045,7 +2045,7 @@ body.zen .title-row .icon-action,
 body.zen .promoted-attributes-widget,
 body.zen .floating-buttons-children > *:not(.bx-edit-alt),
 body.zen .action-button,
-body.zen .note-list-widget {
+body.zen .note-list-widget:not(.full-height) {
     display: none !important;
 }
 
