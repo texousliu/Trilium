@@ -31,6 +31,6 @@ export type { Api };
 const fakeNote = new BNote();
 
 /**
- * The `code` api global variable allows access to the backend script API, which is documented in {@link Api}.
+ * The `api` global variable allows access to the backend script API, which is documented in {@link Api}.
  */
 export const api: Api = new BackendScriptApi(fakeNote, {});
