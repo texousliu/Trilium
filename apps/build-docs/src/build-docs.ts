@@ -20,6 +20,10 @@ async function buildDocsInner() {
 
     const sqlInit = (await import("../../server/src/services/sql_init.js")).default;
     await sqlInit.createInitialDatabase(true);
+    
+    // Wait for becca to be loaded before importing data
+    const beccaLoader = await import("../../server/src/becca/becca_loader.js");
+    await beccaLoader.beccaLoaded;
 
     const note = await importData(join(__dirname, DOCS_ROOT, "User Guide"));
 
@@ -51,11 +55,12 @@ async function buildDocsInner() {
 
 export async function importData(path: string) {
     const buffer = await createImportZip(path);
-    const importService = (await import("@triliumnext/server/src/services/import/zip.js")).default;
-    const TaskContext = (await import("@triliumnext/server/src/services/task_context.js")).default;
+    const importService = (await import("../../server/src/services/import/zip.js")).default;
+    const TaskContext = (await import("../../server/src/services/task_context.js")).default;
     const context = new TaskContext("no-progress-reporting", "importNotes", null);
-    const becca = (await import("@triliumnext/server/src/becca/becca.js")).default;
-
+    const beccaLoader = (await import("../../server/src/becca/becca_loader.js")).default;
+    const becca = beccaLoader.becca;
+    
     const rootNote = becca.getRoot();
     if (!rootNote) {
         throw new Error("Missing root note for import.");
