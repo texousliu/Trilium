@@ -23,6 +23,8 @@ if (!DOCS_ROOT || !USER_GUIDE_ROOT) {
     throw new Error("Missing DOCS_ROOT or USER_GUIDE_ROOT environment variable.");
 }
 
+const BASE_URL = "https://docs.triliumnotes.org";
+
 const NOTE_MAPPINGS: NoteMapping[] = [
     {
         rootNoteId: "pOsGYCXsbNQG",
@@ -163,7 +165,7 @@ async function cleanUpMeta(outputPath: string, minify: boolean) {
         if (el.type === "webView" && minify) {
             const srcAttr = el.attributes.find(attr => attr.name === "webViewSrc");
             if (srcAttr.value.startsWith("/")) {
-                srcAttr.value = "docs.triliumnotes.org" + srcAttr.value;
+                srcAttr.value = BASE_URL + srcAttr.value;
             }
         }
     }
