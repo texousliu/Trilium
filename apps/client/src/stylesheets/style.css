@@ -2119,11 +2119,17 @@ body.zen .note-split.type-text {
 /* Fixed formatting toolbar */
 
 body.zen .note-split .ribbon-container {
-    position: absolute;
+    position: fixed;
+    left: 0;
     bottom: 20px;
     width: 100%;
     z-index: 100000;
     pointer-events: none;
+    visibility: hidden; /* Hidden unless the current note split is focused */
+}
+
+body.zen .note-split:focus-within .ribbon-container {
+    visibility: visible; /* Show when the note split is focused */
 }
 
 body.zen .note-split .ribbon-container .ribbon-body {
