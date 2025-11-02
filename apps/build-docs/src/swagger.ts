@@ -8,7 +8,7 @@ interface BuildInfo {
     outDir: string;
 }
 
-const DIR_PREFIX = "rest-api"
+const DIR_PREFIX = "rest-api";
 
 const buildInfos: BuildInfo[] = [
     {
