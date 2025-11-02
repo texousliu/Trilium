@@ -28,7 +28,7 @@ To change the configuration of a collection or even switch to a different collec
 
 ## Archived notes
 
-By default, [archived notes](Basic%20Concepts%20and%20Features/Notes/Archived%20Notes.md) will not be shown in collections. This behaviour can be changed by going to _Collection Properties_ in the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and checking _Show archived notes_.
+By default, [archived notes](Basic%20Concepts%20and%20Features/Notes/Archived%20Notes.md) will not be shown in collections. This behavior can be changed by going to _Collection Properties_ in the <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and checking _Show archived notes_.
 
 Archived notes will be generally indicated by being greyed out as opposed to the normal ones.
 
