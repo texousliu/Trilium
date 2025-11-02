@@ -277,6 +277,11 @@ function setPrefixBatch(req: Request) {
         throw new ValidationError("branchIds must be an array");
     }
 
+    // Validate that prefix is a string or null/undefined to prevent prototype pollution
+    if (prefix !== null && prefix !== undefined && typeof prefix !== 'string') {
+        throw new ValidationError("prefix must be a string or null");
+    }
+
     const normalizedPrefix = utils.isEmptyOrWhitespace(prefix) ? null : prefix;
     let updatedCount = 0;
 
