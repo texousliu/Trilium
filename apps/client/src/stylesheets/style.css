@@ -2123,6 +2123,7 @@ body.zen .note-split .ribbon-container {
     bottom: 20px;
     width: 100%;
     z-index: 100000;
+    pointer-events: none;
 }
 
 body.zen .note-split .ribbon-container .ribbon-body {
@@ -2137,6 +2138,7 @@ body.zen .note-split .ribbon-container .classic-toolbar-widget {
     border: 1px solid var(--main-border-color);
     padding: 4px;
     background: var(--menu-background-color);
+    pointer-events: all;
 }
 
 /* Content renderer */
