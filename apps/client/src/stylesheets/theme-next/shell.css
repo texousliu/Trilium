@@ -94,9 +94,20 @@ body.layout-vertical #horizontal-main-container.left-pane-hidden #launcher-pane.
     border-inline-end: 2px solid var(--left-pane-collapsed-border-color);
 }
 
-body.background-effects.zen #root-widget {
-    --main-background-color: transparent;
-    --root-background: transparent;
+/*
+ * Zen mode
+ */
+
+@keyframes zen-formatting-toolbar-entrance {
+    from {
+        transform: translateY(200%);
+    } to {
+        transform: translateY(0);
+    }
+}
+
+body.zen .note-split .ribbon-container .classic-toolbar-widget {
+    animation: zen-formatting-toolbar-entrance 300ms ease-out;
 }
 
 /*
