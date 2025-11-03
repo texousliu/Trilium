@@ -14,8 +14,24 @@
             "isExpanded": false,
             "type": "text",
             "mime": "text/html",
-            "attributes": [],
+            "attributes": [
+                {
+                    "type": "label",
+                    "name": "label:shareAlias",
+                    "value": "promoted,alias=Slug,single,text",
+                    "isInheritable": true,
+                    "position": 10
+                },
+                {
+                    "type": "label",
+                    "name": "iconClass",
+                    "value": "bx bx-code-alt",
+                    "isInheritable": false,
+                    "position": 20
+                }
+            ],
             "format": "markdown",
+            "dataFileName": "Developer Guide.md",
             "attachments": [],
             "dirFileName": "Developer Guide",
             "children": [
