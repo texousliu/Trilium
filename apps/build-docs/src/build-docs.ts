@@ -14,17 +14,12 @@ import BuildContext from "./context.js";
 const DOCS_ROOT = "../../../docs";
 const OUTPUT_DIR = "../../site";
 
-async function buildDocsInner() {
-    const i18n = await import("@triliumnext/server/src/services/i18n.js");
-    await i18n.initializeTranslations();
+async function importAndExportDocs(sourcePath: string, outputSubDir: string) {
+    const note = await importData(sourcePath);
 
-    const sqlInit = (await import("../../server/src/services/sql_init.js")).default;
-    await sqlInit.createInitialDatabase(true);
-
-    const note = await importData(join(__dirname, DOCS_ROOT, "User Guide"));
-
-    // Export
-    const zipFilePath = "output.zip";
+    // Use a meaningful name for the temporary zip file
+    const zipName = outputSubDir || "user-guide";
+    const zipFilePath = `output-${zipName}.zip`;
     try {
         const { exportToZip } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
         const branch = note.getParentBranches()[0];
@@ -36,25 +31,50 @@ async function buildDocsInner() {
         const fileOutputStream = fsExtra.createWriteStream(zipFilePath);
         await exportToZip(taskContext, branch, "share", fileOutputStream);
         await waitForStreamToFinish(fileOutputStream);
-        await extractZip(zipFilePath, OUTPUT_DIR);
+
+        // Output to root directory if outputSubDir is empty, otherwise to subdirectory
+        const outputPath = outputSubDir ? join(OUTPUT_DIR, outputSubDir) : OUTPUT_DIR;
+        await extractZip(zipFilePath, outputPath);
     } finally {
         if (await fsExtra.exists(zipFilePath)) {
             await fsExtra.rm(zipFilePath);
         }
     }
+}
+
+async function buildDocsInner() {
+    const i18n = await import("@triliumnext/server/src/services/i18n.js");
+    await i18n.initializeTranslations();
+
+    const sqlInit = (await import("../../server/src/services/sql_init.js")).default;
+    await sqlInit.createInitialDatabase(true);
+
+    // Wait for becca to be loaded before importing data
+    const beccaLoader = await import("../../server/src/becca/becca_loader.js");
+    await beccaLoader.beccaLoaded;
+
+    // Build User Guide
+    console.log("Building User Guide...");
+    await importAndExportDocs(join(__dirname, DOCS_ROOT, "User Guide"), "user-guide");
+
+    // Build Developer Guide
+    console.log("Building Developer Guide...");
+    await importAndExportDocs(join(__dirname, DOCS_ROOT, "Developer Guide"), "developer-guide");
 
     // Copy favicon.
     await fs.copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "favicon.ico"));
+    await fs.copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "user-guide", "favicon.ico"));
+    await fs.copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "developer-guide", "favicon.ico"));
 
     console.log("Documentation built successfully!");
 }
 
 export async function importData(path: string) {
     const buffer = await createImportZip(path);
-    const importService = (await import("@triliumnext/server/src/services/import/zip.js")).default;
-    const TaskContext = (await import("@triliumnext/server/src/services/task_context.js")).default;
+    const importService = (await import("../../server/src/services/import/zip.js")).default;
+    const TaskContext = (await import("../../server/src/services/task_context.js")).default;
     const context = new TaskContext("no-progress-reporting", "importNotes", null);
-    const becca = (await import("@triliumnext/server/src/becca/becca.js")).default;
+    const becca = (await import("../../server/src/becca/becca.js")).default;
 
     const rootNote = becca.getRoot();
     if (!rootNote) {
