@@ -1437,7 +1437,6 @@
   },
   "etapi": {
     "title": "ETAPI",
-    "wiki": "вики",
     "created": "Создано",
     "actions": "Действия",
     "existing_tokens": "Существующие токены",
@@ -1445,10 +1444,7 @@
     "default_token_name": "новый токен",
     "rename_token_title": "Переименовать токен",
     "description": "ETAPI — это REST API, используемый для программного доступа к экземпляру Trilium без пользовательского интерфейса.",
-    "see_more": "Более подробную информацию смотрите в {{- link_to_wiki}} и {{- link_to_openapi_spec}} или {{- link_to_swagger_ui }}.",
     "create_token": "Создать новый токен ETAPI",
-    "openapi_spec": "Спецификация ETAPI OpenAPI",
-    "swagger_ui": "Пользовательский интерфейс ETAPI Swagger",
     "new_token_title": "Новый токен ETAPI",
     "token_created_title": "Создан токен ETAPI",
     "rename_token": "Переименовать этот токен",

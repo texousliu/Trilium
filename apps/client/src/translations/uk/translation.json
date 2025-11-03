@@ -1399,10 +1399,6 @@
   "etapi": {
     "title": "ETAPI",
     "description": "ETAPI — це REST API, який використовується для програмного доступу до екземпляра Trilium без інтерфейсу користувача.",
-    "see_more": "Див. докладнішу інформацію у {{- link_to_wiki}} та {{- link_to_openapi_spec}} або {{- link_to_swagger_ui }}.",
-    "wiki": "вікі",
-    "openapi_spec": "ETAPI OpenAPI spec",
-    "swagger_ui": "ETAPI Swagger UI",
     "create_token": "Створити новий токен ETAPI",
     "existing_tokens": "Існуючі токени",
     "no_tokens_yet": "Токенів поки що немає. Натисніть кнопку вище, щоб створити його.",
