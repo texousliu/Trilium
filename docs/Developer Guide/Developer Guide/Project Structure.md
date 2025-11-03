@@ -20,25 +20,9 @@ For example to run the server instance:
 pnpm server:start
 ```
 
-## Important tasks
+## Running and building
 
-Each application has a number of tasks. Here's a non-exhaustive list of the tasks that are useful during development.
-
-To run any of the tasks, use `pnpm project:task`:
-
-*   `client`:
-    *   The client is not meant to be run by itself, despite being described as an app. See the documentation on the server instead.
-*   `server`:
-    *   To run the server in development mode, run `server:start`. The dev port is `8080`.
-    *   To run the server in production mode (with its own copy of the assets), run `server:start-prod`.
-    *   To build for Docker, see <a class="reference-link" href="Building/Docker.md">Docker</a>.
-*   `desktop`:
-    *   To run the desktop in development mode with watch, run `desktop:start`.
-    *   To run the desktop in production mode, run `desktop:start-prod`.
-
-## Building packages
-
-Generally, the building process of a project generates a `dist` folder containing everything needed for production.
+Each application has a number of tasks. Here's a non-exhaustive list of the tasks that are useful during development. See <a class="reference-link" href="Building">Building</a>.
 
 ## Managing dependencies across the mono-repo
 
