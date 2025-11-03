@@ -2117,6 +2117,11 @@ body.zen .note-split.type-text {
     font-size: 1.15em;
 }
 
+body.zen .note-split.type-text .scrolling-container {
+    /* (Usually) keeps the caret above the fixed toolbar */
+    scroll-padding-bottom: 130px;
+}
+
 /* Fixed formatting toolbar */
 
 body.zen .note-split .ribbon-container {
