@@ -63,6 +63,8 @@ async function buildDocsInner() {
 
     // Copy favicon.
     await fs.copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "favicon.ico"));
+    await fs.copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "user-guide", "favicon.ico"));
+    await fs.copyFile("../../apps/website/src/assets/favicon.ico", join(OUTPUT_DIR, "developer-guide", "favicon.ico"));
 
     console.log("Documentation built successfully!");
 }
