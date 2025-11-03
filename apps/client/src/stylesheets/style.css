@@ -2117,9 +2117,29 @@ body.zen .note-split.type-text {
     font-size: 1.15em;
 }
 
+body.zen .note-split.type-text .title-row {
+    --start-color: var(--main-background-color);
+
+    position: absolute;
+    width: 100%;
+    background: linear-gradient(var(--start-color) 30%, transparent 100%);
+    z-index: 1000;
+}
+
+@supports (background: color-mix(in srgb, white, transparent)) {
+    body.zen .note-split.type-text .title-row {
+        --start-color: color-mix(in srgb, var(--main-background-color), transparent 10%);
+    }
+}
+
 body.zen .note-split.type-text .scrolling-container {
+    --padding-top: 50px; /* Should be enough to cover the title row */
+    --padding-bottom: 130px; /* Should be enough to avoid caret being hidden by the formatting toolbar */
+
     /* (Usually) keeps the caret above the fixed toolbar */
-    scroll-padding-bottom: 130px;
+    padding-top: var(--padding-top);
+    scroll-padding-top: var(--padding-top);
+    scroll-padding-bottom: var(--padding-bottom);
 }
 
 /* Fixed formatting toolbar */
