@@ -47,6 +47,13 @@ export default function buildLaunchBarConfig() {
         { id: "_lbBackInHistory", ...sharedLaunchers.backInHistory },
         { id: "_lbForwardInHistory", ...sharedLaunchers.forwardInHistory },
         { id: "_lbBackendLog", title: t("hidden-subtree.backend-log-title"), type: "launcher", targetNoteId: "_backendLog", icon: "bx bx-terminal" },
+        {
+            id: "_zenMode",
+            title: t("hidden-subtree.zen-mode"),
+            type: "launcher",
+            command: "toggleZenMode",
+            icon: "bx bxs-yin-yang"
+        }
     ];
 
     const desktopVisibleLaunchers: HiddenSubtreeItem[] = [
