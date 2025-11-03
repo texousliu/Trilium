@@ -371,10 +371,12 @@ async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, 
         }
 
         if (noteMeta.children?.length || 0 > 0) {
-            const directoryPath = filePathPrefix + noteMeta.dirFileName;
+            const directoryPath = filePathPrefix !== "" || format !== "share" ? filePathPrefix + noteMeta.dirFileName : "";
 
             // create directory
-            archive.append("", { name: `${directoryPath}/`, date: dateUtils.parseDateTime(note.utcDateModified) });
+            if (directoryPath) {
+                archive.append("", { name: `${directoryPath}/`, date: dateUtils.parseDateTime(note.utcDateModified) });
+            }
 
             for (const childMeta of noteMeta.children || []) {
                 saveNote(childMeta, `${directoryPath}/`);

@@ -58,7 +58,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         if (!noteMeta?.notePath?.length) {
             throw new Error("Missing note path.");
         }
-        const basePath = "../".repeat(noteMeta.notePath.length - 1);
+        const basePath = "../".repeat(Math.max(0, noteMeta.notePath.length - 2));
         let searchContent = "";
 
         if (note) {
