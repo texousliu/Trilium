@@ -41,7 +41,7 @@ Go to `src/becca/entities/rows.ts` and add the new note type to `ALLOWED_NOTE_TY
 
 ## Final steps
 
-*   Update the <a class="reference-link" href="../Demo%20document.md">Demo document</a> to showcase the new note type.
+*   Update the <a class="reference-link" href="../../Demo%20document.md">Demo document</a> to showcase the new note type.
 
 ## Troubleshooting
 

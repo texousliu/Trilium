@@ -366,6 +366,41 @@
                                     "format": "markdown",
                                     "dataFileName": "System Requirements.md",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "Un4wj2Mak2Ky",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "poXkQfguuA0U",
+                                        "Un4wj2Mak2Ky"
+                                    ],
+                                    "title": "Nix flake",
+                                    "notePosition": 30,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "nix-flake",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bxl-tux",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Nix flake.md",
+                                    "attachments": []
                                 }
                             ]
                         },
@@ -1221,6 +1256,22 @@
                                     "format": "markdown",
                                     "dataFileName": "System Requirements.md",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": true,
+                                    "noteId": "Un4wj2Mak2Ky",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "Un4wj2Mak2Ky"
+                                    ],
+                                    "title": "Nix flake",
+                                    "prefix": null,
+                                    "dataFileName": "Nix flake.clone.md",
+                                    "type": "text",
+                                    "format": "markdown",
+                                    "isExpanded": false
                                 }
                             ]
                         },
@@ -13996,6 +14047,40 @@
                                     "attachments": []
                                 }
                             ]
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "64ZTlUPgEPtW",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "tC7s2alapj8V",
+                                "64ZTlUPgEPtW"
+                            ],
+                            "title": "Safe mode",
+                            "notePosition": 250,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "safe-mode",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bxs-virus-block",
+                                    "isInheritable": false,
+                                    "position": 30
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Safe mode.md",
+                            "attachments": []
                         }
                     ]
                 },
