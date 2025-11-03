@@ -16,7 +16,7 @@ const OUTPUT_DIR = "../../site";
 
 async function importAndExportDocs(sourcePath: string, outputSubDir: string) {
     const note = await importData(sourcePath);
-    
+
     // Use a meaningful name for the temporary zip file
     const zipName = outputSubDir || "user-guide";
     const zipFilePath = `output-${zipName}.zip`;
@@ -31,7 +31,7 @@ async function importAndExportDocs(sourcePath: string, outputSubDir: string) {
         const fileOutputStream = fsExtra.createWriteStream(zipFilePath);
         await exportToZip(taskContext, branch, "share", fileOutputStream);
         await waitForStreamToFinish(fileOutputStream);
-        
+
         // Output to root directory if outputSubDir is empty, otherwise to subdirectory
         const outputPath = outputSubDir ? join(OUTPUT_DIR, outputSubDir) : OUTPUT_DIR;
         await extractZip(zipFilePath, outputPath);
@@ -48,7 +48,7 @@ async function buildDocsInner() {
 
     const sqlInit = (await import("../../server/src/services/sql_init.js")).default;
     await sqlInit.createInitialDatabase(true);
-    
+
     // Wait for becca to be loaded before importing data
     const beccaLoader = await import("../../server/src/becca/becca_loader.js");
     await beccaLoader.beccaLoaded;
@@ -72,9 +72,8 @@ export async function importData(path: string) {
     const importService = (await import("../../server/src/services/import/zip.js")).default;
     const TaskContext = (await import("../../server/src/services/task_context.js")).default;
     const context = new TaskContext("no-progress-reporting", "importNotes", null);
-    const beccaLoader = (await import("../../server/src/becca/becca_loader.js")).default;
-    const becca = beccaLoader.becca;
-    
+    const becca = (await import("../../server/src/becca/becca.js")).default;
+
     const rootNote = becca.getRoot();
     if (!rootNote) {
         throw new Error("Missing root note for import.");

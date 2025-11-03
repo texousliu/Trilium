@@ -293,6 +293,5 @@ eventService.subscribeBeccaLoader(eventService.LEAVE_PROTECTED_SESSION, load);
 export default {
     load,
     reload,
-    beccaLoaded,
-    becca
+    beccaLoaded
 };
