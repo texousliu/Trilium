@@ -52,12 +52,19 @@ export default function buildLaunchBarConfig() {
             id: "_lbForwardInHistory",
             ...sharedLaunchers.forwardInHistory
         },
+        {
+            id: "_commandPalette",
+            title: t("hidden-subtree.command-palette"),
+            type: "launcher",
+            command: "commandPalette",
+            icon: "bx bx-chevron-right-square"
+        },
         { 
             id: "_lbBackendLog",
             title: t("hidden-subtree.backend-log-title"),
             type: "launcher",
             targetNoteId: "_backendLog",
-            icon: "bx bx-terminal" 
+            icon: "bx bx-detail" 
         },
         {
             id: "_zenMode",

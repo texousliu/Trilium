@@ -7,6 +7,7 @@ enum Command {
     showRecentChanges,
     showOptions,
     createAiChat,
+    commandPalette,
     toggleZenMode
 }
 
@@ -43,6 +44,7 @@ export interface HiddenSubtreeItem {
         | "calendar"
         | "quickSearch"
         | "aiChatLauncher"
+        | "commandPalette"
         | "toggleZenMode";
     command?: keyof typeof Command;
     /**
