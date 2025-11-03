@@ -11,6 +11,7 @@ import FormGroup from "../react/FormGroup.js";
 import { useTriliumEvent } from "../react/hooks.jsx";
 import FBranch from "../../entities/fbranch.js";
 import type { ContextMenuCommandData } from "../../components/app_context.js";
+import "./branch_prefix.css";
 
 // Virtual branches (e.g., from search results) start with this prefix
 const VIRTUAL_BRANCH_PREFIX = "virt-";
@@ -84,12 +85,11 @@ export default function BranchPrefixDialog() {
     }
 
     const isSingleBranch = branches.length === 1;
-    const titleKey = isSingleBranch ? "branch_prefix.edit_branch_prefix" : "branch_prefix.edit_branch_prefix_multiple";
 
     return (
         <Modal
             className="branch-prefix-dialog"
-            title={t(titleKey, { count: branches.length })}
+            title={isSingleBranch ? t("branch_prefix.edit_branch_prefix") : t("branch_prefix.edit_branch_prefix_multiple", { count: branches.length })}
             size="lg"
             onShown={() => branchInput.current?.focus()}
             onHidden={() => setShown(false)}
@@ -108,14 +108,14 @@ export default function BranchPrefixDialog() {
                 </div>
             </FormGroup>
             {!isSingleBranch && (
-                <div className="branch-prefix-notes-list" style={{ marginTop: "10px" }}>
+                <div className="branch-prefix-notes-list">
                     <strong>{t("branch_prefix.affected_branches", { count: branches.length })}</strong>
-                    <ul style={{ maxHeight: "200px", overflow: "auto", marginTop: "5px" }}>
+                    <ul>
                         {branches.map((branch) => {
                             const note = branch.getNoteFromCache();
                             return (
                                 <li key={branch.branchId}>
-                                    {branch.prefix && <span style={{ color: "#888" }}>{branch.prefix} - </span>}
+                                    {branch.prefix && <span className="branch-prefix-current">{branch.prefix} - </span>}
                                     {note.title}
                                 </li>
                             );
