@@ -16,7 +16,7 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import { highlightAuto } from "@triliumnext/highlightjs";
 import becca from "../becca/becca.js";
-import { BAttachment } from "../services/backend_script_entrypoint.js";
+import BAttachment from '../becca/entities/battachment.js';
 import SAttachment from "./shaca/entities/sattachment.js";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 

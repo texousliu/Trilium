@@ -1,11 +1,13 @@
+<aside class="admonition tip">
+  <p>For a quick start, consult the&nbsp;<a class="reference-link" href="#root/pgxEVkzLl1OP/_help_9qPsTWBorUhQ">API Reference</a>.</p>
+</aside>
 <p>ETAPI is Trilium's public/external REST API. It is available since Trilium
   v0.50.</p>
-<p>The documentation is in OpenAPI format, available <a href="https://github.com/TriliumNext/Trilium/blob/master/src/etapi/etapi.openapi.yaml">here</a>.</p>
 <h2>API clients</h2>
 <p>As an alternative to calling the API directly, there are client libraries
   to simplify this</p>
 <ul>
-  <li><a href="https://github.com/Nriver/trilium-py">trilium-py</a>, you can
+  <li data-list-item-id="e3342ddfa108f6c8c6c47d7d3da8b02fa"><a href="https://github.com/Nriver/trilium-py">trilium-py</a>, you can
     use Python to communicate with Trilium.</li>
 </ul>
 <h2>Obtaining a token</h2>
@@ -23,10 +25,10 @@ Authorization: ETAPITOKEN</code></pre>
 <p>Since v0.56 you can also use basic auth format:</p><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
 Authorization: Basic BATOKEN</code></pre>
 <ul>
-  <li>Where <code>BATOKEN = BASE64(username + ':' + password)</code> - this is
+  <li data-list-item-id="ec59ac570a3d2a846da38378a5f2428ed">Where <code>BATOKEN = BASE64(username + ':' + password)</code> - this is
     a standard Basic Auth serialization</li>
-  <li>Where <code>username</code> is "etapi"</li>
-  <li>And <code>password</code> is the generated ETAPI token described above.</li>
+  <li data-list-item-id="e18e2e73ebecc949dd4a51cd9f8bb0b91">Where <code>username</code> is "etapi"</li>
+  <li data-list-item-id="ee892223f95cef4a53caec5477ab31edb">And <code>password</code> is the generated ETAPI token described above.</li>
 </ul>
 <p>Basic Auth is meant to be used with tools which support only basic auth.</p>
 <h2>Interaction using Bash scripts</h2>
@@ -42,10 +44,10 @@ NOTE_ID="i6ra4ZshJhgN"
 curl "$SERVER/etapi/notes/$NOTE_ID/content" -H "Authorization: $TOKEN" </code></pre>
 <p>Make sure to replace the values of:</p>
 <ul>
-  <li><code>TOKEN</code> with your ETAPI token.</li>
-  <li><code>SERVER</code> with the correct protocol, host name and port to your
+  <li data-list-item-id="e68020f83acc951e180bb405d149a64a5"><code>TOKEN</code> with your ETAPI token.</li>
+  <li data-list-item-id="ef4c31df5f6d18811e7de0ee8ff95f3a7"><code>SERVER</code> with the correct protocol, host name and port to your
     Trilium instance.</li>
-  <li><code>NOTE_ID</code> with an existing note ID to download.</li>
+  <li data-list-item-id="e25086bb4c54d32259f987f9366e22204"><code>NOTE_ID</code> with an existing note ID to download.</li>
 </ul>
 <p>As another example, to obtain a .zip export of a note and place it in
   a directory called <code>out</code>, simply replace the last statement in
