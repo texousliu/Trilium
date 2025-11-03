@@ -98,8 +98,8 @@ importers:
         specifier: 0.18.0
         version: 0.18.0
       rollup-plugin-webpack-stats:
-        specifier: 2.1.6
-        version: 2.1.6(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
+        specifier: 2.1.7
+        version: 2.1.7(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -12648,8 +12648,8 @@ packages:
     resolution: {integrity: sha512-EsoOi8moHN6CAYyTZipxDDVTJn0j2nBCWor4wRU45RQ8ER2qREDykXLr3Ulz6hBh6oBKCFTQIjo21i0FXNo/IA==}
     hasBin: true
 
-  rollup-plugin-stats@1.5.1:
-    resolution: {integrity: sha512-WXx9F3i57DLKkB8mt6Zw3jN9sS8YOqTsfvuOG8RW0D95Wn5KHt2e9POh8sYWODgmTsiKK0Nm54ZjxLnp7yeCDw==}
+  rollup-plugin-stats@1.5.2:
+    resolution: {integrity: sha512-3PtTLkgJ9zDaBITh92sysBxpaIJHSokODV4eo6ivnxfzDZxFPpTPooWHPse/X/Qi9A186Opu+hPycZNPxSgtnA==}
     engines: {node: '>=18'}
     peerDependencies:
       rolldown: ^1.0.0-beta.0
@@ -12675,8 +12675,8 @@ packages:
     peerDependencies:
       rollup: ^3.0.0||^4.0.0
 
-  rollup-plugin-webpack-stats@2.1.6:
-    resolution: {integrity: sha512-njKotmo0lWIbrTKJ5CrIPk9DuDsQziOo73rE3aQIAhecJj5o0ECBbE0vxgMor37o6TQ/IEAK8pDxzs4CqLdIJw==}
+  rollup-plugin-webpack-stats@2.1.7:
+    resolution: {integrity: sha512-hg+lhXu/lOp+k9SR7Xi47+s/YJyYnSSfE7h3iuqwDthaFwxYRw9cztd7HLXrwDgW18CC1L7n9ueZBr/Te2BWUw==}
     engines: {node: '>=18'}
     peerDependencies:
       rolldown: ^1.0.0-beta.0
@@ -15684,6 +15684,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-code-block@47.1.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)':
     dependencies:
@@ -15938,6 +15940,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.1.0':
     dependencies:
@@ -16434,8 +16438,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@47.1.0':
     dependencies:
@@ -29535,7 +29537,7 @@ snapshots:
       '@rolldown/binding-win32-x64-msvc': 1.0.0-beta.29
     optional: true
 
-  rollup-plugin-stats@1.5.1(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
+  rollup-plugin-stats@1.5.2(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
     optionalDependencies:
       rolldown: 1.0.0-beta.29
       rollup: 4.52.0
@@ -29568,9 +29570,9 @@ snapshots:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.0)
       rollup: 4.40.0
 
-  rollup-plugin-webpack-stats@2.1.6(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
+  rollup-plugin-webpack-stats@2.1.7(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
     dependencies:
-      rollup-plugin-stats: 1.5.1(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
+      rollup-plugin-stats: 1.5.2(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
     optionalDependencies:
       rolldown: 1.0.0-beta.29
       rollup: 4.52.0
