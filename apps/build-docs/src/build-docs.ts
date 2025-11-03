@@ -55,7 +55,7 @@ async function buildDocsInner() {
 
     // Build User Guide
     console.log("Building User Guide...");
-    await importAndExportDocs(join(__dirname, DOCS_ROOT, "User Guide"), "");
+    await importAndExportDocs(join(__dirname, DOCS_ROOT, "User Guide"), "user-guide");
 
     // Build Developer Guide
     console.log("Building Developer Guide...");
