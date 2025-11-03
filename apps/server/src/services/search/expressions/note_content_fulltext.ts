@@ -96,14 +96,14 @@ class NoteContentFulltextExp extends Expression {
 
         // For exact match with flatText, also search notes WITHOUT content (they may have matching attributes)
         if (this.flatText && (this.operator === "=" || this.operator === "!=")) {
-            for (const noteId of inputNoteSet.noteIdSet) {
+            for (const note of inputNoteSet.notes) {
                 // Skip if already found or doesn't exist
-                if (resultNoteSet.hasNoteId(noteId) || !(noteId in becca.notes)) {
+                if (resultNoteSet.hasNoteId(note.noteId) || !(note.noteId in becca.notes)) {
                     continue;
                 }
 
-                const note = becca.notes[noteId];
-                const flatText = note.getFlatText();
+                const noteFromBecca = becca.notes[note.noteId];
+                const flatText = noteFromBecca.getFlatText();
 
                 // For flatText, only check attribute values (format: #name=value or ~name=value)
                 // Don't match against noteId, type, mime, or title which are also in flatText
@@ -116,7 +116,7 @@ class NoteContentFulltextExp extends Expression {
                 matches = normalizedFlatText.includes(`=${normalizedPhrase}`);
 
                 if ((this.operator === "=" && matches) || (this.operator === "!=" && !matches)) {
-                    resultNoteSet.add(note);
+                    resultNoteSet.add(noteFromBecca);
                 }
             }
         }
