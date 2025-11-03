@@ -253,6 +253,10 @@ async function exportToZip(taskContext: TaskContext<"export">, branch: BBranch, 
 
         for (let i = 0; i < targetPath.length - 1; i++) {
             const meta = noteIdToMeta[targetPath[i]];
+            if (meta === rootMeta && format === "share") {
+                continue;
+            }
+
             if (meta.dirFileName) {
                 url += `${encodeURIComponent(meta.dirFileName)}/`;
             }
