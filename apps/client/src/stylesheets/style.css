@@ -2114,6 +2114,7 @@ body.zen .note-split:not(.full-content-width) .scroll-padding-widget {
 }
 
 body.zen .note-split.type-text {
+    position: relative;
     font-size: 1.15em;
 }
 
