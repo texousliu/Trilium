@@ -25,56 +25,35 @@
                 {
                     "type": "relation",
                     "name": "internalLink",
-                    "value": "BFs8mudNFgCS",
+                    "value": "gh7bpGYxajRS",
                     "isInheritable": false,
                     "position": 20
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "BFs8mudNFgCS",
+                    "isInheritable": false,
+                    "position": 30
                 },
                 {
                     "type": "relation",
                     "name": "internalLink",
                     "value": "GTwFsgaA0lCt",
                     "isInheritable": false,
-                    "position": 30
-                },
-                {
-                    "type": "label",
-                    "name": "shareAlias",
-                    "value": "user-guide",
-                    "isInheritable": false,
-                    "position": 10
-                },
-                {
-                    "type": "label",
-                    "name": "label:shareAlias",
-                    "value": "promoted,alias=Slug,single,text",
-                    "isInheritable": true,
-                    "position": 20
-                },
-                {
-                    "type": "label",
-                    "name": "iconClass",
-                    "value": "bx bx-help-circle",
-                    "isInheritable": false,
-                    "position": 30
+                    "position": 40
                 },
                 {
                     "type": "relation",
                     "name": "internalLink",
                     "value": "poXkQfguuA0U",
                     "isInheritable": false,
-                    "position": 40
-                },
-                {
-                    "type": "relation",
-                    "name": "internalLink",
-                    "value": "WOcw2SLH6tbX",
-                    "isInheritable": false,
                     "position": 50
                 },
                 {
                     "type": "relation",
                     "name": "internalLink",
-                    "value": "gh7bpGYxajRS",
+                    "value": "WOcw2SLH6tbX",
                     "isInheritable": false,
                     "position": 60
                 },
@@ -98,6 +77,27 @@
                     "value": "9qPsTWBorUhQ",
                     "isInheritable": false,
                     "position": 90
+                },
+                {
+                    "type": "label",
+                    "name": "shareAlias",
+                    "value": "user-guide",
+                    "isInheritable": false,
+                    "position": 10
+                },
+                {
+                    "type": "label",
+                    "name": "label:shareAlias",
+                    "value": "promoted,alias=Slug,single,text",
+                    "isInheritable": true,
+                    "position": 20
+                },
+                {
+                    "type": "label",
+                    "name": "iconClass",
+                    "value": "bx bx-help-circle",
+                    "isInheritable": false,
+                    "position": 30
                 }
             ],
             "format": "markdown",

@@ -16,6 +16,20 @@
             "mime": "text/html",
             "attributes": [
                 {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "T2W7WCZrYZBU",
+                    "isInheritable": false,
+                    "position": 10
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "cxfTSHIUQtt2",
+                    "isInheritable": false,
+                    "position": 20
+                },
+                {
                     "type": "label",
                     "name": "label:shareAlias",
                     "value": "promoted,alias=Slug,single,text",
@@ -35,20 +49,6 @@
                     "value": "developer-guide",
                     "isInheritable": false,
                     "position": 30
-                },
-                {
-                    "type": "relation",
-                    "name": "internalLink",
-                    "value": "T2W7WCZrYZBU",
-                    "isInheritable": false,
-                    "position": 40
-                },
-                {
-                    "type": "relation",
-                    "name": "internalLink",
-                    "value": "cxfTSHIUQtt2",
-                    "isInheritable": false,
-                    "position": 50
                 }
             ],
             "format": "markdown",
@@ -245,6 +245,13 @@
                                     "value": "database",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-data",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
@@ -593,13 +600,6 @@
                                                 {
                                                     "type": "relation",
                                                     "name": "internalLink",
-                                                    "value": "VIcWnKGs0sMh",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
                                                     "value": "UvXpeSqfYc6d",
                                                     "isInheritable": false,
                                                     "position": 20
@@ -624,6 +624,13 @@
                                                     "value": "notes",
                                                     "isInheritable": false,
                                                     "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "VIcWnKGs0sMh",
+                                                    "isInheritable": false,
+                                                    "position": 50
                                                 }
                                             ],
                                             "format": "markdown",
@@ -765,6 +772,71 @@
                                             "format": "markdown",
                                             "dataFileName": "revisions.md",
                                             "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "6DG1au6rgOTl",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "6DG1au6rgOTl"
+                                            ],
+                                            "title": "sessions",
+                                            "notePosition": 66,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "sessions",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "sessions.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "zWY2LKmas9os",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "zWY2LKmas9os"
+                                            ],
+                                            "title": "user_data",
+                                            "notePosition": 76,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "user_data.md",
+                                            "attachments": []
                                         }
                                     ]
                                 }
@@ -817,7 +889,7 @@
                                     "name": "internalLink",
                                     "value": "Jg7clqogFOyD",
                                     "isInheritable": false,
-                                    "position": 20
+                                    "position": 10
                                 },
                                 {
                                     "type": "label",
