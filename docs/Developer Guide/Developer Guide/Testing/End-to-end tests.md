@@ -1,6 +1,15 @@
 # End-to-end tests
-*   This tests both the client and the server, by running the server and then using Playwright to query the state of the page.
-*   These can be found in `apps/server-e2e` and `apps/desktop/e2e`.
+**Server E2E:**
+
+*   Tests the entire ETAPI.
+*   Tests WebSocket functionality
+
+**Desktop E2E:**
+
+*   Playwright with Electron
+*   Tests some basic functionality such as creating a new document.
+
+These can be found in `apps/server-e2e` and `apps/desktop/e2e`.
 
 ## First-time run
 

@@ -35,6 +35,20 @@
                     "value": "developer-guide",
                     "isInheritable": false,
                     "position": 30
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "T2W7WCZrYZBU",
+                    "isInheritable": false,
+                    "position": 40
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "cxfTSHIUQtt2",
+                    "isInheritable": false,
+                    "position": 50
                 }
             ],
             "format": "markdown",
@@ -124,18 +138,749 @@
                 },
                 {
                     "isClone": false,
-                    "noteId": "zdQzavvHDl1k",
+                    "noteId": "MhwWMgxwDTZL",
                     "notePath": [
                         "jdjRLhLV3TtI",
-                        "zdQzavvHDl1k"
+                        "MhwWMgxwDTZL"
                     ],
-                    "title": "Documentation",
+                    "title": "Architecture",
                     "notePosition": 280,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
                     "mime": "text/html",
                     "attributes": [
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "architecture",
+                            "isInheritable": false,
+                            "position": 20
+                        },
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bx-arch",
+                            "isInheritable": false,
+                            "position": 30
+                        }
+                    ],
+                    "format": "markdown",
+                    "dataFileName": "Architecture.md",
+                    "attachments": [],
+                    "dirFileName": "Architecture",
+                    "children": [
+                        {
+                            "isClone": false,
+                            "noteId": "dsMq2EIOMOBU",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "MhwWMgxwDTZL",
+                                "dsMq2EIOMOBU"
+                            ],
+                            "title": "Frontend",
+                            "notePosition": 10,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "frontend",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Frontend.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "tsswRlmHEnYW",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "MhwWMgxwDTZL",
+                                "tsswRlmHEnYW"
+                            ],
+                            "title": "Backend",
+                            "notePosition": 20,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "backend",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Backend.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "pRZhrVIGCbMu",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "MhwWMgxwDTZL",
+                                "pRZhrVIGCbMu"
+                            ],
+                            "title": "Database",
+                            "notePosition": 40,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "database",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Database.md",
+                            "attachments": [],
+                            "dirFileName": "Database",
+                            "children": [
+                                {
+                                    "isClone": false,
+                                    "noteId": "vNMojjUN76jc",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "MhwWMgxwDTZL",
+                                        "pRZhrVIGCbMu",
+                                        "vNMojjUN76jc"
+                                    ],
+                                    "title": "Database structure",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "tables",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-table",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "attachments": [],
+                                    "dirFileName": "Database structure",
+                                    "children": [
+                                        {
+                                            "isClone": false,
+                                            "noteId": "e6GnYOXeIWjg",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "e6GnYOXeIWjg"
+                                            ],
+                                            "title": "attachments",
+                                            "notePosition": 20,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "DSkl8C325tEC",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "UvXpeSqfYc6d",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "VIcWnKGs0sMh",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "tM3rIZQzlum4",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "attachments",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "attachments.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "ciL84vNBNi9y",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "ciL84vNBNi9y"
+                                            ],
+                                            "title": "attributes",
+                                            "notePosition": 30,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "DSkl8C325tEC",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "tM3rIZQzlum4",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "attributes",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "attributes.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "VIcWnKGs0sMh",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "VIcWnKGs0sMh"
+                                            ],
+                                            "title": "blobs",
+                                            "notePosition": 40,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "blobs",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "blobs.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "GskLPkgY5n6E",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "GskLPkgY5n6E"
+                                            ],
+                                            "title": "branches",
+                                            "notePosition": 50,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "DSkl8C325tEC",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "h8AsuFjSD4fB",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "tM3rIZQzlum4",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "branches",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "branches.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "ohhExR078MPU",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "ohhExR078MPU"
+                                            ],
+                                            "title": "entity_changes",
+                                            "notePosition": 51,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "entity-changes",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "entity_changes.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "bRqbIg633nCs",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "bRqbIg633nCs"
+                                            ],
+                                            "title": "etapi_tokens",
+                                            "notePosition": 52,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "tM3rIZQzlum4",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "etapi-tokens",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "etapi_tokens.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "DSkl8C325tEC",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "DSkl8C325tEC"
+                                            ],
+                                            "title": "notes",
+                                            "notePosition": 53,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "VIcWnKGs0sMh",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "UvXpeSqfYc6d",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "tM3rIZQzlum4",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "notes",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "notes.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "4oeftEmy77Bt",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "4oeftEmy77Bt"
+                                            ],
+                                            "title": "options",
+                                            "notePosition": 54,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "options",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "options.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "VyFirdgAOoh5",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "VyFirdgAOoh5"
+                                            ],
+                                            "title": "recent_notes",
+                                            "notePosition": 55,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "DSkl8C325tEC",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "recent-notes",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "recent_notes.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "s7ZBiaJVNumK",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "s7ZBiaJVNumK"
+                                            ],
+                                            "title": "revisions",
+                                            "notePosition": 56,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "DSkl8C325tEC",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "VIcWnKGs0sMh",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "UvXpeSqfYc6d",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "revisions",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "revisions.md",
+                                            "attachments": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "Wxn82Em8B7U5",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "MhwWMgxwDTZL",
+                                "Wxn82Em8B7U5"
+                            ],
+                            "title": "APIs",
+                            "notePosition": 50,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "api",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "APIs.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "Vk4zD1Iirarg",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "MhwWMgxwDTZL",
+                                "Vk4zD1Iirarg"
+                            ],
+                            "title": "Arhitecture Decision Records",
+                            "notePosition": 60,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Jg7clqogFOyD",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "adr",
+                                    "isInheritable": false,
+                                    "position": 30
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Arhitecture Decision Records.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "RHbKw3xiwk3S",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "MhwWMgxwDTZL",
+                                "RHbKw3xiwk3S"
+                            ],
+                            "title": "Security",
+                            "notePosition": 80,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "security",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Security.md",
+                            "attachments": []
+                        }
+                    ]
+                },
+                {
+                    "isClone": false,
+                    "noteId": "zdQzavvHDl1k",
+                    "notePath": [
+                        "jdjRLhLV3TtI",
+                        "zdQzavvHDl1k"
+                    ],
+                    "title": "Documentation",
+                    "notePosition": 290,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "T2W7WCZrYZBU",
+                            "isInheritable": false,
+                            "position": 10
+                        },
                         {
                             "type": "label",
                             "name": "shareAlias",
@@ -149,13 +894,6 @@
                             "value": "bx bx-book-open",
                             "isInheritable": false,
                             "position": 30
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "T2W7WCZrYZBU",
-                            "isInheritable": false,
-                            "position": 40
                         }
                     ],
                     "format": "markdown",
@@ -200,7 +938,7 @@
                         "a0mkxxB4Uvbf"
                     ],
                     "title": "Building",
-                    "notePosition": 290,
+                    "notePosition": 300,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -415,7 +1153,7 @@
                                     "name": "internalLink",
                                     "value": "zdQzavvHDl1k",
                                     "isInheritable": false,
-                                    "position": 20
+                                    "position": 10
                                 },
                                 {
                                     "type": "label",
@@ -423,6 +1161,13 @@
                                     "value": "bx bx-rocket",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "releasing",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
@@ -439,7 +1184,7 @@
                         "qalhAaJoQ7AN"
                     ],
                     "title": "Dependencies",
-                    "notePosition": 310,
+                    "notePosition": 320,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -451,6 +1196,13 @@
                             "value": "bx bxs-component",
                             "isInheritable": false,
                             "position": 20
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "dependencies",
+                            "isInheritable": false,
+                            "position": 30
                         }
                     ],
                     "format": "markdown",
@@ -682,8 +1434,8 @@
                         "jdjRLhLV3TtI",
                         "yeqU0zo0ZQ83"
                     ],
-                    "title": "Architecture",
-                    "notePosition": 320,
+                    "title": "Concepts",
+                    "notePosition": 330,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -692,14 +1444,14 @@
                         {
                             "type": "label",
                             "name": "shareAlias",
-                            "value": "architecture",
+                            "value": "concepts",
                             "isInheritable": false,
                             "position": 10
                         },
                         {
                             "type": "label",
                             "name": "iconClass",
-                            "value": "bx bx-arch",
+                            "value": "bx bx-sitemap",
                             "isInheritable": false,
                             "position": 20
                         },
@@ -713,7 +1465,7 @@
                     ],
                     "format": "markdown",
                     "attachments": [],
-                    "dirFileName": "Architecture",
+                    "dirFileName": "Concepts",
                     "children": [
                         {
                             "isClone": false,
@@ -778,6 +1530,40 @@
                         },
                         {
                             "isClone": false,
+                            "noteId": "6Yms5izbd0GF",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "yeqU0zo0ZQ83",
+                                "6Yms5izbd0GF"
+                            ],
+                            "title": "Cache",
+                            "notePosition": 30,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-microchip",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "cache",
+                                    "isInheritable": false,
+                                    "position": 30
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Cache.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
                             "noteId": "oqg9OpK8xfcm",
                             "notePath": [
                                 "jdjRLhLV3TtI",
@@ -785,7 +1571,7 @@
                                 "oqg9OpK8xfcm"
                             ],
                             "title": "CI",
-                            "notePosition": 30,
+                            "notePosition": 40,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -859,511 +1645,6 @@
                         },
                         {
                             "isClone": false,
-                            "noteId": "vNMojjUN76jc",
-                            "notePath": [
-                                "jdjRLhLV3TtI",
-                                "yeqU0zo0ZQ83",
-                                "vNMojjUN76jc"
-                            ],
-                            "title": "Database structure",
-                            "notePosition": 40,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "database",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "iconClass",
-                                    "value": "bx bx-data",
-                                    "isInheritable": false,
-                                    "position": 30
-                                }
-                            ],
-                            "format": "markdown",
-                            "attachments": [],
-                            "dirFileName": "Database structure",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "e6GnYOXeIWjg",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "e6GnYOXeIWjg"
-                                    ],
-                                    "title": "attachments",
-                                    "notePosition": 20,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "DSkl8C325tEC",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "UvXpeSqfYc6d",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "VIcWnKGs0sMh",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "tM3rIZQzlum4",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "attachments",
-                                            "isInheritable": false,
-                                            "position": 50
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "attachments.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "ciL84vNBNi9y",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "ciL84vNBNi9y"
-                                    ],
-                                    "title": "attributes",
-                                    "notePosition": 30,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "DSkl8C325tEC",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "tM3rIZQzlum4",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "attributes",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "attributes.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "VIcWnKGs0sMh",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "VIcWnKGs0sMh"
-                                    ],
-                                    "title": "blobs",
-                                    "notePosition": 40,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "blobs",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "blobs.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "GskLPkgY5n6E",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "GskLPkgY5n6E"
-                                    ],
-                                    "title": "branches",
-                                    "notePosition": 50,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "h8AsuFjSD4fB",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "DSkl8C325tEC",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "tM3rIZQzlum4",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "branches",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "branches.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "ohhExR078MPU",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "ohhExR078MPU"
-                                    ],
-                                    "title": "entity_changes",
-                                    "notePosition": 51,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "entity-changes",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "entity_changes.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "bRqbIg633nCs",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "bRqbIg633nCs"
-                                    ],
-                                    "title": "etapi_tokens",
-                                    "notePosition": 52,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "tM3rIZQzlum4",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "etapi-tokens",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "etapi_tokens.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "DSkl8C325tEC",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "DSkl8C325tEC"
-                                    ],
-                                    "title": "notes",
-                                    "notePosition": 53,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "VIcWnKGs0sMh",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "UvXpeSqfYc6d",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "tM3rIZQzlum4",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "notes",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "notes.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "4oeftEmy77Bt",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "4oeftEmy77Bt"
-                                    ],
-                                    "title": "options",
-                                    "notePosition": 54,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "options",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "options.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "VyFirdgAOoh5",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "VyFirdgAOoh5"
-                                    ],
-                                    "title": "recent_notes",
-                                    "notePosition": 55,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "DSkl8C325tEC",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "recent-notes",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "recent_notes.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "s7ZBiaJVNumK",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "yeqU0zo0ZQ83",
-                                        "vNMojjUN76jc",
-                                        "s7ZBiaJVNumK"
-                                    ],
-                                    "title": "revisions",
-                                    "notePosition": 56,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "DSkl8C325tEC",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "VIcWnKGs0sMh",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "UvXpeSqfYc6d",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-table",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "revisions",
-                                            "isInheritable": false,
-                                            "position": 50
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "revisions.md",
-                                    "attachments": []
-                                }
-                            ]
-                        },
-                        {
-                            "isClone": false,
                             "noteId": "tM3rIZQzlum4",
                             "notePath": [
                                 "jdjRLhLV3TtI",
@@ -1432,6 +1713,40 @@
                         },
                         {
                             "isClone": false,
+                            "noteId": "TiUll0Osoaz6",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "yeqU0zo0ZQ83",
+                                "TiUll0Osoaz6"
+                            ],
+                            "title": "Entities",
+                            "notePosition": 70,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "entities",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bxs-note",
+                                    "isInheritable": false,
+                                    "position": 30
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Entities.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
                             "noteId": "UzRirf46Xi46",
                             "notePath": [
                                 "jdjRLhLV3TtI",
@@ -1482,14 +1797,14 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "oLhKpfi2kGON",
+                                    "value": "PXzm2t3sCdsP",
                                     "isInheritable": false,
                                     "position": 10
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "PXzm2t3sCdsP",
+                                    "value": "oLhKpfi2kGON",
                                     "isInheritable": false,
                                     "position": 20
                                 },
@@ -1715,7 +2030,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "note-types",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "attachments": [],
                             "dirFileName": "Note Types",
@@ -2261,6 +2584,7 @@
                                 }
                             ],
                             "format": "markdown",
+                            "dataFileName": "Synchronisation.md",
                             "attachments": [],
                             "dirFileName": "Synchronisation",
                             "children": [
@@ -2372,7 +2696,7 @@
                         "YjerxU7Aii8X"
                     ],
                     "title": "Troubleshooting",
-                    "notePosition": 360,
+                    "notePosition": 370,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -2461,12 +2785,19 @@
                         "dtKC3FmoWOrv"
                     ],
                     "title": "Testing",
-                    "notePosition": 380,
+                    "notePosition": 390,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
                     "mime": "text/html",
                     "attributes": [
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "w6gMvKh0UAVT",
+                            "isInheritable": false,
+                            "position": 10
+                        },
                         {
                             "type": "label",
                             "name": "shareAlias",
@@ -2480,13 +2811,6 @@
                             "value": "bx bxs-eyedropper",
                             "isInheritable": false,
                             "position": 30
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "w6gMvKh0UAVT",
-                            "isInheritable": false,
-                            "position": 40
                         }
                     ],
                     "format": "markdown",
@@ -2496,6 +2820,33 @@
                     "children": [
                         {
                             "isClone": false,
+                            "noteId": "ETeT5YO61DAW",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "dtKC3FmoWOrv",
+                                "ETeT5YO61DAW"
+                            ],
+                            "title": "Unit tests",
+                            "notePosition": 10,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "unit-tests",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Unit tests.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
                             "noteId": "C5MUQczZ5R9N",
                             "notePath": [
                                 "jdjRLhLV3TtI",
@@ -2503,7 +2854,7 @@
                                 "C5MUQczZ5R9N"
                             ],
                             "title": "Integration testing",
-                            "notePosition": 10,
+                            "notePosition": 20,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2530,7 +2881,7 @@
                                 "bIfKwfCnqpeI"
                             ],
                             "title": "Test database",
-                            "notePosition": 20,
+                            "notePosition": 30,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2557,7 +2908,7 @@
                                 "w6gMvKh0UAVT"
                             ],
                             "title": "End-to-end tests",
-                            "notePosition": 30,
+                            "notePosition": 40,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",

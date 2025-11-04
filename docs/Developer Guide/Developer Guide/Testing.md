@@ -1,4 +1,48 @@
 # Testing
+### Test Organization
+
+**Parallel Tests** (can run simultaneously):
+
+*   Client tests
+*   Package tests
+*   E2E tests (isolated databases)
+
+**Sequential Tests** (shared resources):
+
+*   Server tests (shared database)
+*   CKEditor plugin tests
+
+### Test Frameworks
+
+*   **Vitest** - Unit and integration tests
+*   **Playwright** - E2E tests
+*   **Happy-DOM** - DOM testing environment
+
+## Test locations
+
+```
+apps/
+├── server/
+│   └── src/**/*.spec.ts       # Server tests
+├── client/
+│   └── src/**/*.spec.ts       # Client tests
+└── server-e2e/
+│   └── tests/**/*.spec.ts     # E2E tests
+└── desktop/
+    └── e2e
+        └── tests/**/*.spec.ts # E2E tests
+```
+
+## Running tests
+
+At project root:
+
+```
+pnpm test:all          # All tests
+pnpm test:parallel     # Fast parallel tests
+pnpm test:sequential   # Sequential tests only
+```
+
 ## Unit testing and integration testing
 
 Using `vitest`, there are some unit and integration tests done for both the client and the server.
@@ -27,4 +71,4 @@ These integration tests are run alongside unit tests.
 
 ## End-to-end testing
 
-See <a class="reference-link" href="Testing/End-to-end%20tests.md">e2e tests</a>.
+See <a class="reference-link" href="Testing/End-to-end%20tests.md">End-to-end tests</a>.
