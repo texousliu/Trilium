@@ -12093,7 +12093,7 @@
                                         "R9pX4DGra2Vt",
                                         "ycBFjKrrwE9p"
                                     ],
-                                    "title": "Exporting HTML for web publishing",
+                                    "title": "Exporting static HTML for web publishing",
                                     "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
@@ -12130,7 +12130,7 @@
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "Exporting HTML for web publish.md",
+                                    "dataFileName": "Exporting static HTML for web .md",
                                     "attachments": []
                                 },
                                 {

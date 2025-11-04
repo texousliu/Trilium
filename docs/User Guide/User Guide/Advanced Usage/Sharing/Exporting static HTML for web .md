@@ -1,4 +1,4 @@
-# Exporting HTML for web publishing
+# Exporting static HTML for web publishing
 As described in <a class="reference-link" href="../Sharing.md">Sharing</a>, Trilium can act as a public server in which the shared notes are displayed in read-only mode. While this can work in most cases, it's generally not meant for high-traffic websites and since it's running on a Node.js server it can be potentially exploited.
 
 Another alternative is to generate static HTML files (just like other static site generators such as [MkDocs](https://www.mkdocs.org/)). Since the normal HTML ZIP export does not contain any styling or additional functionality, Trilium provides a way to export the same layout and style as the <a class="reference-link" href="../Sharing.md">Sharing</a> function into static HTML files.
@@ -23,6 +23,10 @@ Apart from normal <a class="reference-link" href="../Sharing.md">Sharing</a>, e
 
 *   The name of the files/URLs will prefer `shareAlias` to allow for clean URLs.
 *   The export requires a functional web server as the pages will not render properly if accessed locally via a web browser due to the use of module scripts.
+*   The directory structure is also slightly different:
+    *   A normal HTML export results in an index file and a single directory.
+    *   Instead, for static exporting the top-root level becomes the index file and the child directories are on the root instead.
+    *   This makes it possible to easily publish to a website, without forcing everything but the root note to be in a sub-directory.
 
 ## Testing locally
 
