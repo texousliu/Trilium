@@ -254,7 +254,8 @@
     "export_status": "エクスポート状況",
     "export_in_progress": "エクスポート処理中: {{progressCount}}",
     "export_finished_successfully": "エクスポートが正常に完了しました。",
-    "format_pdf": "PDF - 印刷または共有目的に。"
+    "format_pdf": "PDF - 印刷または共有目的に。",
+    "share-format": "Web 公開用の HTML - 共有ノートで使用されるのと同じテーマを使用しますが、静的 Web サイトとして公開できます。"
   },
   "help": {
     "title": "チートシート",
@@ -656,10 +657,6 @@
     "created": "作成日時",
     "title": "ETAPI",
     "description": "ETAPI は、Trilium インスタンスに UI なしでプログラム的にアクセスするための REST API です。",
-    "see_more": "詳細は{{- link_to_wiki}}と{{- link_to_openapi_spec}}または{{- link_to_swagger_ui }}を参照してください。",
-    "wiki": "wiki",
-    "openapi_spec": "ETAPI OpenAPIの仕様",
-    "swagger_ui": "ETAPI Swagger UI",
     "create_token": "新しくETAPIトークンを作成",
     "existing_tokens": "既存のトークン",
     "no_tokens_yet": "トークンはまだありません。上のボタンをクリックして作成してください。",

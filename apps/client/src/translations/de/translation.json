@@ -104,7 +104,8 @@
     "export_status": "Exportstatus",
     "export_in_progress": "Export läuft: {{progressCount}}",
     "export_finished_successfully": "Der Export wurde erfolgreich abgeschlossen.",
-    "format_pdf": "PDF - für Ausdrucke oder Teilen."
+    "format_pdf": "PDF - für Ausdrucke oder Teilen.",
+    "share-format": "HTML für die Web-Veröffentlichung – verwendet dasselbe Theme wie bei freigegebenen Notizen, kann jedoch als statische Website veröffentlicht werden."
   },
   "help": {
     "noteNavigation": "Notiz Navigation",
@@ -1285,10 +1286,6 @@
   "etapi": {
     "title": "ETAPI",
     "description": "ETAPI ist eine REST-API, die für den programmgesteuerten Zugriff auf die Trilium-Instanz ohne Benutzeroberfläche verwendet wird.",
-    "see_more": "Weitere Details können im {{- link_to_wiki}} und in der {{- link_to_openapi_spec}} oder der {{- link_to_swagger_ui }} gefunden werden.",
-    "wiki": "Wiki",
-    "openapi_spec": "ETAPI OpenAPI-Spezifikation",
-    "swagger_ui": "ETAPI Swagger UI",
     "create_token": "Erstelle ein neues ETAPI-Token",
     "existing_tokens": "Vorhandene Token",
     "no_tokens_yet": "Es sind noch keine Token vorhanden. Klicke auf die Schaltfläche oben, um eine zu erstellen.",
