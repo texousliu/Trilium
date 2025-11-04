@@ -1,0 +1,46 @@
+# 自定义 Trilium Docker Compose 配置
+# 包含 markdown note type 功能
+services:
+  trilium-markdown:
+    # 使用自定义构建的镜像
+    image: trilium-markdown:latest
+    # 如果镜像不存在，从当前目录构建
+    build:
+      context: ./apps/server
+      dockerfile: Dockerfile.alpine
+    # 重启策略
+    restart: unless-stopped
+    # 环境变量
+    environment:
+      - TRILIUM_DATA_DIR=/home/node/trilium-data
+      # 可选：设置时区
+      - TZ=Asia/Shanghai
+    # 端口映射
+    ports:
+      - '8080:8080'
+    # 数据卷
+    volumes:
+      # 数据持久化
+      - ${TRILIUM_DATA_DIR:-./trilium-data}:/home/node/trilium-data
+      # 时区同步
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # 资源限制（可选）
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+# 可选：添加数据卷定义
+volumes:
+  trilium-data:
+    driver: local

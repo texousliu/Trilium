@@ -398,10 +398,10 @@ export default class MarkdownTypeWidget extends TypeWidget {
         // 检查多种可能的暗色主题标识
         const body = document.body;
         return body.classList.contains("theme-dark") ||
-               body.classList.contains("dark") ||
-               body.classList.contains("theme-next-dark") ||
-               body.getAttribute('data-theme') === 'dark' ||
-               getComputedStyle(body).getPropertyValue('--theme-style')?.trim() === 'dark';
+            body.classList.contains("dark") ||
+            body.classList.contains("theme-next-dark") ||
+            body.getAttribute('data-theme') === 'dark' ||
+            getComputedStyle(body).getPropertyValue('--theme-style')?.trim() === 'dark';
     }
 
     // 设置主题观察器
@@ -438,7 +438,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
             const vditorInstance = (this.vditor as any).vditor;
             if (vditorInstance && vditorInstance.options) {
                 const needsUpdate = vditorInstance.options.theme !== currentTheme ||
-                                  vditorInstance.options.preview?.theme?.current !== currentPreviewTheme;
+                    vditorInstance.options.preview?.theme?.current !== currentPreviewTheme;
 
                 if (needsUpdate) {
                     // 保存当前内容
