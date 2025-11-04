@@ -21,7 +21,7 @@ You will then need to set up the AI “provider” that you wish to use to creat
 
 In the following example, we're going to use our self-hosted Ollama instance to create the embeddings for our Notes. You can see additional documentation about installing your own Ollama locally in <a class="reference-link" href="AI/Providers/Ollama/Installing%20Ollama.md">Installing Ollama</a>.
 
-To see what embedding models Ollama has available, you can check out [this search](https://ollama.com/search?c=embedding)on their website, and then `pull` whichever one you want to try out. As of 4/15/25, my personal favorite is `mxbai-embed-large`.
+To see what embedding models Ollama has available, you can check out [this search](https://ollama.com/search?c=embedding) on their website, and then `pull` whichever one you want to try out. A popular choice is `mxbai-embed-large`.
 
 First, we'll need to select the Ollama provider from the tabs of providers, then we will enter in the Base URL for our Ollama. Since our Ollama is running on our local machine, our Base URL is `http://localhost:11434`. We will then hit the “refresh” button to have it fetch our models:
 

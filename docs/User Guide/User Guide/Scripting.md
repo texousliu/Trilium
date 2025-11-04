@@ -1,14 +1,14 @@
 # Scripting
 Trilium supports creating <a class="reference-link" href="Note%20Types/Code.md">Code</a> notes, i.e. notes which allow you to store some programming code and highlight it. Special case is JavaScript code notes which can also be executed inside Trilium which can in conjunction with <a class="reference-link" href="Scripting/Script%20API.md">Script API</a> provide extra functionality.
 
-## Scripting
+## Architecture Overview
 
 To go further I must explain basic architecture of Trilium - in its essence it is a classic web application - it has these two main components:
 
 *   frontend running in the browser (using HTML, CSS, JavaScript) - this is mainly used to interact with the user, display notes etc.
 *   backend running JavaScript code in node.js runtime - this is responsible for e.g. storing notes, encrypting them etc.
 
-So we have frontend and backend, each with their own set of responsibilities, but their common feature is that they both run JavaScript code. Add to this the fact, that we're able to create JavaScript \[\[code notes\]\] and we're onto something.
+So we have frontend and backend, each with their own set of responsibilities, but their common feature is that they both run JavaScript code. Add to this the fact, that we're able to create JavaScript <a class="reference-link" href="Note%20Types/Code.md">code notes</a> and we're onto something.
 
 ## Use cases
 
