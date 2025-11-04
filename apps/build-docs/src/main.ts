@@ -1,7 +1,7 @@
 import { join } from "path";
 import BuildContext from "./context";
 import buildSwagger from "./swagger";
-import { existsSync, mkdirSync, rmSync } from "fs";
+import { cpSync, existsSync, mkdirSync, rmSync } from "fs";
 import buildDocs from "./build-docs";
 import buildScriptApi from "./script-api";
 
@@ -21,6 +21,10 @@ async function main() {
     await buildDocs(context);
     buildSwagger(context);
     buildScriptApi(context);
+
+    // Copy index and 404 files.
+    cpSync(join(__dirname, "index.html"), join(context.baseDir, "index.html"));
+    cpSync(join(context.baseDir, "user-guide/404.html"), join(context.baseDir, "404.html"));
 }
 
 main();

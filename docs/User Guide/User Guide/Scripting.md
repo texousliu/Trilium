@@ -12,7 +12,7 @@ So we have frontend and backend, each with their own set of responsibilities, bu
 
 ## Use cases
 
-*   <a class="reference-link" href="Scripting/Examples/New%20Task%20launcher%20button.md">"New Task" launcher button</a>
+*   <a class="reference-link" href="Scripting/Frontend%20Basics/Examples/New%20Task%20launcher%20button.md">"New Task" launcher button</a>
 
 ## Action handler
 
@@ -34,7 +34,7 @@ You can see more scripting with explanation in <a class="reference-link" href="
 
 ## Events
 
-See <a class="reference-link" href="Scripting/Events.md">Events</a>.
+See <a class="reference-link" href="Scripting/Backend%20scripts/Events.md">Events</a>.
 
 ## Script API
 
