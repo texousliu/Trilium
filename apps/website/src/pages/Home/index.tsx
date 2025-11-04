@@ -29,6 +29,7 @@ import calendarIcon from "../../assets/boxicons/bx-calendar.svg?raw";
 import tableIcon from "../../assets/boxicons/bx-table.svg?raw";
 import boardIcon from "../../assets/boxicons/bx-columns-3.svg?raw";
 import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
+import presentationIcon from "../../assets/boxicons/bx-slideshow.svg?raw";
 import { getPlatform } from '../../download-helper.js';
 import { useEffect, useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
@@ -132,7 +133,7 @@ function NoteTypesSection() {
     const { t } = useTranslation();
     return (
         <Section className="note-types" title={t("note_types.title")}>
-            <ListWithScreenshot horizontal items={[
+            <ListWithScreenshot items={[
                 {
                     title: t("note_types.text_title"),
                     imageUrl: "/type_text.webp",
@@ -240,45 +241,39 @@ function CollectionsSection() {
                     imageUrl: "/collection_geomap.webp",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Geo%20Map%20View.html",
                     description: t("collections.geomap_description")
+                },
+                {
+                    title: t("collections.presentation_title"),
+                    iconSvg: presentationIcon,
+                    imageUrl: "/collection_presentation.webp",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Presentation%20View.html",
+                    description: t("collections.presentation_description")
                 }
             ]} />
         </Section>
     );
 }
 
-function ListWithScreenshot({ items, horizontal, cardExtra }: {
+function ListWithScreenshot({ items, cardExtra }: {
     items: { title: string, imageUrl: string, description: string, moreInfo: string, iconSvg?: string }[];
-    horizontal?: boolean;
     cardExtra?: ComponentChildren;
 }) {
-    const [ selectedItem, setSelectedItem ] = useState(items[0]);
-    const { t } = useTranslation();
-
     return (
-        <div className={`list-with-screenshot ${horizontal ? "horizontal" : ""}`}>
+        <div className={`list-with-screenshot`}>
             <ul>
                 {items.map(item => (
-                    <li className={`${item === selectedItem ? "selected" : ""}`}>
+                    <li>
                         <Card
                             title={item.title}
-                            onMouseEnter={() => setSelectedItem(item)}
-                            onClick={() => setSelectedItem(item)}
                             moreInfoUrl={item.moreInfo}
                             iconSvg={item.iconSvg}
+                            imageUrl={item.imageUrl}
                         >
                             {item.description}
                         </Card>
                     </li>
                 ))}
             </ul>
-
-            <div className="details">
-                {selectedItem && (
-                    <>
-                        <img src={selectedItem.imageUrl} alt={t("components.list_with_screenshot_alt")} loading="lazy" />
-                    </>
-                )}
-            </div>
         </div>
     )
 }
