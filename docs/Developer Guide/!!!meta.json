@@ -433,6 +433,40 @@
                             "format": "markdown",
                             "dataFileName": "Documentation.md",
                             "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "4nwtTJyjNDKd",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "a0mkxxB4Uvbf",
+                                "4nwtTJyjNDKd"
+                            ],
+                            "title": "Releasing a new version",
+                            "notePosition": 70,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "zdQzavvHDl1k",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-rocket",
+                                    "isInheritable": false,
+                                    "position": 30
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Releasing a new version.md",
+                            "attachments": []
                         }
                     ]
                 },
@@ -2213,40 +2247,6 @@
                     "attachments": [],
                     "dirFileName": "Old documentation",
                     "children": [
-                        {
-                            "isClone": false,
-                            "noteId": "rLWcPPQi7Eso",
-                            "notePath": [
-                                "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "rLWcPPQi7Eso"
-                            ],
-                            "title": "Releasing a version",
-                            "notePosition": 20,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "IxkDdjTogO18",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "releasing",
-                                    "isInheritable": false,
-                                    "position": 20
-                                }
-                            ],
-                            "format": "markdown",
-                            "dataFileName": "Releasing a version.md",
-                            "attachments": []
-                        },
                         {
                             "isClone": false,
                             "noteId": "6BWwXzPCph4G",

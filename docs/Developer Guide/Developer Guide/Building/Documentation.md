@@ -1,4 +1,8 @@
 # Documentation
+## Editing the documentation
+
+To edit the documentation run `pnpm edit-docs:edit-docs`. This will spin up a custom Trilium desktop instance which automatically imports the documentation into memory. Any changes will update in the background the files which can then be committed.
+
 ## Automation
 
 The documentation is built via `apps/build-docs`:
