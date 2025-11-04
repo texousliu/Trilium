@@ -14,4 +14,7 @@ The `deploy-docs` workflow triggers the documentation build and uploads it to Cl
 
 ## Building locally
 
-In the Git root, run `pnpm docs:build`. The built documentation will be available in `site` at Git root.
+In the Git root:
+
+*   Run `pnpm docs:build`. The built documentation will be available in `site` at Git root.
+*   To also run a webserver to test it, run `pnpm docs:preview` (this will not build the documentation) and navigate to `localhost:9000`.

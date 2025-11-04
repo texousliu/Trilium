@@ -1167,6 +1167,22 @@
                                     "attachments": []
                                 },
                                 {
+                                    "isClone": true,
+                                    "noteId": "Un4wj2Mak2Ky",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "Un4wj2Mak2Ky"
+                                    ],
+                                    "title": "Nix flake",
+                                    "prefix": null,
+                                    "dataFileName": "Nix flake.clone.md",
+                                    "type": "text",
+                                    "format": "markdown",
+                                    "isExpanded": false
+                                },
+                                {
                                     "isClone": false,
                                     "noteId": "yeEaYqosGLSh",
                                     "notePath": [
@@ -1256,22 +1272,6 @@
                                     "format": "markdown",
                                     "dataFileName": "System Requirements.md",
                                     "attachments": []
-                                },
-                                {
-                                    "isClone": true,
-                                    "noteId": "Un4wj2Mak2Ky",
-                                    "notePath": [
-                                        "pOsGYCXsbNQG",
-                                        "Otzi9La2YAUX",
-                                        "WOcw2SLH6tbX",
-                                        "Un4wj2Mak2Ky"
-                                    ],
-                                    "title": "Nix flake",
-                                    "prefix": null,
-                                    "dataFileName": "Nix flake.clone.md",
-                                    "type": "text",
-                                    "format": "markdown",
-                                    "isExpanded": false
                                 }
                             ]
                         },
