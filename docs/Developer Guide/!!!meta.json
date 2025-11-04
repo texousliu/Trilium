@@ -120,18 +120,58 @@
                     ],
                     "format": "markdown",
                     "dataFileName": "Project Structure.md",
+                    "attachments": []
+                },
+                {
+                    "isClone": false,
+                    "noteId": "zdQzavvHDl1k",
+                    "notePath": [
+                        "jdjRLhLV3TtI",
+                        "zdQzavvHDl1k"
+                    ],
+                    "title": "Documentation",
+                    "notePosition": 280,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "documentation",
+                            "isInheritable": false,
+                            "position": 20
+                        },
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bx-book-open",
+                            "isInheritable": false,
+                            "position": 30
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "T2W7WCZrYZBU",
+                            "isInheritable": false,
+                            "position": 40
+                        }
+                    ],
+                    "format": "markdown",
+                    "dataFileName": "Documentation.md",
                     "attachments": [],
-                    "dirFileName": "Project Structure",
+                    "dirFileName": "Documentation",
                     "children": [
                         {
                             "isClone": false,
-                            "noteId": "Jg7clqogFOyD",
+                            "noteId": "LjqM0VUL1CrU",
                             "notePath": [
                                 "jdjRLhLV3TtI",
-                                "cxfTSHIUQtt2",
-                                "Jg7clqogFOyD"
+                                "zdQzavvHDl1k",
+                                "LjqM0VUL1CrU"
                             ],
-                            "title": "CKEditor",
+                            "title": "Documentation references in the application",
                             "notePosition": 10,
                             "prefix": null,
                             "isExpanded": false,
@@ -139,61 +179,16 @@
                             "mime": "text/html",
                             "attributes": [
                                 {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "BRhQZHgwaGyw",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "iconClass",
-                                    "value": "bx bx-package",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "ckeditor",
+                                    "value": "doc-references",
                                     "isInheritable": false,
                                     "position": 20
                                 }
                             ],
                             "format": "markdown",
-                            "dataFileName": "CKEditor.md",
-                            "attachments": [],
-                            "dirFileName": "CKEditor",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "BRhQZHgwaGyw",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "cxfTSHIUQtt2",
-                                        "Jg7clqogFOyD",
-                                        "BRhQZHgwaGyw"
-                                    ],
-                                    "title": "Plugin migration guide",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "plugin-migration",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Plugin migration guide.md",
-                                    "attachments": []
-                                }
-                            ]
+                            "dataFileName": "Documentation references in th.md",
+                            "attachments": []
                         }
                     ]
                 },
@@ -205,7 +200,7 @@
                         "a0mkxxB4Uvbf"
                     ],
                     "title": "Building",
-                    "notePosition": 280,
+                    "notePosition": 290,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -402,40 +397,6 @@
                         },
                         {
                             "isClone": false,
-                            "noteId": "zdQzavvHDl1k",
-                            "notePath": [
-                                "jdjRLhLV3TtI",
-                                "a0mkxxB4Uvbf",
-                                "zdQzavvHDl1k"
-                            ],
-                            "title": "Documentation",
-                            "notePosition": 60,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "documentation",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "iconClass",
-                                    "value": "bx bx-book-open",
-                                    "isInheritable": false,
-                                    "position": 30
-                                }
-                            ],
-                            "format": "markdown",
-                            "dataFileName": "Documentation.md",
-                            "attachments": []
-                        },
-                        {
-                            "isClone": false,
                             "noteId": "4nwtTJyjNDKd",
                             "notePath": [
                                 "jdjRLhLV3TtI",
@@ -472,13 +433,257 @@
                 },
                 {
                     "isClone": false,
+                    "noteId": "qalhAaJoQ7AN",
+                    "notePath": [
+                        "jdjRLhLV3TtI",
+                        "qalhAaJoQ7AN"
+                    ],
+                    "title": "Dependencies",
+                    "notePosition": 310,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bxs-component",
+                            "isInheritable": false,
+                            "position": 20
+                        }
+                    ],
+                    "format": "markdown",
+                    "attachments": [],
+                    "dirFileName": "Dependencies",
+                    "children": [
+                        {
+                            "isClone": false,
+                            "noteId": "fa6hAJ9Ith3A",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "qalhAaJoQ7AN",
+                                "fa6hAJ9Ith3A"
+                            ],
+                            "title": "Per-dependency checks",
+                            "notePosition": 10,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Xfi1ScuBTKJf",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "updating-deps",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Per-dependency checks.md",
+                            "attachments": [],
+                            "dirFileName": "Per-dependency checks",
+                            "children": [
+                                {
+                                    "isClone": false,
+                                    "noteId": "Xfi1ScuBTKJf",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "qalhAaJoQ7AN",
+                                        "fa6hAJ9Ith3A",
+                                        "Xfi1ScuBTKJf"
+                                    ],
+                                    "title": "bettersqlite binaries",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "bettersqlite-binaries",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "bettersqlite binaries.md",
+                                    "attachments": []
+                                }
+                            ]
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "Jg7clqogFOyD",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "qalhAaJoQ7AN",
+                                "Jg7clqogFOyD"
+                            ],
+                            "title": "CKEditor",
+                            "notePosition": 20,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "BRhQZHgwaGyw",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-package",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "ckeditor",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "CKEditor.md",
+                            "attachments": [],
+                            "dirFileName": "CKEditor",
+                            "children": [
+                                {
+                                    "isClone": false,
+                                    "noteId": "BRhQZHgwaGyw",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "qalhAaJoQ7AN",
+                                        "Jg7clqogFOyD",
+                                        "BRhQZHgwaGyw"
+                                    ],
+                                    "title": "Plugin migration guide",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "plugin-migration",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Plugin migration guide.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "5gBYmUqiupBl",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "qalhAaJoQ7AN",
+                                        "Jg7clqogFOyD",
+                                        "5gBYmUqiupBl"
+                                    ],
+                                    "title": "Differences from upstream",
+                                    "notePosition": 20,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "lY19SLxUMj3J",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "fullContentWidth",
+                                            "value": "",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "differences-from-upstream",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Differences from upstream.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "lY19SLxUMj3J",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "qalhAaJoQ7AN",
+                                        "Jg7clqogFOyD",
+                                        "lY19SLxUMj3J"
+                                    ],
+                                    "title": "ckeditor5-math",
+                                    "notePosition": 30,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "ckeditor5-math",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "ckeditor5-math.md",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "UlSZYhYX8Kfj",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "ckeditor5-math_image.png"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "isClone": false,
                     "noteId": "yeqU0zo0ZQ83",
                     "notePath": [
                         "jdjRLhLV3TtI",
                         "yeqU0zo0ZQ83"
                     ],
                     "title": "Architecture",
-                    "notePosition": 300,
+                    "notePosition": 320,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -1234,7 +1439,7 @@
                                 "UzRirf46Xi46"
                             ],
                             "title": "Hidden notes",
-                            "notePosition": 70,
+                            "notePosition": 80,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1268,7 +1473,7 @@
                                 "m2W35hwSDUeh"
                             ],
                             "title": "Icons",
-                            "notePosition": 80,
+                            "notePosition": 90,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1309,7 +1514,7 @@
                                 "TLXJwBDo8Rdv"
                             ],
                             "title": "Internationalisation / Translations",
-                            "notePosition": 90,
+                            "notePosition": 100,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1444,7 +1649,7 @@
                                 "Usiyzn9C4WFv"
                             ],
                             "title": "Launchers",
-                            "notePosition": 100,
+                            "notePosition": 110,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1471,7 +1676,7 @@
                                 "qjQNyaYXSNWu"
                             ],
                             "title": "Note Revisions",
-                            "notePosition": 110,
+                            "notePosition": 120,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1505,7 +1710,7 @@
                                 "7RBJMqVz2EsJ"
                             ],
                             "title": "Note Types",
-                            "notePosition": 120,
+                            "notePosition": 130,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1839,7 +2044,7 @@
                                 "6dC7ha5vjqqS"
                             ],
                             "title": "Options",
-                            "notePosition": 130,
+                            "notePosition": 140,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1904,7 +2109,7 @@
                                 "W0msUwLxm40d"
                             ],
                             "title": "Printing and exporting to PDF",
-                            "notePosition": 140,
+                            "notePosition": 150,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -1945,7 +2150,7 @@
                                 "UvXpeSqfYc6d"
                             ],
                             "title": "Protected entities",
-                            "notePosition": 150,
+                            "notePosition": 160,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2000,7 +2205,7 @@
                                 "vphziLmQeQHY"
                             ],
                             "title": "Share",
-                            "notePosition": 160,
+                            "notePosition": 170,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2034,7 +2239,7 @@
                                 "n9wYW9nUTynV"
                             ],
                             "title": "Synchronisation",
-                            "notePosition": 170,
+                            "notePosition": 180,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2098,7 +2303,7 @@
                                 "k7RavjuXQt8z"
                             ],
                             "title": "Syntax highlighting",
-                            "notePosition": 180,
+                            "notePosition": 190,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2132,7 +2337,7 @@
                                 "7BCukQTCm7fv"
                             ],
                             "title": "Themes",
-                            "notePosition": 190,
+                            "notePosition": 200,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2167,7 +2372,7 @@
                         "YjerxU7Aii8X"
                     ],
                     "title": "Troubleshooting",
-                    "notePosition": 340,
+                    "notePosition": 360,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -2218,18 +2423,45 @@
                             "format": "markdown",
                             "dataFileName": "better-sqlite3 was compiled ag.md",
                             "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "QUb0fRhbpT8E",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "YjerxU7Aii8X",
+                                "QUb0fRhbpT8E"
+                            ],
+                            "title": "Error [TransformError]: The package \"@esbuild/linux-x64\" could not be found, and is needed by esbuild.",
+                            "notePosition": 20,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "esbuild-error",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Error [TransformError] The pac.md",
+                            "attachments": []
                         }
                     ]
                 },
                 {
                     "isClone": false,
-                    "noteId": "ibAPHul7Efvr",
+                    "noteId": "dtKC3FmoWOrv",
                     "notePath": [
                         "jdjRLhLV3TtI",
-                        "ibAPHul7Efvr"
+                        "dtKC3FmoWOrv"
                     ],
-                    "title": "Old documentation",
-                    "notePosition": 350,
+                    "title": "Testing",
+                    "notePosition": 380,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -2238,25 +2470,40 @@
                         {
                             "type": "label",
                             "name": "shareAlias",
-                            "value": "old-documentation",
+                            "value": "testing",
                             "isInheritable": false,
                             "position": 20
+                        },
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bxs-eyedropper",
+                            "isInheritable": false,
+                            "position": 30
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "w6gMvKh0UAVT",
+                            "isInheritable": false,
+                            "position": 40
                         }
                     ],
                     "format": "markdown",
+                    "dataFileName": "Testing.md",
                     "attachments": [],
-                    "dirFileName": "Old documentation",
+                    "dirFileName": "Testing",
                     "children": [
                         {
                             "isClone": false,
-                            "noteId": "6BWwXzPCph4G",
+                            "noteId": "C5MUQczZ5R9N",
                             "notePath": [
                                 "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "6BWwXzPCph4G"
+                                "dtKC3FmoWOrv",
+                                "C5MUQczZ5R9N"
                             ],
-                            "title": "Project maintenance",
-                            "notePosition": 60,
+                            "title": "Integration testing",
+                            "notePosition": 10,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2265,101 +2512,25 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "project-maintenance",
+                                    "value": "integration",
                                     "isInheritable": false,
                                     "position": 20
                                 }
                             ],
                             "format": "markdown",
-                            "attachments": [],
-                            "dirFileName": "Project maintenance",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "fa6hAJ9Ith3A",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "6BWwXzPCph4G",
-                                        "fa6hAJ9Ith3A"
-                                    ],
-                                    "title": "Updating dependencies",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "Xfi1ScuBTKJf",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "updating-deps",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Updating dependencies.md",
-                                    "attachments": [],
-                                    "dirFileName": "Updating dependencies",
-                                    "children": [
-                                        {
-                                            "isClone": false,
-                                            "noteId": "Xfi1ScuBTKJf",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "6BWwXzPCph4G",
-                                                "fa6hAJ9Ith3A",
-                                                "Xfi1ScuBTKJf"
-                                            ],
-                                            "title": "bettersqlite binaries",
-                                            "notePosition": 10,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "PXzm2t3sCdsP",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "bettersqlite-binaries",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "bettersqlite binaries.md",
-                                            "attachments": []
-                                        }
-                                    ]
-                                }
-                            ]
+                            "dataFileName": "Integration testing.md",
+                            "attachments": []
                         },
                         {
                             "isClone": false,
-                            "noteId": "re0QTuqiYnVb",
+                            "noteId": "bIfKwfCnqpeI",
                             "notePath": [
                                 "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "re0QTuqiYnVb"
+                                "dtKC3FmoWOrv",
+                                "bIfKwfCnqpeI"
                             ],
-                            "title": "Scripting",
-                            "notePosition": 80,
+                            "title": "Test database",
+                            "notePosition": 20,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2368,144 +2539,25 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "scripting",
+                                    "value": "test-database",
                                     "isInheritable": false,
                                     "position": 20
                                 }
                             ],
                             "format": "markdown",
-                            "attachments": [],
-                            "dirFileName": "Scripting",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "gz6zq5rlHqMa",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "re0QTuqiYnVb",
-                                        "gz6zq5rlHqMa"
-                                    ],
-                                    "title": "Widgets",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "widgets",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Widgets.md",
-                                    "attachments": [],
-                                    "dirFileName": "Widgets",
-                                    "children": [
-                                        {
-                                            "isClone": false,
-                                            "noteId": "M8IppdwVHSjG",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "re0QTuqiYnVb",
-                                                "gz6zq5rlHqMa",
-                                                "M8IppdwVHSjG"
-                                            ],
-                                            "title": "Right pane widget",
-                                            "notePosition": 10,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "right-pane-widget",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Right pane widget.md",
-                                            "attachments": []
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "VqGQnnPGnqAU",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "re0QTuqiYnVb",
-                                                "gz6zq5rlHqMa",
-                                                "VqGQnnPGnqAU"
-                                            ],
-                                            "title": "CSS",
-                                            "notePosition": 20,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "css",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "CSS.md",
-                                            "attachments": []
-                                        }
-                                    ]
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "fZ2IGYFXjkEy",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "re0QTuqiYnVb",
-                                        "fZ2IGYFXjkEy"
-                                    ],
-                                    "title": "Server-side imports",
-                                    "notePosition": 20,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "server-imports",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Server-side imports.md",
-                                    "attachments": []
-                                }
-                            ]
+                            "dataFileName": "Test database.md",
+                            "attachments": []
                         },
                         {
                             "isClone": false,
-                            "noteId": "Sow7ThJozkzJ",
+                            "noteId": "w6gMvKh0UAVT",
                             "notePath": [
                                 "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "Sow7ThJozkzJ"
+                                "dtKC3FmoWOrv",
+                                "w6gMvKh0UAVT"
                             ],
-                            "title": "Documentation",
-                            "notePosition": 90,
+                            "title": "End-to-end tests",
+                            "notePosition": 30,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -2514,718 +2566,14 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "documentation",
+                                    "value": "running-tests",
                                     "isInheritable": false,
                                     "position": 20
                                 }
                             ],
                             "format": "markdown",
-                            "dataFileName": "Documentation.md",
-                            "attachments": [
-                                {
-                                    "attachmentId": "2bUrJyt2yfsd",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "Documentation_image.png"
-                                }
-                            ],
-                            "dirFileName": "Documentation",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "LjqM0VUL1CrU",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "Sow7ThJozkzJ",
-                                        "LjqM0VUL1CrU"
-                                    ],
-                                    "title": "Documentation references in the application",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "doc-references",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Documentation references in th.md",
-                                    "attachments": []
-                                }
-                            ]
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "dtKC3FmoWOrv",
-                            "notePath": [
-                                "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "dtKC3FmoWOrv"
-                            ],
-                            "title": "Testing",
-                            "notePosition": 100,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "testing",
-                                    "isInheritable": false,
-                                    "position": 20
-                                }
-                            ],
-                            "format": "markdown",
-                            "dataFileName": "Testing.md",
-                            "attachments": [],
-                            "dirFileName": "Testing",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "C5MUQczZ5R9N",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "dtKC3FmoWOrv",
-                                        "C5MUQczZ5R9N"
-                                    ],
-                                    "title": "Integration testing",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "integration",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "attachments": [],
-                                    "dirFileName": "Integration testing",
-                                    "children": [
-                                        {
-                                            "isClone": false,
-                                            "noteId": "pH4RsxqifVpK",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dtKC3FmoWOrv",
-                                                "C5MUQczZ5R9N",
-                                                "pH4RsxqifVpK"
-                                            ],
-                                            "title": "Setting up authentication",
-                                            "notePosition": 20,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "auth",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Setting up authentication.md",
-                                            "attachments": [
-                                                {
-                                                    "attachmentId": "aWFXFuXNon7J",
-                                                    "title": "image.png",
-                                                    "role": "image",
-                                                    "mime": "image/png",
-                                                    "position": 10,
-                                                    "dataFileName": "Setting up authentication_.png"
-                                                },
-                                                {
-                                                    "attachmentId": "JRbtB4byzewo",
-                                                    "title": "image.png",
-                                                    "role": "image",
-                                                    "mime": "image/png",
-                                                    "position": 10,
-                                                    "dataFileName": "1_Setting up authentication_.png"
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "bIfKwfCnqpeI",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dtKC3FmoWOrv",
-                                                "C5MUQczZ5R9N",
-                                                "bIfKwfCnqpeI"
-                                            ],
-                                            "title": "Test database",
-                                            "notePosition": 30,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "test-database",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Test database.md",
-                                            "attachments": []
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "w6gMvKh0UAVT",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dtKC3FmoWOrv",
-                                                "C5MUQczZ5R9N",
-                                                "w6gMvKh0UAVT"
-                                            ],
-                                            "title": "Running tests",
-                                            "notePosition": 40,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "running-tests",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Running tests.md",
-                                            "attachments": []
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "dHfw0XZE515z",
-                            "notePath": [
-                                "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "dHfw0XZE515z"
-                            ],
-                            "title": "Sub-projects",
-                            "notePosition": 110,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "subprojects",
-                                    "isInheritable": false,
-                                    "position": 20
-                                }
-                            ],
-                            "format": "markdown",
-                            "attachments": [],
-                            "dirFileName": "Sub-projects",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "JkTy2zz8Zbyq",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "dHfw0XZE515z",
-                                        "JkTy2zz8Zbyq"
-                                    ],
-                                    "title": "CKEditor",
-                                    "notePosition": 20,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "ckeditor",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "attachments": [],
-                                    "dirFileName": "CKEditor",
-                                    "children": [
-                                        {
-                                            "isClone": false,
-                                            "noteId": "5yWZVlKPjLCC",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dHfw0XZE515z",
-                                                "JkTy2zz8Zbyq",
-                                                "5yWZVlKPjLCC"
-                                            ],
-                                            "title": "Environment setup",
-                                            "notePosition": 10,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "CaInsmrlZhR6",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "environment-setup",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Environment setup.md",
-                                            "attachments": []
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "CaInsmrlZhR6",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dHfw0XZE515z",
-                                                "JkTy2zz8Zbyq",
-                                                "CaInsmrlZhR6"
-                                            ],
-                                            "title": "Building the editor",
-                                            "notePosition": 20,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "5yWZVlKPjLCC",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "building-the-editor",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Building the editor.md",
-                                            "attachments": []
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "5gBYmUqiupBl",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dHfw0XZE515z",
-                                                "JkTy2zz8Zbyq",
-                                                "5gBYmUqiupBl"
-                                            ],
-                                            "title": "Differences from upstream",
-                                            "notePosition": 30,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "lY19SLxUMj3J",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "fullContentWidth",
-                                                    "value": "",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "differences-from-upstream",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Differences from upstream.md",
-                                            "attachments": []
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "Q9FyKVERd1Lb",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dHfw0XZE515z",
-                                                "JkTy2zz8Zbyq",
-                                                "Q9FyKVERd1Lb"
-                                            ],
-                                            "title": "Updating to a newer version of CKEditor",
-                                            "notePosition": 40,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "5yWZVlKPjLCC",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "CaInsmrlZhR6",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                },
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "yAFSS6awVbaZ",
-                                                    "isInheritable": false,
-                                                    "position": 30
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "updating",
-                                                    "isInheritable": false,
-                                                    "position": 40
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Updating to a newer version of.md",
-                                            "attachments": []
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "yAFSS6awVbaZ",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dHfw0XZE515z",
-                                                "JkTy2zz8Zbyq",
-                                                "yAFSS6awVbaZ"
-                                            ],
-                                            "title": "Versions and external plugins",
-                                            "notePosition": 50,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "lY19SLxUMj3J",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "external-plugin-and-versions",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Versions and external plugins.md",
-                                            "attachments": []
-                                        }
-                                    ]
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "lY19SLxUMj3J",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "dHfw0XZE515z",
-                                        "lY19SLxUMj3J"
-                                    ],
-                                    "title": "ckeditor5-math",
-                                    "notePosition": 30,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "JkTy2zz8Zbyq",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "UMN2ABrBU5D7",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "CaInsmrlZhR6",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "ckeditor5-math",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "ckeditor5-math.md",
-                                    "attachments": [
-                                        {
-                                            "attachmentId": "UlSZYhYX8Kfj",
-                                            "title": "image.png",
-                                            "role": "image",
-                                            "mime": "image/png",
-                                            "position": 10,
-                                            "dataFileName": "ckeditor5-math_image.png"
-                                        }
-                                    ],
-                                    "dirFileName": "ckeditor5-math",
-                                    "children": [
-                                        {
-                                            "isClone": false,
-                                            "noteId": "vpbbBaypScLb",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dHfw0XZE515z",
-                                                "lY19SLxUMj3J",
-                                                "vpbbBaypScLb"
-                                            ],
-                                            "title": "Updating with upstream",
-                                            "notePosition": 10,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "UMN2ABrBU5D7",
-                                                    "isInheritable": false,
-                                                    "position": 10
-                                                },
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "updating-upstream",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Updating with upstream.md",
-                                            "attachments": []
-                                        },
-                                        {
-                                            "isClone": false,
-                                            "noteId": "UMN2ABrBU5D7",
-                                            "notePath": [
-                                                "jdjRLhLV3TtI",
-                                                "ibAPHul7Efvr",
-                                                "dHfw0XZE515z",
-                                                "lY19SLxUMj3J",
-                                                "UMN2ABrBU5D7"
-                                            ],
-                                            "title": "Release management & continuous integration",
-                                            "notePosition": 20,
-                                            "prefix": null,
-                                            "isExpanded": false,
-                                            "type": "text",
-                                            "mime": "text/html",
-                                            "attributes": [
-                                                {
-                                                    "type": "label",
-                                                    "name": "shareAlias",
-                                                    "value": "release-management",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                }
-                                            ],
-                                            "format": "markdown",
-                                            "dataFileName": "Release management & continuou.md",
-                                            "attachments": []
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "QRLbiDXNxoWN",
-                            "notePath": [
-                                "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "QRLbiDXNxoWN"
-                            ],
-                            "title": "Troubleshooting",
-                            "notePosition": 120,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "troubleshooting",
-                                    "isInheritable": false,
-                                    "position": 20
-                                }
-                            ],
-                            "format": "markdown",
-                            "attachments": [],
-                            "dirFileName": "Troubleshooting",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "QUb0fRhbpT8E",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "QRLbiDXNxoWN",
-                                        "QUb0fRhbpT8E"
-                                    ],
-                                    "title": "Error [TransformError]: The package \"@esbuild/linux-x64\" could not be found, and is needed by esbuild.",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "esbuild-error",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Error [TransformError] The pac.md",
-                                    "attachments": []
-                                }
-                            ]
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "x6lgrdztQwVB",
-                            "notePath": [
-                                "jdjRLhLV3TtI",
-                                "ibAPHul7Efvr",
-                                "x6lgrdztQwVB"
-                            ],
-                            "title": "Installation",
-                            "notePosition": 130,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "installation",
-                                    "isInheritable": false,
-                                    "position": 20
-                                }
-                            ],
-                            "format": "markdown",
-                            "attachments": [],
-                            "dirFileName": "Installation",
-                            "children": [
-                                {
-                                    "isClone": false,
-                                    "noteId": "bOjeTrUViwLw",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "ibAPHul7Efvr",
-                                        "x6lgrdztQwVB",
-                                        "bOjeTrUViwLw"
-                                    ],
-                                    "title": "Download latest nightly and install it",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "download-nightly",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Download latest nightly and in.md",
-                                    "attachments": []
-                                }
-                            ]
+                            "dataFileName": "End-to-end tests.md",
+                            "attachments": []
                         }
                     ]
                 }

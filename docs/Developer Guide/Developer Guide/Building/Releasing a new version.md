@@ -8,7 +8,7 @@ Releases are usually made directly from the `main` branch.
 
 The process is as follows:
 
-1.  Edit the <a class="reference-link" href="Documentation.md">Documentation</a> to add a corresponding entry in the _Release notes_ section.
+1.  Edit the <a class="reference-link" href="../Documentation.md">Documentation</a> to add a corresponding entry in the _Release notes_ section.
 2.  In the root `package.json`, set `version` to the new version to be released.
 3.  Run `chore:update-version` to automatically update the version of the rest of the `package.json` files.
 4.  Run `pnpm i` to update the package lock as well.
