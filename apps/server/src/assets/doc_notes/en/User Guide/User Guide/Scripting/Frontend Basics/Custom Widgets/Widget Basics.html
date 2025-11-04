@@ -16,11 +16,11 @@
 module.exports = new MyWidget();</code></pre>
 <p>To implement this widget:</p>
 <ol>
-  <li data-list-item-id="ee416db068caeb5aebc3edf8d313cdbbf">Create a new <code>JS Frontend</code> note in Trilium and paste in the code
+  <li>Create a new <code>JS Frontend</code> note in Trilium and paste in the code
     above.</li>
-  <li data-list-item-id="ec82d101a82bd1bdbbc180294534aecaa">Assign the <code>#widget</code>  <a href="#root/_help_zEY4DaJG4YT5">attribute</a> to
+  <li>Assign the <code>#widget</code>  <a href="#root/_help_zEY4DaJG4YT5">attribute</a> to
     the <a href="#root/_help_BFs8mudNFgCS">note</a>.</li>
-  <li data-list-item-id="ee1c3b9d316a04a986cc0be3b57d4c569">Restart Trilium or reload the window.</li>
+  <li>Restart Trilium or reload the window.</li>
 </ol>
 <p>To verify that the widget is working, open the developer tools (<code>Cmd</code> + <code>Shift</code> + <code>I</code>)
   and run <code>document.querySelector("#my-widget")</code>. If the element
@@ -89,16 +89,15 @@ module.exports = new MyWidget();</code></pre>
 module.exports = new MyWidget();</code></pre>
 <p><code>parentWidget()</code> can be given the following values:</p>
 <ul>
-  <li data-list-item-id="ebf9bc7b43e420c012d4c72b3b95a8cf0"><code>left-pane</code> - This renders the widget on the left side of the
+  <li><code>left-pane</code> - This renders the widget on the left side of the
     screen where the note tree lives.</li>
-  <li data-list-item-id="ec6ca6cd1ed1b9157edc99a61e4b9f336"><code>center-pane</code> - This renders the widget in the center of the
+  <li><code>center-pane</code> - This renders the widget in the center of the
     layout in the same location that notes and splits appear.</li>
-  <li data-list-item-id="e8575696a825b1dce0a62a3ffb6b59ae8"><code>note-detail-pane</code> - This renders the widget <em>with</em> the
+  <li><code>note-detail-pane</code> - This renders the widget <em>with</em> the
     note in the center pane. This means it can appear multiple times with splits.</li>
-  <li
-  data-list-item-id="e064dfaa93f31a16d42c10c4c45d903be"><code>right-pane</code> - This renders the widget to the right of any opened
+  <li><code>right-pane</code> - This renders the widget to the right of any opened
     notes.</li>
 </ul>
-<p><a href="#root/pOsGYCXsbNQG/BgmBlOIl72jZ/_help_s8alTXmpFR61">Reload</a> the application
-  one last time. When you click the button, a "Hello World!" message should
-  appear, confirming that your widget is fully functional.</p>
+<p><a href="#root/_help_s8alTXmpFR61">Reload</a> the application one last time.
+  When you click the button, a "Hello World!" message should appear, confirming
+  that your widget is fully functional.</p>

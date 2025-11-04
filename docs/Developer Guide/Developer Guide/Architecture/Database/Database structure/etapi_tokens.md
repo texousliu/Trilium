@@ -6,4 +6,4 @@
 | `tokenHash` | Text | Non-null |     | The token itself. |
 | `utcDateCreated` | Text | Non-null |     | Creation date in UTC format (e.g. `2023-11-08 16:43:44.204Z`) |
 | `utcDateModified` | Text | Non-null |     | Modification date in UTC format (e.g. `2023-11-08 16:43:44.204Z`) |
-| `isDeleted` | Integer | Non-null | 0   | `1` if the entity is [deleted](../Deleted%20notes.md), `0` otherwise. |
+| `isDeleted` | Integer | Non-null | 0   | `1` if the entity is [deleted](../../../Concepts/Deleted%20notes.md), `0` otherwise. |
