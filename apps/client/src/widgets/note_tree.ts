@@ -1591,6 +1591,20 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.clearSelectedNodes();
     }
 
+    async editBranchPrefixCommand({ node }: CommandListenerData<"editBranchPrefix">) {
+        const branchIds = this.getSelectedOrActiveBranchIds(node).filter((branchId) => !branchId.startsWith("virt-"));
+
+        if (!branchIds.length) {
+            return;
+        }
+
+        // Trigger the event with the selected branch IDs
+        appContext.triggerEvent("editBranchPrefix", {
+            selectedOrActiveBranchIds: branchIds,
+            node: node
+        });
+    }
+
     canBeMovedUpOrDown(node: Fancytree.FancytreeNode) {
         if (node.data.noteId === "root") {
             return false;
