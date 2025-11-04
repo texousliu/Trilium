@@ -43,7 +43,7 @@ Located at: `apps/server/src/etapi/`
 
 **Example:**
 
-```sh
+```
 curl -H "Authorization: YOUR_TOKEN" \
   https://trilium.example.com/etapi/notes/noteId
 ```

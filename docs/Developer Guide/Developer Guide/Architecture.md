@@ -15,7 +15,10 @@ Trilium Notes is a hierarchical note-taking application built as a TypeScript mo
 *   **Runtime**: Node.js (backend), Browser/Electron (frontend)
 *   **Language**: TypeScript, JavaScript
 *   **Database**: SQLite (better-sqlite3)
-*   **Build Tools**: Vite, ESBuild, pnpm
+*   **Build Tools**:
+    *   Client: Vite,
+    *   Server: ESBuild (bundling)
+    *   Package manager: pnpm
 *   **UI Framework**: Custom widget-based system (vanilla HTML, CSS & JavaScript + jQuery), in the process of converting to React/Preact.
 *   **Rich Text**: CKEditor 5 (customized)
 *   **Code Editing**: CodeMirror 6
@@ -26,7 +29,7 @@ Trilium Notes is a hierarchical note-taking application built as a TypeScript mo
 
 Trilium follows a **client-server architecture** even in desktop mode, where Electron runs both the backend server and frontend client within the same process.
 
-```mermaid
+```
 graph TB
     subgraph Frontend
         Widgets[Widgets<br/>System]

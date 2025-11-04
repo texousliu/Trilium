@@ -3,7 +3,7 @@
 
 Trilium's data model is based on five core entities:
 
-```mermaid
+```
 graph TD
     Note[Note<br/>BNote]
     Branch[Branch<br/>BBranch]
