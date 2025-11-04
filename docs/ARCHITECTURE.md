@@ -53,30 +53,30 @@ Trilium Notes is a hierarchical note-taking application built as a TypeScript mo
 
 Trilium follows a **client-server architecture** even in desktop mode, where Electron runs both the backend server and frontend client within the same process.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                         Frontend                             │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐            │
-│  │  Widgets   │  │   Froca    │  │   UI       │            │
-│  │  System    │  │   Cache    │  │  Services  │            │
-│  └────────────┘  └────────────┘  └────────────┘            │
-│                         │                                    │
-│                    WebSocket / REST API                      │
-│                         │                                    │
-└─────────────────────────┼────────────────────────────────────┘
-                          │
-┌─────────────────────────┼────────────────────────────────────┐
-│                    Backend Server                            │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐            │
-│  │  Express   │  │   Becca    │  │   Script   │            │
-│  │  Routes    │  │   Cache    │  │   Engine   │            │
-│  └────────────┘  └────────────┘  └────────────┘            │
-│                         │                                    │
-│                    ┌────┴─────┐                             │
-│                    │  SQLite  │                             │
-│                    │ Database │                             │
-│                    └──────────┘                             │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Frontend
+        Widgets[Widgets<br/>System]
+        Froca[Froca<br/>Cache]
+        UIServices[UI<br/>Services]
+    end
+    
+    subgraph Backend["Backend Server"]
+        Express[Express<br/>Routes]
+        Becca[Becca<br/>Cache]
+        ScriptEngine[Script<br/>Engine]
+        Database[(SQLite<br/>Database)]
+    end
+    
+    Widgets -.-> API[WebSocket / REST API]
+    Froca -.-> API
+    UIServices -.-> API
+    API -.-> Express
+    API -.-> Becca
+    API -.-> ScriptEngine
+    Becca --> Database
+    Express --> Database
+    ScriptEngine --> Database
 ```
 
 ### Deployment Modes
@@ -225,30 +225,24 @@ Located at: `apps/server/src/share/`
 
 Trilium's data model is based on five core entities:
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                      Note Tree                           │
-│                                                          │
-│    ┌─────────┐                                          │
-│    │  Note   │                                          │
-│    │ (BNote) │                                          │
-│    └────┬────┘                                          │
-│         │                                               │
-│         │ linked by                                     │
-│         ▼                                               │
-│    ┌──────────┐         ┌─────────────┐               │
-│    │ Branch   │◄────────│  Attribute  │               │
-│    │(BBranch) │         │ (BAttribute)│               │
-│    └──────────┘         └─────────────┘               │
-│         │                                               │
-│         │ creates                                       │
-│         ▼                                               │
-│    ┌──────────┐         ┌─────────────┐               │
-│    │ Revision │         │ Attachment  │               │
-│    │(BRevision│         │(BAttachment)│               │
-│    └──────────┘         └─────────────┘               │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    Note[Note<br/>BNote]
+    Branch[Branch<br/>BBranch]
+    Attribute[Attribute<br/>BAttribute]
+    Revision[Revision<br/>BRevision]
+    Attachment[Attachment<br/>BAttachment]
+    
+    Note -->|linked by| Branch
+    Note -.->|metadata| Attribute
+    Branch -->|creates| Revision
+    Note -->|has| Attachment
+    
+    style Note fill:#e1f5ff
+    style Branch fill:#fff4e1
+    style Attribute fill:#ffe1f5
+    style Revision fill:#f5ffe1
+    style Attachment fill:#ffe1e1
 ```
 
 #### Entity Definitions
@@ -514,18 +508,29 @@ Key services:
 ### UI Components
 
 **Main Layout:**
-```
-┌──────────────────────────────────────────────────────┐
-│                    Title Bar                          │
-├──────────┬────────────────────────┬──────────────────┤
-│          │                        │                  │
-│   Note   │    Note Detail         │  Right Panel    │
-│   Tree   │    Editor              │  (Info, Links)  │
-│          │                        │                  │
-│          │                        │                  │
-├──────────┴────────────────────────┴──────────────────┤
-│                  Status Bar                          │
-└──────────────────────────────────────────────────────┘
+
+```mermaid
+graph TD
+    subgraph TriliumUI[" "]
+        TitleBar[Title Bar]
+        
+        subgraph MainArea[" "]
+            NoteTree[Note Tree]
+            NoteDetail[Note Detail<br/>Editor]
+            RightPanel[Right Panel<br/>Info, Links]
+        end
+        
+        StatusBar[Status Bar]
+    end
+    
+    TitleBar -.-> MainArea
+    MainArea -.-> StatusBar
+    
+    style TitleBar fill:#e1f5ff
+    style NoteTree fill:#fff4e1
+    style NoteDetail fill:#f5ffe1
+    style RightPanel fill:#ffe1f5
+    style StatusBar fill:#e1f5ff
 ```
 
 **Component Locations:**

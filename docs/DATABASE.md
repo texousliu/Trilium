@@ -427,27 +427,27 @@ CREATE TABLE etapi_tokens (
 
 ## Data Relationships
 
-```
-                ┌──────────────┐
-                │    Notes     │
-                └───┬──────────┘
-                    │
-        ┌───────────┼───────────┐
-        │           │           │
-        ▼           ▼           ▼
-    ┌────────┐  ┌──────────┐  ┌───────────┐
-    │Branches│  │Attributes│  │Attachments│
-    └────────┘  └──────────┘  └─────┬─────┘
-        │                            │
-        │                            │
-        │       ┌──────────┐         │
-        └──────▶│  Blobs   │◀────────┘
-                └──────────┘
-                     ▲
-                     │
-                ┌────┴─────┐
-                │Revisions │
-                └──────────┘
+```mermaid
+graph TB
+    Notes[Notes]
+    Branches[Branches]
+    Attributes[Attributes]
+    Attachments[Attachments]
+    Blobs[(Blobs)]
+    Revisions[Revisions]
+    
+    Notes --> Branches
+    Notes --> Attributes
+    Notes --> Attachments
+    Notes --> Blobs
+    Notes --> Revisions
+    
+    Branches --> Blobs
+    Attachments --> Blobs
+    Revisions --> Blobs
+    
+    style Notes fill:#e1f5ff
+    style Blobs fill:#ffe1e1
 ```
 
 **Relationships:**

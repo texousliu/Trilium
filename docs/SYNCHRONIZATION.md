@@ -14,29 +14,19 @@ Trilium implements a sophisticated **bidirectional synchronization system** that
 
 ## Sync Architecture
 
-```
-┌─────────────┐                    ┌─────────────┐
-│  Desktop 1  │                    │  Desktop 2  │
-│  (Client)   │                    │  (Client)   │
-└──────┬──────┘                    └──────┬──────┘
-       │                                  │
-       │  WebSocket/HTTP                  │
-       │                                  │
-       ▼                                  ▼
-┌────────────────────────────────────────────────┐
-│            Sync Server                         │
-│  ┌──────────────────────────────────────┐    │
-│  │     Sync Service                      │    │
-│  │  - Entity Change Management           │    │
-│  │  - Conflict Resolution                │    │
-│  │  - Version Tracking                   │    │
-│  └──────────────────────────────────────┘    │
-│                     │                          │
-│              ┌──────┴───────┐                 │
-│              │   Database   │                 │
-│              │ (entity_changes)│              │
-│              └──────────────┘                 │
-└────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    Desktop1[Desktop 1<br/>Client]
+    Desktop2[Desktop 2<br/>Client]
+    
+    subgraph SyncServer["Sync Server"]
+        SyncService[Sync Service<br/>- Entity Change Management<br/>- Conflict Resolution<br/>- Version Tracking]
+        SyncDB[(Database<br/>entity_changes)]
+    end
+    
+    Desktop1 <-->|WebSocket/HTTP| SyncService
+    Desktop2 <-->|WebSocket/HTTP| SyncService
+    SyncService --> SyncDB
 ```
 
 ## Core Concepts
