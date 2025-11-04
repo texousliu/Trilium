@@ -49,7 +49,3 @@ upload
 
 # docs
 site/
-
-# TypeScript and JavaScript maps
-*.js.map
-*.d.ts.map
