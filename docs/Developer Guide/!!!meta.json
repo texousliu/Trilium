@@ -172,64 +172,57 @@
                     "children": [
                         {
                             "isClone": false,
-                            "noteId": "2DJZgzpTJ078",
+                            "noteId": "dsMq2EIOMOBU",
                             "notePath": [
                                 "jdjRLhLV3TtI",
                                 "MhwWMgxwDTZL",
-                                "2DJZgzpTJ078"
+                                "dsMq2EIOMOBU"
                             ],
-                            "title": "Client-server architecture",
+                            "title": "Frontend",
                             "notePosition": 10,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
-                            "format": "markdown",
-                            "attachments": [],
-                            "dirFileName": "Client-server architecture",
-                            "children": [
+                            "attributes": [
                                 {
-                                    "isClone": false,
-                                    "noteId": "dsMq2EIOMOBU",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "MhwWMgxwDTZL",
-                                        "2DJZgzpTJ078",
-                                        "dsMq2EIOMOBU"
-                                    ],
-                                    "title": "Frontend",
-                                    "notePosition": 10,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [],
-                                    "format": "markdown",
-                                    "dataFileName": "Frontend.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "tsswRlmHEnYW",
-                                    "notePath": [
-                                        "jdjRLhLV3TtI",
-                                        "MhwWMgxwDTZL",
-                                        "2DJZgzpTJ078",
-                                        "tsswRlmHEnYW"
-                                    ],
-                                    "title": "Backend",
-                                    "notePosition": 20,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [],
-                                    "format": "markdown",
-                                    "dataFileName": "Backend.md",
-                                    "attachments": []
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "frontend",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
-                            ]
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Frontend.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "tsswRlmHEnYW",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "MhwWMgxwDTZL",
+                                "tsswRlmHEnYW"
+                            ],
+                            "title": "Backend",
+                            "notePosition": 20,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "backend",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Backend.md",
+                            "attachments": []
                         },
                         {
                             "isClone": false,
@@ -240,7 +233,7 @@
                                 "pRZhrVIGCbMu"
                             ],
                             "title": "Database",
-                            "notePosition": 20,
+                            "notePosition": 40,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -785,15 +778,23 @@
                                 "MhwWMgxwDTZL",
                                 "Wxn82Em8B7U5"
                             ],
-                            "title": "API",
-                            "notePosition": 30,
+                            "title": "APIs",
+                            "notePosition": 50,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "api",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
-                            "dataFileName": "API.md",
+                            "dataFileName": "APIs.md",
                             "attachments": []
                         },
                         {
@@ -805,7 +806,7 @@
                                 "Vk4zD1Iirarg"
                             ],
                             "title": "Arhitecture Decision Records",
-                            "notePosition": 40,
+                            "notePosition": 60,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -817,6 +818,13 @@
                                     "value": "Jg7clqogFOyD",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "adr",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
@@ -825,14 +833,14 @@
                         },
                         {
                             "isClone": false,
-                            "noteId": "QW1MB7RZB5Gf",
+                            "noteId": "RHbKw3xiwk3S",
                             "notePath": [
                                 "jdjRLhLV3TtI",
                                 "MhwWMgxwDTZL",
-                                "QW1MB7RZB5Gf"
+                                "RHbKw3xiwk3S"
                             ],
-                            "title": "Security Architecture",
-                            "notePosition": 50,
+                            "title": "Security",
+                            "notePosition": 80,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -841,13 +849,13 @@
                                 {
                                     "type": "label",
                                     "name": "shareAlias",
-                                    "value": "security-architecture",
+                                    "value": "security",
                                     "isInheritable": false,
                                     "position": 20
                                 }
                             ],
                             "format": "markdown",
-                            "dataFileName": "Security Architecture.md",
+                            "dataFileName": "Security.md",
                             "attachments": []
                         }
                     ]
@@ -1153,6 +1161,13 @@
                                     "value": "bx bx-rocket",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "releasing",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
@@ -1181,6 +1196,13 @@
                             "value": "bx bxs-component",
                             "isInheritable": false,
                             "position": 20
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "dependencies",
+                            "isInheritable": false,
+                            "position": 30
                         }
                     ],
                     "format": "markdown",
@@ -1527,6 +1549,13 @@
                                     "value": "bx bx-microchip",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "cache",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
@@ -2001,7 +2030,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "note-types",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "attachments": [],
                             "dirFileName": "Note Types",
@@ -2547,6 +2584,7 @@
                                 }
                             ],
                             "format": "markdown",
+                            "dataFileName": "Synchronisation.md",
                             "attachments": [],
                             "dirFileName": "Synchronisation",
                             "children": [
@@ -2794,7 +2832,15 @@
                             "isExpanded": false,
                             "type": "text",
                             "mime": "text/html",
-                            "attributes": [],
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "unit-tests",
+                                    "isInheritable": false,
+                                    "position": 20
+                                }
+                            ],
                             "format": "markdown",
                             "dataFileName": "Unit tests.md",
                             "attachments": []

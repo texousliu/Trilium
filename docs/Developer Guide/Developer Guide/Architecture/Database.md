@@ -1,5 +1,5 @@
 # Database
-Trilium uses **SQLite** as its database engine, managed via `better-sqlite3`.
+Trilium uses **SQLite** (via `better-sqlite3`) as its embedded database engine, providing a reliable, file-based storage system that requires no separate database server. The database stores all notes, their relationships, metadata, and configuration.
 
 Schema location: `apps/server/src/assets/db/schema.sql`
 

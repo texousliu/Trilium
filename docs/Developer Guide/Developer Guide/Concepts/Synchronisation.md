@@ -1,16 +1,11 @@
-# Trilium Synchronization Architecture
+# Synchronisation
+Trilium implements a **bidirectional synchronization system** that allows users to sync their note databases across multiple devices (desktop clients and server instances). The sync protocol is designed to handle:
 
-> **Related:** [ARCHITECTURE.md](ARCHITECTURE.md) | [User Guide: Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
-
-## Overview
-
-Trilium implements a sophisticated **bidirectional synchronization system** that allows users to sync their note databases across multiple devices (desktop clients and server instances). The sync protocol is designed to handle:
-
-- Concurrent modifications across devices
-- Conflict resolution
-- Partial sync (only changed entities)
-- Protected note synchronization
-- Efficient bandwidth usage
+*   Concurrent modifications across devices
+*   Simple conflict resolution (without “merge conflict” indication).
+*   Partial sync (only changed entities)
+*   Protected note synchronization
+*   Efficient bandwidth usage
 
 ## Sync Architecture
 
@@ -35,7 +30,7 @@ graph TB
 
 Every modification to any entity (note, branch, attribute, etc.) creates an **entity change** record:
 
-```sql
+```
 entity_changes (
     id,                    -- Auto-increment ID
     entityName,            -- 'notes', 'branches', 'attributes', etc.
@@ -43,7 +38,7 @@ entity_changes (
     hash,                  -- Content hash for integrity
     isErased,              -- If entity was erased (deleted permanently)
     changeId,              -- Unique change identifier
-    componentId,           -- Installation identifier
+    componentId,           -- Unique component/widget identifier
     instanceId,            -- Process instance identifier
     isSynced,              -- Whether synced to server
     utcDateChanged         -- When change occurred
@@ -51,17 +46,19 @@ entity_changes (
 ```
 
 **Key Properties:**
-- **changeId**: Globally unique identifier (UUID) for the change
-- **componentId**: Unique per Trilium installation (persists across restarts)
-- **instanceId**: Unique per process (changes on restart)
-- **hash**: SHA-256 hash of entity data for integrity verification
+
+*   **changeId**: Globally unique identifier (UUID) for the change
+*   **componentId**: Unique identifier of the component/widget that generated to change (can be used to avoid refreshing the widget being edited).
+*   **instanceId**: Unique per process (changes on restart)
+*   **hash**: SHA-256 hash of entity data for integrity verification
 
 ### Sync Versions
 
 Each Trilium installation tracks:
-- **Local sync version**: Highest change ID seen locally
-- **Server sync version**: Highest change ID on server
-- **Entity versions**: Last sync version for each entity type
+
+*   **Local sync version**: Highest change ID seen locally
+*   **Server sync version**: Highest change ID on server
+*   **Entity versions**: Last sync version for each entity type
 
 ### Change Tracking
 
@@ -87,11 +84,12 @@ function addEntityChange(entityName, entityId, entity) {
 ```
 
 **Entity modification triggers:**
-- Note content update
-- Note metadata change
-- Branch creation/deletion/reorder
-- Attribute addition/removal
-- Options modification
+
+*   Note content update
+*   Note metadata change
+*   Branch creation/deletion/reorder
+*   Attribute addition/removal
+*   Options modification
 
 ## Sync Protocol
 
@@ -122,9 +120,9 @@ Response:
 
 **Step 3: Decision**
 
-- If `entityChanges > 0`: Pull changes from server
-- If `outstandingPushCount > 0`: Push changes to server
-- Both can happen in sequence
+*   If `entityChanges > 0`: Pull changes from server
+*   If `outstandingPushCount > 0`: Push changes to server
+*   Both can happen in sequence
 
 ### Pull Sync (Server → Client)
 
@@ -159,10 +157,10 @@ Response:
 
 **Client Processing:**
 
-1. Apply entity changes to local database
-2. Update Froca cache
-3. Update local sync version
-4. Trigger UI refresh
+1.  Apply entity changes to local database
+2.  Update Froca cache
+3.  Update local sync version
+4.  Trigger UI refresh
 
 ### Push Sync (Client → Server)
 
@@ -191,12 +189,12 @@ POST /api/sync/push
 
 **Server Processing:**
 
-1. Validate changes
-2. Check for conflicts
-3. Apply changes to database
-4. Update Becca cache
-5. Mark as synced
-6. Broadcast to other connected clients via WebSocket
+1.  Validate changes
+2.  Check for conflicts
+3.  Apply changes to database
+4.  Update Becca cache
+5.  Mark as synced
+6.  Broadcast to other connected clients via WebSocket
 
 **Conflict Detection:**
 
@@ -215,21 +213,25 @@ if (serverLastModified > clientSyncVersion) {
 
 ### Conflict Types
 
-**1. Content Conflict**
-- Both client and server modified same note content
-- **Resolution**: Last-write-wins based on `utcDateModified`
+**1\. Content Conflict**
 
-**2. Structure Conflict**
-- Branch moved/deleted on one side, modified on other
-- **Resolution**: Tombstone records, reconciliation
+*   Both client and server modified same note content
+*   **Resolution**: Last-write-wins based on `utcDateModified`
 
-**3. Attribute Conflict**
-- Same attribute modified differently
-- **Resolution**: Last-write-wins
+**2\. Structure Conflict**
+
+*   Branch moved/deleted on one side, modified on other
+*   **Resolution**: Tombstone records, reconciliation
+
+**3\. Attribute Conflict**
+
+*   Same attribute modified differently
+*   **Resolution**: Last-write-wins
 
 ### Conflict Resolution Strategy
 
 **Last-Write-Wins:**
+
 ```typescript
 if (clientEntity.utcDateModified > serverEntity.utcDateModified) {
     // Client wins, apply client changes
@@ -241,9 +243,10 @@ if (clientEntity.utcDateModified > serverEntity.utcDateModified) {
 ```
 
 **Tombstone Records:**
-- Deleted entities leave tombstone in `entity_changes`
-- Prevents re-sync of deleted items
-- `isErased = 1` for permanent deletions
+
+*   Deleted entities leave tombstone in `entity_changes`
+*   Prevents re-sync of deleted items
+*   `isErased = 1` for permanent deletions
 
 ### Protected Notes Sync
 
@@ -251,43 +254,26 @@ if (clientEntity.utcDateModified > serverEntity.utcDateModified) {
 
 **Solution:**
 
-1. **Protected session required**: User must unlock protected notes
-2. **Encrypted sync**: Content synced in encrypted form
-3. **Hash verification**: Integrity checked without decryption
-4. **Lazy decryption**: Only decrypt when accessed
-
-**Sync Flow:**
-
-```typescript
-// Client side
-if (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable()) {
-    // Skip protected notes if session not active
-    continue
-}
-
-// Server side
-if (note.isProtected) {
-    // Sync encrypted blob
-    // Don't decrypt for sync
-    syncEncryptedBlob(note.blobId)
-}
-```
+1.  **Encrypted sync**: Content synced in encrypted form
+2.  **Hash verification**: Integrity checked without decryption
+3.  **Lazy decryption**: Only decrypt when accessed
 
 ## Sync States
 
 ### Connection States
 
-- **Connected**: WebSocket connection active
-- **Disconnected**: No connection to sync server
-- **Syncing**: Actively transferring data
-- **Conflict**: Sync paused due to conflict
+*   **Connected**: WebSocket connection active
+*   **Disconnected**: No connection to sync server
+*   **Syncing**: Actively transferring data
+*   **Conflict**: Sync paused due to conflict
 
 ### Entity Sync States
 
 Each entity can be in:
-- **Synced**: In sync with server
-- **Pending**: Local changes not yet pushed
-- **Conflict**: Conflicting changes detected
+
+*   **Synced**: In sync with server
+*   **Pending**: Local changes not yet pushed
+*   **Conflict**: Conflicting changes detected
 
 ### UI Indicators
 
@@ -299,8 +285,6 @@ class SyncStatusWidget {
             showIcon('synced')
         } else if (isSyncing) {
             showIcon('syncing-spinner')
-        } else if (hasConflicts) {
-            showIcon('conflict-warning')
         } else {
             showIcon('not-synced')
         }
@@ -314,7 +298,7 @@ class SyncStatusWidget {
 
 Only entities changed since last sync are transferred:
 
-```sql
+```
 SELECT * FROM entity_changes 
 WHERE id > :lastSyncedChangeId 
 ORDER BY id ASC
@@ -357,26 +341,12 @@ res.send(gzip(syncData))
 
 ### Network Errors
 
-**Retry Strategy:**
-```typescript
-const RETRY_DELAYS = [1000, 2000, 5000, 10000, 30000]
-
-async function syncWithRetry(attempt = 0) {
-    try {
-        await performSync()
-    } catch (error) {
-        if (attempt < RETRY_DELAYS.length) {
-            setTimeout(() => {
-                syncWithRetry(attempt + 1)
-            }, RETRY_DELAYS[attempt])
-        }
-    }
-}
-```
+Reported to the user and the sync will be retried after the interval passes.
 
 ### Sync Integrity Checks
 
 **Hash Verification:**
+
 ```typescript
 // Verify entity hash matches
 const calculatedHash = calculateHash(entity)
@@ -388,16 +358,18 @@ if (calculatedHash !== receivedHash) {
 ```
 
 **Consistency Checks:**
-- Orphaned branches detection
-- Missing parent notes
-- Invalid entity references
-- Circular dependencies
+
+*   Orphaned branches detection
+*   Missing parent notes
+*   Invalid entity references
+*   Circular dependencies
 
 ## Sync Server Configuration
 
 ### Server Setup
 
 **Required Options:**
+
 ```javascript
 {
     "syncServerHost": "https://sync.example.com",
@@ -407,39 +379,13 @@ if (calculatedHash !== receivedHash) {
 ```
 
 **Authentication:**
-- Username/password or
-- Sync token (generated on server)
 
-### Client Setup
-
-**Desktop Client:**
-```javascript
-// Settings → Sync
-{
-    "syncServerHost": "https://sync.example.com",
-    "username": "user@example.com",
-    "password": "********"
-}
-```
-
-**Test Connection:**
-```typescript
-POST /api/sync/test
-Response: { "success": true }
-```
+*   Username/password or
+*   Sync token (generated on server)
 
 ## Sync API Endpoints
 
 Located at: `apps/server/src/routes/api/sync.ts`
-
-**Endpoints:**
-
-- `POST /api/sync/check` - Check sync status
-- `POST /api/sync/pull` - Pull changes from server
-- `POST /api/sync/push` - Push changes to server
-- `POST /api/sync/finished` - Mark sync complete
-- `POST /api/sync/test` - Test connection
-- `GET /api/sync/stats` - Sync statistics
 
 ## WebSocket Sync Updates
 
@@ -447,19 +393,12 @@ Real-time sync via WebSocket:
 
 ```typescript
 // Server broadcasts change to all connected clients
-ws.broadcast('entity-change', {
-    entityName: 'notes',
-    entityId: 'abc123',
-    changeId: 'change-uuid',
-    sourceId: 'originating-component-id'
+ws.broadcast('frontend-update', {
+    lastSyncedPush,
+    entityChanges
 })
 
-// Client receives and applies
-ws.on('entity-change', (data) => {
-    if (data.sourceId !== myComponentId) {
-        froca.processEntityChange(data)
-    }
-})
+// Client receives and processed the information.
 ```
 
 ## Sync Scheduling
@@ -467,107 +406,79 @@ ws.on('entity-change', (data) => {
 ### Automatic Sync
 
 **Desktop:**
-- Sync on startup
-- Periodic sync (configurable interval, default: 60s)
-- Sync before shutdown
+
+*   Sync on startup
+*   Periodic sync (configurable interval, default: 60s)
 
 **Server:**
-- Sync on entity modification
-- WebSocket push to connected clients
+
+*   Sync on entity modification
+*   WebSocket push to connected clients
 
 ### Manual Sync
 
 User can trigger:
-- Full sync
-- Sync now
-- Sync specific subtree
+
+*   Full sync
+*   Sync now
+*   Sync specific subtree
 
 ## Troubleshooting
 
 ### Common Issues
 
 **Sync stuck:**
-```sql
+
+```
 -- Reset sync state
 UPDATE entity_changes SET isSynced = 0;
 DELETE FROM options WHERE name LIKE 'sync%';
 ```
 
 **Hash mismatch:**
-- Data corruption detected
-- Re-sync from backup
-- Check database integrity
+
+*   Data corruption detected
+*   Re-sync from backup
+*   Check database integrity
 
 **Conflict loop:**
-- Manual intervention required
-- Export conflicting notes
-- Choose winning version
-- Re-sync
 
-### Sync Diagnostics
-
-**Check sync status:**
-```typescript
-GET /api/sync/stats
-Response: {
-    "unsyncedChanges": 0,
-    "lastSyncDate": "2025-11-02T12:00:00Z",
-    "syncVersion": 12890
-}
-```
-
-**Entity change log:**
-```sql
-SELECT * FROM entity_changes 
-WHERE isSynced = 0 
-ORDER BY id DESC;
-```
+*   Manual intervention required
+*   Export conflicting notes
+*   Choose winning version
+*   Re-sync
 
 ## Security Considerations
 
 ### Encrypted Sync
 
-- Protected notes synced encrypted
-- No plain text over network
-- Server cannot read protected content
+*   Protected notes synced encrypted
+*   No plain text over network
+*   Server cannot read protected content
 
 ### Authentication
 
-- Username/password over HTTPS only
-- Sync tokens for token-based auth
-- Session cookies with CSRF protection
+*   Username/password over HTTPS only
+*   Sync tokens for token-based auth
+*   Session cookies with CSRF protection
 
 ### Authorization
 
-- Users can only sync their own data
-- No cross-user sync support
-- Sync server validates ownership
+*   Users can only sync their own data
+*   No cross-user sync support
+*   Sync server validates ownership
 
 ## Performance Metrics
 
 **Typical Sync Performance:**
-- 1000 changes: ~2-5 seconds
-- 10000 changes: ~20-50 seconds
-- Initial full sync (100k notes): ~5-10 minutes
+
+*   1000 changes: ~2-5 seconds
+*   10000 changes: ~20-50 seconds
+*   Initial full sync (100k notes): ~5-10 minutes
 
 **Factors:**
-- Network latency
-- Database size
-- Number of protected notes
-- Attachment sizes
 
-## Future Improvements
-
-**Planned Enhancements:**
-- Differential sync (binary diff)
-- Peer-to-peer sync (no central server)
-- Multi-server sync
-- Partial sync (subtree only)
-- Sync over Tor/I2P
-
----
-
-**See Also:**
-- [ARCHITECTURE.md](ARCHITECTURE.md) - Overall architecture
-- [Sync User Guide](https://triliumnext.github.io/Docs/Wiki/synchronization)
-- [Sync API Source](../apps/server/src/routes/api/sync.ts)
+*   Network latency
+*   Database size
+*   Number of protected notes
+*   Attachment sizes

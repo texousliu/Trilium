@@ -1,4 +1,4 @@
-# API
+# APIs
 ### Internal API
 
 **REST Endpoints** (`/api/*`)
