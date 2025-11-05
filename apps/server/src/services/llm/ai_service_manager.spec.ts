@@ -45,7 +45,7 @@ vi.mock('./providers/openai_service.js', () => ({
     OpenAIService: vi.fn().mockImplementation(function () {
         this.isAvailable = vi.fn().mockReturnValue(true);
         this.generateChatCompletion = vi.fn();
-    };
+    })
 }));
 
 vi.mock('./providers/ollama_service.js', () => ({

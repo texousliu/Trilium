@@ -51,7 +51,7 @@ vi.mock('./pipeline/chat_pipeline.js', () => ({
                 }
             }
         });
-    });
+    })
 }));
 
 vi.mock('./ai_service_manager.js', () => ({
