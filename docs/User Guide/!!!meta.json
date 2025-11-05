@@ -14187,6 +14187,13 @@
                             "value": "bx bx-bot",
                             "isInheritable": false,
                             "position": 30
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "xYmIYSP6wE3F",
+                            "isInheritable": false,
+                            "position": 40
                         }
                     ],
                     "format": "markdown",
