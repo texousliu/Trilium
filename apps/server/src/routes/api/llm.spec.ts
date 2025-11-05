@@ -382,11 +382,18 @@ describe("LLM API Tests", () => {
                 message: "Streaming initiated successfully"
             });
 
-            // Wait for async streaming operations to complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-
             // Import ws service to access mock
             const ws = (await import("../../services/ws.js")).default;
+
+            // Wait for async streaming operations to complete
+            await vi.waitFor(() => {
+                expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
+                    type: 'llm-stream',
+                    chatNoteId: testChatId,
+                    content: ' world!',
+                    done: true
+                });
+            }, { timeout: 1000, interval: 50 });
 
             // Verify WebSocket messages were sent
             expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
@@ -539,11 +546,18 @@ describe("LLM API Tests", () => {
 
             expect(response.status).toBe(200);
 
-            // Wait for async streaming operations to complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-
             // Import ws service to access mock
             const ws = (await import("../../services/ws.js")).default;
+
+            // Wait for async streaming operations to complete
+            await vi.waitFor(() => {
+                expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
+                    type: 'llm-stream',
+                    chatNoteId: testChatId,
+                    thinking: 'Formulating response...',
+                    done: false
+                });
+            }, { timeout: 1000, interval: 50 });
 
             // Verify thinking messages
             expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
@@ -589,11 +603,25 @@ describe("LLM API Tests", () => {
 
             expect(response.status).toBe(200);
 
-            // Wait for async streaming operations to complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-
             // Import ws service to access mock
             const ws = (await import("../../services/ws.js")).default;
+
+            // Wait for async streaming operations to complete
+            await vi.waitFor(() => {
+                expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
+                    type: 'llm-stream',
+                    chatNoteId: testChatId,
+                    toolExecution: {
+                        tool: 'calculator',
+                        args: { expression: '2 + 2' },
+                        result: '4',
+                        toolCallId: 'call_123',
+                        action: 'execute',
+                        error: undefined
+                    },
+                    done: false
+                });
+            }, { timeout: 1000, interval: 50 });
 
             // Verify tool execution message
             expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
