@@ -3879,7 +3879,7 @@
 							"title": "Scripting examples",
 							"notePosition": 350,
 							"prefix": null,
-							"isExpanded": true,
+							"isExpanded": false,
 							"type": "text",
 							"mime": "text/html",
 							"attributes": [
