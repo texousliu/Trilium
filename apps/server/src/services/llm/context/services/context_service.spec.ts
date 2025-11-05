@@ -49,7 +49,7 @@ vi.mock('../../ai_service_manager.js', () => ({
 vi.mock('../index.js', () => ({
     ContextExtractor: vi.fn().mockImplementation(function () {
         this.findRelevantNotes = vi.fn().mockResolvedValue([])
-    });
+    })
 }));
 
 describe('ContextService', () => {
