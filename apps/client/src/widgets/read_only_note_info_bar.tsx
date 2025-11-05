@@ -1,16 +1,10 @@
-import "./read-only-note-info-bar.css";
+import "./read_only_note_info_bar.css";
 import { t } from "../services/i18n";
-import { useCallback, useEffect, useState } from "preact/hooks";
-import { useNoteContext, useTriliumEvent } from "./react/hooks"
-import appContext from "../components/app_context";
+import { useIsNoteReadOnly, useNoteContext, useTriliumEvent } from "./react/hooks"
 import Button from "./react/Button";
-import FNote from "../entities/fnote";
-import NoteContext from "../components/note_context";
-import options from "../services/options";
-import protected_session_holder from "../services/protected_session_holder";
 
 export default function ReadOnlyNoteInfoBar() {
-    const {isReadOnly, enableEditing} = useIsReadOnly();
+    const {isReadOnly, enableEditing} = useIsNoteReadOnly();
     const {note} = useNoteContext();
 
     return <div class={`read-only-note-info-bar-widget ${(isReadOnly) ? " visible" : ""}`}>
@@ -33,49 +27,4 @@ export default function ReadOnlyNoteInfoBar() {
                             icon="bx-pencil" onClick={() => enableEditing()} />
                 </>}
             </div>;
-}
-
-export function useIsReadOnly() {
-    const {note, noteContext} = useNoteContext();
-    const [isReadOnly, setIsReadOnly] = useState(false);
-
-    const enableEditing = useCallback(() => {
-        if (noteContext?.viewScope) {
-            noteContext.viewScope.readOnlyTemporarilyDisabled = true;
-            appContext.triggerEvent("readOnlyTemporarilyDisabled", {noteContext});
-        }
-    }, [noteContext]);
-
-    useEffect(() => {
-        if (note && noteContext) {
-            isNoteReadOnly(note, noteContext).then((readOnly) => {
-                setIsReadOnly(readOnly);
-            });
-        }
-    }, [note, noteContext]);
-
-    useTriliumEvent("readOnlyTemporarilyDisabled", ({noteContext: eventNoteContext}) => {
-        if (noteContext?.ntxId === eventNoteContext.ntxId) {
-            setIsReadOnly(false);
-        }
-    });
-
-    return {isReadOnly, enableEditing};
-}
-
-async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
-
-    if (note.isProtected && !protected_session_holder.isProtectedSessionAvailable()) {
-        return false;
-    }
-
-    if (options.is("databaseReadonly")) {
-        return false;
-    }
-
-    if (noteContext.viewScope?.viewMode !== "default" || !await noteContext.isReadOnly()) {
-        return false;
-    }
-
-    return true;
 }
