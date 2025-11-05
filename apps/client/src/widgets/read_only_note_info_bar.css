@@ -1,14 +1,15 @@
 div.read-only-note-info-bar-widget {
     contain: none;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    opacity: 0;
+    max-height: 0;
     margin-top: 4px;
     background: var(--read-only-note-info-bar-background, var(--accented-background-color));
     padding: 8px 20px;
     color: var(--read-only-note-info-bar-color);
-    opacity: 0;
-    max-height: 0;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .9em;
 }
 
 div.read-only-note-info-bar-widget.visible {
@@ -19,6 +20,9 @@ div.read-only-note-info-bar-widget.visible {
 
 div.read-only-note-info-bar-widget.zen-mode-only {
     display: none;
+    width: var(--max-content-width);
+    margin: 0 auto;
+    border-radius: 8px;
 }
 
 body.zen div.read-only-note-info-bar-widget.zen-mode-only {
