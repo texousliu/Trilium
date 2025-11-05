@@ -3,11 +3,11 @@ import { t } from "../services/i18n";
 import { useIsNoteReadOnly, useNoteContext, useTriliumEvent } from "./react/hooks"
 import Button from "./react/Button";
 
-export default function ReadOnlyNoteInfoBar() {
+export default function ReadOnlyNoteInfoBar(props: {zenModeOnly?: boolean}) {
     const {isReadOnly, enableEditing} = useIsNoteReadOnly();
     const {note} = useNoteContext();
 
-    return <div class={`read-only-note-info-bar-widget ${(isReadOnly) ? " visible" : ""}`}>
+    return <div class={`read-only-note-info-bar-widget ${(isReadOnly) ? "visible" : ""} ${(props.zenModeOnly) ? "zen-mode-only" : ""}`}>
                 {isReadOnly && <>
                     {note?.isLabelTruthy("readOnly") ? (
                         <div>{t("read-only-info.read-only-note")}</div>

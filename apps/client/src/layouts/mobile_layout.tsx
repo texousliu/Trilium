@@ -153,6 +153,7 @@ export default class MobileLayout {
                                     .child(<SharedInfoWidget />)
                                     .child(<ReadOnlyNoteInfoBar />)
                                     .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
+                                    .child(<ReadOnlyNoteInfoBar zenModeOnly />)
                                     .child(new PromotedAttributesWidget())
                                     .child(
                                         new ScrollingContainer()

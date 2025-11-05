@@ -17,6 +17,14 @@ div.read-only-note-info-bar-widget.visible {
     transition: opacity 300ms ease-out;
 }
 
+div.read-only-note-info-bar-widget.zen-mode-only {
+    display: none;
+}
+
+body.zen div.read-only-note-info-bar-widget.zen-mode-only {
+    display: flex;
+}
+
 :root div.read-only-note-info-bar-widget button {
     white-space: nowrap;
     padding: 2px 8px;

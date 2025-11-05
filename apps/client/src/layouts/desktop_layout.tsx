@@ -137,6 +137,7 @@ export default class DesktopLayout {
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
+                                                                .child(<ReadOnlyNoteInfoBar zenModeOnly />)
                                                                 .child(new PromotedAttributesWidget())
                                                                 .child(<SqlTableSchemas />)
                                                                 .child(new NoteDetailWidget())
