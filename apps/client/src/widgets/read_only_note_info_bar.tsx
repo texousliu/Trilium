@@ -35,7 +35,7 @@ export default function ReadOnlyNoteInfoBar() {
             </div>;
 }
 
-function useIsReadOnly() {
+export function useIsReadOnly() {
     const {note, noteContext} = useNoteContext();
     const [isReadOnly, setIsReadOnly] = useState(false);
 

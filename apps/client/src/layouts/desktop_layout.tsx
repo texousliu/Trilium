@@ -23,7 +23,7 @@ import options from "../services/options.js";
 import PasswordNoteSetDialog from "../widgets/dialogs/password_not_set.js";
 import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
-import ReadOnlyNoteInfoBar from "../widgets/read_only_note_info-bar.jsx";
+import ReadOnlyNoteInfoBar from "../widgets/read_only_note_info_bar.jsx";
 import Ribbon from "../widgets/ribbon/Ribbon.jsx";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
 import RootContainer from "../widgets/containers/root_container.js";

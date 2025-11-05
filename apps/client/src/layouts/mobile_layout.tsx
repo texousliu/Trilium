@@ -16,7 +16,7 @@ import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
-import ReadOnlyNoteInfoBar from "../widgets/read_only_note_info-bar.jsx";
+import ReadOnlyNoteInfoBar from "../widgets/read_only_note_info_bar.jsx";
 import RootContainer from "../widgets/containers/root_container.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
