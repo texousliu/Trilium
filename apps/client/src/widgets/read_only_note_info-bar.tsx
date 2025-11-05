@@ -29,7 +29,8 @@ export default function ReadOnlyNoteInfoBar() {
                         </div>
                     )}
                     
-                    <Button text="Edit note" icon="bx-pencil" onClick={() => enableEditing()} />
+                    <Button text={t("read-only-info.edit-note")}
+                            icon="bx-pencil" onClick={() => enableEditing()} />
                 </>}
             </div>;
 }
