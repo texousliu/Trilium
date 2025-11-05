@@ -70,7 +70,6 @@ import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
 import etapiMetricsRoute from "../etapi/metrics.js";
-import apiDocsRoute from "./api_docs.js";
 import { apiResultHandler, apiRoute, asyncApiRoute, asyncRoute, route, router, uploadMiddlewareWithErrorHandling } from "./route_api.js";
 
 const GET = "get",
@@ -155,6 +154,7 @@ function register(app: express.Application) {
     apiRoute(PUT, "/api/branches/:branchId/expanded-subtree/:expanded", branchesApiRoute.setExpandedForSubtree);
     apiRoute(DEL, "/api/branches/:branchId", branchesApiRoute.deleteBranch);
     apiRoute(PUT, "/api/branches/:branchId/set-prefix", branchesApiRoute.setPrefix);
+    apiRoute(PUT, "/api/branches/set-prefix-batch", branchesApiRoute.setPrefixBatch);
 
     apiRoute(GET, "/api/notes/:noteId/attachments", attachmentsApiRoute.getAttachments);
     apiRoute(PST, "/api/notes/:noteId/attachments", attachmentsApiRoute.saveAttachment);
@@ -382,9 +382,6 @@ function register(app: express.Application) {
     asyncApiRoute(GET, "/api/llm/providers/ollama/models", ollamaRoute.listModels);
     asyncApiRoute(GET, "/api/llm/providers/openai/models", openaiRoute.listModels);
     asyncApiRoute(GET, "/api/llm/providers/anthropic/models", anthropicRoute.listModels);
-
-    // API Documentation
-    apiDocsRoute(app);
 
     app.use("", router);
 }

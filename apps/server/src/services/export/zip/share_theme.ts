@@ -27,6 +27,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     private assetsMeta: NoteMeta[] = [];
     private indexMeta: NoteMeta | null = null;
     private searchIndex: Map<string, SearchIndexEntry> = new Map();
+    private rootMeta: NoteMeta | null = null;
 
     prepareMeta(metaFile: NoteMetaFile): void {
         const assets = [
@@ -50,6 +51,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             noImport: true,
             dataFileName: "index.html"
         };
+        this.rootMeta = metaFile.files[0];
 
         metaFile.files.push(this.indexMeta);
     }
@@ -58,7 +60,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         if (!noteMeta?.notePath?.length) {
             throw new Error("Missing note path.");
         }
-        const basePath = "../".repeat(noteMeta.notePath.length - 1);
+        const basePath = "../".repeat(Math.max(0, noteMeta.notePath.length - 2));
         let searchContent = "";
 
         if (note) {
@@ -71,6 +73,9 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             if (typeof content === "string") {
                 content = content.replace(/href="[^"]*\.\/([a-zA-Z0-9_\/]{12})[^"]*"/g, (match, id) => {
                     if (match.includes("/assets/")) return match;
+                    if (id === this.rootMeta?.noteId) {
+                        return `href="${basePath}"`;
+                    }
                     return `href="#root/${id}"`;
                 });
                 content = this.rewriteFn(content, noteMeta);

@@ -1288,8 +1288,6 @@
   "etapi": {
     "title": "ETAPI",
     "description": "ETAPI est une API REST utilisée pour accéder à l'instance Trilium par programme, sans interface utilisateur.",
-    "wiki": "wiki",
-    "openapi_spec": "Spec ETAPI OpenAPI",
     "create_token": "Créer un nouveau jeton ETAPI",
     "existing_tokens": "Jetons existants",
     "no_tokens_yet": "Il n'y a pas encore de jetons. Cliquez sur le bouton ci-dessus pour en créer un.",
@@ -1306,9 +1304,7 @@
     "delete_token": "Supprimer/désactiver ce token",
     "rename_token_title": "Renommer le jeton",
     "rename_token_message": "Veuillez saisir le nom du nouveau jeton",
-    "delete_token_confirmation": "Êtes-vous sûr de vouloir supprimer le jeton ETAPI « {{name}} » ?",
-    "see_more": "Voir plus de détails dans le {{- link_to_wiki}} et le {{- link_to_openapi_spec}} ou le {{- link_to_swagger_ui }}.",
-    "swagger_ui": "Interface utilisateur ETAPI Swagger"
+    "delete_token_confirmation": "Êtes-vous sûr de vouloir supprimer le jeton ETAPI « {{name}} » ?"
   },
   "options_widget": {
     "options_status": "Statut des options",

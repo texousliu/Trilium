@@ -32,12 +32,11 @@
   "devDependencies": {
     "@digitak/esrun": "3.2.26",
     "@triliumnext/ckeditor5": "workspace:*",
-    "@types/swagger-ui": "5.21.1",
-    "@typescript-eslint/eslint-plugin": "8.46.2",
-    "@typescript-eslint/parser": "8.46.2",
+    "@typescript-eslint/eslint-plugin": "8.46.3",
+    "@typescript-eslint/parser": "8.46.3",
     "dotenv": "17.2.3",
-    "esbuild": "0.25.11",
-    "eslint": "9.38.0",
+    "esbuild": "0.25.12",
+    "eslint": "9.39.1",
     "highlight.js": "11.11.1",
     "typescript": "5.9.3"
   }
