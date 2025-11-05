@@ -2037,6 +2037,9 @@
     "start-presentation": "Start presentation",
     "slide-overview": "Toggle an overview of the slides"
   },
+  "calendar_view": {
+    "delete_note": "Delete note..."
+  },
   "command_palette": {
     "tree-action-name": "Tree: {{name}}",
     "export_note_title": "Export Note",
