@@ -11,7 +11,7 @@ class MyWidget extends api.BasicWidget {
     get parentWidget() { return "left-pane"; }
     
     doRender() {
-        this.$widget = $("");
+        this.$widget = $("<div id='my-widget'>");
         return this.$widget;
     }
 }
@@ -25,14 +25,14 @@ To implement this widget:
 2.  Assign the `#widget` [attribute](../../../Advanced%20Usage/Attributes.md) to the [note](../../../Basic%20Concepts%20and%20Features/Notes.md).
 3.  Restart Trilium or reload the window.
 
-To verify that the widget is working, open the developer tools (`Cmd` + `Shift` + `I`) and run `document.querySelector("#my-widget")`. If the element is found, the widget is functioning correctly. If `undefined` is returned, double-check that the [note](../../../Basic%20Concepts%20and%20Features/Notes.md) has the `#widget` [attribute](../../../Advanced%20Usage/Attributes.md).
+To verify that the widget is working, open the developer tools (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd>) and run `document.querySelector("#my-widget")`. If the element is found, the widget is functioning correctly. If `undefined` is returned, double-check that the [note](../../../Basic%20Concepts%20and%20Features/Notes.md) has the `#widget` [attribute](../../../Advanced%20Usage/Attributes.md).
 
 ### Step 2: Adding an UI Element
 
 Next, let's improve the widget by adding a button to it.
 
 ```
-const template = ``;
+const template = `<div id="my-widget"><button>Click Me!</button></div>`;
 
 class MyWidget extends api.BasicWidget {
     get position() {return 1;}
@@ -56,7 +56,7 @@ To make the button more visually appealing and position it correctly, we'll appl
 Here's the updated template:
 
 ```
-const template = ``;
+const template = `<div id="my-widget"><button class="tree-floating-button bx bxs-magic-wand tree-settings-button"></button></div>`;
 ```
 
 Next, we'll adjust the button's position using CSS:

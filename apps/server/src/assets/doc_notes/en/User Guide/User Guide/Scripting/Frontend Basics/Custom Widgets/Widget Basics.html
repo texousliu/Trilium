@@ -8,7 +8,7 @@
     get parentWidget() { return "left-pane"; }
     
     doRender() {
-        this.$widget = $("");
+        this.$widget = $("&lt;div id='my-widget'&gt;");
         return this.$widget;
     }
 }
@@ -16,19 +16,19 @@
 module.exports = new MyWidget();</code></pre>
 <p>To implement this widget:</p>
 <ol>
-  <li>Create a new <code>JS Frontend</code> note in Trilium and paste in the code
+  <li data-list-item-id="ed70b15c6cddbf0d0ac049dccd6835c5b">Create a new <code>JS Frontend</code> note in Trilium and paste in the code
     above.</li>
-  <li>Assign the <code>#widget</code>  <a href="#root/_help_zEY4DaJG4YT5">attribute</a> to
+  <li data-list-item-id="e507afc0bb1d604a590eba80b6137d84b">Assign the <code>#widget</code>  <a href="#root/_help_zEY4DaJG4YT5">attribute</a> to
     the <a href="#root/_help_BFs8mudNFgCS">note</a>.</li>
-  <li>Restart Trilium or reload the window.</li>
+  <li data-list-item-id="e876a226740e2dcfb2a900ebd674b2b6b">Restart Trilium or reload the window.</li>
 </ol>
-<p>To verify that the widget is working, open the developer tools (<code>Cmd</code> + <code>Shift</code> + <code>I</code>)
+<p>To verify that the widget is working, open the developer tools (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd>)
   and run <code>document.querySelector("#my-widget")</code>. If the element
   is found, the widget is functioning correctly. If <code>undefined</code> is
   returned, double-check that the <a href="#root/_help_BFs8mudNFgCS">note</a> has
   the <code>#widget</code>  <a href="#root/_help_zEY4DaJG4YT5">attribute</a>.</p>
 <h3>Step 2: Adding an UI Element</h3>
-<p>Next, let's improve the widget by adding a button to it.</p><pre><code class="language-text-x-trilium-auto">const template = ``;
+<p>Next, let's improve the widget by adding a button to it.</p><pre><code class="language-text-x-trilium-auto">const template = `&lt;div id="my-widget"&gt;&lt;button&gt;Click Me!&lt;/button&gt;&lt;/div&gt;`;
 
 class MyWidget extends api.BasicWidget {
     get position() {return 1;}
@@ -47,7 +47,7 @@ module.exports = new MyWidget();</code></pre>
 <p>To make the button more visually appealing and position it correctly,
   we'll apply some custom styling. Trilium includes <a href="https://boxicons.com">Box Icons</a>,
   which we'll use to replace the button text with an icon. For example the <code>bx bxs-magic-wand</code> icon.</p>
-<p>Here's the updated template:</p><pre><code class="language-text-x-trilium-auto">const template = ``;</code></pre>
+<p>Here's the updated template:</p><pre><code class="language-text-x-trilium-auto">const template = `&lt;div id="my-widget"&gt;&lt;button class="tree-floating-button bx bxs-magic-wand tree-settings-button"&gt;&lt;/button&gt;&lt;/div&gt;`;</code></pre>
 <p>Next, we'll adjust the button's position using CSS:</p><pre><code class="language-text-x-trilium-auto">class MyWidget extends api.BasicWidget {
     get position() { return 1; }
     get parentWidget() { return "left-pane"; }
@@ -89,13 +89,14 @@ module.exports = new MyWidget();</code></pre>
 module.exports = new MyWidget();</code></pre>
 <p><code>parentWidget()</code> can be given the following values:</p>
 <ul>
-  <li><code>left-pane</code> - This renders the widget on the left side of the
+  <li data-list-item-id="e8b62dcf10b3cfccc9f4bc80ded18346f"><code>left-pane</code> - This renders the widget on the left side of the
     screen where the note tree lives.</li>
-  <li><code>center-pane</code> - This renders the widget in the center of the
+  <li data-list-item-id="eeeef623e323425e2c362acb5fb5fcc91"><code>center-pane</code> - This renders the widget in the center of the
     layout in the same location that notes and splits appear.</li>
-  <li><code>note-detail-pane</code> - This renders the widget <em>with</em> the
+  <li data-list-item-id="e95ab9fba1601f210196b628eccc2e3d0"><code>note-detail-pane</code> - This renders the widget <em>with</em> the
     note in the center pane. This means it can appear multiple times with splits.</li>
-  <li><code>right-pane</code> - This renders the widget to the right of any opened
+  <li
+  data-list-item-id="e0f1f65f68ce610bcc85f51de7ff47f37"><code>right-pane</code> - This renders the widget to the right of any opened
     notes.</li>
 </ul>
 <p><a href="#root/_help_s8alTXmpFR61">Reload</a> the application one last time.
