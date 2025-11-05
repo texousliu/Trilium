@@ -625,19 +625,18 @@ describe("LLM API Tests", () => {
 
             expect(response.status).toBe(200); // Still returns 200
 
-            // Wait for async streaming operations to complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-
             // Import ws service to access mock
             const ws = (await import("../../services/ws.js")).default;
 
-            // Verify error message was sent via WebSocket
-            expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
-                type: 'llm-stream',
-                chatNoteId: testChatId,
-                error: 'Error during streaming: Pipeline error',
-                done: true
-            });
+            // Wait for async streaming operations to complete
+            await vi.waitFor(() => {
+                expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
+                    type: 'llm-stream',
+                    chatNoteId: testChatId,
+                    error: 'Error during streaming: Pipeline error',
+                    done: true
+                });
+            }, { timeout: 1000, interval: 50 });
         });
 
         it("should handle AI disabled state", async () => {
@@ -656,19 +655,18 @@ describe("LLM API Tests", () => {
 
             expect(response.status).toBe(200);
 
-            // Wait for async streaming operations to complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-
             // Import ws service to access mock
             const ws = (await import("../../services/ws.js")).default;
 
-            // Verify error message about AI being disabled
-            expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
-                type: 'llm-stream',
-                chatNoteId: testChatId,
-                error: 'Error during streaming: AI features are disabled. Please enable them in the settings.',
-                done: true
-            });
+            // Wait for async streaming operations to complete
+            await vi.waitFor(() => {
+                expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
+                    type: 'llm-stream',
+                    chatNoteId: testChatId,
+                    error: 'Error during streaming: AI features are disabled. Please enable them in the settings.',
+                    done: true
+                });
+            }, { timeout: 1000, interval: 50 });
         });
 
         it("should save chat messages after streaming completion", async () => {
@@ -758,17 +756,16 @@ describe("LLM API Tests", () => {
 
             expect(response.status).toBe(200);
 
-            // Wait for async streaming operations to complete
-            await new Promise(resolve => setTimeout(resolve, 100));
-
             // Import ws service to access mock
             const ws = (await import("../../services/ws.js")).default;
 
-            // Verify multiple chunks were sent
-            const streamCalls = (ws.sendMessageToAllClients as any).mock.calls.filter(
-                call => call[0].type === 'llm-stream' && call[0].content
-            );
-            expect(streamCalls.length).toBeGreaterThan(5);
+            // Wait for async streaming operations to complete and verify multiple chunks were sent
+            await vi.waitFor(() => {
+                const streamCalls = (ws.sendMessageToAllClients as any).mock.calls.filter(
+                    call => call[0].type === 'llm-stream' && call[0].content
+                );
+                expect(streamCalls.length).toBeGreaterThan(5);
+            }, { timeout: 1000, interval: 50 });
         });
     });
 
