@@ -1636,6 +1636,12 @@
     "shared_locally": "This note is shared locally on {{- link}}.",
     "help_link": "For help visit <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
+  "read-only-info": {
+    "read-only-note": "This is a read-only note.",
+    "auto-read-only-note": "This note was automatically set to read-only to improve navigation speed.",
+    "auto-read-only-learn-more": "Learn more about Automatic Read-Only Mode"
+  
+  },
   "note_types": {
     "text": "Text",
     "code": "Code",

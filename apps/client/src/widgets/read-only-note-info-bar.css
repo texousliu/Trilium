@@ -1,0 +1,22 @@
+div.read-only-note-info-bar-widget {
+    contain: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--read-only-note-info-bar-background, var(--accented-background-color));
+    padding: 6px 20px;
+    color: var(--read-only-note-info-bar-color);
+    opacity: 0;
+    max-height: 0;
+}
+
+div.read-only-note-info-bar-widget.visible {
+    max-height: unset;
+    opacity: 1;
+    transition: opacity 300ms ease-out;
+}
+
+div.read-only-note-info-bar-widget button {
+    white-space: nowrap;
+    padding: 2px 8px;
+}
