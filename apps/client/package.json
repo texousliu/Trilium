@@ -15,7 +15,7 @@
     "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
   },
   "dependencies": {
-    "@eslint/js": "9.39.0",
+    "@eslint/js": "9.39.1",
     "@excalidraw/excalidraw": "0.18.0",
     "@fullcalendar/core": "6.1.19",
     "@fullcalendar/daygrid": "6.1.19",
@@ -59,7 +59,7 @@
     "normalize.css": "8.0.1",
     "panzoom": "9.4.3",
     "preact": "10.27.2",
-    "react-i18next": "16.2.3",
+    "react-i18next": "16.2.4",
     "reveal.js": "5.2.1",
     "svg-pan-zoom": "3.6.2",
     "tabulator-tables": "6.3.1",

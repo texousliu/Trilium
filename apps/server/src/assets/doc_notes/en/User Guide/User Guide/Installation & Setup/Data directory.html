@@ -1,12 +1,12 @@
 <p>Data directory contains:</p>
 <ul>
-  <li><code>document.db</code> - <a href="#root/_help_wX4HbRucYSDD">database</a>
+  <li data-list-item-id="e02c8e6918e645272972d94bf51bd34e1"><code>document.db</code> - <a href="#root/_help_wX4HbRucYSDD">database</a>
   </li>
-  <li><code>config.ini</code> - instance level settings like port on which the
+  <li data-list-item-id="ee3b386f752a4d2de88a1362ff4bc447a"><code>config.ini</code> - instance level settings like port on which the
     Trilium application runs</li>
-  <li><code>backup</code> - contains automatically <a href="#root/_help_ODY7qQn5m2FT">backup</a> of
+  <li data-list-item-id="e9acb98fe27a493914c7f61574b277d59"><code>backup</code> - contains automatically <a href="#root/_help_ODY7qQn5m2FT">backup</a> of
     documents</li>
-  <li><code>log</code> - contains application log files</li>
+  <li data-list-item-id="e9f5de6d3c7f8d79710eb8c8e2ccac979"><code>log</code> - contains application log files</li>
 </ul>
 <h2>Location of the data directory</h2>
 <p>Easy way how to find out which data directory Trilium uses is to look
@@ -18,30 +18,42 @@
 <p>Data directory is normally named <code>trilium-data</code> and it is stored
   in:</p>
 <ul>
-  <li><code>/home/[user]/.local/share</code> for Linux</li>
-  <li><code>C:\Users\[user]\AppData\Roaming</code> for Windows Vista and up</li>
-  <li><code>/Users/[user]/Library/Application Support</code> for Mac OS</li>
-  <li>user's home is a fallback if some of the paths above don't exist</li>
-  <li>user's home is also a default setup for [[docker|Docker server installation]]</li>
+  <li data-list-item-id="e52706d339ce2332e73c5cfdc51edf81d"><code>/home/[user]/.local/share</code> for Linux</li>
+  <li data-list-item-id="e5709c767479c028d2ef60d17124ea924"><code>C:\Users\[user]\AppData\Roaming</code> for Windows Vista and up</li>
+  <li
+  data-list-item-id="eae590672aea8b24e625f372fb22d1f1b"><code>/Users/[user]/Library/Application Support</code> for Mac OS</li>
+    <li
+    data-list-item-id="e150ab7fc3c436d7cbac192acf3fe433f">user's home is a fallback if some of the paths above don't exist</li>
+      <li
+      data-list-item-id="e5f476ac39d8fa453e19b8399073a79d7">user's home is also a default setup for [[docker|Docker server installation]]</li>
 </ul>
 <p>If you want to back up your Trilium data, just backup this single directory
   - it contains everything you need.</p>
 <h3>Changing the location of data directory</h3>
 <p>If you want to use some other location for the data directory than the
-  default one, you may change it via TRILIUM_DATA_DIR environment variable
-  to some other location:</p>
+  default one, you may change it via <code>TRILIUM_DATA_DIR</code> environment
+  variable to some other location:</p>
+<h3>Windows</h3>
+<ol>
+  <li data-list-item-id="e8597645795a4e5b079b8e2e4a772a7d7">Press the Windows key on your keyboard.</li>
+  <li data-list-item-id="ee32856df1db7c2d206baa480a672eeac">Search and select “Edit the system variables”.</li>
+  <li data-list-item-id="e08c7cdc0659b414465a07c78dfdaeb34">Press the “Environment Variables…” button in the bottom-right of the newly
+    opened screen.</li>
+  <li data-list-item-id="e6c7bae2590161a2661b6229c0853021c">On the top section ("User variables for [user]"), press the “New…” button.</li>
+  <li
+  data-list-item-id="effac7dc3976f17d309958dd3374cfa8d">In the <em>Variable name</em> field insert <code>TRILIUM_DATA_DIR</code>.</li>
+    <li
+    data-list-item-id="e3b74fdd03536563bb461e11111fae5ff">Press the <em>Browse Directory…</em> button and select the new directory
+      where to store the database.</li>
+      <li data-list-item-id="ed6df567f0fa772a14610b3904a0cb635">Close all the windows by pressing the <em>OK</em> button for each of them.</li>
+</ol>
 <h4>Linux</h4><pre><code class="language-text-x-trilium-auto">export TRILIUM_DATA_DIR=/home/myuser/data/my-trilium-data</code></pre>
 <h4>Mac OS X</h4>
 <p>You need to create a <code>.plist</code> file under <code>~/Library/LaunchAgents</code> to
   load it properly each login.</p>
 <p>To load it manually, you need to use <code>launchctl setenv TRILIUM_DATA_DIR &lt;yourpath&gt;</code>
 </p>
-<p>Here is a pre-defined template, where you just need to add your path to:</p><pre><code class="language-text-x-trilium-auto">
-
-
-
-    
-        Label
+<p>Here is a pre-defined template, where you just need to add your path to:</p><pre><code class="language-text-x-trilium-auto">        Label
         set.trilium.env
         RunAtLoad
         
@@ -50,76 +62,75 @@
             launchctl
             setenv
             TRILIUM_DATA_DIR
-            /Users/YourUserName/Library/Application Support/trilium-data
-        
-    
-</code></pre>
+            /Users/YourUserName/Library/Application Support/trilium-data    </code></pre>
 <h3>Create a script to run with specific data directory</h3>
 <p>An alternative to globally setting environment variable is to run only
   the Trilium Notes with this environment variable. This then allows for
   different setup styles like two <a href="#root/_help_wX4HbRucYSDD">database</a> instances
   or "portable" installation.</p>
-<p>To do this in unix based systems simply run trilium like this:</p><pre><code class="language-text-x-trilium-auto">TRILIUM_DATA_DIR=/home/myuser/data/my-trilium-data trilium</code></pre>
+<p>To do this in Unix-based systems simply run <code>trilium</code> like this:</p><pre><code class="language-text-x-trilium-auto">TRILIUM_DATA_DIR=/home/myuser/data/my-trilium-data trilium</code></pre>
 <p>You can then save the above command as a shell script on your path for
   convenience.</p>
 <h2>Fine-grained directory/path location</h2>
 <p>Apart from the data directory, some of the subdirectories of it can be
   moved elsewhere by changing an environment variable:</p>
-<table>
-  <thead>
-    <tr>
-      <th>Environment variable</th>
-      <th>Default value</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>TRILIUM_DOCUMENT_PATH</code>
-      </td>
-      <td><code>${TRILIUM_DATA_DIR}/document.db</code>
-      </td>
-      <td>Path to the&nbsp;<a class="reference-link" href="#root/_help_wX4HbRucYSDD">Database</a>&nbsp;(storing
-        all notes and metadata).</td>
-    </tr>
-    <tr>
-      <td><code>TRILIUM_BACKUP_DIR</code>
-      </td>
-      <td><code>${TRILIUM_DATA_DIR}/backup</code>
-      </td>
-      <td>Directory where automated&nbsp;<a class="reference-link" href="#root/_help_ODY7qQn5m2FT">Backup</a>&nbsp;databases
-        are stored.</td>
-    </tr>
-    <tr>
-      <td><code>TRILIUM_LOG_DIR</code>
-      </td>
-      <td><code>${TRILIUM_DATA_DIR}/log</code>
-      </td>
-      <td>Directory where daily&nbsp;<a class="reference-link" href="#root/_help_bnyigUA2UK7s">Backend (server) logs</a>&nbsp;are
-        stored.</td>
-    </tr>
-    <tr>
-      <td><code>TRILIUM_TMP_DIR</code>
-      </td>
-      <td><code>${TRILIUM_DATA_DIR}/tmp</code>
-      </td>
-      <td>Directory where temporary files are stored (for example when opening in
-        an external app).</td>
-    </tr>
-    <tr>
-      <td><code>TRILIUM_ANONYMIZED_DB_DIR</code>
-      </td>
-      <td><code>${TRILIUM_DATA_DIR}/anonymized-db</code>
-      </td>
-      <td>Directory where a&nbsp;<a class="reference-link" href="#root/_help_x59R8J8KV5Bp">Anonymized Database</a>&nbsp;is
-        stored.</td>
-    </tr>
-    <tr>
-      <td><code>TRILIUM_CONFIG_INI_PATH</code>
-      </td>
-      <td><code>${TRILIUM_DATA_DIR}/config.ini</code>
-      </td>
-      <td>Path to&nbsp;<a class="reference-link" href="#root/_help_Gzjqa934BdH4">Configuration (config.ini or environment variables)</a>&nbsp;file.</td>
-    </tr>
-  </tbody>
-</table>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>Environment variable</th>
+        <th>Default value</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>TRILIUM_DOCUMENT_PATH</code>
+        </td>
+        <td><code>${TRILIUM_DATA_DIR}/document.db</code>
+        </td>
+        <td>Path to the&nbsp;<a class="reference-link" href="#root/_help_wX4HbRucYSDD">Database</a>&nbsp;(storing
+          all notes and metadata).</td>
+      </tr>
+      <tr>
+        <td><code>TRILIUM_BACKUP_DIR</code>
+        </td>
+        <td><code>${TRILIUM_DATA_DIR}/backup</code>
+        </td>
+        <td>Directory where automated&nbsp;<a class="reference-link" href="#root/_help_ODY7qQn5m2FT">Backup</a>&nbsp;databases
+          are stored.</td>
+      </tr>
+      <tr>
+        <td><code>TRILIUM_LOG_DIR</code>
+        </td>
+        <td><code>${TRILIUM_DATA_DIR}/log</code>
+        </td>
+        <td>Directory where daily&nbsp;<a class="reference-link" href="#root/_help_bnyigUA2UK7s">Backend (server) logs</a>&nbsp;are
+          stored.</td>
+      </tr>
+      <tr>
+        <td><code>TRILIUM_TMP_DIR</code>
+        </td>
+        <td><code>${TRILIUM_DATA_DIR}/tmp</code>
+        </td>
+        <td>Directory where temporary files are stored (for example when opening in
+          an external app).</td>
+      </tr>
+      <tr>
+        <td><code>TRILIUM_ANONYMIZED_DB_DIR</code>
+        </td>
+        <td><code>${TRILIUM_DATA_DIR}/anonymized-db</code>
+        </td>
+        <td>Directory where a&nbsp;<a class="reference-link" href="#root/_help_x59R8J8KV5Bp">Anonymized Database</a>&nbsp;is
+          stored.</td>
+      </tr>
+      <tr>
+        <td><code>TRILIUM_CONFIG_INI_PATH</code>
+        </td>
+        <td><code>${TRILIUM_DATA_DIR}/config.ini</code>
+        </td>
+        <td>Path to&nbsp;<a class="reference-link" href="#root/_help_Gzjqa934BdH4">Configuration (config.ini or environment variables)</a>&nbsp;file.</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>

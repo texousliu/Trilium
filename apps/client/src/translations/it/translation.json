@@ -109,7 +109,8 @@
     "export_type_single": "Solo questa nota, senza le sottostanti",
     "format_opml": "OPML - formato per scambio informazioni outline. Formattazione, immagini e files non sono inclusi.",
     "opml_version_1": "OPML v.1.0 - solo testo semplice",
-    "opml_version_2": "OPML v2.0 - supporta anche HTML"
+    "opml_version_2": "OPML v2.0 - supporta anche HTML",
+    "share-format": "HTML per la pubblicazione sul web - utilizza lo stesso tema utilizzato per le note condivise, ma può essere pubblicato come sito web statico."
   },
   "password_not_set": {
     "body1": "Le note protette sono crittografate utilizzando una password utente, ma la password non è stata ancora impostata.",

@@ -46,6 +46,7 @@ for (let i = 1; i <= 19; i++) {
 const KEYCODES_WITH_NO_MODIFIER = new Set([
     "Delete",
     "Enter",
+    "NumpadEnter",
     ...functionKeyCodes
 ]);
 

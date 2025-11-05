@@ -19,8 +19,7 @@ class="image image_resized" style="width:74.04%;">
     <img style="aspect-ratio:1911/997;" src="1_AI_image.png"
     width="1911" height="997">
   </figure>
-  
-<h2>Embeddings</h2>
+  <h2>Embeddings</h2>
   <p><strong>Embeddings</strong> are important as it allows us to have an compact
     AI “summary” (it's not human readable text) of each of your Notes, that
     we can then perform mathematical functions on (such as cosine similarity)
@@ -36,7 +35,7 @@ class="image image_resized" style="width:74.04%;">
   <p>To see what embedding models Ollama has available, you can check out
     <a
     href="https://ollama.com/search?c=embedding">this search</a>on their website, and then <code>pull</code> whichever one
-      you want to try out. As of 4/15/25, my personal favorite is <code>mxbai-embed-large</code>.</p>
+      you want to try out. A popular choice is <code>mxbai-embed-large</code>.</p>
   <p>First, we'll need to select the Ollama provider from the tabs of providers,
     then we will enter in the Base URL for our Ollama. Since our Ollama is
     running on our local machine, our Base URL is <code>http://localhost:11434</code>.
@@ -80,59 +79,59 @@ class="image image_resized" style="width:74.04%;">
       <p>These are the tools that currently exist, and will certainly be updated
         to be more effectively (and even more to be added!):</p>
       <ul>
-        <li><code>search_notes</code>
+        <li data-list-item-id="e56ad2313afb3f2f5162bcb3d9bf8e963"><code>search_notes</code>
           <ul>
-            <li>Semantic search</li>
+            <li data-list-item-id="ee3b5cc2bd60f496e7919c63def713108">Semantic search</li>
           </ul>
         </li>
-        <li><code>keyword_search</code>
+        <li data-list-item-id="e9abe7bae428aff060dfc70ef669bd079"><code>keyword_search</code>
           <ul>
-            <li>Keyword-based search</li>
+            <li data-list-item-id="ea8e2cece0d711e80eacfdb42e5d0edc3">Keyword-based search</li>
           </ul>
         </li>
-        <li><code>attribute_search</code>
+        <li data-list-item-id="e775735113778afe2073695881679540b"><code>attribute_search</code>
           <ul>
-            <li>Attribute-specific search</li>
+            <li data-list-item-id="e64a93997e8ae8cc348e222f926866921">Attribute-specific search</li>
           </ul>
         </li>
-        <li><code>search_suggestion</code>
+        <li data-list-item-id="e58d04b2e226a143a8c8941337b04113a"><code>search_suggestion</code>
           <ul>
-            <li>Search syntax helper</li>
+            <li data-list-item-id="e7c1ed076f0e0e3c242ca659276576860">Search syntax helper</li>
           </ul>
         </li>
-        <li><code>read_note</code>
+        <li data-list-item-id="e30741593cef85e71179301c280063bc2"><code>read_note</code>
           <ul>
-            <li>Read note content (helps the LLM read Notes)</li>
+            <li data-list-item-id="e9c50f6fe0b4f013f16f9b32dbf6dbc92">Read note content (helps the LLM read Notes)</li>
           </ul>
         </li>
-        <li><code>create_note</code>
+        <li data-list-item-id="ec71fd71ce58b9d8338bc66e7c99ae1cb"><code>create_note</code>
           <ul>
-            <li>Create a Note</li>
+            <li data-list-item-id="e0b0bae68b45bb0c27bc092145452ecd1">Create a Note</li>
           </ul>
         </li>
-        <li><code>update_note</code>
+        <li data-list-item-id="e7e816d84f52cf76096d2b5f1e4665989"><code>update_note</code>
           <ul>
-            <li>Update a Note</li>
+            <li data-list-item-id="ed28fc8ca5a4753c1b680ee52d140940a">Update a Note</li>
           </ul>
         </li>
-        <li><code>manage_attributes</code>
+        <li data-list-item-id="e4580152b092501aa4fa87d1562b0f304"><code>manage_attributes</code>
           <ul>
-            <li>Manage attributes on a Note</li>
+            <li data-list-item-id="ea0601e29b574cf0e4c40ae0e7d60bfa4">Manage attributes on a Note</li>
           </ul>
         </li>
-        <li><code>manage_relationships</code>
+        <li data-list-item-id="ecea045d4312b04ea06ac12802efb0544"><code>manage_relationships</code>
           <ul>
-            <li>Manage the various relationships between Notes</li>
+            <li data-list-item-id="e3293a7c119de1a0eb2ddf8779a0b0d65">Manage the various relationships between Notes</li>
           </ul>
         </li>
-        <li><code>extract_content</code>
+        <li data-list-item-id="e483a2ef5f76d4da426c6059ddd3827a0"><code>extract_content</code>
           <ul>
-            <li>Used to smartly extract content from a Note</li>
+            <li data-list-item-id="e1735854ab39d6d4e06a242bc2f80b839">Used to smartly extract content from a Note</li>
           </ul>
         </li>
-        <li><code>calendar_integration</code>
+        <li data-list-item-id="e11df70f4a6846bf881cb110c2950065f"><code>calendar_integration</code>
           <ul>
-            <li>Used to find date notes, create date notes, get the daily note, etc.</li>
+            <li data-list-item-id="e0f1dfa6c5520bf02e125c1932b4f6e5e">Used to find date notes, create date notes, get the daily note, etc.</li>
           </ul>
         </li>
       </ul>
@@ -145,17 +144,18 @@ class="image image_resized" style="width:74.04%;">
         <p>You don't need to tell the LLM to execute a certain tool, it should “smartly”
           call tools and automatically execute them as needed.</p>
         <h2>Overview</h2>
-        <p>Now that you know about embeddings and tools, you can just go ahead and
-          use the “Chat with Notes” button, where you can go ahead and start chatting!:</p>
-        <figure
-        class="image image_resized" style="width:60.77%;">
+        <p>To start, simply press the <em>Chat with Notes</em> button in the&nbsp;
+          <a
+          class="reference-link" href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/Vc8PjrjAGuOp/_help_xYmIYSP6wE3F">Launch Bar</a>.</p>
+        <figure class="image image_resized" style="width:60.77%;">
           <img style="aspect-ratio:1378/539;" src="2_AI_image.png"
           width="1378" height="539">
-          </figure>
-          <p>If you don't see the “Chat with Notes” button on your side launchbar,
-            you might need to move it from the “Available Launchers” section to the
-            “Visible Launchers” section:</p>
-          <figure class="image image_resized" style="width:69.81%;">
-            <img style="aspect-ratio:1765/1287;" src="9_AI_image.png"
-            width="1765" height="1287">
-          </figure>
+        </figure>
+        <p>If you don't see the button in the&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/Vc8PjrjAGuOp/_help_xYmIYSP6wE3F">Launch Bar</a>,
+          you might need to move it from the <em>Available Launchers</em> section to
+          the <em>Visible Launchers</em> section:</p>
+        <figure class="image image_resized"
+        style="width:69.81%;">
+          <img style="aspect-ratio:1765/1287;" src="9_AI_image.png"
+          width="1765" height="1287">
+        </figure>
