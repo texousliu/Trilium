@@ -1329,6 +1329,14 @@ body.mobile .note-title {
 }
 
 /*
+ * Read-only note info bar
+ */
+
+.read-only-note-info-bar-widget {
+    --link-color: var(--main-text-color);
+}
+
+/*
  * Promoted attributes
  */
 

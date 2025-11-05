@@ -3,8 +3,9 @@ div.read-only-note-info-bar-widget {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 4px;
     background: var(--read-only-note-info-bar-background, var(--accented-background-color));
-    padding: 6px 20px;
+    padding: 8px 20px;
     color: var(--read-only-note-info-bar-color);
     opacity: 0;
     max-height: 0;
@@ -16,7 +17,7 @@ div.read-only-note-info-bar-widget.visible {
     transition: opacity 300ms ease-out;
 }
 
-div.read-only-note-info-bar-widget button {
+:root div.read-only-note-info-bar-widget button {
     white-space: nowrap;
     padding: 2px 8px;
 }

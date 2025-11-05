@@ -184,6 +184,7 @@
     --inactive-tab-text-color: #4e4e4e;
 
     --alert-bar-background: #32637b29;
+    --read-only-note-info-bar-background: var(--alert-bar-background);
 
     --badge-background-color: #00000011;
     --badge-text-color: var(--muted-text-color);
