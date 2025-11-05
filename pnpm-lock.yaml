@@ -131,8 +131,8 @@ importers:
   apps/build-docs:
     devDependencies:
       '@redocly/cli':
-        specifier: 2.10.0
-        version: 2.10.0(@opentelemetry/api@1.9.0)(ajv@8.17.1)(bufferutil@4.0.9)(core-js@3.46.0)(encoding@0.1.13)(utf-8-validate@6.0.5)
+        specifier: 2.11.0
+        version: 2.11.0(@opentelemetry/api@1.9.0)(ajv@8.17.1)(bufferutil@4.0.9)(core-js@3.46.0)(encoding@0.1.13)(utf-8-validate@6.0.5)
       archiver:
         specifier: 7.0.1
         version: 7.0.1
@@ -604,8 +604,8 @@ importers:
         specifier: 0.5.0
         version: 0.5.0
       axios:
-        specifier: 1.13.1
-        version: 1.13.1(debug@4.4.3)
+        specifier: 1.13.2
+        version: 1.13.2(debug@4.4.3)
       bindings:
         specifier: 1.5.0
         version: 1.5.0
@@ -748,8 +748,8 @@ importers:
         specifier: 2.17.0
         version: 2.17.0
       sax:
-        specifier: 1.4.2
-        version: 1.4.2
+        specifier: 1.4.3
+        version: 1.4.3
       serve-favicon:
         specifier: 2.5.1
         version: 2.5.1
@@ -4223,27 +4223,27 @@ packages:
   '@redocly/ajv@8.11.3':
     resolution: {integrity: sha512-4P3iZse91TkBiY+Dx5DUgxQ9GXkVJf++cmI0MOyLDxV9b5MUBI4II6ES8zA5JCbO72nKAJxWrw4PUPW+YP3ZDQ==}
 
-  '@redocly/cli@2.10.0':
-    resolution: {integrity: sha512-wKuF/30MSmcc4SJwWTuVnIeFKyW60DVOgxTzvvA+wC1HRBZ24X3UTRyt6MtDEFGcNl6hv5/J9l2lodStwwqelQ==}
+  '@redocly/cli@2.11.0':
+    resolution: {integrity: sha512-Wr8me9M5tQ4pZT7Z0Llxojlo8L0GBBt45zceQ8iKyBmJUHWDbKYYdKubZBCH0XktQLEA8HitYBGN1unsxwx20g==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
     hasBin: true
 
   '@redocly/config@0.22.2':
     resolution: {integrity: sha512-roRDai8/zr2S9YfmzUfNhKjOF0NdcOIqF7bhf4MVC5UxpjIysDjyudvlAiVbpPHp3eDRWbdzUgtkK1a7YiDNyQ==}
 
-  '@redocly/config@0.36.2':
-    resolution: {integrity: sha512-gwIjFOzyq9bdJCdtEHDMf2hEJ9hHXUHkY1U3IPWyZmRoFcibzlpXOLrT0xVgnn10IEttMwD+SZtZBE593yDXsw==}
+  '@redocly/config@0.37.0':
+    resolution: {integrity: sha512-cYN+rTTCQIp5mVt1xumJsNqpZcaPVUf1x0ryD0QKXpVKsxKc+lHaMF2P1CqMgdQNY9B7i84z/kvxD0EhxzlxbQ==}
 
   '@redocly/openapi-core@1.34.5':
     resolution: {integrity: sha512-0EbE8LRbkogtcCXU7liAyC00n9uNG9hJ+eMyHFdUsy9lB/WGqnEBgwjA9q2cyzAVcdTkQqTBBU1XePNnN3OijA==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
 
-  '@redocly/openapi-core@2.10.0':
-    resolution: {integrity: sha512-OmWvnpA11J6Tp3+h8I3nrfpTcXROLllr/9yIUB7ofi7s1yOOKOqlZ4HTs+zaeNmk9vclwmbgc2HVdSsBKUXp6g==}
+  '@redocly/openapi-core@2.11.0':
+    resolution: {integrity: sha512-CF4QpCoxxHIB7Dib1XnhdL0WuW4dO4zvNfaEWpN7TASlitOX2mhrc6sD3dYG9knW1iG16e3Oauv2O+tVJx1E9Q==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
 
-  '@redocly/respect-core@2.10.0':
-    resolution: {integrity: sha512-4XFOR3kbuhlPBeW2G/G3yPs7YJKV0d/k2BgDwKIQH8Edld4fHvknEAR9TFUaWsiA7JGWrP3CQ58P5VoDNW5O0Q==}
+  '@redocly/respect-core@2.11.0':
+    resolution: {integrity: sha512-lAvDILvq82IIei2gVyapGyfuWEamJgCiGO++yQriVk4Wr0hE3lF7ZWusUM3aGZrxEWCVGeeLwbMBpv1BQOnmEg==}
     engines: {node: '>=22.12.0 || >=20.19.0 <21.0.0', npm: '>=10'}
 
   '@replit/codemirror-indentation-markers@6.5.3':
@@ -6295,8 +6295,8 @@ packages:
     resolution: {integrity: sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==}
     engines: {node: '>=6.0.0'}
 
-  axios@1.13.1:
-    resolution: {integrity: sha512-hU4EGxxt+j7TQijx1oYdAjw4xuIp1wRQSsbMFwSthCWeBQur1eF+qJ5iQ5sN3Tw8YRzQNKb8jszgBdMDVqwJcw==}
+  axios@1.13.2:
+    resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
 
   b4a@1.6.7:
     resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
@@ -12945,8 +12945,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  sax@1.4.2:
-    resolution: {integrity: sha512-FySGAa0RGcFiN6zfrO9JvK1r7TB59xuzCcTHOBXBNoKgDejlOQCR2KL/FGk3/iDlsqyYg1ELZpOmlg09B01Czw==}
+  sax@1.4.3:
+    resolution: {integrity: sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==}
 
   saxes@5.0.1:
     resolution: {integrity: sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==}
@@ -15611,6 +15611,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-upload': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-ai@47.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15757,8 +15759,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-code-block@47.1.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)':
     dependencies:
@@ -15820,6 +15820,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       '@ckeditor/ckeditor5-watchdog': 47.1.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-dev-build-tools@43.1.0(@swc/helpers@0.5.17)(tslib@2.8.1)(typescript@5.9.3)':
     dependencies:
@@ -15984,8 +15986,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@47.1.0':
     dependencies:
@@ -15995,6 +15995,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-decoupled@47.1.0':
     dependencies:
@@ -16004,6 +16006,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-inline@47.1.0':
     dependencies:
@@ -16013,8 +16017,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.1.0':
     dependencies:
@@ -16121,6 +16123,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-font@47.1.0':
     dependencies:
@@ -16184,6 +16188,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.1.0
       '@ckeditor/ckeditor5-widget': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@47.1.0':
     dependencies:
@@ -16474,6 +16480,8 @@ snapshots:
       '@ckeditor/ckeditor5-paste-from-office': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-paste-from-office@47.1.0':
     dependencies:
@@ -16481,6 +16489,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.1.0
       '@ckeditor/ckeditor5-engine': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-real-time-collaboration@47.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -16522,6 +16532,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-revision-history@47.1.0':
     dependencies:
@@ -16599,6 +16611,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@47.1.0':
     dependencies:
@@ -16608,6 +16622,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
       ckeditor5: 47.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-style@47.1.0':
     dependencies:
@@ -16710,6 +16726,8 @@ snapshots:
       '@ckeditor/ckeditor5-icons': 47.1.0
       '@ckeditor/ckeditor5-ui': 47.1.0
       '@ckeditor/ckeditor5-utils': 47.1.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-upload@47.1.0':
     dependencies:
@@ -17797,7 +17815,7 @@ snapshots:
 
   '@file-type/xml@0.4.3':
     dependencies:
-      sax: 1.4.2
+      sax: 1.4.3
       strtok3: 10.2.2
 
   '@floating-ui/core@1.6.9':
@@ -19324,14 +19342,14 @@ snapshots:
       require-from-string: 2.0.2
       uri-js-replace: 1.0.1
 
-  '@redocly/cli@2.10.0(@opentelemetry/api@1.9.0)(ajv@8.17.1)(bufferutil@4.0.9)(core-js@3.46.0)(encoding@0.1.13)(utf-8-validate@6.0.5)':
+  '@redocly/cli@2.11.0(@opentelemetry/api@1.9.0)(ajv@8.17.1)(bufferutil@4.0.9)(core-js@3.46.0)(encoding@0.1.13)(utf-8-validate@6.0.5)':
     dependencies:
       '@opentelemetry/exporter-trace-otlp-http': 0.202.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 2.0.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.34.0
-      '@redocly/openapi-core': 2.10.0(ajv@8.17.1)
-      '@redocly/respect-core': 2.10.0(ajv@8.17.1)
+      '@redocly/openapi-core': 2.11.0(ajv@8.17.1)
+      '@redocly/respect-core': 2.11.0(ajv@8.17.1)
       abort-controller: 3.0.0
       chokidar: 3.6.0
       colorette: 1.4.0
@@ -19364,7 +19382,7 @@ snapshots:
 
   '@redocly/config@0.22.2': {}
 
-  '@redocly/config@0.36.2':
+  '@redocly/config@0.37.0':
     dependencies:
       json-schema-to-ts: 2.7.2
 
@@ -19382,10 +19400,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@redocly/openapi-core@2.10.0(ajv@8.17.1)':
+  '@redocly/openapi-core@2.11.0(ajv@8.17.1)':
     dependencies:
       '@redocly/ajv': 8.11.3
-      '@redocly/config': 0.36.2
+      '@redocly/config': 0.37.0
       ajv-formats: 2.1.1(ajv@8.17.1)
       colorette: 1.4.0
       js-levenshtein: 1.1.6
@@ -19396,12 +19414,12 @@ snapshots:
     transitivePeerDependencies:
       - ajv
 
-  '@redocly/respect-core@2.10.0(ajv@8.17.1)':
+  '@redocly/respect-core@2.11.0(ajv@8.17.1)':
     dependencies:
       '@faker-js/faker': 7.6.0
       '@noble/hashes': 1.8.0
       '@redocly/ajv': 8.11.2
-      '@redocly/openapi-core': 2.10.0(ajv@8.17.1)
+      '@redocly/openapi-core': 2.11.0(ajv@8.17.1)
       better-ajv-errors: 1.2.0(ajv@8.17.1)
       colorette: 2.0.20
       json-pointer: 0.6.2
@@ -21822,7 +21840,7 @@ snapshots:
 
   await-to-js@3.0.0: {}
 
-  axios@1.13.1(debug@4.4.3):
+  axios@1.13.2(debug@4.4.3):
     dependencies:
       follow-redirects: 1.15.9(debug@4.4.3)
       form-data: 4.0.4
@@ -27548,7 +27566,7 @@ snapshots:
   needle@3.3.1:
     dependencies:
       iconv-lite: 0.6.3
-      sax: 1.4.2
+      sax: 1.4.3
     optional: true
 
   negotiator@0.6.3: {}
@@ -27573,7 +27591,7 @@ snapshots:
 
   node-api-version@0.2.1:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.3
 
   node-domexception@1.0.0: {}
 
@@ -27611,7 +27629,7 @@ snapshots:
       make-fetch-happen: 14.0.3
       nopt: 8.1.0
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.7.3
       tar: 7.4.3
       tinyglobby: 0.2.15
       which: 5.0.0
@@ -29987,7 +30005,7 @@ snapshots:
       '@parcel/watcher': 2.5.1
     optional: true
 
-  sax@1.4.2: {}
+  sax@1.4.3: {}
 
   saxes@5.0.1:
     dependencies:
@@ -30983,7 +31001,7 @@ snapshots:
       css-what: 6.2.2
       csso: 5.0.5
       picocolors: 1.1.1
-      sax: 1.4.2
+      sax: 1.4.3
 
   swagger-jsdoc@6.2.8(openapi-types@12.1.3):
     dependencies:
@@ -32328,12 +32346,12 @@ snapshots:
 
   xml2js@0.5.0:
     dependencies:
-      sax: 1.4.2
+      sax: 1.4.3
       xmlbuilder: 11.0.1
 
   xml2js@0.6.2:
     dependencies:
-      sax: 1.4.2
+      sax: 1.4.3
       xmlbuilder: 11.0.1
 
   xmlbuilder@11.0.1: {}

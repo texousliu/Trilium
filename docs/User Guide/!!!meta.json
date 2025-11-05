@@ -14150,6 +14150,82 @@
                             "format": "markdown",
                             "dataFileName": "Nightly release.md",
                             "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "ZmT9ln8XJX2o",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "tC7s2alapj8V",
+                                "ZmT9ln8XJX2o"
+                            ],
+                            "title": "Read-only database",
+                            "notePosition": 270,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Gzjqa934BdH4",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "wy8So3yZZlH9",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "R9pX4DGra2Vt",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "eIg8jdvaoNNd",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "GTwFsgaA0lCt",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "KSZ04uQ2D1St",
+                                    "isInheritable": false,
+                                    "position": 60
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-book-reader",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "read-only-db",
+                                    "isInheritable": false,
+                                    "position": 40
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Read-only database.md",
+                            "attachments": []
                         }
                     ]
                 },
@@ -14173,6 +14249,13 @@
                             "value": "vvUCN7FDkq7G",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "xYmIYSP6wE3F",
+                            "isInheritable": false,
+                            "position": 20
                         },
                         {
                             "type": "label",
