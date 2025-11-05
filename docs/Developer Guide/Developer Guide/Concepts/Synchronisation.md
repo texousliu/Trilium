@@ -9,7 +9,7 @@ Trilium implements a **bidirectional synchronization system** that allows users 
 
 ## Sync Architecture
 
-```mermaid
+```
 graph TB
     Desktop1[Desktop 1<br/>Client]
     Desktop2[Desktop 2<br/>Client]

@@ -383,7 +383,7 @@ for (const blob of orphanedBlobs) {
 
 **Process:**
 
-```sh
+```
 # Check for vulnerabilities
 npm audit
 
@@ -424,7 +424,7 @@ npm audit fix --force
 
 **pnpm Patches:**
 
-```sh
+```
 # Create patch
 pnpm patch @ckeditor/ckeditor5
 
