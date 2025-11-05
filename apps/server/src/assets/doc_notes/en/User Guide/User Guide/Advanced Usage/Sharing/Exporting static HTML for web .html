@@ -24,33 +24,31 @@
 <p>Apart from normal&nbsp;<a class="reference-link" href="#root/_help_R9pX4DGra2Vt">Sharing</a>,
   exporting to static HTML files comes with a few subtle differences:</p>
 <ul>
-  <li data-list-item-id="e757e614020a02864a52b3b8f9f2b792f">The URL structure is different. Where in normal sharing it's something
+  <li>The URL structure is different. Where in normal sharing it's something
     along the way of <code>example.com/share/noteid</code>, the notes follow
     an hierarchical structure, such as <code>docs.triliumnotes.org/user-guide/concepts/navigation/tree-concepts</code>.</li>
-  <li
-  data-list-item-id="e04429f1cf40760df3c0cd932d1107bfd">The <code>favicon.ico</code> is not handled automatically, it needs to be
+  <li>The <code>favicon.ico</code> is not handled automatically, it needs to be
     manually added on the server after the export is generated.</li>
-    <li data-list-item-id="e5d86e8060c41292df46d0adcfffd5113">The “Last updated” for notes is not available.</li>
-    <li data-list-item-id="eb09fc171d1adcf6923bef3aaebb316d0">The search functionality works slightly different since the normal one
-      requires an active API to work. In the static export, search still works
-      but uses a different mechanism so results might be different.</li>
+  <li>The “Last updated” for notes is not available.</li>
+  <li>The search functionality works slightly different since the normal one
+    requires an active API to work. In the static export, search still works
+    but uses a different mechanism so results might be different.</li>
 </ul>
 <h2>Differences from normal .zip export</h2>
 <ul>
-  <li data-list-item-id="e105d2557437171cb7ce15f84fe7bc405">The name of the files/URLs will prefer <code>shareAlias</code> to allow
+  <li>The name of the files/URLs will prefer <code>shareAlias</code> to allow
     for clean URLs.</li>
-  <li data-list-item-id="ed984cadd9496205a76341b206776d5c7">The export requires a functional web server as the pages will not render
+  <li>The export requires a functional web server as the pages will not render
     properly if accessed locally via a web browser due to the use of module
     scripts.</li>
-  <li data-list-item-id="ed0a279aec254358dcff1769e08fc548b">The directory structure is also slightly different:
+  <li>The directory structure is also slightly different:
     <ul>
-      <li data-list-item-id="ed8b6890f4850eaa869269cb03b812924">A normal HTML export results in an index file and a single directory.</li>
-      <li
-      data-list-item-id="e94e121f725d76c6bb10596f72bb44fd3">Instead, for static exporting the top-root level becomes the index file
+      <li>A normal HTML export results in an index file and a single directory.</li>
+      <li>Instead, for static exporting the top-root level becomes the index file
         and the child directories are on the root instead.</li>
-  <li data-list-item-id="eee85ca77bfc3f3f78042272fbe072610">This makes it possible to easily publish to a website, without forcing
-    everything but the root note to be in a sub-directory.</li>
-  </ul>
+      <li>This makes it possible to easily publish to a website, without forcing
+        everything but the root note to be in a sub-directory.</li>
+    </ul>
   </li>
 </ul>
 <h2>Testing locally</h2>
@@ -60,9 +58,9 @@
   can be installed via:</p><pre><code class="language-text-x-trilium-auto">npm i -g http-server</code></pre>
 <p>Once installed simply:</p>
 <ol>
-  <li data-list-item-id="ef3a455a98e83613ee8cb2fdd55327951">Extract the exported .zip file.</li>
-  <li data-list-item-id="e0a88b24efdc8f247105086ada68cf617">Inside the extracted directory, run <code>http-server</code>.</li>
-  <li data-list-item-id="e533233e9ad5f4a52cddb6e141f26b444">Access the indicated address (e.g. <a href="http://localhost:8080">http://localhost:8080</a>).</li>
+  <li>Extract the exported .zip file.</li>
+  <li>Inside the extracted directory, run <code>http-server</code>.</li>
+  <li>Access the indicated address (e.g. <a href="http://localhost:8080">http://localhost:8080</a>).</li>
 </ol>
 <h2>Automation</h2>
 <p><a class="reference-link" href="#root/_help_pgxEVkzLl1OP">ETAPI (REST API)</a>&nbsp;could

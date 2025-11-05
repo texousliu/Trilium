@@ -600,6 +600,13 @@
                                                 {
                                                     "type": "relation",
                                                     "name": "internalLink",
+                                                    "value": "VIcWnKGs0sMh",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
                                                     "value": "UvXpeSqfYc6d",
                                                     "isInheritable": false,
                                                     "position": 20
@@ -624,13 +631,6 @@
                                                     "value": "notes",
                                                     "isInheritable": false,
                                                     "position": 40
-                                                },
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "VIcWnKGs0sMh",
-                                                    "isInheritable": false,
-                                                    "position": 50
                                                 }
                                             ],
                                             "format": "markdown",
