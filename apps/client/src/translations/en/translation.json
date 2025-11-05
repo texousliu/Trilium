@@ -1639,7 +1639,7 @@
   "read-only-info": {
     "read-only-note": "This is a read-only note.",
     "auto-read-only-note": "This note was automatically set to read-only to improve navigation speed.",
-    "auto-read-only-learn-more": "Learn more about Automatic Read-Only Mode"
+    "auto-read-only-learn-more": "Learn more"
   
   },
   "note_types": {
