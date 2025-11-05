@@ -12093,7 +12093,7 @@
                                         "R9pX4DGra2Vt",
                                         "ycBFjKrrwE9p"
                                     ],
-                                    "title": "Exporting HTML for web publishing",
+                                    "title": "Exporting static HTML for web publishing",
                                     "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
@@ -12130,7 +12130,7 @@
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "Exporting HTML for web publish.md",
+                                    "dataFileName": "Exporting static HTML for web .md",
                                     "attachments": []
                                 },
                                 {
@@ -14167,6 +14167,48 @@
                             "mime": "text/html",
                             "attributes": [
                                 {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Gzjqa934BdH4",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "wy8So3yZZlH9",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "R9pX4DGra2Vt",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "eIg8jdvaoNNd",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "GTwFsgaA0lCt",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "KSZ04uQ2D1St",
+                                    "isInheritable": false,
+                                    "position": 60
+                                },
+                                {
                                     "type": "label",
                                     "name": "iconClass",
                                     "value": "bx bx-book-reader",
@@ -14179,48 +14221,6 @@
                                     "value": "read-only-db",
                                     "isInheritable": false,
                                     "position": 40
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "wy8So3yZZlH9",
-                                    "isInheritable": false,
-                                    "position": 50
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "R9pX4DGra2Vt",
-                                    "isInheritable": false,
-                                    "position": 60
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "Gzjqa934BdH4",
-                                    "isInheritable": false,
-                                    "position": 70
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "eIg8jdvaoNNd",
-                                    "isInheritable": false,
-                                    "position": 80
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "GTwFsgaA0lCt",
-                                    "isInheritable": false,
-                                    "position": 90
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "KSZ04uQ2D1St",
-                                    "isInheritable": false,
-                                    "position": 100
                                 }
                             ],
                             "format": "markdown",
@@ -14251,6 +14251,13 @@
                             "position": 10
                         },
                         {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "xYmIYSP6wE3F",
+                            "isInheritable": false,
+                            "position": 20
+                        },
+                        {
                             "type": "label",
                             "name": "shareAlias",
                             "value": "llm",
@@ -14263,13 +14270,6 @@
                             "value": "bx bx-bot",
                             "isInheritable": false,
                             "position": 30
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "xYmIYSP6wE3F",
-                            "isInheritable": false,
-                            "position": 40
                         }
                     ],
                     "format": "markdown",

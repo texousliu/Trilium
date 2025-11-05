@@ -41,6 +41,15 @@
   <li>The export requires a functional web server as the pages will not render
     properly if accessed locally via a web browser due to the use of module
     scripts.</li>
+  <li>The directory structure is also slightly different:
+    <ul>
+      <li>A normal HTML export results in an index file and a single directory.</li>
+      <li>Instead, for static exporting the top-root level becomes the index file
+        and the child directories are on the root instead.</li>
+      <li>This makes it possible to easily publish to a website, without forcing
+        everything but the root note to be in a sub-directory.</li>
+    </ul>
+  </li>
 </ul>
 <h2>Testing locally</h2>
 <p>As mentioned previously, the exported static pages require a website to

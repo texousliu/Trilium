@@ -1,41 +1,40 @@
 <aside class="admonition warning">
   <p>This functionality is still in preview, expect possible issues or even
     the feature disappearing completely.
-    <br>Feel free to <a href="#root/pOsGYCXsbNQG/BgmBlOIl72jZ/_help_wy8So3yZZlH9">report</a> any
-    issues you might have.</p>
+    <br>Feel free to <a href="#root/_help_wy8So3yZZlH9">report</a> any issues you might
+    have.</p>
 </aside>
 <p>The read-only database is an alternative to&nbsp;<a class="reference-link"
-  href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_R9pX4DGra2Vt">Sharing</a>&nbsp;notes.
-  Although the share functionality works pretty well to publish pages to
-  the Internet in a wiki, blog-like format it does not offer the full functionality
-  behind Trilium (such as the advanced&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/wArbEsdSae6g/_help_eIg8jdvaoNNd">Search</a>&nbsp;or
-  the interactivity behind&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/_help_GTwFsgaA0lCt">Collections</a>&nbsp;or
-  the various&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/_help_KSZ04uQ2D1St">Note Types</a>).</p>
+  href="#root/_help_R9pX4DGra2Vt">Sharing</a>&nbsp;notes. Although the share functionality
+  works pretty well to publish pages to the Internet in a wiki, blog-like
+  format it does not offer the full functionality behind Trilium (such as
+  the advanced&nbsp;<a class="reference-link" href="#root/_help_eIg8jdvaoNNd">Search</a>&nbsp;or
+  the interactivity behind&nbsp;<a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>&nbsp;or
+  the various&nbsp;<a class="reference-link" href="#root/_help_KSZ04uQ2D1St">Note Types</a>).</p>
 <p>When the database is in read-only mode, the Trilium application can be
   used as normal, but editing is disabled and changes are made in-memory
   only.</p>
 <h2>What it does</h2>
 <ul>
-  <li data-list-item-id="e97d71c2d01fa683d840e3f8de9e5bea9">All notes are read-only, without the possibility of editing them.</li>
-  <li
-  data-list-item-id="e6e82b25093f659cca922614ea8701ca4">Features that would normally alter the database such as the list of recent
+  <li>All notes are read-only, without the possibility of editing them.</li>
+  <li>Features that would normally alter the database such as the list of recent
     notes are disabled.</li>
 </ul>
 <h2>Limitations</h2>
 <ul>
-  <li data-list-item-id="ec1a648467ed42eee3d6b96f829b6daad">Some features might “slip through” and still end up creating a note, for
+  <li>Some features might “slip through” and still end up creating a note, for
     example.
     <ul>
-      <li data-list-item-id="ed98de88bf24f574cfda28cf278be7f86">However, the database is still read-only, so all modifications will be
+      <li>However, the database is still read-only, so all modifications will be
         reset if the server is restarted.</li>
-      <li data-list-item-id="e3f0450830304fa98038a8a5fd9026b06">Whenever this occurs, <code>ERROR: read-only DB ignored</code> will be shown
+      <li>Whenever this occurs, <code>ERROR: read-only DB ignored</code> will be shown
         in the logs.</li>
     </ul>
   </li>
 </ul>
 <h2>Setting a database as read-only</h2>
 <p>First, make sure the database is initialized (e.g. the first set up is
-  complete). Then modify the <a href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_Gzjqa934BdH4">config.ini</a> by
+  complete). Then modify the <a href="#root/_help_Gzjqa934BdH4">config.ini</a> by
   looking for the <code>[General]</code> section and adding a new <code>readOnly</code> field:</p><pre><code class="language-text-x-trilium-auto">[General]
 readOnly=true</code></pre>
 <p>If your server is already running, restart it to apply the changes.</p>

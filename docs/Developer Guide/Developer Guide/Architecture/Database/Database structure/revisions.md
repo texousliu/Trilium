@@ -1,7 +1,7 @@
 # revisions
 | Column Name | Data Type | Nullity | Default value | Description |
 | --- | --- | --- | --- | --- |
-| `revisionId` | TextText | Non-null |     | Unique ID of the revision (e.g. `0GjgUqnEudI8`). |
+| `revisionId` | Text | Non-null |     | Unique ID of the revision (e.g. `0GjgUqnEudI8`). |
 | `noteId` | Text | Non-null |     | ID of the [note](notes.md) this revision belongs to. |
 | `type` | Text | Non-null | `""` | The type of note (i.e. `text`, `file`, `code`, `relationMap`, `mermaid`, `canvas`). |
 | `mime` | Text | Non-null | `""` | The MIME type of the note (e.g. `text/html`). |

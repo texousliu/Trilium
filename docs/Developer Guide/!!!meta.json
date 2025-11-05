@@ -245,6 +245,13 @@
                                     "value": "database",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-data",
+                                    "isInheritable": false,
+                                    "position": 30
                                 }
                             ],
                             "format": "markdown",
@@ -764,6 +771,71 @@
                                             ],
                                             "format": "markdown",
                                             "dataFileName": "revisions.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "6DG1au6rgOTl",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "6DG1au6rgOTl"
+                                            ],
+                                            "title": "sessions",
+                                            "notePosition": 66,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "sessions",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "sessions.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "zWY2LKmas9os",
+                                            "notePath": [
+                                                "jdjRLhLV3TtI",
+                                                "MhwWMgxwDTZL",
+                                                "pRZhrVIGCbMu",
+                                                "vNMojjUN76jc",
+                                                "zWY2LKmas9os"
+                                            ],
+                                            "title": "user_data",
+                                            "notePosition": 76,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "user_data.md",
                                             "attachments": []
                                         }
                                     ]
