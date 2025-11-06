@@ -1637,7 +1637,7 @@
     "help_link": "For help visit <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
   "read-only-info": {
-    "read-only-note": "This is a read-only note.",
+    "read-only-note": "Currently viewing a read-only note.",
     "auto-read-only-note": "This note is shown in a read-only mode for faster loading.",
     "auto-read-only-learn-more": "Learn more",
     "edit-note": "Edit note"
