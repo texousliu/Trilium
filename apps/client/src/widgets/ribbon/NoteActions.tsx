@@ -64,9 +64,8 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       iconAction>
 
       {isReadOnly && <>
-        <FormListItem icon="bx bx-pencil" onClick={() => enableEditing()}>
-          {t("read-only-info.edit-note")}
-        </FormListItem>
+        <CommandItem icon="bx bx-pencil" text={t("read-only-info.edit-note")}
+                     command={() => enableEditing()} />
         <FormDropdownDivider />
       </>}
     
