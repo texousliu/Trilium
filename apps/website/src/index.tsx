@@ -8,11 +8,9 @@ import Footer from './components/Footer.js';
 import GetStarted from './pages/GetStarted/get-started.js';
 import SupportUs from './pages/SupportUs/SupportUs.js';
 import { createContext } from 'preact';
-import { useLayoutEffect, useState } from 'preact/hooks';
-import { default as i18next, changeLanguage } from 'i18next';
-import { extractLocaleFromUrl, LOCALES, mapLocale } from './i18n';
-import HttpApi from 'i18next-http-backend';
-import { initReactI18next } from "react-i18next";
+import { useLayoutEffect, useRef } from 'preact/hooks';
+import { changeLanguage } from 'i18next';
+import { extractLocaleFromUrl, initTranslations, LOCALES, mapLocale } from './i18n';
 
 export const LocaleContext = createContext('en');
 
@@ -42,34 +40,26 @@ export function App(props: {repoStargazersCount: number}) {
 
 export function LocaleProvider({ children }) {
   const { path } = useLocation();
-  const localeId = mapLocale(extractLocaleFromUrl(path) || navigator.language);
-  const [ loaded, setLoaded ] = useState(false);
+  const localeId = getLocaleId(path);
+  const loadedRef = useRef(false);
 
-  useLayoutEffect(() => {
-      i18next
-        .use(HttpApi)
-        .use(initReactI18next);
-      i18next.init({
-        lng: localeId,
-        fallbackLng: "en",
-        backend: {
-            loadPath: "/translations/{{lng}}/{{ns}}.json",
-        },
-        returnEmptyString: false
-    }).then(() => setLoaded(true))
-}, []);
-
-  useLayoutEffect(() => {
-    if (!loaded) return;
+  if (!loadedRef.current) {
+    initTranslations(localeId);
+    loadedRef.current = true;
+  } else {
     changeLanguage(localeId);
+  }
+
+  // Update html lang and dir attributes
+  useLayoutEffect(() => {
     const correspondingLocale = LOCALES.find(l => l.id === localeId);
     document.documentElement.lang = localeId;
     document.documentElement.dir = correspondingLocale?.rtl ? "rtl" : "ltr";
-  }, [ loaded, localeId ]);
+  }, [localeId]);
 
   return (
     <LocaleContext.Provider value={localeId}>
-      {loaded && children}
+      {children}
     </LocaleContext.Provider>
   );
 }
@@ -78,12 +68,26 @@ if (typeof window !== 'undefined') {
 	hydrate(<App repoStargazersCount={FALLBACK_STARGAZERS_COUNT} />, document.getElementById('app')!);
 }
 
+function getLocaleId(path: string) {
+    const extractedLocale = extractLocaleFromUrl(path);
+    if (extractedLocale) return mapLocale(extractedLocale);
+    if (typeof window === "undefined") return 'en';
+    return mapLocale(navigator.language);
+}
+
 export async function prerender(data) {
 	// Fetch the stargazer count of the Trilium's GitHub repo on prerender to pass
 	// it to the App component for SSR.
 	// This ensures the GitHub API is not called on every page load in the client.
 	const stargazersCount = await getRepoStargazersCount();
 
-	return await ssr(<App repoStargazersCount={stargazersCount} {...data} />);
+	const { html, links } = await ssr(<App repoStargazersCount={stargazersCount} {...data} />);
+    return {
+        html,
+        links,
+        head: {
+            lang: extractLocaleFromUrl(data.url) ?? "en"
+        }
+    }
 }
 

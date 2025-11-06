@@ -90,6 +90,12 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 }
             });
         },
+        pasteMarkdownIntoTextCommand() {
+            if (!editorApiRef.current) return;
+            parentComponent?.triggerCommand("showPasteMarkdownDialog", {
+                editorApi: editorApiRef.current,
+            });
+        },
         // Include note functionality note
         addIncludeNoteToTextCommand() {
             if (!editorApiRef.current) return;

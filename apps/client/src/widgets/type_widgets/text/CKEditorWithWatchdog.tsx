@@ -13,6 +13,7 @@ export interface CKEditorApi {
     getSelectedText(): string;
     addLink(notePath: string, linkTitle: string | null, externalLink?: boolean): void;
     addLinkToEditor(linkHref: string, linkTitle: string): void;
+    addHtmlToEditor(html: string): void;
     addIncludeNote(noteId: string, boxSize?: BoxSize): void;
     addImage(noteId: string): Promise<void>;
 }
@@ -99,6 +100,26 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
                     })
                 );
             });
+        },
+        addHtmlToEditor(html: string) {
+            const editor = watchdogRef.current?.editor;
+            if (!editor) return;
+
+            editor.model.change((writer) => {
+                const viewFragment = editor.data.processor.toView(html);
+                const modelFragment = editor.data.toModel(viewFragment);
+                const insertPosition = editor.model.document.selection.getLastPosition();
+
+                if (insertPosition) {
+                    const range = editor.model.insertContent(modelFragment, insertPosition);
+
+                    if (range) {
+                        writer.setSelection(range.end);
+                    }
+                }
+            });
+
+            editor.editing.view.focus();
         },
         async addImage(noteId) {
             const editor = watchdogRef.current?.editor;

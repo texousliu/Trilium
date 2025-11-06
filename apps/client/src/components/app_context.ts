@@ -33,7 +33,7 @@ import { SqlExecuteResults } from "@triliumnext/commons";
 import { AddLinkOpts } from "../widgets/dialogs/add_link.jsx";
 import { IncludeNoteOpts } from "../widgets/dialogs/include_note.jsx";
 import { ReactWrappedWidget } from "../widgets/basic_widget.js";
-import { TypeWidget } from "../widgets/note_types.jsx";
+import type { MarkdownImportOpts } from "../widgets/dialogs/markdown_import.jsx";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootContainer;
@@ -219,12 +219,12 @@ export type CommandMappings = {
     /** Works only in the electron context menu. */
     replaceMisspelling: CommandData;
 
-    importMarkdownInline: CommandData;
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     showUploadAttachmentsDialog: CommandData & { noteId: string };
     showIncludeNoteDialog: CommandData & IncludeNoteOpts;
     showAddLinkDialog: CommandData & AddLinkOpts;
+    showPasteMarkdownDialog: CommandData & MarkdownImportOpts;
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;
@@ -271,6 +271,7 @@ export type CommandMappings = {
     closeThisNoteSplit: CommandData;
     moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
     jumpToNote: CommandData;
+    openTodayNote: CommandData;
     commandPalette: CommandData;
 
     // Keyboard shortcuts
