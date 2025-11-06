@@ -101,7 +101,7 @@ function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingBut
 
 function EditButton({ note, noteContext, isDefaultViewMode }: FloatingButtonContext) {
     const [animationClass, setAnimationClass] = useState("");
-    const {isReadOnly, enableEditing} = useIsNoteReadOnly();
+    const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
     
     // make the edit button stand out on the first display, otherwise
     // it's difficult to notice that the note is readonly

@@ -707,9 +707,8 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => v
  * Indicates that the current note is in read-only mode, while an editing mode is available,
  * and provides a way to switch to editing mode.
  */
-export function useIsNoteReadOnly() {
-    const {note, noteContext} = useNoteContext();
-    const [isReadOnly, setIsReadOnly] = useState(false);
+export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: NoteContext | undefined) {
+    const [isReadOnly, setIsReadOnly] = useState<boolean | undefined>(undefined);
 
     const enableEditing = useCallback(() => {
         if (noteContext?.viewScope) {

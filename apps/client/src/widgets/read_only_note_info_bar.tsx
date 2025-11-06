@@ -4,8 +4,8 @@ import { useIsNoteReadOnly, useNoteContext, useTriliumEvent } from "./react/hook
 import Button from "./react/Button";
 
 export default function ReadOnlyNoteInfoBar(props: {zenModeOnly?: boolean}) {
-    const {isReadOnly, enableEditing} = useIsNoteReadOnly();
-    const {note} = useNoteContext();
+    const {note, noteContext} = useNoteContext();
+    const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
 
     return <div class={`read-only-note-info-bar-widget ${(isReadOnly) ? "visible" : ""} ${(props.zenModeOnly) ? "zen-mode-only" : ""}`}>
                 {isReadOnly && <>
