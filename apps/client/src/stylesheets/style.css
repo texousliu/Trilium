@@ -2107,7 +2107,8 @@ body.zen .note-split:not(.full-content-width) .scrolling-container {
 body.zen .note-split:not(.full-content-width) .note-detail {
     margin: auto;
     padding-bottom: 25vh;
-    width: var(--max-content-width);
+    max-width: var(--max-content-width);
+    width: 100%;
 }
 
 body.zen .note-split:not(.full-content-width) .scroll-padding-widget {
