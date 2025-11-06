@@ -39,7 +39,10 @@
     "edit_branch_prefix": "ブランチ接頭辞の編集",
     "help_on_tree_prefix": "ツリー接頭辞に関するヘルプ",
     "prefix": "接頭辞: ",
-    "branch_prefix_saved": "ブランチの接頭辞が保存されました。"
+    "branch_prefix_saved": "ブランチの接頭辞が保存されました。",
+    "edit_branch_prefix_multiple": "{{count}} ブランチのブランチ接頭辞を編集",
+    "branch_prefix_saved_multiple": "{{count}} 個のブランチのブランチ接頭辞が保存されました。",
+    "affected_branches": "影響を受けるブランチ {{count}}:"
   },
   "global_menu": {
     "menu": "メニュー",
@@ -2079,5 +2082,8 @@
     "edit-slide": "このスライドを編集",
     "start-presentation": "プレゼンテーションを開始",
     "slide-overview": "スライドの概要を切り替え"
+  },
+  "calendar_view": {
+    "delete_note": "ノートを削除..."
   }
 }
