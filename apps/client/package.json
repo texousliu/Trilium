@@ -64,7 +64,7 @@
     "svg-pan-zoom": "3.6.2",
     "tabulator-tables": "6.3.1",
     "vanilla-js-wheel-zoom": "9.0.4",
-    "vditor": "^3.10.4"
+    "@toast-ui/editor": "^3.2.2"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-inspector": "5.0.0",

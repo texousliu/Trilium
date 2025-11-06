@@ -1,19 +1,23 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import MarkdownTypeWidget from "./markdown.js";
 
-// Mock vditor
-vi.mock("vditor", () => ({
+// Mock @toast-ui/editor
+vi.mock("@toast-ui/editor", () => ({
     default: vi.fn().mockImplementation(() => ({
-        setValue: vi.fn(),
-        getValue: vi.fn(() => ""),
+        setMarkdown: vi.fn(),
+        getMarkdown: vi.fn(() => ""),
+        getHTML: vi.fn(() => ""),
         focus: vi.fn(),
         destroy: vi.fn(),
-        disabled: vi.fn(),
-        enable: vi.fn()
+        moveCursorToEnd: vi.fn(),
+        changeMode: vi.fn(),
+        isMarkdownMode: vi.fn(() => true),
+        isWysiwygMode: vi.fn(() => false)
     }))
 }));
 
-vi.mock("vditor/dist/index.css", () => ({}));
+vi.mock("@toast-ui/editor/dist/toastui-editor.css", () => ({}));
+vi.mock("@toast-ui/editor/dist/theme/toastui-editor-dark.css", () => ({}));
 
 describe("MarkdownTypeWidget", () => {
     let widget: MarkdownTypeWidget;
@@ -41,7 +45,7 @@ describe("MarkdownTypeWidget", () => {
         expect($widget.hasClass("note-detail-markdown")).toBe(true);
     });
 
-    it("should handle empty content when no vditor", () => {
+    it("should handle empty content when no editor", () => {
         const data = widget.getData();
         expect(data).toBeUndefined();
     });

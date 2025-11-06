@@ -4,15 +4,12 @@ import SpacedUpdate from "../../services/spaced_update.js";
 import protectedSessionHolder from "../../services/protected_session_holder.js";
 import server from "../../services/server.js";
 import options from "../../services/options.js";
+// import { t } from "../../services/i18n.js"; // 暂时不需要
 import type Editor from "@toast-ui/editor";
 
 const TPL = /*html*/`
 <div class="note-detail-markdown note-detail-printable" style="height: 100%">
     <style>
-        .note-detail {
-            height: 100%;
-        }
-
         .note-detail-markdown {
             height: 100%;
             font-family: var(--detail-font-family);
@@ -20,7 +17,6 @@ const TPL = /*html*/`
 
         .toast-ui-editor-container {
             height: 100%;
-            min-height: 300px;
         }
 
         /* Toast UI Editor 基础样式 */
@@ -31,7 +27,6 @@ const TPL = /*html*/`
 
         .toastui-editor-defaultUI {
             border: none !important;
-            height: 100% !important;
         }
 
         .toastui-editor-toolbar {
@@ -144,12 +139,7 @@ const TPL = /*html*/`
 
         .CodeMirror {
             height: auto !important;
-            min-height: 200px !important;
-        }
-
-        /* 回退编辑器样式 */
-        .fallback-markdown-editor {
-            min-height: 200px !important;
+            min-height: 300px !important;
         }
     </style>
 
@@ -161,6 +151,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
     private editor?: Editor;
     private $container!: JQuery<HTMLElement>;
+    private currentNoteId?: string;
     private isEditorReady = false;
     private isFallbackMode = false;
 
@@ -215,83 +206,75 @@ export default class MarkdownTypeWidget extends TypeWidget {
         }
 
         try {
-            // 设置超时机制
-            const initTimeout = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error("Toast UI Editor initialization timeout")), 10000);
-            });
+            console.log("Initializing Toast UI Editor...");
 
-            const initEditor = async () => {
-                // 动态导入 Toast UI Editor
-                const { default: Editor } = await import("@toast-ui/editor");
-                await import("@toast-ui/editor/dist/toastui-editor.css");
+            // 动态导入 Toast UI Editor
+            const { default: Editor } = await import("@toast-ui/editor");
 
-                // 根据主题加载暗色主题样式
-                if (this.isDarkTheme()) {
-                    await import("@toast-ui/editor/dist/theme/toastui-editor-dark.css");
-                }
+            // 导入样式
+            await import("@toast-ui/editor/dist/toastui-editor.css");
 
-                // 清空容器
-                this.$container.empty();
+            // 根据主题加载暗色主题样式
+            if (this.isDarkTheme()) {
+                await import("@toast-ui/editor/dist/theme/toastui-editor-dark.css");
+            }
 
-                // 创建编辑器实例
-                this.editor = new Editor({
-                    el: this.$container[0],
-                    height: "100%",
-                    initialEditType: "markdown",
-                    previewStyle: "vertical",
-                    theme: this.isDarkTheme() ? "dark" : "light",
-                    usageStatistics: false,
-                    hideModeSwitch: false,
-                    initialValue: "",
-                    toolbarItems: [
-                        ["heading", "bold", "italic", "strike"],
-                        ["hr", "quote"],
-                        ["ul", "ol", "task", "indent", "outdent"],
-                        ["table", "image", "link"],
-                        ["code", "codeblock"],
-                        ["scrollSync"]
-                    ],
-                    events: {
-                        change: () => {
-                            if (this.isEditorReady && !options.is("databaseReadonly")) {
-                                this.saveData();
-                            }
-                        }
-                    },
-                    hooks: {
-                        addImageBlobHook: (blob: Blob, callback: (url: string, altText?: string) => void) => {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                const dataUrl = e.target?.result as string;
-                                callback(dataUrl, "image");
-                            };
-                            reader.readAsDataURL(blob);
+            // 清空容器
+            this.$container.empty();
+
+            console.log("Creating Toast UI Editor instance...");
+
+            // 创建编辑器实例
+            this.editor = new Editor({
+                el: this.$container[0],
+                height: "100%",
+                initialEditType: "markdown",
+                previewStyle: "vertical",
+                theme: this.isDarkTheme() ? "dark" : "light",
+                usageStatistics: false,
+                hideModeSwitch: false,
+                initialValue: "",
+                toolbarItems: [
+                    ["heading", "bold", "italic", "strike"],
+                    ["hr", "quote"],
+                    ["ul", "ol", "task", "indent", "outdent"],
+                    ["table", "image", "link"],
+                    ["code", "codeblock"],
+                    ["scrollSync"]
+                ],
+                events: {
+                    change: () => {
+                        if (this.isEditorReady && !options.is("databaseReadonly")) {
+                            this.saveData();
                         }
                     }
-                });
-
-                // 等待编辑器完全初始化
-                await new Promise(resolve => setTimeout(resolve, 300));
-
-                // 检查编辑器是否正确创建
-                if (!this.editor || !this.$container.find('.toastui-editor').length) {
-                    throw new Error("Editor instance creation failed");
+                },
+                hooks: {
+                    addImageBlobHook: (blob: Blob, callback: (url: string, altText?: string) => void) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const dataUrl = e.target?.result as string;
+                            callback(dataUrl, "image");
+                        };
+                        reader.readAsDataURL(blob);
+                    }
                 }
-            };
+            });
 
-            // 使用 Promise.race 实现超时控制
-            await Promise.race([initEditor(), initTimeout]);
+            console.log("Toast UI Editor created successfully");
+
+            // 等待编辑器完全初始化
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            // 检查编辑器是否正确创建
+            if (!this.editor || !this.$container.find('.toastui-editor').length) {
+                throw new Error("Editor not properly initialized");
+            }
+
+            console.log("Toast UI Editor initialization complete");
 
         } catch (error) {
-            // 清理可能的残留状态
-            if (this.editor) {
-                try {
-                    this.editor.destroy();
-                } catch (e) {
-                    // 忽略清理错误
-                }
-                this.editor = undefined;
-            }
+            console.error("Error initializing Toast UI Editor:", error);
             throw error;
         }
     }
@@ -300,6 +283,8 @@ export default class MarkdownTypeWidget extends TypeWidget {
         if (note.type !== "markdown") {
             return;
         }
+
+        this.currentNoteId = note.noteId;
 
         const blob = await note.getBlob();
         const content = blob?.content || "";
@@ -332,12 +317,17 @@ export default class MarkdownTypeWidget extends TypeWidget {
                 this.isEditorReady = true;
             }, 100);
 
+            console.log("Markdown editor initialized successfully with Toast UI Editor");
+
         } catch (error) {
+            console.error("Toast UI Editor failed, falling back to simple editor:", error);
             this.initializeFallbackEditor(content);
         }
     }
 
     private initializeFallbackEditor(content: string) {
+        console.log("Initializing fallback markdown editor");
+
         // 使用简单的 textarea 作为回退方案
         const fallbackHtml = `
             <div style="height: 100%; display: flex; flex-direction: column;">
@@ -350,22 +340,15 @@ export default class MarkdownTypeWidget extends TypeWidget {
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    justify-content: space-between;
                 ">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span>📝</span>
-                        <span>Markdown 编辑器</span>
-                        <span style="opacity: 0.7; font-size: 11px;">(简化模式)</span>
-                    </div>
-                    <div style="font-size: 11px; opacity: 0.6;">
-                        支持基本语法 | Tab 键缩进
-                    </div>
+                    <span>📝</span>
+                    <span>简化 Markdown 编辑器</span>
+                    <span style="opacity: 0.7;">(Toast UI Editor 不可用)</span>
                 </div>
                 <textarea
                     class="fallback-markdown-editor"
                     style="
                         flex: 1;
-                        min-height: 200px;
                         border: none;
                         outline: none;
                         padding: 16px;
@@ -374,7 +357,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
                         line-height: 1.6;
                         background-color: var(--main-background-color);
                         color: var(--main-text-color);
-                        resize: vertical;
+                        resize: none;
                         tab-size: 4;
                     "
                     placeholder="在这里输入 Markdown 内容...
@@ -426,6 +409,8 @@ export default class MarkdownTypeWidget extends TypeWidget {
         // 设置为可编辑状态
         this.isEditorReady = true;
         this.isFallbackMode = true;
+
+        console.log("Fallback markdown editor initialized successfully");
     }
 
     private escapeHtml(text: string): string {
@@ -440,33 +425,56 @@ export default class MarkdownTypeWidget extends TypeWidget {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                height: 100%;
-                min-height: 200px;
+                height: 200px;
                 color: var(--muted-text-color);
                 font-size: 14px;
-                background: var(--main-background-color);
             ">
                 <div style="text-align: center;">
-                    <div style="
-                        margin-bottom: 15px;
-                        font-size: 24px;
-                        animation: spin 2s linear infinite;
-                    ">⚙️</div>
-                    <div style="margin-bottom: 8px; font-weight: 500;">Loading Markdown Editor</div>
-                    <div style="font-size: 12px; opacity: 0.7;">Initializing Toast UI Editor...</div>
+                    <div style="margin-bottom: 10px;">⏳</div>
+                    <div>正在加载 Markdown 编辑器...</div>
                 </div>
             </div>
-            <style>
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-            </style>
         `;
         this.$container.html(loadingHtml);
     }
 
-
+    private showInitializationError(error: any) {
+        const errorHtml = `
+            <div style="
+                padding: 20px;
+                text-align: center;
+                color: var(--muted-text-color);
+                border: 1px solid var(--main-border-color);
+                border-radius: 4px;
+                margin: 20px;
+            ">
+                <div style="font-size: 24px; margin-bottom: 10px;">⚠️</div>
+                <h3 style="margin: 10px 0; color: var(--main-text-color);">Markdown 编辑器初始化失败</h3>
+                <p>Toast UI Editor 无法正常加载。</p>
+                <details style="margin: 15px 0; text-align: left;">
+                    <summary style="cursor: pointer; color: var(--main-text-color);">错误详情</summary>
+                    <pre style="
+                        background: var(--accented-background-color);
+                        padding: 10px;
+                        border-radius: 4px;
+                        font-size: 12px;
+                        overflow-x: auto;
+                        margin-top: 10px;
+                    ">${error?.message || '未知错误'}</pre>
+                </details>
+                <button onclick="location.reload()" style="
+                    margin-top: 15px;
+                    padding: 8px 16px;
+                    background: var(--button-background-color);
+                    color: var(--button-text-color);
+                    border: 1px solid var(--main-border-color);
+                    border-radius: 4px;
+                    cursor: pointer;
+                ">重新加载页面</button>
+            </div>
+        `;
+        this.$container.html(errorHtml);
+    }
 
     getData() {
         if (this.isFallbackMode) {
@@ -539,6 +547,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
         this.isEditorReady = false;
         this.isFallbackMode = false;
+        this.currentNoteId = undefined;
         super.cleanup();
     }
 
@@ -624,6 +633,10 @@ export default class MarkdownTypeWidget extends TypeWidget {
     // 处理主题变化
     private async handleThemeChange() {
         if (this.editor) {
+            console.log("Theme changed, updating editor theme");
+
+            // 暂时不重新初始化编辑器，只更新CSS样式
+            // Toast UI Editor 的主题主要通过CSS控制
             const isDark = this.isDarkTheme();
 
             // 更新编辑器主题相关的CSS类
@@ -634,6 +647,8 @@ export default class MarkdownTypeWidget extends TypeWidget {
                 this.$container.addClass('light-theme');
                 this.$container.removeClass('dark-theme');
             }
+
+            console.log("Theme updated to:", isDark ? "dark" : "light");
         }
     }
 
@@ -645,6 +660,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
         try {
             const isReadOnly = await this.noteContext.isReadOnly();
+            console.log("Updating readonly mode:", isReadOnly);
 
             if (isReadOnly) {
                 // 禁用编辑器
@@ -670,7 +686,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
                 this.$container.find('.toastui-editor').removeClass('readonly');
             }
         } catch (error) {
-            // 忽略只读模式更新错误
+            console.error("Error updating readonly mode:", error);
         }
     }
 
