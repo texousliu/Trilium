@@ -220,7 +220,7 @@ function NoteDetailWrapper({ Element, type, isVisible, isFullHeight, props }: { 
         } else {
             // Do nothing, keep the old props.
         }
-    }, [ isVisible ]);
+    }, [ props, isVisible ]);
 
     const typeMapping = TYPE_MAPPINGS[type];
     return (
