@@ -99,12 +99,12 @@ function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingBut
     />
 }
 
-function EditButton({ note, noteContext, isDefaultViewMode }: FloatingButtonContext) {
+function EditButton({ note, noteContext }: FloatingButtonContext) {
     const [animationClass, setAnimationClass] = useState("");
     const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
     
-    // make the edit button stand out on the first display, otherwise
-    // it's difficult to notice that the note is readonly
+    const isReadOnlyInfoBarDismissed = false; // TODO
+
     useEffect(() => {
         if (isReadOnly) {
             setAnimationClass("bx-tada bx-lg");
@@ -114,7 +114,7 @@ function EditButton({ note, noteContext, isDefaultViewMode }: FloatingButtonCont
         }
     }, [ isReadOnly ]);
 
-    return isReadOnly && <FloatingButton
+    return !!isReadOnly && isReadOnlyInfoBarDismissed && <FloatingButton
         text={t("edit_button.edit_this_note")}
         icon="bx bx-pencil"
         className={animationClass}
