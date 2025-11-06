@@ -1,92 +1,25 @@
-import { Excalidraw, exportToSvg, getSceneVersion } from "@excalidraw/excalidraw";
-import { TypeWidgetProps } from "./type_widget";
-import "@excalidraw/excalidraw/index.css";
-import { useEditorSpacedUpdate, useNoteLabelBoolean } from "../react/hooks";
-import { useCallback, useMemo, useRef } from "preact/hooks";
-import { type ExcalidrawImperativeAPI, type AppState, type BinaryFileData, LibraryItem, ExcalidrawProps } from "@excalidraw/excalidraw/types";
-import options from "../../services/options";
-import "./Canvas.css";
-import FNote from "../../entities/fnote";
 import { RefObject } from "preact";
-import server from "../../services/server";
+import NoteContext from "../../../components/note_context";
+import FNote from "../../../entities/fnote";
+import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
+import { useRef } from "preact/hooks";
+import { useEditorSpacedUpdate } from "../../react/hooks";
 import { ExcalidrawElement, NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { goToLinkExt } from "../../services/link";
-import NoteContext from "../../components/note_context";
-
-// currently required by excalidraw, in order to allows self-hosting fonts locally.
-// this avoids making excalidraw load the fonts from an external CDN.
-window.EXCALIDRAW_ASSET_PATH = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
+import { exportToSvg, getSceneVersion } from "@excalidraw/excalidraw";
+import server from "../../../services/server";
 
 interface AttachmentMetadata {
     title: string;
     attachmentId: string;
 }
 
-interface CanvasContent {
+export interface CanvasContent {
     elements: ExcalidrawElement[];
     files: BinaryFileData[];
     appState: Partial<AppState>;
 }
 
-export default function Canvas({ note, noteContext }: TypeWidgetProps) {
-    const apiRef = useRef<ExcalidrawImperativeAPI>(null);
-    const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const themeStyle = useMemo(() => {
-        const documentStyle = window.getComputedStyle(document.documentElement);
-        return documentStyle.getPropertyValue("--theme-style")?.trim() as AppState["theme"];
-    }, []);
-    const persistence = usePersistence(note, noteContext, apiRef, themeStyle, isReadOnly);
-
-    /** Use excalidraw's native zoom instead of the global zoom. */
-    const onWheel = useCallback((e: MouseEvent) => {
-        if (e.ctrlKey) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }, []);
-
-    const onLinkOpen = useCallback((element: NonDeletedExcalidrawElement, event: CustomEvent) => {
-        let link = element.link;
-        if (!link) {
-            return false;
-        }
-
-        if (link.startsWith("root/")) {
-            link = "#" + link;
-        }
-
-        const { nativeEvent } = event.detail;
-        event.preventDefault();
-        return goToLinkExt(nativeEvent, link, null);
-    }, []);
-
-    return (
-        <div className="canvas-render" onWheel={onWheel}>
-            <div className="excalidraw-wrapper">
-                <Excalidraw
-                    excalidrawAPI={api => apiRef.current = api}
-                    theme={themeStyle}
-                    viewModeEnabled={isReadOnly || options.is("databaseReadonly")}
-                    zenModeEnabled={false}
-                    isCollaborating={false}
-                    detectScroll={false}
-                    handleKeyboardGlobally={false}
-                    autoFocus={false}
-                    UIOptions={{
-                        canvasActions: {
-                            saveToActiveFile: false,
-                            export: false
-                        }
-                    }}
-                    onLinkOpen={onLinkOpen}
-                    {...persistence}
-                />
-            </div>
-        </div>
-    )
-}
-
-function usePersistence(note: FNote, noteContext: NoteContext | null | undefined, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
+export default function useCanvasPersistence(note: FNote, noteContext: NoteContext | null | undefined, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
     const libraryChanged = useRef(false);
 
     /**

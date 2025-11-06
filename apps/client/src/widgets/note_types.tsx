@@ -118,7 +118,7 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
         printable: true
     },
     canvas: {
-        view: () => import("./type_widgets/Canvas"),
+        view: () => import("./type_widgets/canvas/Canvas"),
         className: "note-detail-canvas",
         printable: true,
         isFullHeight: true
