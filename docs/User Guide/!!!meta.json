@@ -4078,6 +4078,20 @@
                                             "value": "printing-and-pdf-export",
                                             "isInheritable": false,
                                             "position": 110
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "bwZpz2ajCEwO",
+                                            "isInheritable": false,
+                                            "position": 120
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "KC1HB96bqqHX",
+                                            "isInheritable": false,
+                                            "position": 130
                                         }
                                     ],
                                     "format": "markdown",
@@ -11006,6 +11020,13 @@
                                     "value": "bx bxs-file-css",
                                     "isInheritable": false,
                                     "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "NRnIZmSMc5sj",
+                                    "isInheritable": false,
+                                    "position": 60
                                 }
                             ],
                             "format": "markdown",

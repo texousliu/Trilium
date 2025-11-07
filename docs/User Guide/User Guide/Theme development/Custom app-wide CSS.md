@@ -18,7 +18,7 @@ Adding a new _app CSS note_ or modifying an existing one does not immediately ap
 > [!TIP]
 > Since v0.99.2, it's no longer possible to use `#appCss` to customize the printing CSS, since the printing is now done in an isolated environment.
 > 
-> However, it's still possible to customize the CSS via `~printCss`; see <a class="reference-link" href="#root/jdjRLhLV3TtI/yeqU0zo0ZQ83/W0msUwLxm40d">Printing and exporting to PDF</a> for more information.
+> However, it's still possible to customize the CSS via `~printCss`; see <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Printing%20%26%20Exporting%20as%20PDF.md">Printing &amp; Exporting as PDF</a> for more information.
 
 ### Per-workspace styles
 
