@@ -92,7 +92,10 @@ function CollectionRenderer({ note, onReady }: RendererProps) {
         ntxId="print"
         highlightedTokens={null}
         media="print"
-        onReady={onReady}
+        onReady={async () => {
+            await loadCustomCss(note);
+            onReady();
+        }}
     />;
 }
 
@@ -107,6 +110,7 @@ function Error404({ noteId }: { noteId: string }) {
 
 async function loadCustomCss(note: FNote) {
     const printCssNotes = await note.getRelationTargets("printCss");
+    let loadPromises: JQueryPromise<void>[] = [];
 
     for (const printCssNote of printCssNotes) {
         if (!printCssNote || (printCssNote.type !== "code" && printCssNote.mime !== "text/css")) continue;
@@ -114,8 +118,15 @@ async function loadCustomCss(note: FNote) {
         const linkEl = document.createElement("link");
         linkEl.href = `/api/notes/${printCssNote.noteId}/download`;
         linkEl.rel = "stylesheet";
+
+        const promise = $.Deferred();
+        loadPromises.push(promise.promise());
+        linkEl.onload = () => promise.resolve();
+
         document.head.appendChild(linkEl);
     }
+
+    await Promise.allSettled(loadPromises);
 }
 
 main();
