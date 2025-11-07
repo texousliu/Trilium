@@ -173,12 +173,13 @@ div.note-detail-empty {
 }
 
 .options-section:not(.tn-no-card) {
-    border-radius: 8px;
-    border: 1px solid var(--card-border-color) !important;
+    margin-bottom: calc(var(--options-title-offset) + 26px) !important;
+    margin-inline: var(--content-margin-inline);
     box-shadow: var(--card-box-shadow);
+    border: 1px solid var(--card-border-color) !important;
+    border-radius: 8px;
     background: var(--card-background-color);
     padding: var(--options-card-padding);
-    margin-bottom: calc(var(--options-title-offset) + 26px) !important;
 }
 
 body.desktop .options-section:not(.tn-no-card) {
