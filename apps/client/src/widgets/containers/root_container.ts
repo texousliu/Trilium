@@ -32,9 +32,9 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
         }
 
         this.#setMaxContentWidth();
-        this.#setMotion(options.is("motionEnabled"));
-        this.#setShadows(options.is("shadowsEnabled"));
-        this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
+        this.#setMotion();
+        this.#setShadows();
+        this.#setBackdropEffects();
         this.#setThemeCapabilities();
         this.#setLocaleAndDirection(options.get("locale"));
 
@@ -43,22 +43,23 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isOptionReloaded("motionEnabled")) {
-            this.#setMotion(options.is("motionEnabled"));
+            this.#setMotion();
         }
 
         if (loadResults.isOptionReloaded("shadowsEnabled")) {
-            this.#setShadows(options.is("shadowsEnabled"));
+            this.#setShadows();
         }
 
         if (loadResults.isOptionReloaded("backdropEffectsEnabled")) {
-            this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
+            this.#setBackdropEffects();
         }
 
-        if (loadResults.isOptionReloaded("maxContentWidth") || loadResults.isOptionReloaded("centerContent")) {
+        if (loadResults.isOptionReloaded("maxContentWidth")
+            || loadResults.isOptionReloaded("centerContent")) {
+            
             this.#setMaxContentWidth();
         }
     }
-
 
     #onMobileResize() {
         const currentViewportHeight = getViewportHeight();
@@ -77,16 +78,19 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
                                         (centerContent) ? "auto" : "unset");
     }
 
-    #setMotion(enabled: boolean) {
+    #setMotion() {
+        const enabled = options.is("motionEnabled");
         document.body.classList.toggle("motion-disabled", !enabled);
         jQuery.fx.off = !enabled;
     }
 
-    #setShadows(enabled: boolean) {
+    #setShadows() {
+        const enabled = options.is("shadowsEnabled");
         document.body.classList.toggle("shadows-disabled", !enabled);
     }
 
-    #setBackdropEffects(enabled: boolean) {
+    #setBackdropEffects() {
+        const enabled = options.is("backdropEffectsEnabled");
         document.body.classList.toggle("backdrop-effects-disabled", !enabled);
     }
 
