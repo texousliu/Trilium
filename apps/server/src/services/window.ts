@@ -337,14 +337,15 @@ async function registerGlobalShortcuts() {
                 const result = globalShortcut.register(
                     translatedShortcut,
                     cls.wrap(() => {
-                        if (!mainWindow) {
+                        const targetWindow = getLastFocusedWindow() || mainWindow;
+                        if (!targetWindow) {
                             return;
                         }
 
                         // window may be hidden / not in focus
-                        mainWindow.focus();
+                        targetWindow.focus();
 
-                        mainWindow.webContents.send("globalShortcut", action.actionName);
+                        targetWindow.webContents.send("globalShortcut", action.actionName);
                     })
                 );
 
