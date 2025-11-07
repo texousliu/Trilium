@@ -343,6 +343,10 @@ async function registerGlobalShortcuts() {
                         }
 
                         // window may be hidden / not in focus
+                        if (targetWindow.isMinimized()) {
+                            targetWindow.restore();
+                        }
+                        targetWindow.show();
                         targetWindow.focus();
 
                         targetWindow.webContents.send("globalShortcut", action.actionName);
