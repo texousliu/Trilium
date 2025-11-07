@@ -6,10 +6,351 @@ import server from "../../services/server.js";
 import options from "../../services/options.js";
 import type Editor from "@toast-ui/editor";
 
+// 全局 Toast UI Editor 管理器
+class MarkdownEditorManager {
+    private static instance: MarkdownEditorManager;
+    private editor: Editor | null = null;
+    private isInitialized = false;
+    private isInitializing = false;
+    private initPromise: Promise<void> | null = null;
+    private currentContainer: HTMLElement | null = null;
+    private currentWidget: MarkdownTypeWidget | null = null;
+    private editorContainer: HTMLElement | null = null;
+
+    static getInstance(): MarkdownEditorManager {
+        if (!MarkdownEditorManager.instance) {
+            MarkdownEditorManager.instance = new MarkdownEditorManager();
+        }
+        return MarkdownEditorManager.instance;
+    }
+
+    async initializeEditor(): Promise<void> {
+        if (this.isInitialized && this.editor) {
+            return;
+        }
+
+        if (this.isInitializing && this.initPromise) {
+            return this.initPromise;
+        }
+
+        this.isInitializing = true;
+        this.initPromise = this.doInitialize();
+
+        try {
+            await this.initPromise;
+            this.isInitialized = true;
+        } catch (error) {
+            this.isInitializing = false;
+            this.initPromise = null;
+            throw error;
+        } finally {
+            this.isInitializing = false;
+        }
+    }
+
+    private async doInitialize(): Promise<void> {
+        try {
+            // 设置超时机制
+            const initTimeout = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error("Toast UI Editor initialization timeout")), 10000);
+            });
+
+            const initEditor = async () => {
+                // 动态导入 Toast UI Editor
+                const { default: Editor } = await import("@toast-ui/editor");
+                await import("@toast-ui/editor/dist/toastui-editor.css");
+
+                // 根据主题加载暗色主题样式
+                if (this.isDarkTheme()) {
+                    await import("@toast-ui/editor/dist/theme/toastui-editor-dark.css");
+                }
+
+                // 创建一个容器用于初始化，使用 CSS 类隐藏
+                this.editorContainer = document.createElement('div');
+                this.editorContainer.id = 'toast-md-editor';
+                this.editorContainer.className = 'markdown-editor-hidden';
+                document.body.appendChild(this.editorContainer);
+
+                console.log("Created editor container:", this.editorContainer);
+
+                // 创建编辑器实例
+                this.editor = new Editor({
+                    el: this.editorContainer,
+                    height: "100%",
+                    initialEditType: "markdown",
+                    previewStyle: "vertical",
+                    theme: this.isDarkTheme() ? "dark" : "light",
+                    usageStatistics: false,
+                    hideModeSwitch: false,
+                    initialValue: "",
+                    toolbarItems: [
+                        ["heading", "bold", "italic", "strike"],
+                        ["hr", "quote"],
+                        ["ul", "ol", "task", "indent", "outdent"],
+                        ["table", "image", "link"],
+                        ["code", "codeblock"],
+                        ["scrollSync"]
+                    ],
+                    hooks: {
+                        addImageBlobHook: (blob: Blob, callback: (url: string, altText?: string) => void) => {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const dataUrl = e.target?.result as string;
+                                callback(dataUrl, "image");
+                            };
+                            reader.readAsDataURL(blob);
+                        }
+                    }
+                });
+
+                // 等待编辑器完全初始化
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                console.log("Editor initialized, container info:", {
+                    hasContainer: !!this.editorContainer,
+                    hasParent: !!this.editorContainer?.parentNode,
+                    containerChildren: this.editorContainer?.children.length
+                });
+
+                // 保持容器在 body 中，但处于隐藏状态
+                // 这样可以随时移动到目标容器
+                console.log("Editor container remains in body (hidden state)");
+            };
+
+            // 使用 Promise.race 实现超时控制
+            await Promise.race([initEditor(), initTimeout]);
+
+        } catch (error) {
+            // 清理可能的残留状态
+            if (this.editor) {
+                try {
+                    this.editor.destroy();
+                } catch (e) {
+                    // 忽略清理错误
+                }
+                this.editor = null;
+            }
+            throw error;
+        }
+    }
+
+    attachToContainer(container: HTMLElement, widget: MarkdownTypeWidget): boolean {
+        console.log("Attempting to attach editor to container", {
+            hasEditor: !!this.editor,
+            isInitialized: this.isInitialized,
+            hasEditorContainer: !!this.editorContainer,
+            containerTagName: container.tagName
+        });
+
+        if (!this.editor || !this.isInitialized) {
+            console.log("Editor not ready:", { hasEditor: !!this.editor, isInitialized: this.isInitialized });
+            return false;
+        }
+
+        if (!this.editorContainer) {
+            console.error("Editor container is null");
+            return false;
+        }
+
+        try {
+            if (this.currentContainer && this.currentContainer === container) {
+                console.log("old container");
+                return true;
+            }
+            // 如果已经附加到其他容器，先分离
+            if (this.currentContainer && this.currentContainer !== container) {
+                console.log("Detaching from previous container");
+                this.detachFromContainer();
+            }
+
+            // 清空目标容器
+            container.innerHTML = '';
+
+            // 获取编辑器的 DOM 元素
+            const editorElement = this.editorContainer;
+            console.log("Editor element info:", {
+                exists: !!editorElement,
+                hasParent: !!editorElement?.parentNode,
+                parentTagName: editorElement?.parentNode?.nodeName
+            });
+
+            if (editorElement) {
+                // 如果编辑器容器有父节点，先移除
+                if (editorElement.parentNode) {
+                    editorElement.parentNode.removeChild(editorElement);
+                }
+
+                // 切换到显示状态
+                editorElement.className = 'markdown-editor-visible';
+                this.addEditorHight();
+
+                // 将编辑器移动到新容器
+                container.appendChild(editorElement);
+
+                // 更新当前容器和组件引用
+                this.currentContainer = container;
+                this.currentWidget = widget;
+
+                // 重新绑定事件
+                this.bindEvents(widget);
+
+                console.log("Successfully attached editor to container");
+                return true;
+            } else {
+                console.error("Editor element is null");
+                return false;
+            }
+        } catch (error) {
+            console.error("Failed to attach editor to container:", error);
+            return false;
+        }
+
+        return false;
+    }
+
+    detachFromContainer(): void {
+        if (this.currentWidget) {
+            this.unbindEvents();
+        }
+        if (this.currentContainer && this.editorContainer && this.editorContainer.parentNode === this.currentContainer) {
+            // 切换到隐藏状态
+            this.editorContainer.className = 'markdown-editor-hidden';
+
+            // 将编辑器移回 body（隐藏状态）
+            this.currentContainer.removeChild(this.editorContainer);
+            document.body.appendChild(this.editorContainer);
+        }
+        this.removeEditorHeight();
+        this.currentContainer = null;
+        this.currentWidget = null;
+    }
+
+    private bindEvents(widget: MarkdownTypeWidget): void {
+        if (!this.editor) return;
+
+        // 移除之前的事件监听器
+        this.editor.off('change');
+
+        // 绑定新的事件监听器
+        this.editor.on('change', () => {
+            if (widget.isEditorReady && !options.is("databaseReadonly")) {
+                widget.saveData();
+            }
+        });
+    }
+
+    private unbindEvents(): void {
+        if (!this.editor) return;
+        this.editor.off('change');
+    }
+
+    getEditor(): Editor | null {
+        return this.editor;
+    }
+
+    isEditorInitialized(): boolean {
+        return this.isInitialized && this.editor !== null;
+    }
+
+    setContent(content: string): void {
+        if (!this.editor) return;
+
+        try {
+            this.editor.setMarkdown(content || "", false);
+        } catch (error) {
+            console.error("Failed to set editor content:", error);
+        }
+    }
+
+    getContent(): string {
+        if (!this.editor) return "";
+
+        try {
+            return this.editor.getMarkdown();
+        } catch (error) {
+            console.error("Failed to get editor content:", error);
+            return "";
+        }
+    }
+
+    focus(): void {
+        if (!this.editor) return;
+
+        try {
+            this.editor.focus();
+        } catch (error) {
+            console.error("Failed to focus editor:", error);
+        }
+    }
+
+    moveCursorToEnd(): void {
+        if (!this.editor) return;
+
+        try {
+            this.editor.moveCursorToEnd();
+        } catch (error) {
+            console.error("Failed to move cursor to end:", error);
+        }
+    }
+
+    updateReadOnlyMode(isReadOnly: boolean): void {
+        // Toast UI Editor 没有直接的只读模式 API，通过 CSS 控制
+        if (this.currentContainer) {
+            if (isReadOnly) {
+                this.currentContainer.classList.add('readonly-mode');
+            } else {
+                this.currentContainer.classList.remove('readonly-mode');
+            }
+        }
+    }
+
+    private isDarkTheme(): boolean {
+        const body = document.body;
+        return body.classList.contains("theme-dark") ||
+            body.classList.contains("dark") ||
+            body.classList.contains("theme-next-dark") ||
+            body.getAttribute('data-theme') === 'dark' ||
+            getComputedStyle(body).getPropertyValue('--theme-style')?.trim() === 'dark';
+    }
+
+    // 全局清理方法（应用关闭时调用）
+    destroy(): void {
+        this.detachFromContainer();
+
+        if (this.editor) {
+            try {
+                this.editor.destroy();
+            } catch (e) {
+                console.warn("Error destroying Toast UI Editor:", e);
+            }
+            this.editor = null;
+        }
+
+        // 清理编辑器容器
+        if (this.editorContainer && this.editorContainer.parentNode) {
+            this.editorContainer.parentNode.removeChild(this.editorContainer);
+        }
+        this.editorContainer = null;
+
+        this.isInitialized = false;
+        this.isInitializing = false;
+        this.initPromise = null;
+    }
+
+    private addEditorHight(): void {
+        document.querySelector('.note-detail')?.classList.add('note-detail-replace');
+    }
+
+    private removeEditorHeight(): void {
+        document.querySelector('.note-detail')?.classList.remove('note-detail-replace');
+    }
+
+}
+
 const TPL = /*html*/`
 <div class="note-detail-markdown note-detail-printable" style="height: 100%">
     <style>
-        .note-detail {
+        .note-detail-replace {
             height: 100%;
         }
 
@@ -151,6 +492,27 @@ const TPL = /*html*/`
         .fallback-markdown-editor {
             min-height: 200px !important;
         }
+
+        /* 编辑器容器显示/隐藏控制 */
+        .markdown-editor-hidden {
+            position: absolute !important;
+            left: -9999px !important;
+            top: -9999px !important;
+            width: 100px !important;
+            height: 100px !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .markdown-editor-visible {
+            position: relative !important;
+            left: auto !important;
+            top: auto !important;
+            width: 100% !important;
+            height: 100% !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
     </style>
 
     <div class="toast-ui-editor-container"></div>
@@ -159,10 +521,10 @@ const TPL = /*html*/`
 
 export default class MarkdownTypeWidget extends TypeWidget {
 
-    private editor?: Editor;
     private $container!: JQuery<HTMLElement>;
-    private isEditorReady = false;
+    public isEditorReady = false;
     private isFallbackMode = false;
+    private editorManager = MarkdownEditorManager.getInstance();
 
     constructor() {
         super();
@@ -204,97 +566,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
         return this.$widget;
     }
 
-    async initEditor(): Promise<void> {
-        if (this.editor) {
-            return;
-        }
 
-        // 确保DOM容器存在且已添加到页面
-        if (!this.$container || !this.$container.length || !this.$container[0].isConnected) {
-            throw new Error("Toast UI Editor container not ready");
-        }
-
-        try {
-            // 设置超时机制
-            const initTimeout = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error("Toast UI Editor initialization timeout")), 10000);
-            });
-
-            const initEditor = async () => {
-                // 动态导入 Toast UI Editor
-                const { default: Editor } = await import("@toast-ui/editor");
-                await import("@toast-ui/editor/dist/toastui-editor.css");
-
-                // 根据主题加载暗色主题样式
-                if (this.isDarkTheme()) {
-                    await import("@toast-ui/editor/dist/theme/toastui-editor-dark.css");
-                }
-
-                // 清空容器
-                this.$container.empty();
-
-                // 创建编辑器实例
-                this.editor = new Editor({
-                    el: this.$container[0],
-                    height: "100%",
-                    initialEditType: "markdown",
-                    previewStyle: "vertical",
-                    theme: this.isDarkTheme() ? "dark" : "light",
-                    usageStatistics: false,
-                    hideModeSwitch: false,
-                    initialValue: "",
-                    toolbarItems: [
-                        ["heading", "bold", "italic", "strike"],
-                        ["hr", "quote"],
-                        ["ul", "ol", "task", "indent", "outdent"],
-                        ["table", "image", "link"],
-                        ["code", "codeblock"],
-                        ["scrollSync"]
-                    ],
-                    events: {
-                        change: () => {
-                            if (this.isEditorReady && !options.is("databaseReadonly")) {
-                                this.saveData();
-                            }
-                        }
-                    },
-                    hooks: {
-                        addImageBlobHook: (blob: Blob, callback: (url: string, altText?: string) => void) => {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                const dataUrl = e.target?.result as string;
-                                callback(dataUrl, "image");
-                            };
-                            reader.readAsDataURL(blob);
-                        }
-                    }
-                });
-
-                // 等待编辑器完全初始化
-                await new Promise(resolve => setTimeout(resolve, 300));
-
-                // 检查编辑器是否正确创建
-                if (!this.editor || !this.$container.find('.toastui-editor').length) {
-                    throw new Error("Editor instance creation failed");
-                }
-            };
-
-            // 使用 Promise.race 实现超时控制
-            await Promise.race([initEditor(), initTimeout]);
-
-        } catch (error) {
-            // 清理可能的残留状态
-            if (this.editor) {
-                try {
-                    this.editor.destroy();
-                } catch (e) {
-                    // 忽略清理错误
-                }
-                this.editor = undefined;
-            }
-            throw error;
-        }
-    }
 
     async doRefresh(note: FNote) {
         if (note.type !== "markdown") {
@@ -316,13 +588,18 @@ export default class MarkdownTypeWidget extends TypeWidget {
             // 显示加载状态
             this.showLoadingState();
 
-            // 尝试初始化 Toast UI Editor
-            if (!this.editor) {
-                await this.initEditor();
+            // 确保全局编辑器已初始化
+            await this.editorManager.initializeEditor();
+
+            // 尝试将编辑器附加到当前容器
+            const attached = this.editorManager.attachToContainer(this.$container[0], this);
+
+            if (!attached) {
+                throw new Error("Failed to attach editor to container");
             }
 
             // 设置内容
-            await this.safeSetValue(content);
+            this.editorManager.setContent(content);
 
             // 更新只读模式
             await this.updateReadOnlyMode();
@@ -333,6 +610,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
             }, 100);
 
         } catch (error) {
+            console.log(error);
             this.initializeFallbackEditor(content);
         }
     }
@@ -477,11 +755,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
             };
         }
 
-        if (!this.editor) {
-            return undefined;
-        }
-
-        const content = this.editor.getMarkdown();
+        const content = this.editorManager.getContent();
         return {
             content: content || ""
         };
@@ -490,15 +764,15 @@ export default class MarkdownTypeWidget extends TypeWidget {
     focus() {
         if (this.isFallbackMode) {
             this.$container.find('.fallback-markdown-editor').focus();
-        } else if (this.editor) {
-            this.editor.focus();
+        } else {
+            this.editorManager.focus();
         }
     }
 
     scrollToEnd() {
-        if (this.editor) {
+        if (!this.isFallbackMode) {
             // 移动光标到末尾
-            this.editor.moveCursorToEnd();
+            this.editorManager.moveCursorToEnd();
 
             // 滚动到底部
             const editorElement = this.$container.find(".CodeMirror-scroll").get(0);
@@ -526,15 +800,9 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
         if (this.isFallbackMode) {
             this.$container.find('.fallback-markdown-editor').off();
-        }
-
-        if (this.editor) {
-            try {
-                this.editor.destroy();
-            } catch (e) {
-                console.warn("Error destroying Toast UI Editor:", e);
-            }
-            this.editor = undefined;
+        } else {
+            // 从管理器中分离编辑器（但不销毁）
+            this.editorManager.detachFromContainer();
         }
 
         this.isEditorReady = false;
@@ -550,11 +818,11 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
     // 导出功能
     exportMarkdown() {
-        if (!this.editor || !this.note) {
+        if (!this.note) {
             return;
         }
 
-        const content = this.editor.getMarkdown();
+        const content = this.editorManager.getContent();
         const blob = new Blob([content], { type: "text/markdown" });
         const url = URL.createObjectURL(blob);
 
@@ -569,11 +837,12 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
     // 导出HTML
     exportHtml() {
-        if (!this.editor || !this.note) {
+        const editor = this.editorManager.getEditor();
+        if (!editor || !this.note) {
             return;
         }
 
-        const html = this.editor.getHTML();
+        const html = editor.getHTML();
         const blob = new Blob([html], { type: "text/html" });
         const url = URL.createObjectURL(blob);
 
@@ -623,7 +892,7 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
     // 处理主题变化
     private async handleThemeChange() {
-        if (this.editor) {
+        if (this.editorManager.isEditorInitialized()) {
             const isDark = this.isDarkTheme();
 
             // 更新编辑器主题相关的CSS类
@@ -639,75 +908,53 @@ export default class MarkdownTypeWidget extends TypeWidget {
 
     // 更新只读模式
     async updateReadOnlyMode() {
-        if (!this.editor || !this.noteContext) {
+        if (!this.noteContext) {
             return;
         }
 
         try {
             const isReadOnly = await this.noteContext.isReadOnly();
 
-            if (isReadOnly) {
-                // 禁用编辑器
-                this.$container.addClass('readonly-mode');
+            if (!this.isFallbackMode) {
+                this.editorManager.updateReadOnlyMode(isReadOnly);
 
-                // 禁用工具栏和编辑区域
-                this.$container.find('.toastui-editor-toolbar').css('pointer-events', 'none');
-                this.$container.find('.toastui-editor-md-container').css('pointer-events', 'none');
-                this.$container.find('.CodeMirror').css('pointer-events', 'none');
-
-                // 添加只读样式
-                this.$container.find('.toastui-editor').addClass('readonly');
-            } else {
-                // 启用编辑器
-                this.$container.removeClass('readonly-mode');
-
-                // 启用工具栏和编辑区域
-                this.$container.find('.toastui-editor-toolbar').css('pointer-events', 'auto');
-                this.$container.find('.toastui-editor-md-container').css('pointer-events', 'auto');
-                this.$container.find('.CodeMirror').css('pointer-events', 'auto');
-
-                // 移除只读样式
-                this.$container.find('.toastui-editor').removeClass('readonly');
+                // 额外的 CSS 控制
+                if (isReadOnly) {
+                    this.$container.find('.toastui-editor-toolbar').css('pointer-events', 'none');
+                    this.$container.find('.toastui-editor-md-container').css('pointer-events', 'none');
+                    this.$container.find('.CodeMirror').css('pointer-events', 'none');
+                    this.$container.find('.toastui-editor').addClass('readonly');
+                } else {
+                    this.$container.find('.toastui-editor-toolbar').css('pointer-events', 'auto');
+                    this.$container.find('.toastui-editor-md-container').css('pointer-events', 'auto');
+                    this.$container.find('.CodeMirror').css('pointer-events', 'auto');
+                    this.$container.find('.toastui-editor').removeClass('readonly');
+                }
             }
         } catch (error) {
             // 忽略只读模式更新错误
         }
     }
 
-    // 安全地设置编辑器内容
-    private async safeSetValue(content: string) {
-        if (!this.editor) {
-            throw new Error("Editor not initialized when trying to set content");
-        }
 
-        // 减少重试次数和等待时间，加快响应速度
-        let retries = 0;
-        const maxRetries = 5;
-
-        while (retries < maxRetries) {
-            try {
-                if (this.editor && typeof this.editor.setMarkdown === 'function') {
-                    this.isEditorReady = false;
-                    this.editor.setMarkdown(content || "", false);
-
-                    // 延迟启用事件监听
-                    setTimeout(() => {
-                        this.isEditorReady = true;
-                    }, 100);
-
-                    return;
-                }
-            } catch (error) {
-                if (retries === maxRetries - 1) {
-                    throw error;
-                }
-            }
-
-            retries++;
-            // 减少等待时间
-            await new Promise(resolve => setTimeout(resolve, 50));
-        }
-
-        throw new Error("Failed to set editor content after retries");
-    }
 }
+
+// 导出全局初始化和清理函数
+export const initializeMarkdownEditor = async (): Promise<void> => {
+    try {
+        const manager = MarkdownEditorManager.getInstance();
+        await manager.initializeEditor();
+    } catch (error) {
+        console.warn("Failed to initialize global markdown editor:", error);
+        // 不抛出错误，允许回退到简化编辑器
+    }
+};
+
+export const destroyMarkdownEditor = (): void => {
+    try {
+        const manager = MarkdownEditorManager.getInstance();
+        manager.destroy();
+    } catch (error) {
+        console.warn("Failed to destroy global markdown editor:", error);
+    }
+};
