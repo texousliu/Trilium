@@ -62,7 +62,7 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
 
         this.$widget.addClass(utils.getNoteTypeClass(note.type));
         this.$widget.addClass(utils.getMimeTypeClass(note.mime));
-        this.$widget.toggleClass("bgfx", note.isOptions());
+        this.$widget.toggleClass(["bgfx", "options"], note.isOptions());
         this.$widget.toggleClass("protected", note.isProtected);
 
         const noteLanguage = note?.getLabelValue("language");
