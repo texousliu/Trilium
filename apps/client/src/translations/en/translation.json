@@ -1110,7 +1110,8 @@
     "title": "Content Width",
     "default_description": "Trilium by default limits max content width to improve readability for maximized screens on wide screens.",
     "max_width_label": "Max content width",
-    "max_width_unit": "pixels"
+    "max_width_unit": "pixels",
+    "centerContent": "Keep content centered"
   },
   "native_title_bar": {
     "title": "Native Title Bar (requires app restart)",

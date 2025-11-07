@@ -284,7 +284,8 @@ function SmoothScrollEnabledOption() {
 }
 
 function MaxContentWidth() {
-    const [ maxContentWidth, setMaxContentWidth ] = useTriliumOption("maxContentWidth");
+    const [maxContentWidth, setMaxContentWidth] = useTriliumOption("maxContentWidth");
+    const [centerContent, setCenterContent] = useTriliumOptionBool("centerContent");
 
     return (
         <OptionsSection title={t("max_content_width.title")}>
@@ -299,6 +300,10 @@ function MaxContentWidth() {
                     />
                 </FormGroup>
             </Column>
+
+            <FormCheckbox label={t("max_content_width.centerContent")}
+                          currentValue={centerContent}
+                          onChange={setCenterContent} />
         </OptionsSection>
     )
 }

@@ -31,7 +31,7 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
             window.visualViewport?.addEventListener("resize", () => this.#onMobileResize());
         }
 
-        this.#setMaxContentWidth(options.getInt("maxContentWidth") ?? 0);
+        this.#setMaxContentWidth();
         this.#setMotion(options.is("motionEnabled"));
         this.#setShadows(options.is("shadowsEnabled"));
         this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
@@ -54,8 +54,8 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
             this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
         }
 
-        if (loadResults.isOptionReloaded("maxContentWidth")) {
-            this.#setMaxContentWidth(options.getInt("maxContentWidth") ?? 0);
+        if (loadResults.isOptionReloaded("maxContentWidth") || loadResults.isOptionReloaded("centerContent")) {
+            this.#setMaxContentWidth();
         }
     }
 
@@ -66,9 +66,15 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
         this.$widget.toggleClass("virtual-keyboard-opened", isKeyboardOpened);
     }
 
-    #setMaxContentWidth(width: number) {
-        width = Math.max(width, 640);
+    #setMaxContentWidth() {
+        const width = Math.max(options.getInt("maxContentWidth") || 0, 640);
+        const centerContent = options.is("centerContent");
+
         document.body.style.setProperty("--preferred-max-content-width", `${width}px`);
+
+        // To center the content, "--preferred-content-margin-inline" should be set to "auto".
+        document.body.style.setProperty("--preferred-content-margin-inline",
+                                        (centerContent) ? "auto" : "unset");
     }
 
     #setMotion(enabled: boolean) {

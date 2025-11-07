@@ -1,6 +1,11 @@
 .note-list-widget {
     min-height: 0;
-    max-width: var(--max-content-width); /* Inherited from .note-split */
+    /* Inherited from .note-split */
+    max-width: var(--max-content-width);
+    /* Inherited from .note-split. If set to "auto" the list widget will be centered horizontally. */
+    margin-inline: var(--content-margin-inline);
+
+
     overflow: auto;
     contain: none !important;
 }

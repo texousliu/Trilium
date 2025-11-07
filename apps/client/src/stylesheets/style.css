@@ -1811,6 +1811,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 .note-split {
     /* Limits the maximum width of the note */
     --max-content-width: var(--preferred-max-content-width);
+    /* Indicates the inline margin of the content. If set to "auto" the content will be centered. */
+    --content-margin-inline: var(--preferred-content-margin-inline);
 
     margin-inline-start: auto;
     margin-inline-end: auto;
