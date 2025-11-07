@@ -45,7 +45,7 @@ const TPL = /*html*/`
     }
 
     body.prefers-centered-content .note-detail {
-        /* Horizontally center the widget in its parent when the "Keep content centered" option is on /*
+        /* Horizontally center the widget in its parent when the "Keep content centered" option is on */
         margin-inline: auto;
     }
 

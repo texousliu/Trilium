@@ -7,7 +7,7 @@
 }
 
 body.prefers-centered-content .note-list-widget {
-    /* Horizontally center the widget in its parent when the "Keep content centered" option is on /*
+    /* Horizontally center the widget in its parent when the "Keep content centered" option is on */
     margin-inline: auto;
 }
 
