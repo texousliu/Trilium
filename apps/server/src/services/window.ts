@@ -343,11 +343,7 @@ async function registerGlobalShortcuts() {
                         }
 
                         // window may be hidden / not in focus
-                        if (targetWindow.isMinimized()) {
-                            targetWindow.restore();
-                        }
-                        targetWindow.show();
-                        targetWindow.focus();
+                        showAndFocusWindow(targetWindow);
 
                         targetWindow.webContents.send("globalShortcut", action.actionName);
                     })
@@ -361,6 +357,17 @@ async function registerGlobalShortcuts() {
             }
         }
     }
+}
+
+function showAndFocusWindow(window: BrowserWindow) {
+    if (!window) return;
+
+    if (window.isMinimized()) {
+        window.restore();
+    }
+
+    window.show();
+    window.focus();
 }
 
 function getMainWindow() {
