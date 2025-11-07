@@ -40,10 +40,13 @@ const TPL = /*html*/`
     <style>
     .note-detail {
         max-width: var(--max-content-width); /* Inherited from .note-split */
-        /* Inherited from .note-split. If set to "auto" the note detail widget will be centered horizontally. */
-        margin-inline: var(--content-margin-inline);
         font-family: var(--detail-font-family);
         font-size: var(--detail-font-size);
+    }
+
+    body.prefers-centered-content .note-detail {
+        /* Horizontally center the widget in its parent when the "Keep content centered" option is on /*
+        margin-inline: auto;
     }
 
     .note-detail.full-height {

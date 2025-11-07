@@ -69,13 +69,9 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
 
     #setMaxContentWidth() {
         const width = Math.max(options.getInt("maxContentWidth") || 0, 640);
-        const centerContent = options.is("centerContent");
-
         document.body.style.setProperty("--preferred-max-content-width", `${width}px`);
 
-        // To center the content, "--preferred-content-margin-inline" should be set to "auto".
-        document.body.style.setProperty("--preferred-content-margin-inline",
-                                        (centerContent) ? "auto" : "unset");
+        document.body.classList.toggle("prefers-centered-content", options.is("centerContent"));
     }
 
     #setMotion() {
