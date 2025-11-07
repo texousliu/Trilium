@@ -1,33 +1,26 @@
 div.read-only-note-info-bar-widget {
     contain: none;
-    display: flex;
-    opacity: 0;
-    max-height: 0;
-    margin-top: 4px;
-    background: var(--read-only-note-info-bar-background, var(--accented-background-color));
-    padding: 8px 20px;
-    color: var(--read-only-note-info-bar-color);
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    font-size: .9em;
-}
-
-div.read-only-note-info-bar-widget.visible {
-    max-height: unset;
-    opacity: 1;
-    transition: opacity 300ms ease-out;
 }
 
 div.read-only-note-info-bar-widget.zen-mode-only {
     display: none;
     max-width: var(--max-content-width);
     margin: 0 auto;
+}
+
+div.read-only-note-info-bar-widget.zen-mode-only .info-bar {
     border-radius: 8px;
 }
 
 body.zen div.read-only-note-info-bar-widget.zen-mode-only {
+    display: block;
+}
+
+.read-only-note-info-bar-widget-content {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
 }
 
 :root div.read-only-note-info-bar-widget button {
