@@ -70,6 +70,9 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
                     });
                 })
             );
+
+            // Check custom CSS.
+            await loadCustomCss(note);
         }
 
         load().then(() => requestAnimationFrame(onReady))
@@ -100,6 +103,19 @@ function Error404({ noteId }: { noteId: string }) {
             <small>{noteId}</small>
         </main>
     )
+}
+
+async function loadCustomCss(note: FNote) {
+    const printCssNotes = await note.getRelationTargets("printCss");
+
+    for (const printCssNote of printCssNotes) {
+        if (!printCssNote || (printCssNote.type !== "code" && printCssNote.mime !== "text/css")) continue;
+
+        const linkEl = document.createElement("link");
+        linkEl.href = `/api/notes/${printCssNote.noteId}/download`;
+        linkEl.rel = "stylesheet";
+        document.head.appendChild(linkEl);
+    }
 }
 
 main();
