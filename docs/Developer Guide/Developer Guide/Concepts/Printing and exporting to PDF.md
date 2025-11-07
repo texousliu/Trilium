@@ -16,3 +16,27 @@ Syntax highlighting for code blocks is supported as well:
 *   It works by injecting a Highlight.js stylesheet into the print.
 *   The theme used is hard-coded (the _Visual Studio Light theme_, at the time of writing) in order not to have a dark background in print.
 *   <a class="reference-link" href="Syntax%20highlighting.md">Syntax highlighting</a> is handled by the content renderer.
+
+## Customizing the print CSS
+
+As an advanced use case, it's possible to customize the CSS used for printing such as adjusting the fonts, sizes or margins. Note that <a class="reference-link" href="#root/pOsGYCXsbNQG/pKK96zzmvBGf/AlhDUqhENtH7">Custom app-wide CSS</a> will not work for printing.
+
+To do so:
+
+*   Create a CSS [code note](#root/pOsGYCXsbNQG/KSZ04uQ2D1St/6f9hih2hXXZk).
+*   On the note being printed, apply the `~printCss` relation to point to the newly created CSS code note.
+*   To apply the CSS to multiple notes, consider using [inheritable attributes](#root/pOsGYCXsbNQG/tC7s2alapj8V/zEY4DaJG4YT5/bwZpz2ajCEwO) or <a class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/KC1HB96bqqHX">Templates</a>.
+
+For example, to change the font of the document from the one defined by the theme or the user to a serif one:
+
+```
+body {
+	--main-font-family: serif !important;
+    --detail-font-family: var(--main-font-family) !important;
+}
+```
+
+To remark:
+
+*   Multiple CSS notes can be add by using multiple `~printCss` relations.
+*   If migrating from a previous version where <a class="reference-link" href="#root/pOsGYCXsbNQG/pKK96zzmvBGf/AlhDUqhENtH7">Custom app-wide CSS</a>, there's no need for `@media print {`  since the style-sheet is used only for printing.
