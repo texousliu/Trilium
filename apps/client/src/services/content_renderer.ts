@@ -47,6 +47,8 @@ export async function getRenderedContent(this: {} | { ctx: string }, entity: FNo
         await renderText(entity, $renderedContent, options);
     } else if (type === "code") {
         await renderCode(entity, $renderedContent);
+    } else if (type === "markdown") {
+        await renderMarkdown(entity, $renderedContent);
     } else if (["image", "canvas", "mindMap"].includes(type)) {
         renderImage(entity, $renderedContent, options);
     } else if (!options.tooltip && ["file", "pdf", "audio", "video"].includes(type)) {
@@ -161,6 +163,41 @@ async function renderCode(note: FNote | FAttachment, $renderedContent: JQuery<HT
     $codeBlock.text(content);
     $renderedContent.append($("<pre>").append($codeBlock));
     await applySingleBlockSyntaxHighlight($codeBlock, normalizeMimeTypeForCKEditor(note.mime));
+}
+
+/**
+ * Renders a markdown note using Toast UI Viewer
+ */
+async function renderMarkdown(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>) {
+    const blob = await note.getBlob();
+    const content = blob?.content || "";
+
+    try {
+        // Dynamically import Toast UI Viewer
+        const { default: Viewer } = await import("@toast-ui/editor/dist/toastui-editor-viewer");
+        await import("@toast-ui/editor/dist/toastui-editor-viewer.css");
+
+        // Create a container for the viewer
+        const $viewerContainer = $('<div class="markdown-viewer-container"></div>');
+        $renderedContent.append($viewerContainer);
+
+        // Initialize the viewer
+        new Viewer({
+            el: $viewerContainer[0],
+            initialValue: content,
+            usageStatistics: false
+        });
+    } catch (error) {
+        console.error("Failed to render markdown with Toast UI Viewer:", error);
+        // Fallback to plain text display
+        const $pre = $("<pre>").css({
+            "white-space": "pre-wrap",
+            "word-wrap": "break-word",
+            "padding": "10px"
+        });
+        $pre.text(content);
+        $renderedContent.append($pre);
+    }
 }
 
 function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>, options: Options = {}) {

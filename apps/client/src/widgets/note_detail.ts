@@ -34,6 +34,7 @@ import type TypeWidget from "./type_widgets/type_widget.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 import AiChatTypeWidget from "./type_widgets/ai_chat.js";
 import MarkdownTypeWidget from "./type_widgets/markdown.js";
+import ReadOnlyMarkdownTypeWidget from "./type_widgets/read_only_markdown.js";
 import toast from "../services/toast.js";
 
 const TPL = /*html*/`
@@ -74,6 +75,7 @@ const typeWidgetClasses = {
     mindMap: MindMapWidget,
     aiChat: AiChatTypeWidget,
     markdown: MarkdownTypeWidget,
+    readOnlyMarkdown: ReadOnlyMarkdownTypeWidget,
 
     // Split type editors
     mermaid: MermaidTypeWidget
@@ -94,7 +96,8 @@ type ExtendedNoteType =
     | "attachmentList"
     | "protectedSession"
     | "aiChat"
-    | "markdown";
+    | "markdown"
+    | "readOnlyMarkdown";
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
 
@@ -241,8 +244,8 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         } else if ((type === "code" || type === "mermaid") && (await this.noteContext?.isReadOnly())) {
             resultingType = "readOnlyCode";
         } else if (type === "markdown" && (await this.noteContext?.isReadOnly())) {
-            // Markdown notes should use readOnlyCode when readonly, but we need to handle this in the markdown widget
-            resultingType = "markdown";
+            // Use read-only markdown viewer for readonly markdown notes
+            resultingType = "readOnlyMarkdown";
         } else if (type === "text") {
             resultingType = "editableText";
         } else if (type === "code") {

@@ -253,8 +253,8 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
             return false;
         }
 
-        // "readOnly" is a state valid only for text/code notes
-        if (!this.note || (this.note.type !== "text" && this.note.type !== "code")) {
+        // "readOnly" is a state valid only for text/code/markdown notes
+        if (!this.note || (this.note.type !== "text" && this.note.type !== "code" && this.note.type !== "markdown")) {
             return false;
         }
 
@@ -287,6 +287,8 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
             const sizeLimit = this.note.type === "text"
                 ? options.getInt("autoReadonlySizeText")
+                : this.note.type === "markdown"
+                ? options.getInt("autoReadonlySizeText") // Use text size limit for markdown
                 : options.getInt("autoReadonlySizeCode");
 
             viewScope.isReadOnly = Boolean(sizeLimit &&

@@ -153,10 +153,6 @@ class MarkdownEditorManager {
         }
 
         try {
-            if (this.currentContainer && this.currentContainer === container) {
-                console.log("old container");
-                return true;
-            }
             // 如果已经附加到其他容器，先分离
             if (this.currentContainer && this.currentContainer !== container) {
                 console.log("Detaching from previous container");
