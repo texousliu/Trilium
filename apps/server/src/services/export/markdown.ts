@@ -56,7 +56,7 @@ function toMarkdown(content: string) {
         instance.addRule("math", buildMathFilter());
         instance.addRule("li", buildListItemFilter());
         instance.use(gfm);
-        instance.keep([ "kbd", "sup", "sub" ]);
+        instance.keep(["kbd", "sup", "sub"]);
     }
 
     return instance.turndown(content);
@@ -89,7 +89,7 @@ function buildImageFilter() {
 
     const escapePattern = new RegExp('(?:' + ESCAPE_PATTERNS.before.source + '|' + ESCAPE_PATTERNS.after.source + ')', 'g');
 
-    function escapeMarkdown (content: string) {
+    function escapeMarkdown(content: string) {
         return content.replace(escapePattern, function (match, before, after) {
             return before ? '\\' + before : after + '\\'
         })
@@ -101,7 +101,7 @@ function buildImageFilter() {
             .replace(/ /g, "%20");
     }
 
-    function escapeLinkTitle (title: string) {
+    function escapeLinkTitle(title: string) {
         return title.replace(/"/g, '\\"')
     }
 
