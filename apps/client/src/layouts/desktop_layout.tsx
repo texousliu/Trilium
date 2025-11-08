@@ -3,6 +3,7 @@ import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.
 import ApiLog from "../widgets/api_log.jsx";
 import ClosePaneButton from "../widgets/buttons/close_pane_button.js";
 import CloseZenModeButton from "../widgets/close_zen_button.jsx";
+import ContentHeader from "../widgets/content-header.js";
 import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
 import FindWidget from "../widgets/find.js";
 import FlexContainer from "../widgets/containers/flex_container.js";
@@ -131,13 +132,14 @@ export default class DesktopLayout {
                                                         )
                                                         .child(<Ribbon />)
                                                         .child(<SharedInfo />)
-                                                        .child(<ReadOnlyNoteInfoBar />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
-                                                                .child(<ReadOnlyNoteInfoBar zenModeOnly />)
+                                                                .child(new ContentHeader()
+                                                                    .child(<ReadOnlyNoteInfoBar />)
+                                                                )
                                                                 .child(new PromotedAttributesWidget())
                                                                 .child(<SqlTableSchemas />)
                                                                 .child(new NoteDetailWidget())

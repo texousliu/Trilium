@@ -28,6 +28,7 @@ import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibb
 import TabRowWidget from "../widgets/tab_row.js";
 import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button.jsx";
 import type AppContext from "../components/app_context.js";
+import ContentHeader from "../widgets/content-header.js";
 
 const MOBILE_CSS = `
 <style>
@@ -151,14 +152,15 @@ export default class MobileLayout {
                                             .child(<MobileDetailMenu />)
                                     )
                                     .child(<SharedInfoWidget />)
-                                    .child(<ReadOnlyNoteInfoBar />)
                                     .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
-                                    .child(<ReadOnlyNoteInfoBar zenModeOnly />)
                                     .child(new PromotedAttributesWidget())
                                     .child(
                                         new ScrollingContainer()
                                             .filling()
                                             .contentSized()
+                                            .child(new ContentHeader()
+                                                .child(<ReadOnlyNoteInfoBar />)
+                                            )
                                             .child(new NoteDetailWidget())
                                             .child(<NoteList media="screen" />)
                                             .child(<StandaloneRibbonAdapter component={SearchDefinitionTab} />)
