@@ -39,7 +39,10 @@
     "help_on_tree_prefix": "有关树前缀的帮助",
     "prefix": "前缀： ",
     "save": "保存",
-    "branch_prefix_saved": "分支前缀已保存。"
+    "branch_prefix_saved": "分支前缀已保存。",
+    "edit_branch_prefix_multiple": "编辑 {{count}} 个分支的前缀",
+    "branch_prefix_saved_multiple": "已为 {{count}} 个分支保存分支前缀。",
+    "affected_branches": "受影响的分支 {{count}}:"
   },
   "bulk_actions": {
     "bulk_actions": "批量操作",
@@ -2076,5 +2079,8 @@
     "edit-slide": "编辑此幻灯片",
     "start-presentation": "开始演示",
     "slide-overview": "切换幻灯片概览"
+  },
+  "calendar_view": {
+    "delete_note": "删除笔记..."
   }
 }
