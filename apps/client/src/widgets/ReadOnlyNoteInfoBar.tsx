@@ -1,15 +1,15 @@
-import "./read_only_note_info_bar.css";
+import "./ReadOnlyNoteInfoBar.css";
 import { t } from "../services/i18n";
 import { useIsNoteReadOnly, useNoteContext, useTriliumEvent } from "./react/hooks"
 import Button from "./react/Button";
 import InfoBar from "./react/InfoBar";
 
-export default function ReadOnlyNoteInfoBar(props: {zenModeOnly?: boolean}) {
+export default function ReadOnlyNoteInfoBar(props: {}) {
     const {note, noteContext} = useNoteContext();
     const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
     const isExplicitReadOnly = note?.isLabelTruthy("readOnly");
 
-    return <div class={`read-only-note-info-bar-widget ${(isReadOnly) ? "visible" : ""} ${(props.zenModeOnly) ? "zen-mode-only" : ""}`}>
+    return <div class={`read-only-note-info-bar-widget ${(isReadOnly) ? "visible" : ""}`}>
                 {isReadOnly && <InfoBar type={(isExplicitReadOnly ? "subtle" : "prominent")}>
                     <div class="read-only-note-info-bar-widget-content">
                         {(isExplicitReadOnly) ? (

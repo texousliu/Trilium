@@ -2,25 +2,22 @@ div.read-only-note-info-bar-widget {
     contain: none;
 }
 
-div.read-only-note-info-bar-widget.zen-mode-only {
-    display: none;
+body.zen div.read-only-note-info-bar-widget {
+    width: fit-content;
     max-width: var(--max-content-width);
     margin: 0 auto;
 }
 
-div.read-only-note-info-bar-widget.zen-mode-only .info-bar {
+body.zen div.read-only-note-info-bar-widget .info-bar {
     border-radius: 8px;
-}
-
-body.zen div.read-only-note-info-bar-widget.zen-mode-only {
-    display: block;
+    border: unset;
 }
 
 .read-only-note-info-bar-widget-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 20px;
 }
 
 :root div.read-only-note-info-bar-widget button {
