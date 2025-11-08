@@ -6,6 +6,11 @@
 
 // Migrations should be kept in descending order, so the latest migration is first.
 const MIGRATIONS: (SqlMigration | JsMigration)[] = [
+    // Migrate old text/markdown files to markdown note type
+    {
+        version: 234,
+        module: async () => import("./0234__migrate_markdown_files_to_markdown_type.js")
+    },
     // Migrate geo map to collection
     {
         version: 233,
