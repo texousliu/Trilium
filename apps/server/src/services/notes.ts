@@ -239,8 +239,6 @@ function createNewNote(params: NoteParams): {
             }
         }
 
-        asyncPostProcessContent(note, params.content);
-
         if (params.templateNoteId) {
             const templateNote = becca.getNote(params.templateNoteId);
             if (!templateNote) {
@@ -1036,6 +1034,8 @@ function duplicateSubtreeInner(origNote: BNote, origBranch: BBranch | null | und
                 duplicateSubtreeInner(childBranch.getNote(), childBranch, newNote.noteId, noteIdMapping);
             }
         }
+
+        asyncPostProcessContent(newNote, content);
 
         return newNote;
     }
