@@ -25,16 +25,58 @@
                 {
                     "type": "relation",
                     "name": "internalLink",
-                    "value": "BFs8mudNFgCS",
+                    "value": "gh7bpGYxajRS",
                     "isInheritable": false,
                     "position": 20
                 },
                 {
                     "type": "relation",
                     "name": "internalLink",
-                    "value": "GTwFsgaA0lCt",
+                    "value": "BFs8mudNFgCS",
                     "isInheritable": false,
                     "position": 30
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "GTwFsgaA0lCt",
+                    "isInheritable": false,
+                    "position": 40
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "poXkQfguuA0U",
+                    "isInheritable": false,
+                    "position": 50
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "WOcw2SLH6tbX",
+                    "isInheritable": false,
+                    "position": 60
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "Q2z6av6JZVWm",
+                    "isInheritable": false,
+                    "position": 70
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "MEtfsqa5VwNi",
+                    "isInheritable": false,
+                    "position": 80
+                },
+                {
+                    "type": "relation",
+                    "name": "internalLink",
+                    "value": "9qPsTWBorUhQ",
+                    "isInheritable": false,
+                    "position": 90
                 },
                 {
                     "type": "label",
@@ -1167,6 +1209,22 @@
                                     "attachments": []
                                 },
                                 {
+                                    "isClone": true,
+                                    "noteId": "Un4wj2Mak2Ky",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "Un4wj2Mak2Ky"
+                                    ],
+                                    "title": "Nix flake",
+                                    "prefix": null,
+                                    "dataFileName": "Nix flake.clone.md",
+                                    "type": "text",
+                                    "format": "markdown",
+                                    "isExpanded": false
+                                },
+                                {
                                     "isClone": false,
                                     "noteId": "yeEaYqosGLSh",
                                     "notePath": [
@@ -1256,22 +1314,6 @@
                                     "format": "markdown",
                                     "dataFileName": "System Requirements.md",
                                     "attachments": []
-                                },
-                                {
-                                    "isClone": true,
-                                    "noteId": "Un4wj2Mak2Ky",
-                                    "notePath": [
-                                        "pOsGYCXsbNQG",
-                                        "Otzi9La2YAUX",
-                                        "WOcw2SLH6tbX",
-                                        "Un4wj2Mak2Ky"
-                                    ],
-                                    "title": "Nix flake",
-                                    "prefix": null,
-                                    "dataFileName": "Nix flake.clone.md",
-                                    "type": "text",
-                                    "format": "markdown",
-                                    "isExpanded": false
                                 }
                             ]
                         },
@@ -4036,6 +4078,20 @@
                                             "value": "printing-and-pdf-export",
                                             "isInheritable": false,
                                             "position": 110
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "bwZpz2ajCEwO",
+                                            "isInheritable": false,
+                                            "position": 120
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "KC1HB96bqqHX",
+                                            "isInheritable": false,
+                                            "position": 130
                                         }
                                     ],
                                     "format": "markdown",
@@ -10964,6 +11020,13 @@
                                     "value": "bx bxs-file-css",
                                     "isInheritable": false,
                                     "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "NRnIZmSMc5sj",
+                                    "isInheritable": false,
+                                    "position": 60
                                 }
                             ],
                             "format": "markdown",
@@ -12051,7 +12114,7 @@
                                         "R9pX4DGra2Vt",
                                         "ycBFjKrrwE9p"
                                     ],
-                                    "title": "Exporting HTML for web publishing",
+                                    "title": "Exporting static HTML for web publishing",
                                     "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
@@ -12088,7 +12151,7 @@
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "Exporting HTML for web publish.md",
+                                    "dataFileName": "Exporting static HTML for web .md",
                                     "attachments": []
                                 },
                                 {
@@ -14081,6 +14144,109 @@
                             "format": "markdown",
                             "dataFileName": "Safe mode.md",
                             "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "HAIOFBoYIIdO",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "tC7s2alapj8V",
+                                "HAIOFBoYIIdO"
+                            ],
+                            "title": "Nightly release",
+                            "notePosition": 260,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-moon",
+                                    "isInheritable": false,
+                                    "position": 30
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Nightly release.md",
+                            "attachments": []
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "ZmT9ln8XJX2o",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "tC7s2alapj8V",
+                                "ZmT9ln8XJX2o"
+                            ],
+                            "title": "Read-only database",
+                            "notePosition": 270,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Gzjqa934BdH4",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "wy8So3yZZlH9",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "R9pX4DGra2Vt",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "eIg8jdvaoNNd",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "GTwFsgaA0lCt",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "KSZ04uQ2D1St",
+                                    "isInheritable": false,
+                                    "position": 60
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-book-reader",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "read-only-db",
+                                    "isInheritable": false,
+                                    "position": 40
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Read-only database.md",
+                            "attachments": []
                         }
                     ]
                 },
@@ -14104,6 +14270,13 @@
                             "value": "vvUCN7FDkq7G",
                             "isInheritable": false,
                             "position": 10
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "xYmIYSP6wE3F",
+                            "isInheritable": false,
+                            "position": 20
                         },
                         {
                             "type": "label",
@@ -14589,21 +14762,21 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "zEY4DaJG4YT5",
+                                    "value": "GLks18SNjxmC",
                                     "isInheritable": false,
                                     "position": 10
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "SynTBQiBsdYJ",
+                                    "value": "zEY4DaJG4YT5",
                                     "isInheritable": false,
                                     "position": 20
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "GLks18SNjxmC",
+                                    "value": "SynTBQiBsdYJ",
                                     "isInheritable": false,
                                     "position": 30
                                 },
@@ -14617,152 +14790,238 @@
                                 {
                                     "type": "label",
                                     "name": "iconClass",
-                                    "value": "bx bx-info-circle",
+                                    "value": "bx bx-window",
                                     "isInheritable": false,
                                     "position": 40
                                 }
                             ],
                             "format": "markdown",
                             "dataFileName": "Frontend Basics.md",
-                            "attachments": []
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "es8OU2GuguFU",
-                            "notePath": [
-                                "pOsGYCXsbNQG",
-                                "CdNpE2pqjmI6",
-                                "es8OU2GuguFU"
-                            ],
-                            "title": "Examples",
-                            "notePosition": 50,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "examples",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "iconClass",
-                                    "value": "bx bx-code-alt",
-                                    "isInheritable": false,
-                                    "position": 30
-                                }
-                            ],
-                            "format": "markdown",
                             "attachments": [],
-                            "dirFileName": "Examples",
+                            "dirFileName": "Frontend Basics",
                             "children": [
                                 {
                                     "isClone": false,
-                                    "noteId": "TjLYAo3JMO8X",
+                                    "noteId": "MgibgPcfeuGz",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
                                         "CdNpE2pqjmI6",
-                                        "es8OU2GuguFU",
-                                        "TjLYAo3JMO8X"
+                                        "yIhgI5H7A2Sm",
+                                        "MgibgPcfeuGz"
                                     ],
-                                    "title": "\"New Task\" launcher button",
+                                    "title": "Custom Widgets",
                                     "notePosition": 10,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
-                                    "mime": "text/html",
+                                    "mime": "text/markdown",
                                     "attributes": [
                                         {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "xYjQUYhpbUEW",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "xYmIYSP6wE3F",
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "custom-widget",
                                             "isInheritable": false,
                                             "position": 20
                                         },
                                         {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "6f9hih2hXXZk",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "zEY4DaJG4YT5",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "m1lbrzyKDaRB",
-                                            "isInheritable": false,
-                                            "position": 50
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "s8alTXmpFR61",
-                                            "isInheritable": false,
-                                            "position": 60
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "yIhgI5H7A2Sm",
-                                            "isInheritable": false,
-                                            "position": 70
-                                        },
-                                        {
                                             "type": "label",
                                             "name": "iconClass",
-                                            "value": "bx bx-task",
+                                            "value": "bx bxs-widget",
                                             "isInheritable": false,
-                                            "position": 80
-                                        },
-                                        {
-                                            "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "new-task-button",
-                                            "isInheritable": false,
-                                            "position": 90
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "New Task launcher button.md",
-                                    "attachments": [
+                                    "dataFileName": "Custom Widgets.md",
+                                    "attachments": [],
+                                    "dirFileName": "Custom Widgets",
+                                    "children": [
                                         {
-                                            "attachmentId": "9C2JA6tdtRpN",
-                                            "title": "image.png",
-                                            "role": "image",
-                                            "mime": "image/png",
-                                            "position": 10,
-                                            "dataFileName": "New Task launcher button_i.png"
+                                            "isClone": false,
+                                            "noteId": "YNxAqkI5Kg1M",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "MgibgPcfeuGz",
+                                                "YNxAqkI5Kg1M"
+                                            ],
+                                            "title": "Word count widget",
+                                            "notePosition": 10,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "6tZeKvSHEUiB",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "6f9hih2hXXZk",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "s8alTXmpFR61",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "word-count",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Word count widget.md",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "JhM9NWfebzPi",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "Word count widget_image.png"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "SynTBQiBsdYJ",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "MgibgPcfeuGz",
+                                                "SynTBQiBsdYJ"
+                                            ],
+                                            "title": "Widget Basics",
+                                            "notePosition": 20,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/markdown",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "zEY4DaJG4YT5",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "BFs8mudNFgCS",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "GLks18SNjxmC",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "s8alTXmpFR61",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "widget-basics",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Widget Basics.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "M8IppdwVHSjG",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "MgibgPcfeuGz",
+                                                "M8IppdwVHSjG"
+                                            ],
+                                            "title": "Right pane widget",
+                                            "notePosition": 30,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "right-pane-widget",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Right pane widget.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "VqGQnnPGnqAU",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "MgibgPcfeuGz",
+                                                "VqGQnnPGnqAU"
+                                            ],
+                                            "title": "CSS",
+                                            "notePosition": 40,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "css",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "CSS.md",
+                                            "attachments": []
                                         }
                                     ]
                                 },
                                 {
                                     "isClone": false,
-                                    "noteId": "7kZPMD0uFwkH",
+                                    "noteId": "es8OU2GuguFU",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
                                         "CdNpE2pqjmI6",
-                                        "es8OU2GuguFU",
-                                        "7kZPMD0uFwkH"
+                                        "yIhgI5H7A2Sm",
+                                        "es8OU2GuguFU"
                                     ],
-                                    "title": "Downloading responses from Google Forms",
+                                    "title": "Examples",
                                     "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
@@ -14772,49 +15031,182 @@
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "responses-from-google-forms",
+                                            "value": "examples",
                                             "isInheritable": false,
                                             "position": 20
-                                        }
-                                    ],
-                                    "format": "markdown",
-                                    "dataFileName": "Downloading responses from Goo.md",
-                                    "attachments": []
-                                },
-                                {
-                                    "isClone": false,
-                                    "noteId": "DL92EjAaXT26",
-                                    "notePath": [
-                                        "pOsGYCXsbNQG",
-                                        "CdNpE2pqjmI6",
-                                        "es8OU2GuguFU",
-                                        "DL92EjAaXT26"
-                                    ],
-                                    "title": "Using promoted attributes to configure scripts",
-                                    "notePosition": 30,
-                                    "prefix": null,
-                                    "isExpanded": false,
-                                    "type": "text",
-                                    "mime": "text/html",
-                                    "attributes": [
+                                        },
                                         {
                                             "type": "label",
-                                            "name": "shareAlias",
-                                            "value": "promoted-attributes-config",
+                                            "name": "iconClass",
+                                            "value": "bx bx-code-alt",
                                             "isInheritable": false,
-                                            "position": 20
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "Using promoted attributes to c.md",
-                                    "attachments": [
+                                    "attachments": [],
+                                    "dirFileName": "Examples",
+                                    "children": [
                                         {
-                                            "attachmentId": "7P3jzVEa1mk7",
-                                            "title": "image.png",
-                                            "role": "image",
-                                            "mime": "image/png",
-                                            "position": 10,
-                                            "dataFileName": "Using promoted attributes .png"
+                                            "isClone": false,
+                                            "noteId": "TjLYAo3JMO8X",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "es8OU2GuguFU",
+                                                "TjLYAo3JMO8X"
+                                            ],
+                                            "title": "\"New Task\" launcher button",
+                                            "notePosition": 10,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "xYjQUYhpbUEW",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "xYmIYSP6wE3F",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "6f9hih2hXXZk",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "zEY4DaJG4YT5",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "yIhgI5H7A2Sm",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "m1lbrzyKDaRB",
+                                                    "isInheritable": false,
+                                                    "position": 60
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "s8alTXmpFR61",
+                                                    "isInheritable": false,
+                                                    "position": 70
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-task",
+                                                    "isInheritable": false,
+                                                    "position": 80
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "new-task-button",
+                                                    "isInheritable": false,
+                                                    "position": 90
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "New Task launcher button.md",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "9C2JA6tdtRpN",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "New Task launcher button_i.png"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "7kZPMD0uFwkH",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "es8OU2GuguFU",
+                                                "7kZPMD0uFwkH"
+                                            ],
+                                            "title": "Downloading responses from Google Forms",
+                                            "notePosition": 20,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "responses-from-google-forms",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Downloading responses from Goo.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "DL92EjAaXT26",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "es8OU2GuguFU",
+                                                "DL92EjAaXT26"
+                                            ],
+                                            "title": "Using promoted attributes to configure scripts",
+                                            "notePosition": 30,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "promoted-attributes-config",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Using promoted attributes to c.md",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "7P3jzVEa1mk7",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "Using promoted attributes .png"
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
@@ -14822,104 +15214,48 @@
                         },
                         {
                             "isClone": false,
-                            "noteId": "GPERMystNGTB",
+                            "noteId": "SPirpZypehBG",
                             "notePath": [
                                 "pOsGYCXsbNQG",
                                 "CdNpE2pqjmI6",
-                                "GPERMystNGTB"
+                                "SPirpZypehBG"
                             ],
-                            "title": "Events",
-                            "notePosition": 70,
+                            "title": "Backend scripts",
+                            "notePosition": 30,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
-                            "mime": "text/markdown",
+                            "mime": "text/html",
                             "attributes": [
                                 {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "CdNpE2pqjmI6",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "c5xB8m4g2IY6",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "zEY4DaJG4YT5",
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "backend-basics",
                                     "isInheritable": false,
                                     "position": 30
                                 },
                                 {
                                     "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "events",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "label",
                                     "name": "iconClass",
-                                    "value": "bx bx-rss",
+                                    "value": "bx bx-server",
                                     "isInheritable": false,
-                                    "position": 20
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
-                            "dataFileName": "Events.md",
-                            "attachments": []
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "MgibgPcfeuGz",
-                            "notePath": [
-                                "pOsGYCXsbNQG",
-                                "CdNpE2pqjmI6",
-                                "MgibgPcfeuGz"
-                            ],
-                            "title": "Custom Widgets",
-                            "notePosition": 80,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/markdown",
-                            "attributes": [
-                                {
-                                    "type": "label",
-                                    "name": "shareAlias",
-                                    "value": "custom-widget",
-                                    "isInheritable": false,
-                                    "position": 20
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "iconClass",
-                                    "value": "bx bxs-widget",
-                                    "isInheritable": false,
-                                    "position": 30
-                                }
-                            ],
-                            "format": "markdown",
-                            "dataFileName": "Custom Widgets.md",
                             "attachments": [],
-                            "dirFileName": "Custom Widgets",
+                            "dirFileName": "Backend scripts",
                             "children": [
                                 {
                                     "isClone": false,
-                                    "noteId": "YNxAqkI5Kg1M",
+                                    "noteId": "fZ2IGYFXjkEy",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
                                         "CdNpE2pqjmI6",
-                                        "MgibgPcfeuGz",
-                                        "YNxAqkI5Kg1M"
+                                        "SPirpZypehBG",
+                                        "fZ2IGYFXjkEy"
                                     ],
-                                    "title": "Word count widget",
+                                    "title": "Server-side imports",
                                     "notePosition": 10,
                                     "prefix": null,
                                     "isExpanded": false,
@@ -14927,57 +15263,27 @@
                                     "mime": "text/html",
                                     "attributes": [
                                         {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "6tZeKvSHEUiB",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "6f9hih2hXXZk",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "s8alTXmpFR61",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "word-count",
+                                            "value": "server-imports",
                                             "isInheritable": false,
-                                            "position": 40
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "Word count widget.md",
-                                    "attachments": [
-                                        {
-                                            "attachmentId": "JhM9NWfebzPi",
-                                            "title": "image.png",
-                                            "role": "image",
-                                            "mime": "image/png",
-                                            "position": 10,
-                                            "dataFileName": "Word count widget_image.png"
-                                        }
-                                    ]
+                                    "dataFileName": "Server-side imports.md",
+                                    "attachments": []
                                 },
                                 {
                                     "isClone": false,
-                                    "noteId": "SynTBQiBsdYJ",
+                                    "noteId": "GPERMystNGTB",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
                                         "CdNpE2pqjmI6",
-                                        "MgibgPcfeuGz",
-                                        "SynTBQiBsdYJ"
+                                        "SPirpZypehBG",
+                                        "GPERMystNGTB"
                                     ],
-                                    "title": "Widget Basics",
+                                    "title": "Events",
                                     "notePosition": 20,
                                     "prefix": null,
                                     "isExpanded": false,
@@ -14987,34 +15293,41 @@
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "zEY4DaJG4YT5",
+                                            "value": "CdNpE2pqjmI6",
                                             "isInheritable": false,
                                             "position": 10
                                         },
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "BFs8mudNFgCS",
+                                            "value": "c5xB8m4g2IY6",
                                             "isInheritable": false,
                                             "position": 20
                                         },
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "GLks18SNjxmC",
+                                            "value": "zEY4DaJG4YT5",
                                             "isInheritable": false,
                                             "position": 30
                                         },
                                         {
                                             "type": "label",
                                             "name": "shareAlias",
-                                            "value": "widget-basics",
+                                            "value": "events",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-rss",
                                             "isInheritable": false,
                                             "position": 20
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "Widget Basics.md",
+                                    "dataFileName": "Events.md",
                                     "attachments": []
                                 }
                             ]
@@ -15028,7 +15341,7 @@
                                 "GLks18SNjxmC"
                             ],
                             "title": "Script API",
-                            "notePosition": 90,
+                            "notePosition": 100,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",
@@ -15191,7 +15504,7 @@
                                 "vElnKeDNPSVl"
                             ],
                             "title": "Logging",
-                            "notePosition": 100,
+                            "notePosition": 110,
                             "prefix": null,
                             "isExpanded": false,
                             "type": "text",

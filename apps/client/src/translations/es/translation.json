@@ -1592,7 +1592,7 @@
   "tree-context-menu": {
     "open-in-a-new-tab": "Abrir en nueva pestaña",
     "open-in-a-new-split": "Abrir en nueva división",
-    "insert-note-after": "Insertar nota después de",
+    "insert-note-after": "Insertar nota contigua",
     "insert-child-note": "Insertar subnota",
     "delete": "Eliminar",
     "search-in-subtree": "Buscar en subárbol",
