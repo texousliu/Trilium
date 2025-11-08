@@ -337,14 +337,15 @@ async function registerGlobalShortcuts() {
                 const result = globalShortcut.register(
                     translatedShortcut,
                     cls.wrap(() => {
-                        if (!mainWindow) {
+                        const targetWindow = getLastFocusedWindow() || mainWindow;
+                        if (!targetWindow || targetWindow.isDestroyed()) {
                             return;
                         }
 
                         // window may be hidden / not in focus
-                        mainWindow.focus();
+                        showAndFocusWindow(targetWindow);
 
-                        mainWindow.webContents.send("globalShortcut", action.actionName);
+                        targetWindow.webContents.send("globalShortcut", action.actionName);
                     })
                 );
 
@@ -356,6 +357,17 @@ async function registerGlobalShortcuts() {
             }
         }
     }
+}
+
+function showAndFocusWindow(window: BrowserWindow) {
+    if (!window) return;
+
+    if (window.isMinimized()) {
+        window.restore();
+    }
+
+    window.show();
+    window.focus();
 }
 
 function getMainWindow() {
