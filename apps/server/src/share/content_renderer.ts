@@ -19,6 +19,7 @@ import becca from "../becca/becca.js";
 import BAttachment from '../becca/entities/battachment.js';
 import SAttachment from "./shaca/entities/sattachment.js";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import markdownService from "../services/import/markdown.js";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const templateCache: Map<string, string> = new Map();
@@ -243,6 +244,8 @@ export function getContent(note: SNote | BNote) {
         renderText(result, note);
     } else if (note.type === "code") {
         renderCode(result);
+    } else if (note.type === "markdown") {
+        renderMarkdown(result);
     } else if (note.type === "mermaid") {
         renderMermaid(result, note);
     } else if (["image", "canvas", "mindMap"].includes(note.type)) {
@@ -388,6 +391,19 @@ export function renderCode(result: Result) {
         const preEl = new HTMLElement("pre", {});
         preEl.appendChild(new TextNode(result.content));
         result.content = preEl.outerHTML;
+    }
+}
+
+/**
+ * Renders a markdown note by converting it to HTML.
+ */
+function renderMarkdown(result: Result) {
+    if (typeof result.content !== "string" || !result.content?.trim()) {
+        result.isEmpty = true;
+    } else {
+        // Convert markdown to HTML using the markdown service
+        result.content = markdownService.renderToHtml(result.content, "");
+        result.isEmpty = false;
     }
 }
 
