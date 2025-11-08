@@ -151,7 +151,6 @@ export default class MobileLayout {
                                             .child(<NoteTitleWidget />)
                                             .child(<MobileDetailMenu />)
                                     )
-                                    .child(<SharedInfoWidget />)
                                     .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
                                     .child(new PromotedAttributesWidget())
                                     .child(
@@ -160,6 +159,7 @@ export default class MobileLayout {
                                             .contentSized()
                                             .child(new ContentHeader()
                                                 .child(<ReadOnlyNoteInfoBar />)
+                                                .child(<SharedInfoWidget />)
                                             )
                                             .child(new NoteDetailWidget())
                                             .child(<NoteList media="screen" />)

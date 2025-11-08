@@ -1,5 +1,6 @@
 .info-bar {
     margin-top: 4px;
+    contain: unset !important;
     padding: 8px 20px;
     color: var(--read-only-note-info-bar-color);
     font-size: .9em;

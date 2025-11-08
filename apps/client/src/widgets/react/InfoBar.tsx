@@ -3,12 +3,13 @@ import { ComponentChildren } from "preact";
 import "./InfoBar.css";
 
 export type InfoBarParams = {
-    type: "prominent" | "subtle"
+    type: "prominent" | "subtle",
+    className: string;
     children: ComponentChildren;
 };
 
 export default function InfoBar(props: InfoBarParams) {
-    return <div className={`info-bar info-bar-${props.type}`}>
+    return <div className={`info-bar ${props.className} info-bar-${props.type}`}>
         {props?.children}
     </div>
 }

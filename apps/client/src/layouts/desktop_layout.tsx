@@ -131,7 +131,6 @@ export default class DesktopLayout {
                                                                 .child(<CreatePaneButton />)
                                                         )
                                                         .child(<Ribbon />)
-                                                        .child(<SharedInfo />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
@@ -139,6 +138,7 @@ export default class DesktopLayout {
                                                                 .filling()
                                                                 .child(new ContentHeader()
                                                                     .child(<ReadOnlyNoteInfoBar />)
+                                                                    .child(<SharedInfo />)
                                                                 )
                                                                 .child(new PromotedAttributesWidget())
                                                                 .child(<SqlTableSchemas />)
