@@ -1,7 +1,7 @@
-import { EventData } from "../components/app_context";
-import BasicWidget from "./basic_widget";
-import Container from "./containers/container";
-import NoteContext from "../components/note_context";
+import { EventData } from "../../components/app_context";
+import BasicWidget from "../basic_widget";
+import Container from "./container";
+import NoteContext from "../../components/note_context";
 
 export default class ContentHeader extends Container<BasicWidget> {
     

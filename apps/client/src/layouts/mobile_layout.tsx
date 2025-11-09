@@ -12,6 +12,7 @@ import MobileEditorToolbar from "../widgets/type_widgets/ckeditor/mobile_editor_
 import NoteDetailWidget from "../widgets/note_detail.js";
 import NoteList from "../widgets/collections/NoteList.jsx";
 import NoteTitleWidget from "../widgets/note_title.js";
+import ContentHeader from "../widgets/containers/content-header.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
@@ -28,7 +29,6 @@ import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibb
 import TabRowWidget from "../widgets/tab_row.js";
 import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button.jsx";
 import type AppContext from "../components/app_context.js";
-import ContentHeader from "../widgets/content-header.js";
 
 const MOBILE_CSS = `
 <style>

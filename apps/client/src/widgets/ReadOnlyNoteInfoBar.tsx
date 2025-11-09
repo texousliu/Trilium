@@ -9,8 +9,10 @@ export default function ReadOnlyNoteInfoBar(props: {}) {
     const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
     const isExplicitReadOnly = note?.isLabelTruthy("readOnly");
 
-    return <div class={`read-only-note-info-bar-widget ${(isReadOnly) ? "visible" : ""}`}>
-                {isReadOnly && <InfoBar type={(isExplicitReadOnly ? "subtle" : "prominent")}>
+    return <InfoBar className="read-only-note-info-bar-widget"
+                    type={(isExplicitReadOnly ? "subtle" : "prominent")}
+                    style={{display: (!isReadOnly) ? "none" : undefined}}>
+
                     <div class="read-only-note-info-bar-widget-content">
                         {(isExplicitReadOnly) ? (
                             <div>{t("read-only-info.read-only-note")}</div>
@@ -29,6 +31,6 @@ export default function ReadOnlyNoteInfoBar(props: {}) {
                         <Button text={t("read-only-info.edit-note")}
                                 icon="bx-pencil" onClick={() => enableEditing()} />
                     </div>
-                </InfoBar>}
-            </div>;
+                </InfoBar>
+
 }
