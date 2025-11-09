@@ -841,7 +841,7 @@ export function arrayEqual<T>(a: T[], b: T[]) {
     return true;
 }
 
-type Indexed<T extends object> = T & { index: number };
+export type Indexed<T extends object> = T & { index: number };
 
 /**
  * Given an object array, alters every object in the array to have an index field assigned to it.
