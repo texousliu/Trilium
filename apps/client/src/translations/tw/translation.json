@@ -39,7 +39,10 @@
     "help_on_tree_prefix": "有關樹前綴的說明",
     "prefix": "前綴： ",
     "save": "儲存",
-    "branch_prefix_saved": "已儲存分支前綴。"
+    "branch_prefix_saved": "已儲存分支前綴。",
+    "edit_branch_prefix_multiple": "編輯 {{count}} 個分支的前綴",
+    "branch_prefix_saved_multiple": "已為 {{count}} 個分支儲存分支前綴。",
+    "affected_branches": "受影響的分支 ({{count}}):"
   },
   "bulk_actions": {
     "bulk_actions": "批次操作",
@@ -2076,5 +2079,8 @@
     "edit-slide": "編輯此投影片",
     "start-presentation": "開始簡報",
     "slide-overview": "切換投影片概覽"
+  },
+  "calendar_view": {
+    "delete_note": "刪除筆記…"
   }
 }
