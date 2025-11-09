@@ -2555,7 +2555,8 @@ iframe.print-iframe {
     flex-direction: column;
 }
 
-.scrolling-container > .note-detail.full-height {
+.scrolling-container > .note-detail.full-height,
+.scrolling-container > .note-list-widget {
     position: relative;
     flex-grow: 1;
     width: 100%;
