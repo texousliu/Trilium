@@ -1,1 +1,7 @@
-{}
+{
+    "get-started": {
+        "title": "Mulai",
+        "desktop_title": "Unduh aplikasi desktop (v{{version}})",
+        "architecture": "Arsitektur:"
+    }
+}
