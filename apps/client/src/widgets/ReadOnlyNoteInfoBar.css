@@ -1,12 +1,9 @@
 body.zen div.read-only-note-info-bar-widget {
     width: fit-content;
     max-width: var(--max-content-width);
-    margin: 0 auto;
-}
-
-body.zen div.read-only-note-info-bar-widget .info-bar {
     border-radius: 8px;
     border: unset;
+    margin: 0 auto;
 }
 
 .read-only-note-info-bar-widget-content {
