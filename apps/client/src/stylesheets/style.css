@@ -2178,6 +2178,11 @@ body.zen .note-split .ribbon-container .classic-toolbar-widget {
     background: var(--menu-background-color);
 }
 
+body.zen .note-split .ribbon-container .classic-toolbar-widget:not(:has(> .ck-toolbar)) {
+    /* Hide the toolbar wrapper if the toolbar is missing */
+    display: none;
+}
+
 body.zen .note-split:focus-within .ribbon-container .classic-toolbar-widget {
     pointer-events: all;
 }
