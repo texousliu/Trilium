@@ -225,9 +225,8 @@ function NoteDetailWrapper({ Element, type, isVisible, isFullHeight, props }: { 
     const typeMapping = TYPE_MAPPINGS[type];
     return (
         <div
-            className={`${typeMapping.className} ${typeMapping.printable ? "note-detail-printable" : ""}`}
+            className={`${typeMapping.className} ${typeMapping.printable ? "note-detail-printable" : ""} ${isVisible ? "visible" : "hidden-ext"}`}
             style={{
-                display: !isVisible ? "none" : "",
                 height: isFullHeight ? "100%" : ""
             }}
         >
