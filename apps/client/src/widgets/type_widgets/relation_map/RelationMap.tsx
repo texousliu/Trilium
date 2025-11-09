@@ -211,7 +211,8 @@ async function useRelationData(noteId: string, mapData: MapData | undefined, map
     const [ inverseRelations, setInverseRelations ] = useState<RelationMapPostResponse["inverseRelations"]>();
 
     async function refresh() {
-        if (!noteIds) return;
+        const api = mapApiRef.current;
+        if (!noteIds || !api) return;
 
         const data = await server.post<RelationMapPostResponse>("relation-map", { noteIds, relationMapNoteId: noteId });
         const relations: ClientRelation[] = [];
@@ -238,8 +239,8 @@ async function useRelationData(noteId: string, mapData: MapData | undefined, map
         }
 
         setRelations(relations);
-        mapApiRef.current?.loadRelations(relations);
-        mapApiRef.current?.cleanupOtherNotes(Object.keys(data.noteTitles));
+        api.loadRelations(relations);
+        api.cleanupOtherNotes(Object.keys(data.noteTitles));
     }
 
     useEffect(() => {
