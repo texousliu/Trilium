@@ -153,7 +153,6 @@ export function CodeEditor({ parentComponent, ntxId, containerRef: externalConta
             const theme = getThemeById(codeNoteTheme.substring(DEFAULT_PREFIX.length));
             if (theme) {
                 codeEditorRef.current.setTheme(theme).then(() => {
-                    if (mime === "text/x-sqlite;schema=trilium") return;
                     const editor = containerRef.current?.querySelector(".cm-editor");
                     if (!editor) return;
                     const style = window.getComputedStyle(editor);
