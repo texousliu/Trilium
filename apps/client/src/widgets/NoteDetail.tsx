@@ -193,12 +193,12 @@ export default function NoteDetail() {
             ref={containerRef}
             class={`note-detail ${isFullHeight ? "full-height" : ""}`}
         >
-            {Object.entries(noteTypesToRender.current).map(([ type, Element ]) => {
+            {Object.entries(noteTypesToRender.current).map(([ itemType, Element ]) => {
                 return <NoteDetailWrapper
                     Element={Element}
-                    key={type}
-                    type={type as ExtendedNoteType}
-                    isVisible={activeNoteType === type}
+                    key={itemType}
+                    type={itemType as ExtendedNoteType}
+                    isVisible={type === itemType}
                     isFullHeight={isFullHeight}
                     props={props}
                 />
