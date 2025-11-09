@@ -1,11 +1,13 @@
 .info-bar {
     --link-color: var(--main-text-color);
-    
+
     margin-top: 4px;
     contain: unset !important;
     padding: 8px 20px;
     color: var(--read-only-note-info-bar-color);
     font-size: .9em;
+    cursor: default;
+    user-select: none;
 }
 
 .info-bar-prominent {
