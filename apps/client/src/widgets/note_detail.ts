@@ -48,10 +48,6 @@ const TPL = /*html*/`
         /* Horizontally center the widget in its parent when the "Keep content centered" option is on */
         margin-inline: auto;
     }
-
-    .note-detail.full-height {
-        height: 100%;
-    }
     </style>
 </div>
 `;

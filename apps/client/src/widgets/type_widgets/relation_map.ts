@@ -103,7 +103,7 @@ const linkOverlays = [
 ];
 
 const TPL = /*html*/`
-<div class="note-detail-relation-map note-detail-printable">
+<div class="note-detail-relation-map full-height note-detail-printable">
     <div class="relation-map-wrapper">
        <div class="relation-map-container"></div>
     </div>

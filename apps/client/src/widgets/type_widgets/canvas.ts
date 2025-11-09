@@ -13,6 +13,10 @@ import protected_session_holder from "../../services/protected_session_holder.js
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
         <style>
+        .canvas-widget {
+            height: 100%;
+        }
+
         .excalidraw .App-menu_top .buttonList {
             display: flex;
         }
