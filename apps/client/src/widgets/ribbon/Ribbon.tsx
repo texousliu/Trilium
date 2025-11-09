@@ -16,7 +16,7 @@ interface ComputedTab extends Indexed<TabConfiguration> {
 }
 
 export default function Ribbon() {
-    const { note, ntxId, hoistedNoteId, notePath, noteContext, componentId } = useNoteContext();
+    const { note, ntxId, hoistedNoteId, notePath, noteContext, componentId, isReadOnlyTemporarilyDisabled } = useNoteContext();
     const noteType = useNoteProperty(note, "type");
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
     const [ computedTabs, setComputedTabs ] = useState<ComputedTab[]>();
@@ -39,7 +39,7 @@ export default function Ribbon() {
 
     useEffect(() => {
         refresh();
-    }, [ note, noteType ]);
+    }, [ note, noteType, isReadOnlyTemporarilyDisabled ]);
 
     // Automatically activate the first ribbon tab that needs to be activated whenever a note changes.
     useEffect(() => {

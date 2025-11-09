@@ -199,6 +199,7 @@ export function useNoteContext() {
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ , setViewMode ] = useState<ViewMode>();
+    const [ isReadOnlyTemporarilyDisabled, setIsReadOnlyTemporarilyDisabled ] = useState<boolean | null | undefined>(noteContext?.viewScope?.isReadOnly);
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useEffect(() => {
@@ -218,6 +219,11 @@ export function useNoteContext() {
             setRefreshCounter(refreshCounter + 1);
         }
     });
+    useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
+        if (eventNoteContext.ntxId === noteContext?.ntxId) {
+            setIsReadOnlyTemporarilyDisabled(eventNoteContext?.viewScope?.readOnlyTemporarilyDisabled);
+        }
+    });
 
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
@@ -231,7 +237,8 @@ export function useNoteContext() {
         viewScope: noteContext?.viewScope,
         componentId: parentComponent.componentId,
         noteContext,
-        parentComponent
+        parentComponent,
+        isReadOnlyTemporarilyDisabled
     };
 
 }

@@ -7,7 +7,6 @@ import protectedSessionService from "../services/protected_session.js";
 import options from "../services/options.js";
 import froca from "../services/froca.js";
 import utils from "../services/utils.js";
-import LlmChatPanel from "../widgets/llm_chat_panel.js";
 import toastService from "../services/toast.js";
 import noteCreateService from "../services/note_create.js";
 
