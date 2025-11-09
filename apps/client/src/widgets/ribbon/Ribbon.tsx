@@ -46,7 +46,7 @@ export default function Ribbon() {
         if (!computedTabs) return;
         const tabToActivate = computedTabs.find(tab => tab.shouldShow && (typeof tab.activate === "boolean" ? tab.activate : tab.activate?.(titleContext)));
         setActiveTabIndex(tabToActivate?.index);
-    }, [ note?.noteId ]);
+    }, [ computedTabs, note?.noteId ]);
 
     // Register keyboard shortcuts.
     const eventsToListenTo = useMemo(() => TAB_CONFIGURATION.filter(config => config.toggleCommand).map(config => config.toggleCommand) as EventNames[], []);
