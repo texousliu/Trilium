@@ -146,7 +146,7 @@ function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: stri
     )
 }
 
-async function shouldShowTab(showConfig: boolean | ((context: TitleContext) => Promise<boolean | null | undefined> | boolean | null | undefined), context: TitleContext) {
+export async function shouldShowTab(showConfig: boolean | ((context: TitleContext) => Promise<boolean | null | undefined> | boolean | null | undefined), context: TitleContext) {
     if (showConfig === null || showConfig === undefined) return true;
     if (typeof showConfig === "boolean") return showConfig;
     if ("then" in showConfig) return await showConfig(context);
