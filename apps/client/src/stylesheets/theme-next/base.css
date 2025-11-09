@@ -494,16 +494,21 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
     margin: 5px 10px 5px 0;
 }
 
+:root .note-list .note-book-card:hover {
+    background-color: var(--card-background-hover-color);
+    transition: background-color 200ms ease-out;
+}
+
+:root .note-list .note-book-card:active {
+    transform: scale(.98);
+}
+
 .note-list.list-view .note-book-card {
     box-shadow: 0 0 3px var(--card-shadow-color);
 }
 
 .note-list.list-view .note-book-card .note-book-header .note-icon {
     vertical-align: middle;
-}
-
-.note-list-wrapper .note-book-card:active {
-    background-color: var(--card-background-press-color);
 }
 
 .note-list-wrapper .note-book-card a {
@@ -587,7 +592,6 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
 }
 
 .note-list.grid-view .note-book-card:hover {
-    background: var(--card-background-color) !important;
     filter: contrast(105%);
 }
 

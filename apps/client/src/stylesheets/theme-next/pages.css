@@ -101,7 +101,7 @@
 .sql-table-schemas-widget .sql-table-schemas button:hover,
 .sql-table-schemas-widget .sql-table-schemas button:active,
 .sql-table-schemas-widget .sql-table-schemas button:focus-visible {
-    --background: var(--card-background-press-color);
+    --background: var(--card-background-hover-color);
     --color: var(--main-text-color);
 }
 
