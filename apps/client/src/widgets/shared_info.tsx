@@ -49,7 +49,7 @@ export default function SharedInfo() {
     });
 
     return (
-        <InfoBar className="shared-info-widget" type="subtle">
+        <InfoBar className="shared-info-widget" type="subtle" style={{display: (!link) ? "none" : undefined}}>
             {link && (
                 <RawHtml html={syncServerHost
                 ? t("shared_info.shared_publicly", { link })
