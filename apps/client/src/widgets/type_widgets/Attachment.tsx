@@ -129,12 +129,19 @@ export function AttachmentDetail({ note, viewScope }: TypeWidgetProps) {
 function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment, isFullDetail?: boolean }) {
     const contentWrapper = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    function refresh() {
         content_renderer.getRenderedContent(attachment, { imageHasZoom: isFullDetail })
             .then(({ $renderedContent }) => {
                 contentWrapper.current?.replaceChildren(...$renderedContent);
-            })
-    }, [ attachment ]);
+            });
+    }
+
+    useEffect(refresh, [ attachment ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttachmentRows().find(attachment => attachment.attachmentId)) {
+            refresh();
+        }
+    });
 
     async function copyAttachmentLinkToClipboard() {
         if (attachment.role === "image") {
