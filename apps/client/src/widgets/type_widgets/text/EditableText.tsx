@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
-import utils, { deferred, hasTouchBar, isMobile } from "../../../services/utils";
+import utils, { hasTouchBar, isMobile } from "../../../services/utils";
 import { useEditorSpacedUpdate, useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteLabel, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog, { CKEditorApi } from "./CKEditorWithWatchdog";
@@ -17,6 +17,7 @@ import note_create from "../../../services/note_create";
 import TouchBar, { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl } from "../../react/TouchBar";
 import { RefObject } from "preact";
 import { buildSelectedBackgroundColor } from "../../../components/touch_bar";
+import { deferred } from "@triliumnext/commons";
 
 /**
  * The editor can operate into two distinct modes:
@@ -202,6 +203,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         const customDateTimeFormat = options.get("customDateTimeFormat");
         const dateString = utils.formatDateTime(date, customDateTimeFormat);
 
+        console.log("Insert text ", ntxId, eventNtxId, dateString);
         addTextToEditor(dateString);
     });
     useTriliumEvent("addTextToActiveEditor", ({ text }) => {

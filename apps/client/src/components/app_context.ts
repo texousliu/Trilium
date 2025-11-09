@@ -668,7 +668,7 @@ export class AppContext extends Component {
     }
 
     removeBeforeUnloadListener(listener: (() => boolean)) {
-        this.beforeUnloadListeners = this.beforeUnloadListeners.filter(l => l === listener);
+        this.beforeUnloadListeners = this.beforeUnloadListeners.filter(l => l !== listener);
     }
 }
 

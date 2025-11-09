@@ -40,7 +40,6 @@ export default function AiChat({ note, noteContext }: TypeWidgetProps) {
     useEffect(() => {
         llmChatPanel.setNoteId(note.noteId);
         llmChatPanel.setCurrentNoteId(note.noteId);
-        console.log("Refresh!");
     }, [ note ]);
 
     return ChatWidget;

@@ -873,29 +873,6 @@ export function getErrorMessage(e: unknown) {
     }
 }
 
-// TODO: Deduplicate with server
-export interface DeferredPromise<T> extends Promise<T> {
-    resolve: (value: T | PromiseLike<T>) => void;
-    reject: (reason?: any) => void;
-}
-
-// TODO: Deduplicate with server
-export function deferred<T>(): DeferredPromise<T> {
-    return (() => {
-        let resolve!: (value: T | PromiseLike<T>) => void;
-        let reject!: (reason?: any) => void;
-
-        let promise = new Promise<T>((res, rej) => {
-            resolve = res;
-            reject = rej;
-        }) as DeferredPromise<T>;
-
-        promise.resolve = resolve;
-        promise.reject = reject;
-        return promise as DeferredPromise<T>;
-    })();
-}
-
 /**
  * Handles left or right placement of e.g. tooltips in case of right-to-left languages. If the current language is a RTL one, then left and right are swapped. Other directions are unaffected.
  * @param placement a string optionally containing a "left" or "right" value.

@@ -20,7 +20,6 @@ export default function Doc({ note, viewScope, ntxId }: TypeWidgetProps) {
     }, [ note ]);
 
     useTriliumEvent("executeWithContentElement", async ({ resolve, ntxId: eventNtxId}) => {
-        console.log("Got request for content ", ntxId, eventNtxId);
         if (eventNtxId !== ntxId) return;
         await initialized.current;
         resolve(refToJQuerySelector(containerRef));
