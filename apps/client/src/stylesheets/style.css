@@ -1104,7 +1104,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 .card {
     color: inherit !important;
-    background-color: inherit !important;
     border-color: var(--main-border-color) !important;
 }
 
@@ -1759,10 +1758,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     flex-direction: column;
     margin-inline-start: 10px;
     margin-inline-end: 5px;
+    background: transparent;
 }
 
 #right-pane .card-header {
-    background: inherit;
     padding: 6px 0 3px 0;
     width: 99%; /* to give minimal right margin */
     background-color: var(--button-background-color);
