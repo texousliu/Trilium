@@ -8,8 +8,6 @@ import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
 import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
-import MobileEditorToolbar from "../widgets/type_widgets/ckeditor/mobile_editor_toolbar.js";
-import NoteDetailWidget from "../widgets/note_detail.js";
 import NoteList from "../widgets/collections/NoteList.jsx";
 import NoteTitleWidget from "../widgets/note_title.js";
 import ContentHeader from "../widgets/containers/content-header.js";
@@ -29,6 +27,8 @@ import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibb
 import TabRowWidget from "../widgets/tab_row.js";
 import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button.jsx";
 import type AppContext from "../components/app_context.js";
+import NoteDetail from "../widgets/NoteDetail.jsx";
+import MobileEditorToolbar from "../widgets/type_widgets/text/mobile_editor_toolbar.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -161,7 +161,7 @@ export default class MobileLayout {
                                                 .child(<ReadOnlyNoteInfoBar />)
                                                 .child(<SharedInfoWidget />)
                                             )
-                                            .child(new NoteDetailWidget())
+                                            .child(<NoteDetail />)
                                             .child(<NoteList media="screen" />)
                                             .child(<StandaloneRibbonAdapter component={SearchDefinitionTab} />)
                                             .child(<SearchResult />)

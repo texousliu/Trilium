@@ -8,11 +8,10 @@ import tray from "@triliumnext/server/src/services/tray.js";
 import options from "@triliumnext/server/src/services/options.js";
 import electronDebug from "electron-debug";
 import electronDl from "electron-dl";
-import { deferred } from "@triliumnext/server/src/services/utils.js";
 import { PRODUCT_NAME } from "./app-info";
 import port from "@triliumnext/server/src/services/port.js";
 import { join } from "path";
-import { LOCALES } from "../../../packages/commons/src";
+import { deferred, LOCALES } from "../../../packages/commons/src";
 
 async function main() {
     const userDataPath = getUserData();

@@ -1,12 +1,12 @@
 import { CSSProperties } from "preact/compat";
 import { DragData } from "../note_tree";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
-import { Inputs, MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { ParentComponent } from "./react_utils";
+import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { ParentComponent, refToJQuerySelector } from "./react_utils";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
-import { ViewMode } from "../../services/link";
-import appContext, { CommandListenerData, EventData, EventNames } from "../../components/app_context";
+import { ViewMode, ViewScope } from "../../services/link";
+import appContext, { EventData, EventNames } from "../../components/app_context";
 import attributes from "../../services/attributes";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import Component from "../../components/component";
@@ -21,6 +21,8 @@ import protected_session_holder from "../../services/protected_session_holder";
 import SpacedUpdate from "../../services/spaced_update";
 import toast, { ToastOptions } from "../../services/toast";
 import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
+import server from "../../services/server";
+import { removeIndividualBinding } from "../../services/shortcuts";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -73,6 +75,66 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     }, [interval]);
 
     return spacedUpdateRef.current;
+}
+
+export function useEditorSpacedUpdate({ note, noteContext, getData, onContentChange, dataSaved, updateInterval }: {
+    note: FNote,
+    noteContext: NoteContext | null | undefined,
+    getData: () => Promise<object | undefined> | object | undefined,
+    onContentChange: (newContent: string) => void,
+    dataSaved?: () => void,
+    updateInterval?: number;
+}) {
+    const parentComponent = useContext(ParentComponent);
+    const blob = useNoteBlob(note, parentComponent?.componentId);
+
+    const callback = useMemo(() => {
+        return async () => {
+            const data = await getData();
+
+            // for read only notes
+            if (data === undefined) return;
+
+            protected_session_holder.touchProtectedSessionIfNecessary(note);
+            await server.put(`notes/${note.noteId}/data`, data, parentComponent?.componentId);
+
+            dataSaved?.();
+        }
+    }, [ note, getData, dataSaved ])
+    const spacedUpdate = useSpacedUpdate(callback);
+
+    // React to note/blob changes.
+    useEffect(() => {
+        if (!blob) return;
+        spacedUpdate.allowUpdateWithoutChange(() => onContentChange(blob.content));
+    }, [ blob ]);
+
+    // React to update interval changes.
+    useEffect(() => {
+        if (!updateInterval) return;
+        spacedUpdate.setUpdateInterval(updateInterval);
+    }, [ updateInterval ]);
+
+    // Save if needed upon switching tabs.
+    useTriliumEvent("beforeNoteSwitch", async ({ noteContext: eventNoteContext }) => {
+        if (eventNoteContext.ntxId !== noteContext?.ntxId) return;
+        await spacedUpdate.updateNowIfNecessary();
+    });
+
+    // Save if needed upon tab closing.
+    useTriliumEvent("beforeNoteContextRemove", async ({ ntxIds }) => {
+        if (!noteContext?.ntxId || !ntxIds.includes(noteContext.ntxId)) return;
+        await spacedUpdate.updateNowIfNecessary();
+    })
+
+    // Save if needed upon window/browser closing.
+    useEffect(() => {
+        const listener = () => spacedUpdate.isAllSavedAndTriggerUpdate();
+        appContext.addBeforeUnloadListener(listener);
+        return () => appContext.removeBeforeUnloadListener(listener);
+    }, []);
+
+    return spacedUpdate;
 }
 
 /**
@@ -198,7 +260,7 @@ export function useNoteContext() {
     const [ noteContext, setNoteContext ] = useState<NoteContext>();
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
-    const [ , setViewMode ] = useState<ViewMode>();
+    const [ , setViewScope ] = useState<ViewScope>();
     const [ isReadOnlyTemporarilyDisabled, setIsReadOnlyTemporarilyDisabled ] = useState<boolean | null | undefined>(noteContext?.viewScope?.isReadOnly);
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
@@ -209,7 +271,7 @@ export function useNoteContext() {
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);
-        setViewMode(noteContext.viewScope?.viewMode);
+        setViewScope(noteContext.viewScope);
     });
     useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
@@ -381,7 +443,7 @@ export function useNoteLabelInt(note: FNote | undefined | null, labelName: Filte
     ]
 }
 
-export function useNoteBlob(note: FNote | null | undefined): FBlob | null | undefined {
+export function useNoteBlob(note: FNote | null | undefined, componentId?: string): FBlob | null | undefined {
     const [ blob, setBlob ] = useState<FBlob | null>();
 
     function refresh() {
@@ -400,6 +462,10 @@ export function useNoteBlob(note: FNote | null | undefined): FBlob | null | unde
 
         // Check if a revision occurred.
         if (loadResults.hasRevisionForNote(note.noteId)) {
+            refresh();
+        }
+
+        if (loadResults.isNoteContentReloaded(note.noteId, componentId)) {
             refresh();
         }
     });
@@ -675,26 +741,6 @@ export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | un
     }, [ containerRef, callback ]);
 }
 
-export function useTouchBar(
-    factory: (context: CommandListenerData<"buildTouchBar"> & { parentComponent: Component | null }) => void,
-    inputs: Inputs
-) {
-    const parentComponent = useContext(ParentComponent);
-
-    useLegacyImperativeHandlers({
-        buildTouchBarCommand(context: CommandListenerData<"buildTouchBar">) {
-            return factory({
-                ...context,
-                parentComponent
-            });
-        }
-    });
-
-    useEffect(() => {
-        parentComponent?.triggerCommand("refreshTouchBar");
-    }, inputs);
-}
-
 export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => void) {
     const resizeObserver = useRef<ResizeObserver>(null);
     useEffect(() => {
@@ -708,6 +754,20 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => v
 
         return () => observer.disconnect();
     }, [ callback, ref ]);
+}
+
+export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined) {
+    useEffect(() => {
+        if (!parentComponent) return;
+        const $container = refToJQuerySelector(containerRef);
+        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent);
+        return async () => {
+            const bindings = await bindingPromise;
+            for (const binding of bindings) {
+                removeIndividualBinding(binding);
+            }
+        }
+    }, []);
 }
 
 /**

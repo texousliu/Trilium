@@ -14,7 +14,6 @@ import LauncherContainer from "../widgets/containers/launcher_container.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
-import NoteDetailWidget from "../widgets/note_detail.js";
 import NoteIconWidget from "../widgets/note_icon.jsx";
 import NoteList from "../widgets/collections/NoteList.jsx";
 import NoteTitleWidget from "../widgets/note_title.jsx";
@@ -44,6 +43,7 @@ import type { WidgetsByParent } from "../services/bundle.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import utils from "../services/utils.js";
 import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
+import NoteDetail from "../widgets/NoteDetail.jsx";
 
 export default class DesktopLayout {
 
@@ -142,7 +142,7 @@ export default class DesktopLayout {
                                                                 )
                                                                 .child(new PromotedAttributesWidget())
                                                                 .child(<SqlTableSchemas />)
-                                                                .child(new NoteDetailWidget())
+                                                                .child(<NoteDetail />)
                                                                 .child(<NoteList media="screen" />)
                                                                 .child(<SearchResult />)
                                                                 .child(<SqlResults />)

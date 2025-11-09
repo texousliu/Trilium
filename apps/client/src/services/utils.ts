@@ -173,7 +173,7 @@ const entityMap: Record<string, string> = {
     "=": "&#x3D;"
 };
 
-function escapeHtml(str: string) {
+export function escapeHtml(str: string) {
     return str.replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
 }
 
