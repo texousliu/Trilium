@@ -3,7 +3,7 @@ body.zen div.read-only-note-info-bar-widget {
     max-width: var(--max-content-width);
     border-radius: 8px;
     border: unset;
-    margin: 0 auto;
+    margin: 0 auto 10px auto;
 }
 
 .read-only-note-info-bar-widget-content {

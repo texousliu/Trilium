@@ -1,5 +1,5 @@
 .info-bar {
-    --link-color: var(--main-text-color);
+    --link-color: currentColor;
 
     margin-top: 4px;
     contain: unset !important;

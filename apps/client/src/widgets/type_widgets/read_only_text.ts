@@ -33,6 +33,7 @@ const TPL = /*html*/`
     body.heading-style-underline .note-detail-readonly-text h6 { border-bottom: 1px solid var(--main-border-color); }
 
     .note-detail-readonly-text {
+
         padding-inline-start: 24px;
         padding-top: 10px;
         font-family: var(--detail-font-family);
