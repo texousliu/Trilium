@@ -144,10 +144,7 @@ export function CodeEditor({ parentComponent, ntxId, containerRef: externalConta
     const [ backgroundColor, setBackgroundColor ] = useState<string>();
     useEffect(() => {
         if (!backgroundColor || noBackgroundChange) return;
-        parentComponent?.$widget.closest(".scrolling-container").css("background-color", backgroundColor);
-        return () => {
-            parentComponent?.$widget.closest(".scrolling-container").css("background-color", "unset");
-        };
+        parentComponent?.$widget.closest(".scrolling-container").css("--code-background-color", backgroundColor);
     }, [ backgroundColor ]);
 
     // React to theme changes.
