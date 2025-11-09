@@ -6,7 +6,6 @@ import utils from "../../services/utils";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
 import { useTriliumEvent } from "../react/hooks";
-import EditableTextTypeWidget from "../type_widgets/editable_text";
 import { CKEditorApi } from "../type_widgets/text/CKEditorWithWatchdog";
 
 export interface MarkdownImportOpts {
@@ -20,12 +19,10 @@ interface RenderMarkdownResponse {
 export default function MarkdownImportDialog() {
     const markdownImportTextArea = useRef<HTMLTextAreaElement>(null);
     const editorApiRef = useRef<CKEditorApi>(null);
-    const [ textTypeWidget, setTextTypeWidget ] = useState<EditableTextTypeWidget>();
     const [ text, setText ] = useState("");
     const [ shown, setShown ] = useState(false);
 
     useTriliumEvent("showPasteMarkdownDialog", ({ editorApi }) => {
-        setTextTypeWidget(textTypeWidget);
         if (utils.isElectron()) {
             const { clipboard } = utils.dynamicRequire("electron");
             const text = clipboard.readText();
