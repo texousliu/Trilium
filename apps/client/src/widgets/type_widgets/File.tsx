@@ -1,4 +1,3 @@
-import { VNode } from "preact";
 import { useNoteBlob } from "../react/hooks";
 import "./File.css";
 import { TypeWidgetProps } from "./type_widget";

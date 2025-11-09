@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { useEditorSpacedUpdate, useLegacyWidget } from "../react/hooks";
 import { type TypeWidgetProps } from "./type_widget";
 import LlmChatPanel from "../llm_chat";

@@ -141,7 +141,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
         async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null = null) {
             await link.loadReferenceLinkTitle($el, href);
         }
-    })
+    });
 
     useEffect(() => {
         const container = containerRef.current;

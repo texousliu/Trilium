@@ -3,7 +3,7 @@ import { t } from "../../../services/i18n";
 import SplitEditor, { PreviewButton, SplitEditorProps } from "./SplitEditor";
 import { RawHtmlBlock } from "../../react/RawHtml";
 import server from "../../../services/server";
-import svgPanZoom, { zoomIn } from "svg-pan-zoom";
+import svgPanZoom from "svg-pan-zoom";
 import { RefObject } from "preact";
 import { useElementSize, useTriliumEvent } from "../../react/hooks";
 import utils from "../../../services/utils";

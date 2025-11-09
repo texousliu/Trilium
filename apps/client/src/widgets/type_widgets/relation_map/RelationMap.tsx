@@ -10,7 +10,7 @@ import panzoom, { PanZoomOptions } from "panzoom";
 import dialog from "../../../services/dialog";
 import server from "../../../services/server";
 import toast from "../../../services/toast";
-import { CreateChildrenResponse, RelationMapPostResponse, RelationMapRelation } from "@triliumnext/commons";
+import { CreateChildrenResponse, RelationMapPostResponse } from "@triliumnext/commons";
 import RelationMapApi, { ClientRelation, MapData, MapDataNoteEntry, RelationType } from "./api";
 import setupOverlays, { uniDirectionalOverlays } from "./overlays";
 import { JsPlumb } from "./jsplumb";
@@ -157,7 +157,7 @@ export default function RelationMap({ note, noteContext, ntxId }: TypeWidgetProp
                 ))}
             </JsPlumb>
         </div>
-    )
+    );
 }
 
 function usePanZoom({ ntxId, containerRef, options, transformData, onTransform }: {

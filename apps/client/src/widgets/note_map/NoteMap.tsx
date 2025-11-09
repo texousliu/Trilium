@@ -142,7 +142,7 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
             <div ref={styleResolverRef} class="style-resolver" />
             <div ref={containerRef} className="note-map-container" />
         </div>
-    )
+    );
 }
 
 function MapTypeSwitcher({ icon, text, type, currentMapType, setMapType }: {

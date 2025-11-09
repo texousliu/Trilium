@@ -202,5 +202,5 @@ export function CodeEditor({ parentComponent, ntxId, containerRef: externalConta
             initialized.current.resolve();
             onInitialized?.();
         }}
-    />
+    />;
 }

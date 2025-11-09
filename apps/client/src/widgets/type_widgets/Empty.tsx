@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";

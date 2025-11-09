@@ -1,4 +1,4 @@
-import { useNoteContext, useTriliumEvent, useTriliumEvents } from "./react/hooks"
+import { useNoteContext, useTriliumEvent } from "./react/hooks"
 import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
 import { useEffect, useRef, useState } from "preact/hooks";

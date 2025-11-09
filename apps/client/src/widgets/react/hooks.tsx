@@ -1,12 +1,12 @@
 import { CSSProperties } from "preact/compat";
 import { DragData } from "../note_tree";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
-import { Inputs, MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ParentComponent, refToJQuerySelector } from "./react_utils";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
-import { ViewMode, ViewScope } from "../../services/link";
-import appContext, { CommandListenerData, EventData, EventNames } from "../../components/app_context";
+import { ViewScope } from "../../services/link";
+import appContext, { EventData, EventNames } from "../../components/app_context";
 import attributes from "../../services/attributes";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import Component from "../../components/component";

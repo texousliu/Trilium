@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { createImageSrcUrl } from "../../services/utils";
-import { useNoteBlob, useTriliumEvent, useUniqueName } from "../react/hooks";
+import { useTriliumEvent, useUniqueName } from "../react/hooks";
 import "./Image.css";
 import { TypeWidgetProps } from "./type_widget";
 import WheelZoom from 'vanilla-js-wheel-zoom';

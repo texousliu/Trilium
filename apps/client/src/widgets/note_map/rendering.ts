@@ -167,7 +167,7 @@ export function setupRendering(graph: ForceGraph<NoteMapNodeObject, NoteMapLinkO
         .linkWidth((link) => (highlightLinks.has(link) ? 3 : 0.4))
         .linkColor((link) => (highlightLinks.has(link) ? cssData.textColor : cssData.mutedTextColor))
         .linkDirectionalArrowLength(4)
-        .linkDirectionalArrowRelPos(0.95)
+        .linkDirectionalArrowRelPos(0.95);
 
     // Link-specific config
     if (mapType) {

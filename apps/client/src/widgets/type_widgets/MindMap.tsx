@@ -7,7 +7,7 @@ import nodeMenu from "@mind-elixir/node-menu";
 import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
-import { useEditorSpacedUpdate, useNoteLabelBoolean, useSyncedRef, useTriliumEvent, useTriliumEvents, useTriliumOptionBool } from "../react/hooks";
+import { useEditorSpacedUpdate, useNoteLabelBoolean, useSyncedRef, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import { refToJQuerySelector } from "../react/react_utils";
 import utils from "../../services/utils";
 

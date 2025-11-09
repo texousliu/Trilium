@@ -258,7 +258,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
 
             <EditableTextTouchBar watchdogRef={watchdogRef} refreshTouchBarRef={refreshTouchBarRef} />
         </>
-    )
+    );
 }
 
 function useTemplates() {

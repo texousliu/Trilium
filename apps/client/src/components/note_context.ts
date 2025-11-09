@@ -12,7 +12,6 @@ import type FNote from "../entities/fnote.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
 import { closeActiveDialog } from "../services/dialog.js";
-import { TypeWidget } from "../widgets/note_types.jsx";
 import { ReactWrappedWidget } from "../widgets/basic_widget.js";
 
 export interface SetNoteOpts {

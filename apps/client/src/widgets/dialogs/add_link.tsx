@@ -38,7 +38,7 @@ export default function AddLinkDialog() {
         } else {
             setLinkType("reference-link");
         }
-    }, [ opts ])
+    }, [ opts ]);
 
     async function setDefaultLinkTitle(noteId: string) {
         const noteTitle = await tree.getNoteTitle(noteId);
