@@ -39,8 +39,14 @@ const TPL = /*html*/`
 <div class="note-detail">
     <style>
     .note-detail {
+        max-width: var(--max-content-width); /* Inherited from .note-split */
         font-family: var(--detail-font-family);
         font-size: var(--detail-font-size);
+    }
+
+    body.prefers-centered-content .note-detail {
+        /* Horizontally center the widget in its parent when the "Keep content centered" option is on */
+        margin-inline: auto;
     }
 
     .note-detail.full-height {

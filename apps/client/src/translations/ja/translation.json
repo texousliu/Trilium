@@ -833,13 +833,10 @@
     "theme_defined": "テーマが定義されました"
   },
   "max_content_width": {
-    "reload_button": "フロントエンドをリロード",
     "title": "コンテンツ幅",
     "default_description": "Triliumは、ワイドスクリーンで最大化された画面での可読性を向上させるために、デフォルトでコンテンツの最大幅を制限しています。",
     "max_width_label": "最大コンテンツ幅",
-    "max_width_unit": "ピクセル",
-    "apply_changes_description": "コンテンツ幅の変更を適用するには、クリックしてください",
-    "reload_description": "外観設定から変更"
+    "max_width_unit": "ピクセル"
   },
   "theme": {
     "title": "アプリのテーマ",
