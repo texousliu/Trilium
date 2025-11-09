@@ -1104,7 +1104,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 .card {
     color: inherit !important;
-    background-color: inherit !important;
     border-color: var(--main-border-color) !important;
 }
 
@@ -1759,10 +1758,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     flex-direction: column;
     margin-inline-start: 10px;
     margin-inline-end: 5px;
+    background: transparent;
 }
 
 #right-pane .card-header {
-    background: inherit;
     padding: 6px 0 3px 0;
     width: 99%; /* to give minimal right margin */
     background-color: var(--button-background-color);
@@ -2516,7 +2515,7 @@ footer.webview-footer button {
     transform: rotate(180deg);
 }
 
-/* CK Edito */
+/* CK Editor */
 
 /* Insert text snippet: limit the width of the listed items to avoid overly long names */
 :root body.desktop div.ck-template-form li.ck-list__item .ck-template-form__text-part > span {
@@ -2546,4 +2545,18 @@ iframe.print-iframe {
 
 .excalidraw.theme--dark canvas {
     --theme-filter: invert(100%) hue-rotate(180deg);
+}
+
+/* Scrolling container */
+
+.scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)) {
+    display: flex;
+    flex-direction: column;
+}
+
+.scrolling-container > .note-detail.full-height,
+.scrolling-container > .note-list-widget {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
 }

@@ -211,8 +211,8 @@
     --new-tab-button-hover-color: black;
 
     --right-pane-background-color: var(--main-background-color);
-    --right-pane-background-color-bgfx: var(--center-pane-vert-layout-background-color-bgfx); /* Only for the vertical layout */
-    --right-pane-item-hover-background: #ececec;
+    --right-pane-background-color-bgfx: #ffffff9e; /* Only for the vertical layout */
+    --right-pane-item-hover-background: #00000013;
     --right-pane-item-hover-color: inherit;
 
     --scrollbar-thumb-color: #0000005c;
@@ -229,8 +229,7 @@
     --code-block-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 2px rgba(0, 0, 0, 0.2);
 
     --card-background-color: #0000000d;
-    --card-background-hover-color: #f9f9f9;
-    --card-background-press-color: #efefef;
+    --card-background-hover-color: #0000001c;
     --card-border-color: transparent;
     --card-shadow-color: rgba(0, 0, 0, 0.1);
     --card-box-shadow: none;

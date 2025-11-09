@@ -1,3 +1,7 @@
+.canvas-widget {
+    height: 100%;
+}
+
 .excalidraw .App-menu_top .buttonList {
   display: flex;
 }

@@ -25,8 +25,7 @@ export default class ContentHeader extends Container<BasicWidget> {
     }
 
     init() {
-        this.parentElement = this.parent!.$widget.get(0);
-
+        this.parentElement = this.parent?.$widget.get(0);
         if (!this.parentElement) {
             console.warn("No parent set for <ContentHeader>.");
             return;

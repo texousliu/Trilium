@@ -675,3 +675,16 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 .ck-content a.reference-link > span {
     text-decoration: underline;
 }
+
+/*
+ * Read-only text content
+ */
+
+.note-detail-readonly-text:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color);
+    border-radius: 4px;
+}
+
+.note-list-widget {
+    outline: 0 !important;
+}

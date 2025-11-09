@@ -126,7 +126,8 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
     relationMap: {
         view: () => import("./type_widgets/relation_map/RelationMap"),
         className: "note-detail-relation-map",
-        printable: true
+        printable: true,
+        isFullHeight: true
     },
     noteMap: {
         view: () => import("./type_widgets/NoteMap"),
