@@ -41,6 +41,11 @@ export default function CodeMirror({ className, content, mime, editorRef: extern
         codeEditor?.clearHistory();
     }, [content]);
 
+    // React to language change.
+    useEffect(() => {
+        codeEditorRef.current?.setMimeType(mime);
+    }, [ mime ]);
+
     // React to line wrapping.
     useEffect(() => codeEditorRef.current?.setLineWrapping(!!lineWrapping), [ lineWrapping ]);
 
