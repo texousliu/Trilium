@@ -197,11 +197,11 @@ function usePlugins(isEditable: boolean, isCalendarRoot: boolean) {
 }
 
 function useLocale() {
-    const [ locale ] = useTriliumOption("locale");
+    const [ formattingLocale ] = useTriliumOption("formattingLocale");
     const [ calendarLocale, setCalendarLocale ] = useState<LocaleInput>();
 
     useEffect(() => {
-        const correspondingLocale = LOCALE_MAPPINGS[locale];
+        const correspondingLocale = LOCALE_MAPPINGS[formattingLocale];
         if (correspondingLocale) {
             correspondingLocale().then((locale) => setCalendarLocale(locale.default));
         } else {

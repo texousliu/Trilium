@@ -1107,10 +1107,7 @@
     "title": "Ancho del contenido",
     "default_description": "Trilium limita de forma predeterminada el ancho máximo del contenido para mejorar la legibilidad de ventanas maximizadas en pantallas anchas.",
     "max_width_label": "Ancho máximo del contenido en píxeles",
-    "max_width_unit": "píxeles",
-    "apply_changes_description": "Para aplicar cambios en el ancho del contenido, haga clic en",
-    "reload_button": "recargar la interfaz",
-    "reload_description": "cambios desde las opciones de apariencia"
+    "max_width_unit": "píxeles"
   },
   "native_title_bar": {
     "title": "Barra de título nativa (requiere reiniciar la aplicación)",
@@ -1592,7 +1589,7 @@
   "tree-context-menu": {
     "open-in-a-new-tab": "Abrir en nueva pestaña",
     "open-in-a-new-split": "Abrir en nueva división",
-    "insert-note-after": "Insertar nota después de",
+    "insert-note-after": "Insertar nota contigua",
     "insert-child-note": "Insertar subnota",
     "delete": "Eliminar",
     "search-in-subtree": "Buscar en subárbol",

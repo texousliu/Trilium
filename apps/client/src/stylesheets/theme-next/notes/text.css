@@ -258,11 +258,6 @@
     border-inline-start: 1px solid var(--ck-color-toolbar-border);
 }
 
-/* The last separator of the toolbar */
-:root .classic-toolbar-widget .ck.ck-toolbar__separator:last-of-type {
-    flex-grow: 1;
-}
-
 /* Heading dropdown */
 
 :root .ck.ck-dropdown.ck-heading-dropdown .ck-dropdown__panel .ck-list__item {

@@ -1111,9 +1111,7 @@
     "default_description": "Trilium by default limits max content width to improve readability for maximized screens on wide screens.",
     "max_width_label": "Max content width",
     "max_width_unit": "pixels",
-    "apply_changes_description": "To apply content width changes, click on",
-    "reload_button": "reload frontend",
-    "reload_description": "changes from appearance options"
+    "centerContent": "Keep content centered"
   },
   "native_title_bar": {
     "title": "Native Title Bar (requires app restart)",
@@ -1638,6 +1636,12 @@
     "shared_publicly": "This note is shared publicly on {{- link}}.",
     "shared_locally": "This note is shared locally on {{- link}}.",
     "help_link": "For help visit <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
+  },
+  "read-only-info": {
+    "read-only-note": "Currently viewing a read-only note.",
+    "auto-read-only-note": "This note is shown in a read-only mode for faster loading.",
+    "auto-read-only-learn-more": "Learn more",
+    "edit-note": "Edit note"
   },
   "note_types": {
     "text": "Text",

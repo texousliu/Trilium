@@ -1,28 +1,28 @@
-import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import appContext, { EventData, EventNames } from "../../components/app_context";
-import { ParentComponent, refToJQuerySelector } from "./react_utils";
-import SpacedUpdate from "../../services/spaced_update";
+import { CSSProperties } from "preact/compat";
+import { DragData } from "../note_tree";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
-import options, { type OptionValue } from "../../services/options";
-import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
-import NoteContext from "../../components/note_context";
-import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
-import FNote from "../../entities/fnote";
-import attributes from "../../services/attributes";
-import FBlob from "../../entities/fblob";
-import NoteContextAwareWidget from "../note_context_aware_widget";
+import { Inputs, MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { ParentComponent, refToJQuerySelector } from "./react_utils";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
-import { CSSProperties } from "preact/compat";
+import { ViewMode, ViewScope } from "../../services/link";
+import appContext, { CommandListenerData, EventData, EventNames } from "../../components/app_context";
+import attributes from "../../services/attributes";
+import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
+import Component from "../../components/component";
+import FBlob from "../../entities/fblob";
+import FNote from "../../entities/fnote";
 import keyboard_actions from "../../services/keyboard_actions";
 import Mark from "mark.js";
-import { DragData } from "../note_tree";
-import Component from "../../components/component";
-import toast, { ToastOptions } from "../../services/toast";
+import NoteContext from "../../components/note_context";
+import NoteContextAwareWidget from "../note_context_aware_widget";
+import options, { type OptionValue } from "../../services/options";
 import protected_session_holder from "../../services/protected_session_holder";
+import SpacedUpdate from "../../services/spaced_update";
+import toast, { ToastOptions } from "../../services/toast";
+import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
 import server from "../../services/server";
 import { removeIndividualBinding } from "../../services/shortcuts";
-import { ViewScope } from "../../services/link";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -761,4 +761,52 @@ export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", conta
             }
         }
     }, []);
+}
+
+/**
+ * Indicates that the current note is in read-only mode, while an editing mode is available,
+ * and provides a way to switch to editing mode.
+ */
+export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: NoteContext | undefined) {
+    const [isReadOnly, setIsReadOnly] = useState<boolean | undefined>(undefined);
+
+    const enableEditing = useCallback(() => {
+        if (noteContext?.viewScope) {
+            noteContext.viewScope.readOnlyTemporarilyDisabled = true;
+            appContext.triggerEvent("readOnlyTemporarilyDisabled", {noteContext});
+        }
+    }, [noteContext]);
+
+    useEffect(() => {
+        if (note && noteContext) {
+            isNoteReadOnly(note, noteContext).then((readOnly) => {
+                setIsReadOnly(readOnly);
+            });
+        }
+    }, [note, noteContext]);
+
+    useTriliumEvent("readOnlyTemporarilyDisabled", ({noteContext: eventNoteContext}) => {
+        if (noteContext?.ntxId === eventNoteContext.ntxId) {
+            setIsReadOnly(false);
+        }
+    });
+
+    return {isReadOnly, enableEditing};
+}
+
+async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
+
+    if (note.isProtected && !protected_session_holder.isProtectedSessionAvailable()) {
+        return false;
+    }
+
+    if (options.is("databaseReadonly")) {
+        return false;
+    }
+
+    if (noteContext.viewScope?.viewMode !== "default" || !await noteContext.isReadOnly()) {
+        return false;
+    }
+
+    return true;
 }

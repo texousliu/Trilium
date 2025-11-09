@@ -56,17 +56,19 @@ const TPL = /*html*/`\
         }
     </style>
 
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <!-- This is where the first child will be injected -->
+    <div class="quick-edit-dialog-wrapper">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <!-- This is where the first child will be injected -->
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
 
-            <div class="modal-body">
-                <!-- This is where all but the first child will be injected. -->
+                <div class="modal-body">
+                    <!-- This is where all but the first child will be injected. -->
+                </div>
             </div>
         </div>
     </div>
@@ -78,6 +80,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     private noteContext: NoteContext;
     private $modalHeader!: JQuery<HTMLElement>;
     private $modalBody!: JQuery<HTMLElement>;
+    private $wrapper!: JQuery<HTMLDivElement>;
 
     constructor() {
         super();
@@ -92,6 +95,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         const $newWidget = $(TPL);
         this.$modalHeader = $newWidget.find(".modal-title");
         this.$modalBody = $newWidget.find(".modal-body");
+        this.$wrapper = $newWidget.find(".quick-edit-dialog-wrapper");
 
         const children = this.$widget.children();
         this.$modalHeader.append(children[0]);
@@ -110,6 +114,21 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
                 readOnlyTemporarilyDisabled: true
             }
         });
+
+        const colorClass = this.noteContext.note?.getColorClass();
+        const wrapperElement = this.$wrapper.get(0)!;
+
+        if (colorClass) {
+            wrapperElement.className = "quick-edit-dialog-wrapper " + colorClass;
+        } else {
+            wrapperElement.className = "quick-edit-dialog-wrapper";
+        }
+
+        const customHue = getComputedStyle(wrapperElement).getPropertyValue("--custom-color-hue");
+        if (customHue) {
+            /* Apply the tinted-dialog class only if the custom color CSS class specifies a hue */
+            wrapperElement.classList.add("tinted-quick-edit-dialog");
+        }
 
         const activeEl = document.activeElement;
         if (activeEl && "blur" in activeEl) {

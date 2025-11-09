@@ -34,6 +34,7 @@
 div.promoted-attributes-container {
     margin-top: 8px;
     margin-bottom: 8px;
+    margin-inline-start: 12px;
 }
 
 /*

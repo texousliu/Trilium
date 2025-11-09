@@ -82,6 +82,7 @@
 
     /* Theme capabilities */
     --tab-note-icons: true;
+    --allow-background-effects: true;
 
     /* To ensure that a tree item's custom color remains sufficiently contrasted and readable,
      * the color is adjusted based on the current color scheme (light or dark). The lightness
@@ -131,7 +132,8 @@ body.mobile .dropdown-menu .dropdown-menu {
 
 body.desktop .dropdown-menu::before,
 :root .ck.ck-dropdown__panel::before,
-:root .excalidraw .popover::before {
+:root .excalidraw .popover::before,
+body.zen .note-split .ribbon-container .classic-toolbar-widget::before {
     content: "";
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);

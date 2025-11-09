@@ -1,19 +1,20 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
-import appContext, { CommandNames } from "../../components/app_context";
-import FNote from "../../entities/fnote"
-import dialog from "../../services/dialog";
-import { t } from "../../services/i18n"
-import server from "../../services/server";
-import toast from "../../services/toast";
-import ws from "../../services/ws";
-import ActionButton from "../react/ActionButton"
-import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/utils";
 import { ParentComponent } from "../react/react_utils";
+import { t } from "../../services/i18n"
 import { useContext } from "preact/hooks";
-import NoteContext from "../../components/note_context";
+import { useIsNoteReadOnly } from "../react/hooks";
+import ActionButton from "../react/ActionButton"
+import appContext, { CommandNames } from "../../components/app_context";
 import branches from "../../services/branches";
+import dialog from "../../services/dialog";
+import Dropdown from "../react/Dropdown";
+import FNote from "../../entities/fnote"
+import NoteContext from "../../components/note_context";
+import server from "../../services/server";
+import toast from "../../services/toast";
+import ws from "../../services/ws";
 
 interface NoteActionsProps {
   note?: FNote;
@@ -52,6 +53,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
   const isMac = getIsMac();
   const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(note.type);
   const isSearchOrBook = ["search", "book"].includes(note.type);
+  const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
 
   return (
     <Dropdown
@@ -59,8 +61,14 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       className="note-actions"
       hideToggleArrow
       noSelectButtonStyle
-      iconAction
-    >
+      iconAction>
+
+      {isReadOnly && <>
+        <CommandItem icon="bx bx-pencil" text={t("read-only-info.edit-note")}
+                     command={() => enableEditing()} />
+        <FormDropdownDivider />
+      </>}
+    
       {canBeConvertedToAttachment && <ConvertToAttachment note={note} /> }
       {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} />}
       <CommandItem command="findInText" icon="bx bx-search" disabled={!isSearchable} text={t("note_actions.search_in_note")} />

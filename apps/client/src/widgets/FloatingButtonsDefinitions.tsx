@@ -4,7 +4,7 @@ import Component from "../components/component";
 import NoteContext from "../components/note_context";
 import FNote from "../entities/fnote";
 import ActionButton, { ActionButtonProps } from "./react/ActionButton";
-import { useNoteLabelBoolean, useTriliumEvent, useTriliumOption, useWindowSize } from "./react/hooks";
+import { useIsNoteReadOnly, useNoteLabelBoolean, useTriliumEvent, useTriliumOption, useWindowSize } from "./react/hooks";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { createImageSrcUrl, openInAppHelpFromUrl } from "../services/utils";
 import server from "../services/server";
@@ -13,8 +13,6 @@ import toast from "../services/toast";
 import { t } from "../services/i18n";
 import { copyImageReferenceToClipboard } from "../services/image";
 import tree from "../services/tree";
-import protected_session_holder from "../services/protected_session_holder";
-import options from "../services/options";
 import { getHelpUrlForNote } from "../services/in_app_help";
 import froca from "../services/froca";
 import NoteLink from "./react/NoteLink";
@@ -101,48 +99,26 @@ function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingBut
     />
 }
 
-function EditButton({ note, noteContext, isDefaultViewMode }: FloatingButtonContext) {
-    const [ animationClass, setAnimationClass ] = useState("");
-    const [ isEnabled, setIsEnabled ] = useState(false);
+function EditButton({ note, noteContext }: FloatingButtonContext) {
+    const [animationClass, setAnimationClass] = useState("");
+    const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
+    
+    const isReadOnlyInfoBarDismissed = false; // TODO
 
     useEffect(() => {
-        noteContext.isReadOnly().then(isReadOnly => {
-            setIsEnabled(
-                isDefaultViewMode
-                && (!note.isProtected || protected_session_holder.isProtectedSessionAvailable())
-                && !options.is("databaseReadonly")
-                && isReadOnly
-            );
-        });
-    }, [ note ]);
-
-    useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
-        if (noteContext?.ntxId === eventNoteContext.ntxId) {
-            setIsEnabled(false);
-        }
-    });
-
-    // make the edit button stand out on the first display, otherwise
-    // it's difficult to notice that the note is readonly
-    useEffect(() => {
-        if (isEnabled) {
+        if (isReadOnly) {
             setAnimationClass("bx-tada bx-lg");
             setTimeout(() => {
                 setAnimationClass("");
             }, 1700);
         }
-    }, [ isEnabled ]);
+    }, [ isReadOnly ]);
 
-    return isEnabled && <FloatingButton
+    return !!isReadOnly && isReadOnlyInfoBarDismissed && <FloatingButton
         text={t("edit_button.edit_this_note")}
         icon="bx bx-pencil"
         className={animationClass}
-        onClick={() => {
-            if (noteContext.viewScope) {
-                noteContext.viewScope.readOnlyTemporarilyDisabled = true;
-                appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext });
-            }
-        }}
+        onClick={() => enableEditing()}
     />
 }
 
