@@ -277,10 +277,10 @@ async function getCorrespondingWidget(type: ExtendedNoteType): Promise<null | Ty
     }
 }
 
-async function getWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType> {
+async function getWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType | undefined> {
     if (!note) {
-        console.log("Returning empty because no note.");
-        return "empty";
+        // If the note is null, then it's a new tab. If it's undefined, then it's not loaded yet.
+        return note === null ? "empty" : undefined;
     }
 
     const type = note.type;
