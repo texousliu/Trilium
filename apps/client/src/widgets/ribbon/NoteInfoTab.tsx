@@ -62,7 +62,6 @@ export default function NoteInfoTab({ note }: TabContext) {
                             {!isLoading && !noteSizeResponse && !subtreeSizeResponse && (
                                 <Button
                                     className="calculate-button"
-                                    style={{ padding: "0px 10px 0px 10px" }}
                                     icon="bx bx-calculator"
                                     text={t("note_info_widget.calculate")}
                                     onClick={() => {

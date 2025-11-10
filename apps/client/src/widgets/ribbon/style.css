@@ -189,6 +189,10 @@
     font-size: 0.8em;
     vertical-align: middle !important;
 }
+
+.note-info-widget .calculate-button {
+    padding: 0 10px;
+}
 /* #endregion */
 
 /* #region Similar Notes */
