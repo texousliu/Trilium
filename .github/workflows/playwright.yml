@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TRILIUM_DOCKER: 1
-      TRILIUM_PORT: 8080
+      TRILIUM_PORT: 8082
       TRILIUM_DATA_DIR: "${{ github.workspace }}/apps/server/spec/db"
       TRILIUM_INTEGRATION_TEST: memory
     steps:
