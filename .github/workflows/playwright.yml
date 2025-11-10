@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - hotfix
     paths-ignore:
       - "apps/website/**"
   pull_request:
@@ -29,9 +30,34 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps
 
-      - run: pnpm --filter server-e2e e2e
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Build the server
+        uses: ./.github/actions/build-server
+        with:
+          os: linux
+          arch: x64
+
+      - name: Unpack and start the server
+        run: |
+          version=$(node --eval "console.log(require('./package.json').version)")
+          file=$(find ./upload -name '*.tar.xz' -print -quit)
+          name=$(basename "$file" .tar.xz)
+          mkdir -p ./server-dist
+          tar -xvf "$file" -C ./server-dist
+          server_dir="./server-dist/TriliumNotes-Server-$version-linux-x64"
+          if [ ! -d "$server_dir" ]; then
+            echo Missing dir.
+            exit 1
+          fi
+          cd "$server_dir"
+          "./trilium.sh" &
+          sleep 10
+
+      - name: Server end-to-end tests
+        run: TRILIUM_DOCKER=1 TRILIUM_PORT=8080 pnpm --filter server-e2e e2e
 
       - name: Upload test report
         if: failure()
@@ -39,3 +65,7 @@ jobs:
         with:
           name: e2e report
           path: apps/server-e2e/test-output
+
+      - name: Kill the server
+        if: always()
+        run: pkill -f trilium || true
