@@ -98,13 +98,53 @@
                 },
                 {
                     "isClone": false,
+                    "noteId": "ccIoz7nqgDRK",
+                    "notePath": [
+                        "jdjRLhLV3TtI",
+                        "ccIoz7nqgDRK"
+                    ],
+                    "title": "Branching strategy",
+                    "notePosition": 270,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bx-git-merge",
+                            "isInheritable": false,
+                            "position": 20
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "4nwtTJyjNDKd",
+                            "isInheritable": false,
+                            "position": 30
+                        },
+                        {
+                            "type": "label",
+                            "name": "shareAlias",
+                            "value": "branching-strategy",
+                            "isInheritable": false,
+                            "position": 40
+                        }
+                    ],
+                    "format": "markdown",
+                    "dataFileName": "Branching strategy.md",
+                    "attachments": []
+                },
+                {
+                    "isClone": false,
                     "noteId": "cxfTSHIUQtt2",
                     "notePath": [
                         "jdjRLhLV3TtI",
                         "cxfTSHIUQtt2"
                     ],
                     "title": "Project Structure",
-                    "notePosition": 270,
+                    "notePosition": 280,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -144,7 +184,7 @@
                         "MhwWMgxwDTZL"
                     ],
                     "title": "Architecture",
-                    "notePosition": 280,
+                    "notePosition": 290,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -940,7 +980,7 @@
                         "zdQzavvHDl1k"
                     ],
                     "title": "Documentation",
-                    "notePosition": 290,
+                    "notePosition": 300,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -1010,7 +1050,7 @@
                         "a0mkxxB4Uvbf"
                     ],
                     "title": "Building",
-                    "notePosition": 300,
+                    "notePosition": 310,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -1240,6 +1280,13 @@
                                     "value": "releasing",
                                     "isInheritable": false,
                                     "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "ccIoz7nqgDRK",
+                                    "isInheritable": false,
+                                    "position": 50
                                 }
                             ],
                             "format": "markdown",
@@ -1256,7 +1303,7 @@
                         "qalhAaJoQ7AN"
                     ],
                     "title": "Dependencies",
-                    "notePosition": 320,
+                    "notePosition": 330,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -1507,7 +1554,7 @@
                         "yeqU0zo0ZQ83"
                     ],
                     "title": "Concepts",
-                    "notePosition": 330,
+                    "notePosition": 340,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -2768,7 +2815,7 @@
                         "YjerxU7Aii8X"
                     ],
                     "title": "Troubleshooting",
-                    "notePosition": 370,
+                    "notePosition": 380,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -2857,7 +2904,7 @@
                         "dtKC3FmoWOrv"
                     ],
                     "title": "Testing",
-                    "notePosition": 390,
+                    "notePosition": 400,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
