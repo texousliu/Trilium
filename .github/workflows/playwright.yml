@@ -15,7 +15,16 @@ permissions:
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: linux-x64
+            os: ubuntu-22.04
+            arch: x64
+          - name: linux-arm64
+            os: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
     env:
       TRILIUM_DOCKER: 1
       TRILIUM_PORT: 8082
@@ -43,7 +52,7 @@ jobs:
         uses: ./.github/actions/build-server
         with:
           os: linux
-          arch: x64
+          arch: ${{ matrix.arch }}
 
       - name: Unpack and start the server
         run: |
