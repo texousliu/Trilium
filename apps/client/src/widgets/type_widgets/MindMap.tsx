@@ -18,12 +18,10 @@ interface MindElixirProps {
     containerProps?: Omit<HTMLAttributes<HTMLDivElement>, "ref">;
     containerRef?: RefObject<HTMLDivElement>;
     editable: boolean;
-    content: MindElixirData;
     onChange?: () => void;
 }
 
 export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
-    const content = VanillaMindElixir.new(NEW_TOPIC_NAME);
     const apiRef = useRef<MindElixirInstance>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
@@ -99,7 +97,6 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
         <MindElixir
             containerRef={containerRef}
             apiRef={apiRef}
-            content={content}
             onChange={() => spacedUpdate.scheduleUpdate()}
             editable={!isReadOnly}
             containerProps={{
@@ -110,7 +107,7 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
     )
 }
 
-function MindElixir({ content, containerRef: externalContainerRef, containerProps, apiRef: externalApiRef, onChange, editable }: MindElixirProps) {
+function MindElixir({ containerRef: externalContainerRef, containerProps, apiRef: externalApiRef, onChange, editable }: MindElixirProps) {
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const apiRef = useRef<MindElixirInstance>(null);
 
@@ -125,7 +122,6 @@ function MindElixir({ content, containerRef: externalContainerRef, containerProp
         if (editable) {
             mind.install(nodeMenu);
         }
-        mind.init(content);
 
         apiRef.current = mind;
         if (externalApiRef) {
