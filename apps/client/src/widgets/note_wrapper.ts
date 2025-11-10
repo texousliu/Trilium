@@ -52,7 +52,7 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
 
         const note = this.noteContext?.note;
         if (!note) {
-            this.$widget.addClass("bgfx");
+            this.$widget.addClass("bgfx empty-note");
             return;
         }
 

@@ -123,8 +123,12 @@
  */
 
 /* The container */
-div.note-detail-empty {
-    max-width: 70%;
+
+.note-split.empty-note {
+    --max-content-width: 70%;
+}
+
+.note-split.empty-note div.note-detail {
     margin: 50px auto;
 }
 
