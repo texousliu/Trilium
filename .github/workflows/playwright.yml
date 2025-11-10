@@ -16,6 +16,7 @@ permissions:
 jobs:
   main:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: linux-x64
