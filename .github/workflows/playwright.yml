@@ -16,6 +16,11 @@ permissions:
 jobs:
   main:
     runs-on: ubuntu-latest
+    env:
+      TRILIUM_DOCKER: 1
+      TRILIUM_PORT: 8080
+      TRILIUM_DATA_DIR: "${{ github.workspace }}/apps/server/spec/db"
+      TRILIUM_INTEGRATION_TEST: memory
     steps:
       - uses: actions/checkout@v5
         with:
@@ -57,7 +62,7 @@ jobs:
           sleep 10
 
       - name: Server end-to-end tests
-        run: TRILIUM_DOCKER=1 TRILIUM_PORT=8080 pnpm --filter server-e2e e2e
+        run: pnpm --filter server-e2e e2e
 
       - name: Upload test report
         if: failure()
