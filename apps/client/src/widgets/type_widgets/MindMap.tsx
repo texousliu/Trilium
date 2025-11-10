@@ -111,7 +111,7 @@ function MindElixir({ containerRef: externalContainerRef, containerProps, apiRef
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const apiRef = useRef<MindElixirInstance>(null);
 
-    useEffect(() => {
+    function reinitialize() {
         if (!containerRef.current) return;
 
         const mind = new VanillaMindElixir({
@@ -127,8 +127,22 @@ function MindElixir({ containerRef: externalContainerRef, containerProps, apiRef
         if (externalApiRef) {
             externalApiRef.current = mind;
         }
+    }
 
-        return () => mind.destroy();
+    useEffect(() => {
+        reinitialize();
+        return () => {
+            apiRef.current?.destroy();
+            apiRef.current = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        const data = apiRef.current?.getData();
+        reinitialize();
+        if (data) {
+            apiRef.current?.init(data);
+        }
     }, [ editable ]);
 
     // On change listener.
