@@ -498,7 +498,7 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
     transition: background-color 200ms ease-out;
 }
 
-:root .note-list .note-book-card:active {
+:root .note-list.grid-view .note-book-card:active {
     transform: scale(.98);
 }
 
