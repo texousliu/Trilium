@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  main:
+  e2e:
     strategy:
       fail-fast: false
       matrix:
@@ -26,6 +26,7 @@ jobs:
             os: ubuntu-24.04-arm
             arch: arm64
     runs-on: ${{ matrix.os }}
+    name: E2E tests on ${{ matrix.name }}
     env:
       TRILIUM_DOCKER: 1
       TRILIUM_PORT: 8082
@@ -62,7 +63,7 @@ jobs:
           name=$(basename "$file" .tar.xz)
           mkdir -p ./server-dist
           tar -xvf "$file" -C ./server-dist
-          server_dir="./server-dist/TriliumNotes-Server-$version-linux-x64"
+          server_dir="./server-dist/TriliumNotes-Server-$version-linux-${{ matrix.arch }}"
           if [ ! -d "$server_dir" ]; then
             echo Missing dir.
             exit 1
