@@ -39,11 +39,16 @@ async function main() {
         app.commandLine.appendSwitch("disable-smooth-scrolling");
     }
 
-    // Electron 36 crashes with "Using GTK 2/3 and GTK 4 in the same process is not supported" on some distributions.
-    // See https://github.com/electron/electron/issues/46538 for more info.
     if (process.platform === "linux") {
         app.setName(PRODUCT_NAME);
+
+        // Electron 36 crashes with "Using GTK 2/3 and GTK 4 in the same process is not supported" on some distributions.
+        // See https://github.com/electron/electron/issues/46538 for more info.
         app.commandLine.appendSwitch("gtk-version", "3");
+
+        // Enable global shortcuts in Flatpak
+        // the app runs in a Wayland session.
+        app.commandLine.appendSwitch("enable-features", "GlobalShortcutsPortal");
     }
 
     // Quit when all windows are closed, except on macOS. There, it's common
