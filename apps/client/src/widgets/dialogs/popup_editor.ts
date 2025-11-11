@@ -11,6 +11,7 @@ const TPL = /*html*/`\
         /** Reduce the z-index of modals so that ckeditor popups are properly shown on top of it. */
         body.popup-editor-open > .modal-backdrop { z-index: 998; }
         body.popup-editor-open .popup-editor-dialog { z-index: 999; }
+        body.popup-editor-open .ck-clipboard-drop-target-line { z-index: 1000; }
 
         body.desktop .modal.popup-editor-dialog .modal-dialog {
             max-width: 75vw;
