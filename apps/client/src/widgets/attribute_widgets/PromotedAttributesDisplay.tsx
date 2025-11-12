@@ -5,6 +5,8 @@ import { useTriliumEvent } from "../react/hooks";
 import attributes from "../../services/attributes";
 import { DefinitionObject } from "../../services/promoted_attribute_definition_parser";
 import { formatDateTime } from "../../utils/formatters";
+import { ComponentChildren } from "preact";
+import Icon from "../react/Icon";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -26,7 +28,7 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
             {promotedDefinitionAttributes?.map((attr) => {
                 return (
                     <span key={attr.friendlyName} className="promoted-attribute">
-                        <strong>{attr.friendlyName}:</strong> {formatLabelValue(attr)}
+                        {formatLabelValue(attr)}
                     </span>
                 );
             }
@@ -48,25 +50,27 @@ function useNoteAttributesWithDefinitions(note: FNote, attributesToIgnore:  stri
     return promotedDefinitionAttributes;
 }
 
-function formatLabelValue(attr: AttributeWithDefinitions): string {
+function formatLabelValue(attr: AttributeWithDefinitions): ComponentChildren {
     let value = attr.value;
     switch (attr.def.labelType) {
         case "number":
+            let formattedValue = value;
             const numberValue = Number(value);
             if (attr.def.numberPrecision) {
-                return numberValue.toFixed(attr.def.numberPrecision);
-            } else {
-                return numberValue.toString();
+                formattedValue = numberValue.toFixed(attr.def.numberPrecision);
             }
+            return <><strong>{attr.friendlyName}:</strong> {formattedValue}</>;
         case "date":
         case "datetime":
             const date = new Date(value);
             if (isNaN(date.getTime())) return value;
             const timeFormat = attr.def.labelType === "datetime" ? "short" : "none";
-            return formatDateTime(date, "short", timeFormat);
+            return <><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "short", timeFormat)}</>;
+        case "boolean":
+            return <><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} /> <strong>{attr.friendlyName}</strong></>;
         case "text":
         default:
-            return value;
+            return <><strong>{attr.friendlyName}:</strong> {value}</>;
     }
 }
 
