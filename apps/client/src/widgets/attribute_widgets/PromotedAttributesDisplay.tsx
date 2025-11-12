@@ -72,6 +72,8 @@ function formatLabelValue(attr: AttributeWithDefinitions): ComponentChildren {
         }
         case "boolean":
             return <><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} /> <strong>{attr.friendlyName}</strong></>;
+        case "url":
+            return <><a href={value} target="_blank" rel="noopener noreferrer">{attr.friendlyName}</a></>;
         case "text":
         default:
             return <><strong>{attr.friendlyName}:</strong> {value}</>;
