@@ -836,7 +836,8 @@
     "title": "コンテンツ幅",
     "default_description": "Triliumは、ワイドスクリーンで最大化された画面での可読性を向上させるために、デフォルトでコンテンツの最大幅を制限しています。",
     "max_width_label": "最大コンテンツ幅",
-    "max_width_unit": "ピクセル"
+    "max_width_unit": "ピクセル",
+    "centerContent": "コンテンツを中央に配置"
   },
   "theme": {
     "title": "アプリのテーマ",
@@ -1783,7 +1784,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "保護されたノートを表示するにはパスワードを入力する必要があります:",
-    "start_session_button": "保護されたセッションを開始 <kbd>enter</kbd>",
+    "start_session_button": "保護されたセッションを開始",
     "started": "保護されたセッションが開始されました。",
     "wrong_password": "パスワードが間違っています。",
     "protecting-finished-successfully": "保護が正常に完了しました。",
@@ -2082,5 +2083,11 @@
   },
   "calendar_view": {
     "delete_note": "ノートを削除..."
+  },
+  "read-only-info": {
+    "read-only-note": "現在、読み取り専用のノートを表示しています。",
+    "auto-read-only-note": "このノートは読み込みを高速化するために読み取り専用モードで表示されています。",
+    "auto-read-only-learn-more": "さらに詳しく",
+    "edit-note": "ノートを編集"
   }
 }
