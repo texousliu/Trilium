@@ -51,7 +51,7 @@
         "mermaid_description": "Twórz diagramy, takie jak schematy blokowe, diagramy klas i sekwencyjne, wykresy Gantta i wiele innych, korzystając z składni Mermaid.",
         "mindmap_title": "Mapy myśli",
         "mindmap_description": "Organizuj wizualnie swoje myśli albo przeprowadź sesję burzy mózgów.",
-        "others_list": "I wiele innych: <0>mapa notatek</0>, <1>mapa powiązań</1>, <2>zapisane wyszukiwania</2>, <3>renderowane notatki</3>, and <4>podgląd stron www</4>.",
+        "others_list": "I wiele innych: <0>mapa notatek</0>, <1>mapa powiązań</1>, <2>zapisane wyszukiwania</2>, <3>renderowane notatki</3> i <4>podgląd stron www</4>.",
         "title": "Wiele sposobów przedstawienia Twoich informacji"
     },
     "extensibility_benefits": {
@@ -132,7 +132,7 @@
         "title": "Inne sposoby wsparcia",
         "way_translate": "Przetłumacz aplikacja na swój natywny język przez <Link>Weblate</Link>.",
         "way_community": "Dołącz do społeczności na <Discussions>GitHub Discussions</Discussions> lub na <Matrix>Matrix</Matrix>.",
-        "way_reports": "Zgłoś błędy przez<Link>GitHub issues</Link>.",
+        "way_reports": "Zgłoś błędy przez <Link>GitHub issues</Link>.",
         "way_document": "Pomóż nam w doskonaleniu dokumentacji przez informowanie nas o lukach albo sam pomóż w tworzeniu treści (dokumentacja, FAQ, poradniki).",
         "way_market": "Powiedz o nas swoim znajomym, na blogu albo na social mediach."
     },
