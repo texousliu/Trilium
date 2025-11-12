@@ -1,5 +1,8 @@
+import { useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import "./PromotedAttributesDisplay.css";
+import { useTriliumEvent } from "../react/hooks";
+import attributes from "../../services/attributes";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -30,10 +33,21 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
 
 }
 
-function useNoteAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
+function useNoteAttributesWithDefinitions(note: FNote, attributesToIgnore:  string[] = []): AttributeWithDefinitions[] {
+    const [ promotedDefinitionAttributes, setPromotedDefinitionAttributes ] = useState<AttributeWithDefinitions[]>(getAttributesWithDefinitions(note, attributesToIgnore));
+
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttributeRows().some(attr => attributes.isAffecting(attr, note))) {
+            setPromotedDefinitionAttributes(getAttributesWithDefinitions(note, attributesToIgnore));
+        }
+    });
+
+    return promotedDefinitionAttributes;
+}
+
+function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
     const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
     const result: AttributeWithDefinitions[] = [];
-
     for (const attr of promotedDefinitionAttributes) {
         const def = attr.getDefinition();
         const [ type, name ] = attr.name.split(":", 2);
