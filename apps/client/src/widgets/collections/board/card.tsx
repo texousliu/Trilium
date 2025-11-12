@@ -6,6 +6,7 @@ import { BoardViewContext, TitleEditor } from ".";
 import { ContextMenuEvent } from "../../../menus/context_menu";
 import { openNoteContextMenu } from "./context_menu";
 import { t } from "../../../services/i18n";
+import PromotedAttributesDisplay from "../../attribute_widgets/PromotedAttributesDisplay";
 
 export const CARD_CLIPBOARD_TYPE = "trilium/board-card";
 
@@ -108,6 +109,7 @@ export default function Card({
                         title={t("board_view.edit-note-title")}
                         onClick={handleEdit}
                     />
+                    <PromotedAttributesDisplay note={note} />
                 </>
             ) : (
                 <TitleEditor
