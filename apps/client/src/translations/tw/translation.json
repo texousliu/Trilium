@@ -687,7 +687,8 @@
     "convert_into_attachment_failed": "筆記 '{{title}}' 轉換失敗。",
     "convert_into_attachment_successful": "筆記 '{{title}}' 已成功轉換為附件。",
     "convert_into_attachment_prompt": "確定要將筆記 '{{title}}' 轉換為父級筆記的附件嗎？",
-    "print_pdf": "匯出為 PDF…"
+    "print_pdf": "匯出為 PDF…",
+    "open_note_on_server": "在伺服器上開啟筆記"
   },
   "onclick_button": {
     "no_click_handler": "按鈕元件'{{componentId}}'沒有定義點擊時的處理方式"
@@ -1107,7 +1108,8 @@
     "title": "內容寬度",
     "default_description": "Trilium 預設會限制內容的最大寬度以提高在寬螢幕中全螢幕時的可讀性。",
     "max_width_label": "內容最大寬度（像素）",
-    "max_width_unit": "像素"
+    "max_width_unit": "像素",
+    "centerContent": "將內容置中"
   },
   "native_title_bar": {
     "title": "原生標題列（需要重新啟動程式）",
@@ -2082,5 +2084,11 @@
   },
   "calendar_view": {
     "delete_note": "刪除筆記…"
+  },
+  "read-only-info": {
+    "read-only-note": "目前正在檢視唯讀筆記。",
+    "auto-read-only-note": "此筆記以唯讀模式顯示以加快載入速度。",
+    "auto-read-only-learn-more": "了解更多",
+    "edit-note": "編輯筆記"
   }
 }
