@@ -7,6 +7,7 @@ import { DefinitionObject } from "../../services/promoted_attribute_definition_p
 import { formatDateTime } from "../../utils/formatters";
 import { ComponentChildren } from "preact";
 import Icon from "../react/Icon";
+import css_class_manager from "../../services/css_class_manager";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -26,8 +27,9 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
     return promotedDefinitionAttributes?.length > 0 && (
         <div className="promoted-attributes">
             {promotedDefinitionAttributes?.map((attr) => {
+                const className = `${attr.type === "label" ? "label" + " " + attr.def.labelType : "relation"}`;
                 return (
-                    <span key={attr.friendlyName} className="promoted-attribute">
+                    <span key={attr.friendlyName} className={`promoted-attribute type-${className}`}>
                         {formatLabelValue(attr)}
                     </span>
                 );
@@ -74,6 +76,8 @@ function formatLabelValue(attr: AttributeWithDefinitions): ComponentChildren {
             return <><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} /> <strong>{attr.friendlyName}</strong></>;
         case "url":
             return <><a href={value} target="_blank" rel="noopener noreferrer">{attr.friendlyName}</a></>;
+        case "color":
+            return <><span style={{ color: value }}>{attr.friendlyName}</span></>;
         case "text":
         default:
             return <><strong>{attr.friendlyName}:</strong> {value}</>;
