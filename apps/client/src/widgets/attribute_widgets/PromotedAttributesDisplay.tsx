@@ -6,22 +6,23 @@ interface PromotedAttributesDisplayProps {
     ignoredAttributes?: string[];
 }
 
-export default function PromotedAttributesDisplay({ note, ignoredAttributes }: PromotedAttributesDisplayProps) {
-    const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
+interface AttributeWithDefinitions {
+    name: string;
+    type: string;
+    friendlyName: string;
+    value: string;
+}
 
-    return promotedDefinitionAttributes.length > 0 && (
+export default function PromotedAttributesDisplay({ note, ignoredAttributes }: PromotedAttributesDisplayProps) {
+    const promotedDefinitionAttributes = useNoteAttributesWithDefinitions(note);
+    return promotedDefinitionAttributes?.length > 0 && (
         <div className="promoted-attributes">
-            {promotedDefinitionAttributes.map((attr) => {
-                const def = attr.getDefinition();
-                const [ type, name ] = attr.name.split(":", 2);
-                const value = note.getLabelValue(name);
-                const friendlyName = def?.promotedAlias ?? name;
-                if (!value) return null;
-                if (ignoredAttributes && ignoredAttributes.includes(name)) return null;
+            {promotedDefinitionAttributes?.map((attr) => {
+                if (ignoredAttributes && ignoredAttributes.includes(attr.name)) return null;
 
                 return (
-                    <span key={attr.name} className="promoted-attribute">
-                        <strong>{friendlyName}:</strong> {value}
+                    <span key={attr.friendlyName} className="promoted-attribute">
+                        <strong>{attr.friendlyName}:</strong> {attr.value}
                     </span>
                 );
             }
@@ -29,4 +30,20 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
         </div>
     )
 
+}
+
+function useNoteAttributesWithDefinitions(note: FNote) {
+    const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
+    const result: AttributeWithDefinitions[] = [];
+
+    for (const attr of promotedDefinitionAttributes) {
+        const def = attr.getDefinition();
+        const [ type, name ] = attr.name.split(":", 2);
+        const value = note.getLabelValue(name);
+        const friendlyName = def?.promotedAlias ?? name;
+        if (!value) continue;
+
+        result.push({ name, type, friendlyName, value });
+    }
+    return result;
 }
