@@ -61,11 +61,15 @@ function formatLabelValue(attr: AttributeWithDefinitions): ComponentChildren {
             }
             return <><strong>{attr.friendlyName}:</strong> {formattedValue}</>;
         case "date":
-        case "datetime":
+        case "datetime": {
             const date = new Date(value);
-            if (isNaN(date.getTime())) return value;
-            const timeFormat = attr.def.labelType === "datetime" ? "short" : "none";
+            const timeFormat = attr.def.labelType !== "date" ? "short" : "none";
             return <><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "short", timeFormat)}</>;
+        }
+        case "time": {
+            const date = new Date(`1970-01-01T${value}Z`);
+            return <><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "none", "short")}</>;
+        }
         case "boolean":
             return <><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} /> <strong>{attr.friendlyName}</strong></>;
         case "text":
@@ -81,7 +85,7 @@ function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] 
         const def = attr.getDefinition();
         const [ type, name ] = attr.name.split(":", 2);
         const value = note.getLabelValue(name);
-        const friendlyName = def?.promotedAlias ?? name;
+        const friendlyName = def?.promotedAlias || name;
         if (!value) continue;
         if (attributesToIgnore.includes(name)) continue;
 
