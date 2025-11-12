@@ -7,7 +7,7 @@ import { DefinitionObject } from "../../services/promoted_attribute_definition_p
 import { formatDateTime } from "../../utils/formatters";
 import { ComponentChildren } from "preact";
 import Icon from "../react/Icon";
-import css_class_manager from "../../services/css_class_manager";
+import NoteLink from "../react/NoteLink";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -30,7 +30,7 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
                 const className = `${attr.type === "label" ? "label" + " " + attr.def.labelType : "relation"}`;
                 return (
                     <span key={attr.friendlyName} className={`promoted-attribute type-${className}`}>
-                        {formatLabelValue(attr)}
+                        {attr.type === "relation" ? formatRelation(attr) : formatLabelValue(attr)}
                     </span>
                 );
             }
@@ -84,13 +84,19 @@ function formatLabelValue(attr: AttributeWithDefinitions): ComponentChildren {
     }
 }
 
+function formatRelation(attr: AttributeWithDefinitions): ComponentChildren {
+    return (
+        <><strong>{attr.friendlyName}:</strong> <NoteLink notePath={attr.value} showNoteIcon /></>
+    )
+}
+
 function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
     const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
     const result: AttributeWithDefinitions[] = [];
     for (const attr of promotedDefinitionAttributes) {
         const def = attr.getDefinition();
         const [ type, name ] = attr.name.split(":", 2);
-        const value = note.getLabelValue(name);
+        const value = type === "label" ? note.getLabelValue(name) : note.getRelationValue(name);
         const friendlyName = def?.promotedAlias || name;
         if (!value) continue;
         if (attributesToIgnore.includes(name)) continue;
