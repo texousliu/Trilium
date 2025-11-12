@@ -14,12 +14,10 @@ interface AttributeWithDefinitions {
 }
 
 export default function PromotedAttributesDisplay({ note, ignoredAttributes }: PromotedAttributesDisplayProps) {
-    const promotedDefinitionAttributes = useNoteAttributesWithDefinitions(note);
+    const promotedDefinitionAttributes = useNoteAttributesWithDefinitions(note, ignoredAttributes);
     return promotedDefinitionAttributes?.length > 0 && (
         <div className="promoted-attributes">
             {promotedDefinitionAttributes?.map((attr) => {
-                if (ignoredAttributes && ignoredAttributes.includes(attr.name)) return null;
-
                 return (
                     <span key={attr.friendlyName} className="promoted-attribute">
                         <strong>{attr.friendlyName}:</strong> {attr.value}
@@ -32,7 +30,7 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
 
 }
 
-function useNoteAttributesWithDefinitions(note: FNote) {
+function useNoteAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
     const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
     const result: AttributeWithDefinitions[] = [];
 
@@ -42,6 +40,7 @@ function useNoteAttributesWithDefinitions(note: FNote) {
         const value = note.getLabelValue(name);
         const friendlyName = def?.promotedAlias ?? name;
         if (!value) continue;
+        if (attributesToIgnore.includes(name)) continue;
 
         result.push({ name, type, friendlyName, value });
     }
