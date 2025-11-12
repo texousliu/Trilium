@@ -1,4 +1,5 @@
 import FNote from "../../entities/fnote";
+import "./PromotedAttributesDisplay.css";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -8,7 +9,7 @@ interface PromotedAttributesDisplayProps {
 export default function PromotedAttributesDisplay({ note, ignoredAttributes }: PromotedAttributesDisplayProps) {
     const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
 
-    return (
+    return promotedDefinitionAttributes.length > 0 && (
         <div className="promoted-attributes">
             {promotedDefinitionAttributes.map((attr) => {
                 const def = attr.getDefinition();
@@ -19,9 +20,9 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
                 if (ignoredAttributes && ignoredAttributes.includes(name)) return null;
 
                 return (
-                    <div key={attr.name} className="promoted-attribute">
+                    <span key={attr.name} className="promoted-attribute">
                         <strong>{friendlyName}:</strong> {value}
-                    </div>
+                    </span>
                 );
             }
             )}
