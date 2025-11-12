@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/desktop",
-  "version": "0.99.4",
+  "version": "0.99.5",
   "description": "Build your personal knowledge base with Trilium Notes",
   "private": true,
   "main": "src/main.ts",
@@ -16,7 +16,7 @@
     "build": "tsx scripts/build.ts",
     "start-prod": "pnpm build && cross-env TRILIUM_DATA_DIR=data TRILIUM_PORT=37841 ELECTRON_IS_DEV=0 electron dist",
     "electron-forge:make": "pnpm build && electron-forge make dist",
-    "electron-forge:make-flatpak": "pnpm build && electron-forge make dist --targets=@electron-forge/maker-flatpak",
+    "electron-forge:make-flatpak": "pnpm build && DEBUG=* electron-forge make dist --targets=@electron-forge/maker-flatpak",
     "electron-forge:package": "pnpm build && electron-forge package dist",
     "electron-forge:start": "pnpm build && electron-forge start dist",
     "e2e": "pnpm build && cross-env TRILIUM_INTEGRATION_TEST=memory-no-store TRILIUM_PORT=8082 TRILIUM_DATA_DIR=data-e2e ELECTRON_IS_DEV=0 playwright test"

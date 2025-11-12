@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/source",
-  "version": "0.99.4",
+  "version": "0.99.5",
   "description": "Build your personal knowledge base with Trilium Notes",
   "directories": {
     "doc": "docs"
