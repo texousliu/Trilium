@@ -96,12 +96,24 @@ function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] 
     for (const attr of promotedDefinitionAttributes) {
         const def = attr.getDefinition();
         const [ type, name ] = attr.name.split(":", 2);
-        const value = type === "label" ? note.getLabelValue(name) : note.getRelationValue(name);
         const friendlyName = def?.promotedAlias || name;
-        if (!value) continue;
-        if (attributesToIgnore.includes(name)) continue;
+        const props: Omit<AttributeWithDefinitions, "value"> = { def, name, type, friendlyName };
 
-        result.push({ def, name, type, value, friendlyName });
+        if (type === "label") {
+            const labels = note.getLabels(name);
+            for (const label of labels) {
+                if (!label.value) continue;
+                result.push({ ...props, value: label.value } );
+            }
+        } else if (type === "relation") {
+            const relations = note.getRelations(name);
+            for (const relation of relations) {
+                if (!relation.value) continue;
+                result.push({ ...props, value: relation.value } );
+            }
+        }
+
+        if (attributesToIgnore.includes(name)) continue;
     }
     return result;
 }
