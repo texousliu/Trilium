@@ -104,6 +104,8 @@ export default function Column({
                 {!isEditing ? (
                     <>
                         <span className="title">{column}</span>
+                        <span className="counter-badge">{columnItems?.length ?? 0}</span>
+                        <div className="spacer" />
                         <span
                             className="edit-icon icon bx bx-edit-alt"
                             title={t("board_view.edit-column-title")}
