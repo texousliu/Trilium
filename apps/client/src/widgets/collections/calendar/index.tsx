@@ -6,7 +6,7 @@ import "./index.css";
 import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumEvent, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
 import { Calendar as FullCalendar } from "@fullcalendar/core";
-import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent, getCustomisableLabel } from "./utils";
+import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent } from "./utils";
 import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
 import { buildEvents, buildEventsForCalendar } from "./event_builder";
@@ -91,7 +91,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     const [ hideWeekends ] = useNoteLabelBoolean(note, "calendar:hideWeekends");
     const [ weekNumbers ] = useNoteLabelBoolean(note, "calendar:weekNumbers");
     const [ calendarView, setCalendarView ] = useNoteLabel(note, "calendar:view");
-    const initialDate = getCustomisableLabel(note, "initialDate", "calendar:initialDate");
+    const [ initialDate ] = useNoteLabel(note, "calendar:initialDate");
     const initialView = useRef(calendarView);
     const viewSpacedUpdate = useSpacedUpdate(() => setCalendarView(initialView.current));
     useResizeObserver(containerRef, () => calendarRef.current?.updateSize());
@@ -135,7 +135,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 height="90%"
                 nowIndicator
                 handleWindowResize={false}
-                { ...(initialDate ? {initialDate: initialDate} : undefined)}
+                initialDate={initialDate || undefined}
                 locale={locale}
                 {...editingProps}
                 eventDidMount={eventDidMount}
