@@ -109,7 +109,7 @@ export default function Card({
                         title={t("board_view.edit-note-title")}
                         onClick={handleEdit}
                     />
-                    <PromotedAttributesDisplay note={note} />
+                    <PromotedAttributesDisplay note={note} ignoredAttributes={[api.statusAttribute]} />
                 </>
             ) : (
                 <TitleEditor

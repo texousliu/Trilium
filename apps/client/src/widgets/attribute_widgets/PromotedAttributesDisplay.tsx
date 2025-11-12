@@ -2,9 +2,10 @@ import FNote from "../../entities/fnote";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
+    ignoredAttributes?: string[];
 }
 
-export default function PromotedAttributesDisplay({ note }: PromotedAttributesDisplayProps) {
+export default function PromotedAttributesDisplay({ note, ignoredAttributes }: PromotedAttributesDisplayProps) {
     const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
 
     return (
@@ -15,6 +16,7 @@ export default function PromotedAttributesDisplay({ note }: PromotedAttributesDi
                 const value = note.getLabelValue(name);
                 const friendlyName = def?.promotedAlias ?? name;
                 if (!value) return null;
+                if (ignoredAttributes && ignoredAttributes.includes(name)) return null;
 
                 return (
                     <div key={attr.name} className="promoted-attribute">

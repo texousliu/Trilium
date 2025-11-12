@@ -16,7 +16,7 @@ export default class BoardApi {
         private byColumn: ColumnMap | undefined,
         public columns: string[],
         private parentNote: FNote,
-        private statusAttribute: string,
+        readonly statusAttribute: string,
         private viewConfig: BoardViewData,
         private saveConfig: (newConfig: BoardViewData) => void,
         private setBranchIdToEdit: (branchId: string | undefined) => void
