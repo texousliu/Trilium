@@ -3,6 +3,7 @@ import FNote from "../../entities/fnote";
 import "./PromotedAttributesDisplay.css";
 import { useTriliumEvent } from "../react/hooks";
 import attributes from "../../services/attributes";
+import { DefinitionObject } from "../../services/promoted_attribute_definition_parser";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -10,10 +11,11 @@ interface PromotedAttributesDisplayProps {
 }
 
 interface AttributeWithDefinitions {
+    friendlyName: string;
     name: string;
     type: string;
-    friendlyName: string;
     value: string;
+    def: DefinitionObject;
 }
 
 export default function PromotedAttributesDisplay({ note, ignoredAttributes }: PromotedAttributesDisplayProps) {
@@ -23,7 +25,7 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
             {promotedDefinitionAttributes?.map((attr) => {
                 return (
                     <span key={attr.friendlyName} className="promoted-attribute">
-                        <strong>{attr.friendlyName}:</strong> {attr.value}
+                        <strong>{attr.friendlyName}:</strong> {formatLabelValue(attr)}
                     </span>
                 );
             }
@@ -45,6 +47,22 @@ function useNoteAttributesWithDefinitions(note: FNote, attributesToIgnore:  stri
     return promotedDefinitionAttributes;
 }
 
+function formatLabelValue(attr: AttributeWithDefinitions): string {
+    let value = attr.value;
+    switch (attr.def.labelType) {
+        case "number":
+            const numberValue = Number(value);
+            if (attr.def.numberPrecision) {
+                return numberValue.toFixed(attr.def.numberPrecision);
+            } else {
+                return numberValue.toString();
+            }
+        case "text":
+        default:
+            return value;
+    }
+}
+
 function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
     const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
     const result: AttributeWithDefinitions[] = [];
@@ -56,7 +74,7 @@ function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] 
         if (!value) continue;
         if (attributesToIgnore.includes(name)) continue;
 
-        result.push({ name, type, friendlyName, value });
+        result.push({ def, name, type, value, friendlyName });
     }
     return result;
 }
