@@ -4,6 +4,7 @@ import "./PromotedAttributesDisplay.css";
 import { useTriliumEvent } from "../react/hooks";
 import attributes from "../../services/attributes";
 import { DefinitionObject } from "../../services/promoted_attribute_definition_parser";
+import { formatDateTime } from "../../utils/formatters";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -57,6 +58,12 @@ function formatLabelValue(attr: AttributeWithDefinitions): string {
             } else {
                 return numberValue.toString();
             }
+        case "date":
+        case "datetime":
+            const date = new Date(value);
+            if (isNaN(date.getTime())) return value;
+            const timeFormat = attr.def.labelType === "datetime" ? "short" : "none";
+            return formatDateTime(date, "short", timeFormat);
         case "text":
         default:
             return value;
