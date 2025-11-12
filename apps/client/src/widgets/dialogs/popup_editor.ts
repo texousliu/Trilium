@@ -7,6 +7,11 @@ import Container from "../containers/container.js";
 const TPL = /*html*/`\
 <div class="popup-editor-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <style>
+        /** Reduce the z-index of modals so that ckeditor popups are properly shown on top of it. */
+        body.popup-editor-open > .modal-backdrop { z-index: 998; }
+        body.popup-editor-open .popup-editor-dialog { z-index: 999; }
+        body.popup-editor-open .ck-clipboard-drop-target-line { z-index: 1000; }
+
         body.desktop .modal.popup-editor-dialog .modal-dialog {
             max-width: 75vw;
         }
@@ -136,11 +141,6 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         }
 
         $dialog.on("shown.bs.modal", async () => {
-            // Reduce the z-index of modals so that ckeditor popups are properly shown on top of it.
-            // The backdrop instance is not shared so it's OK to make a one-off modification.
-            $("body > .modal-backdrop").css("z-index", "998");
-            $dialog.css("z-index", "999");
-
             await this.handleEventInChildren("activeContextChanged", { noteContext: this.noteContext });
             this.setVisibility(true);
             await this.handleEventInChildren("focusOnDetail", { ntxId: this.noteContext.ntxId });
@@ -161,9 +161,12 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         if (visible) {
             $bodyItems.fadeIn();
             this.$modalHeader.children().show();
+            document.body.classList.add("popup-editor-open");
+
         } else {
             $bodyItems.hide();
             this.$modalHeader.children().hide();
+            document.body.classList.remove("popup-editor-open");
         }
     }
 
