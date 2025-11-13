@@ -237,8 +237,8 @@ function importEnex(taskContext: TaskContext<"importNotes">, file: File, parentN
 
     function updateDates(note: BNote, utcDateCreated?: string, utcDateModified?: string) {
         // it's difficult to force custom dateCreated and dateModified to Note entity, so we do it post-creation with SQL
-        const dateCreated = formatDateTimeToLocalDbFormat(utcDateCreated);
-        const dateModified = formatDateTimeToLocalDbFormat(utcDateModified);
+        const dateCreated = formatDateTimeToLocalDbFormat(utcDateCreated, false);
+        const dateModified = formatDateTimeToLocalDbFormat(utcDateModified, false);
         sql.execute(
             `
                 UPDATE notes
@@ -411,17 +411,23 @@ function importEnex(taskContext: TaskContext<"importNotes">, file: File, parentN
     });
 }
 
-function formatDateTimeToLocalDbFormat(date: Date | string | null | undefined) {
-    if (!date) {
+function formatDateTimeToLocalDbFormat(
+    utcDateFromEnex: Date | string | null | undefined,
+    keepUtc: boolean) {
+
+    if (!utcDateFromEnex) {
         return undefined;
     }
 
-    const d = dayjs(date);
-    if (!d.isValid()) {
+    let date = dayjs(utcDateFromEnex);
+    if (keepUtc) {
+        date = date.utc();
+    }
+    if (!date.isValid()) {
         return undefined;
     }
 
-    return d.format(date_utils.LOCAL_DATETIME_FORMAT);
+    return date.format(date_utils.LOCAL_DATETIME_FORMAT);
 }
 
 export default { importEnex };
