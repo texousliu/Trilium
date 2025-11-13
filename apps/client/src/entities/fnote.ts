@@ -6,6 +6,7 @@ import type { Froca } from "../services/froca-interface.js";
 import type FAttachment from "./fattachment.js";
 import type { default as FAttribute, AttributeType } from "./fattribute.js";
 import utils from "../services/utils.js";
+import search from "../services/search.js";
 
 const LABEL = "label";
 const RELATION = "relation";
@@ -256,12 +257,18 @@ export default class FNote {
     }
 
     async getChildNoteIdsWithArchiveFiltering(includeArchived = false) {
-        let noteIds: string[] = [];
-        for (const child of await this.getChildNotes()) {
-            if (child.isArchived && !includeArchived) continue;
-            noteIds.push(child.noteId);
+        if (!includeArchived) {
+            const unorderedIds = new Set(await search.searchForNoteIds(`note.parents.noteId="${this.noteId}" #!archived`));
+            const results: string[] = [];
+            for (const id of this.children) {
+                if (unorderedIds.has(id)) {
+                    results.push(id);
+                }
+            }
+            return results;
+        } else {
+            return this.children;
         }
-        return noteIds;
     }
 
     async getSubtreeNoteIds(includeArchived = false) {
