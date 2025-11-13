@@ -5,9 +5,10 @@ import { useTriliumEvent } from "../react/hooks";
 import attributes from "../../services/attributes";
 import { DefinitionObject } from "../../services/promoted_attribute_definition_parser";
 import { formatDateTime } from "../../utils/formatters";
-import { ComponentChildren } from "preact";
+import { ComponentChildren, CSSProperties } from "preact";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
+import { getReadableTextColor } from "../../services/css_class_manager";
 
 interface PromotedAttributesDisplayProps {
     note: FNote;
@@ -26,15 +27,7 @@ export default function PromotedAttributesDisplay({ note, ignoredAttributes }: P
     const promotedDefinitionAttributes = useNoteAttributesWithDefinitions(note, ignoredAttributes);
     return promotedDefinitionAttributes?.length > 0 && (
         <div className="promoted-attributes">
-            {promotedDefinitionAttributes?.map((attr) => {
-                const className = `${attr.type === "label" ? "label" + " " + attr.def.labelType : "relation"}`;
-                return (
-                    <span key={attr.friendlyName} className={`promoted-attribute type-${className}`}>
-                        {attr.type === "relation" ? formatRelation(attr) : formatLabelValue(attr)}
-                    </span>
-                );
-            }
-            )}
+            {promotedDefinitionAttributes?.map(attr => buildPromotedAttribute(attr))}
         </div>
     )
 
@@ -52,7 +45,21 @@ function useNoteAttributesWithDefinitions(note: FNote, attributesToIgnore:  stri
     return promotedDefinitionAttributes;
 }
 
-function formatLabelValue(attr: AttributeWithDefinitions): ComponentChildren {
+function PromotedAttribute({ attr, children, style }: { attr: AttributeWithDefinitions, children: ComponentChildren, style?: CSSProperties }) {
+    const className = `${attr.type === "label" ? "label" + " " + attr.def.labelType : "relation"}`;
+
+    return (
+        <span key={attr.friendlyName} className={`promoted-attribute type-${className}`} style={style}>
+            {children}
+        </span>
+    )
+}
+
+function buildPromotedAttribute(attr: AttributeWithDefinitions): ComponentChildren {
+    if (attr.type === "relation") {
+        return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> <NoteLink notePath={attr.value} showNoteIcon /></PromotedAttribute>
+    }
+
     let value = attr.value;
     switch (attr.def.labelType) {
         case "number":
@@ -61,33 +68,27 @@ function formatLabelValue(attr: AttributeWithDefinitions): ComponentChildren {
             if (attr.def.numberPrecision) {
                 formattedValue = numberValue.toFixed(attr.def.numberPrecision);
             }
-            return <><strong>{attr.friendlyName}:</strong> {formattedValue}</>;
+            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {formattedValue}</PromotedAttribute>;
         case "date":
         case "datetime": {
             const date = new Date(value);
             const timeFormat = attr.def.labelType !== "date" ? "short" : "none";
-            return <><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "short", timeFormat)}</>;
+            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "short", timeFormat)}</PromotedAttribute>;
         }
         case "time": {
             const date = new Date(`1970-01-01T${value}Z`);
-            return <><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "none", "short")}</>;
+            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "none", "short")}</PromotedAttribute>;
         }
         case "boolean":
-            return <><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} /> <strong>{attr.friendlyName}</strong></>;
+            return <PromotedAttribute attr={attr}><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} /> <strong>{attr.friendlyName}</strong></PromotedAttribute>;
         case "url":
-            return <><a href={value} target="_blank" rel="noopener noreferrer">{attr.friendlyName}</a></>;
+            return <PromotedAttribute attr={attr}><a href={value} target="_blank" rel="noopener noreferrer">{attr.friendlyName}</a></PromotedAttribute>;
         case "color":
-            return <><span style={{ color: value }}>{attr.friendlyName}</span></>;
+            return <PromotedAttribute attr={attr} style={{ backgroundColor: value, color: getReadableTextColor(value) }}>{attr.friendlyName}</PromotedAttribute>;
         case "text":
         default:
-            return <><strong>{attr.friendlyName}:</strong> {value}</>;
+            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {value}</PromotedAttribute>;
     }
-}
-
-function formatRelation(attr: AttributeWithDefinitions): ComponentChildren {
-    return (
-        <><strong>{attr.friendlyName}:</strong> <NoteLink notePath={attr.value} showNoteIcon /></>
-    )
 }
 
 function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
