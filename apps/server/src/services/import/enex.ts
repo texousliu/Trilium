@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import sax from "sax";
 import stream from "stream";
 import { Throttle } from "stream-throttle";
@@ -236,8 +237,8 @@ function importEnex(taskContext: TaskContext<"importNotes">, file: File, parentN
 
     function updateDates(note: BNote, utcDateCreated?: string, utcDateModified?: string) {
         // it's difficult to force custom dateCreated and dateModified to Note entity, so we do it post-creation with SQL
-        const dateCreated = date_utils.formatDateTimeToLocalISO(utcDateCreated);
-        const dateModified = date_utils.formatDateTimeToLocalISO(utcDateModified);
+        const dateCreated = formatDateTimeToLocalDbFormat(utcDateCreated);
+        const dateModified = formatDateTimeToLocalDbFormat(utcDateModified);
         sql.execute(
             `
                 UPDATE notes
@@ -408,6 +409,19 @@ function importEnex(taskContext: TaskContext<"importNotes">, file: File, parentN
             .pipe(new Throttle({ rate: 500000 }))
             .pipe(saxStream);
     });
+}
+
+function formatDateTimeToLocalDbFormat(date: Date | string | null | undefined) {
+    if (!date) {
+        return undefined;
+    }
+
+    const d = dayjs(date);
+    if (!d.isValid()) {
+        return undefined;
+    }
+
+    return d.format(date_utils.LOCAL_DATETIME_FORMAT);
 }
 
 export default { importEnex };

@@ -27,19 +27,6 @@ function localNowDate() {
     }
 }
 
-function formatDateTimeToLocalISO(date: Date | string | null | undefined) {
-    if (!date) {
-        return undefined;
-    }
-
-    const d = dayjs(date);
-    if (!d.isValid()) {
-        return undefined;
-    }
-
-    return d.format(LOCAL_DATETIME_FORMAT);
-}
-
 function pad(num: number) {
     return num <= 9 ? `0${num}` : `${num}`;
 }
@@ -104,10 +91,12 @@ function validateUtcDateTime(str: string | undefined) {
 }
 
 export default {
+    LOCAL_DATETIME_FORMAT,
+    UTC_DATETIME_FORMAT,
     utcNowDateTime,
     localNowDateTime,
     localNowDate,
-    formatDateTimeToLocalISO,
+
     utcDateStr,
     utcDateTimeStr,
     parseDateTime,
