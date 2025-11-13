@@ -5,7 +5,7 @@ import { useTriliumEvent } from "../react/hooks";
 import attributes from "../../services/attributes";
 import { DefinitionObject } from "../../services/promoted_attribute_definition_parser";
 import { formatDateTime } from "../../utils/formatters";
-import { ComponentChildren, CSSProperties } from "preact";
+import { ComponentChild, ComponentChildren, CSSProperties } from "preact";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 import { getReadableTextColor } from "../../services/css_class_manager";
@@ -56,39 +56,53 @@ function PromotedAttribute({ attr, children, style }: { attr: AttributeWithDefin
 }
 
 function buildPromotedAttribute(attr: AttributeWithDefinitions): ComponentChildren {
-    if (attr.type === "relation") {
-        return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> <NoteLink notePath={attr.value} showNoteIcon /></PromotedAttribute>
+    const defaultLabel = <><strong>{attr.friendlyName}:</strong>{" "}</>;
+    let content: ComponentChildren;
+    let style: CSSProperties | undefined;
+
+    if (attr.type === "label") {
+        let value = attr.value;
+        switch (attr.def.labelType) {
+            case "number":
+                let formattedValue = value;
+                const numberValue = Number(value);
+                if (!Number.isNaN(numberValue) && attr.def.numberPrecision) formattedValue = numberValue.toFixed(attr.def.numberPrecision);
+                content = <>{defaultLabel}{formattedValue}</>;
+                break;
+            case "date":
+            case "datetime": {
+                const date = new Date(value);
+                const timeFormat = attr.def.labelType !== "date" ? "short" : "none";
+                const formattedValue = formatDateTime(date, "short", timeFormat);
+                content = <>{defaultLabel}{formattedValue}</>;
+                break;
+            }
+            case "time": {
+                const date = new Date(`1970-01-01T${value}Z`);
+                const formattedValue = formatDateTime(date, "none", "short");
+                content = <>{defaultLabel}{formattedValue}</>;
+                break;
+            }
+            case "boolean":
+                content = <><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} />{" "}<strong>{attr.friendlyName}</strong></>;
+                break;
+            case "url":
+                content = <a href={value} target="_blank" rel="noopener noreferrer">{attr.friendlyName}</a>;
+                break;
+            case "color":
+                style = { backgroundColor: value, color: getReadableTextColor(value) };
+                content = <>{attr.friendlyName}</>;
+                break;
+            case "text":
+            default:
+                content = <>{defaultLabel}{value}</>;
+                break;
+        }
+    } else if (attr.type === "relation") {
+        content = <>{defaultLabel}<NoteLink notePath={attr.value} showNoteIcon /></>;
     }
 
-    let value = attr.value;
-    switch (attr.def.labelType) {
-        case "number":
-            let formattedValue = value;
-            const numberValue = Number(value);
-            if (attr.def.numberPrecision) {
-                formattedValue = numberValue.toFixed(attr.def.numberPrecision);
-            }
-            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {formattedValue}</PromotedAttribute>;
-        case "date":
-        case "datetime": {
-            const date = new Date(value);
-            const timeFormat = attr.def.labelType !== "date" ? "short" : "none";
-            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "short", timeFormat)}</PromotedAttribute>;
-        }
-        case "time": {
-            const date = new Date(`1970-01-01T${value}Z`);
-            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {formatDateTime(date, "none", "short")}</PromotedAttribute>;
-        }
-        case "boolean":
-            return <PromotedAttribute attr={attr}><Icon icon={value === "true" ? "bx bx-check-square" : "bx bx-square"} /> <strong>{attr.friendlyName}</strong></PromotedAttribute>;
-        case "url":
-            return <PromotedAttribute attr={attr}><a href={value} target="_blank" rel="noopener noreferrer">{attr.friendlyName}</a></PromotedAttribute>;
-        case "color":
-            return <PromotedAttribute attr={attr} style={{ backgroundColor: value, color: getReadableTextColor(value) }}>{attr.friendlyName}</PromotedAttribute>;
-        case "text":
-        default:
-            return <PromotedAttribute attr={attr}><strong>{attr.friendlyName}:</strong> {value}</PromotedAttribute>;
-    }
+    return <PromotedAttribute attr={attr} style={style}>{content}</PromotedAttribute>
 }
 
 function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
