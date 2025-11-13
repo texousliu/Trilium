@@ -118,10 +118,7 @@ class NoteContentFulltextExp extends Expression {
                     // Single word: look for =word with word boundaries
                     // Split by = to get attribute values, then check each value for exact word match
                     const parts = normalizedFlatText.split('=');
-                    matches = parts.slice(1).some(part => {
-                        const words = part.split(/\s+/);
-                        return words.some(word => word === normalizedPhrase);
-                    });
+                    matches = parts.slice(1).some(part => this.exactWordMatch(normalizedPhrase, part));
                 } else {
                     // Multi-word phrase: check for substring match
                     matches = normalizedFlatText.includes(`=${normalizedPhrase}`);
@@ -134,6 +131,17 @@ class NoteContentFulltextExp extends Expression {
         }
 
         return resultNoteSet;
+    }
+
+    /**
+     * Helper method to check if a single word appears as an exact match in text
+     * @param wordToFind - The word to search for (should be normalized)
+     * @param text - The text to search in (should be normalized)
+     * @returns true if the word is found as an exact match (not substring)
+     */
+    private exactWordMatch(wordToFind: string, text: string): boolean {
+        const words = text.split(/\s+/);
+        return words.some(word => word === wordToFind);
     }
 
     /**
@@ -151,9 +159,8 @@ class NoteContentFulltextExp extends Expression {
             return normalizedContent.includes(normalizedToken);
         }
 
-        // For single words, split content into words and check for exact match
-        const words = normalizedContent.split(/\s+/);
-        return words.some(word => word === normalizedToken);
+        // For single words, use exact word matching to avoid substring matches
+        return this.exactWordMatch(normalizedToken, normalizedContent);
     }
 
     /**
@@ -170,9 +177,8 @@ class NoteContentFulltextExp extends Expression {
         // For single-word phrases, use word-boundary matching to avoid substring matches
         // e.g., "asd" should not match "asdfasdf"
         if (!phrase.includes(' ')) {
-            // Single word: split into words and check for exact match
-            const words = normalizedContent.split(/\s+/);
-            return words.some(word => word === phrase);
+            // Single word: use exact word matching to avoid substring matches
+            return this.exactWordMatch(phrase, normalizedContent);
         }
 
         // For multi-word phrases, check if the phrase appears as consecutive words
