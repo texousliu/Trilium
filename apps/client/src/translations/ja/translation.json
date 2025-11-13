@@ -41,7 +41,7 @@
     "prefix": "接頭辞: ",
     "branch_prefix_saved": "ブランチの接頭辞が保存されました。",
     "edit_branch_prefix_multiple": "{{count}} ブランチのブランチ接頭辞を編集",
-    "branch_prefix_saved_multiple": "{{count}} 個のブランチのブランチ接頭辞が保存されました。",
+    "branch_prefix_saved_multiple": "{{count}} ブランチのブランチ接頭辞が保存されました。",
     "affected_branches": "影響を受けるブランチ {{count}}:"
   },
   "global_menu": {
@@ -456,7 +456,8 @@
     "convert_into_attachment_failed": "ノート '{{title}}' の変換に失敗しました。",
     "convert_into_attachment_successful": "ノート '{{title}}' は添付ファイルに変換されました。",
     "convert_into_attachment_prompt": "本当にノート '{{title}}' を親ノートの添付ファイルに変換しますか？",
-    "note_attachments": "ノートの添付ファイル"
+    "note_attachments": "ノートの添付ファイル",
+    "open_note_on_server": "サーバー上のノートを開く"
   },
   "command_palette": {
     "export_note_title": "ノートをエクスポート",
