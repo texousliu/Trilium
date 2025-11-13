@@ -413,21 +413,19 @@ function importEnex(taskContext: TaskContext<"importNotes">, file: File, parentN
 
 function formatDateTimeToLocalDbFormat(
     utcDateFromEnex: Date | string | null | undefined,
-    keepUtc: boolean) {
-
+    keepUtc: boolean
+): string | undefined {
     if (!utcDateFromEnex) {
         return undefined;
     }
 
-    let date = dayjs(utcDateFromEnex);
-    if (keepUtc) {
-        date = date.utc();
-    }
-    if (!date.isValid()) {
+    const parsedDate = dayjs(utcDateFromEnex);
+
+    if (!parsedDate.isValid()) {
         return undefined;
     }
 
-    return date.format(date_utils.LOCAL_DATETIME_FORMAT);
+    return (keepUtc ? parsedDate.utc() : parsedDate).format(date_utils.LOCAL_DATETIME_FORMAT);
 }
 
 export default { importEnex };
