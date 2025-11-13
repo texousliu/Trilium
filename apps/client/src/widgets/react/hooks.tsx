@@ -406,14 +406,17 @@ export function useNoteLabelWithDefault(note: FNote | undefined | null, labelNam
 }
 
 export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: FilterLabelsByType<boolean>): [ boolean, (newValue: boolean) => void] {
-    const [ labelValue, setLabelValue ] = useState<boolean>(!!note?.hasLabel(labelName));
+    const [, forceRender] = useState({});
 
-    useEffect(() => setLabelValue(!!note?.hasLabel(labelName)), [ note ]);
+    useEffect(() => {
+        forceRender({});
+    }, [ note ]);
 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {
             if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
-                setLabelValue(!attr.isDeleted);
+                forceRender({});
+                break;
             }
         }
     });
@@ -430,6 +433,7 @@ export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: F
 
     useDebugValue(labelName);
 
+    const labelValue = !!note?.hasLabel(labelName);
     return [ labelValue, setter ] as const;
 }
 
