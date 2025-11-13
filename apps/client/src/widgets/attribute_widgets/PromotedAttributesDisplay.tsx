@@ -91,7 +91,7 @@ function formatRelation(attr: AttributeWithDefinitions): ComponentChildren {
 }
 
 function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
-    const promotedDefinitionAttributes = note.getPromotedDefinitionAttributes();
+    const promotedDefinitionAttributes = note.getAttributeDefinitions();
     const result: AttributeWithDefinitions[] = [];
     for (const attr of promotedDefinitionAttributes) {
         const def = attr.getDefinition();

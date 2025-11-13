@@ -839,8 +839,7 @@ export default class FNote {
             return [];
         }
 
-        const promotedAttrs = this.getAttributes()
-            .filter((attr) => attr.isDefinition())
+        const promotedAttrs = this.getAttributeDefinitions()
             .filter((attr) => {
                 const def = attr.getDefinition();
 
@@ -858,6 +857,11 @@ export default class FNote {
         });
 
         return promotedAttrs;
+    }
+
+    getAttributeDefinitions() {
+        return this.getAttributes()
+            .filter((attr) => attr.isDefinition());
     }
 
     hasAncestor(ancestorNoteId: string, followTemplates = false, visitedNoteIds: Set<string> | null = null) {
