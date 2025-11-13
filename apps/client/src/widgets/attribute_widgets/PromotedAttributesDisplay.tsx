@@ -99,6 +99,8 @@ function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] 
         const friendlyName = def?.promotedAlias || name;
         const props: Omit<AttributeWithDefinitions, "value"> = { def, name, type, friendlyName };
 
+        if (attributesToIgnore.includes(name)) continue;
+
         if (type === "label") {
             const labels = note.getLabels(name);
             for (const label of labels) {
@@ -112,8 +114,6 @@ function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] 
                 result.push({ ...props, value: relation.value } );
             }
         }
-
-        if (attributesToIgnore.includes(name)) continue;
     }
     return result;
 }
