@@ -355,7 +355,9 @@
     "visible-launchers-title": "可見啟動器",
     "user-guide": "用戶說明",
     "localization": "語言和區域",
-    "inbox-title": "收件匣"
+    "inbox-title": "收件匣",
+    "command-palette": "打開命令面板",
+    "zen-mode": "禪模式"
   },
   "notes": {
     "new-note": "新增筆記",

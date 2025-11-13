@@ -690,7 +690,8 @@
     "convert_into_attachment_failed": "笔记 '{{title}}' 转换失败。",
     "convert_into_attachment_successful": "笔记 '{{title}}' 已成功转换为附件。",
     "convert_into_attachment_prompt": "确定要将笔记 '{{title}}' 转换为父笔记的附件吗？",
-    "print_pdf": "导出为 PDF..."
+    "print_pdf": "导出为 PDF...",
+    "open_note_on_server": "在服务器上打开笔记"
   },
   "onclick_button": {
     "no_click_handler": "按钮组件'{{componentId}}'没有定义点击处理程序"
@@ -1110,7 +1111,8 @@
     "title": "内容宽度",
     "default_description": "Trilium默认会限制内容的最大宽度以提高在宽屏中全屏时的可读性。",
     "max_width_label": "内容最大宽度(像素)",
-    "max_width_unit": "像素"
+    "max_width_unit": "像素",
+    "centerContent": "保持内容居中"
   },
   "native_title_bar": {
     "title": "原生标题栏（需要重新启动应用）",
@@ -2082,5 +2084,11 @@
   },
   "calendar_view": {
     "delete_note": "删除笔记..."
+  },
+  "read-only-info": {
+    "read-only-note": "当前正在查看一个只读笔记。",
+    "auto-read-only-note": "这条笔记以只读模式显示便于快速加载。",
+    "auto-read-only-learn-more": "了解更多",
+    "edit-note": "编辑笔记"
   }
 }
