@@ -3,7 +3,7 @@ import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.
 import ApiLog from "../widgets/api_log.jsx";
 import ClosePaneButton from "../widgets/buttons/close_pane_button.js";
 import CloseZenModeButton from "../widgets/close_zen_button.jsx";
-import ContentHeader from "../widgets/containers/content-header.js";
+import ContentHeader from "../widgets/containers/content_header.js";
 import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
 import FindWidget from "../widgets/find.js";
 import FlexContainer from "../widgets/containers/flex_container.js";
