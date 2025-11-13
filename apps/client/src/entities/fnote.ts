@@ -255,6 +255,15 @@ export default class FNote {
         return this.children;
     }
 
+    async getChildNoteIdsWithArchiveFiltering(includeArchived = false) {
+        let noteIds: string[] = [];
+        for (const child of await this.getChildNotes()) {
+            if (child.isArchived && !includeArchived) continue;
+            noteIds.push(child.noteId);
+        }
+        return noteIds;
+    }
+
     async getSubtreeNoteIds(includeArchived = false) {
         let noteIds: (string | string[])[] = [];
         for (const child of await this.getChildNotes()) {
