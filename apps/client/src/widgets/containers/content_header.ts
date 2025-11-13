@@ -15,6 +15,7 @@ export default class ContentHeader extends Container<BasicWidget> {
     constructor() {
         super();
 
+        this.class("content-header-widget");
         this.css("contain", "unset");
         this.resizeObserver = new ResizeObserver(this.onResize.bind(this));
     }

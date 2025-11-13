@@ -10,7 +10,7 @@ import LauncherContainer from "../widgets/containers/launcher_container.js";
 import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import NoteList from "../widgets/collections/NoteList.jsx";
 import NoteTitleWidget from "../widgets/note_title.js";
-import ContentHeader from "../widgets/containers/content-header.js";
+import ContentHeader from "../widgets/containers/content_header.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
