@@ -76,7 +76,7 @@
             preBuildCommands ? "",
           }:
           pnpm2nix.packages.${system}.mkPnpmPackage rec {
-            pname = "triliumnext-${app}";
+            pname = "trilium-${app}";
             version = packageJson.version + (lib.optionalString (self ? shortRev) "-${self.shortRev}");
 
             src = fullCleanSource ./.;
