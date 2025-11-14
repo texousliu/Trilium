@@ -879,8 +879,8 @@ importers:
         specifier: '>=4.1.0'
         version: 5.0.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: 4.1.1
-        version: 4.1.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
+        specifier: 5.0.0
+        version: 5.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.46.0
         version: 8.46.4(@typescript-eslint/parser@8.46.4(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -939,8 +939,8 @@ importers:
         specifier: '>=4.1.0'
         version: 5.0.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: 4.1.1
-        version: 4.1.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
+        specifier: 5.0.0
+        version: 5.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.46.0
         version: 8.46.4(@typescript-eslint/parser@8.46.4(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -999,8 +999,8 @@ importers:
         specifier: '>=4.1.0'
         version: 5.0.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: 4.1.1
-        version: 4.1.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
+        specifier: 5.0.0
+        version: 5.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.46.0
         version: 8.46.4(@typescript-eslint/parser@8.46.4(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -1066,8 +1066,8 @@ importers:
         specifier: '>=4.1.0'
         version: 5.0.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: 4.1.1
-        version: 4.1.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
+        specifier: 5.0.0
+        version: 5.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.46.0
         version: 8.46.4(@typescript-eslint/parser@8.46.4(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -1133,8 +1133,8 @@ importers:
         specifier: '>=4.1.0'
         version: 5.0.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: 4.1.1
-        version: 4.1.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
+        specifier: 5.0.0
+        version: 5.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.46.0
         version: 8.46.4(@typescript-eslint/parser@8.46.4(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -1810,17 +1810,17 @@ packages:
     resolution: {integrity: sha512-dIjau68aLaaQtugLsHaCTuxhRL9t2bFmtTIsoUfMl1uHWpOWMdv2LeGEcDznZp633gZh6SDmrqLq2Bp2iOVBew==}
     engines: {node: '>=18.0.0', npm: '>=5.7.1'}
 
-  '@ckeditor/ckeditor5-dev-translations@53.2.0':
-    resolution: {integrity: sha512-FauIaK1TUTklU50wdNrBG6PxPH0ccErlTC5h6z49PhAl3O9/BHtNImpGTk5FwGB0b8Yi2SMoibsQbqwfBdNabg==}
-    engines: {node: '>=22.0.0', npm: '>=5.7.1'}
+  '@ckeditor/ckeditor5-dev-translations@54.0.0':
+    resolution: {integrity: sha512-3mBoVDrzE0yzYgoGhGLBB3B7yPaPnY6EvceRIrFcPUQeXGAmL9NxZj49zhJhohbw11EZ0gqtJYnwVuZugyHcKg==}
+    engines: {node: '>=24.11.0', npm: '>=5.7.1'}
 
   '@ckeditor/ckeditor5-dev-utils@43.1.0':
     resolution: {integrity: sha512-EM1zg0vWcFSkxbwOYV6YE6nPoBphfEHtRKzgk86ex9XbxoQvq8HdDvC0dkCSAfgX0oUrFxjLonQBJUTgCoD3YQ==}
     engines: {node: '>=18.0.0', npm: '>=5.7.1'}
 
-  '@ckeditor/ckeditor5-dev-utils@53.2.0':
-    resolution: {integrity: sha512-zdQoHiYPwJ82FFg6GvTJc5p/dJGl2P8xK5w9Aj3Fbt5ELDeGHwYqPmFklv2jzitkO3z8rMNc3gea/ct241bb8w==}
-    engines: {node: '>=22.0.0', npm: '>=5.7.1'}
+  '@ckeditor/ckeditor5-dev-utils@54.0.0':
+    resolution: {integrity: sha512-Qz6VUUbYTuQ+pMfR9UNZ5hf0lriNducmDdSCEKh8u+UXP7s1DeS6SmrlhnGcEUD97mUTuU2o7RgpqkSy19kPBA==}
+    engines: {node: '>=24.11.0', npm: '>=5.7.1'}
 
   '@ckeditor/ckeditor5-document-outline@47.2.0':
     resolution: {integrity: sha512-bVM1dHeos0UL8WL4Hd3IMVUhyj2ML552cT1ROPn1cKLGdlyb8oEwJnIC6fh7t9cz+w+digFmU7X+MsN3SmPexQ==}
@@ -1945,8 +1945,9 @@ packages:
   '@ckeditor/ckeditor5-operations-compressor@47.2.0':
     resolution: {integrity: sha512-7ZYAE1W4KlKOqLRLmbeorhHDGYKNXWUl9TZixcgbpso/u3EWQZSJ2zoaHp9J0Rf/PPmYprUxzaIL2nrQ0PWKSw==}
 
-  '@ckeditor/ckeditor5-package-tools@4.1.1':
-    resolution: {integrity: sha512-yqGcJO3wRRthYO26Zaax0++cDHPI3sQAy9eBeUFo4JznC7lkNPT5uGgov3ZSsgVA6uza4aDq7sWvNWFUdz+iOw==}
+  '@ckeditor/ckeditor5-package-tools@5.0.0':
+    resolution: {integrity: sha512-BuC0ejkZWhV4Ztltw9rJlWFwqceGAcRmotHrn00CANgaZr5zLX39BKLzPfGmByMNlM3udRXs5rXnBXBmi++pPg==}
+    engines: {node: '>=24.11.0'}
     hasBin: true
 
   '@ckeditor/ckeditor5-page-break@47.2.0':
@@ -6203,6 +6204,13 @@ packages:
 
   b4a@1.6.7:
     resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
+
+  babel-loader@10.0.0:
+    resolution: {integrity: sha512-z8jt+EdS61AMw22nSfoNJAZ0vrtmhPRVi6ghL3rCeRZI8cdNYFiV5xeV3HbE7rlZZNmGH8BVccwWt8/ED0QOHA==}
+    engines: {node: ^18.20.0 || ^20.10.0 || >=22.0.0}
+    peerDependencies:
+      '@babel/core': ^7.12.0
+      webpack: '>=5.61.0'
 
   babel-plugin-transform-hook-names@1.0.2:
     resolution: {integrity: sha512-5gafyjyyBTTdX/tQQ0hRgu4AhNHG/hqWi0ZZmg2xvs2FgRkJXzDNKBZCyoYqgFkovfDrgM8OoKg8karoUvWeCw==}
@@ -15785,11 +15793,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ckeditor/ckeditor5-dev-translations@53.2.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))':
+  '@ckeditor/ckeditor5-dev-translations@54.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))':
     dependencies:
       '@babel/parser': 7.28.4
       '@babel/traverse': 7.28.4
-      '@ckeditor/ckeditor5-dev-utils': 53.2.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
+      '@ckeditor/ckeditor5-dev-utils': 54.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
       chalk: 5.6.2
       fs-extra: 11.3.2
       glob: 11.0.3
@@ -15799,6 +15807,7 @@ snapshots:
       upath: 2.0.1
       webpack-sources: 3.3.3
     transitivePeerDependencies:
+      - '@babel/core'
       - '@rspack/core'
       - '@swc/core'
       - esbuild
@@ -15837,11 +15846,12 @@ snapshots:
       - supports-color
       - webpack
 
-  '@ckeditor/ckeditor5-dev-utils@53.2.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))':
+  '@ckeditor/ckeditor5-dev-utils@54.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))':
     dependencies:
-      '@ckeditor/ckeditor5-dev-translations': 53.2.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
+      '@ckeditor/ckeditor5-dev-translations': 54.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
       '@types/postcss-import': 14.0.3
       '@types/through2': 2.0.41
+      babel-loader: 10.0.0(@babel/core@7.28.0)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
       chalk: 5.6.2
       cli-cursor: 5.0.0
       cli-spinners: 3.2.0
@@ -15867,6 +15877,7 @@ snapshots:
       through2: 4.0.2
       upath: 2.0.1
     transitivePeerDependencies:
+      - '@babel/core'
       - '@rspack/core'
       - '@swc/core'
       - esbuild
@@ -16329,10 +16340,10 @@ snapshots:
       es-toolkit: 1.39.5
       protobufjs: 7.5.0
 
-  '@ckeditor/ckeditor5-package-tools@4.1.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)':
+  '@ckeditor/ckeditor5-package-tools@5.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.10.1)(bufferutil@4.0.9)(esbuild@0.27.0)(utf-8-validate@6.0.5)':
     dependencies:
-      '@ckeditor/ckeditor5-dev-translations': 53.2.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
-      '@ckeditor/ckeditor5-dev-utils': 53.2.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
+      '@ckeditor/ckeditor5-dev-translations': 54.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
+      '@ckeditor/ckeditor5-dev-utils': 54.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
       buffer: 6.0.3
       chalk: 5.6.2
       css-loader: 5.2.7(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
@@ -16354,6 +16365,7 @@ snapshots:
       webpack: 5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)
       webpack-dev-server: 5.2.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0))
     transitivePeerDependencies:
+      - '@babel/core'
       - '@rspack/core'
       - '@swc/core'
       - '@swc/wasm'
@@ -21606,6 +21618,12 @@ snapshots:
       - debug
 
   b4a@1.6.7: {}
+
+  babel-loader@10.0.0(@babel/core@7.28.0)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)):
+    dependencies:
+      '@babel/core': 7.28.0
+      find-up: 5.0.0
+      webpack: 5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.0)
 
   babel-plugin-transform-hook-names@1.0.2(@babel/core@7.28.0):
     dependencies:
