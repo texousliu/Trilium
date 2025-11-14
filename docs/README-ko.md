@@ -40,7 +40,7 @@ quick overview:
   unstable development version, updated daily with the latest features and
   fixes.
 
-## 📚 Documentation
+## 📚 문서
 
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
