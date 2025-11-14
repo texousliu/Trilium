@@ -150,11 +150,16 @@ async function createLink(notePath: string | undefined, options: CreateLinkOptio
     $container.append($noteLink);
 
     if (showNotePath) {
-        const resolvedPathSegments = (await treeService.resolveNotePathToSegments(notePath)) || [];
-        resolvedPathSegments.pop(); // Remove last element
+        let pathSegments: string[];
+        if (notePath == "root") {
+            pathSegments = ["⌂"];
+        } else {
+            const resolvedPathSegments = (await treeService.resolveNotePathToSegments(notePath)) || [];
+            resolvedPathSegments.pop(); // Remove last element
 
-        const resolvedPath = resolvedPathSegments.join("/");
-        const pathSegments = await treeService.getNotePathTitleComponents(resolvedPath);
+            const resolvedPath = resolvedPathSegments.join("/");
+            pathSegments = await treeService.getNotePathTitleComponents(resolvedPath);
+        }
 
         if (pathSegments) {
             if (pathSegments.length) {
