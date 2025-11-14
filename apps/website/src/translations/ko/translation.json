@@ -1,6 +1,12 @@
 {
     "hero_section": {
         "github": "깃허브",
-        "dockerhub": "도커 허브"
+        "dockerhub": "도커 허브",
+        "get_started": "시작하기"
+    },
+    "get-started": {
+        "title": "시작하기",
+        "desktop_title": "데스크탑 애플리케이션 내려받기 (v{{version}})",
+        "older_releases": "오래된 릴리즈 보기"
     }
 }
