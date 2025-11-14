@@ -22,7 +22,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
         electron = pkgs."electron_${lib.versions.major packageJsonDesktop.devDependencies.electron}";
-        nodejs = pkgs.nodejs_22;
+        nodejs = pkgs.nodejs_24;
         # pnpm creates an overly long PATH env variable for child processes.
         # This patch deduplicates entries in PATH, which results in an equivalent but shorter entry.
         # https://github.com/pnpm/pnpm/issues/6106
