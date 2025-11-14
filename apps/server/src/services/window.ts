@@ -342,8 +342,11 @@ async function registerGlobalShortcuts() {
                             return;
                         }
 
-                        // window may be hidden / not in focus
-                        showAndFocusWindow(targetWindow);
+                        if (action.actionName === "toggleTray") {
+                            targetWindow.focus();
+                        } else {
+                            showAndFocusWindow(targetWindow);
+                        }
 
                         targetWindow.webContents.send("globalShortcut", action.actionName);
                     })
