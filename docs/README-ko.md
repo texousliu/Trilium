@@ -9,7 +9,7 @@
 
 <hr />
 
-# Trilium Notes
+# 트릴리움 노트
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
@@ -25,8 +25,7 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 | [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
 [Spanish](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 오픈 소스 크로스 플랫폼 계층적 메모 작성 애플리케이션입니다.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
@@ -34,18 +33,16 @@ quick overview:
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ 내려받기
-- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  stable version, recommended for most users.
-- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
-  unstable development version, updated daily with the latest features and
-  fixes.
+- [최신 릴리스](https://github.com/TriliumNext/Trilium/releases/latest) – 안정된 버전으로
+  대부분의 사용자에게 권장됩니다.
+- [야간 빌드](https://github.com/TriliumNext/Trilium/releases/tag/nightly) – 불안정한 개발
+  버전으로, 최신 기능과 수정 사항이 매일 업데이트됩니다.
 
 ## 📚 문서
 
-**Visit our comprehensive documentation at
-[docs.triliumnotes.org](https://docs.triliumnotes.org/)**
+**[docs.triliumnotes.org](https://docs.triliumnotes.org/)에서 포괄적인 문서를 방문하세요**
 
-Our documentation is available in multiple formats:
+저희 문서는 다양한 형식으로 제공됩니다.
 - **Online Documentation**: Browse the full documentation at
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
