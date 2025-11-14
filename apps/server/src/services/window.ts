@@ -6,7 +6,6 @@ import optionService from "./options.js";
 import log from "./log.js";
 import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
-import { KeyboardActionNames } from "@triliumnext/commons";
 import keyboardActionsService from "./keyboard_actions.js";
 import electron from "electron";
 import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents, IpcMainEvent } from "electron";
@@ -320,7 +319,6 @@ function closeSetupWindow() {
 }
 
 async function registerGlobalShortcuts() {
-    const toggleTrayAction: KeyboardActionNames = "toggleTray";
     const { globalShortcut } = await import("electron");
 
     await sqlInit.dbReady;
@@ -344,7 +342,7 @@ async function registerGlobalShortcuts() {
                             return;
                         }
 
-                        if (action.actionName === toggleTrayAction) {
+                        if (action.actionName === "toggleTray") {
                             targetWindow.focus();
                         } else {
                             showAndFocusWindow(targetWindow);
