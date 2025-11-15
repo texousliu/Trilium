@@ -202,7 +202,6 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         const customDateTimeFormat = options.get("customDateTimeFormat");
         const dateString = utils.formatDateTime(date, customDateTimeFormat);
 
-        console.log("Insert text ", ntxId, eventNtxId, dateString);
         addTextToEditor(dateString);
     });
     useTriliumEvent("addTextToActiveEditor", ({ text }) => {
