@@ -41,6 +41,19 @@ Notes are displayed recursively, so even the child notes of the child notes will
     *   Delete the current note.
 *   If there are many notes within the column, move the mouse over the column and use the mouse wheel to scroll.
 
+### Working with the note tree
+
+It's also possible to add items on the board using the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>.
+
+1.  Select the desired note in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>.
+2.  Hold the mouse on the note and drag it to the to the desired column.
+
+This works for:
+
+*   Notes that are not children of the board, case in which a [clone](../Basic%20Concepts%20and%20Features/Notes/Cloning%20Notes.md) will be created.
+*   Notes that are children of the board, but not yet assigned on the board.
+*   Notes that are children of the board, case in which they will be moved to the new column.
+
 ### Keyboard interaction
 
 The board view has mild support for keyboard-based navigation:
