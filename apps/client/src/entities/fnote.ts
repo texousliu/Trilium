@@ -257,7 +257,9 @@ export default class FNote {
     }
 
     async getChildNoteIdsWithArchiveFiltering(includeArchived = false) {
-        if (!includeArchived) {
+        const isHiddenNote = this.noteId.startsWith("_");
+        const isSearchNote = this.type === "search";
+        if (!includeArchived && !isHiddenNote && !isSearchNote) {
             const unorderedIds = new Set(await search.searchForNoteIds(`note.parents.noteId="${this.noteId}" #!archived`));
             const results: string[] = [];
             for (const id of this.children) {
