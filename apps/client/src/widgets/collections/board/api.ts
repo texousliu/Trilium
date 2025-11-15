@@ -12,15 +12,25 @@ import { ColumnMap } from "./data";
 
 export default class BoardApi {
 
+    private isRelationMode: boolean;
+    statusAttribute: string;
+
     constructor(
         private byColumn: ColumnMap | undefined,
         public columns: string[],
         private parentNote: FNote,
-        readonly statusAttribute: string,
+        statusAttribute: string,
         private viewConfig: BoardViewData,
         private saveConfig: (newConfig: BoardViewData) => void,
         private setBranchIdToEdit: (branchId: string | undefined) => void
-    ) {};
+    ) {
+        this.isRelationMode = statusAttribute.startsWith("~");
+
+        if (statusAttribute.startsWith("~") || statusAttribute.startsWith("#")) {
+            statusAttribute = statusAttribute.substring(1);
+        }
+        this.statusAttribute = statusAttribute;
+    };
 
     async createNewItem(column: string, title: string) {
         try {
@@ -42,7 +52,11 @@ export default class BoardApi {
     }
 
     async changeColumn(noteId: string, newColumn: string) {
-        await attributes.setLabel(noteId, this.statusAttribute, newColumn);
+        if (this.isRelationMode) {
+            await attributes.setRelation(noteId, this.statusAttribute, newColumn);
+        } else {
+            await attributes.setLabel(noteId, this.statusAttribute, newColumn);
+        }
     }
 
     async addNewColumn(columnName: string) {

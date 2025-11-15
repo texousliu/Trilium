@@ -22,6 +22,15 @@ export async function setLabel(noteId: string, name: string, value: string = "",
     });
 }
 
+export async function setRelation(noteId: string, name: string, value: string = "", isInheritable = false) {
+    await server.put(`notes/${noteId}/set-attribute`, {
+        type: "relation",
+        name: name,
+        value: value,
+        isInheritable
+    });
+}
+
 async function removeAttributeById(noteId: string, attributeId: string) {
     await server.remove(`notes/${noteId}/attributes/${attributeId}`);
 }
@@ -116,6 +125,7 @@ function isAffecting(attrRow: AttributeRow, affectedNote: FNote | null | undefin
 export default {
     addLabel,
     setLabel,
+    setRelation,
     setAttribute,
     removeAttributeById,
     removeOwnedLabelByName,
