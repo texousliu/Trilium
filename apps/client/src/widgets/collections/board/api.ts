@@ -75,10 +75,10 @@ export default class BoardApi {
 
         // Add the new column to persisted data if it doesn't exist
         const existingColumn = this.viewConfig.columns.find(col => col.value === columnName);
-        if (!existingColumn) {
-            this.viewConfig.columns.push({ value: columnName });
-            this.saveConfig(this.viewConfig);
-        }
+        if (existingColumn) return false;
+        this.viewConfig.columns.push({ value: columnName });
+        this.saveConfig(this.viewConfig);
+        return true;
     }
 
     async removeColumn(column: string) {

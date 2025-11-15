@@ -14,6 +14,7 @@ import BoardApi from "./api";
 import FormTextArea from "../../react/FormTextArea";
 import FNote from "../../../entities/fnote";
 import NoteAutocomplete from "../../react/NoteAutocomplete";
+import toast from "../../../services/toast";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -213,7 +214,12 @@ function AddNewColumn({ api, isInRelationMode }: { api: BoardApi, isInRelationMo
             : (
                 <TitleEditor
                     placeholder={t("board_view.add-column-placeholder")}
-                    save={(columnName) => api.addNewColumn(columnName)}
+                    save={async (columnName) => {
+                        const created = await api.addNewColumn(columnName);
+                        if (!created) {
+                            toast.showMessage(t("board_view.column-already-exists"), undefined, "bx bx-duplicate");
+                        }
+                    }}
                     dismiss={() => setIsCreatingNewColumn(false)}
                     isNewItem
                     mode={isInRelationMode ? "relation" : "normal"}
