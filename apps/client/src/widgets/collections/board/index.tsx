@@ -42,7 +42,7 @@ interface BoardViewContextData {
 export const BoardViewContext = createContext<BoardViewContextData | undefined>(undefined);
 
 export default function BoardView({ note: parentNote, noteIds, viewConfig, saveConfig }: ViewModeProps<BoardViewData>) {
-    const [ statusAttribute ] = useNoteLabelWithDefault(parentNote, "board:groupBy", "status");
+    const [ statusAttributeWithPrefix ] = useNoteLabelWithDefault(parentNote, "board:groupBy", "status");
     const [ includeArchived ] = useNoteLabelBoolean(parentNote, "includeArchived");
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
@@ -56,8 +56,8 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ branchIdToEdit, setBranchIdToEdit ] = useState<string>();
     const [ columnNameToEdit, setColumnNameToEdit ] = useState<string>();
     const api = useMemo(() => {
-        return new Api(byColumn, columns ?? [], parentNote, statusAttribute, viewConfig ?? {}, saveConfig, setBranchIdToEdit );
-    }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig, setBranchIdToEdit ]);
+        return new Api(byColumn, columns ?? [], parentNote, statusAttributeWithPrefix, viewConfig ?? {}, saveConfig, setBranchIdToEdit );
+    }, [ byColumn, columns, parentNote, statusAttributeWithPrefix, viewConfig, saveConfig, setBranchIdToEdit ]);
     const boardViewContext = useMemo<BoardViewContextData>(() => ({
         api,
         parentNote,
@@ -79,7 +79,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     ]);
 
     function refresh() {
-        getBoardData(parentNote, statusAttribute, viewConfig ?? {}, includeArchived).then(({ byColumn, newPersistedData, isInRelationMode }) => {
+        getBoardData(parentNote, statusAttributeWithPrefix, viewConfig ?? {}, includeArchived).then(({ byColumn, newPersistedData, isInRelationMode }) => {
             setByColumn(byColumn);
             setIsRelationMode(isInRelationMode);
 
@@ -112,7 +112,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         // Check if any changes affect our board
         const hasRelevantChanges =
             // React to changes in status attribute for notes in this board
-            loadResults.getAttributeRows().some(attr => attr.name === statusAttribute && noteIds.includes(attr.noteId!)) ||
+            loadResults.getAttributeRows().some(attr => attr.name === api.statusAttribute && noteIds.includes(attr.noteId!)) ||
             // React to changes in note title
             loadResults.getNoteIds().some(noteId => noteIds.includes(noteId)) ||
             // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
