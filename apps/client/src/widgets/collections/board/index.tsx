@@ -243,7 +243,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, mode, is
     const shouldDismiss = useRef(false);
 
     useEffect(() => {
-        focusElRef.current = document.activeElement;
+        focusElRef.current = document.activeElement !== document.body ? document.activeElement : null;
         inputRef.current?.focus();
         inputRef.current?.select();
     }, [ inputRef ]);
@@ -259,9 +259,11 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, mode, is
         if (e.key === "Enter" || e.key === "Escape") {
             e.preventDefault();
             e.stopPropagation();
-            shouldDismiss.current = (e.key === "Escape");
             if (focusElRef.current instanceof HTMLElement) {
+                shouldDismiss.current = (e.key === "Escape");
                 focusElRef.current.focus();
+            } else {
+                dismiss();
             }
         }
     };
