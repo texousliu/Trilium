@@ -13,6 +13,7 @@ import Column from "./column";
 import BoardApi from "./api";
 import FormTextArea from "../../react/FormTextArea";
 import FNote from "../../../entities/fnote";
+import NoteAutocomplete from "../../react/NoteAutocomplete";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -188,14 +189,14 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                         <div className="column-drop-placeholder show" />
                     )}
 
-                    <AddNewColumn api={api} />
+                    <AddNewColumn api={api} isInRelationMode={isInRelationMode} />
                 </div>
             </BoardViewContext.Provider>
         </div>
     )
 }
 
-function AddNewColumn({ api }: { api: BoardApi }) {
+function AddNewColumn({ api, isInRelationMode }: { api: BoardApi, isInRelationMode: boolean }) {
     const [ isCreatingNewColumn, setIsCreatingNewColumn ] = useState(false);
 
     const addColumnCallback = useCallback(() => {
@@ -215,19 +216,20 @@ function AddNewColumn({ api }: { api: BoardApi }) {
                     save={(columnName) => api.addNewColumn(columnName)}
                     dismiss={() => setIsCreatingNewColumn(false)}
                     isNewItem
+                    mode={isInRelationMode ? "relation" : "normal"}
                 />
             )}
         </div>
     )
 }
 
-export function TitleEditor({ currentValue, placeholder, save, dismiss, multiline, isNewItem }: {
+export function TitleEditor({ currentValue, placeholder, save, dismiss, mode, isNewItem }: {
     currentValue?: string;
     placeholder?: string;
     save: (newValue: string) => void;
     dismiss: () => void;
-    multiline?: boolean;
     isNewItem?: boolean;
+    mode?: "normal" | "multiline" | "relation";
 }) {
     const inputRef = useRef<any>(null);
     const focusElRef = useRef<Element>(null);
@@ -240,8 +242,6 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
         inputRef.current?.select();
     }, [ inputRef ]);
 
-    const Element = multiline ? FormTextArea : FormTextBox;
-
     useEffect(() => {
         if (dismissOnNextRefreshRef.current) {
             dismiss();
@@ -249,31 +249,52 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
         }
     });
 
-    return (
-        <Element
-            inputRef={inputRef}
-            currentValue={currentValue ?? ""}
-            placeholder={placeholder}
-            autoComplete="trilium-title-entry" // forces the auto-fill off better than the "off" value.
-            rows={multiline ? 4 : undefined}
-            onKeyDown={(e: TargetedKeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                if (e.key === "Enter" || e.key === "Escape") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    shouldDismiss.current = (e.key === "Escape");
-                    if (focusElRef.current instanceof HTMLElement) {
-                        focusElRef.current.focus();
-                    }
-                }
-            }}
-            onBlur={(newValue) => {
-                if (!shouldDismiss.current && newValue.trim() && (newValue !== currentValue || isNewItem)) {
-                    save(newValue);
-                    dismissOnNextRefreshRef.current = true;
-                } else {
-                    dismiss();
-                }
-            }}
-        />
-    );
+    const onKeyDown = (e: TargetedKeyboardEvent<HTMLInputElement | HTMLTextAreaElement> | KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === "Escape") {
+            e.preventDefault();
+            e.stopPropagation();
+            shouldDismiss.current = (e.key === "Escape");
+            if (focusElRef.current instanceof HTMLElement) {
+                focusElRef.current.focus();
+            }
+        }
+    };
+
+    const onBlur = (newValue) => {
+        if (!shouldDismiss.current && newValue.trim() && (newValue !== currentValue || isNewItem)) {
+            save(newValue);
+            dismissOnNextRefreshRef.current = true;
+        } else {
+            dismiss();
+        }
+    };
+
+    if (mode !== "relation") {
+        const Element = mode === "multiline" ? FormTextArea : FormTextBox;
+
+        return (
+            <Element
+                inputRef={inputRef}
+                currentValue={currentValue ?? ""}
+                placeholder={placeholder}
+                autoComplete="trilium-title-entry" // forces the auto-fill off better than the "off" value.
+                rows={mode === "multiline" ? 4 : undefined}
+                onKeyDown={onKeyDown}
+                onBlur={onBlur}
+            />
+        );
+    } else {
+        return (
+            <NoteAutocomplete
+                inputRef={inputRef}
+                noteId={currentValue ?? ""}
+                opts={{
+                    hideAllButtons: true,
+                    allowCreatingNotes: true
+                }}
+                onKeyDown={onKeyDown}
+                onBlur={onBlur}
+            />
+        )
+    }
 }

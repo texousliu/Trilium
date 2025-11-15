@@ -119,7 +119,7 @@ export default function Card({
                         setTitle(newTitle);
                     }}
                     dismiss={() => api.dismissEditingTitle()}
-                    multiline
+                    mode="multiline"
                 />
             )}
         </div>

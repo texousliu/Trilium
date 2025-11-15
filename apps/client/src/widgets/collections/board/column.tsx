@@ -124,6 +124,7 @@ export default function Column({
                         currentValue={column}
                         save={newTitle => api.renameColumn(column, newTitle)}
                         dismiss={() => setColumnNameToEdit?.(undefined)}
+                        mode={isInRelationMode ? "relation" : "normal"}
                     />
                 )}
             </h3>
@@ -187,7 +188,7 @@ function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
                     placeholder={t("board_view.new-item-placeholder")}
                     save={(title) => api.createNewItem(column, title)}
                     dismiss={() => setIsCreatingNewItem(false)}
-                    multiline isNewItem
+                    mode="multiline" isNewItem
                 />
             )}
         </div>
