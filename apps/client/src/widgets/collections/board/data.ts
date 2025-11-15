@@ -57,7 +57,8 @@ export async function getBoardData(parentNote: FNote, groupByColumn: string, per
 
     return {
         byColumn,
-        newPersistedData
+        newPersistedData,
+        isInRelationMode: groupByColumn.startsWith("~")
     };
 }
 
@@ -70,7 +71,7 @@ async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupB
             await recursiveGroupBy(note.getChildBranches(), byColumn, groupByColumn, includeArchived, seenNoteIds);
         }
 
-        const group = note.getLabelValue(groupByColumn);
+        const group = note.getLabelOrRelation(groupByColumn);
         if (!group || seenNoteIds.has(note.noteId)) {
             continue;
         }

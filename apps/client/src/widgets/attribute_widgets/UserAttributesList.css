@@ -1,4 +1,4 @@
-.promoted-attributes {
+.user-attributes {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -6,7 +6,7 @@
     margin-top: 8px;
 }
 
-.promoted-attributes .promoted-attribute {
+.user-attributes .user-attribute {
     padding: 2px 10px;
     border-radius: 9999px;
     white-space: nowrap;
@@ -17,15 +17,15 @@
     line-height: 1.2;
 }
 
-.promoted-attributes .promoted-attribute:hover {
+.user-attributes .user-attribute:hover {
     background-color: var(--chip-bg-hover, rgba(0, 0, 0, 0.12));
     border-color: var(--chip-border-hover, rgba(0, 0, 0, 0.22));
 }
 
-.promoted-attributes .promoted-attribute .name {
+.user-attributes .user-attribute .name {
     font-weight: 600;
 }
 
-.promoted-attributes .promoted-attribute .value {
+.user-attributes .user-attribute .value {
     opacity: 0.9;
 }
