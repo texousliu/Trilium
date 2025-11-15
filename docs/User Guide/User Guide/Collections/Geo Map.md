@@ -1,6 +1,6 @@
 # Geo Map
 > [!IMPORTANT]
-> Starting with Trilium v0.97.0, the geo map has been converted from a standalone [note type](../Note%20Types.md) to a type of view for the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>. 
+> <a class="reference-link" href="../Advanced%20Usage/Attributes.md">Attributes</a><a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a><a class="reference-link" href="../Advanced%20Usage/Attributes.md">Attributes</a>Starting with Trilium v0.97.0, the geo map has been converted from a standalone [note type](../Note%20Types.md) to a type of view for the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>. 
 
 <figure class="image image-style-align-center"><img style="aspect-ratio:892/675;" src="9_Geo Map_image.png" width="892" height="675"></figure>
 

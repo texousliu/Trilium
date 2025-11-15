@@ -1,5 +1,5 @@
 <figure class="image">
-  <img style="aspect-ratio:918/248;" src="1_Kanban Board_image.png"
+  <img style="aspect-ratio:918/248;" src="2_Kanban Board_image.png"
   width="918" height="248">
 </figure>
 <p>The Board view presents sub-notes in columns for a Kanban-like experience.
@@ -101,6 +101,42 @@
     <li data-list-item-id="eec6f2285fa4d8e95f6a3d40cf51e3d69">To dismiss a rename of a note or a column, press <kbd>Escape</kbd>.</li>
 </ul>
 <h2>Configuration</h2>
+<h3>Displaying custom attributes</h3>
+<figure class="image image-style-align-center">
+  <img style="aspect-ratio:531/485;" src="Kanban Board_image.png"
+  width="531" height="485">
+</figure>
+<p>Note attributes can be displayed on the board to enhance it with custom
+  information such as adding a Due date for your tasks.</p>
+<p>This feature works exclusively via attribute definitions (<a class="reference-link"
+  href="#root/zEY4DaJG4YT5/_help_OFXdgB2nNk1F">Promoted Attributes</a>). The easiest
+  way to add these is:</p>
+<ol>
+  <li data-list-item-id="eb2220bf769a14b4d3c3763ddb412215a">Go to board note.</li>
+  <li data-list-item-id="ef2b3775a79f59cc97c77a69ca78a345e">In the ribbon select <em>Owned Attributes</em> → plus button → <em>Add new label/relation definition</em>.</li>
+  <li
+  data-list-item-id="e2565a4dfea04fba704b37927e6252ce4">Configure the attribute as desired.</li>
+    <li data-list-item-id="ee18605ea5b4a07f7b3f5529ba00b2a57">Check <em>Inheritable</em> to make it applicable to child notes automatically.</li>
+</ol>
+<p>After creating the attribute, click on a note and fill in the promoted
+  attributes which should then reflect inside the board.</p>
+<p>Of note:</p>
+<ul>
+  <li data-list-item-id="e5a19ed95dbafe9a850690bea201deba1">Both promoted and non-promoted attribute definitions are supported. The
+    only difference is that non-promoted attributes don't have an “Alias” for
+    assigning a custom name.</li>
+  <li data-list-item-id="e7ec69af7257cfe86e14bb803910872b4">Both “Single value” and “Multi value” attributes are supported. In case
+    of multi-value, a badge is displayed for every instance of the attribute.</li>
+  <li
+  data-list-item-id="e810a5dbe56db7e59f9091e45c545a611">All label types are supported, including dates, booleans and URLs.</li>
+    <li
+    data-list-item-id="e49414fe2d9d206692332cd7d7ff1d4c0">Relation attributes are also supported as well, showing a link with the
+      target note title and icon.</li>
+      <li data-list-item-id="e1c3fb07ae71ca498c04613917eca93d4">Currently, it's not possible to adjust which promoted attributes are displayed,
+        since all promoted attributes will be displayed (except the <code>board:groupBy</code> one).
+        There are plans to improve upon this being able to hide promoted attributes
+        individually.</li>
+</ul>
 <h3>Grouping by another label</h3>
 <p>By default, the label used to group the notes is <code>#status</code>.
   It is possible to use a different label if needed by defining a label named <code>#board:groupBy</code> with
@@ -108,7 +144,7 @@
   prefix).</p>
 <h3>Grouping by relations</h3>
 <figure class="image image-style-align-right">
-  <img style="aspect-ratio:535/245;" src="Kanban Board_image.png"
+  <img style="aspect-ratio:535/245;" src="1_Kanban Board_image.png"
   width="535" height="245">
 </figure>
 <p>A more advanced use-case is grouping by <a href="#root/pOsGYCXsbNQG/tC7s2alapj8V/zEY4DaJG4YT5/_help_Cq5X6iKQop6R">Relations</a>.</p>

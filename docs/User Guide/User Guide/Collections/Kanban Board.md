@@ -1,5 +1,5 @@
 # Kanban Board
-<figure class="image"><img style="aspect-ratio:918/248;" src="1_Kanban Board_image.png" width="918" height="248"></figure>
+<figure class="image"><img style="aspect-ratio:918/248;" src="2_Kanban Board_image.png" width="918" height="248"></figure>
 
 The Board view presents sub-notes in columns for a Kanban-like experience. Each column represents a possible value for a status label, which can be adjusted.
 
@@ -65,13 +65,36 @@ The board view has mild support for keyboard-based navigation:
 
 ## Configuration
 
+### Displaying custom attributes
+
+<figure class="image image-style-align-center"><img style="aspect-ratio:531/485;" src="Kanban Board_image.png" width="531" height="485"></figure>
+
+Note attributes can be displayed on the board to enhance it with custom information such as adding a Due date for your tasks.
+
+This feature works exclusively via attribute definitions (<a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a>). The easiest way to add these is:
+
+1.  Go to board note.
+2.  In the ribbon select _Owned Attributes_ → plus button → _Add new label/relation definition_.
+3.  Configure the attribute as desired.
+4.  Check _Inheritable_ to make it applicable to child notes automatically.
+
+After creating the attribute, click on a note and fill in the promoted attributes which should then reflect inside the board.
+
+Of note:
+
+*   Both promoted and non-promoted attribute definitions are supported. The only difference is that non-promoted attributes don't have an “Alias” for assigning a custom name.
+*   Both “Single value” and “Multi value” attributes are supported. In case of multi-value, a badge is displayed for every instance of the attribute.
+*   All label types are supported, including dates, booleans and URLs.
+*   Relation attributes are also supported as well, showing a link with the target note title and icon.
+*   Currently, it's not possible to adjust which promoted attributes are displayed, since all promoted attributes will be displayed (except the `board:groupBy` one). There are plans to improve upon this being able to hide promoted attributes individually.
+
 ### Grouping by another label
 
 By default, the label used to group the notes is `#status`. It is possible to use a different label if needed by defining a label named `#board:groupBy` with the value being the attribute to use (with or without `#` attribute prefix).
 
 ### Grouping by relations
 
-<figure class="image image-style-align-right"><img style="aspect-ratio:535/245;" src="Kanban Board_image.png" width="535" height="245"></figure>
+<figure class="image image-style-align-right"><img style="aspect-ratio:535/245;" src="1_Kanban Board_image.png" width="535" height="245"></figure>
 
 A more advanced use-case is grouping by [Relations](../Advanced%20Usage/Attributes/Relations.md).
 
