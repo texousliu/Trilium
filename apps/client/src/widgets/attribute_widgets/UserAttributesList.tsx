@@ -1,16 +1,16 @@
 import { useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
-import "./PromotedAttributesDisplay.css";
+import "./UserAttributesList.css";
 import { useTriliumEvent } from "../react/hooks";
 import attributes from "../../services/attributes";
 import { DefinitionObject } from "../../services/promoted_attribute_definition_parser";
 import { formatDateTime } from "../../utils/formatters";
-import { ComponentChild, ComponentChildren, CSSProperties } from "preact";
+import { ComponentChildren, CSSProperties } from "preact";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 import { getReadableTextColor } from "../../services/css_class_manager";
 
-interface PromotedAttributesDisplayProps {
+interface UserAttributesListProps {
     note: FNote;
     ignoredAttributes?: string[];
 }
@@ -23,39 +23,39 @@ interface AttributeWithDefinitions {
     def: DefinitionObject;
 }
 
-export default function PromotedAttributesDisplay({ note, ignoredAttributes }: PromotedAttributesDisplayProps) {
-    const promotedDefinitionAttributes = useNoteAttributesWithDefinitions(note, ignoredAttributes);
-    return promotedDefinitionAttributes?.length > 0 && (
-        <div className="promoted-attributes">
-            {promotedDefinitionAttributes?.map(attr => buildPromotedAttribute(attr))}
+export default function UserAttributesDisplay({ note, ignoredAttributes }: UserAttributesListProps) {
+    const userAttributes = useNoteAttributesWithDefinitions(note, ignoredAttributes);
+    return userAttributes?.length > 0 && (
+        <div className="user-attributes">
+            {userAttributes?.map(attr => buildUserAttribute(attr))}
         </div>
     )
 
 }
 
 function useNoteAttributesWithDefinitions(note: FNote, attributesToIgnore:  string[] = []): AttributeWithDefinitions[] {
-    const [ promotedDefinitionAttributes, setPromotedDefinitionAttributes ] = useState<AttributeWithDefinitions[]>(getAttributesWithDefinitions(note, attributesToIgnore));
+    const [ userAttributes, setUserAttributes ] = useState<AttributeWithDefinitions[]>(getAttributesWithDefinitions(note, attributesToIgnore));
 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getAttributeRows().some(attr => attributes.isAffecting(attr, note))) {
-            setPromotedDefinitionAttributes(getAttributesWithDefinitions(note, attributesToIgnore));
+            setUserAttributes(getAttributesWithDefinitions(note, attributesToIgnore));
         }
     });
 
-    return promotedDefinitionAttributes;
+    return userAttributes;
 }
 
-function PromotedAttribute({ attr, children, style }: { attr: AttributeWithDefinitions, children: ComponentChildren, style?: CSSProperties }) {
+function UserAttribute({ attr, children, style }: { attr: AttributeWithDefinitions, children: ComponentChildren, style?: CSSProperties }) {
     const className = `${attr.type === "label" ? "label" + " " + attr.def.labelType : "relation"}`;
 
     return (
-        <span key={attr.friendlyName} className={`promoted-attribute type-${className}`} style={style}>
+        <span key={attr.friendlyName} className={`user-attribute type-${className}`} style={style}>
             {children}
         </span>
     )
 }
 
-function buildPromotedAttribute(attr: AttributeWithDefinitions): ComponentChildren {
+function buildUserAttribute(attr: AttributeWithDefinitions): ComponentChildren {
     const defaultLabel = <><strong>{attr.friendlyName}:</strong>{" "}</>;
     let content: ComponentChildren;
     let style: CSSProperties | undefined;
@@ -102,13 +102,13 @@ function buildPromotedAttribute(attr: AttributeWithDefinitions): ComponentChildr
         content = <>{defaultLabel}<NoteLink notePath={attr.value} showNoteIcon /></>;
     }
 
-    return <PromotedAttribute attr={attr} style={style}>{content}</PromotedAttribute>
+    return <UserAttribute attr={attr} style={style}>{content}</UserAttribute>
 }
 
 function getAttributesWithDefinitions(note: FNote, attributesToIgnore: string[] = []): AttributeWithDefinitions[] {
-    const promotedDefinitionAttributes = note.getAttributeDefinitions();
+    const attributeDefintions = note.getAttributeDefinitions();
     const result: AttributeWithDefinitions[] = [];
-    for (const attr of promotedDefinitionAttributes) {
+    for (const attr of attributeDefintions) {
         const def = attr.getDefinition();
         const [ type, name ] = attr.name.split(":", 2);
         const friendlyName = def?.promotedAlias || name;

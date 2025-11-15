@@ -57,7 +57,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Update nightly version
-        run: npm run chore:ci-update-nightly-version
+        run: pnpm run chore:ci-update-nightly-version
       - name: Run the build
         uses: ./.github/actions/build-electron
         with:

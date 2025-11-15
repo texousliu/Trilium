@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.99.4",
+    "appVersion": "0.99.5",
     "files": [
         {
             "isClone": false,
@@ -9884,18 +9884,69 @@
                                     "value": "kanban-board",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Cq5X6iKQop6R",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "OFXdgB2nNk1F",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "bdUJEHsAPYQR",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "oPVyFC7WL2Lp",
+                                    "isInheritable": false,
+                                    "position": 60
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "IakOLONlIfGI",
+                                    "isInheritable": false,
+                                    "position": 70
                                 }
                             ],
                             "format": "markdown",
                             "dataFileName": "Kanban Board.md",
                             "attachments": [
                                 {
-                                    "attachmentId": "usSSa0WI6dDK",
+                                    "attachmentId": "3ze7RpkjIWdW",
                                     "title": "image.png",
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
                                     "dataFileName": "Kanban Board_image.png"
+                                },
+                                {
+                                    "attachmentId": "IrIeh59VGjHq",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "1_Kanban Board_image.png"
+                                },
+                                {
+                                    "attachmentId": "usSSa0WI6dDK",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "2_Kanban Board_image.png"
                                 }
                             ]
                         },
@@ -9983,6 +10034,20 @@
                                     "value": "geomap",
                                     "isInheritable": false,
                                     "position": 90
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "zEY4DaJG4YT5",
+                                    "isInheritable": false,
+                                    "position": 100
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "OFXdgB2nNk1F",
+                                    "isInheritable": false,
+                                    "position": 110
                                 }
                             ],
                             "format": "markdown",
@@ -11206,6 +11271,27 @@
                                     "value": "bx bx-list-check",
                                     "isInheritable": false,
                                     "position": 110
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "oPVyFC7WL2Lp",
+                                    "isInheritable": false,
+                                    "position": 120
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "eIg8jdvaoNNd",
+                                    "isInheritable": false,
+                                    "position": 130
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "CdNpE2pqjmI6",
+                                    "isInheritable": false,
+                                    "position": 140
                                 }
                             ],
                             "format": "markdown",
@@ -11670,27 +11756,71 @@
                                             "name": "iconClass",
                                             "value": "bx bx-table",
                                             "isInheritable": false,
-                                            "position": 40
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "BlN9DFI679QC",
+                                            "isInheritable": false,
+                                            "position": 50
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "GTwFsgaA0lCt",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "zP3PMqaG71Ct",
+                                            "isInheritable": false,
+                                            "position": 70
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "R9pX4DGra2Vt",
+                                            "isInheritable": false,
+                                            "position": 80
                                         }
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Promoted Attributes.md",
                                     "attachments": [
                                         {
-                                            "attachmentId": "4EcBRWF9iCk2",
+                                            "attachmentId": "8ue55DaAJ82K",
                                             "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/jpg",
+                                            "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "Promoted Attributes_image.png"
                                         },
                                         {
-                                            "attachmentId": "Txf5Jdm2vqt2",
-                                            "title": "promoted-attributes.png",
+                                            "attachmentId": "bLMPNRtMAaKo",
+                                            "title": "image.png",
                                             "role": "image",
                                             "mime": "image/png",
                                             "position": 10,
-                                            "dataFileName": "Promoted Attributes_promot.png"
+                                            "dataFileName": "1_Promoted Attributes_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "FbNQB8xcY0Nu",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "2_Promoted Attributes_image.png"
+                                        },
+                                        {
+                                            "attachmentId": "yBIe1DyxuL2e",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "3_Promoted Attributes_image.png"
                                         }
                                     ]
                                 }

@@ -196,14 +196,12 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         });
     }
 
-    useKeyboardShortcuts("text-detail", containerRef, parentComponent);
     useTriliumEvent("insertDateTimeToText", ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
         const date = new Date();
         const customDateTimeFormat = options.get("customDateTimeFormat");
         const dateString = utils.formatDateTime(date, customDateTimeFormat);
 
-        console.log("Insert text ", ntxId, eventNtxId, dateString);
         addTextToEditor(dateString);
     });
     useTriliumEvent("addTextToActiveEditor", ({ text }) => {

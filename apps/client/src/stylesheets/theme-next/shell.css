@@ -16,6 +16,10 @@
     background-color: var(--root-background);
 }
 
+body.mobile #root-widget {
+    background-color: var(--main-background-color);
+}
+
 body {
     --native-titlebar-darwin-x-offset: 10;
     --native-titlebar-darwin-y-offset: 12 !important;
