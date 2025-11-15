@@ -1,7 +1,7 @@
 import { HTMLProps, RefObject, useEffect, useImperativeHandle, useRef, useState } from "preact/compat";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type WatchdogConfig, CKTextEditor, TemplateDefinition } from "@triliumnext/ckeditor5";
 import { buildConfig, BuildEditorOptions } from "./config";
-import { useLegacyImperativeHandlers, useSyncedRef } from "../../react/hooks";
+import { useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteContext, useSyncedRef } from "../../react/hooks";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
 
@@ -38,6 +38,9 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ editor, setEditor ] = useState<CKTextEditor>();
+    const { parentComponent } = useNoteContext();
+
+    useKeyboardShortcuts("text-detail", containerRef, parentComponent);
 
     useImperativeHandle(editorApi, () => ({
         hasSelection() {

@@ -196,7 +196,6 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         });
     }
 
-    useKeyboardShortcuts("text-detail", containerRef, parentComponent);
     useTriliumEvent("insertDateTimeToText", ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
         const date = new Date();

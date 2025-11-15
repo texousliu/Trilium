@@ -29,6 +29,8 @@ async function getActionsForScope(scope: string) {
 }
 
 async function setupActionsForElement(scope: string, $el: JQuery<HTMLElement>, component: Component) {
+    if (!$el[0]) return;
+
     const actions = await getActionsForScope(scope);
     const bindings: ShortcutBinding[] = [];
 
