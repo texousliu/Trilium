@@ -292,8 +292,16 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, mode, is
                     hideAllButtons: true,
                     allowCreatingNotes: true
                 }}
-                onKeyDown={onKeyDown}
-                onBlur={onBlur}
+                onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                        dismiss();
+                    }
+                }}
+                onBlur={() => dismiss()}
+                noteIdChanged={(newValue) => {
+                    save(newValue);
+                    dismiss();
+                }}
             />
         )
     }
