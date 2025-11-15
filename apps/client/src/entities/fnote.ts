@@ -804,6 +804,16 @@ export default class FNote {
         return this.getAttributeValue(LABEL, name);
     }
 
+    getLabelOrRelation(nameWithPrefix: string) {
+        if (nameWithPrefix.startsWith("#")) {
+            return this.getLabelValue(nameWithPrefix.substring(1));
+        } else if (nameWithPrefix.startsWith("~")) {
+            return this.getRelationValue(nameWithPrefix.substring(1));
+        } else {
+            return this.getLabelValue(nameWithPrefix);
+        }
+    }
+
     /**
      * @param name - relation name
      * @returns relation value if relation exists, null otherwise
