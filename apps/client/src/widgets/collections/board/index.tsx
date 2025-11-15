@@ -268,7 +268,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, mode, is
         }
     };
 
-    const onBlur = (newValue) => {
+    const onBlur = (newValue: string) => {
         if (!shouldDismiss.current && newValue.trim() && (newValue !== currentValue || isNewItem)) {
             save(newValue);
             dismissOnNextRefreshRef.current = true;
@@ -311,6 +311,6 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, mode, is
                     dismiss();
                 }}
             />
-        )
+        );
     }
 }

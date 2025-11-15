@@ -69,7 +69,7 @@ function removeOwnedLabelByName(note: FNote, labelName: string) {
  * @returns `true` if an attribute was identified and removed, `false` otherwise.
  */
 function removeOwnedRelationByName(note: FNote, relationName: string) {
-    const label = note.getOwnedRelation(relationName);
+    const relation = note.getOwnedRelation(relationName);
     if (label) {
         removeAttributeById(note.noteId, label.attributeId);
         return true;

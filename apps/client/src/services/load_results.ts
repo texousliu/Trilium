@@ -7,7 +7,7 @@ import type { EntityChange } from "../server_types.js";
 interface NoteRow {
     blobId: string;
     dateCreated: string;
-    dateMOdified: string;
+    dateModified: string;
     isDeleted?: boolean;
     isProtected?: boolean;
     mime: string;
