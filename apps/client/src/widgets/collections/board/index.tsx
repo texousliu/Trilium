@@ -98,7 +98,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         });
     }
 
-    useEffect(refresh, [ parentNote, noteIds, viewConfig ]);
+    useEffect(refresh, [ parentNote, noteIds, viewConfig, statusAttributeWithPrefix ]);
 
     const handleColumnDrop = useCallback((fromIndex: number, toIndex: number) => {
         const newColumns = api.reorderColumn(fromIndex, toIndex);
