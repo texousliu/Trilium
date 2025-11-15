@@ -203,7 +203,7 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
                     <FormTextBoxWithUnit
                         name="tree-font-size"
                         type="number" min={50} max={200} step={10}
-                        currentValue={fontSize} onChange={setFontSize}
+                        currentValue={fontSize} onBlur={setFontSize}
                         unit={t("units.percentage")}
                     />
                 </FormGroup>
