@@ -70,8 +70,8 @@ function removeOwnedLabelByName(note: FNote, labelName: string) {
  */
 function removeOwnedRelationByName(note: FNote, relationName: string) {
     const relation = note.getOwnedRelation(relationName);
-    if (label) {
-        removeAttributeById(note.noteId, label.attributeId);
+    if (relation) {
+        removeAttributeById(note.noteId, relation.attributeId);
         return true;
     }
     return false;
