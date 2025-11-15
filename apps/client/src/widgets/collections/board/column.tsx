@@ -12,6 +12,7 @@ import Card, { CARD_CLIPBOARD_TYPE, CardDragData } from "./card";
 import { JSX } from "preact/jsx-runtime";
 import froca from "../../../services/froca";
 import { DragData, TREE_CLIPBOARD_TYPE } from "../../note_tree";
+import NoteLink from "../../react/NoteLink";
 
 interface DragContext {
     column: string;
@@ -27,12 +28,14 @@ export default function Column({
     api,
     onColumnHover,
     isAnyColumnDragging,
+    isInRelationMode
 }: {
     columnItems?: { note: FNote, branch: FBranch }[];
     isDraggingColumn: boolean,
     api: BoardApi,
     onColumnHover?: (index: number, mouseX: number, rect: DOMRect) => void,
-    isAnyColumnDragging?: boolean
+    isAnyColumnDragging?: boolean,
+    isInRelationMode: boolean
 } & DragContext) {
     const [ isVisible, setVisible ] = useState(true);
     const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition } = useContext(BoardViewContext)!;
@@ -103,7 +106,11 @@ export default function Column({
             >
                 {!isEditing ? (
                     <>
-                        <span className="title">{column}</span>
+                        <span className="title">
+                            {isInRelationMode
+                            ? <NoteLink notePath={column} showNoteIcon />
+                            : column}
+                        </span>
                         <span className="counter-badge">{columnItems?.length ?? 0}</span>
                         <div className="spacer" />
                         <span

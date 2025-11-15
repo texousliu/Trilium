@@ -46,6 +46,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ includeArchived ] = useNoteLabelBoolean(parentNote, "includeArchived");
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
+    const [ isInRelationMode, setIsRelationMode ] = useState(false);
     const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, branchId: string, fromColumn: string, index: number } | null>(null);
     const [ dropTarget, setDropTarget ] = useState<string | null>(null);
     const [ dropPosition, setDropPosition ] = useState<{ column: string, index: number } | null>(null);
@@ -78,8 +79,9 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     ]);
 
     function refresh() {
-        getBoardData(parentNote, statusAttribute, viewConfig ?? {}, includeArchived).then(({ byColumn, newPersistedData }) => {
+        getBoardData(parentNote, statusAttribute, viewConfig ?? {}, includeArchived).then(({ byColumn, newPersistedData, isInRelationMode }) => {
             setByColumn(byColumn);
+            setIsRelationMode(isInRelationMode);
 
             if (newPersistedData) {
                 viewConfig = { ...newPersistedData };
@@ -171,6 +173,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                                 <div className="column-drop-placeholder show" />
                             )}
                             <Column
+                                isInRelationMode={isInRelationMode}
                                 api={api}
                                 column={column}
                                 columnIndex={index}

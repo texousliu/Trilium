@@ -53,6 +53,11 @@
   align-items: center;
 }
 
+.board-view-container .board-column h3 a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .board-view-container .board-column h3 .counter-badge {
   background-color: var(--muted-text-color);
   color: var(--main-background-color);
