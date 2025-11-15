@@ -1,5 +1,5 @@
 # Kanban Board
-<figure class="image"><img style="aspect-ratio:918/248;" src="Kanban Board_image.png" width="918" height="248"></figure>
+<figure class="image"><img style="aspect-ratio:918/248;" src="1_Kanban Board_image.png" width="918" height="248"></figure>
 
 The Board view presents sub-notes in columns for a Kanban-like experience. Each column represents a possible value for a status label, which can be adjusted.
 
@@ -41,7 +41,7 @@ Notes are displayed recursively, so even the child notes of the child notes will
     *   Delete the current note.
 *   If there are many notes within the column, move the mouse over the column and use the mouse wheel to scroll.
 
-## Keyboard interaction
+### Keyboard interaction
 
 The board view has mild support for keyboard-based navigation:
 
@@ -52,13 +52,37 @@ The board view has mild support for keyboard-based navigation:
 
 ## Configuration
 
-### Grouping by another attribute
+### Grouping by another label
 
-By default, the label used to group the notes is `#status`. It is possible to use a different label if needed by defining a label named `#board:groupBy` with the value being the attribute to use (without `#` attribute prefix).
+By default, the label used to group the notes is `#status`. It is possible to use a different label if needed by defining a label named `#board:groupBy` with the value being the attribute to use (with or without `#` attribute prefix).
 
-> [!NOTE]
-> It's currently not possible to set a relation as the grouping criteria. There are plans to add support for it.
+### Grouping by relations
 
-## Limitations
+<figure class="image image-style-align-right"><img style="aspect-ratio:535/245;" src="Kanban Board_image.png" width="535" height="245"></figure>
 
-*   It is not possible yet to use group by a relation, only by label.
+A more advanced use-case is grouping by [Relations](../Advanced%20Usage/Attributes/Relations.md).
+
+During this mode:
+
+*   The columns represent the _target notes_ of a relation.
+*   When creating a new column, a note is selected instead of a column name.
+*   The column icon will match the target note.
+*   Moving notes between columns will change its relation.
+*   Renaming an existing column will change the target note of all the notes in that column.
+
+Using relations instead of labels has some benefits:
+
+*   The status/grouping of the notes is visible outside the Kanban board, for example on the <a class="reference-link" href="../Note%20Types/Note%20Map.md">Note Map</a>.
+*   Columns can have icons.
+*   Renaming columns is less intensive since it simply involves changing the note title of the target note instead of having to do a bulk rename.
+
+To do so:
+
+1.  First, create a Kanban board from scratch and not a template:
+2.  Assign `#viewType=board #hidePromotedAttributes` to emulate the default template.
+3.  Set `#board:groupBy` to the name of a relation to group by, **including the** `**~**` **prefix** (e.g. `~status`).
+4.  Optionally, use <a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> for easy status change within the note:
+    
+    ```
+    #relation:status(inheritable)="promoted,alias=Status,single"
+    ```

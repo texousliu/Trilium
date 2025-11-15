@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.99.4",
+    "appVersion": "0.99.5",
     "files": [
         {
             "isClone": false,
@@ -9884,18 +9884,47 @@
                                     "value": "kanban-board",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Cq5X6iKQop6R",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "OFXdgB2nNk1F",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "bdUJEHsAPYQR",
+                                    "isInheritable": false,
+                                    "position": 50
                                 }
                             ],
                             "format": "markdown",
                             "dataFileName": "Kanban Board.md",
                             "attachments": [
                                 {
-                                    "attachmentId": "usSSa0WI6dDK",
+                                    "attachmentId": "IrIeh59VGjHq",
                                     "title": "image.png",
                                     "role": "image",
                                     "mime": "image/png",
                                     "position": 10,
                                     "dataFileName": "Kanban Board_image.png"
+                                },
+                                {
+                                    "attachmentId": "usSSa0WI6dDK",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "1_Kanban Board_image.png"
                                 }
                             ]
                         },

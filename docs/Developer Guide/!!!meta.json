@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.99.4",
+    "appVersion": "0.99.5",
     "files": [
         {
             "isClone": false,
@@ -111,18 +111,18 @@
                     "mime": "text/html",
                     "attributes": [
                         {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "4nwtTJyjNDKd",
+                            "isInheritable": false,
+                            "position": 10
+                        },
+                        {
                             "type": "label",
                             "name": "iconClass",
                             "value": "bx bx-git-merge",
                             "isInheritable": false,
                             "position": 20
-                        },
-                        {
-                            "type": "relation",
-                            "name": "internalLink",
-                            "value": "4nwtTJyjNDKd",
-                            "isInheritable": false,
-                            "position": 30
                         },
                         {
                             "type": "label",
@@ -1263,9 +1263,16 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "zdQzavvHDl1k",
+                                    "value": "ccIoz7nqgDRK",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "zdQzavvHDl1k",
+                                    "isInheritable": false,
+                                    "position": 20
                                 },
                                 {
                                     "type": "label",
@@ -1280,13 +1287,6 @@
                                     "value": "releasing",
                                     "isInheritable": false,
                                     "position": 40
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "ccIoz7nqgDRK",
-                                    "isInheritable": false,
-                                    "position": 50
                                 }
                             ],
                             "format": "markdown",
