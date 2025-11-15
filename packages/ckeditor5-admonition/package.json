@@ -23,7 +23,7 @@
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-build-tools": "43.1.0",
     "@ckeditor/ckeditor5-inspector": ">=4.1.0",
-    "@ckeditor/ckeditor5-package-tools": "5.0.0",
+    "@ckeditor/ckeditor5-package-tools": "5.0.1",
     "@typescript-eslint/eslint-plugin": "~8.46.0",
     "@typescript-eslint/parser": "8.46.4",
     "@vitest/browser": "3.2.4",
