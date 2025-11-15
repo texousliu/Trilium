@@ -1,3 +1,4 @@
+import { BulkAction } from "@triliumnext/commons";
 import { BoardViewData } from ".";
 import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
@@ -83,13 +84,11 @@ export default class BoardApi {
     async removeColumn(column: string) {
         // Remove the value from the notes.
         const noteIds = this.byColumn?.get(column)?.map(item => item.note.noteId) || [];
-        await executeBulkActions(noteIds, [
-            {
-                name: "deleteLabel",
-                labelName: this.statusAttribute
-            }
-        ]);
 
+        const action: BulkAction = this.isRelationMode
+            ? { name: "deleteRelation", relationName: this.statusAttribute }
+            : { name: "deleteLabel", labelName: this.statusAttribute }
+        await executeBulkActions(noteIds, [ action ]);
         this.viewConfig.columns = (this.viewConfig.columns ?? []).filter(col => col.value !== column);
         this.saveConfig(this.viewConfig);
     }
@@ -98,13 +97,10 @@ export default class BoardApi {
         const noteIds = this.byColumn?.get(oldValue)?.map(item => item.note.noteId) || [];
 
         // Change the value in the notes.
-        await executeBulkActions(noteIds, [
-            {
-                name: "updateLabelValue",
-                labelName: this.statusAttribute,
-                labelValue: newValue
-            }
-        ]);
+        const action: BulkAction = this.isRelationMode
+            ? { name: "updateRelationTarget", relationName: this.statusAttribute, targetNoteId: newValue }
+            : { name: "updateLabelValue", labelName: this.statusAttribute, labelValue: newValue }
+        await executeBulkActions(noteIds, [ action ]);
 
         // Rename the column in the persisted data.
         for (const column of this.viewConfig.columns || []) {
@@ -181,7 +177,11 @@ export default class BoardApi {
     removeFromBoard(noteId: string) {
         const note = froca.getNoteFromCache(noteId);
         if (!note) return;
-        return attributes.removeOwnedLabelByName(note, this.statusAttribute);
+        if (this.isRelationMode) {
+            return attributes.removeOwnedRelationByName(note, this.statusAttribute);
+        } else {
+            return attributes.removeOwnedLabelByName(note, this.statusAttribute);
+        }
     }
 
     async moveWithinBoard(noteId: string, sourceBranchId: string, sourceIndex: number, targetIndex: number, sourceColumn: string, targetColumn: string) {

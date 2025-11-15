@@ -61,6 +61,23 @@ function removeOwnedLabelByName(note: FNote, labelName: string) {
 }
 
 /**
+ * Removes a relation identified by its name from the given note, if it exists. Note that the relation must be owned, i.e.
+ * it will not remove inherited attributes.
+ *
+ * @param note the note from which to remove the relation.
+ * @param relationName the name of the relation to remove.
+ * @returns `true` if an attribute was identified and removed, `false` otherwise.
+ */
+function removeOwnedRelationByName(note: FNote, relationName: string) {
+    const label = note.getOwnedRelation(relationName);
+    if (label) {
+        removeAttributeById(note.noteId, label.attributeId);
+        return true;
+    }
+    return false;
+}
+
+/**
  * Sets the attribute of the given note to the provided value if its truthy, or removes the attribute if the value is falsy.
  * For an attribute with an empty value, pass an empty string instead.
  *
@@ -129,5 +146,6 @@ export default {
     setAttribute,
     removeAttributeById,
     removeOwnedLabelByName,
+    removeOwnedRelationByName,
     isAffecting
 };
