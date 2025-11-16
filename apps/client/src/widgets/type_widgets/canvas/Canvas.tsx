@@ -10,6 +10,7 @@ import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/type
 import { goToLinkExt } from "../../../services/link";
 import useCanvasPersistence from "./persistence";
 import { LANGUAGE_MAPPINGS } from "./i18n";
+import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
 
 // currently required by excalidraw, in order to allows self-hosting fonts locally.
 // this avoids making excalidraw load the fonts from an external CDN.
@@ -60,7 +61,7 @@ export default function Canvas({ note, noteContext }: TypeWidgetProps) {
                     detectScroll={false}
                     handleKeyboardGlobally={false}
                     autoFocus={false}
-                    langCode={LANGUAGE_MAPPINGS[locale]}
+                    langCode={LANGUAGE_MAPPINGS[locale as DISPLAYABLE_LOCALE_IDS] ?? undefined}
                     UIOptions={{
                         canvasActions: {
                             saveToActiveFile: false,

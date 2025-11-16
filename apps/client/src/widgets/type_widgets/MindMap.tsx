@@ -136,7 +136,7 @@ function MindElixir({ containerRef: externalContainerRef, containerProps, apiRef
 
         const mind = new VanillaMindElixir({
             el: containerRef.current,
-            locale: LOCALE_MAPPINGS[locale],
+            locale: LOCALE_MAPPINGS[locale as DISPLAYABLE_LOCALE_IDS] ?? undefined,
             editable
         });
 

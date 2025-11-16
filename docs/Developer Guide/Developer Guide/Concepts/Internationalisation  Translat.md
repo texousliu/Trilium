@@ -15,7 +15,7 @@ One important aspect is the fact that we are using a key-based approach. This me
 
 The key-based approach allows a hierarchical structure. For example, a key of `about.title` would be added in `translation.json` as follows:
 
-```
+```json
 {
 	"about": {
 		"title": "About Trilium Notes"
