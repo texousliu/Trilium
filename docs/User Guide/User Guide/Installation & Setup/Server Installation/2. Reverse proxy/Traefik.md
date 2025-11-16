@@ -34,11 +34,11 @@ services:
     networks:
       - traefik-proxy
     environment:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
       - TRILIUM_NETWORK_TRUSTEDREVERSEPROXY=my-traefik-host-ip
     volumes:
       - /path/to/data=/home/node/trilium-data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.trilium.entrypoints=https
