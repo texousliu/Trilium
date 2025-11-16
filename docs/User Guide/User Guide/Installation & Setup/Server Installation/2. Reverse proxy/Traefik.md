@@ -36,7 +36,7 @@ services:
     environment:
       - TRILIUM_NETWORK_TRUSTEDREVERSEPROXY=my-traefik-host-ip # e.g., 172.18.0.0/16
     volumes:
-      - /path/to/data=/home/node/trilium-data
+      - /path/to/data:/home/node/trilium-data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
