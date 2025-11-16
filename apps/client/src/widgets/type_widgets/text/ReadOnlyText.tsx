@@ -17,6 +17,7 @@ import link from "../../../services/link";
 import { formatCodeBlocks } from "../../../services/syntax_highlight";
 import TouchBar, { TouchBarButton, TouchBarSpacer } from "../../react/TouchBar";
 import appContext from "../../../components/app_context";
+import { applyReferenceLinks } from "./read_only_helper";
 
 export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
@@ -120,12 +121,5 @@ function applyMath(container: HTMLDivElement) {
     const equations = container.querySelectorAll("span.math-tex");
     for (const equation of equations) {
         renderMathInElement(equation, { trust: true });
-    }
-}
-
-function applyReferenceLinks(container: HTMLDivElement) {
-    const referenceLinks = container.querySelectorAll<HTMLDivElement>("a.reference-link");
-    for (const referenceLink of referenceLinks) {
-        link.loadReferenceLinkTitle($(referenceLink));
     }
 }

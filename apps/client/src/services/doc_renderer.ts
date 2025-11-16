@@ -1,4 +1,5 @@
 import type FNote from "../entities/fnote.js";
+import { applyReferenceLinks } from "../widgets/type_widgets/text/read_only_helper.js";
 import { getCurrentLanguage } from "./i18n.js";
 import { formatCodeBlocks } from "./syntax_highlight.js";
 
@@ -42,6 +43,9 @@ function processContent(url: string, $content: JQuery<HTMLElement>) {
     });
 
     formatCodeBlocks($content);
+
+    // Apply reference links.
+    applyReferenceLinks($content[0]);
 }
 
 function getUrl(docNameValue: string, language: string) {
