@@ -22,30 +22,28 @@
   value are strings.</p>
 <p>The <em>Attribute definition</em> specifies how should this value be interpreted:</p>
 <ul>
-  <li data-list-item-id="e73e2d8dffca4fe59d009bfc5a245da88">Is it just string, or is it a date?</li>
-  <li data-list-item-id="e115a58c2d81149f481c385479cf06965">Should we allow multiple values or note?</li>
-  <li data-list-item-id="eb8cab0b2fdcefb7af9128f63b3b9f4ee">Should we <em>promote</em> the attribute or not?</li>
+  <li>Is it just string, or is it a date?</li>
+  <li>Should we allow multiple values or note?</li>
+  <li>Should we <em>promote</em> the attribute or not?</li>
 </ul>
 <h2>Creating a new promoted attribute definition</h2>
 <p>To create a new promoted attribute:</p>
 <ol>
-  <li data-list-item-id="e118d34c98d285e3a7492876f73a49ed5">Go to a note.</li>
-  <li data-list-item-id="e480cc90d938f7f728011679df29f6ce0">Go to <em>Owned Attributes</em> in the&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/Vc8PjrjAGuOp/_help_BlN9DFI679QC">Ribbon</a>.</li>
-  <li
-  data-list-item-id="e40a26a8a32714572e670d8c7c18d1355">Press the + button.</li>
-    <li data-list-item-id="e5ba4dcc8ae48c7f043de2c8fc5ec1c2c">Select either <em>Add new label definition</em> or <em>Add new relation definition</em>.</li>
-    <li
-    data-list-item-id="e14e894cf6d207a410adbe87c56143799">Select the name which will be name of the label or relation that will
-      be created when the promoted attribute is edited.</li>
-      <li data-list-item-id="e5d803cd5a37a7169a5aa770d769f2dd4">Ensure <em>Promoted</em> is checked in order to display it at the top of
-        notes.</li>
-      <li data-list-item-id="e50c81da6343840b2a06b46a20e21181e">Optionally, choose an <em>Alias</em> which will be displayed next to the
-        promoted attribute instead of the attribute name. Generally it's best to
-        choose a “user-friendly” name since it can contain spaces and other characters
-        which are not supported as attribute names.</li>
-      <li data-list-item-id="e0e08c63296b88ea8ec8ae17104eed366">Check <em>Inheritable</em> to apply it to this note and all its descendants.
-        To keep it only for the current note, un-check it.</li>
-      <li data-list-item-id="ededc09be314b651d919aebd026cc5b86">Press “Save &amp; Close” to apply the changes.</li>
+  <li>Go to a note.</li>
+  <li>Go to <em>Owned Attributes</em> in the&nbsp;<a class="reference-link" href="#root/_help_BlN9DFI679QC">Ribbon</a>.</li>
+  <li>Press the + button.</li>
+  <li>Select either <em>Add new label definition</em> or <em>Add new relation definition</em>.</li>
+  <li>Select the name which will be name of the label or relation that will
+    be created when the promoted attribute is edited.</li>
+  <li>Ensure <em>Promoted</em> is checked in order to display it at the top of
+    notes.</li>
+  <li>Optionally, choose an <em>Alias</em> which will be displayed next to the
+    promoted attribute instead of the attribute name. Generally it's best to
+    choose a “user-friendly” name since it can contain spaces and other characters
+    which are not supported as attribute names.</li>
+  <li>Check <em>Inheritable</em> to apply it to this note and all its descendants.
+    To keep it only for the current note, un-check it.</li>
+  <li>Press “Save &amp; Close” to apply the changes.</li>
 </ol>
 <h2>How attribute definitions actually work</h2>
 <p>When a new promoted attribute definition is created, it creates a corresponding
@@ -54,37 +52,37 @@
 <p>The only purpose of the attribute definition is to set up a template.
   If the attribute was marked as promoted, then it's also displayed to the
   user for easy editing.</p>
-<figure class="table" style="width:100%;">
-  <table class="ck-table-resized">
-    <colgroup>
-      <col style="width:47.64%;">
-        <col style="width:52.36%;">
-    </colgroup>
-    <tbody>
-      <tr>
-        <td>
-          <figure class="image">
-            <img style="aspect-ratio:495/157;" src="2_Promoted Attributes_image.png"
-            width="495" height="157">
-          </figure>
-        </td>
-        <td>Notice how the promoted attribute definition only creates a “Due date”
-          box above the text content.</td>
-      </tr>
-      <tr>
-        <td>
-          <figure class="image">
-            <img style="aspect-ratio:663/160;" src="3_Promoted Attributes_image.png"
-            width="663" height="160">
-          </figure>
-        </td>
-        <td>Once a value is set by the user, a new label (or relation, depending on
-          the type) is created. The name of the attribute matches one set when creating
-          the promoted attribute.</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <figure class="image">
+          <img style="aspect-ratio:495/157;" src="2_Promoted Attributes_image.png"
+          width="495" height="157">
+        </figure>
+      </td>
+      <td>Notice how the promoted attribute definition only creates a “Due date”
+        box above the text content.</td>
+    </tr>
+    <tr>
+      <td>
+        <figure class="image">
+          <img style="aspect-ratio:663/160;" src="3_Promoted Attributes_image.png"
+          width="663" height="160">
+        </figure>
+      </td>
+      <td>Once a value is set by the user, a new label (or relation, depending on
+        the type) is created. The name of the attribute matches one set when creating
+        the promoted attribute.</td>
+    </tr>
+  </tbody>
+</table>
 <p>So there's one attribute for value and one for definition. But notice
   how an definition attribute can be made <a href="#root/_help_bwZpz2ajCEwO">Inheritable</a>,
   meaning that it's also applied to all descendant notes. In this case, the
@@ -95,22 +93,22 @@
   to be able to easily alter them.</p>
 <p>Here are a few practical examples:</p>
 <ul>
-  <li data-list-item-id="eb7e4e362b582d6bf480375d1e5648ac3"><a class="reference-link" href="#root/pOsGYCXsbNQG/_help_GTwFsgaA0lCt">Collections</a>&nbsp;already
+  <li><a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>&nbsp;already
     make use of this practice, for example:
     <ul>
-      <li data-list-item-id="e0831925d935c7a90f90bd5fed94d089e">Calendars add “Start Date”, “End Date”, “Start Time” and “End Time” as
+      <li>Calendars add “Start Date”, “End Date”, “Start Time” and “End Time” as
         promoted attributes. These map to system attributes such as <code>startDate</code> which
         are then interpreted by the calendar view.</li>
-      <li data-list-item-id="e4a235f12a7934803ba7706e309511c82"><a class="reference-link" href="#root/pOsGYCXsbNQG/GTwFsgaA0lCt/_help_zP3PMqaG71Ct">Presentation</a>&nbsp;adds
+      <li><a class="reference-link" href="#root/_help_zP3PMqaG71Ct">Presentation</a>&nbsp;adds
         a “Background” promoted attribute for each of the slide to easily be able
         to customize.</li>
     </ul>
   </li>
-  <li data-list-item-id="e9069ad779c177b7ed0d3ece786e73cd3">The Trilium documentation (which is edited in Trilium) uses a promoted
+  <li>The Trilium documentation (which is edited in Trilium) uses a promoted
     attribute to be able to easily edit the <code>#shareAlias</code> (see&nbsp;
     <a
-    class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_R9pX4DGra2Vt">Sharing</a>) in order to form clean URLs.</li>
-  <li data-list-item-id="ed14685a7279b42a1769be97ffe7f5e8f">If you always edit a particular system attribute such as <code>#color</code>,
+    class="reference-link" href="#root/_help_R9pX4DGra2Vt">Sharing</a>) in order to form clean URLs.</li>
+  <li>If you always edit a particular system attribute such as <code>#color</code>,
     simply create a promoted attribute for it to make it easier.</li>
 </ul>
 <h3>Inverse relation</h3>

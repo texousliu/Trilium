@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TypeWidgetProps } from "./type_widget";
-import { MindElixirData, MindElixirInstance, Operation, default as VanillaMindElixir } from "mind-elixir";
+import { MindElixirData, MindElixirInstance, Operation, Options, default as VanillaMindElixir } from "mind-elixir";
 import { HTMLAttributes, RefObject } from "preact";
 // allow node-menu plugin css to be bundled by webpack
 import nodeMenu from "@mind-elixir/node-menu";
 import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
-import { useEditorSpacedUpdate, useNoteLabelBoolean, useSyncedRef, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useEditorSpacedUpdate, useNoteLabelBoolean, useSyncedRef, useTriliumEvent, useTriliumEvents, useTriliumOption } from "../react/hooks";
 import { refToJQuerySelector } from "../react/react_utils";
 import utils from "../../services/utils";
+import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
 
 const NEW_TOPIC_NAME = "";
 
@@ -20,6 +21,24 @@ interface MindElixirProps {
     editable: boolean;
     onChange?: () => void;
 }
+
+const LOCALE_MAPPINGS: Record<DISPLAYABLE_LOCALE_IDS, Options["locale"] | null> = {
+    ar: null,
+    cn: "zh_CN",
+    de: null,
+    en: "en",
+    en_rtl: "en",
+    es: "es",
+    fr: "fr",
+    it: "it",
+    ja: "ja",
+    pt: "pt",
+    pt_br: "pt",
+    ro: null,
+    ru: "ru",
+    tw: "zh_TW",
+    uk: null
+};
 
 export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
     const apiRef = useRef<MindElixirInstance>(null);
@@ -110,12 +129,14 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
 function MindElixir({ containerRef: externalContainerRef, containerProps, apiRef: externalApiRef, onChange, editable }: MindElixirProps) {
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const apiRef = useRef<MindElixirInstance>(null);
+    const [ locale ] = useTriliumOption("locale");
 
     function reinitialize() {
         if (!containerRef.current) return;
 
         const mind = new VanillaMindElixir({
             el: containerRef.current,
+            locale: LOCALE_MAPPINGS[locale as DISPLAYABLE_LOCALE_IDS] ?? undefined,
             editable
         });
 
@@ -143,7 +164,7 @@ function MindElixir({ containerRef: externalContainerRef, containerProps, apiRef
         if (data) {
             apiRef.current?.init(data);
         }
-    }, [ editable ]);
+    }, [ editable, locale ]);
 
     // On change listener.
     useEffect(() => {

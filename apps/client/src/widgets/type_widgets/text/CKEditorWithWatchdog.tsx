@@ -1,9 +1,10 @@
 import { HTMLProps, RefObject, useEffect, useImperativeHandle, useRef, useState } from "preact/compat";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type WatchdogConfig, CKTextEditor, TemplateDefinition } from "@triliumnext/ckeditor5";
 import { buildConfig, BuildEditorOptions } from "./config";
-import { useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteContext, useSyncedRef } from "../../react/hooks";
+import { useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteContext, useSyncedRef, useTriliumOption } from "../../react/hooks";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
+import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
 
 export type BoxSize = "small" | "medium" | "full";
 
@@ -37,6 +38,7 @@ interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "cla
 export default function CKEditorWithWatchdog({ containerRef: externalContainerRef, content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized, editorApi, templates }: CKEditorWithWatchdogProps) {
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const watchdogRef = useRef<EditorWatchdog>(null);
+    const [ uiLanguage ] = useTriliumOption("locale");
     const [ editor, setEditor ] = useState<CKTextEditor>();
     const { parentComponent } = useNoteContext();
 
@@ -156,6 +158,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
             const editor = await buildEditor(container, !!isClassicEditor, {
                 forceGplLicense: false,
                 isClassicEditor: !!isClassicEditor,
+                uiLanguage: uiLanguage as DISPLAYABLE_LOCALE_IDS,
                 contentLanguage: contentLanguage ?? null,
                 templates
             });
@@ -180,7 +183,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
         watchdog.create(container);
 
         return () => watchdog.destroy();
-    }, [ contentLanguage, templates ]);
+    }, [ contentLanguage, templates, uiLanguage ]);
 
     // React to content changes.
     useEffect(() => editor?.setData(content ?? ""), [ editor, content ]);

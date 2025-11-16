@@ -1,7 +1,7 @@
 import { Excalidraw } from "@excalidraw/excalidraw";
 import { TypeWidgetProps } from "../type_widget";
 import "@excalidraw/excalidraw/index.css";
-import { useNoteLabelBoolean } from "../../react/hooks";
+import { useNoteLabelBoolean, useTriliumOption } from "../../react/hooks";
 import { useCallback, useMemo, useRef } from "preact/hooks";
 import { type ExcalidrawImperativeAPI, type AppState } from "@excalidraw/excalidraw/types";
 import options from "../../../services/options";
@@ -9,6 +9,8 @@ import "./Canvas.css";
 import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { goToLinkExt } from "../../../services/link";
 import useCanvasPersistence from "./persistence";
+import { LANGUAGE_MAPPINGS } from "./i18n";
+import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
 
 // currently required by excalidraw, in order to allows self-hosting fonts locally.
 // this avoids making excalidraw load the fonts from an external CDN.
@@ -21,6 +23,7 @@ export default function Canvas({ note, noteContext }: TypeWidgetProps) {
         const documentStyle = window.getComputedStyle(document.documentElement);
         return documentStyle.getPropertyValue("--theme-style")?.trim() as AppState["theme"];
     }, []);
+    const [ locale ] = useTriliumOption("locale");
     const persistence = useCanvasPersistence(note, noteContext, apiRef, themeStyle, isReadOnly);
 
     /** Use excalidraw's native zoom instead of the global zoom. */
@@ -58,6 +61,7 @@ export default function Canvas({ note, noteContext }: TypeWidgetProps) {
                     detectScroll={false}
                     handleKeyboardGlobally={false}
                     autoFocus={false}
+                    langCode={LANGUAGE_MAPPINGS[locale as DISPLAYABLE_LOCALE_IDS] ?? undefined}
                     UIOptions={{
                         canvasActions: {
                             saveToActiveFile: false,
