@@ -49,7 +49,7 @@ services:
       # scheme must be HTTP instead of the usual HTTPS because of how trilium works
       - traefik.http.services.trilium.loadbalancer.server.scheme=http
       - traefik.docker.network=traefik-proxy
-      # forward to HTTPS
+      # Tell Trilium the original request was HTTPS
       - traefik.http.routers.trilium.middlewares=trilium-headers@docker
       - traefik.http.middlewares.trilium-headers.headers.customrequestheaders.X-Forwarded-Proto=https
 
