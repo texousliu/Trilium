@@ -541,7 +541,7 @@
     "opml_version_2": "OPML v2.0 - permite și HTML",
     "format_html": "HTML - recomandat deoarece păstrează toata formatarea",
     "format_pdf": "PDF - cu scopul de printare sau partajare.",
-    "share-format": "HTML pentru publicare web - folosește aceeași temă pentru notițele partajare, dar se pot publica într-un website static."
+    "share-format": "HTML pentru publicare web - folosește aceeași temă pentru notițele partajate, dar se pot publica într-un website static."
   },
   "fast_search": {
     "description": "Căutarea rapidă dezactivează căutarea la nivel de conținut al notițelor cu scopul de a îmbunătăți performanța de căutare pentru baze de date mari.",
