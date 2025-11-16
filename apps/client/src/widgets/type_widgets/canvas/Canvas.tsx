@@ -1,7 +1,7 @@
 import { Excalidraw } from "@excalidraw/excalidraw";
 import { TypeWidgetProps } from "../type_widget";
 import "@excalidraw/excalidraw/index.css";
-import { useNoteLabelBoolean } from "../../react/hooks";
+import { useNoteLabelBoolean, useTriliumOption } from "../../react/hooks";
 import { useCallback, useMemo, useRef } from "preact/hooks";
 import { type ExcalidrawImperativeAPI, type AppState } from "@excalidraw/excalidraw/types";
 import options from "../../../services/options";
@@ -9,10 +9,29 @@ import "./Canvas.css";
 import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { goToLinkExt } from "../../../services/link";
 import useCanvasPersistence from "./persistence";
+import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
 
 // currently required by excalidraw, in order to allows self-hosting fonts locally.
 // this avoids making excalidraw load the fonts from an external CDN.
 window.EXCALIDRAW_ASSET_PATH = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
+
+const LANGUAGE_MAPPINGS: Record<DISPLAYABLE_LOCALE_IDS, string | null> = {
+    ar: "ar-SA",
+    cn: "zh-CN",
+    de: "de-DE",
+    en: "en",
+    en_rtl: "en",
+    es: "es-ES",
+    fr: "fr-FR",
+    it: "it-IT",
+    ja: "ja-JP",
+    pt: "pt-PT",
+    pt_br: "pt-BR",
+    ro: "ro-RO",
+    ru: "ru-RU",
+    tw: "zh-TW",
+    uk: "uk-UA"
+};
 
 export default function Canvas({ note, noteContext }: TypeWidgetProps) {
     const apiRef = useRef<ExcalidrawImperativeAPI>(null);
@@ -21,6 +40,7 @@ export default function Canvas({ note, noteContext }: TypeWidgetProps) {
         const documentStyle = window.getComputedStyle(document.documentElement);
         return documentStyle.getPropertyValue("--theme-style")?.trim() as AppState["theme"];
     }, []);
+    const [ locale ] = useTriliumOption("locale");
     const persistence = useCanvasPersistence(note, noteContext, apiRef, themeStyle, isReadOnly);
 
     /** Use excalidraw's native zoom instead of the global zoom. */
@@ -58,6 +78,7 @@ export default function Canvas({ note, noteContext }: TypeWidgetProps) {
                     detectScroll={false}
                     handleKeyboardGlobally={false}
                     autoFocus={false}
+                    langCode={LANGUAGE_MAPPINGS[locale]}
                     UIOptions={{
                         canvasActions: {
                             saveToActiveFile: false,
