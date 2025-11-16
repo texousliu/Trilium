@@ -8,7 +8,7 @@ export default function ClosePaneButton() {
     const [ isEnabled, setIsEnabled ] = useState(false);
 
     function refresh() {
-        setIsEnabled(!!(noteContext && !!noteContext.mainNtxId));
+        setIsEnabled(!!noteContext);
     }
 
     useTriliumEvent("noteContextReorder", refresh);
