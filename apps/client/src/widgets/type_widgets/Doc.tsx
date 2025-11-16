@@ -7,7 +7,6 @@ import { useTriliumEvent } from "../react/hooks";
 import { refToJQuerySelector } from "../react/react_utils";
 
 export default function Doc({ note, viewScope, ntxId }: TypeWidgetProps) {
-    const [ html, setHtml ] = useState<string>();
     const initialized = useRef<Promise<void> | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -15,7 +14,7 @@ export default function Doc({ note, viewScope, ntxId }: TypeWidgetProps) {
         if (!note) return;
 
         initialized.current = renderDoc(note).then($content => {
-            setHtml($content.html());
+            containerRef.current?.replaceChildren(...$content);
         });
     }, [ note ]);
 
@@ -26,10 +25,9 @@ export default function Doc({ note, viewScope, ntxId }: TypeWidgetProps) {
     });
 
     return (
-        <RawHtmlBlock
-            containerRef={containerRef}
+        <div
+            ref={containerRef}
             className={`note-detail-doc-content ck-content ${viewScope?.viewMode === "contextual-help" ? "contextual-help" : ""}`}
-            html={html}
         />
     );
 }
