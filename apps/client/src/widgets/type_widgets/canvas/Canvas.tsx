@@ -9,29 +9,11 @@ import "./Canvas.css";
 import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { goToLinkExt } from "../../../services/link";
 import useCanvasPersistence from "./persistence";
-import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
+import { LANGUAGE_MAPPINGS } from "./i18n";
 
 // currently required by excalidraw, in order to allows self-hosting fonts locally.
 // this avoids making excalidraw load the fonts from an external CDN.
 window.EXCALIDRAW_ASSET_PATH = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
-
-const LANGUAGE_MAPPINGS: Record<DISPLAYABLE_LOCALE_IDS, string | null> = {
-    ar: "ar-SA",
-    cn: "zh-CN",
-    de: "de-DE",
-    en: "en",
-    en_rtl: "en",
-    es: "es-ES",
-    fr: "fr-FR",
-    it: "it-IT",
-    ja: "ja-JP",
-    pt: "pt-PT",
-    pt_br: "pt-BR",
-    ro: "ro-RO",
-    ru: "ru-RU",
-    tw: "zh-TW",
-    uk: "uk-UA"
-};
 
 export default function Canvas({ note, noteContext }: TypeWidgetProps) {
     const apiRef = useRef<ExcalidrawImperativeAPI>(null);
