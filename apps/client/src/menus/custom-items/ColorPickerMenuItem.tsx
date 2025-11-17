@@ -52,7 +52,14 @@ export default function ColorPickerMenuItem(props: ColorPickerMenuItemProps) {
     </div>
 }
 
-function ColorCell(props: {color: string, isSelected: boolean, isDisabled?: boolean, onClick?: () => void}) {
+interface ColorCellProps {
+    color: string,
+    isSelected: boolean,
+    isDisabled?: boolean,
+    onClick?: () => void
+}
+
+function ColorCell(props: ColorCellProps) {
     return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""}`}
                 style={`background-color: ${props.color}`}
                 onClick={props.onClick}>
