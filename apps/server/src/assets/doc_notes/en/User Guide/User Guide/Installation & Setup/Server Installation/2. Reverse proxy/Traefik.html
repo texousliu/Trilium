@@ -1,12 +1,7 @@
-# Traefik
-Configure Traefik proxy and HTTPS. See [#7768](https://github.com/TriliumNext/Trilium/issues/7768#issuecomment-3539165814) for reference
-
-### Build the docker-compose file
-
-Setting up Traefik as reverse proxy requires setting the following labels:
-
-```yaml
-    labels:
+<p>Configure Traefik proxy and HTTPS. See <a href="https://github.com/TriliumNext/Trilium/issues/7768#issuecomment-3539165814">#7768</a> for
+  reference</p>
+<h3>Build the docker-compose file</h3>
+<p>Setting up Traefik as reverse proxy requires setting the following labels:</p><pre><code class="language-text-x-yaml">    labels:
       - traefik.enable=true
       - traefik.http.routers.trilium.entrypoints=https
       - traefik.http.routers.trilium.rule=Host(`trilium.mydomain.tld`)
@@ -18,17 +13,11 @@ Setting up Traefik as reverse proxy requires setting the following labels:
       - traefik.docker.network=proxy
       # forward HTTP to HTTPS
       - traefik.http.routers.trilium.middlewares=trilium-headers@docker
-      - traefik.http.middlewares.trilium-headers.headers.customrequestheaders.X-Forwarded-Proto=https
-```
-
-### Setup needed environment variables
-
-After setting up a reverse proxy, make sure to configure the <a class="reference-link" href="Trusted%20proxy.md">[missing note]</a>.
-
-### Example `docker-compose.yaml`
-
-```yaml
-services:
+      - traefik.http.middlewares.trilium-headers.headers.customrequestheaders.X-Forwarded-Proto=https</code></pre>
+<h3>Setup needed environment variables</h3>
+<p>After setting up a reverse proxy, make sure to configure the&nbsp;<a class="reference-link"
+  href="Trusted%20proxy.md">[missing note]</a>.</p>
+<h3>Example <code>docker-compose.yaml</code></h3><pre><code class="language-text-x-yaml">services:
   trilium:
     image: triliumnext/trilium
     container_name: trilium
@@ -56,5 +45,4 @@ services:
 
 networks:
   traefik-proxy:
-    external: true
-```
+    external: true</code></pre>
