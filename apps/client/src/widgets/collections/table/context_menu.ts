@@ -6,6 +6,7 @@ import { TableData } from "./rows.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
 import froca from "../../../services/froca.js";
 import branches from "../../../services/branches.js";
+import ColorPickerMenuItem from "../../../menus/custom-items/ColorPickerMenuItem.jsx";
 import Component from "../../../components/component.js";
 import { RefObject } from "preact";
 
@@ -219,6 +220,11 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
                 title: t("table_context_menu.delete_row"),
                 uiIcon: "bx bx-trash",
                 handler: () => branches.deleteNotes([ rowData.branchId ], false, false)
+            },
+            { kind: "separator"},
+            {
+                kind: "custom",
+                componentFn: () => ColorPickerMenuItem({note: rowData.noteId})
             }
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, rowData.noteId),
