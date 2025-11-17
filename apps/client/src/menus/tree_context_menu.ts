@@ -1,3 +1,4 @@
+import ColorPickerMenuItem from "./custom-items/ColorPickerMenuItem.jsx";
 import treeService from "../services/tree.js";
 import froca from "../services/froca.js";
 import clipboard from "../services/clipboard.js";
@@ -255,7 +256,12 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 keyboardShortcut: "searchInSubtree",
                 uiIcon: "bx bx-search",
                 enabled: notSearch && noSelectedNotes
-            }
+            },
+
+            {
+                kind: "custom",
+                componentFn: () => ColorPickerMenuItem({note})
+            },
         ];
         return items.filter((row) => row !== null) as MenuItem<TreeCommandNames>[];
     }
