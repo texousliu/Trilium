@@ -258,6 +258,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 enabled: notSearch && noSelectedNotes
             },
 
+            { kind: "separator"},
+
             {
                 kind: "custom",
                 componentFn: () => ColorPickerMenuItem({note})
