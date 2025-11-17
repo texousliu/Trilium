@@ -1,8 +1,10 @@
+import ColorPickerMenuItem from "../../../menus/custom-items/ColorPickerMenuItem";
 import FNote from "../../../entities/fnote";
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
 import branches from "../../../services/branches";
 import froca from "../../../services/froca";
+import { note } from "mermaid/dist/rendering-util/rendering-elements/shapes/note.js";
 import { t } from "../../../services/i18n";
 
 export function openCalendarContextMenu(e: ContextMenuEvent, noteId: string, parentNote: FNote) {
@@ -34,6 +36,11 @@ export function openCalendarContextMenu(e: ContextMenuEvent, noteId: string, par
                         await branches.deleteNotes([ branchIdToDelete ], false, false);
                     }
                 }
+            },
+            { kind: "separator" },
+            {
+                kind: "custom",
+                componentFn: () => ColorPickerMenuItem({note: noteId})
             }
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),
