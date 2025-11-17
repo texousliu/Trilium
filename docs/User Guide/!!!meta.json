@@ -694,6 +694,13 @@
                                                     "value": "bx bxl-docker",
                                                     "isInheritable": false,
                                                     "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "Gzjqa934BdH4",
+                                                    "isInheritable": false,
+                                                    "position": 50
                                                 }
                                             ],
                                             "format": "markdown",
