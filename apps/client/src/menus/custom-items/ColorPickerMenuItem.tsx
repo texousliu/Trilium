@@ -1,23 +1,44 @@
 import "./ColorPickerMenuItem.css";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import attributes from "../../services/attributes";
 import FNote from "../../entities/fnote";
+import froca from "../../services/froca";
 
 const COLORS = ["blue", "green", "cyan", "red", "magenta", "brown", "yellow", ""];
 
 export interface ColorPickerMenuItemProps {
-    note: FNote | null;
+    /** The target Note instance or its ID string. */
+    note: FNote | string | null;
 }
 
 export default function ColorPickerMenuItem(props: ColorPickerMenuItemProps) {
-    const {note} = props;
-    if (!note) return null;
+    if (!props.note) return null;
 
-    const [currentColor, setCurrentColor] = useState(note.getLabel("color")?.value ?? "");
+    const [note, setNote] = useState<FNote | null>(null);
+    const [currentColor, setCurrentColor] = useState<string | null>(null);
+
+
+    useEffect(() => {
+        const retrieveNote = async (noteId: string) => {
+            const result = await froca.getNote(noteId, true);
+            if (result) {
+                setNote(result);
+                setCurrentColor(result.getLabel("color")?.value ?? "");
+            }
+        }
+
+        if (typeof props.note === "string") {
+            retrieveNote(props.note); // Get the note from the given ID string
+        } else {
+            setNote(props.note);
+        }
+    }, []);
 
     const onColorCellClicked = (color: string) => {
-        attributes.setLabel(note.noteId, "color", color);
-        setCurrentColor(color);
+        if (note) {
+            attributes.setLabel(note.noteId, "color", color);
+            setCurrentColor(color);
+        }
     }
 
     return <div className="color-picker-menu-item">
@@ -25,13 +46,14 @@ export default function ColorPickerMenuItem(props: ColorPickerMenuItemProps) {
             <ColorCell key={color}
                        color={color}
                        isSelected={(color === currentColor)}
+                       isDisabled={(note !== null)}
                        onClick={() => onColorCellClicked(color)} />
         ))}
     </div>
 }
 
-function ColorCell(props: {color: string, isSelected: boolean, onClick?: () => void}) {
-    return <div class={`color-cell ${props.isSelected ? "selected" : ""}`}
+function ColorCell(props: {color: string, isSelected: boolean, isDisabled?: boolean, onClick?: () => void}) {
+    return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""}`}
                 style={`background-color: ${props.color}`}
                 onClick={props.onClick}>
     </div>;
