@@ -1962,6 +1962,13 @@
                                     "position": 10
                                 },
                                 {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "lXjOyKpUSKgE",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
                                     "type": "label",
                                     "name": "iconClass",
                                     "value": "bx bx-globe",
@@ -2070,6 +2077,34 @@
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Server translations.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "lXjOyKpUSKgE",
+                                    "notePath": [
+                                        "jdjRLhLV3TtI",
+                                        "yeqU0zo0ZQ83",
+                                        "TLXJwBDo8Rdv",
+                                        "lXjOyKpUSKgE"
+                                    ],
+                                    "title": "Adding a new locale",
+                                    "notePosition": 40,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "new-locale",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Adding a new locale.md",
                                     "attachments": []
                                 }
                             ]

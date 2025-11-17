@@ -1,5 +1,5 @@
-import { ALLOWED_PROTOCOLS, MIME_TYPE_AUTO } from "@triliumnext/commons";
-import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS, TemplateDefinition } from "@triliumnext/ckeditor5";
+import { ALLOWED_PROTOCOLS, DISPLAYABLE_LOCALE_IDS, MIME_TYPE_AUTO } from "@triliumnext/commons";
+import { buildExtraCommands, type EditorConfig, getCkLocale, PREMIUM_PLUGINS, TemplateDefinition } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
@@ -17,6 +17,7 @@ export const OPEN_SOURCE_LICENSE_KEY = "GPL";
 export interface BuildEditorOptions {
     forceGplLicense: boolean;
     isClassicEditor: boolean;
+    uiLanguage: DISPLAYABLE_LOCALE_IDS;
     contentLanguage: string | null;
     templates: TemplateDefinition[];
 }
@@ -161,9 +162,8 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
         htmlSupport: {
             allow: JSON.parse(options.get("allowedHtmlTags"))
         },
-        // This value must be kept in sync with the language defined in webpack.config.js.
-        language: "en",
-        removePlugins: getDisabledPlugins()
+        removePlugins: getDisabledPlugins(),
+        ...await getCkLocale(opts.uiLanguage)
     };
 
     // Set up content language.
