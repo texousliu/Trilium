@@ -46,7 +46,7 @@ export default function ColorPickerMenuItem(props: ColorPickerMenuItemProps) {
             <ColorCell key={color}
                        color={color}
                        isSelected={(color === currentColor)}
-                       isDisabled={(note !== null)}
+                       isDisabled={(note === null)}
                        onClick={() => onColorCellClicked(color)} />
         ))}
     </div>
