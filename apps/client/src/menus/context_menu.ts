@@ -17,7 +17,7 @@ export interface ContextMenuOptions<T> {
 
 export interface CustomMenuItem {
     kind: "custom",
-    componentFn: () => JSX.Element;
+    componentFn: () => JSX.Element | null;
 }
 
 export interface MenuSeparatorItem {
