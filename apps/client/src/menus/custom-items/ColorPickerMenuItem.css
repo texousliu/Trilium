@@ -1,0 +1,15 @@
+.color-picker-menu-item {
+    display: flex;
+    gap: 10px;
+}
+
+.color-picker-menu-item > .color-cell {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background: transparent;
+}
+
+.color-picker-menu-item > .color-cell.selected {
+    outline: 2px solid royalblue;
+}
