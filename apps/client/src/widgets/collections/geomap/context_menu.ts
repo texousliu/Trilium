@@ -2,6 +2,7 @@ import type { LatLng, LeafletMouseEvent } from "leaflet";
 import appContext, { type CommandMappings } from "../../../components/app_context.js";
 import contextMenu, { type MenuItem } from "../../../menus/context_menu.js";
 import linkContextMenu from "../../../menus/link_context_menu.js";
+import ColorPickerMenuItem from "../../../menus/custom-items/ColorPickerMenuItem.jsx";
 import { t } from "../../../services/i18n.js";
 import { createNewNote } from "./api.js";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
@@ -18,7 +19,12 @@ export default function openContextMenu(noteId: string, e: LeafletMouseEvent, is
         items = [
             ...items,
             { kind: "separator" },
-            { title: t("geo-map-context.remove-from-map"), command: "deleteFromMap", uiIcon: "bx bx-trash" }
+            { title: t("geo-map-context.remove-from-map"), command: "deleteFromMap", uiIcon: "bx bx-trash" },
+            { kind: "separator"},
+            {
+                kind: "custom",
+                componentFn: () => ColorPickerMenuItem({note: noteId})
+            }
         ];
     }
 
