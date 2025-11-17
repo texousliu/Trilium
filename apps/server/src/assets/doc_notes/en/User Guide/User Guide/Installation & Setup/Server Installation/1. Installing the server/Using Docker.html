@@ -39,8 +39,8 @@
   setup is suitable for testing or when using a proxy server like Nginx or
   Apache.</p><pre><code class="language-text-x-trilium-auto">sudo docker run -t -i -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/trilium:[VERSION]</code></pre>
 <ol>
-  <li data-list-item-id="e80c579b4a0bc1835053edc0db1cf6a02">Verify the container is running using <code>docker ps</code>.</li>
-  <li data-list-item-id="eede157791e4c575365d2062fa585510a">Access Trilium via a web browser at <code>127.0.0.1:8080</code>.</li>
+  <li>Verify the container is running using <code>docker ps</code>.</li>
+  <li>Access Trilium via a web browser at <code>127.0.0.1:8080</code>.</li>
 </ol>
 <h4>Local Network Access</h4>
 <p>To make the container accessible only on your local network, first create
@@ -65,9 +65,9 @@ docker inspect [container_name]</code></pre>
   is the container's path. More details can be found in the <a href="https://docs.docker.com/storage/volumes/">Docker Volumes Documentation</a>.</p>
 <h2>Reverse Proxy</h2>
 <ol>
-  <li data-list-item-id="ec4c3fc06ee11be205d718f2e7420ddc4"><a href="#root/_help_ud6MShXL4WpO">Nginx</a>
+  <li><a href="#root/_help_ud6MShXL4WpO">Nginx</a>
   </li>
-  <li data-list-item-id="e5fab2239f11e7b5ca2f4635a953b6468"><a href="#root/_help_fDLvzOx29Pfg">Apache</a>
+  <li><a href="#root/_help_fDLvzOx29Pfg">Apache</a>
   </li>
 </ol>
 <h3>Note on --user Directive</h3>
@@ -101,12 +101,10 @@ docker pull triliumnext/trilium:rootless-alpine</code></pre>
 <h3>How It Works</h3>
 <p>The rootless Trilium image:</p>
 <ol>
-  <li data-list-item-id="e90c32e9ff9c613ffb612b14de8c4e487">Creates a non-root user (<code>trilium</code>) during build time</li>
-  <li
-  data-list-item-id="eea8c80200f4f4d3fc99ee61ebd28ef90">Configures the application to run as this non-root user</li>
-    <li data-list-item-id="e8898c3bf906b0fa681dd37014e21c135">Allows runtime customization of the user's UID/GID via Docker's <code>--user</code> flag</li>
-    <li
-    data-list-item-id="e7b4f254dfd0b53084245c3a5f8aff9e9">Does not require a separate Docker <code>entrypoint</code> script</li>
+  <li>Creates a non-root user (<code>trilium</code>) during build time</li>
+  <li>Configures the application to run as this non-root user</li>
+  <li>Allows runtime customization of the user's UID/GID via Docker's <code>--user</code> flag</li>
+  <li>Does not require a separate Docker <code>entrypoint</code> script</li>
 </ol>
 <h3>Usage</h3>
 <h4><strong>Using docker-compose (Recommended)</strong></h4><pre><code class="language-text-x-trilium-auto"># Run with default UID/GID (1000:1000)
@@ -129,51 +127,51 @@ docker run -d --name trilium -p 8080:8080 --user $(id -u):$(id -g) -v ~/trilium-
 </code></pre>
 <h3>Environment Variables</h3>
 <ul>
-  <li data-list-item-id="eb52d2c583a8808652ce0761d246ef29e"><code>TRILIUM_UID</code>: UID to use for the container process (passed
+  <li><code>TRILIUM_UID</code>: UID to use for the container process (passed
     to Docker's <code>--user</code> flag)</li>
-  <li data-list-item-id="ea0cfaacd3839aa7be06ab16ac93c0b73"><code>TRILIUM_GID</code>: GID to use for the container process (passed
+  <li><code>TRILIUM_GID</code>: GID to use for the container process (passed
     to Docker's <code>--user</code> flag)</li>
-  <li data-list-item-id="e798f25ec7f7eb14d5e37c010a893f574"><code>TRILIUM_DATA_DIR</code>: Path to the data directory inside the container
+  <li><code>TRILIUM_DATA_DIR</code>: Path to the data directory inside the container
     (default: <code>/home/node/trilium-data</code>)</li>
 </ul>
 <p>For a complete list of configuration environment variables (network settings,
-  authentication, sync, etc.), see&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_Gzjqa934BdH4">Configuration (config.ini or environment variables)</a>.</p>
+  authentication, sync, etc.), see&nbsp;<a class="reference-link" href="#root/_help_Gzjqa934BdH4">Configuration (config.ini or environment variables)</a>.</p>
 <h3>Volume Permissions</h3>
 <p>If you encounter permission issues with the data volume, ensure that:</p>
 <ol>
-  <li data-list-item-id="e080a03231b298c4ed1f1517161a4a827">The host directory has appropriate permissions for the UID/GID you're
+  <li>The host directory has appropriate permissions for the UID/GID you're
     using</li>
-  <li data-list-item-id="e6ae1b441bf88ef155897ae808def1659">You're setting both <code>TRILIUM_UID</code> and <code>TRILIUM_GID</code> to
+  <li>You're setting both <code>TRILIUM_UID</code> and <code>TRILIUM_GID</code> to
     match the owner of the host directory</li>
 </ol><pre><code class="language-text-x-trilium-auto"># For example, if your data directory is owned by UID 1001 and GID 1001:
 TRILIUM_UID=1001 TRILIUM_GID=1001 docker-compose -f docker-compose.rootless.yml up -d
 </code></pre>
 <h3>Considerations</h3>
 <ul>
-  <li data-list-item-id="ecc3672515488dba9b61869cdfd5d9844">The container starts with a specific UID/GID which can be customized at
+  <li>The container starts with a specific UID/GID which can be customized at
     runtime</li>
-  <li data-list-item-id="e0c331861745c5c0487f49ff6253af2b0">Unlike the traditional setup, this approach does not use a separate entrypoint
+  <li>Unlike the traditional setup, this approach does not use a separate entrypoint
     script with <code>usermod</code>/<code>groupmod</code> commands</li>
-  <li data-list-item-id="eaa843c637b6b98c143be6e388283406b">The container cannot modify its own UID/GID at runtime, which is a security
+  <li>The container cannot modify its own UID/GID at runtime, which is a security
     feature of rootless containers</li>
 </ul>
 <h3>Available Rootless Images</h3>
 <p>Two rootless variants are provided:</p>
 <ol>
-  <li data-list-item-id="eb55a0f37e1d52feab8f2cf0bed2ff5ba"><strong>Debian-based</strong> (default): Uses the Debian Bullseye Slim
+  <li><strong>Debian-based</strong> (default): Uses the Debian Bullseye Slim
     base image
     <ul>
-      <li data-list-item-id="ed167aa522a14c0c11e7b67cf2ec829d0">Dockerfile: <code>apps/server/Dockerfile.rootless</code>
+      <li>Dockerfile: <code>apps/server/Dockerfile.rootless</code>
       </li>
-      <li data-list-item-id="e01b97bf3611445c24a10109aac1bdb93">Recommended for most users</li>
+      <li>Recommended for most users</li>
     </ul>
   </li>
-  <li data-list-item-id="efdc17349ac079b3595b2da5741080641"><strong>Alpine-based</strong>: Uses the Alpine base image for smaller
+  <li><strong>Alpine-based</strong>: Uses the Alpine base image for smaller
     size
     <ul>
-      <li data-list-item-id="ea6712f3d5c9c339f5dee5ab643d00bac">Dockerfile: <code>apps/server/Dockerfile.alpine.rootless</code>
+      <li>Dockerfile: <code>apps/server/Dockerfile.alpine.rootless</code>
       </li>
-      <li data-list-item-id="ebdeac8a67fc5f4f6a4d8df566482f56d">Smaller image size, but may have compatibility issues with some systems</li>
+      <li>Smaller image size, but may have compatibility issues with some systems</li>
     </ul>
   </li>
 </ol>
@@ -188,9 +186,7 @@ docker build --build-arg USER=myuser --build-arg UID=1001 --build-arg GID=1001 \
 </code></pre>
 <p>Available build arguments:</p>
 <ul>
-  <li data-list-item-id="e71af4a98ca5cd03cd91a5821015a264f"><code>USER</code>: Username for the non-root user (default: trilium)</li>
-  <li
-  data-list-item-id="e46e4176bfb41ec68f7671ce4f4c44959"><code>UID</code>: User ID for the non-root user (default: 1000)</li>
-    <li
-    data-list-item-id="e9c69339349469f3711dca84cc9e7483b"><code>GID</code>: Group ID for the non-root user (default: 1000)</li>
+  <li><code>USER</code>: Username for the non-root user (default: trilium)</li>
+  <li><code>UID</code>: User ID for the non-root user (default: 1000)</li>
+  <li><code>GID</code>: Group ID for the non-root user (default: 1000)</li>
 </ul>
