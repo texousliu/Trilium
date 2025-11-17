@@ -17,13 +17,11 @@ export default function ColorPickerMenuItem(props: ColorPickerMenuItemProps) {
     const [note, setNote] = useState<FNote | null>(null);
     const [currentColor, setCurrentColor] = useState<string | null>(null);
 
-
     useEffect(() => {
         const retrieveNote = async (noteId: string) => {
             const result = await froca.getNote(noteId, true);
             if (result) {
                 setNote(result);
-                setCurrentColor(result.getLabel("color")?.value ?? "");
             }
         }
 
@@ -33,6 +31,10 @@ export default function ColorPickerMenuItem(props: ColorPickerMenuItemProps) {
             setNote(props.note);
         }
     }, []);
+
+    useEffect(() => {
+        setCurrentColor(note?.getLabel("color")?.value ?? "");
+    }, [note]);
 
     const onColorCellClicked = (color: string) => {
         if (note) {
