@@ -16,7 +16,7 @@ export default function Book({ note }: TypeWidgetProps) {
         setShouldDisplayNoChildrenWarning(!note.hasChildren() && VIEW_TYPES.includes(viewType ?? ""));
     }
 
-    useEffect(refresh, [ note ]);
+    useEffect(refresh, [ note, viewType ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getBranchRows().some(branchRow => branchRow.parentNoteId === note.noteId)) {
             refresh();
