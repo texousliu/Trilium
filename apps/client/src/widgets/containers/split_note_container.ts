@@ -181,12 +181,14 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
         splitService.delNoteSplitResizer(ntxIds);
     }
 
-    contextsReopenedEvent({ ntxId, mainNtxId, tabPosition, afterNtxId }: EventData<"contextsReopened">) {
+    contextsReopenedEvent({ ntxId, mainNtxId, afterNtxId }: EventData<"contextsReopened">) {
         if (ntxId !== undefined && afterNtxId !== undefined) {
             this.$widget.find(`[data-ntx-id="${ntxId}"]`).insertAfter(this.$widget.find(`[data-ntx-id="${afterNtxId}"]`));
-        } else if (mainNtxId && tabPosition >= 0) {
+        } else if (mainNtxId) {
             const contexts = appContext.tabManager.noteContexts;
-            const beforeNtxId = contexts.find(c => c.mainNtxId === mainNtxId)?.ntxId || null;
+            const nextIndex = contexts.findIndex(c => c.ntxId === mainNtxId);
+            const beforeNtxId = (nextIndex !== -1 && nextIndex + 1 < contexts.length) ? contexts[nextIndex + 1].ntxId : null;
+
             this.$widget.find(`[data-ntx-id="${mainNtxId}"]`).insertBefore(this.$widget.find(`[data-ntx-id="${beforeNtxId}"]`));
         }
     }
