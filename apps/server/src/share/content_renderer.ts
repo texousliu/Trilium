@@ -325,6 +325,11 @@ function renderText(result: Result, note: SNote | BNote) {
 
         // Apply syntax highlight.
         for (const codeEl of document.querySelectorAll("pre code")) {
+            if (codeEl.classList.contains("language-mermaid") && note.type === "text") {
+                // Mermaid is handled on client-side, we don't want to break it by adding syntax highlighting.
+                continue;
+            }
+
             const highlightResult = highlightAuto(codeEl.innerText);
             codeEl.innerHTML = highlightResult.value;
             codeEl.classList.add("hljs");
