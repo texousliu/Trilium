@@ -1,5 +1,6 @@
 import "./NoteColorPickerMenuItem.css";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState} from "preact/hooks";
+import {ComponentChildren} from "preact";
 import attributes from "../../services/attributes";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
@@ -55,21 +56,87 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
                        color={color}
                        isSelected={(color === currentColor)}
                        isDisabled={(note === null)}
-                       onClick={() => onColorCellClicked(color)} />
+                       onSelect={() => onColorCellClicked(color)} />
         ))}
+
+        <CustomColorCell color={currentColor} isSelected={false} onSelect={onColorCellClicked}  />
     </div>
 }
 
 interface ColorCellProps {
+    children?: ComponentChildren,
+    className?: string;
     color: string | null,
     isSelected: boolean,
     isDisabled?: boolean,
-    onClick?: () => void
+    onSelect?: (color: string | null) => void
 }
 
 function ColorCell(props: ColorCellProps) {
-    return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""}`}
+    return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""} ${props.className ?? ""}`}
                 style={`${(props.color !== null) ? `background-color: ${props.color}` : ""}`}
-                onClick={props.onClick}>
+                onClick={() => props.onSelect?.(props.color)}>
+        {props.children}
     </div>;
+}
+
+function CustomColorCell(props: ColorCellProps) {
+    const colorInput = useRef<HTMLInputElement>(null);
+    let colorInputDebouncer: Debouncer<string | null>;
+
+    useEffect(() => {
+        colorInputDebouncer = new Debouncer(500, (color) => {
+            props.onSelect?.(color);
+        });
+
+        return () => {
+            colorInputDebouncer.destroy();
+        }
+    });
+
+    return <>
+        <ColorCell {...props} 
+                   className="custom-color-cell"
+                   onSelect={() => {colorInput.current?.click()}}>
+
+            <input ref={colorInput}
+                   type="color"
+                   value={props.color ?? ""}
+                   onChange={() => {colorInputDebouncer.updateValue(colorInput.current?.value ?? null)}}
+                   style="width: 0; height: 0; opacity: 0" />
+        </ColorCell>
+    </>
+}
+
+type DebouncerCallback<T> = (value: T) => void;
+
+class Debouncer<T> {
+
+    private debounceInterval: number;
+    private callback: DebouncerCallback<T>;
+    private lastValue: T | undefined;
+    private timeoutId: any | null = null;
+
+    constructor(debounceInterval: number, onUpdate: DebouncerCallback<T>) {
+        this.debounceInterval = debounceInterval;
+        this.callback = onUpdate;
+    }
+
+    updateValue(value: T) {
+        this.lastValue = value;
+        this.destroy();
+        this.timeoutId = setTimeout(this.reportUpdate.bind(this), this.debounceInterval);
+    }
+
+    destroy() {
+        if (this.timeoutId !== null) {
+            clearTimeout(this.timeoutId);
+        }
+    }
+
+    private reportUpdate() {
+        if (this.lastValue !== undefined) {
+            this.callback(this.lastValue);
+        }
+    }
 }
