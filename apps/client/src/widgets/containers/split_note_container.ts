@@ -102,12 +102,11 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
     async closeThisNoteSplitCommand({ ntxId }: CommandListenerData<"closeThisNoteSplit">) {
         if (!ntxId) return;
         const contexts = appContext.tabManager.noteContexts;
-
         const currentIndex = contexts.findIndex((c) => c.ntxId === ntxId);
         if (currentIndex === -1) return;
 
-        const isRemoveMainContext = !contexts[currentIndex].mainNtxId;
-        if (isRemoveMainContext && currentIndex + 1 <= contexts.length) {
+        const isRemoveMainContext = contexts[currentIndex].isMainContext();
+        if (isRemoveMainContext && currentIndex + 1 < contexts.length) {
             const ntxIds = contexts.map((c) => c.ntxId).filter((c) => !!c) as string[];
             this.triggerCommand("noteContextReorder", {
                 ntxIdsInOrder: ntxIds,
