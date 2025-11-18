@@ -6,7 +6,10 @@ import Debouncer from "../../utils/debouncer";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 
-const COLORS = ["blue", "green", "cyan", "red", "magenta", "brown", "yellow", null];
+const COLORS = [
+    "#e64d4d", "#e6994d", "#e5e64d", "#99e64d", "#4de64d", "#4de699",
+    "#4de5e6", "#4d99e6", "#4d4de6", "#994de6", null
+];
 
 export interface NoteColorPickerMenuItemProps {
     /** The target Note instance or its ID string. */
