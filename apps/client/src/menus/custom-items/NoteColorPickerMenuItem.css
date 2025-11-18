@@ -1,19 +1,60 @@
 .color-picker-menu-item {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    justify-content: space-between;
 }
 
-.color-picker-menu-item > .color-cell {
-    width: 13px;
-    height: 13px;
+.color-picker-menu-item  .color-cell {
+    width: 14px;
+    height: 14px;
     border-radius: 4px;
-    background: transparent;
+    background: var(--color);
 }
 
-.color-picker-menu-item > .color-cell.disabled-color-cell {
+.color-picker-menu-item  .color-cell.disabled-color-cell {
     cursor: not-allowed;
 }
 
-.color-picker-menu-item > .color-cell.selected {
-    outline: 2px solid royalblue;
+.color-picker-menu-item  .color-cell.selected {
+    outline: 2px solid var(--color);
+    outline-offset: 2px;
+}
+
+.color-cell-reset::before,
+.custom-color-cell::before {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 14px;
+    justify-content: center;
+    align-items: center;
+    font-family: boxicons;
+    color: black;
+}
+
+.color-cell-reset {
+    position: relative;
+    --color: rgba(255, 255, 255, .4);
+}
+
+.color-cell-reset::before {
+    content: "\ec8d";
+    mix-blend-mode: normal;
+    color: black;
+}
+
+.custom-color-cell {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background: var(--color);
+}
+
+.custom-color-cell::before {
+    content: "\ed35";
+    color: var(--foreground);
+    font-size: 16px;
 }

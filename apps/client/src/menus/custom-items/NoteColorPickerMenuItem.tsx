@@ -2,13 +2,14 @@ import "./NoteColorPickerMenuItem.css";
 import { useEffect, useRef, useState} from "preact/hooks";
 import {ComponentChildren} from "preact";
 import attributes from "../../services/attributes";
+import Color, { ColorInstance } from "color";
 import Debouncer from "../../utils/debouncer";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 
 const COLORS = [
-    "#e64d4d", "#e6994d", "#e5e64d", "#99e64d", "#4de64d", "#4de699",
-    "#4de5e6", "#4d99e6", "#4d4de6", "#994de6", null
+    null, "#e64d4d", "#e6994d", "#e5e64d", "#99e64d", "#4de64d", "#4de699",
+    "#4de5e6", "#4d99e6", "#4d4de6", "#994de6"
 ];
 
 export interface NoteColorPickerMenuItemProps {
@@ -57,6 +58,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
                 onClick={(e) => {e.stopPropagation()}}>
         {COLORS.map((color) => (
             <ColorCell key={color}
+                       className={(color === null) ? "color-cell-reset" : undefined}
                        color={color}
                        isSelected={(color === currentColor)}
                        isDisabled={(note === null)}
@@ -78,7 +80,7 @@ interface ColorCellProps {
 
 function ColorCell(props: ColorCellProps) {
     return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""} ${props.className ?? ""}`}
-                style={`${(props.color !== null) ? `background-color: ${props.color}` : ""}`}
+                style={`${(props.color !== null) ? `--color: ${props.color}` : ""}`}
                 onClick={() => props.onSelect?.(props.color)}>
         {props.children}
     </div>;
@@ -98,7 +100,7 @@ function CustomColorCell(props: ColorCellProps) {
         }
     });
 
-    return <>
+    return <div style={`--foreground: ${ensureContrast(props.color)};`}>
         <ColorCell {...props} 
                    className="custom-color-cell"
                    onSelect={() => {colorInput.current?.click()}}>
@@ -109,5 +111,20 @@ function CustomColorCell(props: ColorCellProps) {
                    onChange={() => {colorInputDebouncer.updateValue(colorInput.current?.value ?? null)}}
                    style="width: 0; height: 0; opacity: 0" />
         </ColorCell>
-    </>
+    </div>
+}
+
+function ensureContrast(color: string | null) {
+    if (color === null) return "inherit";
+
+    const colorHsl = Color(color).hsl();
+    let l = colorHsl.lightness();
+
+    if (l >= 40) {
+        l = 0;
+    } else {
+        l = 100
+    }
+
+    return colorHsl.saturationl(0).lightness(l).hex();
 }
