@@ -24,7 +24,7 @@ export default function SharedInfo() {
         const shareId = getShareId(note);
 
         if (syncServerHost) {
-            link = `${syncServerHost}/share/${shareId}`;
+            link = new URL(`/share/${shareId}`, syncServerHost).href;
         } else {
             let host = location.host;
             if (host.endsWith("/")) {
