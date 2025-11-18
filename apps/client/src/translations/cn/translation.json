@@ -2019,7 +2019,8 @@
     "add-column-placeholder": "请输入列名...",
     "edit-note-title": "点击编辑笔记标题",
     "edit-column-title": "点击编辑列标题",
-    "remove-from-board": "从看板上移除"
+    "remove-from-board": "从看板上移除",
+    "column-already-exists": "此列已在看板上。"
   },
   "command_palette": {
     "tree-action-name": "树形：{{name}}",

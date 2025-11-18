@@ -428,7 +428,8 @@
     "add-column": "Aggiungi colonna",
     "add-column-placeholder": "Inserisci il nome della colonna...",
     "edit-note-title": "Fare clic per modificare il titolo della nota",
-    "edit-column-title": "Fare clic per modificare il titolo della colonna"
+    "edit-column-title": "Fare clic per modificare il titolo della colonna",
+    "column-already-exists": "Questa colonna esiste già nella bacheca."
   },
   "backup": {
     "enable_weekly_backup": "Abilita le archiviazioni settimanali",
@@ -1262,7 +1263,8 @@
     "convert_into_attachment_failed": "Conversione della nota '{{title}}' fallita.",
     "convert_into_attachment_successful": "Nota '{{title}}' è stato convertito in allegato.",
     "convert_into_attachment_prompt": "Sei sicuro di voler convertire la nota '{{title}}' in un allegato della nota padre?",
-    "print_pdf": "Esporta come PDF..."
+    "print_pdf": "Esporta come PDF...",
+    "open_note_on_server": "Apri una nota sul server"
   },
   "onclick_button": {
     "no_click_handler": "Il widget pulsante '{{componentId}}' non ha un gestore di clic definito"
