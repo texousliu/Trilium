@@ -46,11 +46,12 @@ vi.mock('../../ai_service_manager.js', () => ({
     }
 }));
 
-vi.mock('../index.js', () => ({
-    ContextExtractor: vi.fn().mockImplementation(function () {
-        this.findRelevantNotes = vi.fn().mockResolvedValue([])
-    })
-}));
+vi.mock('../index.js', () => {
+    class ContextExtractor {
+        findRelevantNotes = vi.fn().mockResolvedValue([])
+    }
+    return { ContextExtractor };
+});
 
 describe('ContextService', () => {
     let service: ContextService;

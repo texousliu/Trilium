@@ -48,8 +48,8 @@ vi.mock('@anthropic-ai/sdk', () => {
         }
     };
 
-    const mockAnthropic = vi.fn().mockImplementation(function () {
-        this.messages = {
+    class MockAnthropic {
+        messages = {
             create: vi.fn().mockImplementation((params) => {
                 if (params.stream) {
                     return Promise.resolve(mockStream);
@@ -72,9 +72,9 @@ vi.mock('@anthropic-ai/sdk', () => {
                 });
             })
         };
-    });
+    }
 
-    return { default: mockAnthropic };
+    return { default: MockAnthropic };
 });
 
 describe('AnthropicService', () => {

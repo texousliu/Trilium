@@ -34,26 +34,29 @@ vi.mock('../log.js', () => ({
     }
 }));
 
-vi.mock('./providers/anthropic_service.js', () => ({
-    AnthropicService: vi.fn().mockImplementation(function () {
-        this.isAvailable = vi.fn().mockReturnValue(true);
-        this.generateChatCompletion = vi.fn();
-    })
-}));
+vi.mock('./providers/anthropic_service.js', () => {
+    class AnthropicService {
+        isAvailable = vi.fn().mockReturnValue(true);
+        generateChatCompletion = vi.fn();
+    }
+    return { AnthropicService };
+});
 
-vi.mock('./providers/openai_service.js', () => ({
-    OpenAIService: vi.fn().mockImplementation(function () {
-        this.isAvailable = vi.fn().mockReturnValue(true);
-        this.generateChatCompletion = vi.fn();
-    })
-}));
+vi.mock('./providers/openai_service.js', () => {
+    class OpenAIService {
+        isAvailable = vi.fn().mockReturnValue(true);
+        generateChatCompletion = vi.fn();
+    }
+    return { OpenAIService };
+});
 
-vi.mock('./providers/ollama_service.js', () => ({
-    OllamaService: vi.fn().mockImplementation(function () {
-        this.isAvailable = vi.fn().mockReturnValue(true);
-        this.generateChatCompletion = vi.fn();
-    })
-}));
+vi.mock('./providers/ollama_service.js', () => {
+    class OllamaService {
+        isAvailable = vi.fn().mockReturnValue(true);
+        generateChatCompletion = vi.fn();
+    }
+    return { OllamaService };
+});
 
 vi.mock('./config/configuration_helpers.js', () => ({
     getSelectedProvider: vi.fn(),

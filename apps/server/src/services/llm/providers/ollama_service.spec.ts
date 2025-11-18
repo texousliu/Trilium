@@ -29,12 +29,12 @@ vi.mock('./providers.js', () => ({
     getOllamaOptions: vi.fn()
 }));
 
-vi.mock('../formatters/ollama_formatter.js', () => ({
-    OllamaMessageFormatter: vi.fn().mockImplementation(function () {
-        this.formatMessages = vi.fn().mockReturnValue([
+vi.mock('../formatters/ollama_formatter.js', () => {
+    class MockFormatter {
+        formatMessages = vi.fn().mockReturnValue([
             { role: 'user', content: 'Hello' }
         ]);
-        this.formatResponse = vi.fn().mockReturnValue({
+        formatResponse = vi.fn().mockReturnValue({
             text: 'Hello! How can I help you today?',
             provider: 'Ollama',
             model: 'llama2',
@@ -45,8 +45,9 @@ vi.mock('../formatters/ollama_formatter.js', () => ({
             },
             tool_calls: null
         });
-    })
-}));
+    }
+    return { OllamaMessageFormatter: MockFormatter };
+});
 
 vi.mock('../tools/tool_registry.js', () => ({
     default: {
@@ -83,8 +84,8 @@ vi.mock('ollama', () => {
         }
     };
 
-    const mockOllama = vi.fn().mockImplementation(function () {
-        this.chat = vi.fn().mockImplementation((params) => {
+    class MockOllama {
+        chat = vi.fn().mockImplementation((params) => {
             if (params.stream) {
                 return Promise.resolve(mockStream);
             }
@@ -98,7 +99,7 @@ vi.mock('ollama', () => {
                 done: true
             });
         });
-        this.show = vi.fn().mockResolvedValue({
+        show = vi.fn().mockResolvedValue({
             modelfile: 'FROM llama2',
             parameters: {},
             template: '',
@@ -110,7 +111,7 @@ vi.mock('ollama', () => {
                 quantization_level: 'Q4_0'
             }
         });
-        this.list = vi.fn().mockResolvedValue({
+        list = vi.fn().mockResolvedValue({
             models: [
                 {
                     name: 'llama2:latest',
@@ -118,10 +119,10 @@ vi.mock('ollama', () => {
                     size: 3800000000
                 }
             ]
-        })
-    });
+        });
+    }
 
-    return { Ollama: mockOllama };
+    return { Ollama: MockOllama };
 });
 
 // Mock global fetch

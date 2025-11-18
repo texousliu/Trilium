@@ -35,24 +35,28 @@ vi.mock('./constants/llm_prompt_constants.js', () => ({
     }
 }));
 
-vi.mock('./pipeline/chat_pipeline.js', () => ({
-    ChatPipeline: vi.fn().mockImplementation(function (config) {
-        Object.assign(this, {
-            config,
-            execute: vi.fn(),
-            getMetrics: vi.fn(),
-            resetMetrics: vi.fn(),
-            stages: {
-                contextExtraction: {
-                    execute: vi.fn()
-                },
-                semanticContextExtraction: {
-                    execute: vi.fn()
-                }
+vi.mock('./pipeline/chat_pipeline.js', () => {
+    class ChatPipeline {
+        config: any;
+
+        constructor(config: any) {
+            this.config = config;
+        }
+
+        execute = vi.fn();
+        getMetrics = vi.fn();
+        resetMetrics = vi.fn();
+        stages = {
+            contextExtraction: {
+                execute: vi.fn()
+            },
+            semanticContextExtraction: {
+                execute: vi.fn()
             }
-        });
-    })
-}));
+        }
+    }
+    return { ChatPipeline };
+});
 
 vi.mock('./ai_service_manager.js', () => ({
     default: {
