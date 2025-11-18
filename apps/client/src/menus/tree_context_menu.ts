@@ -1,4 +1,4 @@
-import ColorPickerMenuItem from "./custom-items/ColorPickerMenuItem.jsx";
+import NoteColorPickerMenuItem from "./custom-items/NoteColorPickerMenuItem.jsx";
 import treeService from "../services/tree.js";
 import froca from "../services/froca.js";
 import clipboard from "../services/clipboard.js";
@@ -264,7 +264,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 kind: "custom",
                 componentFn: () => {
                     if (notOptionsOrHelp && selectedNotes.length === 1) {
-                        return ColorPickerMenuItem({note});
+                        return NoteColorPickerMenuItem({note});
                     } else {
                         return null;
                     }

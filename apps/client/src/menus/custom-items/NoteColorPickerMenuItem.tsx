@@ -1,4 +1,4 @@
-import "./ColorPickerMenuItem.css";
+import "./NoteColorPickerMenuItem.css";
 import { useEffect, useState } from "preact/hooks";
 import attributes from "../../services/attributes";
 import FNote from "../../entities/fnote";
@@ -6,12 +6,12 @@ import froca from "../../services/froca";
 
 const COLORS = ["blue", "green", "cyan", "red", "magenta", "brown", "yellow", ""];
 
-export interface ColorPickerMenuItemProps {
+export interface NoteColorPickerMenuItemProps {
     /** The target Note instance or its ID string. */
     note: FNote | string | null;
 }
 
-export default function ColorPickerMenuItem(props: ColorPickerMenuItemProps) {
+export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemProps) {
     if (!props.note) return null;
 
     const [note, setNote] = useState<FNote | null>(null);

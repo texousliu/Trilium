@@ -1,5 +1,5 @@
-import ColorPickerMenuItem from "../../../menus/custom-items/ColorPickerMenuItem";
 import FNote from "../../../entities/fnote";
+import NoteColorPickerMenuItem from "../../../menus/custom-items/NoteColorPickerMenuItem";
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
 import attributes from "../../../services/attributes";
@@ -78,7 +78,7 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
             { kind: "separator" },
             {
                 kind: "custom",
-                componentFn: () => ColorPickerMenuItem({note})
+                componentFn: () => NoteColorPickerMenuItem({note})
             }
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, note.noteId),
