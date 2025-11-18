@@ -100,9 +100,22 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
     }
 
     async closeThisNoteSplitCommand({ ntxId }: CommandListenerData<"closeThisNoteSplit">) {
-        if (ntxId) {
-            await appContext.tabManager.removeNoteContext(ntxId);
+        if (!ntxId) return;
+        const contexts = appContext.tabManager.noteContexts;
+        const currentIndex = contexts.findIndex((c) => c.ntxId === ntxId);
+        if (currentIndex === -1) return;
+
+        const isRemoveMainContext = contexts[currentIndex].isMainContext();
+        if (isRemoveMainContext && currentIndex + 1 < contexts.length) {
+            const ntxIds = contexts.map((c) => c.ntxId).filter((c) => !!c) as string[];
+            this.triggerCommand("noteContextReorder", {
+                ntxIdsInOrder: ntxIds,
+                oldMainNtxId: ntxId,
+                newMainNtxId: ntxIds[currentIndex + 1]
+            });
         }
+
+        await appContext.tabManager.removeNoteContext(ntxId);
     }
 
     async moveThisNoteSplitCommand({ ntxId, isMovingLeft }: CommandListenerData<"moveThisNoteSplit">) {
@@ -167,12 +180,16 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
         splitService.delNoteSplitResizer(ntxIds);
     }
 
-    contextsReopenedEvent({ ntxId, afterNtxId }: EventData<"contextsReopened">) {
-        if (ntxId === undefined || afterNtxId === undefined) {
-            // no single split reopened
-            return;
+    contextsReopenedEvent({ ntxId, mainNtxId, afterNtxId }: EventData<"contextsReopened">) {
+        if (ntxId !== undefined && afterNtxId !== undefined) {
+            this.$widget.find(`[data-ntx-id="${ntxId}"]`).insertAfter(this.$widget.find(`[data-ntx-id="${afterNtxId}"]`));
+        } else if (mainNtxId) {
+            const contexts = appContext.tabManager.noteContexts;
+            const nextIndex = contexts.findIndex(c => c.ntxId === mainNtxId);
+            const beforeNtxId = (nextIndex !== -1 && nextIndex + 1 < contexts.length) ? contexts[nextIndex + 1].ntxId : null;
+
+            this.$widget.find(`[data-ntx-id="${mainNtxId}"]`).insertBefore(this.$widget.find(`[data-ntx-id="${beforeNtxId}"]`));
         }
-        this.$widget.find(`[data-ntx-id="${ntxId}"]`).insertAfter(this.$widget.find(`[data-ntx-id="${afterNtxId}"]`));
     }
 
     async refresh() {
