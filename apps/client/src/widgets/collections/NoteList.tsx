@@ -23,22 +23,27 @@ interface NoteListProps {
     isEnabled: boolean;
     ntxId: string | null | undefined;
     media: ViewModeMedia;
+    viewType: ViewTypeOptions | undefined;
     onReady?: () => void;
 }
 
 export default function NoteList<T extends object>(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
     const { note, noteContext, notePath, ntxId } = useNoteContext();
-    const isEnabled = noteContext?.hasNoteList();
-    return <CustomNoteList note={note} isEnabled={!!isEnabled} notePath={notePath} ntxId={ntxId} {...props} />
+    const viewType = useNoteViewType(note);
+    const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
+    useEffect(() => {
+        setEnabled(noteContext?.hasNoteList());
+    }, [ noteContext, viewType ])
+    return <CustomNoteList viewType={viewType} note={note} isEnabled={!!enabled} notePath={notePath} ntxId={ntxId} {...props} />
 }
 
 export function SearchNoteList<T extends object>(props: Omit<NoteListProps, "isEnabled">) {
-    return <CustomNoteList {...props} isEnabled={true} />
+    const viewType = useNoteViewType(props.note);
+    return <CustomNoteList {...props} isEnabled={true} viewType={viewType} />
 }
 
-export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
+export function CustomNoteList<T extends object>({ note, viewType, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
     const widgetRef = useRef<HTMLDivElement>(null);
-    const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(shouldEnable ? note : null, viewType, ntxId);
     const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
