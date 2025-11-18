@@ -4,7 +4,7 @@ import attributes from "../../services/attributes";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 
-const COLORS = ["blue", "green", "cyan", "red", "magenta", "brown", "yellow", ""];
+const COLORS = ["blue", "green", "cyan", "red", "magenta", "brown", "yellow", null];
 
 export interface NoteColorPickerMenuItemProps {
     /** The target Note instance or its ID string. */
@@ -33,17 +33,23 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
     }, []);
 
     useEffect(() => {
-        setCurrentColor(note?.getLabel("color")?.value ?? "");
+        setCurrentColor(note?.getLabel("color")?.value ?? null);
     }, [note]);
 
-    const onColorCellClicked = (color: string) => {
+    const onColorCellClicked = (color: string | null) => {
         if (note) {
-            attributes.setLabel(note.noteId, "color", color);
+            if (color !== null) {
+                attributes.setLabel(note.noteId, "color", color);
+            } else {
+                attributes.removeOwnedLabelByName(note, "color");
+            }
+            
             setCurrentColor(color);
         }
     }
 
-    return <div className="color-picker-menu-item">
+    return <div className="color-picker-menu-item"
+                onClick={(e) => {e.stopPropagation()}}>
         {COLORS.map((color) => (
             <ColorCell key={color}
                        color={color}
@@ -55,7 +61,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
 }
 
 interface ColorCellProps {
-    color: string,
+    color: string | null,
     isSelected: boolean,
     isDisabled?: boolean,
     onClick?: () => void
@@ -63,7 +69,7 @@ interface ColorCellProps {
 
 function ColorCell(props: ColorCellProps) {
     return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""}`}
-                style={`background-color: ${props.color}`}
+                style={`${(props.color !== null) ? `background-color: ${props.color}` : ""}`}
                 onClick={props.onClick}>
     </div>;
 }
