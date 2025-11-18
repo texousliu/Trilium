@@ -1,6 +1,6 @@
 import { t } from "../../services/i18n";
 import Alert from "../react/Alert";
-import { useNoteLabel, useTriliumEvent } from "../react/hooks";
+import { useNoteLabelWithDefault, useTriliumEvent } from "../react/hooks";
 import RawHtml from "../react/RawHtml";
 import { TypeWidgetProps } from "./type_widget";
 import "./Book.css";
@@ -9,7 +9,7 @@ import { useEffect, useState } from "preact/hooks";
 const VIEW_TYPES = [ "list", "grid" ];
 
 export default function Book({ note }: TypeWidgetProps) {
-    const [ viewType ] = useNoteLabel(note, "viewType");
+    const [ viewType ] = useNoteLabelWithDefault(note, "viewType", "grid");
     const [ shouldDisplayNoChildrenWarning, setShouldDisplayNoChildrenWarning ] = useState(false);
 
     function refresh() {
