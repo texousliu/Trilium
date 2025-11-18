@@ -27,7 +27,7 @@ interface NoteListProps {
     onReady?: () => void;
 }
 
-export default function NoteList<T extends object>(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
+export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
     const { note, noteContext, notePath, ntxId } = useNoteContext();
     const viewType = useNoteViewType(note);
     const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
@@ -37,12 +37,12 @@ export default function NoteList<T extends object>(props: Pick<NoteListProps, "d
     return <CustomNoteList viewType={viewType} note={note} isEnabled={!!enabled} notePath={notePath} ntxId={ntxId} {...props} />
 }
 
-export function SearchNoteList<T extends object>(props: Omit<NoteListProps, "isEnabled">) {
+export function SearchNoteList(props: Omit<NoteListProps, "isEnabled" | "viewType">) {
     const viewType = useNoteViewType(props.note);
     return <CustomNoteList {...props} isEnabled={true} viewType={viewType} />
 }
 
-export function CustomNoteList<T extends object>({ note, viewType, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
+export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
     const widgetRef = useRef<HTMLDivElement>(null);
     const noteIds = useNoteIds(shouldEnable ? note : null, viewType, ntxId);
     const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
@@ -119,7 +119,7 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
     }
 }
 
-function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
+export function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
     const [ viewType ] = useNoteLabel(note, "viewType");
 
     if (!note) {
