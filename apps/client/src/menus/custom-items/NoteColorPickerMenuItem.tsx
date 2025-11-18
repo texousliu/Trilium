@@ -2,6 +2,7 @@ import "./NoteColorPickerMenuItem.css";
 import { useEffect, useRef, useState} from "preact/hooks";
 import {ComponentChildren} from "preact";
 import attributes from "../../services/attributes";
+import Debouncer from "../../utils/debouncer";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 
@@ -106,37 +107,4 @@ function CustomColorCell(props: ColorCellProps) {
                    style="width: 0; height: 0; opacity: 0" />
         </ColorCell>
     </>
-}
-
-type DebouncerCallback<T> = (value: T) => void;
-
-class Debouncer<T> {
-
-    private debounceInterval: number;
-    private callback: DebouncerCallback<T>;
-    private lastValue: T | undefined;
-    private timeoutId: any | null = null;
-
-    constructor(debounceInterval: number, onUpdate: DebouncerCallback<T>) {
-        this.debounceInterval = debounceInterval;
-        this.callback = onUpdate;
-    }
-
-    updateValue(value: T) {
-        this.lastValue = value;
-        this.destroy();
-        this.timeoutId = setTimeout(this.reportUpdate.bind(this), this.debounceInterval);
-    }
-
-    destroy() {
-        if (this.timeoutId !== null) {
-            clearTimeout(this.timeoutId);
-        }
-    }
-
-    private reportUpdate() {
-        if (this.lastValue !== undefined) {
-            this.callback(this.lastValue);
-        }
-    }
 }
