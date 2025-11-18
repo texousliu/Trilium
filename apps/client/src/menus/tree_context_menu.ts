@@ -262,7 +262,13 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
 
             {
                 kind: "custom",
-                componentFn: () => ColorPickerMenuItem({note})
+                componentFn: () => {
+                    if (notOptionsOrHelp && selectedNotes.length === 1) {
+                        return ColorPickerMenuItem({note});
+                    } else {
+                        return null;
+                    }
+                }
             },
         ];
         return items.filter((row) => row !== null) as MenuItem<TreeCommandNames>[];
