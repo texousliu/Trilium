@@ -41,7 +41,7 @@ export default function PresentationView({ note, noteIds, media, onReady }: View
         }
     }, [ api, presentation ]);
 
-    if (!presentation || !stylesheets) return;
+    if (!presentation || !stylesheets || !note.hasChildren()) return;
     const content = (
         <>
             {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}

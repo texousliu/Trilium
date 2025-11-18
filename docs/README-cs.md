@@ -20,13 +20,13 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[Angličtina](./README.md) | [Čínština (Zjednodušená)](./docs/README-ZH_CN.md) |
+[Čínština (Tradiční)](./docs/README-ZH_TW.md) | [Ruština](./docs/README-ru.md) |
+[Japonština](./docs/README-ja.md) | [Italština](./docs/README-it.md) |
+[Španělština](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes je open-source, cross-platform aplikace pro hierarchiální psaní
+poznámek.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
@@ -40,26 +40,26 @@ quick overview:
   unstable development version, updated daily with the latest features and
   fixes.
 
-## 📚 Documentation
+## 📚 Dokumentace
 
-**Visit our comprehensive documentation at
+**Navštivte naši rozsáhlou dokumentaci na
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+Naše dokumenatce je dostupná ve vícero formátech:
+- **Online dokumentace**: Prohlédněte si kompletní dokumentaci na
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **Pomoc v aplikaci**: V Trilium stiskněte `F1`, pro přístup k stejné
+  dokumentaci přímo v aplikaci
+- **GitHub**: Projděte si [Uživatelskou
+  příručku](./docs/User%20Guide/User%20Guide/) v tomto repozitáři
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
+### Rychlé odkazy
+- [Návod pro začátečníky](https://docs.triliumnotes.org/)
+- [Pokyny pro
+  instalaci](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Nastavení
+  Dockeru](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Aktualizování
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Basic Concepts and
   Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)

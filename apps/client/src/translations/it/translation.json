@@ -39,7 +39,10 @@
     "help_on_tree_prefix": "Aiuto sui prefissi dell'Albero",
     "prefix": "Prefisso: ",
     "save": "Salva",
-    "branch_prefix_saved": "Il prefisso del ramo è stato salvato."
+    "branch_prefix_saved": "Il prefisso del ramo è stato salvato.",
+    "edit_branch_prefix_multiple": "Modifica prefisso ramo per {{count}} rami",
+    "branch_prefix_saved_multiple": "Il prefisso del ramo è stato salvato per {{count}} rami.",
+    "affected_branches": "Rami interessati ({{count}}):"
   },
   "bulk_actions": {
     "bulk_actions": "Azioni massive",
@@ -425,7 +428,8 @@
     "add-column": "Aggiungi colonna",
     "add-column-placeholder": "Inserisci il nome della colonna...",
     "edit-note-title": "Fare clic per modificare il titolo della nota",
-    "edit-column-title": "Fare clic per modificare il titolo della colonna"
+    "edit-column-title": "Fare clic per modificare il titolo della colonna",
+    "column-already-exists": "Questa colonna esiste già nella bacheca."
   },
   "backup": {
     "enable_weekly_backup": "Abilita le archiviazioni settimanali",
@@ -1259,7 +1263,8 @@
     "convert_into_attachment_failed": "Conversione della nota '{{title}}' fallita.",
     "convert_into_attachment_successful": "Nota '{{title}}' è stato convertito in allegato.",
     "convert_into_attachment_prompt": "Sei sicuro di voler convertire la nota '{{title}}' in un allegato della nota padre?",
-    "print_pdf": "Esporta come PDF..."
+    "print_pdf": "Esporta come PDF...",
+    "open_note_on_server": "Apri una nota sul server"
   },
   "onclick_button": {
     "no_click_handler": "Il widget pulsante '{{componentId}}' non ha un gestore di clic definito"
@@ -1499,7 +1504,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "Per visualizzare la nota protetta è necessario inserire la password:",
-    "start_session_button": "Avvia sessione protetta <kbd>invio</kbd>",
+    "start_session_button": "Avvia sessione protetta",
     "started": "La sessione protetta è stata avviata.",
     "wrong_password": "Password errata.",
     "protecting-finished-successfully": "Protezione completata con successo.",
@@ -1571,9 +1576,7 @@
     "default_description": "Per impostazione predefinita, Trilium limita la larghezza massima del contenuto per migliorare la leggibilità sugli schermi più grandi.",
     "max_width_label": "Larghezza massima del contenuto",
     "max_width_unit": "pixel",
-    "apply_changes_description": "Per applicare le modifiche alla larghezza del contenuto, fare clic su",
-    "reload_button": "ricarica frontend",
-    "reload_description": "modifiche dalle opzioni di aspetto"
+    "centerContent": "Mantieni il contenuto centrato"
   },
   "native_title_bar": {
     "title": "Barra del titolo nativa (richiede il riavvio dell'app)",
@@ -2083,5 +2086,14 @@
   },
   "collections": {
     "rendering_error": "Impossibile mostrare il contenuto a causa di un errore."
+  },
+  "read-only-info": {
+    "read-only-note": "Stai visualizzando una nota di sola lettura.",
+    "auto-read-only-note": "Questa nota viene visualizzata in modalità di sola lettura per un caricamento più rapido.",
+    "auto-read-only-learn-more": "Per saperne di più",
+    "edit-note": "Modifica nota"
+  },
+  "calendar_view": {
+    "delete_note": "Eliminazione nota..."
   }
 }

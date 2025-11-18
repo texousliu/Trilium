@@ -38,16 +38,32 @@
     "note": "Poznámka",
     "search_note": "hledat poznámku podle názvu",
     "link_title": "Název odkazu",
-    "button_add_link": "Přidat odkaz"
+    "button_add_link": "Přidat odkaz",
+    "link_title_mirrors": "titulek odkazu odráží momentální titulek poznámky",
+    "link_title_arbitrary": "titulek odkazu může být změněn libovolně"
   },
   "branch_prefix": {
     "prefix": "Prefix: ",
-    "save": "Uložit"
+    "save": "Uložit",
+    "edit_branch_prefix": "Upravit prefix větve",
+    "edit_branch_prefix_multiple": "Upravit prefix větve pro {{count}} větví",
+    "help_on_tree_prefix": "Nápověda k prefixu stromu",
+    "branch_prefix_saved": "Prefix větve byl uložen.",
+    "branch_prefix_saved_multiple": "Prefix větve byl uložen pro {{count}} větví.",
+    "affected_branches": "Ovlivněné větve ({{count}}):"
   },
   "bulk_actions": {
     "bulk_actions": "Hromadné akce",
     "affected_notes": "Ovlivněné poznámky",
-    "notes": "Poznámky"
+    "notes": "Poznámky",
+    "include_descendants": "Zahrnout potomky vybraných poznámek",
+    "available_actions": "Dostupné akce",
+    "chosen_actions": "Vybrané akce",
+    "execute_bulk_actions": "Vykonat hromadné akce",
+    "bulk_actions_executed": "Hromadné akce byly úspěšně provedeny.",
+    "labels": "Štítky",
+    "relations": "Relace",
+    "other": "Ostatní"
   },
   "confirm": {
     "cancel": "Zrušit",
@@ -60,5 +76,11 @@
   },
   "export": {
     "close": "Zavřít"
+  },
+  "clone_to": {
+    "clone_notes_to": "Kopírovat poznámky do...",
+    "help_on_links": "Nápověda k odkazům",
+    "notes_to_clone": "Poznámky na kopírování",
+    "search_for_note_by_its_name": "hledat poznámku dle jejího názvu"
   }
 }

@@ -23,22 +23,27 @@ interface NoteListProps {
     isEnabled: boolean;
     ntxId: string | null | undefined;
     media: ViewModeMedia;
+    viewType: ViewTypeOptions | undefined;
     onReady?: () => void;
 }
 
-export default function NoteList<T extends object>(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
+export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
     const { note, noteContext, notePath, ntxId } = useNoteContext();
-    const isEnabled = noteContext?.hasNoteList();
-    return <CustomNoteList note={note} isEnabled={!!isEnabled} notePath={notePath} ntxId={ntxId} {...props} />
-}
-
-export function SearchNoteList<T extends object>(props: Omit<NoteListProps, "isEnabled">) {
-    return <CustomNoteList {...props} isEnabled={true} />
-}
-
-export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
-    const widgetRef = useRef<HTMLDivElement>(null);
     const viewType = useNoteViewType(note);
+    const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
+    useEffect(() => {
+        setEnabled(noteContext?.hasNoteList());
+    }, [ noteContext, viewType ])
+    return <CustomNoteList viewType={viewType} note={note} isEnabled={!!enabled} notePath={notePath} ntxId={ntxId} {...props} />
+}
+
+export function SearchNoteList(props: Omit<NoteListProps, "isEnabled" | "viewType">) {
+    const viewType = useNoteViewType(props.note);
+    return <CustomNoteList {...props} isEnabled={true} viewType={viewType} />
+}
+
+export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
+    const widgetRef = useRef<HTMLDivElement>(null);
     const noteIds = useNoteIds(shouldEnable ? note : null, viewType, ntxId);
     const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
@@ -77,8 +82,8 @@ export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable
         props = {
             note, noteIds, notePath,
             highlightedTokens,
-            viewConfig: viewModeConfig[0],
-            saveConfig: viewModeConfig[1],
+            viewConfig: viewModeConfig.config,
+            saveConfig: viewModeConfig.storeFn,
             onReady: onReady ?? (() => {}),
             ...restProps
         }
@@ -114,7 +119,7 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
     }
 }
 
-function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
+export function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
     const [ viewType ] = useNoteLabel(note, "viewType");
 
     if (!note) {
@@ -141,7 +146,7 @@ export function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOpt
 
     async function getNoteIds(note: FNote) {
         if (viewType === "list" || viewType === "grid" || viewType === "table" || note.type === "search") {
-            return note.getChildNoteIds();
+            return await note.getChildNoteIdsWithArchiveFiltering(includeArchived);
         } else {
             return await note.getSubtreeNoteIds(includeArchived);
         }
@@ -192,7 +197,11 @@ export function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOpt
 }
 
 export function useViewModeConfig<T extends object>(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined) {
-    const [ viewConfig, setViewConfig ] = useState<[T | undefined, (data: T) => void]>();
+    const [ viewConfig, setViewConfig ] = useState<{
+        config: T | undefined;
+        storeFn: (data: T) => void;
+        note: FNote;
+    }>();
 
     useEffect(() => {
         if (!note || !viewType) return;
@@ -200,12 +209,14 @@ export function useViewModeConfig<T extends object>(note: FNote | null | undefin
         const viewStorage = new ViewModeStorage<T>(note, viewType);
         viewStorage.restore().then(config => {
             const storeFn = (config: T) => {
-                setViewConfig([ config, storeFn ]);
+                setViewConfig({ note, config, storeFn });
                 viewStorage.store(config);
             };
-            setViewConfig([ config, storeFn ]);
+            setViewConfig({ note, config, storeFn });
         });
     }, [ note, viewType ]);
 
+    // Only expose config for the current note, avoid leaking notes when switching between them.
+    if (viewConfig?.note !== note) return undefined;
     return viewConfig;
 }

@@ -1,6 +1,82 @@
 {
     "hero_section": {
         "github": "깃허브",
-        "dockerhub": "도커 허브"
+        "dockerhub": "도커 허브",
+        "get_started": "시작하기",
+        "title": "생각을 정리하고, 개인 지식 기반을 구축하세요.",
+        "subtitle": "Trilium은 개인 지식 베이스를 정리하고 노트를 작성하는 오픈소스 솔루션입니다. 데스크톱에서 로컬로 사용하거나, 자체 호스팅 서버와 동기화하여 어디에서나 노트를 보관할 수 있습니다.",
+        "screenshot_alt": "Trilium Notes 데스크톱 애플리케이션의 스크린샷"
+    },
+    "get-started": {
+        "title": "시작하기",
+        "desktop_title": "데스크탑 애플리케이션 내려받기 (v{{version}})",
+        "older_releases": "오래된 릴리즈 보기",
+        "architecture": "아키텍쳐:",
+        "server_title": "여러 기기에서 액세스할 수 있는 서버 설정"
+    },
+    "download_now": {
+        "text": "지금 내려받기 ",
+        "platform_big": "{{platform}}용 v{{version}}",
+        "platform_small": "{{platform}}용",
+        "linux_big": "리눅스용 v{{version}}",
+        "linux_small": "리눅스용",
+        "more_platforms": "더 많은 플랫폼 및 서버 구성"
+    },
+    "organization_benefits": {
+        "title": "구성",
+        "note_structure_description": "노트는 계층적으로 정리될 수 있습니다. 각 노트는 하위 노트를 포함할 수 있으므로 폴더가 필요 없습니다. 하나의 노트가 계층 구조의 여러 위치에 추가될 수 있습니다.",
+        "attributes_title": "노트 라벨과 관계",
+        "attributes_description": "쉬운 분류를 위해 노트 사이의 관계를 이용하거나 라벨을 추가할 수 있습니다. 테이블이나 보드에서 사용될 수 있는 구조화된 정보를 입력하려면 승격된 속성을 사용하세요.",
+        "hoisting_title": "작업 공간과 끌어올리기",
+        "hoisting_description": "작업 공간에 개인 노트와 업무 노트를 그룹화하여 쉽게 분리할 수 있으며 메모 트리가 특정 메모 세트만 표시하도록 할 수 있습니다."
+    },
+    "productivity_benefits": {
+        "title": "생산성과 안전성",
+        "revisions_title": "노트 수정",
+        "revisions_content": "노트는 주기적으로 백그라운드에서 저장되고 수정 내용들은 검토하거나 실수로 변경한 내용을 취소하는 데 사용할 수 있습니다.수정 내역들은 필요에 따라 수동으로 생성될 수도 있습니다.",
+        "sync_title": "동기화",
+        "sync_content": "자체 호스팅 또는 클라우드 인스턴스를 이용하여 여러 기기 사이에서 노트를 쉽게 동기화하고 PWA를 통해 모바일 폰에서 접근할 수 있습니다.",
+        "protected_notes_title": "보호된 노트",
+        "protected_notes_content": "노트를 암호화하고 비밀번호로 보호되는 세션 뒤에 잠궈 민감한 개인 정보를 보호하세요."
+    },
+    "header": {
+        "get-started": "시작하기",
+        "documentation": "문서"
+    },
+    "support_us": {
+        "financial_donations_title": "금전적 기부",
+        "financial_donations_description": "Trilium은 <Link>수백시간의 작업</Link>을 통해 구축되고 유지관리됩니다. 여러분의 지원은 Trilium을 오픈소스로 유지하고, 기능을 개선하고, 호스팅 등의 비용을 충당합니다.",
+        "financial_donations_cta": "애플리케이션의 주요 개발자 (<Link>eliandoran</Link>)을 다음 방법으로 후원하는 것을 고려해 주십시오.",
+        "github_sponsors": "GitHub Sponsors",
+        "paypal": "페이팔",
+        "buy_me_a_coffee": "Buy Me A Coffee"
+    },
+    "contribute": {
+        "title": "기여할 수 있는 다른 방법",
+        "way_translate": "<Link>Weblate</Link>를 통해 이 애플리케이션을 당신의 모국어로 번역하세요.",
+        "way_community": "<Discussions>GitHub Discussions</Discussions>나 <Matrix>Matrix</Matrix>에서 커뮤니티와 소통하세요.",
+        "way_reports": "<Link>GitHub issues</Link>를 통해 버그를 제보하세요.",
+        "way_document": "문서의 부족한 부분을 알려주거나 가이드, FAQ, 튜토리얼에 기여하여 문서를 개선하세요.",
+        "way_market": "소문을 내주세요: Trilium Notes를 친구들과, 혹은 블로그나 SNS에서 공유하세요."
+    },
+    "404": {
+        "title": "404: 페이지를 찾을 수 없음",
+        "description": "요청하신 페이지를 찾을 수 없습니다. 해당 페이지가 삭제되었거나 URL이 잘못되었을 수 있습니다."
+    },
+    "download_helper_desktop_windows": {
+        "title_x64": "Windows 64비트",
+        "title_arm64": "Windows on ARM (WoA)",
+        "description_x64": "Windows 10 및 11을 구동하는 Intel 또는 AMD 장치와 호환됩니다.",
+        "description_arm64": "ARM 장치와 호환됩니다. (예: Qualcomm Snapdragon).",
+        "quick_start": "Winget을 통해 설치:",
+        "download_exe": "설치 프로그램 내려받기 (.exe)",
+        "download_zip": "포터블 (.zip)",
+        "download_scoop": "Scoop (패키지 관리자)"
+    },
+    "download_helper_desktop_linux": {
+        "title_x64": "리눅스 64비트",
+        "title_arm64": "ARM 기반 리눅스",
+        "description_x64": "대부분의 리눅스 배포판에서 x86_64 아키텍처와 호환됩니다.",
+        "description_arm64": "ARM 기반 리눅스 배포판에서 aarch64 아키텍처와 호환됩니다."
     }
 }

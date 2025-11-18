@@ -1,6 +1,6 @@
 import FNote from "./entities/fnote";
 import { render } from "preact";
-import { CustomNoteList } from "./widgets/collections/NoteList";
+import { CustomNoteList, useNoteViewType } from "./widgets/collections/NoteList";
 import { useCallback, useLayoutEffect, useRef } from "preact/hooks";
 import content_renderer from "./services/content_renderer";
 
@@ -70,6 +70,9 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
                     });
                 })
             );
+
+            // Check custom CSS.
+            await loadCustomCss(note);
         }
 
         load().then(() => requestAnimationFrame(onReady))
@@ -82,14 +85,19 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
 }
 
 function CollectionRenderer({ note, onReady }: RendererProps) {
+    const viewType = useNoteViewType(note);
     return <CustomNoteList
+        viewType={viewType}
         isEnabled
         note={note}
         notePath={note.getBestNotePath().join("/")}
         ntxId="print"
         highlightedTokens={null}
         media="print"
-        onReady={onReady}
+        onReady={async () => {
+            await loadCustomCss(note);
+            onReady();
+        }}
     />;
 }
 
@@ -100,6 +108,27 @@ function Error404({ noteId }: { noteId: string }) {
             <small>{noteId}</small>
         </main>
     )
+}
+
+async function loadCustomCss(note: FNote) {
+    const printCssNotes = await note.getRelationTargets("printCss");
+    let loadPromises: JQueryPromise<void>[] = [];
+
+    for (const printCssNote of printCssNotes) {
+        if (!printCssNote || (printCssNote.type !== "code" && printCssNote.mime !== "text/css")) continue;
+
+        const linkEl = document.createElement("link");
+        linkEl.href = `/api/notes/${printCssNote.noteId}/download`;
+        linkEl.rel = "stylesheet";
+
+        const promise = $.Deferred();
+        loadPromises.push(promise.promise());
+        linkEl.onload = () => promise.resolve();
+
+        document.head.appendChild(linkEl);
+    }
+
+    await Promise.allSettled(loadPromises);
 }
 
 main();
