@@ -14,12 +14,15 @@ export default class Debouncer<T> {
 
     updateValue(value: T) {
         this.lastValue = value;
-        this.destroy();
+        if (this.timeoutId !== null) {
+            clearTimeout(this.timeoutId);
+        }
         this.timeoutId = setTimeout(this.reportUpdate.bind(this), this.debounceInterval);
     }
 
     destroy() {
         if (this.timeoutId !== null) {
+            this.reportUpdate();
             clearTimeout(this.timeoutId);
         }
     }
