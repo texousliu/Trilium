@@ -1070,6 +1070,13 @@
                                             "mime": "text/html",
                                             "attributes": [
                                                 {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "LLzSMXACKhUs",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
                                                     "type": "label",
                                                     "name": "shareAlias",
                                                     "value": "traefik",
