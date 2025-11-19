@@ -393,17 +393,16 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: s
  * @param linkEl the <a> element to process.
  */
 function cleanUpReferenceLinks(linkEl: HTMLElement) {
+    // Note: this method is basically a reimplementation of getReferenceLinkTitleSync from the link service of the client.
     const noteId = linkEl.getAttribute("href")?.split("/").at(-1);
     const note = noteId ? shaca.getNote(noteId) : undefined;
-    let text = "";
     if (!note) {
-        text = "[missing note]";
+        linkEl.innerHTML = "[missing note]";
     } else if (note.isProtected) {
-        text = "[protected]";
+        linkEl.innerHTML = "[protected]";
     } else {
-        text = note.title;
+        linkEl.innerHTML = `<span><span class="${note.getIcon()}"></span>${note.title}</span>`;
     }
-    linkEl.innerHTML = text;
 }
 
 /**
