@@ -81,6 +81,35 @@ describe("content_renderer", () => {
                 <p>After</p>
             `);
         });
+
+        it("handles syntax highlight for code blocks with escaped syntax", () => {
+            const note = buildShareNote({
+                id: "note",
+                content: trimIndentation`\
+                    <h2>
+                        Defining the options
+                    </h2>
+                    <pre>
+                    <code class="language-text-x-trilium-auto">&lt;t t-name="module.SectionWidthOption"&gt;
+                    &lt;BuilderRow label.translate="Section Width"&gt;
+                    &lt;/BuilderRow&gt;
+                    &lt;/t&gt;</code>
+                    </pre>
+                `
+            });
+            const result = getContent(note);
+            expect(result.content).toStrictEqual(trimIndentation`\
+                <h2>
+                    Defining the options
+                </h2>
+                <pre>
+                <code class="language-text-x-trilium-auto hljs"><span class="hljs-tag">&lt;<span class="hljs-name">t</span> <span class="hljs-attr">t-name</span>=<span class="hljs-string">&quot;module.SectionWidthOption&quot;</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">BuilderRow</span> <span class="hljs-attr">label.translate</span>=<span class="hljs-string">&quot;Section Width&quot;</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">BuilderRow</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">t</span>&gt;</span></code>
+                </pre>
+            `)
+        });
     });
 
     describe("renderCode", () => {

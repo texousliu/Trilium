@@ -330,7 +330,7 @@ function renderText(result: Result, note: SNote | BNote) {
                 continue;
             }
 
-            const highlightResult = highlightAuto(codeEl.innerText);
+            const highlightResult = highlightAuto(codeEl.text);
             codeEl.innerHTML = highlightResult.value;
             codeEl.classList.add("hljs");
         }
