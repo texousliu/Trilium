@@ -321,6 +321,10 @@ function renderText(result: Result, note: SNote | BNote) {
             if (href?.startsWith("#")) {
                 handleAttachmentLink(linkEl, href, getNote, getAttachment);
             }
+
+            if (linkEl.classList.contains("reference-link")) {
+                cleanUpReferenceLinks(linkEl);
+            }
         }
 
         // Apply syntax highlight.
@@ -381,6 +385,25 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: s
             linkEl.removeAttribute("href");
         }
     }
+}
+
+/**
+ * Processes reference links to ensure that they are up to date. More specifically, reference links contain in their HTML source code the note title at the time of the linking. It can be changed in the mean-time or the note can become protected, which leaks information.
+ *
+ * @param linkEl the <a> element to process.
+ */
+function cleanUpReferenceLinks(linkEl: HTMLElement) {
+    const noteId = linkEl.getAttribute("href")?.split("/").at(-1);
+    const note = noteId ? shaca.getNote(noteId) : undefined;
+    let text = "";
+    if (!note) {
+        text = "[missing note]";
+    } else if (note.isProtected) {
+        text = "[protected]";
+    } else {
+        text = note.title;
+    }
+    linkEl.innerHTML = text;
 }
 
 /**
