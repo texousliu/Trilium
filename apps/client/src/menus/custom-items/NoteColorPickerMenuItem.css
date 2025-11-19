@@ -4,18 +4,22 @@
     justify-content: space-between;
 }
 
-.color-picker-menu-item  .color-cell {
+.color-picker-menu-item .color-cell {
     width: 14px;
     height: 14px;
     border-radius: 4px;
-    background: var(--color);
+    background-color: var(--color);
 }
 
-.color-picker-menu-item  .color-cell.disabled-color-cell {
+.color-picker-menu-item .color-cell:not(.selected):hover {
+    transform: scale(1.2);
+}
+
+.color-picker-menu-item .color-cell.disabled-color-cell {
     cursor: not-allowed;
 }
 
-.color-picker-menu-item  .color-cell.selected {
+.color-picker-menu-item .color-cell.selected {
     outline: 2px solid var(--color);
     outline-offset: 2px;
 }
@@ -28,7 +32,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    font-size: 14px;
+    font-size: 18px;
     justify-content: center;
     align-items: center;
     font-family: boxicons;
@@ -50,8 +54,15 @@
     position: relative;
     display: flex;
     justify-content: center;
-    background: var(--color);
+
 }
+
+.custom-color-cell.custom-color-cell-empty {
+    background-image: url(./custom-culor.png);
+    background-size: cover;
+    --foreground: transparent;
+}
+
 
 .custom-color-cell::before {
     content: "\ed35";

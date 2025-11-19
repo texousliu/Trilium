@@ -1,5 +1,5 @@
 import "./NoteColorPickerMenuItem.css";
-import { useEffect, useRef, useState} from "preact/hooks";
+import { useCallback, useEffect, useRef, useState} from "preact/hooks";
 import {ComponentChildren} from "preact";
 import attributes from "../../services/attributes";
 import Color, { ColorInstance } from "color";
@@ -22,12 +22,13 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
 
     const [note, setNote] = useState<FNote | null>(null);
     const [currentColor, setCurrentColor] = useState<string | null>(null);
+    const [isCustomColor, setIsCustomColor] = useState<boolean>(false);
 
     useEffect(() => {
         const retrieveNote = async (noteId: string) => {
-            const result = await froca.getNote(noteId, true);
-            if (result) {
-                setNote(result);
+            const noteInstance = await froca.getNote(noteId, true);
+            if (noteInstance) {
+                setNote(noteInstance);
             }
         }
 
@@ -39,10 +40,27 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
     }, []);
 
     useEffect(() => {
-        setCurrentColor(note?.getLabel("color")?.value ?? null);
+        const colorLabel = note?.getLabel("color")?.value ?? null;
+        if (colorLabel) {
+            let color: ColorInstance | null = null;
+
+            try {
+                color = new Color(colorLabel);
+            } catch(ex) {
+                console.error(ex);
+            }
+
+            if (color) {
+                setCurrentColor(color.hex().toLowerCase());
+            }
+        }
     }, [note]);
 
-    const onColorCellClicked = (color: string | null) => {
+    useEffect(() => {
+        setIsCustomColor(COLORS.indexOf(currentColor) === -1);
+    }, [currentColor])
+
+    const onColorCellClicked = useCallback((color: string | null) => {
         if (note) {
             if (color !== null) {
                 attributes.setLabel(note.noteId, "color", color);
@@ -52,7 +70,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
             
             setCurrentColor(color);
         }
-    }
+    }, [note, currentColor]);
 
     return <div className="color-picker-menu-item"
                 onClick={(e) => {e.stopPropagation()}}>
@@ -65,7 +83,9 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
                        onSelect={() => onColorCellClicked(color)} />
         ))}
 
-        <CustomColorCell color={currentColor} isSelected={false} onSelect={onColorCellClicked}  />
+        <CustomColorCell color={currentColor}
+                         isSelected={isCustomColor}
+                         onSelect={onColorCellClicked} />
     </div>
 }
 
@@ -87,28 +107,50 @@ function ColorCell(props: ColorCellProps) {
 }
 
 function CustomColorCell(props: ColorCellProps) {
+    const [pickedColor, setPickedColor] = useState<string | null>(null);
     const colorInput = useRef<HTMLInputElement>(null);
-    let colorInputDebouncer: Debouncer<string | null>;
+    const colorInputDebouncer = useRef<Debouncer<string | null> | null>(null);
+    const callbackRef = useRef(props.onSelect);
 
     useEffect(() => {
-        colorInputDebouncer = new Debouncer(500, (color) => {
-            props.onSelect?.(color);
+        colorInputDebouncer.current = new Debouncer(500, (color) => {
+            callbackRef.current?.(color);
+            setPickedColor(color);
         });
 
         return () => {
-            colorInputDebouncer.destroy();
+            colorInputDebouncer.current?.destroy();
         }
-    });
+    }, []);
+
+    useEffect(() => {
+        if (props.isSelected && pickedColor === null) {
+            setPickedColor(props.color);
+        }
+    }, [props.isSelected])
+
+    useEffect(() => {
+        callbackRef.current = props.onSelect;
+    }, [props.onSelect]);
+
+    const onSelect = useCallback(() => {
+        if (pickedColor !== null) {
+            callbackRef.current?.(pickedColor);
+        }
+
+        colorInput.current?.click();
+    }, [pickedColor]);
 
     return <div style={`--foreground: ${ensureContrast(props.color)};`}>
-        <ColorCell {...props} 
-                   className="custom-color-cell"
-                   onSelect={() => {colorInput.current?.click()}}>
+        <ColorCell {...props}
+                   color={pickedColor} 
+                   className={`custom-color-cell ${(pickedColor === null) ? "custom-color-cell-empty" : ""}`}
+                   onSelect={onSelect}>
 
             <input ref={colorInput}
                    type="color"
-                   value={props.color ?? ""}
-                   onChange={() => {colorInputDebouncer.updateValue(colorInput.current?.value ?? null)}}
+                   value={pickedColor ?? props.color ?? "#40bfbf"}
+                   onChange={() => {colorInputDebouncer.current?.updateValue(colorInput.current?.value ?? null)}}
                    style="width: 0; height: 0; opacity: 0" />
         </ColorCell>
     </div>
