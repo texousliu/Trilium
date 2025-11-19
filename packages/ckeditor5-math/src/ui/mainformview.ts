@@ -1,23 +1,18 @@
-import { ButtonView, createLabeledTextarea, FocusCycler, LabelView, LabeledFieldView, submitHandler, SwitchButtonView, View, ViewCollection, type TextareaView, type FocusableView, Locale, FocusTracker, KeystrokeHandler } from 'ckeditor5';
-import IconCheck from "@ckeditor/ckeditor5-icons/theme/icons/check.svg?raw";
-import IconCancel from "@ckeditor/ckeditor5-icons/theme/icons/cancel.svg?raw";
+import { ButtonView, FocusCycler, LabelView, submitHandler, SwitchButtonView, View, ViewCollection, type FocusableView, Locale, FocusTracker, KeystrokeHandler } from 'ckeditor5';
+import IconCheck from '../../theme/icons/check.svg?raw';
+import IconCancel from '../../theme/icons/cancel.svg?raw';
 import { extractDelimiters, hasDelimiters } from '../utils.js';
 import MathView from './mathview.js';
+import MathLiveInputView from './mathliveinputview.js';
+import RawLatexInputView from './rawlatexinputview.js';
 import '../../theme/mathform.css';
 import type { KatexOptions } from '../typings-external.js';
 
-class MathInputView extends LabeledFieldView<TextareaView> {
-	public value: null | string = null;
-	public isReadOnly = false;
-
-	constructor( locale: Locale ) {
-		super( locale, createLabeledTextarea );
-	}
-}
-
 export default class MainFormView extends View {
 	public saveButtonView: ButtonView;
-	public mathInputView: MathInputView;
+	public mathInputView: MathLiveInputView;
+	public rawLatexInputView: RawLatexInputView;
+	public rawLatexLabel: LabelView;
 	public displayButtonView: SwitchButtonView;
 	public cancelButtonView: ButtonView;
 	public previewEnabled: boolean;
@@ -54,6 +49,13 @@ export default class MainFormView extends View {
 		// Equation input
 		this.mathInputView = this._createMathInput();
 
+		// Raw LaTeX input
+		this.rawLatexInputView = this._createRawLatexInput();
+
+		// Raw LaTeX label
+		this.rawLatexLabel = new LabelView( locale );
+		this.rawLatexLabel.text = t( 'LaTeX' );
+
 		// Display button
 		this.displayButtonView = this._createDisplayButton();
 
@@ -74,6 +76,8 @@ export default class MainFormView extends View {
 
 			children = [
 				this.mathInputView,
+				this.rawLatexLabel,
+				this.rawLatexInputView,
 				this.displayButtonView,
 				this.previewLabel,
 				this.mathView
@@ -81,6 +85,8 @@ export default class MainFormView extends View {
 		} else {
 			children = [
 				this.mathInputView,
+				this.rawLatexLabel,
+				this.rawLatexInputView,
 				this.displayButtonView
 			];
 		}
@@ -101,14 +107,28 @@ export default class MainFormView extends View {
 				{
 					tag: 'div',
 					attributes: {
-						class: [
-							'ck-math-view'
-						]
+						class: [ 'ck-math-scroll' ]
 					},
-					children
+					children: [
+						{
+							tag: 'div',
+							attributes: {
+								class: [ 'ck-math-view' ]
+							},
+							children
+						}
+					]
 				},
-				this.saveButtonView,
-				this.cancelButtonView
+				{
+					tag: 'div',
+					attributes: {
+						class: [ 'ck-math-button-row' ]
+					},
+					children: [
+						this.saveButtonView,
+						this.cancelButtonView
+					]
+				}
 			]
 		} );
 	}
@@ -124,6 +144,7 @@ export default class MainFormView extends View {
 		// Register form elements to focusable elements
 		const childViews = [
 			this.mathInputView,
+			this.rawLatexInputView,
 			this.displayButtonView,
 			this.saveButtonView,
 			this.cancelButtonView
@@ -147,13 +168,12 @@ export default class MainFormView extends View {
 	}
 
 	public get equation(): string {
-		return this.mathInputView.fieldView.element?.value ?? '';
+		return this.mathInputView.value ?? '';
 	}
 
 	public set equation( equation: string ) {
-		if ( this.mathInputView.fieldView.element ) {
-			this.mathInputView.fieldView.element.value = equation;
-		}
+		this.mathInputView.value = equation;
+		this.rawLatexInputView.value = equation;
 		if ( this.previewEnabled && this.mathView ) {
 			this.mathView.value = equation;
 		}
@@ -172,44 +192,77 @@ export default class MainFormView extends View {
 		}
 	} );
 
+	/**
+	 * Creates the MathLive visual equation editor.
+	 *
+	 * Handles bidirectional synchronization with the raw LaTeX input and preview.
+	 */
 	private _createMathInput() {
-		const t = this.locale.t;
-
-		// Create equation input
-		const mathInput = new MathInputView( this.locale );
-		const fieldView = mathInput.fieldView;
-		mathInput.infoText = t( 'Insert equation in TeX format.' );
+		const mathInput = new MathLiveInputView( this.locale );
 
 		const onInput = () => {
-			if ( fieldView.element != null ) {
-				let equationInput = fieldView.element.value.trim();
+			const rawValue = mathInput.value ?? '';
+			let equationInput = rawValue.trim();
 
-				// If input has delimiters
-				if ( hasDelimiters( equationInput ) ) {
-					// Get equation without delimiters
-					const params = extractDelimiters( equationInput );
+			// If input has delimiters
+			if ( hasDelimiters( equationInput ) ) {
+				// Get equation without delimiters
+				const params = extractDelimiters( equationInput );
 
-					// Remove delimiters from input field
-					fieldView.element.value = params.equation;
+				// Remove delimiters from input field
+				mathInput.value = params.equation;
 
-					equationInput = params.equation;
+				equationInput = params.equation;
 
-					// update display button and preview
-					this.displayButtonView.isOn = params.display;
-				}
-				if ( this.previewEnabled && this.mathView ) {
-					// Update preview view
-					this.mathView.value = equationInput;
-				}
-
-				this.saveButtonView.isEnabled = !!equationInput;
+				// update display button and preview
+				this.displayButtonView.isOn = params.display;
 			}
+
+			// Sync to raw LaTeX input
+			this.rawLatexInputView.value = equationInput;
+
+			if ( this.previewEnabled && this.mathView ) {
+				// Update preview view
+				this.mathView.value = equationInput;
+			}
+
+			this.saveButtonView.isEnabled = !!equationInput;
 		};
 
-		fieldView.on( 'render', onInput );
-		fieldView.on( 'input', onInput );
+		mathInput.on( 'change:value', onInput );
 
 		return mathInput;
+	}
+
+	/**
+	 * Creates the raw LaTeX code textarea editor.
+	 *
+	 * Provides direct LaTeX editing and synchronizes changes with the MathLive visual editor.
+	 */
+	private _createRawLatexInput() {
+		const t = this.locale.t;
+		const rawLatexInput = new RawLatexInputView( this.locale );
+		rawLatexInput.label = t( 'LaTeX' );
+
+		// Sync raw LaTeX changes to MathLive visual editor
+		rawLatexInput.on( 'change:value', () => {
+			const rawValue = rawLatexInput.value ?? '';
+			const equationInput = rawValue.trim();
+
+			// Update MathLive field
+			if ( this.mathInputView.value !== equationInput ) {
+				this.mathInputView.value = equationInput;
+			}
+
+			// Update preview if enabled
+			if ( this.previewEnabled && this.mathView ) {
+				this.mathView.value = equationInput;
+			}
+
+			this.saveButtonView.isEnabled = !!equationInput;
+		} );
+
+		return rawLatexInput;
 	}
 
 	private _createButton(

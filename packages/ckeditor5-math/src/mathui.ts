@@ -4,6 +4,7 @@ import mathIcon from '../theme/icons/math.svg?raw';
 import { Plugin, ClickObserver, ButtonView, ContextualBalloon, clickOutsideHandler, CKEditorError, uid } from 'ckeditor5';
 import { getBalloonPositionData } from './utils.js';
 import MathCommand from './mathcommand.js';
+import 'mathlive';
 
 const mathKeystroke = 'Ctrl+M';
 
@@ -56,7 +57,7 @@ export default class MathUI extends Plugin {
 		this._balloon.showStack( 'main' );
 
 		requestAnimationFrame(() => {
-			this.formView?.mathInputView.fieldView.element?.focus();
+			this.formView?.mathInputView.focus();
 		});
 	}
 
@@ -89,7 +90,7 @@ export default class MathUI extends Plugin {
 			mathConfig.katexRenderOptions!
 		);
 
-		formView.mathInputView.bind( 'value' ).to( mathCommand, 'value' );
+		formView.mathInputView.bind( 'value' ).to( mathCommand, value => value ?? '' );
 		formView.displayButtonView.bind( 'isOn' ).to( mathCommand, 'display' );
 
 		// Form elements should be read-only when corresponding commands are disabled.
@@ -122,18 +123,6 @@ export default class MathUI extends Plugin {
 			}
 		});
 
-		// Allow the textarea to be resizable
-		formView.mathInputView.fieldView.once('render', () => {
-			const textarea = formView.mathInputView.fieldView.element;
-			if (!textarea) return;
-			Object.assign(textarea.style, {
-				resize: 'both',
-				height: '100px',
-				width: '400px',
-				minWidth: '100%',
-			});
-		});
-
 		return formView;
 	}
 
@@ -162,7 +151,7 @@ export default class MathUI extends Plugin {
 		} );
 
 		if ( this._balloon.visibleView === this.formView ) {
-			this.formView.mathInputView.fieldView.element?.select();
+			this.formView.mathInputView.focus();
 		}
 
 		// Show preview element

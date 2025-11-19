@@ -1,35 +1,227 @@
+/**
+ * Math equation editor dialog styles
+ *
+ * This stylesheet provides the layout and styling for the math equation editor,
+ * which includes a MathLive visual editor, a raw LaTeX textarea, and control buttons.
+ * The dialog is resizable and uses a flexible layout to accommodate different content sizes.
+ */
+
+/* ============================================================================
+   Form Layout
+   ========================================================================= */
+
 .ck.ck-math-form {
 	display: flex;
-	align-items: flex-start;
-	flex-direction: row;
-	flex-wrap: nowrap;
+	flex-direction: column;
 	padding: var(--ck-spacing-standard);
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
 
 	@media screen and (max-width: 600px) {
 		flex-wrap: wrap;
-
-		& .ck-math-view {
-			flex-basis: 100%;
-
-			& .ck-labeled-view {
-				flex-basis: 100%;
-			}
-
-			& .ck-label {
-				flex-basis: 100%;
-			}
-		}
-
-		& .ck-button {
-			flex-basis: 50%;
-		}
 	}
 }
 
-.ck-math-tex.ck-placeholder::before {
+
+/* ============================================================================
+   Button Row
+   ========================================================================= */
+
+/* Button row */
+.ck-math-button-row {
+	display: flex;
+	gap: var(--ck-spacing-standard);
+	flex-shrink: 0;
+	margin-top: var(--ck-spacing-standard);
+	width: fit-content;
+}
+
+/* Scrollable content area */
+.ck-math-scroll {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+	min-width: 0;
+	overflow: hidden;
+}
+
+/* ============================================================================
+   Math Panel Layout
+   ========================================================================= */
+
+/* Math panel layout */
+.ck-math-view {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ck-spacing-standard);
+	flex: 1 1 auto;
+	min-height: fit-content;
+}
+
+/* ============================================================================
+   MathLive Integration
+   ========================================================================= */
+
+/* MathLive input container */
+.ck.ck-mathlive-input {
+	display: inline-block;
+	flex: 0 0 auto;
+	width: auto;
+	min-width: 100%;
+	min-height: 140px;
+	max-height: 70vh;
+	resize: both;
+	overflow: auto;
+	padding-bottom: var(--ck-spacing-small);
+	box-sizing: border-box;
+}
+
+/* MathLive field styling */
+.ck.ck-mathlive-input math-field {
+	display: block !important;
+	width: 100%;
+	height: 100%;
+	min-height: 140px;
+	box-sizing: border-box;
+	resize: none !important;
+	overflow: hidden !important;
+}
+
+/* Style MathLive shadow DOM parts so the whole area is interactive */
+.ck.ck-math-form math-field::part(container),
+.ck.ck-math-form math-field::part(content),
+.ck.ck-math-form math-field::part(field) {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 100%;
+	height: 100%;
+	align-items: flex-start;
+	justify-content: flex-start;
+}
+
+
+/* Position MathLive virtual keyboard toggle button */
+.ck.ck-math-form math-field::part(virtual-keyboard-toggle) {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+}
+
+/* Position MathLive menu toggle button and ensure it's always visible */
+.ck.ck-math-form math-field::part(menu-toggle) {
+	position: absolute;
+	right: 8px;
+	top: 48px;
+	/* Force visibility even when field is empty */
+	display: flex !important;
+	visibility: visible !important;
+}
+
+
+/* ============================================================================
+	Raw LaTeX Integration
+	========================================================================= */
+
+/* Mirror MathLive container behavior for the labeled textarea wrapper */
+
+
+.ck-math-view .ck-labeled-field-view {
+	display: flex;
+	flex-direction: column;
+	flex: 0 0 auto;
+	width: 100%;
+	min-width: 100%;
+	min-height: 140px;
+	max-height: 70vh;
+	resize: vertical;
+	overflow: auto;
+	padding-bottom: 0;
+	box-sizing: border-box;
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	outline: none;
+}
+
+/* Let the internal wrapper stretch so the textarea can fill the space */
+.ck-math-view .ck-labeled-field-view .ck-labeled-field-view__input-wrapper {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	width: 100%;
+	height: auto;
+	min-height: 100px;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+/* Ensure the raw textarea fills its wrapper like MathLive's math-field */
+.ck-math-view .ck-labeled-field-view textarea {
+	display: block;
+	width: 100% !important;
+	flex: 1 1 auto;
+	height: 100%;
+	min-height: 140px;
+	box-sizing: border-box;
+	resize: none !important;
+	overflow: hidden !important;
+}
+
+
+/* ============================================================================
+   Shared Input Styling (MathLive & Raw LaTeX)
+   ========================================================================= */
+
+/* Base styling for both MathLive field and raw LaTeX textarea */
+.ck.ck-math-form math-field,
+.ck.ck-math-form textarea {
+	padding: var(--ck-spacing-small);
+	border: none !important;
+	border-radius: var(--ck-border-radius, 6px);
+	font-size: var(--ck-font-size-base);
+	box-sizing: border-box;
+	background: var(--input-background-color);
+	color: var(--input-text-color);
+	outline: 3px solid transparent;
+	outline-offset: 6px;
+}
+
+/* Hover state */
+.ck.ck-math-form math-field:hover,
+.ck.ck-math-form textarea:hover {
+	background: var(--input-hover-background);
+	color: var(--input-hover-color);
+}
+
+/* Make the raw LaTeX textarea flat (no rounded corners or hover animation) */
+.ck-math-view .ck-labeled-field-view textarea {
+	border-radius: 0 !important;
+	outline: none !important;
+	box-shadow: none !important;
+	transition: none !important;
+}
+
+.ck-math-view .ck-labeled-field-view textarea:hover,
+.ck-math-view .ck-labeled-field-view textarea:focus {
+	background: var(--input-background-color);
+	color: var(--input-text-color);
+	outline: none !important;
+	box-shadow: none !important;
+	transition: none !important;
+}
+
+/* Hide the internal label (we use a separate label element for better layout control) */
+.ck-math-view .ck-labeled-field-view .ck-label {
 	display: none !important;
 }
 
-.ck.ck-toolbar-container {
-	z-index: calc(var(--ck-z-panel) + 2);
-}
+
+
+
+
