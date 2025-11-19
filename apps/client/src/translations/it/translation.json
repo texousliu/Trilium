@@ -1542,9 +1542,9 @@
     "create_label": "Per iniziare, crea un'etichetta con l'indirizzo URL che desideri incorporare, ad esempio #webViewSrc=\"https://www.google.com\""
   },
   "vacuum_database": {
-    "title": "Database del vuoto",
+    "title": "Pulizia del database",
     "description": "Questa operazione ricostruirà il database, generando in genere un file di dimensioni inferiori. In realtà, nessun dato verrà modificato.",
-    "button_text": "Database del vuoto",
+    "button_text": "Pulizia del database",
     "vacuuming_database": "Aspirazione del database...",
     "database_vacuumed": "Il database è stato svuotato"
   },

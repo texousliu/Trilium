@@ -78,9 +78,9 @@
     "close": "Zavřít"
   },
   "clone_to": {
-    "clone_notes_to": "Kopírovat poznámky do...",
+    "clone_notes_to": "Klonovat poznámky do...",
     "help_on_links": "Nápověda k odkazům",
-    "notes_to_clone": "Poznámky na kopírování",
+    "notes_to_clone": "Poznámky na klonování",
     "search_for_note_by_its_name": "hledat poznámku dle jejího názvu"
   }
 }
