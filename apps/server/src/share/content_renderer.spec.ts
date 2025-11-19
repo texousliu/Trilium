@@ -35,30 +35,6 @@ describe("content_renderer", () => {
             expect(result.content).toStrictEqual(content);
         });
 
-        it("handles attachment link", () => {
-            const content = trimIndentation`\
-                <h1>Test</h1>
-                <p>
-                    <a class="reference-link" href="#root/iwTmeWnqBG5Q?viewMode=attachments&amp;attachmentId=q14s2Id7V6pp">
-                        5863845791835102555.mp4
-                    </a>
-                    &nbsp;
-                </p>
-            `;
-            const note = buildShareNote({
-                content,
-                attachments: [ { id: "q14s2Id7V6pp", title: "5863845791835102555.mp4" } ]
-            });
-            const result = getContent(note);
-            expect(result.content).toStrictEqual(trimIndentation`\
-                <h1>Test</h1>
-                <p>
-                    <a class="reference-link attachment-link role-file" href="api/attachments/q14s2Id7V6pp/download">5863845791835102555.mp4</a>
-                    &nbsp;
-                </p>
-            `);
-        });
-
         it("renders included notes", () => {
             buildShareNotes([
                 { id: "subnote1", content: `<p>Foo</p><div>Bar</div>` },
@@ -109,6 +85,98 @@ describe("content_renderer", () => {
                 <span class="hljs-tag">&lt;/<span class="hljs-name">t</span>&gt;</span></code>
                 </pre>
             `)
+        });
+
+        describe("Reference links", () => {
+            it("handles attachment link", () => {
+                const content = trimIndentation`\
+                    <h1>Test</h1>
+                    <p>
+                        <a class="reference-link" href="#root/iwTmeWnqBG5Q?viewMode=attachments&amp;attachmentId=q14s2Id7V6pp">
+                            5863845791835102555.mp4
+                        </a>
+                        &nbsp;
+                    </p>
+                `;
+                const note = buildShareNote({
+                    content,
+                    attachments: [ { id: "q14s2Id7V6pp", title: "5863845791835102555.mp4" } ]
+                });
+                const result = getContent(note);
+                expect(result.content).toStrictEqual(trimIndentation`\
+                    <h1>Test</h1>
+                    <p>
+                        <a class="reference-link attachment-link role-file" href="api/attachments/q14s2Id7V6pp/download">5863845791835102555.mp4</a>
+                        &nbsp;
+                    </p>
+                `);
+            });
+
+            it("handles protected notes", () => {
+                buildShareNote({
+                    id: "MSkxxCFbBsYP",
+                    title: "Foo",
+                    isProtected: true
+                });
+                const note = buildShareNote({
+                    id: "note",
+                    content: trimIndentation`\
+                        <p>
+                            <a class="reference-link" href="#root/zaIItd4TM5Ly/MSkxxCFbBsYP">
+                                Foo
+                            </a>
+                        </p>
+                    `
+                });
+                const result = getContent(note);
+                expect(result.content).toStrictEqual(trimIndentation`\
+                    <p>
+                        <a class="reference-link type-text" href="./MSkxxCFbBsYP">[protected]</a>
+                    </p>
+                `);
+            });
+
+            it("handles missing notes", () => {
+                const note = buildShareNote({
+                    id: "note",
+                    content: trimIndentation`\
+                        <p>
+                            <a class="reference-link" href="#root/zaIItd4TM5Ly/AsKxyCFbBsYp">
+                                Foo
+                            </a>
+                        </p>
+                    `
+                });
+                const result = getContent(note);
+                expect(result.content).toStrictEqual(trimIndentation`\
+                    <p>
+                        <a class="reference-link">[missing note]</a>
+                    </p>
+                `);
+            });
+
+            it("properly escapes note title", () => {
+                buildShareNote({
+                    id: "MSkxxCFbBsYP",
+                    title: "The quick <strong>brown</strong> fox"
+                });
+                const note = buildShareNote({
+                    id: "note",
+                    content: trimIndentation`\
+                        <p>
+                            <a class="reference-link" href="#root/zaIItd4TM5Ly/MSkxxCFbBsYP">
+                            Hi
+                            </a>
+                        </p>
+                    `
+                });
+                const result = getContent(note);
+                expect(result.content).toStrictEqual(trimIndentation`\
+                    <p>
+                        <a class="reference-link type-text" href="./MSkxxCFbBsYP"><span><span class="bx bx-note"></span>The quick &lt;strong&gt;brown&lt;/strong&gt; fox</span></a>
+                    </p>
+                `);
+            });
         });
     });
 
