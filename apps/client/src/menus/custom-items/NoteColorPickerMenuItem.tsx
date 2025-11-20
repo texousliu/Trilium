@@ -1,4 +1,5 @@
 import "./NoteColorPickerMenuItem.css";
+import { t } from "../../services/i18n";
 import { useCallback, useEffect, useRef, useState} from "preact/hooks";
 import {ComponentChildren} from "preact";
 import attributes from "../../services/attributes";
@@ -76,6 +77,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
                 onClick={(e) => {e.stopPropagation()}}>
         
         <ColorCell className="color-cell-reset"
+                   tooltip={t("note-color.clear-color")}
                    color={null}
                    isSelected={(currentColor === null)}
                    isDisabled={(note === null)}
@@ -84,13 +86,15 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
         
         {COLORS.map((color) => (
             <ColorCell key={color}
+                       tooltip={t("note-color.set-color")}
                        color={color}
                        isSelected={(color === currentColor)}
                        isDisabled={(note === null)}
                        onSelect={onColorCellClicked} />
         ))}
 
-        <CustomColorCell color={currentColor}
+        <CustomColorCell tooltip={t("note-color.set-custom-color")}
+                         color={currentColor}
                          isSelected={isCustomColor}
                          isDisabled={(note === null)}
                          onSelect={onColorCellClicked} />
@@ -99,7 +103,8 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
 
 interface ColorCellProps {
     children?: ComponentChildren,
-    className?: string;
+    className?: string,
+    tooltip?: string,
     color: string | null,
     isSelected: boolean,
     isDisabled?: boolean,
@@ -109,6 +114,7 @@ interface ColorCellProps {
 function ColorCell(props: ColorCellProps) {
     return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""} ${props.className ?? ""}`}
                 style={`${(props.color !== null) ? `--color: ${props.color}` : ""}`}
+                title={props.tooltip}
                 onClick={() => props.onSelect?.(props.color)}>
         {props.children}
     </div>;
