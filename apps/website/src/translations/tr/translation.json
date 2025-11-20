@@ -1,1 +1,9 @@
-{}
+{
+    "get-started": {
+        "title": "Başlangıç",
+        "desktop_title": "Masaüstü uygulamasını indirin (v{{version}})",
+        "architecture": "Mimari:",
+        "older_releases": "Eski sürümleri görüntüle",
+        "server_title": "Birden fazla cihazdan erişim için bir sunucu kurun"
+    }
+}
