@@ -3,6 +3,7 @@ import { t } from "../../services/i18n";
 import { useCallback, useEffect, useRef, useState} from "preact/hooks";
 import {ComponentChildren} from "preact";
 import attributes from "../../services/attributes";
+import clsx from "clsx";
 import Color, { ColorInstance } from "color";
 import Debouncer from "../../utils/debouncer";
 import FNote from "../../entities/fnote";
@@ -105,7 +106,11 @@ interface ColorCellProps {
 }
 
 function ColorCell(props: ColorCellProps) {
-    return <div class={`color-cell ${props.isSelected ? "selected" : ""} ${props.isDisabled ? "disabled-color-cell" : ""} ${props.className ?? ""}`}
+    return <div className={clsx(props.className, {
+                    "color-cell": true,
+                    "selected": props.isSelected,
+                    "disabled-color-cell": props.isDisabled
+                })}
                 style={`${(props.color !== null) ? `--color: ${props.color}` : ""}`}
                 title={props.tooltip}
                 onClick={() => props.onSelect?.(props.color)}>
@@ -151,7 +156,9 @@ function CustomColorCell(props: ColorCellProps) {
     return <div style={`--foreground: ${getForegroundColor(props.color)};`}>
         <ColorCell {...props}
                    color={pickedColor} 
-                   className={`custom-color-cell ${(pickedColor === null) ? "custom-color-cell-empty" : ""}`}
+                   className={clsx("custom-color-cell", {
+                        "custom-color-cell-empty": (pickedColor === null)
+                   })}
                    onSelect={onSelect}>
 
             <input ref={colorInput}
