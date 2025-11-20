@@ -40,7 +40,7 @@ export default class MathLiveInputView extends View {
 				class: [ 'ck', 'ck-mathlive-input' ]
 			}
 		} );
-	}git config --local credential.helper ""
+	}
 
 	/**
 	 * @inheritDoc
