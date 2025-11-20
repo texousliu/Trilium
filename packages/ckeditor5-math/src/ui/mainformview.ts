@@ -10,7 +10,7 @@ import type { KatexOptions } from '../typings-external.js';
 
 export default class MainFormView extends View {
 	public saveButtonView: ButtonView;
-	public mathInputView: MathLiveInputView;
+	public mathLiveInputView: MathLiveInputView;
 	public rawLatexInputView: RawLatexInputView;
 	public rawLatexLabel: LabelView;
 	public displayButtonView: SwitchButtonView;
@@ -46,8 +46,8 @@ export default class MainFormView extends View {
 		this.saveButtonView = this._createButton( t( 'Save' ), IconCheck, 'ck-button-save', null );
 		this.saveButtonView.type = 'submit';
 
-		// Equation input
-		this.mathInputView = this._createMathInput();
+		// MathLive visual equation editor
+		this.mathLiveInputView = this._createMathLiveInput();
 
 		// Raw LaTeX input
 		this.rawLatexInputView = this._createRawLatexInput();
@@ -75,7 +75,7 @@ export default class MainFormView extends View {
 			this.mathView.bind( 'display' ).to( this.displayButtonView, 'isOn' );
 
 			children = [
-				this.mathInputView,
+				this.mathLiveInputView,
 				this.rawLatexLabel,
 				this.rawLatexInputView,
 				this.displayButtonView,
@@ -84,7 +84,7 @@ export default class MainFormView extends View {
 			];
 		} else {
 			children = [
-				this.mathInputView,
+				this.mathLiveInputView,
 				this.rawLatexLabel,
 				this.rawLatexInputView,
 				this.displayButtonView
@@ -143,7 +143,7 @@ export default class MainFormView extends View {
 
 		// Register form elements to focusable elements
 		const childViews = [
-			this.mathInputView,
+			this.mathLiveInputView,
 			this.rawLatexInputView,
 			this.displayButtonView,
 			this.saveButtonView,
@@ -168,14 +168,15 @@ export default class MainFormView extends View {
 	}
 
 	public get equation(): string {
-		return this.mathInputView.value ?? '';
+		return this.mathLiveInputView.value ?? '';
 	}
 
 	public set equation( equation: string ) {
-		this.mathInputView.value = equation;
-		this.rawLatexInputView.value = equation;
+		const normalizedEquation = equation.trim();
+		this.mathLiveInputView.value = normalizedEquation.length ? normalizedEquation : null;
+		this.rawLatexInputView.value = normalizedEquation;
 		if ( this.previewEnabled && this.mathView ) {
-			this.mathView.value = equation;
+			this.mathView.value = normalizedEquation;
 		}
 	}
 
@@ -195,13 +196,13 @@ export default class MainFormView extends View {
 	/**
 	 * Creates the MathLive visual equation editor.
 	 *
-	 * Handles bidirectional synchronization with the raw LaTeX input and preview.
+	 * Handles bidirectional synchronization with the raw LaTeX textarea and preview.
 	 */
-	private _createMathInput() {
-		const mathInput = new MathLiveInputView( this.locale );
+	private _createMathLiveInput() {
+		const mathLiveInput = new MathLiveInputView( this.locale );
 
 		const onInput = () => {
-			const rawValue = mathInput.value ?? '';
+			const rawValue = mathLiveInput.value ?? '';
 			let equationInput = rawValue.trim();
 
 			// If input has delimiters
@@ -210,56 +211,58 @@ export default class MainFormView extends View {
 				const params = extractDelimiters( equationInput );
 
 				// Remove delimiters from input field
-				mathInput.value = params.equation;
+				mathLiveInput.value = params.equation;
 
 				equationInput = params.equation;
 
-				// update display button and preview
+				// Update display button and preview
 				this.displayButtonView.isOn = params.display;
 			}
 
-			// Sync to raw LaTeX input
+			const normalizedEquation = equationInput.length ? equationInput : null;
+			if ( mathLiveInput.value !== normalizedEquation ) {
+				mathLiveInput.value = normalizedEquation;
+			}
+
+			// Sync to raw LaTeX textarea
 			this.rawLatexInputView.value = equationInput;
 
 			if ( this.previewEnabled && this.mathView ) {
-				// Update preview view
+				// Update preview
 				this.mathView.value = equationInput;
 			}
-
-			this.saveButtonView.isEnabled = !!equationInput;
 		};
 
-		mathInput.on( 'change:value', onInput );
+		mathLiveInput.on( 'change:value', onInput );
 
-		return mathInput;
+		return mathLiveInput;
 	}
 
 	/**
-	 * Creates the raw LaTeX code textarea editor.
+	 * Creates the raw LaTeX textarea editor.
 	 *
-	 * Provides direct LaTeX editing and synchronizes changes with the MathLive visual editor.
+	 * Provides direct LaTeX code editing and synchronizes changes with the MathLive visual editor.
 	 */
 	private _createRawLatexInput() {
 		const t = this.locale.t;
 		const rawLatexInput = new RawLatexInputView( this.locale );
 		rawLatexInput.label = t( 'LaTeX' );
 
-		// Sync raw LaTeX changes to MathLive visual editor
+		// Sync raw LaTeX textarea changes to MathLive visual editor
 		rawLatexInput.on( 'change:value', () => {
 			const rawValue = rawLatexInput.value ?? '';
 			const equationInput = rawValue.trim();
 
-			// Update MathLive field
-			if ( this.mathInputView.value !== equationInput ) {
-				this.mathInputView.value = equationInput;
+			// Update MathLive visual editor
+			const normalizedEquation = equationInput.length ? equationInput : null;
+			if ( this.mathLiveInputView.value !== normalizedEquation ) {
+				this.mathLiveInputView.value = normalizedEquation;
 			}
 
-			// Update preview if enabled
+			// Update preview
 			if ( this.previewEnabled && this.mathView ) {
 				this.mathView.value = equationInput;
 			}
-
-			this.saveButtonView.isEnabled = !!equationInput;
 		} );
 
 		return rawLatexInput;

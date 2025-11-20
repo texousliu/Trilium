@@ -57,7 +57,7 @@ export default class MathUI extends Plugin {
 		this._balloon.showStack( 'main' );
 
 		requestAnimationFrame(() => {
-			this.formView?.mathInputView.focus();
+			this.formView?.mathLiveInputView.focus();
 		});
 	}
 
@@ -90,13 +90,22 @@ export default class MathUI extends Plugin {
 			mathConfig.katexRenderOptions!
 		);
 
-		formView.mathInputView.bind( 'value' ).to( mathCommand, value => value ?? '' );
+		formView.mathLiveInputView.bind( 'value' ).to( mathCommand, 'value' );
 		formView.displayButtonView.bind( 'isOn' ).to( mathCommand, 'display' );
 
 		// Form elements should be read-only when corresponding commands are disabled.
-		formView.mathInputView.bind( 'isReadOnly' ).to( mathCommand, 'isEnabled', value => !value );
-		formView.saveButtonView.bind( 'isEnabled' ).to( mathCommand );
-		formView.displayButtonView.bind( 'isEnabled' ).to( mathCommand );
+		formView.mathLiveInputView.bind( 'isReadOnly' ).to( mathCommand, 'isEnabled', value => !value );
+		formView.saveButtonView.bind( 'isEnabled' ).to(
+			mathCommand,
+			'isEnabled',
+			formView.mathLiveInputView,
+			'value',
+			( commandEnabled, equation ) => {
+				const normalizedEquation = ( equation ?? '' ).trim();
+				return commandEnabled && normalizedEquation.length > 0;
+			}
+		);
+		formView.displayButtonView.bind( 'isEnabled' ).to( mathCommand, 'isEnabled' );
 
 		// Listen to submit button click
 		this.listenTo( formView, 'submit', () => {
@@ -151,7 +160,7 @@ export default class MathUI extends Plugin {
 		} );
 
 		if ( this._balloon.visibleView === this.formView ) {
-			this.formView.mathInputView.focus();
+			this.formView.mathLiveInputView.focus();
 		}
 
 		// Show preview element

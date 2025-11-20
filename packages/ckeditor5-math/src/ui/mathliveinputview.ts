@@ -14,7 +14,7 @@ export default class MathLiveInputView extends View {
 	 *
 	 * @observable
 	 */
-	public declare value: string;
+	public declare value: string | null;
 
 	/**
 	 * Whether the input is in read-only mode.
@@ -31,7 +31,7 @@ export default class MathLiveInputView extends View {
 	constructor( locale: Locale ) {
 		super( locale );
 
-		this.set( 'value', '' );
+		this.set( 'value', null );
 		this.set( 'isReadOnly', false );
 
 		this.setTemplate( {
@@ -56,8 +56,9 @@ export default class MathLiveInputView extends View {
 		mathfield.setAttribute( 'virtual-keyboard-mode', 'manual' );
 
 		// Set initial value
-		if ( this.value ) {
-			( mathfield as any ).value = this.value;
+		const initialValue = this.value ?? '';
+		if ( initialValue ) {
+			( mathfield as any ).value = initialValue;
 		}
 
 		// Bind readonly state
@@ -67,13 +68,15 @@ export default class MathLiveInputView extends View {
 
 		// Sync math-field changes to observable value
 		mathfield.addEventListener( 'input', () => {
-			this.value = ( mathfield as any ).value;
+			const nextValue: string = ( mathfield as any ).value;
+			this.value = nextValue.length ? nextValue : null;
 		} );
 
 		// Sync observable value changes back to math-field
 		this.on( 'change:value', () => {
-			if ( ( mathfield as any ).value !== this.value ) {
-				( mathfield as any ).value = this.value;
+			const nextValue = this.value ?? '';
+			if ( ( mathfield as any ).value !== nextValue ) {
+				( mathfield as any ).value = nextValue;
 			}
 		} );
 
