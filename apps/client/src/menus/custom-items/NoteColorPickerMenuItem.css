@@ -1,3 +1,9 @@
+:root {
+    --note-color-picker-clear-color-cell-background: var(--primary-button-background-color);
+    --note-color-picker-clear-color-cell-color: var(--main-background-color);
+    --note-color-picker-clear-color-cell-selection-outline-color: var(--primary-button-border-color);
+}
+
 .color-picker-menu-item {
     display: flex;
     gap: 8px;
@@ -5,8 +11,10 @@
 }
 
 .color-picker-menu-item .color-cell {
-    width: 14px;
-    height: 14px;
+    --color-picker-cell-size: 14px;
+
+    width: var(--color-picker-cell-size);
+    height: var(--color-picker-cell-size);
     border-radius: 4px;
     background-color: var(--color);
 }
@@ -20,51 +28,59 @@
 }
 
 .color-picker-menu-item .color-cell.selected {
-    outline: 2px solid var(--color);
+    outline: 2px solid var(--outline-color, var(--color));
     outline-offset: 2px;
 }
 
-.color-cell-reset::before,
-.custom-color-cell::before {
+.color-picker-menu-item .color-cell-reset::before,
+.color-picker-menu-item .custom-color-cell::before {
     position: absolute;
     display: flex;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    font-size: 18px;
+    font-size: calc(var(--color-picker-cell-size) * 1.3);
     justify-content: center;
     align-items: center;
     font-family: boxicons;
-    color: black;
 }
 
-.color-cell-reset {
+/*
+ * RESET COLOR CELL
+ */
+
+.color-picker-menu-item .color-cell-reset {
+    --color: var(--note-color-picker-clear-color-cell-background);
+    --outline-color: var(--note-color-picker-clear-color-cell-selection-outline-color);
+
     position: relative;
-    --color: rgba(255, 255, 255, .4);
 }
 
-.color-cell-reset::before {
+.color-picker-menu-item .color-cell-reset::before {
     content: "\ec8d";
     mix-blend-mode: normal;
-    color: black;
+    color: var(--note-color-picker-clear-color-cell-color);
 }
 
-.custom-color-cell {
+/*
+ * CUSTOM COLOR CELL
+ */
+
+.color-picker-menu-item .custom-color-cell {
     position: relative;
     display: flex;
     justify-content: center;
 
 }
 
-.custom-color-cell.custom-color-cell-empty {
-    background-image: url(./custom-culor.png);
+.color-picker-menu-item .custom-color-cell.custom-color-cell-empty {
+    background-image: url(./custom-color.png);
     background-size: cover;
     --foreground: transparent;
 }
 
-
-.custom-color-cell::before {
+.color-picker-menu-item .custom-color-cell::before {
     content: "\ed35";
     color: var(--foreground);
     font-size: 16px;
