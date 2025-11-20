@@ -27,20 +27,8 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
 
                 const contentEl = content.$renderedContent[0];
 
-                // Create page title element
-                const pageTitleEl = document.createElement("h1");
-                pageTitleEl.textContent = note.title;
-                contentEl.prepend(pageTitleEl);
-
-                // Rewrite heading tags to ensure proper hierarchy in print view.
-                const headings = contentEl.querySelectorAll("h1, h2, h3, h4, h5, h6")
-                for (const headingEl of headings) {
-                    const currentLevel = parseInt(headingEl.tagName.substring(1), 10);
-                    const newLevel = Math.min(currentLevel + depth, 6);
-                    const newHeadingEl = document.createElement(`h${newLevel}`);
-                    newHeadingEl.innerHTML = headingEl.innerHTML;
-                    headingEl.replaceWith(newHeadingEl);
-                }
+                insertPageTitle(contentEl, note.title);
+                rewriteHeadings(contentEl, depth);
 
                 notesWithContent.push({ note, content: contentEl.innerHTML });
 
@@ -80,4 +68,21 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
             </div>
         </div>
     );
+}
+
+function insertPageTitle(contentEl: HTMLElement, title: string) {
+    const pageTitleEl = document.createElement("h1");
+    pageTitleEl.textContent = title;
+    contentEl.prepend(pageTitleEl);
+}
+
+function rewriteHeadings(contentEl: HTMLElement, depth: number) {
+    const headings = contentEl.querySelectorAll("h1, h2, h3, h4, h5, h6")
+    for (const headingEl of headings) {
+        const currentLevel = parseInt(headingEl.tagName.substring(1), 10);
+        const newLevel = Math.min(currentLevel + depth, 6);
+        const newHeadingEl = document.createElement(`h${newLevel}`);
+        newHeadingEl.innerHTML = headingEl.innerHTML;
+        headingEl.replaceWith(newHeadingEl);
+    }
 }
