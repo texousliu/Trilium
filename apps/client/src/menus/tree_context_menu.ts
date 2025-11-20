@@ -242,6 +242,19 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp
             },
 
+            { kind: "separator"},
+
+            {
+                kind: "custom",
+                componentFn: () => {
+                    if (notOptionsOrHelp && selectedNotes.length === 1) {
+                        return NoteColorPicker({note});
+                    } else {
+                        return null;
+                    }
+                }
+            },
+
             { kind: "separator" },
 
             { title: t("tree-context-menu.import-into-note"), command: "importIntoNote", uiIcon: "bx bx-import", enabled: notSearch && noSelectedNotes && notOptionsOrHelp },
@@ -256,20 +269,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 keyboardShortcut: "searchInSubtree",
                 uiIcon: "bx bx-search",
                 enabled: notSearch && noSelectedNotes
-            },
-
-            { kind: "separator"},
-
-            {
-                kind: "custom",
-                componentFn: () => {
-                    if (notOptionsOrHelp && selectedNotes.length === 1) {
-                        return NoteColorPicker({note});
-                    } else {
-                        return null;
-                    }
-                }
-            },
+            }
         ];
         return items.filter((row) => row !== null) as MenuItem<TreeCommandNames>[];
     }
