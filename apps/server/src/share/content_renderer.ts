@@ -318,12 +318,12 @@ function renderText(result: Result, note: SNote | BNote) {
                 continue;
             }
 
-            if (href?.startsWith("#")) {
-                handleAttachmentLink(linkEl, href, getNote, getAttachment);
-            }
-
             if (linkEl.classList.contains("reference-link")) {
                 cleanUpReferenceLinks(linkEl);
+            }
+
+            if (href?.startsWith("#")) {
+                handleAttachmentLink(linkEl, href, getNote, getAttachment);
             }
         }
 
@@ -400,6 +400,7 @@ function cleanUpReferenceLinks(linkEl: HTMLElement) {
     const noteId = href.split("/").at(-1);
     const note = noteId ? shaca.getNote(noteId) : undefined;
     if (!note) {
+        console.warn("Unable to find note ", noteId);
         linkEl.innerHTML = "[missing note]";
     } else if (note.isProtected) {
         linkEl.innerHTML = "[protected]";
