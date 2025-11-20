@@ -89,7 +89,7 @@ async function resolveNotePathToSegments(notePath: string, hoistedNoteId = "root
 
     effectivePathSegments.reverse();
 
-    if (effectivePathSegments.includes(hoistedNoteId)) {
+    if (effectivePathSegments.includes(hoistedNoteId) && effectivePathSegments.includes('root')) {
         return effectivePathSegments;
     } else {
         const noteId = getNoteIdFromUrl(notePath);

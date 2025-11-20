@@ -13,6 +13,7 @@ import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } f
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import PresentationView from "./presentation";
+import { ListPrintView } from "./legacy/ListPrintView";
 
 interface NoteListProps {
     note: FNote | null | undefined;
@@ -23,22 +24,27 @@ interface NoteListProps {
     isEnabled: boolean;
     ntxId: string | null | undefined;
     media: ViewModeMedia;
+    viewType: ViewTypeOptions | undefined;
     onReady?: () => void;
 }
 
-export default function NoteList<T extends object>(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
+export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
     const { note, noteContext, notePath, ntxId } = useNoteContext();
-    const isEnabled = noteContext?.hasNoteList();
-    return <CustomNoteList note={note} isEnabled={!!isEnabled} notePath={notePath} ntxId={ntxId} {...props} />
-}
-
-export function SearchNoteList<T extends object>(props: Omit<NoteListProps, "isEnabled">) {
-    return <CustomNoteList {...props} isEnabled={true} />
-}
-
-export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
-    const widgetRef = useRef<HTMLDivElement>(null);
     const viewType = useNoteViewType(note);
+    const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
+    useEffect(() => {
+        setEnabled(noteContext?.hasNoteList());
+    }, [ noteContext, viewType ])
+    return <CustomNoteList viewType={viewType} note={note} isEnabled={!!enabled} notePath={notePath} ntxId={ntxId} {...props} />
+}
+
+export function SearchNoteList(props: Omit<NoteListProps, "isEnabled" | "viewType">) {
+    const viewType = useNoteViewType(props.note);
+    return <CustomNoteList {...props} isEnabled={true} viewType={viewType} />
+}
+
+export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
+    const widgetRef = useRef<HTMLDivElement>(null);
     const noteIds = useNoteIds(shouldEnable ? note : null, viewType, ntxId);
     const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
@@ -98,7 +104,11 @@ export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable
 function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
     switch (viewType) {
         case "list":
-            return <ListView {...props} />;
+            if (props.media !== "print") {
+                return <ListView {...props} />;
+            } else {
+                return <ListPrintView {...props} />;
+            }
         case "grid":
             return <GridView {...props} />;
         case "geoMap":
@@ -114,7 +124,7 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
     }
 }
 
-function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
+export function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
     const [ viewType ] = useNoteLabel(note, "viewType");
 
     if (!note) {

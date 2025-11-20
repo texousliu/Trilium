@@ -1,6 +1,10 @@
 <ul>
   <li><code>doRender</code> must not be overridden, instead <code>doRenderBody()</code> has
-    to be overridden.</li>
+    to be overridden.
+    <ul>
+      <li><code>doRenderBody</code> can optionally be <code>async</code>.</li>
+    </ul>
+  </li>
   <li><code>parentWidget()</code> must be set to <code>“rightPane”</code>.</li>
   <li><code>widgetTitle()</code> getter can optionally be overriden, otherwise
     the widget will be displayed as “Untitled widget”.</li>

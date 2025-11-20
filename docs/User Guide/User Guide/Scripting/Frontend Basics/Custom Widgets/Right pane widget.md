@@ -1,5 +1,6 @@
 # Right pane widget
 *   `doRender` must not be overridden, instead `doRenderBody()` has to be overridden.
+    *   `doRenderBody` can optionally be `async`.
 *   `parentWidget()` must be set to `“rightPane”`.
 *   `widgetTitle()` getter can optionally be overriden, otherwise the widget will be displayed as “Untitled widget”.
 

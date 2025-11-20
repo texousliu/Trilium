@@ -467,28 +467,30 @@ function getReferenceLinkTitleSync(href: string) {
     }
 }
 
-// TODO: Check why the event is not supported.
-//@ts-ignore
-$(document).on("click", "a", goToLink);
-// TODO: Check why the event is not supported.
-//@ts-ignore
-$(document).on("auxclick", "a", goToLink); // to handle the middle button
-// TODO: Check why the event is not supported.
-//@ts-ignore
-$(document).on("contextmenu", "a", linkContextMenu);
-// TODO: Check why the event is not supported.
-//@ts-ignore
-$(document).on("dblclick", "a", goToLink);
+if (glob.device !== "print") {
+    // TODO: Check why the event is not supported.
+    //@ts-ignore
+    $(document).on("click", "a", goToLink);
+    // TODO: Check why the event is not supported.
+    //@ts-ignore
+    $(document).on("auxclick", "a", goToLink); // to handle the middle button
+    // TODO: Check why the event is not supported.
+    //@ts-ignore
+    $(document).on("contextmenu", "a", linkContextMenu);
+    // TODO: Check why the event is not supported.
+    //@ts-ignore
+    $(document).on("dblclick", "a", goToLink);
 
-$(document).on("mousedown", "a", (e) => {
-    if (e.which === 2) {
-        // prevent paste on middle click
-        // https://github.com/zadam/trilium/issues/2995
-        // https://developer.mozilla.org/en-US/docs/Web/API/Element/auxclick_event#preventing_default_actions
-        e.preventDefault();
-        return false;
-    }
-});
+    $(document).on("mousedown", "a", (e) => {
+        if (e.which === 2) {
+            // prevent paste on middle click
+            // https://github.com/zadam/trilium/issues/2995
+            // https://developer.mozilla.org/en-US/docs/Web/API/Element/auxclick_event#preventing_default_actions
+            e.preventDefault();
+            return false;
+        }
+    });
+}
 
 export default {
     getNotePathFromUrl,

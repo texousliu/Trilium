@@ -1,8 +1,8 @@
 import FNote from "./entities/fnote";
 import { render } from "preact";
-import { CustomNoteList } from "./widgets/collections/NoteList";
+import { CustomNoteList, useNoteViewType } from "./widgets/collections/NoteList";
 import { useCallback, useLayoutEffect, useRef } from "preact/hooks";
-import content_renderer from "./services/content_renderer";
+import content_renderer, { applyInlineMermaid } from "./services/content_renderer";
 
 interface RendererProps {
     note: FNote;
@@ -71,6 +71,11 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
                 })
             );
 
+            // Initialize mermaid.
+            if (note.type === "text") {
+                await applyInlineMermaid(container);
+            }
+
             // Check custom CSS.
             await loadCustomCss(note);
         }
@@ -85,7 +90,9 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
 }
 
 function CollectionRenderer({ note, onReady }: RendererProps) {
+    const viewType = useNoteViewType(note);
     return <CustomNoteList
+        viewType={viewType}
         isEnabled
         note={note}
         notePath={note.getBestNotePath().join("/")}

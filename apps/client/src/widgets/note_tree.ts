@@ -1606,7 +1606,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         return !parentNote?.hasLabel("sorted");
     }
 
-    moveNoteUpCommand({ node }: CommandListenerData<"moveNoteUp">) {
+    async moveNoteUpCommand({ node }: CommandListenerData<"moveNoteUp">) {
         if (!node || !this.canBeMovedUpOrDown(node)) {
             return;
         }
@@ -1614,11 +1614,12 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const beforeNode = node.getPrevSibling();
 
         if (beforeNode !== null) {
-            branchService.moveBeforeBranch([node.data.branchId], beforeNode.data.branchId);
+            await branchService.moveBeforeBranch([node.data.branchId], beforeNode.data.branchId);
+            node.makeVisible({ scrollIntoView: true });
         }
     }
 
-    moveNoteDownCommand({ node }: CommandListenerData<"moveNoteDown">) {
+    async moveNoteDownCommand({ node }: CommandListenerData<"moveNoteDown">) {
         if (!this.canBeMovedUpOrDown(node)) {
             return;
         }
@@ -1626,7 +1627,8 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const afterNode = node.getNextSibling();
 
         if (afterNode !== null) {
-            branchService.moveAfterBranch([node.data.branchId], afterNode.data.branchId);
+            await branchService.moveAfterBranch([node.data.branchId], afterNode.data.branchId);
+            node.makeVisible({ scrollIntoView: true });
         }
     }
 

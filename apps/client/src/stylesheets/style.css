@@ -2438,6 +2438,15 @@ footer.webview-footer button {
 .admonition.caution::before { content: "\eac7"; }
 .admonition.warning::before { content: "\eac5"; }
 
+.ck-content ul.todo-list li span.todo-list__label__description {
+    transition: opacity 200ms ease;
+}
+
+.ck-content ul.todo-list li:has(input[type="checkbox"]:checked) span.todo-list__label__description {
+    text-decoration: line-through;
+    opacity: 0.6;    
+}
+
 .chat-options-container {
     display: flex;
     margin: 5px 0;
