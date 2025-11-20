@@ -8,7 +8,7 @@ import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 
 const COLORS = [
-    null, "#e64d4d", "#e6994d", "#e5e64d", "#99e64d", "#4de64d", "#4de699",
+    "#e64d4d", "#e6994d", "#e5e64d", "#99e64d", "#4de64d", "#4de699",
     "#4de5e6", "#4d99e6", "#4d4de6", "#994de6", "#e64db3"
 ];
 
@@ -57,7 +57,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
     }, [note]);
 
     useEffect(() => {
-        setIsCustomColor(COLORS.indexOf(currentColor) === -1);
+        setIsCustomColor(currentColor !== null && COLORS.indexOf(currentColor) === -1);
     }, [currentColor])
 
     const onColorCellClicked = useCallback((color: string | null) => {
@@ -74,17 +74,25 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
 
     return <div className="color-picker-menu-item"
                 onClick={(e) => {e.stopPropagation()}}>
+        
+        <ColorCell className="color-cell-reset"
+                   color={null}
+                   isSelected={(currentColor === null)}
+                   isDisabled={(note === null)}
+                   onSelect={onColorCellClicked} />
+        
+        
         {COLORS.map((color) => (
             <ColorCell key={color}
-                       className={(color === null) ? "color-cell-reset" : undefined}
                        color={color}
                        isSelected={(color === currentColor)}
                        isDisabled={(note === null)}
-                       onSelect={() => onColorCellClicked(color)} />
+                       onSelect={onColorCellClicked} />
         ))}
 
         <CustomColorCell color={currentColor}
                          isSelected={isCustomColor}
+                         isDisabled={(note === null)}
                          onSelect={onColorCellClicked} />
     </div>
 }
