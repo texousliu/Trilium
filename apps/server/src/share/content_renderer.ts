@@ -38,6 +38,8 @@ interface Subroot {
     branch?: SBranch | BBranch
 }
 
+type GetNoteFunction = (id: string) => SNote | BNote | null;
+
 function getSharedSubTreeRoot(note: SNote | BNote | undefined): Subroot {
     if (!note || note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
         // share root itself is not shared
@@ -301,7 +303,7 @@ function renderText(result: Result, note: SNote | BNote) {
 
     result.isEmpty = document.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
 
-    const getNote = note instanceof BNote
+    const getNote: GetNoteFunction = note instanceof BNote
         ? (noteId: string) => becca.getNote(noteId)
         : (noteId: string) => shaca.getNote(noteId);
     const getAttachment = note instanceof BNote
@@ -319,7 +321,7 @@ function renderText(result: Result, note: SNote | BNote) {
             }
 
             if (linkEl.classList.contains("reference-link")) {
-                cleanUpReferenceLinks(linkEl);
+                cleanUpReferenceLinks(linkEl, getNote);
             }
 
             if (href?.startsWith("#")) {
@@ -347,7 +349,7 @@ function renderText(result: Result, note: SNote | BNote) {
     }
 }
 
-function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: string) => SNote | BNote | null, getAttachment: (id: string) => BAttachment | SAttachment | null) {
+function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: GetNoteFunction, getAttachment: (id: string) => BAttachment | SAttachment | null) {
     const linkRegExp = /attachmentId=([a-zA-Z0-9_]+)/g;
     let attachmentMatch;
     if ((attachmentMatch = linkRegExp.exec(href))) {
@@ -392,13 +394,13 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: (id: s
  *
  * @param linkEl the <a> element to process.
  */
-function cleanUpReferenceLinks(linkEl: HTMLElement) {
+function cleanUpReferenceLinks(linkEl: HTMLElement, getNote: GetNoteFunction) {
     // Note: this method is basically a reimplementation of getReferenceLinkTitleSync from the link service of the client.
     const href = linkEl.getAttribute("href") ?? "";
     if (linkEl.classList.contains("attachment-link")) return;
 
     const noteId = href.split("/").at(-1);
-    const note = noteId ? shaca.getNote(noteId) : undefined;
+    const note = noteId ? getNote(noteId) : undefined;
     if (!note) {
         console.warn("Unable to find note ", noteId);
         linkEl.innerHTML = "[missing note]";
