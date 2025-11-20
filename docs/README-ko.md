@@ -27,8 +27,7 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 
 Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 오픈 소스 크로스 플랫폼 계층적 메모 작성 애플리케이션입니다.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+[스크린샷](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)에서 간략한 개요를 확인하세요:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
@@ -40,33 +39,31 @@ quick overview:
 
 ## 📚 문서
 
-**[docs.triliumnotes.org](https://docs.triliumnotes.org/)에서 포괄적인 문서를 방문하세요**
+**[docs.triliumnotes.org](https://docs.triliumnotes.org/)에서 전체 문서를 확인하세요**
 
-저희 문서는 다양한 형식으로 제공됩니다.
+저희 문서는 다양한 형식으로 제공됩니다:
 - **온라인 문서**: [docs.triliumnotes.org](https://docs.triliumnotes.org/)에서 모든 문서를
   보여줍니다
 - **도움말**: 트릴리움 어플리케이션에서 `F1` 버튼을 눌러 같은 문서를 직접 볼 수 있습니다
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **GitHub**: 이 레포지토리의 [사용자 가이드](./docs/User%20Guide/User%20Guide/)에서 확인할 수 있습니다
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+### 바로가기
+- [시작하기 가이드](https://docs.triliumnotes.org/)
+- [설치
+  방법](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [도커
+  설치](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [TriliumNext로
+  업그레이드](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [기본 개념 및
+  기능](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [개인 지식 베이스의
+  패턴들](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 기능들
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
-  [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
+* 노트는 다양한 깊이의 트리로 배열될 수 있습니다. 하나의 노트는 트리의 여러 위치에 둘 수 있습니다
+  ([cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes) 참고)
 * Rich WYSIWYG note editor including e.g. tables, images and
   [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
   [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
