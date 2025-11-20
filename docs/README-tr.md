@@ -9,27 +9,28 @@
 
 <hr />
 
-# Trilium Notes
+# Trilium Notlar
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
-![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
-![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![GitHub Sponsorları](https://img.shields.io/github/sponsors/eliandoran)
+![LiberaPay Destekçileri](https://img.shields.io/liberapay/patrons/ElianDoran) \
+![Docker İndirme
+Sayısı](https://img.shields.io/docker/pulls/triliumnext/trilium) ![GitHub
+İndirmeleri (tüm varlıklar, tüm
+sürümler)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Çeviri
+Durumu](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[İngilizce](./README.md) | [Çince (Basitleştirilmiş)](./docs/README-ZH_CN.md) |
+[Çince (Geleneksel)](./docs/README-ZH_TW.md) | [Rusça](./docs/README-ru.md) |
+[Japonca](./docs/README-ja.md) | [İtalyanca](./docs/README-it.md) |
+[İspanyolca](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes, büyük kişisel bilgi tabanları oluşturmaya odaklanmış, ücretsiz ve
+açık kaynaklı, çapraz platform hiyerarşik bir not alma uygulamasıdır.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Hızlı bir genel bakış için [ekran
+görüntülerine](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) bakın:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
