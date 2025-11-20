@@ -9,5 +9,12 @@ export function useFilteredNoteIds(note: FNote, noteIds: string[]) {
         const includedLinks = note ? note.getRelations().filter((rel) => rel.name === "imageLink" || rel.name === "includeNoteLink") : [];
         const includedNoteIds = new Set(includedLinks.map((rel) => rel.value));
         return noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
-    }, noteIds);
+    }, [ note, noteIds ]);
+}
+
+export async function filterChildNotes(note: FNote) {
+    const imageLinks = note.getRelations("imageLink");
+    const imageLinkNoteIds = new Set(imageLinks.map(rel => rel.value));
+    const childNotes = await note.getChildNotes();
+    return childNotes.filter((childNote) => !imageLinkNoteIds.has(childNote.noteId));
 }

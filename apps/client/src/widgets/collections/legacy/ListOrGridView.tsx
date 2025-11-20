@@ -11,7 +11,7 @@ import tree from "../../../services/tree";
 import link from "../../../services/link";
 import { t } from "../../../services/i18n";
 import attribute_renderer from "../../../services/attribute_renderer";
-import { useFilteredNoteIds } from "./utils";
+import { filterChildNotes, useFilteredNoteIds } from "./utils";
 
 export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -161,14 +161,10 @@ function NoteContent({ note, trim, noChildrenList, highlightedTokens }: { note: 
 }
 
 function NoteChildren({ note, parentNote, highlightedTokens }: { note: FNote, parentNote: FNote, highlightedTokens: string[] | null | undefined }) {
-    const imageLinks = note.getRelations("imageLink");
     const [ childNotes, setChildNotes ] = useState<FNote[]>();
 
     useEffect(() => {
-        note.getChildNotes().then(childNotes => {
-            const filteredChildNotes = childNotes.filter((childNote) => !imageLinks.find((rel) => rel.value === childNote.noteId));
-            setChildNotes(filteredChildNotes);
-        });
+        filterChildNotes(note).then(setChildNotes);
     }, [ note ]);
 
     return childNotes?.map(childNote => <ListNoteCard note={childNote} parentNote={parentNote} highlightedTokens={highlightedTokens} />)

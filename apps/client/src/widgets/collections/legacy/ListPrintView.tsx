@@ -1,10 +1,9 @@
 import { useEffect, useLayoutEffect, useState } from "preact/hooks";
-import { RawHtmlBlock } from "../../react/RawHtml";
 import froca from "../../../services/froca";
 import type FNote from "../../../entities/fnote";
 import content_renderer from "../../../services/content_renderer";
 import type { ViewModeProps } from "../interface";
-import { useFilteredNoteIds } from "./utils";
+import { filterChildNotes, useFilteredNoteIds } from "./utils";
 
 interface NotesWithContent {
     note: FNote;
@@ -13,10 +12,11 @@ interface NotesWithContent {
 
 export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: ViewModeProps<{}>) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
-    const noteIdsSet = new Set<string>();
     const [ notesWithContent, setNotesWithContent ] = useState<NotesWithContent[]>();
 
     useLayoutEffect(() => {
+        const noteIdsSet = new Set<string>();
+
         froca.getNotes(noteIds).then(async (notes) => {
             const notesWithContent: NotesWithContent[] = [];
 
@@ -34,9 +34,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
                 notesWithContent.push({ note, contentEl });
 
                 if (note.hasChildren()) {
-                    const imageLinks = note.getRelations("imageLink");
-                    const childNotes = await note.getChildNotes();
-                    const filteredChildNotes = childNotes.filter((childNote) => !imageLinks.find((rel) => rel.value === childNote.noteId));
+                    const filteredChildNotes = await filterChildNotes(note);
                     for (const childNote of filteredChildNotes) {
                         await processNote(childNote, depth + 1);
                     }
@@ -82,7 +80,7 @@ function insertPageTitle(contentEl: HTMLElement, title: string) {
 }
 
 function rewriteHeadings(contentEl: HTMLElement, depth: number) {
-    const headings = contentEl.querySelectorAll("h1, h2, h3, h4, h5, h6")
+    const headings = contentEl.querySelectorAll("h1, h2, h3, h4, h5, h6");
     for (const headingEl of headings) {
         const currentLevel = parseInt(headingEl.tagName.substring(1), 10);
         const newLevel = Math.min(currentLevel + depth, 6);
