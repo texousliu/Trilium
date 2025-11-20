@@ -2,7 +2,7 @@ import { allViewTypes, ViewModeMedia, ViewModeProps, ViewTypeOptions } from "./i
 import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
-import { ListView, GridView, ListPrintView } from "./legacy/ListOrGridView";
+import { ListView, GridView } from "./legacy/ListOrGridView";
 import { useEffect, useRef, useState } from "preact/hooks";
 import GeoView from "./geomap";
 import ViewModeStorage from "./view_mode_storage";
@@ -13,6 +13,7 @@ import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } f
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import PresentationView from "./presentation";
+import { ListPrintView } from "./legacy/ListPrintView";
 
 interface NoteListProps {
     note: FNote | null | undefined;
