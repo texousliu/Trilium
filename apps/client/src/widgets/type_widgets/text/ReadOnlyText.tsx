@@ -10,13 +10,13 @@ import RawHtml from "../../react/RawHtml";
 import "@triliumnext/ckeditor5";
 import FNote from "../../../entities/fnote";
 import { getLocaleById } from "../../../services/i18n";
-import { getMermaidConfig } from "../../../services/mermaid";
 import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./utils";
 import { renderMathInElement } from "../../../services/math";
 import { formatCodeBlocks } from "../../../services/syntax_highlight";
 import TouchBar, { TouchBarButton, TouchBarSpacer } from "../../react/TouchBar";
 import appContext from "../../../components/app_context";
 import { applyReferenceLinks } from "./read_only_helper";
+import { applyInlineMermaid, rewriteMermaidDiagramsInContainer } from "../../../services/content_renderer";
 
 export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
@@ -29,6 +29,7 @@ export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetPro
         const container = contentRef.current;
         if (!container) return;
 
+        rewriteMermaidDiagramsInContainer(container);
         applyInlineMermaid(container);
         applyIncludedNotes(container);
         applyMath(container);
@@ -85,26 +86,6 @@ function useNoteLanguage(note: FNote) {
         return correspondingLocale?.rtl;
     }, [ language ]);
     return { isRtl };
-}
-
-async function applyInlineMermaid(container: HTMLDivElement) {
-    const mermaidBlocks = container.querySelectorAll('pre:has(code[class="language-mermaid"])');
-    if (!mermaidBlocks.length) return;
-    const nodes: HTMLElement[] = [];
-
-    // Rewrite the code block from <pre><code> to <div> in order not to apply a codeblock style to it.
-    for (const mermaidBlock of mermaidBlocks) {
-        const div = document.createElement("div");
-        div.classList.add("mermaid-diagram");
-        div.innerHTML = mermaidBlock.querySelector("code")?.innerHTML ?? "";
-        mermaidBlock.replaceWith(div);
-        nodes.push(div);
-    }
-
-    // Initialize mermaid
-    const mermaid = (await import("mermaid")).default;
-    mermaid.initialize(getMermaidConfig());
-    mermaid.run({ nodes });
 }
 
 function applyIncludedNotes(container: HTMLDivElement) {

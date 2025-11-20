@@ -10,7 +10,7 @@ import FNote from "../entities/fnote.js";
 import FAttachment from "../entities/fattachment.js";
 import imageContextMenuService from "../menus/image_context_menu.js";
 import { applySingleBlockSyntaxHighlight, formatCodeBlocks } from "./syntax_highlight.js";
-import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
+import { getMermaidConfig, loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
 import renderDoc from "./doc_renderer.js";
 import { t } from "../services/i18n.js";
 import WheelZoom from 'vanilla-js-wheel-zoom';
@@ -136,6 +136,7 @@ async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HT
             await linkService.loadReferenceLinkTitle($(el));
         }
 
+        await rewriteMermaidDiagramsInContainer($renderedContent[0] as HTMLDivElement);
         await formatCodeBlocks($renderedContent);
     } else if (note instanceof FNote && !options.noChildrenList) {
         await renderChildrenList($renderedContent, note);
@@ -368,6 +369,34 @@ function getRenderingType(entity: FNote | FAttachment) {
     }
 
     return type;
+}
+
+/** Rewrite the code block from <pre><code> to <div> in order not to apply a codeblock style to it. */
+export async function rewriteMermaidDiagramsInContainer(container: HTMLDivElement) {
+    const mermaidBlocks = container.querySelectorAll('pre:has(code[class="language-mermaid"])');
+    if (!mermaidBlocks.length) return;
+    const nodes: HTMLElement[] = [];
+
+    for (const mermaidBlock of mermaidBlocks) {
+        const div = document.createElement("div");
+        div.classList.add("mermaid-diagram");
+        div.innerHTML = mermaidBlock.querySelector("code")?.innerHTML ?? "";
+        mermaidBlock.replaceWith(div);
+        nodes.push(div);
+    }
+}
+
+export async function applyInlineMermaid(container: HTMLDivElement) {
+    // Initialize mermaid
+    const mermaid = (await import("mermaid")).default;
+    mermaid.initialize(getMermaidConfig());
+    const nodes = Array.from(container.querySelectorAll<HTMLElement>("div.mermaid-diagram"));
+    console.log("Got nodes", nodes);
+    try {
+        await mermaid.run({ nodes });
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 export default {
