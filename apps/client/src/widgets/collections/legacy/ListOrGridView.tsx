@@ -50,7 +50,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
         froca.getNotes(noteIds).then(async (notes) => {
             const notesWithContent: NotesWithContent[] = [];
 
-            async function processNote(note: FNote) {
+            async function processNote(note: FNote, depth: number) {
                 const content = await content_renderer.getRenderedContent(note, {
                     trim: false,
                     noChildrenList: true
@@ -67,7 +67,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
                 const headings = contentEl.querySelectorAll("h1, h2, h3, h4, h5, h6")
                 for (const headingEl of headings) {
                     const currentLevel = parseInt(headingEl.tagName.substring(1), 10);
-                    const newLevel = Math.min(currentLevel + 1, 6); // Shift down by 1, max to h6
+                    const newLevel = Math.min(currentLevel + depth, 6);
                     const newHeadingEl = document.createElement(`h${newLevel}`);
                     newHeadingEl.innerHTML = headingEl.innerHTML;
                     headingEl.replaceWith(newHeadingEl);
@@ -80,13 +80,13 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
                     const childNotes = await note.getChildNotes();
                     const filteredChildNotes = childNotes.filter((childNote) => !imageLinks.find((rel) => rel.value === childNote.noteId));
                     for (const childNote of filteredChildNotes) {
-                        await processNote(childNote);
+                        await processNote(childNote, depth + 1);
                     }
                 }
             }
 
             for (const note of notes) {
-                await processNote(note);
+                await processNote(note, 1);
             }
             setNotesWithContent(notesWithContent);
         });
