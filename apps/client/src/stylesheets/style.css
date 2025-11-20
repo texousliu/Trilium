@@ -495,7 +495,7 @@ body #context-menu-container .dropdown-item > span {
 }
 
 .dropdown-menu .note-color-picker {
-    padding: 10px 12px 8px 12px;
+    padding: 4px 12px 8px 12px;
 }
 
 .cm-editor {
