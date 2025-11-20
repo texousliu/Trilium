@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import FNote from "../../../entities/fnote";
 import Icon from "../../react/Icon";
 import { ViewModeProps } from "../interface";
@@ -12,6 +12,7 @@ import link from "../../../services/link";
 import { t } from "../../../services/i18n";
 import attribute_renderer from "../../../services/attribute_renderer";
 import froca from "../../../services/froca";
+import { RawHtmlBlock } from "../../react/RawHtml";
 
 export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -35,31 +36,43 @@ export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
     );
 }
 
+interface NotesWithContent {
+    note: FNote;
+    content: string;
+}
+
 export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTokens, onReady }: ViewModeProps<{}>) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
-    const [ notes, setNotes ] = useState<FNote[]>();
+    const [ notesWithContent, setNotesWithContent ] = useState<NotesWithContent[]>();
 
-    useEffect(() => {
-        froca.getNotes(noteIds).then(setNotes);
+    useLayoutEffect(() => {
+        froca.getNotes(noteIds).then(async (notes) => {
+            const notesWithContent: NotesWithContent[] = [];
+            for (const note of notes) {
+                const content = await content_renderer.getRenderedContent(note, {
+                    trim: false,
+                    noChildrenList: true
+                });
+                notesWithContent.push({ note, content: content.$renderedContent[0].innerHTML });
+            }
+            setNotesWithContent(notesWithContent);
+        });
     }, [noteIds]);
 
     useEffect(() => {
-        if (notes && onReady) {
+        if (notesWithContent && onReady) {
             onReady();
         }
-    }, [ notes, onReady ]);
+    }, [ notesWithContent, onReady ]);
 
     return (
         <div class="note-list list-print-view">
             <div class="note-list-container use-tn-links">
-                {notes?.map(childNote => (
-                    <>
+                {notesWithContent?.map(({ note: childNote, content }) => (
+                    <section id={`note-${childNote.noteId}`} class="note">
                         <h1>{childNote.title}</h1>
-                        <NoteContent
-                            note={childNote}
-                            highlightedTokens={highlightedTokens}
-                        />
-                    </>
+                        <RawHtmlBlock html={content} />
+                    </section>
                 ))}
             </div>
         </div>
