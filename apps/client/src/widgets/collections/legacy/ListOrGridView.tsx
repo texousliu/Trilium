@@ -48,12 +48,27 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTok
     useLayoutEffect(() => {
         froca.getNotes(noteIds).then(async (notes) => {
             const notesWithContent: NotesWithContent[] = [];
-            for (const note of notes) {
+
+            async function processNote(note: FNote) {
                 const content = await content_renderer.getRenderedContent(note, {
                     trim: false,
                     noChildrenList: true
                 });
+
                 notesWithContent.push({ note, content: content.$renderedContent[0].innerHTML });
+
+                if (note.hasChildren()) {
+                    const imageLinks = note.getRelations("imageLink");
+                    const childNotes = await note.getChildNotes();
+                    const filteredChildNotes = childNotes.filter((childNote) => !imageLinks.find((rel) => rel.value === childNote.noteId));
+                    for (const childNote of filteredChildNotes) {
+                        await processNote(childNote);
+                    }
+                }
+            }
+
+            for (const note of notes) {
+                await processNote(note);
             }
             setNotesWithContent(notesWithContent);
         });
