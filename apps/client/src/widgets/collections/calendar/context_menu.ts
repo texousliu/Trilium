@@ -1,4 +1,4 @@
-import NoteColorPickerMenuItem from "../../../menus/custom-items/NoteColorPickerMenuItem";
+import NoteColorPicker from "../../../menus/custom-items/NoteColorPicker";
 import FNote from "../../../entities/fnote";
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
@@ -40,7 +40,7 @@ export function openCalendarContextMenu(e: ContextMenuEvent, noteId: string, par
             { kind: "separator" },
             {
                 kind: "custom",
-                componentFn: () => NoteColorPickerMenuItem({note: noteId})
+                componentFn: () => NoteColorPicker({note: noteId})
             }
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),

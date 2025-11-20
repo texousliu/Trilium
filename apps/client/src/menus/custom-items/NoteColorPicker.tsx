@@ -1,4 +1,4 @@
-import "./NoteColorPickerMenuItem.css";
+import "./NoteColorPicker.css";
 import { t } from "../../services/i18n";
 import { useCallback, useEffect, useRef, useState} from "preact/hooks";
 import {ComponentChildren} from "preact";

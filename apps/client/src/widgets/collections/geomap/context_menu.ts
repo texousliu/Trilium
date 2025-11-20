@@ -2,7 +2,7 @@ import type { LatLng, LeafletMouseEvent } from "leaflet";
 import appContext, { type CommandMappings } from "../../../components/app_context.js";
 import contextMenu, { type MenuItem } from "../../../menus/context_menu.js";
 import linkContextMenu from "../../../menus/link_context_menu.js";
-import NoteColorPickerMenuItem from "../../../menus/custom-items/NoteColorPickerMenuItem.jsx";
+import NoteColorPicker from "../../../menus/custom-items/NoteColorPicker.jsx";
 import { t } from "../../../services/i18n.js";
 import { createNewNote } from "./api.js";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
@@ -23,7 +23,7 @@ export default function openContextMenu(noteId: string, e: LeafletMouseEvent, is
             { kind: "separator"},
             {
                 kind: "custom",
-                componentFn: () => NoteColorPickerMenuItem({note: noteId})
+                componentFn: () => NoteColorPicker({note: noteId})
             }
         ];
     }

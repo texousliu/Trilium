@@ -7,7 +7,7 @@ import link_context_menu from "../../../menus/link_context_menu.js";
 import froca from "../../../services/froca.js";
 import branches from "../../../services/branches.js";
 import Component from "../../../components/component.js";
-import NoteColorPickerMenuItem from "../../../menus/custom-items/NoteColorPickerMenuItem.jsx";
+import NoteColorPicker from "../../../menus/custom-items/NoteColorPicker.jsx";
 import { RefObject } from "preact";
 
 export function useContextMenu(parentNote: FNote, parentComponent: Component | null | undefined, tabulator: RefObject<Tabulator>): Partial<EventCallBackMethods> {
@@ -224,7 +224,7 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
             { kind: "separator"},
             {
                 kind: "custom",
-                componentFn: () => NoteColorPickerMenuItem({note: rowData.noteId})
+                componentFn: () => NoteColorPicker({note: rowData.noteId})
             }
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, rowData.noteId),
