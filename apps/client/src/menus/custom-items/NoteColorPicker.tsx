@@ -8,17 +8,17 @@ import Debouncer from "../../utils/debouncer";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 
-const COLORS = [
+const COLOR_PALETTE = [
     "#e64d4d", "#e6994d", "#e5e64d", "#99e64d", "#4de64d", "#4de699",
     "#4de5e6", "#4d99e6", "#4d4de6", "#994de6", "#e64db3"
 ];
 
-export interface NoteColorPickerMenuItemProps {
+export interface NoteColorPickerProps {
     /** The target Note instance or its ID string. */
     note: FNote | string | null;
 }
 
-export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemProps) {
+export default function NoteColorPicker(props: NoteColorPickerProps) {
     if (!props.note) return null;
 
     const [note, setNote] = useState<FNote | null>(null);
@@ -43,14 +43,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
     useEffect(() => {
         const colorLabel = note?.getLabel("color")?.value ?? null;
         if (colorLabel) {
-            let color: ColorInstance | null = null;
-
-            try {
-                color = new Color(colorLabel);
-            } catch(ex) {
-                console.error(ex);
-            }
-
+            let color = tryParseColor(colorLabel);
             if (color) {
                 setCurrentColor(color.hex().toLowerCase());
             }
@@ -58,7 +51,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
     }, [note]);
 
     useEffect(() => {
-        setIsCustomColor(currentColor !== null && COLORS.indexOf(currentColor) === -1);
+        setIsCustomColor(currentColor !== null && COLOR_PALETTE.indexOf(currentColor) === -1);
     }, [currentColor])
 
     const onColorCellClicked = useCallback((color: string | null) => {
@@ -84,7 +77,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
                    onSelect={onColorCellClicked} />
         
         
-        {COLORS.map((color) => (
+        {COLOR_PALETTE.map((color) => (
             <ColorCell key={color}
                        tooltip={t("note-color.set-color")}
                        color={color}
@@ -155,7 +148,7 @@ function CustomColorCell(props: ColorCellProps) {
         colorInput.current?.click();
     }, [pickedColor]);
 
-    return <div style={`--foreground: ${ensureContrast(props.color)};`}>
+    return <div style={`--foreground: ${getForegroundColor(props.color)};`}>
         <ColorCell {...props}
                    color={pickedColor} 
                    className={`custom-color-cell ${(pickedColor === null) ? "custom-color-cell-empty" : ""}`}
@@ -170,17 +163,24 @@ function CustomColorCell(props: ColorCellProps) {
     </div>
 }
 
-function ensureContrast(color: string | null) {
-    if (color === null) return "inherit";
+function getForegroundColor(backgroundColor: string | null) {
+    if (backgroundColor === null) return "inherit";
 
-    const colorHsl = Color(color).hsl();
-    let l = colorHsl.lightness();
-
-    if (l >= 40) {
-        l = 0;
+    const colorHsl = tryParseColor(backgroundColor)?.hsl();
+    if (colorHsl) {
+        let l = colorHsl.lightness();
+        return colorHsl.saturationl(0).lightness(l >= 50 ? 0 : 100).hex();
     } else {
-        l = 100
+        return "inherit";
+    }
+}
+
+function tryParseColor(colorStr: string): ColorInstance | null {
+    try {
+        return new Color(colorStr);
+    } catch(ex) {
+        console.error(ex);
     }
 
-    return colorHsl.saturationl(0).lightness(l).hex();
+    return null;
 }
