@@ -8,7 +8,7 @@ import { useFilteredNoteIds } from "./utils";
 
 interface NotesWithContent {
     note: FNote;
-    content: string;
+    content: { __html: string };
 }
 
 export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: ViewModeProps<{}>) {
@@ -30,7 +30,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
                 insertPageTitle(contentEl, note.title);
                 rewriteHeadings(contentEl, depth);
 
-                notesWithContent.push({ note, content: contentEl.innerHTML });
+                notesWithContent.push({ note, content: { __html: contentEl.innerHTML } });
 
                 if (note.hasChildren()) {
                     const imageLinks = note.getRelations("imageLink");
@@ -61,9 +61,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
                 <h1>{note.title}</h1>
 
                 {notesWithContent?.map(({ note: childNote, content }) => (
-                    <section id={`note-${childNote.noteId}`} class="note">
-                        <RawHtmlBlock html={content} />
-                    </section>
+                    <section id={`note-${childNote.noteId}`} class="note" dangerouslySetInnerHTML={content} />
                 ))}
             </div>
         </div>
