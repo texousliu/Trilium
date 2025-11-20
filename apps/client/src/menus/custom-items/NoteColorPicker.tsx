@@ -125,7 +125,7 @@ function CustomColorCell(props: ColorCellProps) {
     const isSafari = useRef(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
 
     useEffect(() => {
-        colorInputDebouncer.current = new Debouncer(500, (color) => {
+        colorInputDebouncer.current = new Debouncer(250, (color) => {
             callbackRef.current?.(color);
             setPickedColor(color);
         });
