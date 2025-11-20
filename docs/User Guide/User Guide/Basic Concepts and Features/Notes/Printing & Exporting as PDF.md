@@ -49,6 +49,16 @@ When exporting to PDF, there are no customizable settings such as page orientati
 > [!NOTE]
 > These options have no effect when used with the printing feature, since the user-defined settings are used instead.
 
+## Printing multiple notes
+
+Since v0.100.0, it is possible to print more than one note at the time by using <a class="reference-link" href="../../Collections.md">Collections</a>:
+
+1.  First create a collection.
+2.  Configure it to use <a class="reference-link" href="../../Collections/List%20View.md">List View</a>.
+3.  Print the collection note normally.
+
+The resulting collection will contain all the children of the collection, while maintaining the hierarchy.
+
 ## Keyboard shortcut
 
 It's possible to trigger both printing and export as PDF from the keyboard by going to _Keyboard shortcuts_ in <a class="reference-link" href="../UI%20Elements/Options.md">Options</a> and assigning a key combination for:
@@ -64,8 +74,9 @@ Not all <a class="reference-link" href="../../Note%20Types.md">Note Types</a> 
     *   Line numbers are not printed.
     *   Syntax highlighting is enabled, however a default theme (Visual Studio) is enforced.
 *   For <a class="reference-link" href="../../Collections.md">Collections</a>:
-    *   Only <a class="reference-link" href="../../Collections/Presentation.md">Presentation</a> is currently supported.
-    *   We plan to add support for all the collection types at some point.
+    *   <a class="reference-link" href="../../Collections/List%20View.md">List View</a> is supported, allowing to print multiple notes at once while preserving hierarchy (similar to a book).
+    *   <a class="reference-link" href="../../Collections/Presentation.md">Presentation</a> is also supported, where each slide/subnote is displayed.
+    *   The rest of the collections are not supported, but we plan to add support for all the collection types at some point.
 *   Using <a class="reference-link" href="../../Theme%20development/Custom%20app-wide%20CSS.md">Custom app-wide CSS</a> for printing is not longer supported, due to a more stable but isolated mechanism.
     *   We plan to introduce a new mechanism specifically for a print CSS.
 

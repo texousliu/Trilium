@@ -13,6 +13,7 @@ import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } f
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import PresentationView from "./presentation";
+import { ListPrintView } from "./legacy/ListPrintView";
 
 interface NoteListProps {
     note: FNote | null | undefined;
@@ -103,7 +104,11 @@ export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePa
 function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
     switch (viewType) {
         case "list":
-            return <ListView {...props} />;
+            if (props.media !== "print") {
+                return <ListView {...props} />;
+            } else {
+                return <ListPrintView {...props} />;
+            }
         case "grid":
             return <GridView {...props} />;
         case "geoMap":
