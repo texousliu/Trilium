@@ -68,6 +68,8 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTok
     return (
         <div class="note-list list-print-view">
             <div class="note-list-container use-tn-links">
+                <h1>{note.title}</h1>
+
                 {notesWithContent?.map(({ note: childNote, content }) => (
                     <section id={`note-${childNote.noteId}`} class="note">
                         <h1>{childNote.title}</h1>
