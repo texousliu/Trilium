@@ -67,8 +67,7 @@ export default function NoteColorPicker(props: NoteColorPickerProps) {
         }
     }, [note, currentColor]);
 
-    return <div className="note-color-picker"
-                onClick={(e) => {e.stopPropagation()}}>
+    return <div className="note-color-picker">
         
         <ColorCell className="color-cell-reset"
                    tooltip={t("note-color.clear-color")}
