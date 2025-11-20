@@ -11,6 +11,7 @@ import tree from "../../../services/tree";
 import link from "../../../services/link";
 import { t } from "../../../services/i18n";
 import attribute_renderer from "../../../services/attribute_renderer";
+import froca from "../../../services/froca";
 
 export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -30,6 +31,25 @@ export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
 
                 <Pager {...pagination} />
             </div>}
+        </div>
+    );
+}
+
+export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
+    const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
+    const [ notes, setNotes ] = useState<FNote[]>();
+
+    useEffect(() => {
+        froca.getNotes(noteIds).then(setNotes);
+    }, [noteIds]);
+
+    return (
+        <div class="note-list list-print-view">
+            <div class="note-list-container use-tn-links">
+                {notes?.map(childNote => (
+                    <h1>{childNote.title}</h1>
+                ))}
+            </div>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { allViewTypes, ViewModeMedia, ViewModeProps, ViewTypeOptions } from "./i
 import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
-import { ListView, GridView } from "./legacy/ListOrGridView";
+import { ListView, GridView, ListPrintView } from "./legacy/ListOrGridView";
 import { useEffect, useRef, useState } from "preact/hooks";
 import GeoView from "./geomap";
 import ViewModeStorage from "./view_mode_storage";
@@ -103,7 +103,11 @@ export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePa
 function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
     switch (viewType) {
         case "list":
-            return <ListView {...props} />;
+            if (props.media !== "print") {
+                return <ListView {...props} />;
+            } else {
+                return <ListPrintView {...props} />;
+            }
         case "grid":
             return <GridView {...props} />;
         case "geoMap":
