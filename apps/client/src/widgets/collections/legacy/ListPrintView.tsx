@@ -8,11 +8,12 @@ import { useFilteredNoteIds } from "./utils";
 
 interface NotesWithContent {
     note: FNote;
-    content: { __html: string };
+    contentEl: HTMLElement;
 }
 
 export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: ViewModeProps<{}>) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
+    const noteIdsSet = new Set<string>();
     const [ notesWithContent, setNotesWithContent ] = useState<NotesWithContent[]>();
 
     useLayoutEffect(() => {
@@ -29,9 +30,8 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
 
                 insertPageTitle(contentEl, note.title);
                 rewriteHeadings(contentEl, depth);
-                rewriteLinks(contentEl);
-
-                notesWithContent.push({ note, content: { __html: contentEl.innerHTML } });
+                noteIdsSet.add(note.noteId);
+                notesWithContent.push({ note, contentEl });
 
                 if (note.hasChildren()) {
                     const imageLinks = note.getRelations("imageLink");
@@ -46,6 +46,12 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
             for (const note of notes) {
                 await processNote(note, 1);
             }
+
+            // After all notes are processed, rewrite links
+            for (const { contentEl } of notesWithContent) {
+                rewriteLinks(contentEl, noteIdsSet);
+            }
+
             setNotesWithContent(notesWithContent);
         });
     }, [noteIds]);
@@ -61,8 +67,8 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
             <div class="note-list-container use-tn-links">
                 <h1>{note.title}</h1>
 
-                {notesWithContent?.map(({ note: childNote, content }) => (
-                    <section id={`note-${childNote.noteId}`} class="note" dangerouslySetInnerHTML={content} />
+                {notesWithContent?.map(({ note: childNote, contentEl }) => (
+                    <section id={`note-${childNote.noteId}`} class="note" dangerouslySetInnerHTML={{ __html: contentEl.innerHTML }} />
                 ))}
             </div>
         </div>
@@ -86,13 +92,21 @@ function rewriteHeadings(contentEl: HTMLElement, depth: number) {
     }
 }
 
-function rewriteLinks(contentEl: HTMLElement) {
+function rewriteLinks(contentEl: HTMLElement, noteIdsSet: Set<string>) {
     const linkEls = contentEl.querySelectorAll("a");
     for (const linkEl of linkEls) {
         const href = linkEl.getAttribute("href");
         if (href && href.startsWith("#root/")) {
             const noteId = href.split("/").at(-1);
-            linkEl.setAttribute("href", `#note-${noteId}`);
+
+            if (noteId && noteIdsSet.has(noteId)) {
+                linkEl.setAttribute("href", `#note-${noteId}`);
+            } else {
+                // Link to note not in the print view, remove link but keep text
+                const spanEl = document.createElement("span");
+                spanEl.innerHTML = linkEl.innerHTML;
+                linkEl.replaceWith(spanEl);
+            }
         }
     }
 }
