@@ -1,8 +1,13 @@
 <ul>
-  <li><code>doRender</code> must not be overridden, instead <code>doRenderBody()</code> has
-    to be overridden.</li>
-  <li><code>parentWidget()</code> must be set to <code>“rightPane”</code>.</li>
-  <li><code>widgetTitle()</code> getter can optionally be overriden, otherwise
+  <li data-list-item-id="ef125f092e6b27dc2c8486d195be8be39"><code>doRender</code> must not be overridden, instead <code>doRenderBody()</code> has
+    to be overridden.
+    <ul>
+      <li data-list-item-id="e632e4415d4439f862124dc2e024093db"><code>doRenderBody</code> can optionally be <code>async</code>.</li>
+    </ul>
+  </li>
+  <li data-list-item-id="eef79d03bdc04d4869f6ee69f9086931f"><code>parentWidget()</code> must be set to <code>“rightPane”</code>.</li>
+  <li
+  data-list-item-id="e1bbd084dfcfdea1a8061159b8dcffd44"><code>widgetTitle()</code> getter can optionally be overriden, otherwise
     the widget will be displayed as “Untitled widget”.</li>
 </ul><pre><code class="language-text-x-trilium-auto">const template = `&lt;div&gt;Hi&lt;/div&gt;`;
 

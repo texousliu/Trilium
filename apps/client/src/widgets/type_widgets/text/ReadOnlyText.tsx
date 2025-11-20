@@ -13,7 +13,6 @@ import { getLocaleById } from "../../../services/i18n";
 import { getMermaidConfig } from "../../../services/mermaid";
 import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./utils";
 import { renderMathInElement } from "../../../services/math";
-import link from "../../../services/link";
 import { formatCodeBlocks } from "../../../services/syntax_highlight";
 import TouchBar, { TouchBarButton, TouchBarSpacer } from "../../react/TouchBar";
 import appContext from "../../../components/app_context";

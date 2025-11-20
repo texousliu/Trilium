@@ -40,26 +40,26 @@ quick overview:
   unstable development version, updated daily with the latest features and
   fixes.
 
-## 📚 Documentation
+## 📚 Dokumentace
 
-**Visit our comprehensive documentation at
+**Navštivte naši rozsáhlou dokumentaci na
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+Naše dokumenatce je dostupná ve vícero formátech:
+- **Online dokumentace**: Prohlédněte si kompletní dokumentaci na
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **Pomoc v aplikaci**: V Trilium stiskněte `F1`, pro přístup k stejné
+  dokumentaci přímo v aplikaci
+- **GitHub**: Projděte si [Uživatelskou
+  příručku](./docs/User%20Guide/User%20Guide/) v tomto repozitáři
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
+### Rychlé odkazy
+- [Návod pro začátečníky](https://docs.triliumnotes.org/)
+- [Pokyny pro
+  instalaci](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Nastavení
+  Dockeru](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Aktualizování
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Basic Concepts and
   Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)

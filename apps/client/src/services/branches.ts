@@ -176,11 +176,6 @@ async function moveNodeUpInHierarchy(node: Fancytree.FancytreeNode) {
         toastService.showError(resp.message);
         return;
     }
-
-    if (!hoistedNoteService.isTopLevelNode(node) && node.getParent().getChildren().length <= 1) {
-        node.getParent().folder = false;
-        node.getParent().renderTitle();
-    }
 }
 
 function filterSearchBranches(branchIds: string[]) {
