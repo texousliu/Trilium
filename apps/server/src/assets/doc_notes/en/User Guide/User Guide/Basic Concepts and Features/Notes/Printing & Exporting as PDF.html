@@ -4,7 +4,6 @@
   <figcaption>Screenshot of the note contextual menu indicating the “Export as PDF”
     option.</figcaption>
 </figure>
-
 <h2>Printing</h2>
 <p>This feature allows printing of notes. It works on both the desktop client,
   but also on the web.</p>
@@ -60,9 +59,9 @@ class="admonition note">
     orientation, size. However, there are a few&nbsp;<a class="reference-link"
     href="#root/_help_zEY4DaJG4YT5">Attributes</a>&nbsp;to adjust some of the settings:</p>
   <ul>
-    <li>To print in landscape mode instead of portrait (useful for big diagrams
+    <li data-list-item-id="e05b1bc3a57c550c493c8b1030c301673">To print in landscape mode instead of portrait (useful for big diagrams
       or slides), add <code>#printLandscape</code>.</li>
-    <li>By default, the resulting PDF will be in Letter format. It is possible
+    <li data-list-item-id="e6d7f6bb720e1f94994aa178881885dbd">By default, the resulting PDF will be in Letter format. It is possible
       to adjust it to another page size via the <code>#printPageSize</code> attribute,
       with one of the following values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.</li>
   </ul>
@@ -70,15 +69,26 @@ class="admonition note">
     <p>These options have no effect when used with the printing feature, since
       the user-defined settings are used instead.</p>
   </aside>
+  <h2>Printing multiple notes</h2>
+  <p>Since v0.100.0, it is possible to print more than one note at the time
+    by using&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/_help_GTwFsgaA0lCt">Collections</a>:</p>
+  <ol>
+    <li data-list-item-id="e1caaf943b13fd4764f93c58ea5f4f0c4">First create a collection.</li>
+    <li data-list-item-id="e3593024c9c69c3d26295d1e0152c813d">Configure it to use&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/GTwFsgaA0lCt/_help_mULW0Q3VojwY">List View</a>.</li>
+    <li
+    data-list-item-id="ebeea878f04af6f1da53fc0e8a80caf2d">Print the collection note normally.</li>
+  </ol>
+  <p>The resulting collection will contain all the children of the collection,
+    while maintaining the hierarchy.</p>
   <h2>Keyboard shortcut</h2>
   <p>It's possible to trigger both printing and export as PDF from the keyboard
     by going to&nbsp;<em>Keyboard shortcuts</em>&nbsp;in&nbsp;<a class="reference-link"
     href="#root/_help_4TIF1oA4VQRO">Options</a>&nbsp;and assigning a key combination
     for:</p>
   <ul>
-    <li><em>Print Active Note</em>
+    <li class="ck-list-marker-italic" data-list-item-id="e9595278e625ee8de30a6e88fb00d48e3"><em>Print Active Note</em>
     </li>
-    <li><em>Export Active Note as PDF</em>
+    <li class="ck-list-marker-italic" data-list-item-id="e981d4cf371e1ff69416a796d88e88709"><em>Export Active Note as PDF</em>
     </li>
   </ul>
   <h2>Constraints &amp; limitations</h2>
@@ -86,24 +96,24 @@ class="admonition note">
     supported when printing, in which case the <em>Print</em> and <em>Export as PDF</em> options
     will be disabled.</p>
   <ul>
-    <li>For&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;notes:
+    <li data-list-item-id="e82f01875cc03dcdab5328121654d815c">For&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;notes:
       <ul>
-        <li>Line numbers are not printed.</li>
-        <li>Syntax highlighting is enabled, however a default theme (Visual Studio)
+        <li data-list-item-id="eea76e6bf545a3b54270ff86a74ca0d8d">Line numbers are not printed.</li>
+        <li data-list-item-id="edea65d8d3dedd354431e1e3a5dcd2e08">Syntax highlighting is enabled, however a default theme (Visual Studio)
           is enforced.</li>
       </ul>
     </li>
-    <li>For&nbsp;<a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>:
+    <li data-list-item-id="ec32cca86e4b0e2f75a2f1a06d2219e0b">For&nbsp;<a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>:
       <ul>
-        <li>Only&nbsp;<a class="reference-link" href="#root/_help_zP3PMqaG71Ct">Presentation</a>&nbsp;is
+        <li data-list-item-id="e0e1fc82e1141d3f4a609699e228ccc73">Only&nbsp;<a class="reference-link" href="#root/_help_zP3PMqaG71Ct">Presentation</a>&nbsp;is
           currently supported.</li>
-        <li>We plan to add support for all the collection types at some point.</li>
+        <li data-list-item-id="e4efe886c3ca1d19a49196340d9e1f6c8">We plan to add support for all the collection types at some point.</li>
       </ul>
     </li>
-    <li>Using&nbsp;<a class="reference-link" href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
+    <li data-list-item-id="ee721d0145486818bd914a26594699cbd">Using&nbsp;<a class="reference-link" href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
       printing is not longer supported, due to a more stable but isolated mechanism.
       <ul>
-        <li>We plan to introduce a new mechanism specifically for a print CSS.</li>
+        <li data-list-item-id="e2e1228d8d62cbdc8e96a7cbc9655c2ca">We plan to introduce a new mechanism specifically for a print CSS.</li>
       </ul>
     </li>
   </ul>
@@ -114,10 +124,10 @@ class="admonition note">
     printing.</p>
   <p>To do so:</p>
   <ul>
-    <li>Create a CSS <a href="#root/_help_6f9hih2hXXZk">code note</a>.</li>
-    <li>On the note being printed, apply the <code>~printCss</code> relation to
+    <li data-list-item-id="ea90c233190428f0aacfcca4abe2f6b18">Create a CSS <a href="#root/_help_6f9hih2hXXZk">code note</a>.</li>
+    <li data-list-item-id="ec0756dfa1ce83087dd2c9bcc289d234b">On the note being printed, apply the <code>~printCss</code> relation to
       point to the newly created CSS code note.</li>
-    <li>To apply the CSS to multiple notes, consider using <a href="#root/_help_bwZpz2ajCEwO">inheritable attributes</a> or&nbsp;
+    <li data-list-item-id="ed05b40a29e6b442327bf439286096ac6">To apply the CSS to multiple notes, consider using <a href="#root/_help_bwZpz2ajCEwO">inheritable attributes</a> or&nbsp;
       <a
       class="reference-link" href="#root/_help_KC1HB96bqqHX">Templates</a>.</li>
   </ul>
@@ -128,12 +138,13 @@ class="admonition note">
 }</code></pre>
   <p>To remark:</p>
   <ul>
-    <li>Multiple CSS notes can be add by using multiple <code>~printCss</code> relations.</li>
-    <li>If the note pointing to the <code>printCss</code> doesn't have the right
+    <li data-list-item-id="ec7fa7fb43c85ba65185b42a9ed590da7">Multiple CSS notes can be add by using multiple <code>~printCss</code> relations.</li>
+    <li
+    data-list-item-id="e1db64e345bbaf53151b84a69ff91376f">If the note pointing to the <code>printCss</code> doesn't have the right
       note type or mime type, it will be ignored.</li>
-    <li>If migrating from a previous version where&nbsp;<a class="reference-link"
-      href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>, there's no need for <code>@media print {</code>  since
-      the style-sheet is used only for printing.</li>
+      <li data-list-item-id="e8b2d24c4a6781c5516d0551f51b3947b">If migrating from a previous version where&nbsp;<a class="reference-link"
+        href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>, there's no need for <code>@media print {</code>  since
+        the style-sheet is used only for printing.</li>
   </ul>
   <h2>Under the hood</h2>
   <p>Both printing and exporting as PDF use the same mechanism: a note is rendered

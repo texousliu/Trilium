@@ -49,6 +49,16 @@ When exporting to PDF, there are no customizable settings such as page orientati
 > [!NOTE]
 > These options have no effect when used with the printing feature, since the user-defined settings are used instead.
 
+## Printing multiple notes
+
+Since v0.100.0, it is possible to print more than one note at the time by using <a class="reference-link" href="../../Collections.md">Collections</a>:
+
+1.  First create a collection.
+2.  Configure it to use <a class="reference-link" href="../../Collections/List%20View.md">List View</a>.
+3.  Print the collection note normally.
+
+The resulting collection will contain all the children of the collection, while maintaining the hierarchy.
+
 ## Keyboard shortcut
 
 It's possible to trigger both printing and export as PDF from the keyboard by going to _Keyboard shortcuts_ in <a class="reference-link" href="../UI%20Elements/Options.md">Options</a> and assigning a key combination for:
