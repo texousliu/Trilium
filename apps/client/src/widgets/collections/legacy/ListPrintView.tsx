@@ -29,6 +29,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
 
                 insertPageTitle(contentEl, note.title);
                 rewriteHeadings(contentEl, depth);
+                rewriteLinks(contentEl);
 
                 notesWithContent.push({ note, content: { __html: contentEl.innerHTML } });
 
@@ -82,5 +83,16 @@ function rewriteHeadings(contentEl: HTMLElement, depth: number) {
         const newHeadingEl = document.createElement(`h${newLevel}`);
         newHeadingEl.innerHTML = headingEl.innerHTML;
         headingEl.replaceWith(newHeadingEl);
+    }
+}
+
+function rewriteLinks(contentEl: HTMLElement) {
+    const linkEls = contentEl.querySelectorAll("a");
+    for (const linkEl of linkEls) {
+        const href = linkEl.getAttribute("href");
+        if (href && href.startsWith("#root/")) {
+            const noteId = href.split("/").at(-1);
+            linkEl.setAttribute("href", `#note-${noteId}`);
+        }
     }
 }
