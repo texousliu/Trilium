@@ -35,13 +35,19 @@ export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
     );
 }
 
-export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
+export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTokens, onReady }: ViewModeProps<{}>) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const [ notes, setNotes ] = useState<FNote[]>();
 
     useEffect(() => {
         froca.getNotes(noteIds).then(setNotes);
     }, [noteIds]);
+
+    useEffect(() => {
+        if (notes && onReady) {
+            onReady();
+        }
+    }, [ notes, onReady ]);
 
     return (
         <div class="note-list list-print-view">
