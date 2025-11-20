@@ -13,6 +13,7 @@ import { t } from "../../../services/i18n";
 import attribute_renderer from "../../../services/attribute_renderer";
 import froca from "../../../services/froca";
 import { RawHtmlBlock } from "../../react/RawHtml";
+import { escapeHtml } from "../../../services/utils";
 
 export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -41,7 +42,7 @@ interface NotesWithContent {
     content: string;
 }
 
-export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTokens, onReady }: ViewModeProps<{}>) {
+export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: ViewModeProps<{}>) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const [ notesWithContent, setNotesWithContent ] = useState<NotesWithContent[]>();
 
@@ -55,7 +56,24 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTok
                     noChildrenList: true
                 });
 
-                notesWithContent.push({ note, content: content.$renderedContent[0].innerHTML });
+                const contentEl = content.$renderedContent[0];
+
+                // Create page title element
+                const pageTitleEl = document.createElement("h1");
+                pageTitleEl.textContent = note.title;
+                contentEl.prepend(pageTitleEl);
+
+                // Rewrite heading tags to ensure proper hierarchy in print view.
+                const headings = contentEl.querySelectorAll("h1, h2, h3, h4, h5, h6")
+                for (const headingEl of headings) {
+                    const currentLevel = parseInt(headingEl.tagName.substring(1), 10);
+                    const newLevel = Math.min(currentLevel + 1, 6); // Shift down by 1, max to h6
+                    const newHeadingEl = document.createElement(`h${newLevel}`);
+                    newHeadingEl.innerHTML = headingEl.innerHTML;
+                    headingEl.replaceWith(newHeadingEl);
+                }
+
+                notesWithContent.push({ note, content: contentEl.innerHTML });
 
                 if (note.hasChildren()) {
                     const imageLinks = note.getRelations("imageLink");
@@ -87,7 +105,6 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTok
 
                 {notesWithContent?.map(({ note: childNote, content }) => (
                     <section id={`note-${childNote.noteId}`} class="note">
-                        <h1>{childNote.title}</h1>
                         <RawHtmlBlock html={content} />
                     </section>
                 ))}
