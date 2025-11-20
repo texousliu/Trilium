@@ -4,13 +4,13 @@
     --note-color-picker-clear-color-cell-selection-outline-color: var(--primary-button-border-color);
 }
 
-.color-picker-menu-item {
+.note-color-picker {
     display: flex;
     gap: 8px;
     justify-content: space-between;
 }
 
-.color-picker-menu-item .color-cell {
+.note-color-picker .color-cell {
     --color-picker-cell-size: 14px;
 
     width: var(--color-picker-cell-size);
@@ -19,21 +19,21 @@
     background-color: var(--color);
 }
 
-.color-picker-menu-item .color-cell:not(.selected):hover {
+.note-color-picker .color-cell:not(.selected):hover {
     transform: scale(1.2);
 }
 
-.color-picker-menu-item .color-cell.disabled-color-cell {
+.note-color-picker .color-cell.disabled-color-cell {
     cursor: not-allowed;
 }
 
-.color-picker-menu-item .color-cell.selected {
+.note-color-picker .color-cell.selected {
     outline: 2px solid var(--outline-color, var(--color));
     outline-offset: 2px;
 }
 
-.color-picker-menu-item .color-cell-reset::before,
-.color-picker-menu-item .custom-color-cell::before {
+.note-color-picker .color-cell-reset::before,
+.note-color-picker .custom-color-cell::before {
     position: absolute;
     display: flex;
     top: 0;
@@ -50,14 +50,14 @@
  * RESET COLOR CELL
  */
 
-.color-picker-menu-item .color-cell-reset {
+.note-color-picker .color-cell-reset {
     --color: var(--note-color-picker-clear-color-cell-background);
     --outline-color: var(--note-color-picker-clear-color-cell-selection-outline-color);
 
     position: relative;
 }
 
-.color-picker-menu-item .color-cell-reset::before {
+.note-color-picker .color-cell-reset::before {
     content: "\ec8d";
     mix-blend-mode: normal;
     color: var(--note-color-picker-clear-color-cell-color);
@@ -67,20 +67,20 @@
  * CUSTOM COLOR CELL
  */
 
-.color-picker-menu-item .custom-color-cell {
+.note-color-picker .custom-color-cell {
     position: relative;
     display: flex;
     justify-content: center;
 
 }
 
-.color-picker-menu-item .custom-color-cell.custom-color-cell-empty {
+.note-color-picker .custom-color-cell.custom-color-cell-empty {
     background-image: url(./custom-color.png);
     background-size: cover;
     --foreground: transparent;
 }
 
-.color-picker-menu-item .custom-color-cell::before {
+.note-color-picker .custom-color-cell::before {
     content: "\ed35";
     color: var(--foreground);
     font-size: 16px;

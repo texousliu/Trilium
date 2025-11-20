@@ -73,7 +73,7 @@ export default function NoteColorPickerMenuItem(props: NoteColorPickerMenuItemPr
         }
     }, [note, currentColor]);
 
-    return <div className="color-picker-menu-item"
+    return <div className="note-color-picker"
                 onClick={(e) => {e.stopPropagation()}}>
         
         <ColorCell className="color-cell-reset"
