@@ -47,7 +47,13 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, highlightedTok
         <div class="note-list list-print-view">
             <div class="note-list-container use-tn-links">
                 {notes?.map(childNote => (
-                    <h1>{childNote.title}</h1>
+                    <>
+                        <h1>{childNote.title}</h1>
+                        <NoteContent
+                            note={childNote}
+                            highlightedTokens={highlightedTokens}
+                        />
+                    </>
                 ))}
             </div>
         </div>
