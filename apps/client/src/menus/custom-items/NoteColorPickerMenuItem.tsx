@@ -9,7 +9,7 @@ import froca from "../../services/froca";
 
 const COLORS = [
     null, "#e64d4d", "#e6994d", "#e5e64d", "#99e64d", "#4de64d", "#4de699",
-    "#4de5e6", "#4d99e6", "#4d4de6", "#994de6"
+    "#4de5e6", "#4d99e6", "#4d4de6", "#994de6", "#e64db3"
 ];
 
 export interface NoteColorPickerMenuItemProps {
