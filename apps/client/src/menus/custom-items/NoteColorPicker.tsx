@@ -122,6 +122,7 @@ function CustomColorCell(props: ColorCellProps) {
     const colorInput = useRef<HTMLInputElement>(null);
     const colorInputDebouncer = useRef<Debouncer<string | null> | null>(null);
     const callbackRef = useRef(props.onSelect);
+    const isSafari = useRef(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
 
     useEffect(() => {
         colorInputDebouncer.current = new Debouncer(500, (color) => {
@@ -152,7 +153,12 @@ function CustomColorCell(props: ColorCellProps) {
         colorInput.current?.click();
     }, [pickedColor]);
 
-    return <div style={`--foreground: ${getForegroundColor(props.color)};`}>
+    return <div style={`--foreground: ${getForegroundColor(props.color)};`}
+                onClick={(e) => {
+                    // The color picker dropdown will close on Safari if the parent context menu is
+                    // dismissed, so stop the click propagation to prevent dismissing the menu.
+                    isSafari.current && e.stopPropagation();
+                }}>
         <ColorCell {...props}
                    color={pickedColor} 
                    className={clsx("custom-color-cell", {
