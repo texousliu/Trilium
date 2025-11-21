@@ -49,7 +49,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
   const canBeConvertedToAttachment = note?.isEligibleForConversionToAttachment();
   const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(note.type);
   const isInOptionsOrHelp = note?.noteId.startsWith("_options") || note?.noteId.startsWith("_help");
-  const isPrintable = ["text", "code"].includes(note.type) || (note.type === "book" && ["presentation", "list"].includes(note.getLabelValue("viewType") ?? ""));
+  const isPrintable = ["text", "code"].includes(note.type) || (note.type === "book" && ["presentation", "list", "table"].includes(note.getLabelValue("viewType") ?? ""));
   const isElectron = getIsElectron();
   const isMac = getIsMac();
   const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(note.type);
