@@ -369,7 +369,7 @@ const configMapping = {
             standardEnvVar: 'TRILIUM_NETWORK_CORSRESOURCEPOLICY',
             aliasEnvVars: ['TRILIUM_NETWORK_CORS_RESOURCE_POLICY'],
             iniGetter: () => getIniSection("Network")?.corsResourcePolicy,
-            defaultValue: ''
+            defaultValue: 'same-origin'
         }
     },
     Session: {
