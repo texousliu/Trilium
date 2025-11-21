@@ -1,0 +1,7 @@
+.tabulator-print-table table,
+.tabulator-print-table th,
+.tabulator-print-table tr,
+.tabulator-print-table td {
+    border: 1px solid black !important;
+    border-collapse: collapse;
+}

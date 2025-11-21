@@ -4,6 +4,7 @@ import useData, { TableConfig } from "./data";
 import { ExportModule, PrintModule, Tabulator as VanillaTabulator} from 'tabulator-tables';
 import Tabulator from "./tabulator";
 import { RawHtmlBlock } from "../../react/RawHtml";
+import "./TablePrintView.css";
 
 export default function TablePrintView({ note, noteIds, viewConfig }: ViewModeProps<TableConfig>) {
     const tabulatorRef = useRef<VanillaTabulator>(null);
@@ -21,16 +22,19 @@ export default function TablePrintView({ note, noteIds, viewConfig }: ViewModePr
                     data={rowData}
                     index="branchId"
                     dataTree={hasChildren}
-                    printAsHtml={true}
                     printStyled={true}
                     onReady={() => {
                         const tabulator = tabulatorRef.current;
                         if (!tabulator) return;
-                        setHtml(tabulator.getHtml());
+                        const generatedTable = tabulator.modules.export.generateTable(tabulator.options.printConfig, tabulator.options.printStyled, tabulator.options.printRowRange, "print");
+                        if(tabulator.options.printFormatter){
+                            tabulator.options.printFormatter(tabulator.element, generatedTable);
+                        }
+                        setHtml(generatedTable.outerHTML);
                     }}
                 />
             ) : (
-                <RawHtmlBlock html={html} />
+                <RawHtmlBlock html={html} className="tabulator-print-fullscreen" />
             )}
         </div>
 
