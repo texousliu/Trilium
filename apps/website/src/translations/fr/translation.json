@@ -51,7 +51,8 @@
         "mermaid_description": "Créez des diagrammes tels que des organigrammes, des diagrammes de classes et de séquences, des diagrammes de Gantt et bien d'autres, en utilisant la syntaxe Mermaid.",
         "mindmap_title": "Carte mentale",
         "mindmap_description": "Organisez vos pensées visuellement ou faites une séance de brainstorming.",
-        "others_list": "et autres : <0>carte de notes</0>, <1>carte de relations</1>, <2>recherches enregistrées</2>, <3>note de rendu</3> et <4>vues Web</4>."
+        "others_list": "et autres : <0>carte de notes</0>, <1>carte de relations</1>, <2>recherches enregistrées</2>, <3>note de rendu</3> et <4>vues Web</4>.",
+        "title": "Plusieurs façons de représenter vos informations"
     },
     "faq": {
         "database_question": "Où sont les données stockées?",
@@ -168,7 +169,9 @@
         "board_title": "Tableau de bord",
         "board_description": "Organisez vos tâches ou l'état de vos projets dans un tableau Kanban avec un moyen simple de créer de nouveaux éléments et colonnes et de modifier simplement leur état en les faisant glisser sur le tableau.",
         "geomap_title": "Géocarte",
-        "geomap_description": "Planifiez vos vacances ou marquez vos points d'intérêt directement sur une carte géographique grâce à des marqueurs personnalisables. Affichez les traces GPX enregistrées pour suivre vos itinéraires."
+        "geomap_description": "Planifiez vos vacances ou marquez vos points d'intérêt directement sur une carte géographique grâce à des marqueurs personnalisables. Affichez les traces GPX enregistrées pour suivre vos itinéraires.",
+        "title": "Collections",
+        "presentation_title": "Présentation"
     },
     "download_now": {
         "text": "Télécharger maintenant. ",
