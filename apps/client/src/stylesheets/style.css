@@ -494,6 +494,10 @@ body #context-menu-container .dropdown-item > span {
     width: 100%;
 }
 
+.dropdown-menu .note-color-picker {
+    padding: 4px 12px 8px 12px;
+}
+
 .cm-editor {
     height: 100%;
     outline: none !important;
@@ -1587,6 +1591,14 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
     #detail-container {
         width: 100%;
+    }
+
+    .note-split.empty-note {
+        --max-content-width: var(--preferred-max-content-width);
+    }
+
+    .note-detail-empty {
+        margin: 15px;
     }
 
     #mobile-sidebar-container.show #mobile-sidebar-wrapper {

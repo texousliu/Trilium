@@ -1,3 +1,4 @@
+import NoteColorPicker from "./custom-items/NoteColorPicker.jsx";
 import treeService from "../services/tree.js";
 import froca from "../services/froca.js";
 import clipboard from "../services/clipboard.js";
@@ -239,6 +240,19 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 keyboardShortcut: "deleteNotes",
                 uiIcon: "bx bx-trash destructive-action-icon",
                 enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp
+            },
+
+            { kind: "separator"},
+
+            {
+                kind: "custom",
+                componentFn: () => {
+                    if (notOptionsOrHelp && selectedNotes.length === 1) {
+                        return NoteColorPicker({note});
+                    } else {
+                        return null;
+                    }
+                }
             },
 
             { kind: "separator" },

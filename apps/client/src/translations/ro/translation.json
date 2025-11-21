@@ -2095,5 +2095,10 @@
   },
   "calendar_view": {
     "delete_note": "Șterge notița..."
+  },
+    "note-color": {
+    "clear-color": "Înlăturați culoarea notiței",
+    "set-color": "Setați culoarea notiței",
+    "set-custom-color": "Setați culoare personalizată pentru notiță"
   }
 }

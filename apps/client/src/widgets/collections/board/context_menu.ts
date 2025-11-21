@@ -1,4 +1,5 @@
 import FNote from "../../../entities/fnote";
+import NoteColorPicker from "../../../menus/custom-items/NoteColorPicker";
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
 import attributes from "../../../services/attributes";
@@ -74,6 +75,11 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
                 uiIcon: "bx bx-trash",
                 handler: () => branches.deleteNotes([ branchId ], false, false)
             },
+            { kind: "separator" },
+            {
+                kind: "custom",
+                componentFn: () => NoteColorPicker({note})
+            }
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, note.noteId),
     });

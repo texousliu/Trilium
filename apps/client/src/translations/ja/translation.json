@@ -496,7 +496,8 @@
     "new-item-placeholder": "ノートのタイトルを入力...",
     "add-column-placeholder": "列名を入力...",
     "edit-note-title": "クリックしてノートのタイトルを編集",
-    "edit-column-title": "クリックして列のタイトルを編集"
+    "edit-column-title": "クリックして列のタイトルを編集",
+    "column-already-exists": "この列は既にボード上に存在します。"
   },
   "code_buttons": {
     "execute_button_title": "スクリプトを実行",
