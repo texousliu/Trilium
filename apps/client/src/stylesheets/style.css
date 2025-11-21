@@ -1582,6 +1582,14 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         width: 100%;
     }
 
+    .note-split.empty-note {
+        --max-content-width: var(--preferred-max-content-width);
+    }
+
+    .note-detail-empty {
+        margin: 15px;
+    }
+
     #mobile-sidebar-container.show #mobile-sidebar-wrapper {
         transform: translateX(0);
     }
