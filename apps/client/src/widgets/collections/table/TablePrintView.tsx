@@ -1,14 +1,14 @@
 import { useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import useData, { TableConfig } from "./data";
-import { ExportModule, PrintModule, Tabulator as VanillaTabulator} from 'tabulator-tables';
+import { ExportModule, FormatModule, PrintModule, Tabulator as VanillaTabulator} from 'tabulator-tables';
 import Tabulator from "./tabulator";
 import { RawHtmlBlock } from "../../react/RawHtml";
 import "./TablePrintView.css";
 
 export default function TablePrintView({ note, noteIds, viewConfig }: ViewModeProps<TableConfig>) {
     const tabulatorRef = useRef<VanillaTabulator>(null);
-    const { columnDefs, rowData, movableRows, hasChildren } = useData(note, noteIds, viewConfig, undefined, () => {});
+    const { columnDefs, rowData, hasChildren } = useData(note, noteIds, viewConfig, undefined, () => {});
     const [ html, setHtml ] = useState<string>();
 
     return rowData && (
@@ -17,7 +17,7 @@ export default function TablePrintView({ note, noteIds, viewConfig }: ViewModePr
                 <Tabulator
                     tabulatorRef={tabulatorRef}
                     className="table-print-view-container"
-                    modules={[ PrintModule, ExportModule ]}
+                    modules={[ PrintModule, ExportModule, FormatModule ]}
                     columns={columnDefs ?? []}
                     data={rowData}
                     index="branchId"
