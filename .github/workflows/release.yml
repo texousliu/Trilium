@@ -45,7 +45,7 @@ jobs:
               forge_platform: linux
     runs-on: ${{ matrix.os.image }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies
         uses: actions/setup-node@v6
@@ -91,7 +91,7 @@ jobs:
             runs-on: ubuntu-24.04-arm
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Run the build
         uses: ./.github/actions/build-server
@@ -114,7 +114,7 @@ jobs:
     steps:
       - run: mkdir upload
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           sparse-checkout: |
             docs/Release Notes
