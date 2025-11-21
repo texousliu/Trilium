@@ -113,11 +113,17 @@ export default function NoteDetail() {
     useEffect(() => {
         if (!isElectron()) return;
         const { ipcRenderer } = dynamicRequire("electron");
-        const listener = () => {
-            toast.closePersistent("printing");
+        const onPrintProgress = (_e: any, progress: number) => {
+            console.log("Got print progress:", progress);
+            showToast("printing", progress);
         };
-        ipcRenderer.on("print-done", listener);
-        return () => ipcRenderer.off("print-done", listener);
+        const onPrintDone = () => toast.closePersistent("printing");
+        ipcRenderer.on("print-progress", onPrintProgress);
+        ipcRenderer.on("print-done", onPrintDone);
+        return () => {
+            ipcRenderer.off("print-progress", onPrintProgress);
+            ipcRenderer.off("print-done", onPrintDone);
+        };
     }, []);
 
     useTriliumEvent("executeInActiveNoteDetailWidget", ({ callback }) => {

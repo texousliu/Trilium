@@ -3,6 +3,7 @@ import { render } from "preact";
 import { CustomNoteList, useNoteViewType } from "./widgets/collections/NoteList";
 import { useCallback, useLayoutEffect, useRef } from "preact/hooks";
 import content_renderer, { applyInlineMermaid } from "./services/content_renderer";
+import { dynamicRequire, isElectron } from "./services/utils";
 
 interface RendererProps {
     note: FNote;
@@ -25,7 +26,12 @@ async function main() {
 function App({ note, noteId }: { note: FNote | null | undefined, noteId: string }) {
     const sentReadyEvent = useRef(false);
     const onProgressChanged = useCallback((progress: number) => {
-        window.dispatchEvent(new CustomEvent("note-load-progress", { detail: { progress } }));
+        if (isElectron()) {
+            const { ipcRenderer } = dynamicRequire('electron');
+            ipcRenderer.send("print-progress", progress);
+        } else {
+            window.dispatchEvent(new CustomEvent("note-load-progress", { detail: { progress } }));
+        }
     }, []);
     const onReady = useCallback(() => {
         if (sentReadyEvent.current) return;
