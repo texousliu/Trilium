@@ -97,7 +97,7 @@ export interface TriliumConfig {
         corsAllowMethods: string;
         /** CORS allowed headers (comma-separated header names) */
         corsAllowHeaders: string;
-        /** CORS Resource Policy ('same-origin', 'same-site' 'cross-origin') */
+        /** CORS Resource Policy ('same-origin', 'same-site', 'cross-origin') */
         corsResourcePolicy: 'same-origin' | 'same-site' | 'cross-origin' | undefined;
     };
     /** Session management configuration */
