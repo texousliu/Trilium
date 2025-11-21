@@ -83,7 +83,7 @@ export default defineConfig(() => ({
                 chunkFileNames: "src/[name].js",
                 assetFileNames: "src/[name].[ext]",
                 manualChunks: {
-                    "ckeditor5": [ "@triliumnext/ckeditor5" ],
+                    "ckeditor5": [ "@triliumnext/ckeditor5", "mathlive" ],
                     "boxicons": [ "../../node_modules/boxicons/css/boxicons.min.css" ]
                 },
             },

@@ -1,4 +1,5 @@
 import { View, type Locale } from 'ckeditor5';
+import 'mathlive';
 
 /**
  * A view that wraps the MathLive `<math-field>` web component for interactive LaTeX equation editing.

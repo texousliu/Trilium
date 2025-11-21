@@ -1,6 +1,7 @@
 import ckeditor from './../theme/icons/math.svg?raw';
 import './augmentation.js';
 import "../theme/mathform.css";
+import 'mathlive';
 import 'mathlive/fonts.css';
 import 'mathlive/static.css';
 

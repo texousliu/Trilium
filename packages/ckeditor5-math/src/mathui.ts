@@ -4,7 +4,6 @@ import mathIcon from '../theme/icons/math.svg?raw';
 import { Plugin, ClickObserver, ButtonView, ContextualBalloon, clickOutsideHandler, CKEditorError, uid } from 'ckeditor5';
 import { getBalloonPositionData } from './utils.js';
 import MathCommand from './mathcommand.js';
-import 'mathlive';
 
 const mathKeystroke = 'Ctrl+M';
 
