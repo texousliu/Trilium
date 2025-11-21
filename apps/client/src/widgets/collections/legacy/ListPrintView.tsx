@@ -10,7 +10,7 @@ interface NotesWithContent {
     contentEl: HTMLElement;
 }
 
-export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: ViewModeProps<{}>) {
+export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady, onProgressChanged }: ViewModeProps<{}>) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const [ notesWithContent, setNotesWithContent ] = useState<NotesWithContent[]>();
 
@@ -32,6 +32,10 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady }: Vie
                 rewriteHeadings(contentEl, depth);
                 noteIdsSet.add(note.noteId);
                 notesWithContent.push({ note, contentEl });
+
+                if (onProgressChanged) {
+                    onProgressChanged((notesWithContent.length / noteIds.length) * 100);
+                }
 
                 if (note.hasChildren()) {
                     const filteredChildNotes = await filterChildNotes(note);

@@ -162,6 +162,10 @@ export default function NoteDetail() {
                     return;
                 }
 
+                iframe.contentWindow.addEventListener("note-load-progress", (e) => {
+                    console.log("Got ", e);
+                });
+
                 iframe.contentWindow.addEventListener("note-ready", () => {
                     toast.closePersistent("printing");
                     iframe.contentWindow?.print();

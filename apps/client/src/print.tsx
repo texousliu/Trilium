@@ -7,6 +7,7 @@ import content_renderer, { applyInlineMermaid } from "./services/content_rendere
 interface RendererProps {
     note: FNote;
     onReady: () => void;
+    onProgressChanged?: (progress: number) => void;
 }
 
 async function main() {
@@ -23,13 +24,16 @@ async function main() {
 
 function App({ note, noteId }: { note: FNote | null | undefined, noteId: string }) {
     const sentReadyEvent = useRef(false);
+    const onProgressChanged = useCallback((progress: number) => {
+        window.dispatchEvent(new CustomEvent("note-load-progress", { detail: { progress } }));
+    }, []);
     const onReady = useCallback(() => {
         if (sentReadyEvent.current) return;
         window.dispatchEvent(new Event("note-ready"));
         window._noteReady = true;
         sentReadyEvent.current = true;
     }, []);
-    const props: RendererProps | undefined | null = note && { note, onReady };
+    const props: RendererProps | undefined | null = note && { note, onReady, onProgressChanged };
 
     if (!note || !props) return <Error404 noteId={noteId} />
 
@@ -89,7 +93,7 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
     </>;
 }
 
-function CollectionRenderer({ note, onReady }: RendererProps) {
+function CollectionRenderer({ note, onReady, onProgressChanged }: RendererProps) {
     const viewType = useNoteViewType(note);
     return <CustomNoteList
         viewType={viewType}
@@ -103,6 +107,7 @@ function CollectionRenderer({ note, onReady }: RendererProps) {
             await loadCustomCss(note);
             onReady();
         }}
+        onProgressChanged={onProgressChanged}
     />;
 }
 

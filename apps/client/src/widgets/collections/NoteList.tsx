@@ -26,9 +26,10 @@ interface NoteListProps {
     media: ViewModeMedia;
     viewType: ViewTypeOptions | undefined;
     onReady?: () => void;
+    onProgressChanged?(progress: number): void;
 }
 
-export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
+export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady" | "onProgressChanged">) {
     const { note, noteContext, notePath, ntxId } = useNoteContext();
     const viewType = useNoteViewType(note);
     const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
@@ -43,7 +44,7 @@ export function SearchNoteList(props: Omit<NoteListProps, "isEnabled" | "viewTyp
     return <CustomNoteList {...props} isEnabled={true} viewType={viewType} />
 }
 
-export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
+export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, onProgressChanged, ...restProps }: NoteListProps) {
     const widgetRef = useRef<HTMLDivElement>(null);
     const noteIds = useNoteIds(shouldEnable ? note : null, viewType, ntxId);
     const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
@@ -86,6 +87,8 @@ export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePa
             viewConfig: viewModeConfig.config,
             saveConfig: viewModeConfig.storeFn,
             onReady: onReady ?? (() => {}),
+            onProgressChanged: onProgressChanged ?? (() => {}),
+
             ...restProps
         }
     }

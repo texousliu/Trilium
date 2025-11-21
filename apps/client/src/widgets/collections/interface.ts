@@ -17,4 +17,5 @@ export interface ViewModeProps<T extends object> {
     saveConfig(newConfig: T): void;
     media: ViewModeMedia;
     onReady(): void;
+    onProgressChanged?(progress: number): void;
 }
