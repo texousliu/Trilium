@@ -2461,7 +2461,7 @@ footer.webview-footer button {
     transition: opacity 200ms ease;
 }
 
-.ck-content ul.todo-list li:has(input[type="checkbox"]:checked) span.todo-list__label__description {
+.ck-content ul.todo-list li:has(> span.todo-list__label input[type="checkbox"]:checked) > span.todo-list__label span.todo-list__label__description {
     text-decoration: line-through;
     opacity: 0.6;    
 }
