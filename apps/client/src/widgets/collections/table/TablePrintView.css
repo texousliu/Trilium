@@ -14,3 +14,7 @@
 .tabulator-print-table td {
     padding: 0.25rem 0.5rem !important;
 }
+
+.tabulator-print-table td[aria-checked] svg path {
+    fill: currentColor !important;
+}
