@@ -18,6 +18,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady, onPro
         const noteIdsSet = new Set<string>();
 
         froca.getNotes(noteIds).then(async (notes) => {
+            const noteIdsWithChildren = await note.getSubtreeNoteIds(true);
             const notesWithContent: NotesWithContent[] = [];
 
             async function processNote(note: FNote, depth: number) {
@@ -34,7 +35,7 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady, onPro
                 notesWithContent.push({ note, contentEl });
 
                 if (onProgressChanged) {
-                    onProgressChanged((notesWithContent.length / noteIds.length) * 100);
+                    onProgressChanged(notesWithContent.length / noteIdsWithChildren.length);
                 }
 
                 if (note.hasChildren()) {

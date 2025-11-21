@@ -1137,6 +1137,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     --bs-toast-color: var(--main-text-color);
     z-index: 9999999999 !important;
     pointer-events: all;
+    overflow: hidden;
 }
 
 .toast-header {
@@ -1167,6 +1168,16 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 .toast.no-title .toast-header {
     background-color: unset !important;
+}
+
+.toast .toast-progress {
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    background-color: var(--toast-text-color) !important;
+    height: 4px;
+    transition: width 0.1s linear;    
 }
 
 .ck-mentions .ck-button {

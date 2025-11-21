@@ -139,11 +139,7 @@ export default function NoteDetail() {
     useTriliumEvent("printActiveNote", () => {
         if (!noteContext?.isActive() || !note) return;
 
-        toast.showPersistent({
-            icon: "bx bx-loader-circle bx-spin",
-            message: t("note_detail.printing"),
-            id: "printing"
-        });
+        showToast("printing");
 
         if (isElectron()) {
             const { ipcRenderer } = dynamicRequire("electron");
@@ -163,7 +159,7 @@ export default function NoteDetail() {
                 }
 
                 iframe.contentWindow.addEventListener("note-load-progress", (e) => {
-                    console.log("Got ", e);
+                    showToast("printing", e.detail.progress);
                 });
 
                 iframe.contentWindow.addEventListener("note-ready", () => {
@@ -325,4 +321,13 @@ function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNot
     return (!noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
         || noteContext?.viewScope?.viewMode === "attachments"
         || isBackendNote;
+}
+
+function showToast(type: "printing" | "exporting_pdf", progress: number = 0) {
+    toast.showPersistent({
+        icon: "bx bx-loader-circle bx-spin",
+        message: t("note_detail.printing"),
+        id: "printing",
+        progress
+    });
 }
