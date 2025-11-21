@@ -5,3 +5,7 @@
     border: 1px solid black !important;
     border-collapse: collapse;
 }
+
+.tabulator-print-table th {
+    background-color: #f0f0f0 !important;
+}
