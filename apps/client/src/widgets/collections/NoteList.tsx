@@ -14,6 +14,7 @@ import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import PresentationView from "./presentation";
 import { ListPrintView } from "./legacy/ListPrintView";
+import TablePrintView from "./table/TablePrintView";
 
 interface NoteListProps {
     note: FNote | null | undefined;
@@ -117,9 +118,13 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
         case "geoMap":
             return <GeoView {...props} />;
         case "calendar":
-            return <CalendarView {...props} />
+            return <CalendarView {...props} />;
         case "table":
-            return <TableView {...props} />
+            if (props.media !== "print") {
+                return <TableView {...props} />;
+            } else {
+                return <TablePrintView {...props} />;
+            }
         case "board":
             return <BoardView {...props} />
         case "presentation":
