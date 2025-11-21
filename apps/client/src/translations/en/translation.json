@@ -2093,5 +2093,10 @@
   },
   "collections": {
     "rendering_error": "Unable to show content due to an error."
+  },
+  "note-color": {
+    "clear-color": "Clear note color",
+    "set-color": "Set note color",
+    "set-custom-color": "Set custom note color"
   }
 }
