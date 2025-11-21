@@ -113,10 +113,7 @@ export default function NoteDetail() {
     useEffect(() => {
         if (!isElectron()) return;
         const { ipcRenderer } = dynamicRequire("electron");
-        const onPrintProgress = (_e: any, progress: number) => {
-            console.log("Got print progress:", progress);
-            showToast("printing", progress);
-        };
+        const onPrintProgress = (_e: any, { progress, action }: { progress: number, action: "printing" | "exporting_pdf" }) => showToast(action, progress);
         const onPrintDone = () => toast.closePersistent("printing");
         ipcRenderer.on("print-progress", onPrintProgress);
         ipcRenderer.on("print-done", onPrintDone);
@@ -179,11 +176,7 @@ export default function NoteDetail() {
 
     useTriliumEvent("exportAsPdf", () => {
         if (!noteContext?.isActive() || !note) return;
-        toast.showPersistent({
-            icon: "bx bx-loader-circle bx-spin",
-            message: t("note_detail.printing_pdf"),
-            id: "printing"
-        });
+        showToast("exporting_pdf");
 
         const { ipcRenderer } = dynamicRequire("electron");
         ipcRenderer.send("export-as-pdf", {
@@ -332,7 +325,7 @@ function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNot
 function showToast(type: "printing" | "exporting_pdf", progress: number = 0) {
     toast.showPersistent({
         icon: "bx bx-loader-circle bx-spin",
-        message: t("note_detail.printing"),
+        message: type === "printing" ? t("note_detail.printing") : t("note_detail.printing_pdf"),
         id: "printing",
         progress
     });

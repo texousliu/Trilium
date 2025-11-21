@@ -80,7 +80,7 @@ interface ExportAsPdfOpts {
 }
 
 electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
-    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
+    const browserWindow = await getBrowserWindowForPrinting(e, notePath, "printing");
     browserWindow.webContents.print({}, (success, failureReason) => {
         if (!success) {
             electron.dialog.showErrorBox(t("pdf.unable-to-print"), failureReason);
@@ -91,7 +91,7 @@ electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
 });
 
 electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pageSize }: ExportAsPdfOpts) => {
-    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
+    const browserWindow = await getBrowserWindowForPrinting(e, notePath, "exporting_pdf");
 
     async function print() {
         const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
@@ -143,7 +143,7 @@ electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pag
     }
 });
 
-async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string) {
+async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string, action: "printing" | "exporting_pdf") {
     const browserWindow = new electron.BrowserWindow({
         show: false,
         webPreferences: {
@@ -154,7 +154,7 @@ async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string) {
         },
     });
 
-    const progressCallback = (_e, progress: number) => e.sender.send("print-progress", progress);
+    const progressCallback = (_e, progress: number) => e.sender.send("print-progress", { progress, action });
     ipcMain.on("print-progress", progressCallback);
 
     await browserWindow.loadURL(`http://127.0.0.1:${port}/?print#${notePath}`);
