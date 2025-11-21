@@ -15,7 +15,7 @@ export interface TableConfig {
 }
 
 export default function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undefined, newAttributePosition: RefObject<number | undefined> | undefined, resetNewAttributePosition: () => void) {
-    const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
+    const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth");
     const [ includeArchived ] = useNoteLabelBoolean(note, "includeArchived");
 
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
