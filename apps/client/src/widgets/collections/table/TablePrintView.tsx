@@ -12,31 +12,36 @@ export default function TablePrintView({ note, noteIds, viewConfig }: ViewModePr
     const [ html, setHtml ] = useState<string>();
 
     return rowData && (
-        <div className="table-print-view">
-            {!html ? (
-                <Tabulator
-                    tabulatorRef={tabulatorRef}
-                    className="table-print-view-container"
-                    modules={[ PrintModule, ExportModule, FormatModule ]}
-                    columns={columnDefs ?? []}
-                    data={rowData}
-                    index="branchId"
-                    dataTree={hasChildren}
-                    printStyled={true}
-                    onReady={() => {
-                        const tabulator = tabulatorRef.current;
-                        if (!tabulator) return;
-                        const generatedTable = tabulator.modules.export.generateTable(tabulator.options.printConfig, tabulator.options.printStyled, tabulator.options.printRowRange, "print");
-                        if(tabulator.options.printFormatter){
-                            tabulator.options.printFormatter(tabulator.element, generatedTable);
-                        }
-                        setHtml(generatedTable.outerHTML);
-                    }}
-                />
-            ) : (
-                <RawHtmlBlock html={html} className="tabulator-print-fullscreen" />
-            )}
-        </div>
+        <>
+            <h1>{note.title}</h1>
+
+            <div className="table-print-view">
+
+                {!html ? (
+                    <Tabulator
+                        tabulatorRef={tabulatorRef}
+                        className="table-print-view-container"
+                        modules={[ PrintModule, ExportModule, FormatModule ]}
+                        columns={columnDefs ?? []}
+                        data={rowData}
+                        index="branchId"
+                        dataTree={hasChildren}
+                        printStyled={true}
+                        onReady={() => {
+                            const tabulator = tabulatorRef.current;
+                            if (!tabulator) return;
+                            const generatedTable = tabulator.modules.export.generateTable(tabulator.options.printConfig, tabulator.options.printStyled, tabulator.options.printRowRange, "print");
+                            if(tabulator.options.printFormatter){
+                                tabulator.options.printFormatter(tabulator.element, generatedTable);
+                            }
+                            setHtml(generatedTable.outerHTML);
+                        }}
+                    />
+                ) : (
+                    <RawHtmlBlock html={html} />
+                )}
+            </div>
+        </>
 
     )
 }
