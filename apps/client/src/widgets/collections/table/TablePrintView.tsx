@@ -26,7 +26,8 @@ export default function TablePrintView({ note, noteIds, viewConfig }: ViewModePr
                         data={rowData}
                         index="branchId"
                         dataTree={hasChildren}
-                        printStyled={true}
+                        printAsHtml={true}
+                        printStyled={false}
                         onReady={() => {
                             const tabulator = tabulatorRef.current;
                             if (!tabulator) return;

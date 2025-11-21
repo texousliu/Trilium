@@ -9,3 +9,8 @@
 .tabulator-print-table th {
     background-color: #f0f0f0 !important;
 }
+
+.tabulator-print-table th,
+.tabulator-print-table td {
+    padding: 0.25rem 0.5rem !important;
+}
