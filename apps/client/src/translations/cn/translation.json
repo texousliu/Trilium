@@ -2091,5 +2091,10 @@
     "auto-read-only-note": "这条笔记以只读模式显示便于快速加载。",
     "auto-read-only-learn-more": "了解更多",
     "edit-note": "编辑笔记"
+  },
+  "note-color": {
+    "clear-color": "清除笔记颜色",
+    "set-color": "设置笔记颜色",
+    "set-custom-color": "设置自定义笔记颜色"
   }
 }
