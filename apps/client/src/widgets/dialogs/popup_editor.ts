@@ -13,7 +13,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
     constructor() {
         super();
-        this.noteContext = new NoteContext("_popup-editor");
+        this.noteContext =
     }
 
     doRender() {
@@ -34,11 +34,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     }
 
     async openInPopupEvent({ noteIdOrPath }: EventData<"openInPopup">) {
-        await this.noteContext.setNote(noteIdOrPath, {
-            viewScope: {
-                readOnlyTemporarilyDisabled: true
-            }
-        });
+
 
         const colorClass = this.noteContext.note?.getColorClass();
         const wrapperElement = this.$wrapper.get(0)!;
@@ -61,7 +57,6 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         }
 
         $dialog.on("shown.bs.modal", async () => {
-            await this.handleEventInChildren("activeContextChanged", { noteContext: this.noteContext });
             this.setVisibility(true);
             await this.handleEventInChildren("focusOnDetail", { ntxId: this.noteContext.ntxId });
         });
