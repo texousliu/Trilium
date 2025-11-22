@@ -10,16 +10,21 @@ import { TabContext } from "./ribbon-interface";
  * The ribbon item is active by default for text notes, as long as they are not in read-only mode.
  *
  * ! The toolbar is not only used in the ribbon, but also in the quick edit feature.
+ * * The mobile toolbar is handled separately (see `MobileEditorToolbar`).
  */
 export default function FormattingToolbar({ hidden, ntxId }: TabContext) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
 
+    // Attach the toolbar from the CKEditor.
     useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
-        if (eventNtxId !== ntxId) return;
+        if (eventNtxId !== ntxId || !containerRef.current) return;
         const toolbar = editor.ui.view.toolbar?.element;
-        if (toolbar && containerRef.current) {
+
+        if (toolbar) {
             containerRef.current.replaceChildren(toolbar);
+        } else {
+            containerRef.current.replaceChildren();
         }
     });
 

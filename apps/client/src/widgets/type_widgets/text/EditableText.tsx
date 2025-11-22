@@ -233,12 +233,6 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 onWatchdogStateChange={onWatchdogStateChange}
                 onChange={() => spacedUpdate.scheduleUpdate()}
                 onEditorInitialized={(editor) => {
-                    console.log("Editor has been initialized!", parentComponent, editor);
-
-                    if (isClassicEditor) {
-                        setupClassicEditor(editor, parentComponent);
-                    }
-
                     if (hasTouchBar) {
                         const handler = () => refreshTouchBarRef.current?.();
                         for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
@@ -301,26 +295,6 @@ function onNotificationWarning(data, evt) {
     }
 
     evt.stop();
-}
-
-function setupClassicEditor(editor: CKTextEditor, parentComponent: Component | undefined) {
-    if (!parentComponent) return;
-
-    if (utils.isMobile()) {
-        // Reposition all dropdowns to point upwards instead of downwards.
-        // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
-        const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
-        for (const item of toolbarView.items) {
-            if (!("panelView" in item)) continue;
-
-            item.on("change:isOpen", () => {
-                if (!("isOpen" in item) || !item.isOpen) return;
-
-                // @ts-ignore
-                item.panelView.position = item.panelView.position.replace("s", "n");
-            });
-        }
-    }
 }
 
 function EditableTextTouchBar({ watchdogRef, refreshTouchBarRef }: { watchdogRef: RefObject<EditorWatchdog | null>, refreshTouchBarRef: RefObject<() => void> }) {
