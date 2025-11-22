@@ -39,7 +39,10 @@
     "help_on_tree_prefix": "Aide sur le préfixe de l'arbre",
     "prefix": "Préfixe : ",
     "save": "Sauvegarder",
-    "branch_prefix_saved": "Le préfixe de la branche a été enregistré."
+    "branch_prefix_saved": "Le préfixe de la branche a été enregistré.",
+    "edit_branch_prefix_multiple": "Modifier le préfixe de branche pour {{count}} branches",
+    "branch_prefix_saved_multiple": "Le préfixe de la branche a été sauvegardé pour {{count}} branches.",
+    "affected_branches": "Branches impactées ({{count}}):"
   },
   "bulk_actions": {
     "bulk_actions": "Actions groupées",
