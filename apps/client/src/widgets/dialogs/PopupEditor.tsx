@@ -29,6 +29,11 @@ export default function PopupEditor() {
         setShown(true);
     });
 
+    // Add a global class to be able to handle issues with z-index due to rendering in a popup.
+    useEffect(() => {
+        document.body.classList.toggle("popup-editor-open", shown);
+    }, [shown]);
+
     return (
         <NoteContextContext.Provider value={noteContext}>
             <DialogWrapper>
@@ -52,9 +57,8 @@ export default function PopupEditor() {
 }
 
 export function DialogWrapper({ children }: { children: ComponentChildren }) {
-    const { note, ntxId } = useNoteContext();
+    const { note } = useNoteContext();
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const colorClass = note?.getColorClass();
     const [ hasTint, setHasTint ] = useState(false);
 
     // Apply the tinted-dialog class only if the custom color CSS class specifies a hue
