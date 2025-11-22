@@ -58,7 +58,6 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
         $dialog.on("shown.bs.modal", async () => {
             this.setVisibility(true);
-            await this.handleEventInChildren("focusOnDetail", { ntxId: this.noteContext.ntxId });
         });
         $dialog.on("hidden.bs.modal", () => {
             const $typeWidgetEl = $dialog.find(".note-detail-printable");

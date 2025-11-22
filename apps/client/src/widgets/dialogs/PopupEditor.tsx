@@ -12,6 +12,7 @@ const noteContext = new NoteContext("_popup-editor");
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
+    const parentComponent = useContext(ParentComponent);
 
     useTriliumEvent("openInPopup", async ({ noteIdOrPath }) => {
         await noteContext.setNote(noteIdOrPath, {
@@ -30,6 +31,9 @@ export default function PopupEditor() {
                 className="popup-editor-dialog"
                 size="lg"
                 show={shown}
+                onShown={() => {
+                    parentComponent?.handleEvent("focusOnDetail", { ntxId: noteContext.ntxId });
+                }}
                 onHidden={() => setShown(false)}
             >
                 <NoteDetail />
