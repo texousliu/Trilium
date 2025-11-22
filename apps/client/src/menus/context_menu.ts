@@ -211,15 +211,15 @@ class ContextMenu {
                 $group.append($("<div>").addClass("dropdown-divider"));
                 shouldResetGroup = true; // End the group after the next item
             } else if (itemKind === "header") {
-                $group.append($("<h6>").addClass("dropdown-header").text(item.title));
+                $group.append($("<h6>").addClass("dropdown-header").text((item as MenuHeader).title));
                 shouldResetGroup = true;
             } else {
                 if (itemKind === "custom") {
                     // Custom menu item
-                    $group.append(this.createCustomMenuItem(item));
+                    $group.append(this.createCustomMenuItem(item as CustomMenuItem));
                 } else {
                     // Standard menu item
-                    $group.append(this.createMenuItem(item));
+                    $group.append(this.createMenuItem(item as MenuCommandItem<any>));
                 }
 
                 // After adding a menu item, if the previous item was a separator or header,
