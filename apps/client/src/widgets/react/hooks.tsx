@@ -266,10 +266,19 @@ export function useNoteContext() {
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useEffect(() => {
+        if (!noteContextContext) return;
+        setNoteContext(noteContextContext);
+        setNote(noteContextContext.note);
+        setNotePath(noteContextContext.notePath);
+        setViewScope(noteContextContext.viewScope);
+    }, [ noteContextContext ]);
+
+    useEffect(() => {
         setNote(noteContext?.note);
     }, [ notePath ]);
 
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
+        if (noteContextContext) return;
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);
         setViewScope(noteContext.viewScope);
