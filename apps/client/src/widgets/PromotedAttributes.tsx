@@ -2,10 +2,17 @@ import { useEffect, useState } from "preact/hooks";
 import "./PromotedAttributes.css";
 import { useNoteContext } from "./react/hooks";
 import { Attribute } from "../services/attribute_parser";
+import FAttribute from "../entities/fattribute";
+
+interface Cell {
+    definitionAttr: FAttribute;
+    valueAttr: Attribute;
+    valueName: string;
+}
 
 export default function PromotedAttributes() {
     const { note } = useNoteContext();
-    const [ cells, setCells ] = useState<Attribute[]>();
+    const [ cells, setCells ] = useState<Cell[]>();
 
     useEffect(() => {
         if (!note) return;
@@ -16,7 +23,7 @@ export default function PromotedAttributes() {
         // the order of attributes is important as well
         ownedAttributes.sort((a, b) => a.position - b.position);
 
-        const cells: Attribute[] = [];
+        const cells: Cell[] = [];
         for (const definitionAttr of promotedDefAttrs) {
             const valueType = definitionAttr.name.startsWith("label:") ? "label" : "relation";
             const valueName = definitionAttr.name.substr(valueType.length + 1);
@@ -36,7 +43,9 @@ export default function PromotedAttributes() {
                 valueAttrs = valueAttrs.slice(0, 1);
             }
 
-            cells.push(...valueAttrs);
+            for (const valueAttr of valueAttrs) {
+                cells.push({  definitionAttr, valueAttr, valueName });
+            }
         }
         setCells(cells);
     }, [ note ]);
@@ -44,8 +53,24 @@ export default function PromotedAttributes() {
     return (
         <div className="promoted-attributes-widget">
             <div className="promoted-attributes-container">
-
+                {cells?.map(cell => <PromotedAttributeCell cell={cell} />)}
             </div>
         </div>
     );
+}
+
+function PromotedAttributeCell({ cell }: { cell: Cell }) {
+    const { valueName, valueAttr, definitionAttr } = cell;
+    const inputId = `value-${valueAttr.attributeId}`;
+    const definition = definitionAttr.getDefinition();
+
+    return (
+        <div className="promoted-attribute-cell">
+            <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
+            <input
+                tabIndex={200 + definitionAttr.position}
+                id={inputId}
+            />
+        </div>
+    )
 }

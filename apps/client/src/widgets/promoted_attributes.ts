@@ -21,14 +21,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
     private $container!: JQuery<HTMLElement>;
 
-    get name() {
-        return "promotedAttributes";
-    }
-
-    get toggleCommand() {
-        return "toggleRibbonTabPromotedAttributes";
-    }
-
     doRender() {
         this.contentSized();
     }
@@ -59,11 +51,8 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
     async createPromotedAttributeCell(definitionAttr: FAttribute, valueAttr: Attribute, valueName: string) {
         const definition = definitionAttr.getDefinition();
-        const id = `value-${valueAttr.attributeId}`;
 
         const $input = $("<input>")
-            .prop("tabindex", 200 + definitionAttr.position)
-            .prop("id", id)
             .attr("data-attribute-id", valueAttr.noteId === this.noteId ? valueAttr.attributeId ?? "" : "") // if not owned, we'll force creation of a new attribute instead of updating the inherited one
             .attr("data-attribute-type", valueAttr.type)
             .attr("data-attribute-name", valueAttr.name)
@@ -79,7 +68,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         const $wrapper = $('<div class="promoted-attribute-cell">')
             .append(
                 $("<label>")
-                    .prop("for", id)
                     .text(definition.promotedAlias ?? valueName)
             )
             .append($("<div>").addClass("input-group").append($input))

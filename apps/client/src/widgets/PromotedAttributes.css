@@ -4,6 +4,10 @@ body.mobile .promoted-attributes-widget {
     overflow: auto;
 }
 
+.component.promoted-attributes-widget {
+    contain: none;
+}
+
 .promoted-attributes-container {
     margin: 0 1.5em;
     overflow: auto;
