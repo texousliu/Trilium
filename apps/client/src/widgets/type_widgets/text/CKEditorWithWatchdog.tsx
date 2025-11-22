@@ -41,6 +41,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
     const [ editor, setEditor ] = useState<CKTextEditor>();
     const { parentComponent, ntxId } = useNoteContext();
 
+    console.log("Register with ntxId", ntxId);
     useKeyboardShortcuts("text-detail", containerRef, parentComponent, ntxId);
 
     useImperativeHandle(editorApi, () => ({

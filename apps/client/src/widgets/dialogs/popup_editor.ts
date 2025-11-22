@@ -4,82 +4,6 @@ import { openDialog } from "../../services/dialog.js";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget.js";
 import Container from "../containers/container.js";
 
-const TPL = /*html*/`\
-<div class="popup-editor-dialog modal fade mx-auto" tabindex="-1" role="dialog">
-    <style>
-        /** Reduce the z-index of modals so that ckeditor popups are properly shown on top of it. */
-        body.popup-editor-open > .modal-backdrop { z-index: 998; }
-        body.popup-editor-open .popup-editor-dialog { z-index: 999; }
-        body.popup-editor-open .ck-clipboard-drop-target-line { z-index: 1000; }
-
-        body.desktop .modal.popup-editor-dialog .modal-dialog {
-            max-width: 75vw;
-        }
-
-        .modal.popup-editor-dialog .modal-header .modal-title {
-            font-size: 1.1em;
-        }
-
-        .modal.popup-editor-dialog .modal-body {
-            padding: 0;
-            height: 75vh;
-            overflow: auto;
-        }
-
-        .modal.popup-editor-dialog .note-detail-editable-text {
-            padding: 0 1em;
-        }
-
-        .modal.popup-editor-dialog .title-row,
-        .modal.popup-editor-dialog .modal-title,
-        .modal.popup-editor-dialog .note-icon-widget {
-            height: 32px;
-        }
-
-        .modal.popup-editor-dialog .note-icon-widget {
-            width: 32px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .modal.popup-editor-dialog .note-icon-widget button.note-icon,
-        .modal.popup-editor-dialog .note-title-widget input.note-title {
-            font-size: 1em;
-        }
-
-        .modal.popup-editor-dialog .classic-toolbar-widget {
-            position: sticky;
-            top: 0;
-            inset-inline-start: 0;
-            inset-inline-end: 0;
-            background: var(--modal-background-color);
-            z-index: 998;
-        }
-
-        .modal.popup-editor-dialog .note-detail-file {
-            padding: 0;
-        }
-    </style>
-
-    <div class="quick-edit-dialog-wrapper">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <!-- This is where the first child will be injected -->
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <!-- This is where all but the first child will be injected. -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-`;
-
 export default class PopupEditorDialog extends Container<BasicWidget> {
 
     private noteContext: NoteContext;
@@ -110,10 +34,6 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     }
 
     async openInPopupEvent({ noteIdOrPath }: EventData<"openInPopup">) {
-        const $dialog = await openDialog(this.$widget, false, {
-            focus: false
-        });
-
         await this.noteContext.setNote(noteIdOrPath, {
             viewScope: {
                 readOnlyTemporarilyDisabled: true
