@@ -186,17 +186,10 @@
 	border-radius: var(--ck-border-radius, 6px);
 	font-size: var(--ck-font-size-base);
 	box-sizing: border-box;
-	background: var(--input-background-color);
-	color: var(--input-text-color);
+	background: var(--ck-color-input-background,) !important;
+	color: var(--ck-color-input-text, inherit);
 	outline: 3px solid transparent;
 	outline-offset: 6px;
-}
-
-/* Hover state */
-.ck.ck-math-form math-field:hover,
-.ck.ck-math-form textarea:hover {
-	background: var(--input-hover-background);
-	color: var(--input-hover-color);
 }
 
 /* Make the raw LaTeX textarea flat (no rounded corners or hover animation) */
@@ -209,8 +202,8 @@
 
 .ck-math-view .ck-labeled-field-view textarea:hover,
 .ck-math-view .ck-labeled-field-view textarea:focus {
-	background: var(--input-background-color);
-	color: var(--input-text-color);
+	background: var(--ck-color-input-background, ) !important;
+	color: var(--ck-color-input-text, inherit) !important;
 	outline: none !important;
 	box-shadow: none !important;
 	transition: none !important;
