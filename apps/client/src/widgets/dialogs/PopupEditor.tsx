@@ -1,13 +1,16 @@
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import Modal from "../react/Modal";
 import "./PopupEditor.css";
-import { useNoteContext, useNoteLabel, useTriliumEvent } from "../react/hooks";
+import { useNoteContext, useTriliumEvent } from "../react/hooks";
 import NoteTitleWidget from "../note_title";
 import NoteIcon from "../note_icon";
 import NoteContext from "../../components/note_context";
 import { NoteContextContext, ParentComponent } from "../react/react_utils";
 import NoteDetail from "../NoteDetail";
 import { ComponentChildren } from "preact";
+import NoteList from "../collections/NoteList";
+import StandaloneRibbonAdapter from "../ribbon/components/StandaloneRibbonAdapter";
+import FormattingToolbar from "../ribbon/FormattingToolbar";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
@@ -39,7 +42,9 @@ export default function PopupEditor() {
                     }}
                     onHidden={() => setShown(false)}
                 >
+                    <StandaloneRibbonAdapter component={FormattingToolbar} />
                     <NoteDetail />
+                    <NoteList media="screen" displayOnlyCollections />
                 </Modal>
             </DialogWrapper>
         </NoteContextContext.Provider>
