@@ -271,6 +271,7 @@ export function useNoteContext() {
         setNote(noteContextContext.note);
         setNotePath(noteContextContext.notePath);
         setViewScope(noteContextContext.viewScope);
+        setIsReadOnlyTemporarilyDisabled(noteContextContext?.viewScope?.readOnlyTemporarilyDisabled);
     }, [ noteContextContext ]);
 
     useEffect(() => {
@@ -292,6 +293,7 @@ export function useNoteContext() {
         }
     });
     useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
+        if (noteContextContext) return;
         if (eventNoteContext.ntxId === noteContext?.ntxId) {
             setIsReadOnlyTemporarilyDisabled(eventNoteContext?.viewScope?.readOnlyTemporarilyDisabled);
         }

@@ -62,10 +62,10 @@ export function DialogWrapper({ children }: { children: ComponentChildren }) {
         if (!wrapperRef.current) return;
         const customHue = getComputedStyle(wrapperRef.current).getPropertyValue("--custom-color-hue");
         setHasTint(!!customHue);
-    }, [ note, colorClass ]);
+    }, [ note ]);
 
     return (
-        <div ref={wrapperRef} class={`quick-edit-dialog-wrapper ${note?.getColorClass()} ${hasTint ? "tinted-quick-edit-dialog" : ""}`}>
+        <div ref={wrapperRef} class={`quick-edit-dialog-wrapper ${note?.getColorClass() ?? ""} ${hasTint ? "tinted-quick-edit-dialog" : ""}`}>
             {children}
         </div>
     )
