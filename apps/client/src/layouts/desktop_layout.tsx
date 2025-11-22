@@ -44,6 +44,7 @@ import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import utils from "../services/utils.js";
 import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
 import NoteDetail from "../widgets/NoteDetail.jsx";
+import RightPanelWidget from "../widgets/sidebar/RightPanelWidget.jsx";
 
 export default class DesktopLayout {
 

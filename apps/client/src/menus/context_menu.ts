@@ -165,16 +165,19 @@ class ContextMenu {
         let $group = $parent; // The current group or parent element to which items are being appended
         let shouldStartNewGroup = false; // If true, the next item will start a new group
         let shouldResetGroup = false; // If true, the next item will be the last one from the group
+        let prevItemKind: string = "";
 
         for (let index = 0; index < items.length; index++) {
             const item = items[index];
+            const itemKind = ("kind" in item) ? item.kind : "";
+
             if (!item) {
                 continue;
             }
 
             // If the current item is a header, start a new group. This group will contain the
             // header and the next item that follows the header.
-            if ("kind" in item && item.kind === "header") {
+            if (itemKind === "header") {
                 if (multicolumn && !shouldResetGroup) {
                     shouldStartNewGroup = true;
                 }
@@ -200,19 +203,23 @@ class ContextMenu {
                 shouldStartNewGroup = false;
             }
 
-            if ("kind" in item && item.kind === "separator") {
+            if (itemKind === "separator") {
+                if (prevItemKind === "separator") {
+                    // Skip consecutive separators
+                    continue;
+                }
                 $group.append($("<div>").addClass("dropdown-divider"));
                 shouldResetGroup = true; // End the group after the next item
-            } else if ("kind" in item && item.kind === "header") {
-                $group.append($("<h6>").addClass("dropdown-header").text(item.title));
+            } else if (itemKind === "header") {
+                $group.append($("<h6>").addClass("dropdown-header").text((item as MenuHeader).title));
                 shouldResetGroup = true;
             } else {
-                if ("kind" in item && item.kind === "custom") {
+                if (itemKind === "custom") {
                     // Custom menu item
-                    $group.append(this.createCustomMenuItem(item));
+                    $group.append(this.createCustomMenuItem(item as CustomMenuItem));
                 } else {
                     // Standard menu item
-                    $group.append(this.createMenuItem(item));
+                    $group.append(this.createMenuItem(item as MenuCommandItem<any>));
                 }
 
                 // After adding a menu item, if the previous item was a separator or header,
@@ -222,6 +229,9 @@ class ContextMenu {
                     shouldResetGroup = false;
                 };
             }
+
+            prevItemKind = itemKind;
+
         }
     }
 

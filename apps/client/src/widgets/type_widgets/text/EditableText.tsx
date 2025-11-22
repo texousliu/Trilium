@@ -2,12 +2,11 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import utils, { hasTouchBar, isMobile } from "../../../services/utils";
-import { useEditorSpacedUpdate, useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteLabel, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
+import { useEditorSpacedUpdate, useLegacyImperativeHandlers, useNoteLabel, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog, { CKEditorApi } from "./CKEditorWithWatchdog";
 import "./EditableText.css";
-import { CKTextEditor, ClassicEditor, EditorWatchdog, TemplateDefinition } from "@triliumnext/ckeditor5";
-import Component from "../../../components/component";
+import { CKTextEditor, EditorWatchdog, TemplateDefinition } from "@triliumnext/ckeditor5";
 import options from "../../../services/options";
 import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./utils";
 import getTemplates, { updateTemplateCache } from "./snippets.js";
@@ -27,7 +26,7 @@ import { deferred } from "@triliumnext/commons";
  */
 export default function EditableText({ note, parentComponent, ntxId, noteContext }: TypeWidgetProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [ content, setContent ] = useState<string>();
+    const contentRef = useRef<string>("");
     const watchdogRef = useRef<EditorWatchdog>(null);
     const editorApiRef = useRef<CKEditorApi>(null);
     const refreshTouchBarRef = useRef<() => void>(null);
@@ -55,7 +54,8 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
             };
         },
         onContentChange(newContent) {
-            setContent(newContent);
+            contentRef.current = newContent;
+            watchdogRef.current?.editor?.setData(newContent);
         }
     });
     const templates = useTemplates();
@@ -215,7 +215,6 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 containerRef={containerRef}
                 className={`note-detail-editable-text-editor use-tn-links ${codeBlockWordWrap ? "word-wrap" : ""}`}
                 tabIndex={300}
-                content={content}
                 contentLanguage={language}
                 isClassicEditor={isClassicEditor}
                 editorApi={editorApiRef}
@@ -233,12 +232,6 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 onWatchdogStateChange={onWatchdogStateChange}
                 onChange={() => spacedUpdate.scheduleUpdate()}
                 onEditorInitialized={(editor) => {
-                    console.log("Editor has been initialized!", parentComponent, editor);
-
-                    if (isClassicEditor) {
-                        setupClassicEditor(editor, parentComponent);
-                    }
-
                     if (hasTouchBar) {
                         const handler = () => refreshTouchBarRef.current?.();
                         for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
@@ -251,6 +244,8 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     }
 
                     initialized.current.resolve();
+                    editor.setData(contentRef.current ?? "");
+                    parentComponent?.triggerEvent("textEditorRefreshed", { ntxId, editor });
                 }}
             />}
 
@@ -300,55 +295,6 @@ function onNotificationWarning(data, evt) {
     }
 
     evt.stop();
-}
-
-function setupClassicEditor(editor: CKTextEditor, parentComponent: Component | undefined) {
-    if (!parentComponent) return;
-    const $classicToolbarWidget = findClassicToolbar(parentComponent);
-
-    $classicToolbarWidget.empty();
-    if ($classicToolbarWidget.length) {
-        const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
-        if (toolbarView.element) {
-            $classicToolbarWidget[0].appendChild(toolbarView.element);
-        }
-    }
-
-    if (utils.isMobile()) {
-        $classicToolbarWidget.addClass("visible");
-
-        // Reposition all dropdowns to point upwards instead of downwards.
-        // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
-        const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
-        for (const item of toolbarView.items) {
-            if (!("panelView" in item)) continue;
-
-            item.on("change:isOpen", () => {
-                if (!("isOpen" in item) || !item.isOpen) return;
-
-                // @ts-ignore
-                item.panelView.position = item.panelView.position.replace("s", "n");
-            });
-        }
-    }
-}
-
-function findClassicToolbar(parentComponent: Component): JQuery<HTMLElement> {
-    const $widget = $(parentComponent.$widget);
-
-    if (!utils.isMobile()) {
-        const $parentSplit = $widget.parents(".note-split.type-text");
-
-        if ($parentSplit.length) {
-            // The editor is in a normal tab.
-            return $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
-        } else {
-            // The editor is in a popup.
-            return $widget.closest(".modal-body").find(".classic-toolbar-widget");
-        }
-    } else {
-        return $("body").find(".classic-toolbar-widget");
-    }
 }
 
 function EditableTextTouchBar({ watchdogRef, refreshTouchBarRef }: { watchdogRef: RefObject<EditorWatchdog | null>, refreshTouchBarRef: RefObject<() => void> }) {

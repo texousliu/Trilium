@@ -445,6 +445,7 @@ type EventMappings = {
         error: string;
     };
     searchRefreshed: { ntxId?: string | null };
+    textEditorRefreshed: { ntxId?: string | null, editor: CKTextEditor };
     hoistedNoteChanged: {
         noteId: string;
         ntxId: string | null;

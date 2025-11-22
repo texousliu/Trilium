@@ -2,7 +2,7 @@ import { CSSProperties } from "preact/compat";
 import { DragData } from "../note_tree";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
 import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { ParentComponent, refToJQuerySelector } from "./react_utils";
+import { NoteContextContext, ParentComponent, refToJQuerySelector } from "./react_utils";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
 import { ViewMode, ViewScope } from "../../services/link";
@@ -257,7 +257,8 @@ export function useUniqueName(prefix?: string) {
 }
 
 export function useNoteContext() {
-    const [ noteContext, setNoteContext ] = useState<NoteContext>();
+    const noteContextContext = useContext(NoteContextContext);
+    const [ noteContext, setNoteContext ] = useState<NoteContext | undefined>(noteContextContext ?? undefined);
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ , setViewScope ] = useState<ViewScope>();
@@ -265,10 +266,20 @@ export function useNoteContext() {
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useEffect(() => {
+        if (!noteContextContext) return;
+        setNoteContext(noteContextContext);
+        setNote(noteContextContext.note);
+        setNotePath(noteContextContext.notePath);
+        setViewScope(noteContextContext.viewScope);
+        setIsReadOnlyTemporarilyDisabled(noteContextContext?.viewScope?.readOnlyTemporarilyDisabled);
+    }, [ noteContextContext ]);
+
+    useEffect(() => {
         setNote(noteContext?.note);
     }, [ notePath ]);
 
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
+        if (noteContextContext) return;
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);
         setViewScope(noteContext.viewScope);
@@ -282,6 +293,7 @@ export function useNoteContext() {
         }
     });
     useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
+        if (noteContextContext) return;
         if (eventNoteContext.ntxId === noteContext?.ntxId) {
             setIsReadOnlyTemporarilyDisabled(eventNoteContext?.viewScope?.readOnlyTemporarilyDisabled);
         }
@@ -760,18 +772,18 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => v
     }, [ callback, ref ]);
 }
 
-export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined) {
+export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined, ntxId: string | null | undefined) {
     useEffect(() => {
         if (!parentComponent) return;
         const $container = refToJQuerySelector(containerRef);
-        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent);
+        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent, ntxId);
         return async () => {
             const bindings = await bindingPromise;
             for (const binding of bindings) {
                 removeIndividualBinding(binding);
             }
         }
-    }, []);
+    }, [ scope, containerRef, parentComponent, ntxId ]);
 }
 
 /**

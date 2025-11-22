@@ -2,19 +2,13 @@ import { allViewTypes, ViewModeMedia, ViewModeProps, ViewTypeOptions } from "./i
 import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
-import { ListView, GridView } from "./legacy/ListOrGridView";
 import { useEffect, useRef, useState } from "preact/hooks";
-import GeoView from "./geomap";
 import ViewModeStorage from "./view_mode_storage";
-import CalendarView from "./calendar";
-import TableView from "./table";
-import BoardView from "./board";
 import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } from "../../services/ws";
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
-import PresentationView from "./presentation";
-import { ListPrintView } from "./legacy/ListPrintView";
-
+import { lazy, Suspense } from "preact/compat";
+import { VNode } from "preact";
 interface NoteListProps {
     note: FNote | null | undefined;
     notePath: string | null | undefined;
@@ -27,6 +21,33 @@ interface NoteListProps {
     viewType: ViewTypeOptions | undefined;
     onReady?: () => void;
     onProgressChanged?(progress: number): void;
+}
+
+type LazyLoadedComponent = ((props: ViewModeProps<any>) => VNode<any> | undefined);
+const ViewComponents: Record<ViewTypeOptions, { normal: LazyLoadedComponent, print?: LazyLoadedComponent }> = {
+    list: {
+        normal: lazy(() => import("./legacy/ListOrGridView.js").then(i => i.ListView)),
+        print: lazy(() => import("./legacy/ListPrintView.js").then(i => i.ListPrintView))
+    },
+    grid: {
+        normal: lazy(() => import("./legacy/ListOrGridView.js").then(i => i.GridView)),
+    },
+    geoMap: {
+        normal: lazy(() => import("./geomap/index.js")),
+    },
+    calendar: {
+        normal: lazy(() => import("./calendar/index.js"))
+    },
+    table: {
+        normal: lazy(() => import("./table/index.js")),
+        print: lazy(() => import("./table/TablePrintView.js"))
+    },
+    board: {
+        normal: lazy(() => import("./board/index.js"))
+    },
+    presentation: {
+        normal: lazy(() => import("./presentation/index.js"))
+    }
 }
 
 export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady" | "onProgressChanged">) {
@@ -93,38 +114,21 @@ export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePa
         }
     }
 
+    const ComponentToRender = viewType && props && isEnabled && (
+        props.media === "print" ? ViewComponents[viewType].print : ViewComponents[viewType].normal
+    );
+
     return (
         <div ref={widgetRef} className={`note-list-widget component ${isFullHeight && isEnabled ? "full-height" : ""}`}>
-            {props && isEnabled && (
+            {ComponentToRender && props && (
                 <div className="note-list-widget-content">
-                    {getComponentByViewType(viewType, props)}
+                    <Suspense fallback="">
+                        <ComponentToRender {...props} />
+                    </Suspense>
                 </div>
             )}
         </div>
     );
-}
-
-function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
-    switch (viewType) {
-        case "list":
-            if (props.media !== "print") {
-                return <ListView {...props} />;
-            } else {
-                return <ListPrintView {...props} />;
-            }
-        case "grid":
-            return <GridView {...props} />;
-        case "geoMap":
-            return <GeoView {...props} />;
-        case "calendar":
-            return <CalendarView {...props} />
-        case "table":
-            return <TableView {...props} />
-        case "board":
-            return <BoardView {...props} />
-        case "presentation":
-            return <PresentationView {...props} />
-    }
 }
 
 export function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
