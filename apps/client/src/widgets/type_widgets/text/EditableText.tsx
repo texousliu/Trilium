@@ -27,7 +27,7 @@ import { deferred } from "@triliumnext/commons";
  */
 export default function EditableText({ note, parentComponent, ntxId, noteContext }: TypeWidgetProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [ content, setContent ] = useState<string>();
+    const contentRef = useRef<string>("");
     const watchdogRef = useRef<EditorWatchdog>(null);
     const editorApiRef = useRef<CKEditorApi>(null);
     const refreshTouchBarRef = useRef<() => void>(null);
@@ -55,7 +55,8 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
             };
         },
         onContentChange(newContent) {
-            setContent(newContent);
+            contentRef.current = newContent;
+            watchdogRef.current?.editor?.setData(newContent);
         }
     });
     const templates = useTemplates();
@@ -215,7 +216,6 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 containerRef={containerRef}
                 className={`note-detail-editable-text-editor use-tn-links ${codeBlockWordWrap ? "word-wrap" : ""}`}
                 tabIndex={300}
-                content={content}
                 contentLanguage={language}
                 isClassicEditor={isClassicEditor}
                 editorApi={editorApiRef}
@@ -245,6 +245,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     }
 
                     initialized.current.resolve();
+                    editor.setData(contentRef.current ?? "");
                     parentComponent?.triggerEvent("textEditorRefreshed", { ntxId, editor });
                 }}
             />}
