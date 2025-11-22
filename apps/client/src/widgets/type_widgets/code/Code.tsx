@@ -100,7 +100,7 @@ export function EditableCode({ note, ntxId, noteContext, debounceUpdate, parentC
         }
     });
 
-    useKeyboardShortcuts("code-detail", containerRef, parentComponent);
+    useKeyboardShortcuts("code-detail", containerRef, parentComponent, ntxId);
 
     return (
         <>

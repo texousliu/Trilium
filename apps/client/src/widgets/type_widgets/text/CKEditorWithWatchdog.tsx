@@ -39,9 +39,9 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ uiLanguage ] = useTriliumOption("locale");
     const [ editor, setEditor ] = useState<CKTextEditor>();
-    const { parentComponent } = useNoteContext();
+    const { parentComponent, ntxId } = useNoteContext();
 
-    useKeyboardShortcuts("text-detail", containerRef, parentComponent);
+    useKeyboardShortcuts("text-detail", containerRef, parentComponent, ntxId);
 
     useImperativeHandle(editorApi, () => ({
         hasSelection() {

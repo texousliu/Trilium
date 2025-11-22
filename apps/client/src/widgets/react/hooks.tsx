@@ -760,18 +760,18 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => v
     }, [ callback, ref ]);
 }
 
-export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined) {
+export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined, ntxId: string | null | undefined) {
     useEffect(() => {
         if (!parentComponent) return;
         const $container = refToJQuerySelector(containerRef);
-        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent);
+        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent, ntxId);
         return async () => {
             const bindings = await bindingPromise;
             for (const binding of bindings) {
                 removeIndividualBinding(binding);
             }
         }
-    }, []);
+    }, [ scope, containerRef, parentComponent, ntxId ]);
 }
 
 /**
