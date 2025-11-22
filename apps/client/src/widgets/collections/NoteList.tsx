@@ -8,6 +8,7 @@ import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } f
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import { lazy, Suspense } from "preact/compat";
+import { VNode } from "preact";
 interface NoteListProps {
     note: FNote | null | undefined;
     notePath: string | null | undefined;
@@ -20,6 +21,33 @@ interface NoteListProps {
     viewType: ViewTypeOptions | undefined;
     onReady?: () => void;
     onProgressChanged?(progress: number): void;
+}
+
+type LazyLoadedComponent = ((props: ViewModeProps<any>) => VNode<any> | undefined);
+const ViewComponents: Record<ViewTypeOptions, { normal: LazyLoadedComponent, print?: LazyLoadedComponent }> = {
+    list: {
+        normal: lazy(() => import("./legacy/ListOrGridView.js").then(i => i.ListView)),
+        print: lazy(() => import("./legacy/ListPrintView.js").then(i => i.ListPrintView))
+    },
+    grid: {
+        normal: lazy(() => import("./legacy/ListOrGridView.js").then(i => i.GridView)),
+    },
+    geoMap: {
+        normal: lazy(() => import("./geomap/index.js")),
+    },
+    calendar: {
+        normal: lazy(() => import("./calendar/index.js"))
+    },
+    table: {
+        normal: lazy(() => import("./table/index.js")),
+        print: lazy(() => import("./table/TablePrintView.js"))
+    },
+    board: {
+        normal: lazy(() => import("./board/index.js"))
+    },
+    presentation: {
+        normal: lazy(() => import("./presentation/index.js"))
+    }
 }
 
 export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady" | "onProgressChanged">) {
@@ -86,7 +114,9 @@ export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePa
         }
     }
 
-    const ComponentToRender = viewType && props && isEnabled && getComponentByViewType(viewType, props);
+    const ComponentToRender = viewType && props && isEnabled && (
+        props.media === "print" ? ViewComponents[viewType].print : ViewComponents[viewType].normal
+    );
 
     return (
         <div ref={widgetRef} className={`note-list-widget component ${isFullHeight && isEnabled ? "full-height" : ""}`}>
@@ -99,33 +129,6 @@ export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePa
             )}
         </div>
     );
-}
-
-function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
-    switch (viewType) {
-        case "list":
-            if (props.media !== "print") {
-                return lazy(() => import("./legacy/ListOrGridView.js").then(i => i.ListView));
-            } else {
-                return lazy(() => import("./legacy/ListPrintView.js").then(i => i.ListPrintView));
-            }
-        case "grid":
-            return lazy(() => import("./legacy/ListOrGridView.js").then(i => i.GridView));
-        case "geoMap":
-            return lazy(() => import("./geomap/index.js"));
-        case "calendar":
-            return lazy(() => import("./calendar/index.js"));
-        case "table":
-            if (props.media !== "print") {
-                return lazy(() => import("./table/index.js"));
-            } else {
-                return lazy(() => import("./table/TablePrintView.js"));
-            }
-        case "board":
-            return lazy(() => import("./board/index.js"));
-        case "presentation":
-            return lazy(() => import("./presentation/index.js"));
-    }
 }
 
 export function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
