@@ -25,6 +25,8 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
     padding: 0;
     height: 75vh;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal.popup-editor-dialog .note-detail-editable-text {
