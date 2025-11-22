@@ -136,7 +136,7 @@
 	min-width: 100%;
 	min-height: 140px;
 	max-height: 70vh;
-	resize: vertical;
+	resize: both;
 	overflow: auto;
 	padding-bottom: 0;
 	box-sizing: border-box;

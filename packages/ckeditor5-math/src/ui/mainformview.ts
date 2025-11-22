@@ -19,7 +19,6 @@ export default class MainFormView extends View {
 	public previewLabel?: LabelView;
 	public mathView?: MathView;
 	public override locale: Locale = new Locale();
-	public lazyLoad: undefined | ( () => Promise<void> );
 
 	constructor(
 		locale: Locale,
@@ -161,6 +160,16 @@ export default class MainFormView extends View {
 		if ( this.element ) {
 			this.keystrokes.listenTo( this.element );
 		}
+
+		this._initResizeSync();
+	}
+
+	public override destroy(): void {
+		super.destroy();
+		this._resizeObserver?.disconnect();
+		document.removeEventListener( 'mouseup', this._onMouseUp );
+		this.mathLiveInputView.element?.removeEventListener( 'mousedown', this._onMouseDown );
+		this.rawLatexInputView.element?.removeEventListener( 'mousedown', this._onMouseDown );
 	}
 
 	public focus(): void {
@@ -192,6 +201,75 @@ export default class MainFormView extends View {
 			focusNext: 'tab'
 		}
 	} );
+
+	private _resizeObserver: ResizeObserver | null = null;
+	private _activeResizeTarget: HTMLElement | null = null;
+
+	private _onMouseUp = () => {
+		this._activeResizeTarget = null;
+		// Re-observe everything to ensure state is reset
+		if ( this.mathLiveInputView.element ) this._resizeObserver?.observe( this.mathLiveInputView.element );
+		if ( this.rawLatexInputView.element ) this._resizeObserver?.observe( this.rawLatexInputView.element );
+	};
+
+	private _onMouseDown = ( evt: Event ) => {
+		const target = evt.currentTarget as HTMLElement;
+		this._activeResizeTarget = target;
+
+		// Stop observing the OTHER element to prevent loops and errors while resizing
+		if ( target === this.mathLiveInputView.element ) {
+			if ( this.rawLatexInputView.element ) {
+				this._resizeObserver?.unobserve( this.rawLatexInputView.element );
+			}
+		} else if ( target === this.rawLatexInputView.element ) {
+			if ( this.mathLiveInputView.element ) {
+				this._resizeObserver?.unobserve( this.mathLiveInputView.element );
+			}
+		}
+	};
+
+	private _initResizeSync() {
+		if ( this.mathLiveInputView.element ) {
+			this.mathLiveInputView.element.addEventListener( 'mousedown', this._onMouseDown );
+		}
+		if ( this.rawLatexInputView.element ) {
+			this.rawLatexInputView.element.addEventListener( 'mousedown', this._onMouseDown );
+		}
+		document.addEventListener( 'mouseup', this._onMouseUp );
+
+		// Synchronize width between MathLive and Raw LaTeX inputs
+		this._resizeObserver = new ResizeObserver( entries => {
+			if ( !this._activeResizeTarget ) {
+				return;
+			}
+
+			for ( const entry of entries ) {
+				if ( entry.target === this._activeResizeTarget ) {
+					// Use style.width directly to avoid box-sizing issues causing infinite growth
+					const width = ( entry.target as HTMLElement ).style.width;
+
+					if ( !width ) continue;
+
+					const other = entry.target === this.mathLiveInputView.element
+						? this.rawLatexInputView.element
+						: this.mathLiveInputView.element;
+
+					if ( other && other.style.width !== width ) {
+						window.requestAnimationFrame( () => {
+							other.style.width = width;
+						} );
+					}
+				}
+			}
+		} );
+
+		if ( this.mathLiveInputView.element ) {
+			this._resizeObserver.observe( this.mathLiveInputView.element );
+		}
+		if ( this.rawLatexInputView.element ) {
+			this._resizeObserver.observe( this.rawLatexInputView.element );
+		}
+	}
 
 	/**
 	 * Creates the MathLive visual equation editor.
