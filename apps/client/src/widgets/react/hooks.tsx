@@ -258,7 +258,7 @@ export function useUniqueName(prefix?: string) {
 
 export function useNoteContext() {
     const noteContextContext = useContext(NoteContextContext);
-    const [ noteContext, setNoteContext ] = useState<NoteContext | null>(noteContextContext);
+    const [ noteContext, setNoteContext ] = useState<NoteContext | undefined>(noteContextContext ?? undefined);
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ , setViewScope ] = useState<ViewScope>();
