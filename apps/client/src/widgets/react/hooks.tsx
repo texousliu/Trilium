@@ -2,7 +2,7 @@ import { CSSProperties } from "preact/compat";
 import { DragData } from "../note_tree";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
 import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { ParentComponent, refToJQuerySelector } from "./react_utils";
+import { NoteContextContext, ParentComponent, refToJQuerySelector } from "./react_utils";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
 import { ViewMode, ViewScope } from "../../services/link";
@@ -257,7 +257,8 @@ export function useUniqueName(prefix?: string) {
 }
 
 export function useNoteContext() {
-    const [ noteContext, setNoteContext ] = useState<NoteContext>();
+    const noteContextContext = useContext(NoteContextContext);
+    const [ noteContext, setNoteContext ] = useState<NoteContext | null>(noteContextContext);
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ , setViewScope ] = useState<ViewScope>();
