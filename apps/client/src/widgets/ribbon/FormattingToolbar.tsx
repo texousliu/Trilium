@@ -1,4 +1,5 @@
-import { useTriliumOption } from "../react/hooks";
+import { useRef } from "preact/hooks";
+import { useTriliumEvent, useTriliumOption } from "../react/hooks";
 import { TabContext } from "./ribbon-interface";
 
 /**
@@ -10,10 +11,22 @@ import { TabContext } from "./ribbon-interface";
  *
  * ! The toolbar is not only used in the ribbon, but also in the quick edit feature.
  */
-export default function FormattingToolbar({ hidden }: TabContext) {
+export default function FormattingToolbar({ hidden, ntxId }: TabContext) {
+    const containerRef = useRef<HTMLDivElement>(null);
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
 
+    useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
+        if (eventNtxId !== ntxId) return;
+        const toolbar = editor.ui.view.toolbar?.element;
+        if (toolbar && containerRef.current) {
+            containerRef.current.replaceChildren(toolbar);
+        }
+    });
+
     return (textNoteEditorType === "ckeditor-classic" &&
-        <div className={`classic-toolbar-widget ${hidden ? "hidden-ext" : ""}`} />
+        <div
+            ref={containerRef}
+            className={`classic-toolbar-widget ${hidden ? "hidden-ext" : ""}`}
+        />
     )
 };

@@ -251,6 +251,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     }
 
                     initialized.current.resolve();
+                    parentComponent?.triggerEvent("textEditorRefreshed", { ntxId, editor });
                 }}
             />}
 
@@ -304,19 +305,8 @@ function onNotificationWarning(data, evt) {
 
 function setupClassicEditor(editor: CKTextEditor, parentComponent: Component | undefined) {
     if (!parentComponent) return;
-    const $classicToolbarWidget = findClassicToolbar(parentComponent);
-
-    $classicToolbarWidget.empty();
-    if ($classicToolbarWidget.length) {
-        const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
-        if (toolbarView.element) {
-            $classicToolbarWidget[0].appendChild(toolbarView.element);
-        }
-    }
 
     if (utils.isMobile()) {
-        $classicToolbarWidget.addClass("visible");
-
         // Reposition all dropdowns to point upwards instead of downwards.
         // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
         const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
@@ -330,24 +320,6 @@ function setupClassicEditor(editor: CKTextEditor, parentComponent: Component | u
                 item.panelView.position = item.panelView.position.replace("s", "n");
             });
         }
-    }
-}
-
-function findClassicToolbar(parentComponent: Component): JQuery<HTMLElement> {
-    const $widget = $(parentComponent.$widget);
-
-    if (!utils.isMobile()) {
-        const $parentSplit = $widget.parents(".note-split.type-text");
-
-        if ($parentSplit.length) {
-            // The editor is in a normal tab.
-            return $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
-        } else {
-            // The editor is in a popup.
-            return $widget.closest(".modal-body").find(".classic-toolbar-widget");
-        }
-    } else {
-        return $("body").find(".classic-toolbar-widget");
     }
 }
 
