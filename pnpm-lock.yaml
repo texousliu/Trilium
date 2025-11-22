@@ -369,8 +369,8 @@ importers:
         specifier: 2.1.3
         version: 2.1.3(electron@38.7.1)
       better-sqlite3:
-        specifier: 12.4.1
-        version: 12.4.1
+        specifier: 12.4.6
+        version: 12.4.6
       electron-debug:
         specifier: 4.1.0
         version: 4.1.0
@@ -433,8 +433,8 @@ importers:
   apps/dump-db:
     dependencies:
       better-sqlite3:
-        specifier: 12.4.1
-        version: 12.4.1
+        specifier: 12.4.6
+        version: 12.4.6
       mime-types:
         specifier: 3.0.1
         version: 3.0.1
@@ -464,8 +464,8 @@ importers:
         specifier: 7.0.1
         version: 7.0.1
       better-sqlite3:
-        specifier: 12.4.1
-        version: 12.4.1
+        specifier: 12.4.6
+        version: 12.4.6
     devDependencies:
       '@triliumnext/client':
         specifier: workspace:*
@@ -489,8 +489,8 @@ importers:
   apps/server:
     dependencies:
       better-sqlite3:
-        specifier: 12.4.1
-        version: 12.4.1
+        specifier: 12.4.6
+        version: 12.4.6
       html-to-text:
         specifier: 9.0.5
         version: 9.0.5
@@ -6342,9 +6342,9 @@ packages:
     peerDependencies:
       ajv: 4.11.8 - 8
 
-  better-sqlite3@12.4.1:
-    resolution: {integrity: sha512-3yVdyZhklTiNrtg+4WqHpJpFDd+WHTg2oM7UcR80GqL05AOV0xEJzc6qNvFYoEtE+hRp1n9MpN6/+4yhlGkDXQ==}
-    engines: {node: 20.x || 22.x || 23.x || 24.x}
+  better-sqlite3@12.4.6:
+    resolution: {integrity: sha512-gaYt9yqTbQ1iOxLpJA8FPR5PiaHP+jlg8I5EX0Rs2KFwNzhBsF40KzMZS5FwelY7RG0wzaucWdqSAJM3uNCPCg==}
+    engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x}
 
   bezier-easing@2.1.0:
     resolution: {integrity: sha512-gbIqZ/eslnUFC1tjEvtz0sgx+xTK20wDnYMIA27VA04R7w6xxXQPZDbibjA9DTWZRA2CXtwHykkVzlCaAJAZig==}
@@ -15954,8 +15954,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.2.0
       ckeditor5: 47.2.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@47.2.0':
     dependencies:
@@ -16036,8 +16034,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.2.0
       '@ckeditor/ckeditor5-engine': 47.2.0
       '@ckeditor/ckeditor5-utils': 47.2.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-essentials@47.2.0':
     dependencies:
@@ -16169,8 +16165,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.2.0
       '@ckeditor/ckeditor5-widget': 47.2.0
       ckeditor5: 47.2.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@47.2.0':
     dependencies:
@@ -16587,8 +16581,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.2.0
       '@ckeditor/ckeditor5-utils': 47.2.0
       ckeditor5: 47.2.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@47.2.0':
     dependencies:
@@ -21813,7 +21805,7 @@ snapshots:
       jsonpointer: 5.0.1
       leven: 3.1.0
 
-  better-sqlite3@12.4.1:
+  better-sqlite3@12.4.6:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
