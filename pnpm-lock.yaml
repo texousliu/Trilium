@@ -667,8 +667,8 @@ importers:
         specifier: 2.1.2
         version: 2.1.2
       express-openid-connect:
-        specifier: 2.19.2
-        version: 2.19.2(express@5.1.0)
+        specifier: 2.19.3
+        version: 2.19.3(express@5.1.0)
       express-rate-limit:
         specifier: 8.2.1
         version: 8.2.1(express@5.1.0)
@@ -8208,8 +8208,8 @@ packages:
     resolution: {integrity: sha512-FXcAcs7Nf/hF73Mzh0WDWPwaOlsEUL/fCHW3L4wU6DH79dypsaxmbnAildCLniFs7HQuuvoiR6bjNVUvGuTb5g==}
     engines: {node: '>=6.0.0'}
 
-  express-openid-connect@2.19.2:
-    resolution: {integrity: sha512-hRRRBS+mH9hrhVcbg7+APe+dIsYB4BDLILv7QfTmM1jSDyaU9NYpTxqWourAnlud/E4Gf4Q0qCVmSJguh4BTaA==}
+  express-openid-connect@2.19.3:
+    resolution: {integrity: sha512-3XTQBa6Bzuw1GozlIQcruJ7vaWkjHaSDHTTJFuAvQwq/B42Brzn/MiVQUsxPXHnLCs/tN9Scg+G12dS2RGgT4Q==}
     engines: {node: ^10.19.0 || >=12.0.0 < 13 || >=13.7.0 < 14 || >= 14.2.0}
     peerDependencies:
       express: '>= 4.17.0'
@@ -14265,6 +14265,9 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  util-promisify@3.0.0:
+    resolution: {integrity: sha512-uWRZJMjSWt/A1J1exfqz7xiKx2kVpAHR5qIDr6WwwBMQHDoKbo2I1kQN62iA2uXHxOSVpZRDvbm8do+4ijfkNA==}
+
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
@@ -16011,8 +16014,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.2.0
       ckeditor5: 47.2.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.2.0':
     dependencies:
@@ -16035,8 +16036,6 @@ snapshots:
       '@ckeditor/ckeditor5-table': 47.2.0
       '@ckeditor/ckeditor5-utils': 47.2.0
       ckeditor5: 47.2.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-emoji@47.2.0':
     dependencies:
@@ -24383,7 +24382,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  express-openid-connect@2.19.2(express@5.1.0):
+  express-openid-connect@2.19.3(express@5.1.0):
     dependencies:
       base64url: 3.0.1
       clone: 2.1.2
@@ -24397,6 +24396,7 @@ snapshots:
       on-headers: 1.1.0
       openid-client: 4.9.1
       url-join: 4.0.1
+      util-promisify: 3.0.0
     transitivePeerDependencies:
       - supports-color
 
@@ -31636,6 +31636,10 @@ snapshots:
       pako: 1.0.11
 
   util-deprecate@1.0.2: {}
+
+  util-promisify@3.0.0:
+    dependencies:
+      object.getownpropertydescriptors: 2.1.8
 
   utils-merge@1.0.1: {}
 
