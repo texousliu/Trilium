@@ -1,0 +1,64 @@
+/** Reduce the z-index of modals so that ckeditor popups are properly shown on top of it. */
+body.popup-editor-open > .modal-backdrop { z-index: 998; }
+body.popup-editor-open .popup-editor-dialog { z-index: 999; }
+body.popup-editor-open .ck-clipboard-drop-target-line { z-index: 1000; }
+
+body.desktop .modal.popup-editor-dialog .modal-dialog {
+    max-width: 75vw;
+}
+
+.modal.popup-editor-dialog .modal-header .modal-title {
+    font-size: 1.1em;
+}
+
+.modal.popup-editor-dialog .modal-header .title-row {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.modal.popup-editor-dialog .modal-header .title-row > * {
+    margin: 5px;
+}
+
+.modal.popup-editor-dialog .modal-body {
+    padding: 0;
+    height: 75vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal.popup-editor-dialog .note-detail-editable-text {
+    padding: 0 1em;
+}
+
+.modal.popup-editor-dialog .title-row,
+.modal.popup-editor-dialog .modal-title,
+.modal.popup-editor-dialog .note-icon-widget {
+    height: 32px;
+}
+
+.modal.popup-editor-dialog .note-icon-widget {
+    width: 32px;
+    margin: 0;
+    padding: 0;
+}
+
+.modal.popup-editor-dialog .note-icon-widget button.note-icon,
+.modal.popup-editor-dialog .note-title-widget input.note-title {
+    font-size: 1em;
+}
+
+.modal.popup-editor-dialog .classic-toolbar-widget {
+    position: sticky;
+    top: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    background: var(--modal-background-color);
+    z-index: 998;
+}
+
+.modal.popup-editor-dialog .note-detail-file {
+    padding: 0;
+}

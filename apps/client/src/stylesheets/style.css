@@ -2591,7 +2591,7 @@ iframe.print-iframe {
     flex-direction: column;
 }
 
-.scrolling-container > .note-detail.full-height,
+.note-detail.full-height,
 .scrolling-container > .note-list-widget.full-height {
     position: relative;
     flex-grow: 1;

@@ -1,7 +1,10 @@
 import { ComponentChild, createContext, render, type JSX, type RefObject } from "preact";
 import Component from "../../components/component";
+import NoteContext from "../../components/note_context";
 
 export const ParentComponent = createContext<Component | null>(null);
+
+export const NoteContextContext = createContext<NoteContext | null>(null);
 
 /**
  * Takes in a React ref and returns a corresponding JQuery selector.
