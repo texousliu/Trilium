@@ -82,7 +82,7 @@ interface ExportAsPdfOpts {
 electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
     const browserWindow = await getBrowserWindowForPrinting(e, notePath, "printing");
     browserWindow.webContents.print({}, (success, failureReason) => {
-        if (!success) {
+        if (!success && failureReason !== "Print job canceled") {
             electron.dialog.showErrorBox(t("pdf.unable-to-print"), failureReason);
         }
         e.sender.send("print-done");
