@@ -2,20 +2,12 @@ import { allViewTypes, ViewModeMedia, ViewModeProps, ViewTypeOptions } from "./i
 import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
-import { ListView, GridView } from "./legacy/ListOrGridView";
 import { useEffect, useRef, useState } from "preact/hooks";
-import GeoView from "./geomap";
 import ViewModeStorage from "./view_mode_storage";
-import CalendarView from "./calendar";
-import TableView from "./table";
-import BoardView from "./board";
 import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } from "../../services/ws";
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
-import PresentationView from "./presentation";
-import { ListPrintView } from "./legacy/ListPrintView";
-import TablePrintView from "./table/TablePrintView";
-
+import { lazy, Suspense } from "preact/compat";
 interface NoteListProps {
     note: FNote | null | undefined;
     notePath: string | null | undefined;
@@ -94,11 +86,15 @@ export function CustomNoteList({ note, viewType, isEnabled: shouldEnable, notePa
         }
     }
 
+    const ComponentToRender = viewType && props && isEnabled && getComponentByViewType(viewType, props);
+
     return (
         <div ref={widgetRef} className={`note-list-widget component ${isFullHeight && isEnabled ? "full-height" : ""}`}>
-            {props && isEnabled && (
+            {ComponentToRender && props && (
                 <div className="note-list-widget-content">
-                    {getComponentByViewType(viewType, props)}
+                    <Suspense fallback="">
+                        <ComponentToRender {...props} />
+                    </Suspense>
                 </div>
             )}
         </div>
@@ -109,26 +105,26 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
     switch (viewType) {
         case "list":
             if (props.media !== "print") {
-                return <ListView {...props} />;
+                return lazy(() => import("./legacy/ListOrGridView.js").then(i => i.ListView));
             } else {
-                return <ListPrintView {...props} />;
+                return lazy(() => import("./legacy/ListPrintView.js").then(i => i.ListPrintView));
             }
         case "grid":
-            return <GridView {...props} />;
+            return lazy(() => import("./legacy/ListOrGridView.js").then(i => i.GridView));
         case "geoMap":
-            return <GeoView {...props} />;
+            return lazy(() => import("./geomap/index.js"));
         case "calendar":
-            return <CalendarView {...props} />;
+            return lazy(() => import("./calendar/index.js"));
         case "table":
             if (props.media !== "print") {
-                return <TableView {...props} />;
+                return lazy(() => import("./table/index.js"));
             } else {
-                return <TablePrintView {...props} />;
+                return lazy(() => import("./table/TablePrintView.js"));
             }
         case "board":
-            return <BoardView {...props} />
+            return lazy(() => import("./board/index.js"));
         case "presentation":
-            return <PresentationView {...props} />
+            return lazy(() => import("./presentation/index.js"));
     }
 }
 
