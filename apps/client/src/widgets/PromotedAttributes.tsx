@@ -115,10 +115,8 @@ function PromotedAttributeCell(props: CellProps) {
     return (
         <div className={clsx("promoted-attribute-cell",
             valueAttr.type === "label" ? `promoted-attribute-label-${definition.labelType}` : "promoted-attribute-relation")}>
-            <label for={inputId}>{definition.promotedAlias ?? valueName}</label>{' '}
-            <div className="input-group">
-                <LabelInput inputId={inputId} {...props} />
-            </div>
+            {definition.labelType !== "boolean" && <label for={inputId}>{definition.promotedAlias ?? valueName}</label>}
+            <LabelInput inputId={inputId} {...props} />
             <ActionCell />
             <MultiplicityCell {...props} />
         </div>
@@ -137,7 +135,7 @@ const LABEL_MAPPINGS: Record<LabelType, HTMLInputTypeAttribute> = {
 };
 
 function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
-    const { valueAttr, definition, definitionAttr } = props.cell;
+    const { valueName, valueAttr, definition, definitionAttr } = props.cell;
     const onChangeListener = buildPromotedAttributeChangedListener({...props});
     const extraInputProps: InputHTMLAttributes = {};
 
@@ -165,39 +163,49 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
         }
     }
 
-    return (
-        <>
-            <input
-                className="form-control promoted-attribute-input"
-                tabIndex={200 + definitionAttr.position}
-                id={inputId}
-                type={LABEL_MAPPINGS[definition.labelType ?? "text"]}
-                value={valueAttr.value}
-                placeholder={t("promoted_attributes.unset-field-placeholder")}
-                data-attribute-id={valueAttr.attributeId}
-                data-attribute-type={valueAttr.type}
-                data-attribute-name={valueAttr.name}
-                onChange={onChangeListener}
-                {...extraInputProps}
-            />
+    const inputNode = <input
+        className="form-control promoted-attribute-input"
+        tabIndex={200 + definitionAttr.position}
+        id={inputId}
+        type={LABEL_MAPPINGS[definition.labelType ?? "text"]}
+        value={valueAttr.value}
+        placeholder={t("promoted_attributes.unset-field-placeholder")}
+        data-attribute-id={valueAttr.attributeId}
+        data-attribute-type={valueAttr.type}
+        data-attribute-name={valueAttr.name}
+        onChange={onChangeListener}
+        {...extraInputProps}
+    />;
 
-            { definition.labelType === "color" && <ColorPicker {...props} onChange={onChangeListener} inputId={inputId} />}
-            { definition.labelType === "url" && (
-                <InputButton
-                    className="open-external-link-button"
-                    icon="bx bx-window-open"
-                    title={t("promoted_attributes.open_external_link")}
-                    onClick={(e) => {
-                        const inputEl = document.getElementById(inputId) as HTMLInputElement | null;
-                        const url = inputEl?.value;
-                        if (url) {
-                            window.open(url, "_blank");
-                        }
-                    }}
-                />
-            )}
+    if (definition.labelType === "boolean") {
+        return <>
+            <div>
+                <label className="tn-checkbox">{inputNode}</label>
+            </div>
+            <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
         </>
-    );
+    } else {
+        return (
+            <div className="input-group">
+                {inputNode}
+                { definition.labelType === "color" && <ColorPicker {...props} onChange={onChangeListener} inputId={inputId} />}
+                { definition.labelType === "url" && (
+                    <InputButton
+                        className="open-external-link-button"
+                        icon="bx bx-window-open"
+                        title={t("promoted_attributes.open_external_link")}
+                        onClick={(e) => {
+                            const inputEl = document.getElementById(inputId) as HTMLInputElement | null;
+                            const url = inputEl?.value;
+                            if (url) {
+                                window.open(url, "_blank");
+                            }
+                        }}
+                    />
+                )}
+            </div>
+        );
+    }
 }
 
 

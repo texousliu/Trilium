@@ -1428,9 +1428,7 @@ div.promoted-attribute-cell .tn-checkbox {
     height: 1cap;
 }
 
-/* Relocate the checkbox before the label */
 div.promoted-attribute-cell.promoted-attribute-label-boolean > div:first-of-type {
-    order: -1;
     margin-inline-end: 1.5em;
 }
 
