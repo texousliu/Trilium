@@ -436,14 +436,14 @@ function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, .
     return debounce(onChange, 250);
 }
 
-function updateAttribute(note: FNote, cell: Cell, componentId: string, value: string) {
+function updateAttribute(note: FNote, cell: Cell, componentId: string, value: string | undefined) {
     return server.put<UpdateAttributeResponse>(
         `notes/${note.noteId}/attribute`,
         {
             attributeId: cell.valueAttr.attributeId,
             type: cell.valueAttr.type,
             name: cell.valueName,
-            value: value
+            value: value || ""
         },
         componentId
     );
