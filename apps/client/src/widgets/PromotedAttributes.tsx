@@ -8,7 +8,7 @@ import { t } from "../services/i18n";
 import { DefinitionObject, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
 import FNote from "../entities/fnote";
-import { HTMLInputTypeAttribute, InputHTMLAttributes, TargetedEvent } from "preact";
+import { HTMLInputTypeAttribute, InputHTMLAttributes, TargetedEvent, TargetedInputEvent } from "preact";
 import tree from "../services/tree";
 
 interface Cell {
@@ -115,7 +115,7 @@ function PromotedAttributeCell(props: CellProps) {
     return (
         <div className={clsx("promoted-attribute-cell",
             valueAttr.type === "label" ? `promoted-attribute-label-${definition.labelType}` : "promoted-attribute-relation")}>
-            <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
+            <label for={inputId}>{definition.promotedAlias ?? valueName}</label>{' '}
             <div className="input-group">
                 <LabelInput inputId={inputId} {...props} />
             </div>
@@ -159,19 +159,64 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
     }
 
     return (
-        <input
-            className="form-control promoted-attribute-input"
-            tabIndex={200 + definitionAttr.position}
-            id={inputId}
-            type={LABEL_MAPPINGS[definition.labelType ?? "text"]}
-            value={valueAttr.value}
-            placeholder={t("promoted_attributes.unset-field-placeholder")}
-            data-attribute-id={valueAttr.attributeId}
-            data-attribute-type={valueAttr.type}
-            data-attribute-name={valueAttr.name}
-            onChange={onChangeListener}
-            {...extraInputProps}
-        />
+        <>
+            <input
+                className="form-control promoted-attribute-input"
+                tabIndex={200 + definitionAttr.position}
+                id={inputId}
+                type={LABEL_MAPPINGS[definition.labelType ?? "text"]}
+                value={valueAttr.value}
+                placeholder={t("promoted_attributes.unset-field-placeholder")}
+                data-attribute-id={valueAttr.attributeId}
+                data-attribute-type={valueAttr.type}
+                data-attribute-name={valueAttr.name}
+                onChange={onChangeListener}
+                {...extraInputProps}
+            />
+
+            { definition.labelType === "color" && <ColorPicker {...props} onChange={onChangeListener} inputId={inputId} />}
+        </>
+    );
+}
+
+
+// We insert a separate input since the color input does not support empty value.
+// This is a workaround to allow clearing the color input.
+function ColorPicker({ cell, onChange, inputId }: CellProps & {
+    onChange: (e: TargetedEvent<HTMLInputElement, Event>) => Promise<void>,
+    inputId: string;
+}) {
+    const defaultColor = "#ffffff";
+    const colorInputRef = useRef<HTMLInputElement>(null);
+    return (
+        <>
+            <input
+                ref={colorInputRef}
+                className="form-control promoted-attribute-input"
+                type="color"
+                value={cell.valueAttr.value || defaultColor}
+                onChange={onChange}
+            />
+            <span
+                className="input-group-text bx bxs-tag-x"
+                title={t("promoted_attributes.remove_color")}
+                onClick={(e) => {
+                    // Indicate to the user the color was reset.
+                    if (colorInputRef.current) {
+                        colorInputRef.current.value = defaultColor;
+                    }
+
+                    // Trigger the actual attribute change by injecting it into the hidden field.
+                    const inputEl = document.getElementById(inputId) as HTMLInputElement | null;
+                    if (!inputEl) return;
+                    inputEl.value = "";
+                    onChange({
+                        ...e,
+                        target: inputEl
+                    } as unknown as TargetedInputEvent<HTMLInputElement>);
+                }}
+            />
+        </>
     )
 }
 
