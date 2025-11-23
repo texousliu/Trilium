@@ -283,33 +283,29 @@ export default class MainFormView extends View {
 		const mathLiveInput = new MathLiveInputView( this.locale );
 
 		const onInput = () => {
-			const rawValue = mathLiveInput.value ?? '';
-			let equationInput = rawValue.trim();
+			let equationInput = ( mathLiveInput.value ?? '' ).trim();
 
-			// If input has delimiters
+			// If input has delimiters, strip them and update the display mode.
 			if ( hasDelimiters( equationInput ) ) {
-				// Get equation without delimiters
 				const params = extractDelimiters( equationInput );
-
-				// Remove delimiters from input field
-				mathLiveInput.value = params.equation;
-
 				equationInput = params.equation;
-
-				// Update display button and preview
 				this.displayButtonView.isOn = params.display;
 			}
 
 			const normalizedEquation = equationInput.length ? equationInput : null;
+
+			// Update self if needed.
 			if ( mathLiveInput.value !== normalizedEquation ) {
 				mathLiveInput.value = normalizedEquation;
 			}
 
-			// Sync to raw LaTeX textarea
-			this.rawLatexInputView.value = equationInput;
+			// Sync to raw LaTeX textarea if its value is different.
+			if ( this.rawLatexInputView.value !== equationInput ) {
+				this.rawLatexInputView.value = equationInput;
+			}
 
-			if ( this.previewEnabled && this.mathView ) {
-				// Update preview
+			// Update preview if enabled and its value is different.
+			if ( this.previewEnabled && this.mathView && this.mathView.value !== equationInput ) {
 				this.mathView.value = equationInput;
 			}
 		};
