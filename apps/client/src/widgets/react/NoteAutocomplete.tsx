@@ -95,7 +95,7 @@ export default function NoteAutocomplete({ id, inputRef: externalInputRef, text,
             $autoComplete.autocomplete("val", "").trigger("change");
             ref.current.value = "";
         }
-    }, [text, noteId]);
+    }); // no inputs is intentional to enforce the text of the autocomplete, which is modified externally by the autocomplete.
 
     return (
         <div className="input-group" style={containerStyle}>
