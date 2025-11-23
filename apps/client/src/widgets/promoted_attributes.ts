@@ -19,36 +19,6 @@ interface AttributeResult {
 
 export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
-    private $container!: JQuery<HTMLElement>;
-
-    doRender() {
-        this.contentSized();
-    }
-
-    async refreshWithNote(note: FNote) {
-        this.$container.empty();
-
-        if (promotedDefAttrs.length === 0 || note.getLabelValue("viewType") === "table") {
-            this.toggleInt(false);
-            return;
-        }
-
-        const $cells: JQuery<HTMLElement>[] = [];
-
-        for (const valueAttr of valueAttrs) {
-                const $cell = await this.createPromotedAttributeCell(definitionAttr, valueAttr, valueName);
-
-                if ($cell) {
-                    $cells.push($cell);
-                }
-            }
-
-        // we replace the whole content in one step, so there can't be any race conditions
-        // (previously we saw promoted attributes doubling)
-        this.$container.empty().append(...$cells);
-        this.toggleInt(true);
-    }
-
     async createPromotedAttributeCell(definitionAttr: FAttribute, valueAttr: Attribute, valueName: string) {
         const definition = definitionAttr.getDefinition();
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import "./PromotedAttributes.css";
-import { useNoteContext } from "./react/hooks";
+import { useNoteContext, useNoteLabel } from "./react/hooks";
 import { Attribute } from "../services/attribute_parser";
 import FAttribute from "../entities/fattribute";
 import clsx from "clsx";
@@ -17,9 +17,13 @@ interface Cell {
 export default function PromotedAttributes() {
     const { note } = useNoteContext();
     const [ cells, setCells ] = useState<Cell[]>();
+    const [ viewType ] = useNoteLabel(note, "viewType");
 
     useEffect(() => {
-        if (!note) return;
+        if (!note || viewType === "table") {
+            setCells([]);
+            return;
+        }
         const promotedDefAttrs = note.getPromotedDefinitionAttributes();
         const ownedAttributes = note.getOwnedAttributes();
         // attrs are not resorted if position changes after the initial load
@@ -53,7 +57,7 @@ export default function PromotedAttributes() {
             }
         }
         setCells(cells);
-    }, [ note ]);
+    }, [ note, viewType ]);
 
     return (
         <div className="promoted-attributes-widget">
