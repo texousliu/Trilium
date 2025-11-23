@@ -23,13 +23,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         const definition = definitionAttr.getDefinition();
 
         const $input = $("<input>")
-            .attr("data-attribute-id", valueAttr.noteId === this.noteId ? valueAttr.attributeId ?? "" : "") // if not owned, we'll force creation of a new attribute instead of updating the inherited one
-            .attr("data-attribute-type", valueAttr.type)
-            .attr("data-attribute-name", valueAttr.name)
-            .prop("value", valueAttr.value)
-            .prop("placeholder", t("promoted_attributes.unset-field-placeholder"))
-            .addClass("form-control")
-            .addClass("promoted-attribute-input")
             .on("change", (event) => this.promotedAttributeChanged(event));
 
         if (valueAttr.type === "label") {

@@ -66,6 +66,12 @@ export default function PromotedAttributes() {
 
             for (const valueAttr of valueAttrs) {
                 const definition = definitionAttr.getDefinition();
+
+                // if not owned, we'll force creation of a new attribute instead of updating the inherited one
+                if (valueAttr.noteId !== note.noteId) {
+                    valueAttr.attributeId = "";
+                }
+
                 cells.push({  definitionAttr, definition, valueAttr, valueName });
             }
         }
@@ -103,8 +109,14 @@ function PromotedAttributeCell(props: CellProps) {
             <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
             <div className="input-group">
                 <input
+                    className="form-control promoted-attribute-input"
                     tabIndex={200 + definitionAttr.position}
                     id={inputId}
+                    value={valueAttr.value}
+                    placeholder={t("promoted_attributes.unset-field-placeholder")}
+                    data-attribute-id={valueAttr.attributeId}
+                    data-attribute-type={valueAttr.type}
+                    data-attribute-name={valueAttr.name}
                 />
             </div>
             <ActionCell />
