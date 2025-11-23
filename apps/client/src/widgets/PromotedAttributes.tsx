@@ -8,7 +8,7 @@ import { t } from "../services/i18n";
 import { DefinitionObject, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
 import FNote from "../entities/fnote";
-import { HTMLInputTypeAttribute, InputHTMLAttributes, TargetedEvent, TargetedInputEvent } from "preact";
+import { HTMLInputTypeAttribute, InputHTMLAttributes, MouseEventHandler, TargetedEvent, TargetedInputEvent } from "preact";
 import tree from "../services/tree";
 
 interface Cell {
@@ -150,12 +150,19 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
         }
     }, []);
 
-    if (definition.labelType === "number") {
-        let step = 1;
-        for (let i = 0; i < (definition.numberPrecision || 0) && i < 10; i++) {
-            step /= 10;
+    switch (definition.labelType) {
+        case "number": {
+            let step = 1;
+            for (let i = 0; i < (definition.numberPrecision || 0) && i < 10; i++) {
+                step /= 10;
+            }
+            extraInputProps.step = step;
+            break;
         }
-        extraInputProps.step = step;
+        case "url": {
+            extraInputProps.placeholder = t("promoted_attributes.url_placeholder");
+            break;
+        }
     }
 
     return (
@@ -175,6 +182,20 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
             />
 
             { definition.labelType === "color" && <ColorPicker {...props} onChange={onChangeListener} inputId={inputId} />}
+            { definition.labelType === "url" && (
+                <InputButton
+                    className="open-external-link-button"
+                    icon="bx bx-window-open"
+                    title={t("promoted_attributes.open_external_link")}
+                    onClick={(e) => {
+                        const inputEl = document.getElementById(inputId) as HTMLInputElement | null;
+                        const url = inputEl?.value;
+                        if (url) {
+                            window.open(url, "_blank");
+                        }
+                    }}
+                />
+            )}
         </>
     );
 }
@@ -197,8 +218,8 @@ function ColorPicker({ cell, onChange, inputId }: CellProps & {
                 value={cell.valueAttr.value || defaultColor}
                 onChange={onChange}
             />
-            <span
-                className="input-group-text bx bxs-tag-x"
+            <InputButton
+                icon="bx bxs-tag-x"
                 title={t("promoted_attributes.remove_color")}
                 onClick={(e) => {
                     // Indicate to the user the color was reset.
@@ -292,12 +313,26 @@ function MultiplicityCell({ cell, cells, setCells, setCellToFocus, note, compone
 function PromotedActionButton({ icon, title, onClick }: {
     icon: string,
     title: string,
-    onClick: () => void
-})
-{
+    onClick: MouseEventHandler<HTMLSpanElement>
+}) {
     return (
         <span
             className={clsx("tn-tool-button pointer", icon)}
+            title={title}
+            onClick={onClick}
+        />
+    )
+}
+
+function InputButton({ icon, className, title, onClick }: {
+    icon: string;
+    className?: string;
+    title: string;
+    onClick: MouseEventHandler<HTMLSpanElement>;
+}) {
+    return (
+        <span
+            className={clsx("input-group-text", className, icon)}
             title={title}
             onClick={onClick}
         />

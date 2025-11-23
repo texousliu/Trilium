@@ -30,15 +30,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                 if (valueAttr.value === "true") {
                     $input.prop("checked", "checked");
                 }
-            } else if (definition.labelType === "url") {
-                $input.prop("placeholder", t("promoted_attributes.url_placeholder"));
-
-                const $openButton = $("<span>")
-                    .addClass("input-group-text open-external-link-button bx bx-window-open")
-                    .prop("title", t("promoted_attributes.open_external_link"))
-                    .on("click", () => window.open($input.val() as string, "_blank"));
-
-                $input.after($openButton);
             } else {
                 ws.logError(t("promoted_attributes.unknown_label_type", { type: definition.labelType }));
             }
