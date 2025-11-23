@@ -11,6 +11,7 @@ import { ComponentChildren } from "preact";
 import NoteList from "../collections/NoteList";
 import StandaloneRibbonAdapter from "../ribbon/components/StandaloneRibbonAdapter";
 import FormattingToolbar from "../ribbon/FormattingToolbar";
+import PromotedAttributes from "../PromotedAttributes";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
@@ -47,6 +48,7 @@ export default function PopupEditor() {
                     }}
                     onHidden={() => setShown(false)}
                 >
+                    <PromotedAttributes />
                     <StandaloneRibbonAdapter component={FormattingToolbar} />
                     <NoteDetail />
                     <NoteList media="screen" displayOnlyCollections />
