@@ -42,14 +42,14 @@ export default function PromotedAttributes() {
 
     return (
         <div className="promoted-attributes-widget">
-            <div className="promoted-attributes-container">
+            {cells && cells.length > 0 && <div className="promoted-attributes-container">
                 {note && cells?.map(cell => <PromotedAttributeCell
                     cell={cell}
                     cells={cells} setCells={setCells}
                     shouldFocus={cell === cellToFocus} setCellToFocus={setCellToFocus}
                     componentId={componentId} note={note}
                 />)}
-            </div>
+            </div>}
         </div>
     );
 }
