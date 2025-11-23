@@ -8,8 +8,10 @@ import { t } from "../services/i18n";
 import { DefinitionObject, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
 import FNote from "../entities/fnote";
-import { HTMLInputTypeAttribute, InputHTMLAttributes, MouseEventHandler, TargetedEvent, TargetedInputEvent } from "preact";
+import { ComponentChild, HTMLInputTypeAttribute, InputHTMLAttributes, MouseEventHandler, TargetedEvent, TargetedInputEvent } from "preact";
 import tree from "../services/tree";
+import NoteAutocomplete from "./react/NoteAutocomplete";
+import ws from "../services/ws";
 
 interface Cell {
     definitionAttr: FAttribute;
@@ -112,11 +114,24 @@ function PromotedAttributeCell(props: CellProps) {
         }
     }, [ props.shouldFocus ]);
 
+    let correspondingInput: ComponentChild;
+    switch (valueAttr.type) {
+        case "label":
+            correspondingInput = <LabelInput inputId={inputId} {...props} />;
+            break;
+        case "relation":
+            correspondingInput = <RelationInput inputId={inputId} {...props} />;
+            break;
+        default:
+            ws.logError(t(`promoted_attributes.unknown_attribute_type`, { type: valueAttr.type }));
+            break;
+    }
+
     return (
         <div className={clsx("promoted-attribute-cell",
             valueAttr.type === "label" ? `promoted-attribute-label-${definition.labelType}` : "promoted-attribute-relation")}>
             {definition.labelType !== "boolean" && <label for={inputId}>{definition.promotedAlias ?? valueName}</label>}
-            <LabelInput inputId={inputId} {...props} />
+            {correspondingInput}
             <ActionCell />
             <MultiplicityCell {...props} />
         </div>
@@ -136,7 +151,7 @@ const LABEL_MAPPINGS: Record<LabelType, HTMLInputTypeAttribute> = {
 
 function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
     const { valueName, valueAttr, definition, definitionAttr } = props.cell;
-    const onChangeListener = buildPromotedAttributeChangedListener({...props});
+    const onChangeListener = buildPromotedAttributeLabelChangedListener({...props});
     const extraInputProps: InputHTMLAttributes = {};
 
     useEffect(() => {
@@ -249,8 +264,17 @@ function ColorPicker({ cell, onChange, inputId }: CellProps & {
     )
 }
 
-function RelationInput() {
-
+function RelationInput({ inputId, ...props }: CellProps & { inputId: string }) {
+    return (
+        <NoteAutocomplete
+            id={inputId}
+            noteId={props.cell.valueAttr.value}
+            noteIdChanged={async (value) => {
+                const { note, cell, componentId } = props;
+                cell.valueAttr.attributeId = (await updateAttribute(note, cell, componentId, value)).attributeId;
+            }}
+        />
+    )
 }
 
 function ActionCell() {
@@ -384,32 +408,30 @@ function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, 
     });
 }
 
-function buildPromotedAttributeChangedListener({ note, cell, componentId }: CellProps) {
-    return async (e: TargetedEvent<HTMLInputElement, Event>) => {
+function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, ...props }: CellProps) {
+    return async (e: TargetedEvent<HTMLInputElement, Event> | InputEvent) => {
         const inputEl = e.target as HTMLInputElement;
         let value: string;
 
         if (inputEl.type === "checkbox") {
             value = inputEl.checked ? "true" : "false";
-        } else if (inputEl.dataset.attributeType === "relation") {
-            const selectedPath = $(inputEl).getSelectedNotePath();
-            value = selectedPath ? tree.getNoteIdFromUrl(selectedPath) ?? "" : "";
-            console.log("Got relation ", value);
         } else {
             value = inputEl.value;
         }
 
-        const result = await server.put<AttributeResult>(
-            `notes/${note.noteId}/attribute`,
-            {
-                attributeId: cell.valueAttr.attributeId,
-                type: cell.valueAttr.type,
-                name: cell.valueName,
-                value: value
-            },
-            componentId
-        );
-
-        cell.valueAttr.attributeId = result.attributeId;
+        cell.valueAttr.attributeId = (await updateAttribute(note, cell, componentId, value)).attributeId;
     }
+}
+
+function updateAttribute(note: FNote, cell: Cell, componentId: string, value: string) {
+    return server.put<AttributeResult>(
+        `notes/${note.noteId}/attribute`,
+        {
+            attributeId: cell.valueAttr.attributeId,
+            type: cell.valueAttr.type,
+            name: cell.valueName,
+            value: value
+        },
+        componentId
+    );
 }
