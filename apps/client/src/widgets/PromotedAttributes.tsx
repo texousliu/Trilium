@@ -1,6 +1,6 @@
-import { MutableRef, useEffect, useRef, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
 import "./PromotedAttributes.css";
-import { useNoteContext, useNoteLabel, useUniqueName } from "./react/hooks";
+import { useNoteContext, useNoteLabel, useTriliumEvent, useUniqueName } from "./react/hooks";
 import { Attribute } from "../services/attribute_parser";
 import FAttribute from "../entities/fattribute";
 import clsx from "clsx";
@@ -9,10 +9,10 @@ import { DefinitionObject, LabelType } from "../services/promoted_attribute_defi
 import server from "../services/server";
 import FNote from "../entities/fnote";
 import { ComponentChild, HTMLInputTypeAttribute, InputHTMLAttributes, MouseEventHandler, TargetedEvent, TargetedInputEvent } from "preact";
-import tree from "../services/tree";
 import NoteAutocomplete from "./react/NoteAutocomplete";
 import ws from "../services/ws";
 import { UpdateAttributeResponse } from "@triliumnext/commons";
+import attributes from "../services/attributes";
 
 interface Cell {
     definitionAttr: FAttribute;
@@ -33,11 +33,34 @@ interface CellProps {
 
 export default function PromotedAttributes() {
     const { note, componentId } = useNoteContext();
-    const [ cells, setCells ] = useState<Cell[]>();
-    const [ viewType ] = useNoteLabel(note, "viewType");
+    const [ cells, setCells ] = usePromotedAttributeData(note, componentId);
     const [ cellToFocus, setCellToFocus ] = useState<Cell>();
 
-    useEffect(() => {
+    return (
+        <div className="promoted-attributes-widget">
+            <div className="promoted-attributes-container">
+                {note && cells?.map(cell => <PromotedAttributeCell
+                    cell={cell}
+                    cells={cells} setCells={setCells}
+                    shouldFocus={cell === cellToFocus} setCellToFocus={setCellToFocus}
+                    componentId={componentId} note={note}
+                />)}
+            </div>
+        </div>
+    );
+}
+
+/**
+ * Handles the individual cells (instances for promoted attributes including empty attributes). Promoted attributes with "multiple" multiplicity will have
+ * each value represented as a separate cell.
+ *
+ * The cells are returned as a state since they can also be altered internally if needed, for example to add a new empty cell.
+ */
+function usePromotedAttributeData(note: FNote | null | undefined, componentId: string): [ Cell[] | undefined, Dispatch<StateUpdater<Cell[] | undefined>> ] {
+    const [ viewType ] = useNoteLabel(note, "viewType");
+    const [ cells, setCells ] = useState<Cell[]>();
+
+    function refresh() {
         if (!note || viewType === "table") {
             setCells([]);
             return;
@@ -81,20 +104,16 @@ export default function PromotedAttributes() {
             }
         }
         setCells(cells);
-    }, [ note, viewType ]);
+    }
 
-    return (
-        <div className="promoted-attributes-widget">
-            <div className="promoted-attributes-container">
-                {note && cells?.map(cell => <PromotedAttributeCell
-                    cell={cell}
-                    cells={cells} setCells={setCells}
-                    shouldFocus={cell === cellToFocus} setCellToFocus={setCellToFocus}
-                    componentId={componentId} note={note}
-                />)}
-            </div>
-        </div>
-    );
+    useEffect(refresh, [ note, viewType ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, note))) {
+            refresh();
+        }
+    });
+
+    return [ cells, setCells ];
 }
 
 function PromotedAttributeCell(props: CellProps) {
