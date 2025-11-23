@@ -163,39 +163,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (definition.multiplicity === "multi") {
-            const $removeButton = $("<span>")
-                .on("click", async () => {
-                    const attributeId = $input.attr("data-attribute-id");
-
-                    if (attributeId) {
-                        await server.remove(`notes/${this.noteId}/attributes/${attributeId}`, this.componentId);
-                    }
-
-                    // if it's the last one the create new empty form immediately
-                    const sameAttrSelector = `input[data-attribute-type='${valueAttr.type}'][data-attribute-name='${valueName}']`;
-
-                    if (this.$widget.find(sameAttrSelector).length <= 1) {
-                        const $new = await this.createPromotedAttributeCell(
-                            definitionAttr,
-                            {
-                                attributeId: "",
-                                type: valueAttr.type,
-                                name: valueName,
-                                value: ""
-                            },
-                            valueName
-                        );
-
-                        if ($new) {
-                            $wrapper.after($new);
-                        }
-                    }
-
-                    $wrapper.remove();
-                });
-        }
-
         return $wrapper;
     }
 

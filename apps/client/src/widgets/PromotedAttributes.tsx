@@ -6,6 +6,8 @@ import FAttribute from "../entities/fattribute";
 import clsx from "clsx";
 import { t } from "../services/i18n";
 import { DefinitionObject } from "../services/promoted_attribute_definition_parser";
+import server from "../services/server";
+import FNote from "../entities/fnote";
 
 interface Cell {
     definitionAttr: FAttribute;
@@ -15,6 +17,8 @@ interface Cell {
 }
 
 interface CellProps {
+    note: FNote;
+    componentId: string;
     cell: Cell,
     cells: Cell[],
     shouldFocus: boolean;
@@ -23,7 +27,7 @@ interface CellProps {
 }
 
 export default function PromotedAttributes() {
-    const { note } = useNoteContext();
+    const { note, componentId } = useNoteContext();
     const [ cells, setCells ] = useState<Cell[]>();
     const [ viewType ] = useNoteLabel(note, "viewType");
     const [ cellToFocus, setCellToFocus ] = useState<Cell>();
@@ -71,7 +75,12 @@ export default function PromotedAttributes() {
     return (
         <div className="promoted-attributes-widget">
             <div className="promoted-attributes-container">
-                {cells?.map(cell => <PromotedAttributeCell cell={cell} cells={cells} setCells={setCells} shouldFocus={cell === cellToFocus} setCellToFocus={setCellToFocus} />)}
+                {note && cells?.map(cell => <PromotedAttributeCell
+                    cell={cell}
+                    cells={cells} setCells={setCells}
+                    shouldFocus={cell === cellToFocus} setCellToFocus={setCellToFocus}
+                    componentId={componentId} note={note}
+                />)}
             </div>
         </div>
     );
@@ -112,7 +121,7 @@ function ActionCell() {
     )
 }
 
-function MultiplicityCell({ cell, cells, setCells, setCellToFocus }: CellProps) {
+function MultiplicityCell({ cell, cells, setCells, setCellToFocus, note, componentId }: CellProps) {
     return (cell.definition.multiplicity === "multi" &&
         <td className="multiplicity">
             <PromotedActionButton
@@ -140,8 +149,30 @@ function MultiplicityCell({ cell, cells, setCells, setCellToFocus }: CellProps) 
             <PromotedActionButton
                 icon="bx bx-trash"
                 title={t("promoted_attributes.remove_this_attribute")}
-                onClick={() => {
+                onClick={async () => {
+                    // Remove the attribute from the server if it exists.
+                    const { attributeId, type } = cell.valueAttr;
+                    const valueName = cell.valueName;
+                    if (attributeId) {
+                        await server.remove(`notes/${note.noteId}/attributes/${attributeId}`, componentId);
+                    }
 
+                    const index = cells.indexOf(cell);
+                    const isLastOneOfType = cells.filter(c => c.valueAttr.type === type && c.valueAttr.name === valueName).length < 2;
+                    const newOnesToInsert: Cell[] = [];
+                    if (isLastOneOfType) {
+                        newOnesToInsert.push({
+                            ...cell,
+                            valueAttr: {
+                                attributeId: "",
+                                type: cell.valueAttr.type,
+                                name: cell.valueName,
+                                value: ""
+                            }
+                        })
+                    }
+                    console.log("Delete at ", index, isLastOneOfType);
+                    setCells(cells.toSpliced(index, 1, ...newOnesToInsert));
                 }}
             />
         </td>
