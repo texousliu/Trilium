@@ -1,6 +1,6 @@
 import { ButtonView, FocusCycler, LabelView, submitHandler, SwitchButtonView, View, ViewCollection, type FocusableView, Locale, FocusTracker, KeystrokeHandler } from 'ckeditor5';
-import IconCheck from '../../theme/icons/check.svg?raw';
-import IconCancel from '../../theme/icons/cancel.svg?raw';
+import IconCheck from '@ckeditor/ckeditor5-icons/theme/icons/check.svg?raw';
+import IconCancel from '@ckeditor/ckeditor5-icons/theme/icons/cancel.svg?raw';
 import { extractDelimiters, hasDelimiters } from '../utils.js';
 import MathView from './mathview.js';
 import MathLiveInputView from './mathliveinputview.js';
