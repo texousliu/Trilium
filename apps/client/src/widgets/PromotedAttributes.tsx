@@ -5,9 +5,10 @@ import { Attribute } from "../services/attribute_parser";
 import FAttribute from "../entities/fattribute";
 import clsx from "clsx";
 import { t } from "../services/i18n";
-import { DefinitionObject } from "../services/promoted_attribute_definition_parser";
+import { DefinitionObject, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
 import FNote from "../entities/fnote";
+import { HTMLInputTypeAttribute } from "preact";
 
 interface Cell {
     definitionAttr: FAttribute;
@@ -116,6 +117,17 @@ function PromotedAttributeCell(props: CellProps) {
     )
 }
 
+const LABEL_MAPPINGS: Record<LabelType, HTMLInputTypeAttribute> = {
+    text: "text",
+    number: "number",
+    boolean: "checkbox",
+    date: "date",
+    datetime: "datetime-local",
+    time: "time",
+    color: "hidden", // handled separately.
+    url: "url"
+};
+
 function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
     const { valueAttr, definition, definitionAttr } = props.cell;
 
@@ -136,6 +148,7 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
             className="form-control promoted-attribute-input"
             tabIndex={200 + definitionAttr.position}
             id={inputId}
+            type={LABEL_MAPPINGS[definition.labelType ?? "text"]}
             value={valueAttr.value}
             placeholder={t("promoted_attributes.unset-field-placeholder")}
             data-attribute-id={valueAttr.attributeId}
@@ -207,7 +220,6 @@ function MultiplicityCell({ cell, cells, setCells, setCellToFocus, note, compone
                             }
                         })
                     }
-                    console.log("Delete at ", index, isLastOneOfType);
                     setCells(cells.toSpliced(index, 1, ...newOnesToInsert));
                 }}
             />

@@ -28,16 +28,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         if (valueAttr.type === "label") {
             $wrapper.addClass(`promoted-attribute-label-${definition.labelType}`);
             if (definition.labelType === "text") {
-                $input.prop("type", "text");
-
-                // autocomplete for label values is just nice to have, mobile can keep labels editable without autocomplete
-                if (utils.isDesktop()) {
-
-                    });
-                }
             } else if (definition.labelType === "number") {
-                $input.prop("type", "number");
-
                 let step = 1;
 
                 for (let i = 0; i < (definition.numberPrecision || 0) && i < 10; i++) {
@@ -47,8 +38,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                 $input.prop("step", step);
                 $input.css("text-align", "right").css("width", "120");
             } else if (definition.labelType === "boolean") {
-                $input.prop("type", "checkbox");
-
                 $input.wrap($(`<label class="tn-checkbox"></label>`));
                 $wrapper.find(".input-group").removeClass("input-group");
 
@@ -56,11 +45,8 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                     $input.prop("checked", "checked");
                 }
             } else if (definition.labelType === "date") {
-                $input.prop("type", "date");
             } else if (definition.labelType === "datetime") {
-                $input.prop("type", "datetime-local");
             } else if (definition.labelType === "time") {
-                $input.prop("type", "time");
             } else if (definition.labelType === "url") {
                 $input.prop("placeholder", t("promoted_attributes.url_placeholder"));
 
