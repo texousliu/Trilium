@@ -8,7 +8,8 @@ import { t } from "../services/i18n";
 import { DefinitionObject, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
 import FNote from "../entities/fnote";
-import { HTMLInputTypeAttribute } from "preact";
+import { HTMLInputTypeAttribute, TargetedEvent } from "preact";
+import tree from "../services/tree";
 
 interface Cell {
     definitionAttr: FAttribute;
@@ -26,6 +27,12 @@ interface CellProps {
     setCells(cells: Cell[]): void;
     setCellToFocus(cell: Cell): void;
 }
+
+// TODO: Deduplicate
+interface AttributeResult {
+    attributeId: string;
+}
+
 
 export default function PromotedAttributes() {
     const { note, componentId } = useNoteContext();
@@ -130,15 +137,13 @@ const LABEL_MAPPINGS: Record<LabelType, HTMLInputTypeAttribute> = {
 
 function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
     const { valueAttr, definition, definitionAttr } = props.cell;
+    const onChangeListener = buildPromotedAttributeChangedListener({...props});
 
     useEffect(() => {
         if (definition.labelType === "text") {
             const el = document.getElementById(inputId);
             if (el) {
-                setupTextLabelAutocomplete(el as HTMLInputElement, valueAttr, () => {
-                    // TODO: Implement me.
-                    console.log("Got change");
-                });
+                setupTextLabelAutocomplete(el as HTMLInputElement, valueAttr, onChangeListener);
             }
         }
     }, []);
@@ -154,6 +159,7 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
             data-attribute-id={valueAttr.attributeId}
             data-attribute-type={valueAttr.type}
             data-attribute-name={valueAttr.name}
+            onChange={onChangeListener}
         />
     )
 }
@@ -242,7 +248,7 @@ function PromotedActionButton({ icon, title, onClick }: {
     )
 }
 
-function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, onChangeListener: () => void) {
+function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, onChangeListener: TargetedEvent<HTMLInputElement, Event>) {
     // no need to await for this, can be done asynchronously
     const $input = $(el);
     server.get<string[]>(`attribute-values/${encodeURIComponent(valueAttr.name)}`).then((_attributeValues) => {
@@ -277,4 +283,34 @@ function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, 
 
         $input.on("autocomplete:selected", onChangeListener);
     });
+}
+
+function buildPromotedAttributeChangedListener({ note, cell, componentId }: CellProps) {
+    return async (e: TargetedEvent<HTMLInputElement, Event>) => {
+        const inputEl = e.target as HTMLInputElement;
+        let value: string;
+
+        if (inputEl.type === "checkbox") {
+            value = inputEl.checked ? "true" : "false";
+        } else if (inputEl.dataset.attributeType === "relation") {
+            const selectedPath = $(inputEl).getSelectedNotePath();
+            value = selectedPath ? tree.getNoteIdFromUrl(selectedPath) ?? "" : "";
+            console.log("Got relation ", value);
+        } else {
+            value = inputEl.value;
+        }
+
+        const result = await server.put<AttributeResult>(
+            `notes/${note.noteId}/attribute`,
+            {
+                attributeId: cell.valueAttr.attributeId,
+                type: cell.valueAttr.type,
+                name: cell.valueName,
+                value: value
+            },
+            componentId
+        );
+
+        cell.valueAttr.attributeId = result.attributeId;
+    }
 }

@@ -12,10 +12,6 @@ import type { Attribute } from "../services/attribute_parser.js";
 import type FAttribute from "../entities/fattribute.js";
 import type { EventData } from "../components/app_context.js";
 
-// TODO: Deduplicate
-interface AttributeResult {
-    attributeId: string;
-}
 
 export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
@@ -44,9 +40,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                 if (valueAttr.value === "true") {
                     $input.prop("checked", "checked");
                 }
-            } else if (definition.labelType === "date") {
-            } else if (definition.labelType === "datetime") {
-            } else if (definition.labelType === "time") {
             } else if (definition.labelType === "url") {
                 $input.prop("placeholder", t("promoted_attributes.url_placeholder"));
 
@@ -112,35 +105,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         }
 
         return $wrapper;
-    }
-
-    async promotedAttributeChanged(event: JQuery.TriggeredEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) {
-        const $attr = $(event.target);
-
-        let value;
-
-        if ($attr.prop("type") === "checkbox") {
-            value = $attr.is(":checked") ? "true" : "false";
-        } else if ($attr.attr("data-attribute-type") === "relation") {
-            const selectedPath = $attr.getSelectedNotePath();
-
-            value = selectedPath ? treeService.getNoteIdFromUrl(selectedPath) : "";
-        } else {
-            value = $attr.val();
-        }
-
-        const result = await server.put<AttributeResult>(
-            `notes/${this.noteId}/attribute`,
-            {
-                attributeId: $attr.attr("data-attribute-id"),
-                type: $attr.attr("data-attribute-type"),
-                name: $attr.attr("data-attribute-name"),
-                value: value
-            },
-            this.componentId
-        );
-
-        $attr.attr("data-attribute-id", result.attributeId);
     }
 
     focus() {
