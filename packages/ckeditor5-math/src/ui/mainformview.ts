@@ -9,16 +9,16 @@ import '../../theme/mathform.css';
 import type { KatexOptions } from '../typings-external.js';
 
 export default class MainFormView extends View {
-	public saveButtonView: ButtonView;
-	public mathLiveInputView: MathLiveInputView;
-	public rawLatexInputView: RawLatexInputView;
-	public rawLatexLabel: LabelView;
-	public displayButtonView: SwitchButtonView;
-	public cancelButtonView: ButtonView;
-	public previewEnabled: boolean;
-	public previewLabel?: LabelView;
-	public mathView?: MathView;
-	public override locale: Locale = new Locale();
+	public declare saveButtonView: ButtonView;
+	public declare mathLiveInputView: MathLiveInputView;
+	public declare rawLatexInputView: RawLatexInputView;
+	public declare rawLatexLabel: LabelView;
+	public declare displayButtonView: SwitchButtonView;
+	public declare cancelButtonView: ButtonView;
+	public declare previewEnabled: boolean;
+	public declare previewLabel?: LabelView;
+	public declare mathView?: MathView;
+	public override locale: Locale;
 
 	constructor(
 		locale: Locale,
@@ -38,6 +38,7 @@ export default class MainFormView extends View {
 		katexRenderOptions: KatexOptions
 	) {
 		super( locale );
+		this.locale = locale;
 
 		const t = locale.t;
 
