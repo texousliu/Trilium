@@ -15,12 +15,13 @@ body.mobile .promoted-attributes-widget {
     flex-wrap: wrap;
     display: table;
 }
+
 .promoted-attribute-cell {
     display: flex;
     align-items: center;
     margin: 10px;
-    display: table-row;
 }
+
 .promoted-attribute-cell > label {
     user-select: none;
     font-weight: bold;

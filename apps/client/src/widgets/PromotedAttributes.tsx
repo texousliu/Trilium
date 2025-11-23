@@ -180,7 +180,7 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
                 setupTextLabelAutocomplete(el as HTMLInputElement, valueAttr, onChangeListener);
             }
         }
-    }, []);
+    }, [ inputId, valueAttr, onChangeListener ]);
 
     switch (definition.labelType) {
         case "number": {
