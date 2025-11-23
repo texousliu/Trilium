@@ -28,7 +28,7 @@ export default function ScrollPadding() {
         refreshHeight();
 
         return () => observer.disconnect();
-    }, [note]); // re-run when note changes
+    }, [ note, isEnabled ]); // re-run when note changes
 
     return (isEnabled ?
         <div
