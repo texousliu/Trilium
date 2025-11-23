@@ -164,26 +164,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         }
 
         if (definition.multiplicity === "multi") {
-            const $addButton = $("<span>")
-                .on("click", async () => {
-                    const $new = await this.createPromotedAttributeCell(
-                        definitionAttr,
-                        {
-                            attributeId: "",
-                            type: valueAttr.type,
-                            name: valueName,
-                            value: ""
-                        },
-                        valueName
-                    );
-
-                    if ($new) {
-                        $wrapper.after($new);
-
-                        $new.find("input").trigger("focus");
-                    }
-                });
-
             const $removeButton = $("<span>")
                 .on("click", async () => {
                     const attributeId = $input.attr("data-attribute-id");

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "preact/hooks";
+import { MutableRef, useEffect, useRef, useState } from "preact/hooks";
 import "./PromotedAttributes.css";
-import { useNoteContext, useNoteLabel } from "./react/hooks";
+import { useNoteContext, useNoteLabel, useUniqueName } from "./react/hooks";
 import { Attribute } from "../services/attribute_parser";
 import FAttribute from "../entities/fattribute";
 import clsx from "clsx";
@@ -14,10 +14,19 @@ interface Cell {
     valueName: string;
 }
 
+interface CellProps {
+    cell: Cell,
+    cells: Cell[],
+    shouldFocus: boolean;
+    setCells(cells: Cell[]): void;
+    setCellToFocus(cell: Cell): void;
+}
+
 export default function PromotedAttributes() {
     const { note } = useNoteContext();
     const [ cells, setCells ] = useState<Cell[]>();
     const [ viewType ] = useNoteLabel(note, "viewType");
+    const [ cellToFocus, setCellToFocus ] = useState<Cell>();
 
     useEffect(() => {
         if (!note || viewType === "table") {
@@ -62,15 +71,23 @@ export default function PromotedAttributes() {
     return (
         <div className="promoted-attributes-widget">
             <div className="promoted-attributes-container">
-                {cells?.map(cell => <PromotedAttributeCell cell={cell} />)}
+                {cells?.map(cell => <PromotedAttributeCell cell={cell} cells={cells} setCells={setCells} shouldFocus={cell === cellToFocus} setCellToFocus={setCellToFocus} />)}
             </div>
         </div>
     );
 }
 
-function PromotedAttributeCell({ cell }: { cell: Cell }) {
-    const { valueName, valueAttr, definition, definitionAttr } = cell;
-    const inputId = `value-${valueAttr.attributeId}`;
+function PromotedAttributeCell(props: CellProps) {
+    const { valueName, valueAttr, definition, definitionAttr } = props.cell;
+    const inputId = useUniqueName(`value-${valueAttr.name}`);
+
+    useEffect(() => {
+        if (!props.shouldFocus) return;
+        const inputEl = document.getElementById(inputId);
+        if (inputEl) {
+            inputEl.focus();
+        }
+    }, [ props.shouldFocus ]);
 
     return (
         <div className="promoted-attribute-cell">
@@ -81,13 +98,13 @@ function PromotedAttributeCell({ cell }: { cell: Cell }) {
                     id={inputId}
                 />
             </div>
-            <ActionCell cell={cell} />
-            <MultiplicityCell cell={cell} />
+            <ActionCell />
+            <MultiplicityCell {...props} />
         </div>
     )
 }
 
-function ActionCell({ cell  }: { cell: Cell }) {
+function ActionCell() {
     return (
         <div>
 
@@ -95,23 +112,53 @@ function ActionCell({ cell  }: { cell: Cell }) {
     )
 }
 
-function MultiplicityCell({ cell }: { cell: Cell }) {
+function MultiplicityCell({ cell, cells, setCells, setCellToFocus }: CellProps) {
     return (cell.definition.multiplicity === "multi" &&
         <td className="multiplicity">
-            <PromotedActionButton icon="bx bx-plus" title={t("promoted_attributes.add_new_attribute")} />{' '}
-            <PromotedActionButton icon="bx bx-trash" title={t("promoted_attributes.remove_this_attribute")} />
+            <PromotedActionButton
+                icon="bx bx-plus"
+                title={t("promoted_attributes.add_new_attribute")}
+                onClick={() => {
+                    const index = cells.indexOf(cell);
+                    const newCell: Cell = {
+                        ...cell,
+                        valueAttr: {
+                            attributeId: "",
+                            type: cell.valueAttr.type,
+                            name: cell.valueName,
+                            value: ""
+                        }
+                    };
+                    setCells([
+                        ...cells.slice(0, index + 1),
+                        newCell,
+                        ...cells.slice(index + 1)
+                    ]);
+                    setCellToFocus(newCell);
+                }}
+            />{' '}
+            <PromotedActionButton
+                icon="bx bx-trash"
+                title={t("promoted_attributes.remove_this_attribute")}
+                onClick={() => {
+
+                }}
+            />
         </td>
     )
 }
 
-function PromotedActionButton({ icon, title }: {
+function PromotedActionButton({ icon, title, onClick }: {
     icon: string,
-    title: string })
+    title: string,
+    onClick: () => void
+})
 {
     return (
         <span
             className={clsx("tn-tool-button pointer", icon)}
             title={title}
+            onClick={onClick}
         />
     )
 }
