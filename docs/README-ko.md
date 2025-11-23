@@ -41,7 +41,7 @@ Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 �
 
 **[docs.triliumnotes.org](https://docs.triliumnotes.org/)에서 전체 문서를 확인하세요**
 
-저희 문서는 다양한 형식으로 제공됩니다:
+문서는 다양한 형식으로 제공됩니다:
 - **온라인 문서**: [docs.triliumnotes.org](https://docs.triliumnotes.org/)에서 모든 문서를
   보여줍니다
 - **도움말**: 트릴리움 어플리케이션에서 `F1` 버튼을 눌러 같은 문서를 직접 볼 수 있습니다
@@ -60,45 +60,34 @@ Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 �
 - [개인 지식 베이스의
   패턴들](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 기능들
+## 🎁 주요 기능
 
-* 노트는 다양한 깊이의 트리로 배열될 수 있습니다. 하나의 노트는 트리의 여러 위치에 둘 수 있습니다
+* 노트는 다양한 깊이의 트리로 배열될 수 있으며, 하나의 노트는 트리의 여러 위치에 둘 수 있음
   ([cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes) 참고)
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
-  [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
-  highlighting
-* Fast and easy [navigation between
-  notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
-  search and [note
-  hoisting](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* Seamless [note
-  versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
-  used for note organization, querying and advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
-* Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  for more secure login
-* [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
-  with self-hosted sync server
-  * there's a [3rd party service for hosting synchronisation
-    server](https://trilium.cc/paid-hosting)
-* [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes
-  to public internet
-* Strong [note
-  encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
-  per-note granularity
-* Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type
-  "canvas")
-* [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
-  [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
-  notes and their relations
-* Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
+* 마크다운 [자동서식](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)과 함께
+  테이블, 이미지, 그리고 [수학](https://triliumnext.github.io/Docs/Wiki/text-notes) 등의 기능을
+  포함한 다양한 기능의 WYSIWYG 노트 편집기 제공
+* 구문 강조를 포함한 [소스코드](https://triliumnext.github.io/Docs/Wiki/code-notes) 편집 기능
+* 쉽고 빠르게 노트를 찾을 수 있는
+  [내비게이션](https://triliumnext.github.io/Docs/Wiki/note-navigation), 전체 텍스트 검색 및
+  [노트 호이스팅](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+* 원활한 [노트 버전 관리](https://triliumnext.github.io/Docs/Wiki/note-revisions)
+* 노트의 [속성](https://triliumnext.github.io/Docs/Wiki/attributes)은 노트 조직화, 쿼리, 그리고
+  고급 기능인 [스크립팅](https://triliumnext.github.io/Docs/Wiki/scripts)에 사용
+* 영어, 독일어, 스페인어, 프랑스어, 루마니아어, 중국어 (간체, 번체) UI 제공
+* 더욱 안전한 로그인을 위해 직접 [OpenID 및 TOTP
+  통합](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+* self-hosted 동기화 서버를 통한
+  [동기화](https://triliumnext.github.io/Docs/Wiki/synchronization)
+  * [동기화 서버 호스팅을 위한 제3자 서비스](https://trilium.cc/paid-hosting) 제공
+* 노트의 인터넷 [공유](https://triliumnext.github.io/Docs/Wiki/sharing) (퍼블리싱) 기능
+* 노트마다 세분화된 강력한 [노트
+  암호화](https://triliumnext.github.io/Docs/Wiki/protected-notes)
+* [Excalidraw](https://excalidraw.com/) 기반 스케치 다이어그램 (노트 타입 "캔버스")
+* 노트 사이의 관계 시각화를 위한 [Relation
+  지도](https://triliumnext.github.io/Docs/Wiki/relation-map)과 [link
+  지도](https://triliumnext.github.io/Docs/Wiki/link-map)
+* [Mind Elixir](https://docs.mind-elixir.com/) 기반 마인드맵
 * [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
   location pins and GPX tracks
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
