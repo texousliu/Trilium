@@ -13,6 +13,7 @@ import NoteAutocomplete from "./react/NoteAutocomplete";
 import ws from "../services/ws";
 import { UpdateAttributeResponse } from "@triliumnext/commons";
 import attributes from "../services/attributes";
+import debounce from "../services/debounce";
 
 interface Cell {
     definitionAttr: FAttribute;
@@ -419,7 +420,7 @@ function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, 
 }
 
 function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, ...props }: CellProps): OnChangeListener {
-    return async (e: OnChangeEventData) => {
+    async function onChange(e: OnChangeEventData) {
         const inputEl = e.target as HTMLInputElement;
         let value: string;
 
@@ -431,6 +432,8 @@ function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, .
 
         cell.valueAttr.attributeId = (await updateAttribute(note, cell, componentId, value)).attributeId;
     }
+
+    return debounce(onChange, 250);
 }
 
 function updateAttribute(note: FNote, cell: Cell, componentId: string, value: string) {
