@@ -93,7 +93,7 @@ export default function PromotedAttributes() {
 }
 
 function PromotedAttributeCell(props: CellProps) {
-    const { valueName, valueAttr, definition, definitionAttr } = props.cell;
+    const { valueName, valueAttr, definition } = props.cell;
     const inputId = useUniqueName(`value-${valueAttr.name}`);
 
     useEffect(() => {
@@ -108,21 +108,45 @@ function PromotedAttributeCell(props: CellProps) {
         <div className="promoted-attribute-cell">
             <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
             <div className="input-group">
-                <input
-                    className="form-control promoted-attribute-input"
-                    tabIndex={200 + definitionAttr.position}
-                    id={inputId}
-                    value={valueAttr.value}
-                    placeholder={t("promoted_attributes.unset-field-placeholder")}
-                    data-attribute-id={valueAttr.attributeId}
-                    data-attribute-type={valueAttr.type}
-                    data-attribute-name={valueAttr.name}
-                />
+                <LabelInput inputId={inputId} {...props} />
             </div>
             <ActionCell />
             <MultiplicityCell {...props} />
         </div>
     )
+}
+
+function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
+    const { valueAttr, definition, definitionAttr } = props.cell;
+
+    useEffect(() => {
+        if (definition.labelType === "text") {
+            const el = document.getElementById(inputId);
+            if (el) {
+                setupTextLabelAutocomplete(el as HTMLInputElement, valueAttr, () => {
+                    // TODO: Implement me.
+                    console.log("Got change");
+                });
+            }
+        }
+    }, []);
+
+    return (
+        <input
+            className="form-control promoted-attribute-input"
+            tabIndex={200 + definitionAttr.position}
+            id={inputId}
+            value={valueAttr.value}
+            placeholder={t("promoted_attributes.unset-field-placeholder")}
+            data-attribute-id={valueAttr.attributeId}
+            data-attribute-type={valueAttr.type}
+            data-attribute-name={valueAttr.name}
+        />
+    )
+}
+
+function RelationInput() {
+
 }
 
 function ActionCell() {
@@ -204,4 +228,41 @@ function PromotedActionButton({ icon, title, onClick }: {
             onClick={onClick}
         />
     )
+}
+
+function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, onChangeListener: () => void) {
+    // no need to await for this, can be done asynchronously
+    const $input = $(el);
+    server.get<string[]>(`attribute-values/${encodeURIComponent(valueAttr.name)}`).then((_attributeValues) => {
+        if (_attributeValues.length === 0) {
+            return;
+        }
+
+        const attributeValues = _attributeValues.map((attribute) => ({ value: attribute }));
+
+        $input.autocomplete(
+            {
+                appendTo: document.querySelector("body"),
+                hint: false,
+                autoselect: false,
+                openOnFocus: true,
+                minLength: 0,
+                tabAutocomplete: false
+            },
+            [
+                {
+                    displayKey: "value",
+                    source: function (term, cb) {
+                        term = term.toLowerCase();
+
+                        const filtered = attributeValues.filter((attr) => attr.value.toLowerCase().includes(term));
+
+                        cb(filtered);
+                    }
+                }
+            ]
+        );
+
+        $input.on("autocomplete:selected", onChangeListener);
+    });
 }

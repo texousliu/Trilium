@@ -32,38 +32,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
                 // autocomplete for label values is just nice to have, mobile can keep labels editable without autocomplete
                 if (utils.isDesktop()) {
-                    // no need to await for this, can be done asynchronously
-                    server.get<string[]>(`attribute-values/${encodeURIComponent(valueAttr.name)}`).then((_attributeValues) => {
-                        if (_attributeValues.length === 0) {
-                            return;
-                        }
 
-                        const attributeValues = _attributeValues.map((attribute) => ({ value: attribute }));
-
-                        $input.autocomplete(
-                            {
-                                appendTo: document.querySelector("body"),
-                                hint: false,
-                                autoselect: false,
-                                openOnFocus: true,
-                                minLength: 0,
-                                tabAutocomplete: false
-                            },
-                            [
-                                {
-                                    displayKey: "value",
-                                    source: function (term, cb) {
-                                        term = term.toLowerCase();
-
-                                        const filtered = attributeValues.filter((attr) => attr.value.toLowerCase().includes(term));
-
-                                        cb(filtered);
-                                    }
-                                }
-                            ]
-                        );
-
-                        $input.on("autocomplete:selected", (e) => this.promotedAttributeChanged(e));
                     });
                 }
             } else if (definition.labelType === "number") {
