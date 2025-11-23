@@ -115,12 +115,15 @@ function PromotedAttributeCell(props: CellProps) {
     }, [ props.shouldFocus ]);
 
     let correspondingInput: ComponentChild;
+    let className: string | undefined;
     switch (valueAttr.type) {
         case "label":
             correspondingInput = <LabelInput inputId={inputId} {...props} />;
+            className = `promoted-attribute-label-${definition.labelType}`;
             break;
         case "relation":
             correspondingInput = <RelationInput inputId={inputId} {...props} />;
+            className = "promoted-attribute-relation";
             break;
         default:
             ws.logError(t(`promoted_attributes.unknown_attribute_type`, { type: valueAttr.type }));
@@ -128,8 +131,7 @@ function PromotedAttributeCell(props: CellProps) {
     }
 
     return (
-        <div className={clsx("promoted-attribute-cell",
-            valueAttr.type === "label" ? `promoted-attribute-label-${definition.labelType}` : "promoted-attribute-relation")}>
+        <div className={clsx("promoted-attribute-cell", className)}>
             {definition.labelType !== "boolean" && <label for={inputId}>{definition.promotedAlias ?? valueName}</label>}
             {correspondingInput}
             <ActionCell />
