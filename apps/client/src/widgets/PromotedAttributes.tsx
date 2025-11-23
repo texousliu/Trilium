@@ -12,6 +12,7 @@ import { ComponentChild, HTMLInputTypeAttribute, InputHTMLAttributes, MouseEvent
 import tree from "../services/tree";
 import NoteAutocomplete from "./react/NoteAutocomplete";
 import ws from "../services/ws";
+import { UpdateAttributeResponse } from "@triliumnext/commons";
 
 interface Cell {
     definitionAttr: FAttribute;
@@ -29,12 +30,6 @@ interface CellProps {
     setCells(cells: Cell[]): void;
     setCellToFocus(cell: Cell): void;
 }
-
-// TODO: Deduplicate
-interface AttributeResult {
-    attributeId: string;
-}
-
 
 export default function PromotedAttributes() {
     const { note, componentId } = useNoteContext();
@@ -417,7 +412,7 @@ function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, .
 }
 
 function updateAttribute(note: FNote, cell: Cell, componentId: string, value: string) {
-    return server.put<AttributeResult>(
+    return server.put<UpdateAttributeResponse>(
         `notes/${note.noteId}/attribute`,
         {
             attributeId: cell.valueAttr.attributeId,
