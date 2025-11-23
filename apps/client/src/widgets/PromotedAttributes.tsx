@@ -31,6 +31,9 @@ interface CellProps {
     setCellToFocus(cell: Cell): void;
 }
 
+type OnChangeEventData = TargetedEvent<HTMLInputElement, Event> | InputEvent | JQuery.TriggeredEvent<HTMLInputElement, undefined, HTMLInputElement, HTMLInputElement>;
+type OnChangeListener = (e: OnChangeEventData) => Promise<void>;
+
 export default function PromotedAttributes() {
     const { note, componentId } = useNoteContext();
     const [ cells, setCells ] = usePromotedAttributeData(note, componentId);
@@ -378,7 +381,7 @@ function InputButton({ icon, className, title, onClick }: {
     )
 }
 
-function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, onChangeListener: TargetedEvent<HTMLInputElement, Event>) {
+function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, onChangeListener: OnChangeListener) {
     // no need to await for this, can be done asynchronously
     const $input = $(el);
     server.get<string[]>(`attribute-values/${encodeURIComponent(valueAttr.name)}`).then((_attributeValues) => {
@@ -415,8 +418,8 @@ function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, 
     });
 }
 
-function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, ...props }: CellProps) {
-    return async (e: TargetedEvent<HTMLInputElement, Event> | InputEvent) => {
+function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, ...props }: CellProps): OnChangeListener {
+    return async (e: OnChangeEventData) => {
         const inputEl = e.target as HTMLInputElement;
         let value: string;
 
