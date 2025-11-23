@@ -8,7 +8,7 @@ import { t } from "../services/i18n";
 import { DefinitionObject, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
 import FNote from "../entities/fnote";
-import { HTMLInputTypeAttribute, TargetedEvent } from "preact";
+import { HTMLInputTypeAttribute, InputHTMLAttributes, TargetedEvent } from "preact";
 import tree from "../services/tree";
 
 interface Cell {
@@ -113,7 +113,8 @@ function PromotedAttributeCell(props: CellProps) {
     }, [ props.shouldFocus ]);
 
     return (
-        <div className="promoted-attribute-cell">
+        <div className={clsx("promoted-attribute-cell",
+            valueAttr.type === "label" ? `promoted-attribute-label-${definition.labelType}` : "promoted-attribute-relation")}>
             <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
             <div className="input-group">
                 <LabelInput inputId={inputId} {...props} />
@@ -138,6 +139,7 @@ const LABEL_MAPPINGS: Record<LabelType, HTMLInputTypeAttribute> = {
 function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
     const { valueAttr, definition, definitionAttr } = props.cell;
     const onChangeListener = buildPromotedAttributeChangedListener({...props});
+    const extraInputProps: InputHTMLAttributes = {};
 
     useEffect(() => {
         if (definition.labelType === "text") {
@@ -147,6 +149,14 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
             }
         }
     }, []);
+
+    if (definition.labelType === "number") {
+        let step = 1;
+        for (let i = 0; i < (definition.numberPrecision || 0) && i < 10; i++) {
+            step /= 10;
+        }
+        extraInputProps.step = step;
+    }
 
     return (
         <input
@@ -160,6 +170,7 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
             data-attribute-type={valueAttr.type}
             data-attribute-name={valueAttr.name}
             onChange={onChangeListener}
+            {...extraInputProps}
         />
     )
 }

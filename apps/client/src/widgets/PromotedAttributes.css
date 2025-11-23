@@ -73,6 +73,11 @@ body.mobile .promoted-attributes-widget {
     border-radius: 25%;
 }
 
+.promoted-attribute-label-number input {
+    text-align: right;
+    width: 120px;
+}
+
 .promoted-attribute-label-color input[type="hidden"][value=""] + input[type="color"] {
     position: relative;
     opacity: 0.5;

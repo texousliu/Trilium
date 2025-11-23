@@ -23,16 +23,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
         if (valueAttr.type === "label") {
             $wrapper.addClass(`promoted-attribute-label-${definition.labelType}`);
-            if (definition.labelType === "text") {
-            } else if (definition.labelType === "number") {
-                let step = 1;
-
-                for (let i = 0; i < (definition.numberPrecision || 0) && i < 10; i++) {
-                    step /= 10;
-                }
-
-                $input.prop("step", step);
-                $input.css("text-align", "right").css("width", "120");
             } else if (definition.labelType === "boolean") {
                 $input.wrap($(`<label class="tn-checkbox"></label>`));
                 $wrapper.find(".input-group").removeClass("input-group");
