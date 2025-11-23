@@ -13,7 +13,6 @@ import NoteTitleWidget from "../widgets/note_title.js";
 import ContentHeader from "../widgets/containers/content_header.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
-import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import ReadOnlyNoteInfoBar from "../widgets/ReadOnlyNoteInfoBar.jsx";
 import RootContainer from "../widgets/containers/root_container.js";
@@ -29,6 +28,7 @@ import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button
 import type AppContext from "../components/app_context.js";
 import NoteDetail from "../widgets/NoteDetail.jsx";
 import MobileEditorToolbar from "../widgets/type_widgets/text/mobile_editor_toolbar.jsx";
+import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -152,7 +152,7 @@ export default class MobileLayout {
                                             .child(<MobileDetailMenu />)
                                     )
                                     .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
-                                    .child(new PromotedAttributesWidget())
+                                    .child(<PromotedAttributes />)
                                     .child(
                                         new ScrollingContainer()
                                             .filling()
