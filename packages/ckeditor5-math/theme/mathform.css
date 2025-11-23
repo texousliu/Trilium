@@ -192,6 +192,13 @@
 	outline-offset: 6px;
 }
 
+/* Override MathLive selection colors to prevent dark blocks in light mode */
+.ck.ck-math-form math-field {
+	--selection-background-color: rgba(33, 150, 243, 0.2);
+	--selection-color: inherit;
+	--contains-highlight-background-color: rgba(0, 0, 0, 0.05);
+}
+
 /* Make the raw LaTeX textarea flat (no rounded corners or hover animation) */
 .ck-math-view .ck-labeled-field-view textarea {
 	border-radius: 0 !important;
