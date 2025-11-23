@@ -62,18 +62,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             .addClass("promoted-attribute-input")
             .on("change", (event) => this.promotedAttributeChanged(event));
 
-        const $actionCell = $("<div>");
-        const $multiplicityCell = $("<td>").addClass("multiplicity").attr("nowrap", "true");
-
-        const $wrapper = $('<div class="promoted-attribute-cell">')
-            .append(
-                $("<label>")
-                    .text(definition.promotedAlias ?? valueName)
-            )
-            .append($("<div>").addClass("input-group").append($input))
-            .append($actionCell)
-            .append($multiplicityCell);
-
         if (valueAttr.type === "label") {
             $wrapper.addClass(`promoted-attribute-label-${definition.labelType}`);
             if (definition.labelType === "text") {
@@ -207,8 +195,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
         if (definition.multiplicity === "multi") {
             const $addButton = $("<span>")
-                .addClass("bx bx-plus pointer tn-tool-button")
-                .prop("title", t("promoted_attributes.add_new_attribute"))
                 .on("click", async () => {
                     const $new = await this.createPromotedAttributeCell(
                         definitionAttr,
@@ -229,8 +215,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                 });
 
             const $removeButton = $("<span>")
-                .addClass("bx bx-trash pointer tn-tool-button")
-                .prop("title", t("promoted_attributes.remove_this_attribute"))
                 .on("click", async () => {
                     const attributeId = $input.attr("data-attribute-id");
 
@@ -260,8 +244,6 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
                     $wrapper.remove();
                 });
-
-            $multiplicityCell.append(" &nbsp;").append($addButton).append(" &nbsp;").append($removeButton);
         }
 
         return $wrapper;

@@ -3,9 +3,13 @@ import "./PromotedAttributes.css";
 import { useNoteContext } from "./react/hooks";
 import { Attribute } from "../services/attribute_parser";
 import FAttribute from "../entities/fattribute";
+import clsx from "clsx";
+import { t } from "../services/i18n";
+import { DefinitionObject } from "../services/promoted_attribute_definition_parser";
 
 interface Cell {
     definitionAttr: FAttribute;
+    definition: DefinitionObject;
     valueAttr: Attribute;
     valueName: string;
 }
@@ -44,7 +48,8 @@ export default function PromotedAttributes() {
             }
 
             for (const valueAttr of valueAttrs) {
-                cells.push({  definitionAttr, valueAttr, valueName });
+                const definition = definitionAttr.getDefinition();
+                cells.push({  definitionAttr, definition, valueAttr, valueName });
             }
         }
         setCells(cells);
@@ -60,17 +65,49 @@ export default function PromotedAttributes() {
 }
 
 function PromotedAttributeCell({ cell }: { cell: Cell }) {
-    const { valueName, valueAttr, definitionAttr } = cell;
+    const { valueName, valueAttr, definition, definitionAttr } = cell;
     const inputId = `value-${valueAttr.attributeId}`;
-    const definition = definitionAttr.getDefinition();
 
     return (
         <div className="promoted-attribute-cell">
             <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
-            <input
-                tabIndex={200 + definitionAttr.position}
-                id={inputId}
-            />
+            <div className="input-group">
+                <input
+                    tabIndex={200 + definitionAttr.position}
+                    id={inputId}
+                />
+            </div>
+            <ActionCell cell={cell} />
+            <MultiplicityCell cell={cell} />
         </div>
+    )
+}
+
+function ActionCell({ cell  }: { cell: Cell }) {
+    return (
+        <div>
+
+        </div>
+    )
+}
+
+function MultiplicityCell({ cell }: { cell: Cell }) {
+    return (cell.definition.multiplicity === "multi" &&
+        <td className="multiplicity">
+            <PromotedActionButton icon="bx bx-plus" title={t("promoted_attributes.add_new_attribute")} />{' '}
+            <PromotedActionButton icon="bx bx-trash" title={t("promoted_attributes.remove_this_attribute")} />
+        </td>
+    )
+}
+
+function PromotedActionButton({ icon, title }: {
+    icon: string,
+    title: string })
+{
+    return (
+        <span
+            className={clsx("tn-tool-button pointer", icon)}
+            title={title}
+        />
     )
 }
