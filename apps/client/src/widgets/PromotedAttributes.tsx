@@ -134,7 +134,6 @@ function PromotedAttributeCell(props: CellProps) {
         <div className={clsx("promoted-attribute-cell", className)}>
             {definition.labelType !== "boolean" && <label for={inputId}>{definition.promotedAlias ?? valueName}</label>}
             {correspondingInput}
-            <ActionCell />
             <MultiplicityCell {...props} />
         </div>
     )
@@ -276,14 +275,6 @@ function RelationInput({ inputId, ...props }: CellProps & { inputId: string }) {
                 cell.valueAttr.attributeId = (await updateAttribute(note, cell, componentId, value)).attributeId;
             }}
         />
-    )
-}
-
-function ActionCell() {
-    return (
-        <div>
-
-        </div>
     )
 }
 
