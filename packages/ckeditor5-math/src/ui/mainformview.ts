@@ -168,8 +168,6 @@ export default class MainFormView extends View {
 		super.destroy();
 		this._resizeObserver?.disconnect();
 		document.removeEventListener( 'mouseup', this._onMouseUp );
-		this.mathLiveInputView.element?.removeEventListener( 'mousedown', this._onMouseDown );
-		this.rawLatexInputView.element?.removeEventListener( 'mousedown', this._onMouseDown );
 	}
 
 	public focus(): void {
@@ -212,8 +210,7 @@ export default class MainFormView extends View {
 		if ( this.rawLatexInputView.element ) this._resizeObserver?.observe( this.rawLatexInputView.element );
 	};
 
-	private _onMouseDown = ( evt: Event ) => {
-		const target = evt.currentTarget as HTMLElement;
+	private _onMouseDown( target: HTMLElement ) {
 		this._activeResizeTarget = target;
 
 		// Stop observing the OTHER element to prevent loops and errors while resizing
@@ -226,15 +223,21 @@ export default class MainFormView extends View {
 				this._resizeObserver?.unobserve( this.mathLiveInputView.element );
 			}
 		}
-	};
+	}
 
 	private _initResizeSync() {
-		if ( this.mathLiveInputView.element ) {
-			this.mathLiveInputView.element.addEventListener( 'mousedown', this._onMouseDown );
-		}
-		if ( this.rawLatexInputView.element ) {
-			this.rawLatexInputView.element.addEventListener( 'mousedown', this._onMouseDown );
-		}
+		this.listenTo( this.mathLiveInputView, 'mousedown', () => {
+			if ( this.mathLiveInputView.element ) {
+				this._onMouseDown( this.mathLiveInputView.element );
+			}
+		} );
+
+		this.listenTo( this.rawLatexInputView, 'mousedown', () => {
+			if ( this.rawLatexInputView.element ) {
+				this._onMouseDown( this.rawLatexInputView.element );
+			}
+		} );
+
 		document.addEventListener( 'mouseup', this._onMouseUp );
 
 		// Synchronize width between MathLive and Raw LaTeX inputs

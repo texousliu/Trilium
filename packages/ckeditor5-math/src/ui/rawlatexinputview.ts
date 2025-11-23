@@ -2,21 +2,21 @@ import { LabeledFieldView, createLabeledTextarea, type Locale, type TextareaView
 
 /**
  * A labeled textarea view for direct LaTeX code editing.
- * 
+ *
  * This provides a plain text input for users who prefer to write LaTeX syntax directly
  * or need to paste/edit raw LaTeX code.
  */
 export default class RawLatexInputView extends LabeledFieldView<TextareaView> {
 	/**
 	 * The current LaTeX value.
-	 * 
+	 *
 	 * @observable
 	 */
 	public declare value: string;
-	
+
 	/**
 	 * Whether the input is in read-only mode.
-	 * 
+	 *
 	 * @observable
 	 */
 	public declare isReadOnly: boolean;
@@ -57,5 +57,10 @@ export default class RawLatexInputView extends LabeledFieldView<TextareaView> {
 	public override render(): void {
 		super.render();
 		// All styling is handled via CSS in mathform.css
+
+		// Propagate mousedown event to the view
+		this.element!.addEventListener( 'mousedown', ( evt ) => {
+			this.fire( 'mousedown', evt );
+		} );
 	}
 }
