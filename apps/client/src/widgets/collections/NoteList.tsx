@@ -51,12 +51,12 @@ const ViewComponents: Record<ViewTypeOptions, { normal: LazyLoadedComponent, pri
 }
 
 export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady" | "onProgressChanged">) {
-    const { note, noteContext, notePath, ntxId } = useNoteContext();
+    const { note, noteContext, notePath, ntxId, viewScope } = useNoteContext();
     const viewType = useNoteViewType(note);
     const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
     useEffect(() => {
         setEnabled(noteContext?.hasNoteList());
-    }, [ noteContext, viewType ])
+    }, [ noteContext, viewType, viewScope?.viewMode ])
     return <CustomNoteList viewType={viewType} note={note} isEnabled={!!enabled} notePath={notePath} ntxId={ntxId} {...props} />
 }
 
