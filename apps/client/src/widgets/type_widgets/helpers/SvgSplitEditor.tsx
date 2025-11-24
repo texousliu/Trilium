@@ -163,19 +163,14 @@ function useResizer(containerRef: RefObject<HTMLDivElement>, noteId: string, svg
                 pan: zoomInstance.getPan(),
                 zoom: zoomInstance.getZoom()
             }
-            try {
-                zoomInstance.destroy();
-            } catch (e) {
-                // Sometimes crashes with "Matrix is not invertible" which can cause havoc such as breaking the popup editor from ever showing up again.
-                console.warn(e);
-            }
+            zoomInstance.destroy();
         };
     }, [ svg ]);
 
     // React to container changes.
     const width = useElementSize(containerRef);
     useEffect(() => {
-        if (!zoomRef.current) return;
+        if (!zoomRef.current || (width?.width ?? 0) === 0) return;
         zoomRef.current.resize().fit().center();
     }, [ width ]);
 
