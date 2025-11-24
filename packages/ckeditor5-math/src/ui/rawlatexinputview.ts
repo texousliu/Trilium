@@ -57,10 +57,6 @@ export default class RawLatexInputView extends LabeledFieldView<TextareaView> {
 	public override render(): void {
 		super.render();
 		// All styling is handled via CSS in mathform.css
-
-		// Propagate mousedown event to the view
-		this.element!.addEventListener( 'mousedown', ( evt ) => {
-			this.fire( 'mousedown', evt );
-		} );
+		// (Removed obsolete mousedown propagation; no longer needed after resize & gray-area click removal.)
 	}
 }

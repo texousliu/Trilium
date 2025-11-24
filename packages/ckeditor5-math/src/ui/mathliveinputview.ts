@@ -49,10 +49,7 @@ export default class MathLiveInputView extends View {
 	public override render(): void {
 		super.render();
 
-		// Propagate mousedown event to the view
-		this.element!.addEventListener( 'mousedown', ( evt ) => {
-			this.fire( 'mousedown', evt );
-		} );
+		// (Removed global area click-to-focus logic; focusing now relies on direct field interaction.)
 
 		// Create the MathLive math-field custom element
 		const mathfield = document.createElement( 'math-field' ) as any;
