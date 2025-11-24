@@ -152,8 +152,9 @@ export function CodeMimeTypesList() {
             `;
         },
         selector: "label",
-        placement: "right",
-        fallbackPlacements: [ "left", "right" ],
+        placement: "left",
+        fallbackPlacements: [ "left" ],
+        animation: false,
         html: true
     });
     const [ codeNotesMimeTypes, setCodeNotesMimeTypes ] = useTriliumOptionJson<string[]>("codeNotesMimeTypes");
