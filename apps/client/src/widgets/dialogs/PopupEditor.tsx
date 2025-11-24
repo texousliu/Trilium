@@ -47,6 +47,7 @@ export default function PopupEditor() {
                         parentComponent?.handleEvent("focusOnDetail", { ntxId: noteContext.ntxId });
                     }}
                     onHidden={() => setShown(false)}
+                    keepInDom // needed for faster loading
                 >
                     <PromotedAttributes />
                     <StandaloneRibbonAdapter component={FormattingToolbar} />

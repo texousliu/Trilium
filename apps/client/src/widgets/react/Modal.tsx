@@ -62,9 +62,13 @@ interface ModalProps {
      * By default displaying a modal will close all existing modals. Set this to true to keep the existing modals open instead. This is useful for confirmation modals.
      */
     stackable?: boolean;
+    /**
+     * If true, the modal will remain in the DOM even when not shown. This can be useful for certain CSS transitions or when you want to avoid re-mounting the modal content.
+     */
+    keepInDom?: boolean;
 }
 
-export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: externalModalRef, formRef, bodyStyle, show, stackable }: ModalProps) {
+export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: externalModalRef, formRef, bodyStyle, show, stackable, keepInDom }: ModalProps) {
     const modalRef = useSyncedRef<HTMLDivElement>(externalModalRef);
     const modalInstanceRef = useRef<BootstrapModal>();
     const elementToFocus = useRef<Element | null>();
@@ -126,7 +130,7 @@ export default function Modal({ children, className, size, title, header, footer
 
     return (
         <div className={`modal fade mx-auto ${className}`} tabIndex={-1} style={dialogStyle} role="dialog" ref={modalRef}>
-            {show && <div className={`modal-dialog modal-${size} ${scrollable ? "modal-dialog-scrollable" : ""}`} style={documentStyle} role="document">
+            {(show || keepInDom) && <div className={`modal-dialog modal-${size} ${scrollable ? "modal-dialog-scrollable" : ""}`} style={documentStyle} role="document">
                 <div className="modal-content">
                     <div className="modal-header">
                         {!title || typeof title === "string" ? (
