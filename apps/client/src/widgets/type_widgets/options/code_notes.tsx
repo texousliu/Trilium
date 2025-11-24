@@ -140,7 +140,7 @@ export function CodeMimeTypesList() {
     useStaticTooltip(containerRef, {
         title() {
             const mime = this.querySelector("input")?.value;
-            if (!mime) return "";
+            if (!mime || mime === "text/plain") return "";
 
             const hasCodeBlockSyntax = !!codeBlockMimeTypes[mime];
             const hasCodeNoteSyntax = !!codeNoteMimeTypes[mime];
