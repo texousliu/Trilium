@@ -1,5 +1,5 @@
 import { View, type Locale } from 'ckeditor5';
-import 'mathlive';
+import { MathfieldElement } from 'mathlive';
 
 /**
  * A view that wraps the MathLive `<math-field>` web component for interactive LaTeX equation editing.
@@ -48,6 +48,10 @@ export default class MathLiveInputView extends View {
 	 */
 	public override render(): void {
 		super.render();
+		  // Disable sounds before creating mathfield
+        if (typeof MathfieldElement !== 'undefined') {
+            MathfieldElement.soundsDirectory = null;
+        }
 
 		// (Removed global area click-to-focus logic; focusing now relies on direct field interaction.)
 
