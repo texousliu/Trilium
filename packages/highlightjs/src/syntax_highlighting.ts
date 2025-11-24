@@ -17,6 +17,7 @@ export const byMimeType: MimeRecord = {
     "application/sieve": null,
     "application/sparql-query": null,
     "application/typescript": () => import("highlight.js/lib/languages/typescript"),
+    "application/vnd.kdl": () => import("./languages/kdl.js"),
     "application/x-aspx": null,
     "application/x-bat": () => import("highlight.js/lib/languages/dos"),
     "application/x-cypher-query": () => import("highlightjs-cypher"),

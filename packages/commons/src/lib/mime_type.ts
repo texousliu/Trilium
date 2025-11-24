@@ -104,6 +104,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "JSX", mime: "text/jsx", mdLanguageCode: "javascript" },
     { title: "Julia", mime: "text/x-julia", mdLanguageCode: "julia" },
     { title: "Kotlin", mime: "text/x-kotlin", mdLanguageCode: "kotlin", default: true },
+    { title: "KDL", mime: "application/vnd.kdl", mdLanguageCode: "kdl" },
     { title: "LaTeX", mime: "text/x-latex", mdLanguageCode: "latex" },
     { title: "LESS", mime: "text/x-less", mdLanguageCode: "less" },
     { title: "LiveScript", mime: "text/x-livescript", mdLanguageCode: "livescript" },

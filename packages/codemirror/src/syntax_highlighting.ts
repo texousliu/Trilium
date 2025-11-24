@@ -37,6 +37,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "application/sieve": async () => (await import('@codemirror/legacy-modes/mode/sieve')).sieve,
     "application/sparql-query": async () => (await import('@codemirror/legacy-modes/mode/sparql')).sparql,
     "application/typescript": async () => (await import('@codemirror/lang-javascript')).javascript({ typescript: true }),
+    "application/vnd.kdl": null,
     "application/x-aspx": null,
     "application/x-bat": async () => (await import("./languages/batch.js")).batch,
     "application/x-cypher-query": async () => (await import('@codemirror/legacy-modes/mode/cypher')).cypher,
