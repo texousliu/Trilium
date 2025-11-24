@@ -41,7 +41,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "ASN.1", mime: "text/x-ttcn-asn" },
     { title: "ASP.NET", mime: "application/x-aspx" },
     { title: "Asterisk", mime: "text/x-asterisk" },
-    { title: "Batch file (DOS)", mime: "application/x-bat", highlightJs: "dos" },
+    { title: "Batch file (DOS)", mime: "application/x-bat", mdLanguageCode: "dos" },
     { title: "Brainfuck", mime: "text/x-brainfuck", mdLanguageCode: "brainfuck" },
     { title: "C", mime: "text/x-csrc", mdLanguageCode: "c", default: true },
     { title: "C#", mime: "text/x-csharp", mdLanguageCode: "csharp", default: true },
