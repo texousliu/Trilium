@@ -3,7 +3,7 @@ import type { LanguageFn } from "highlight.js";
 
 type MimeRecord = Record<string, (() => Promise<{ default: LanguageFn}>) | null>;
 
-const byMimeType: MimeRecord = {
+export const byMimeType: MimeRecord = {
     "text/plain": () => import("highlight.js/lib/languages/plaintext"),
     "application/dart": () => import("highlight.js/lib/languages/dart"),
     "application/edn": () => import("highlight.js/lib/languages/clojure"),
