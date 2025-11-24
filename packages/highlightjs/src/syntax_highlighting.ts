@@ -43,6 +43,7 @@ export const byMimeType: MimeRecord = {
     "text/velocity": null,
     "text/vnd.mermaid": null,
     "text/mermaid": null,
+    "text/x-abap": () => import("./languages/abap.js"),
     "text/x-asm-mips": () => import("highlight.js/lib/languages/mipsasm"),
     "text/x-asterisk": null,
     "text/x-brainfuck": () => import("highlight.js/lib/languages/brainfuck"),

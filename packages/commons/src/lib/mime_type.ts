@@ -37,6 +37,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "Plain text", mime: "text/plain", mdLanguageCode: "plaintext", default: true },
 
     // Keep sorted alphabetically.
+    { title: "ABAP (SAP)", mime: "text/x-abap", mdLanguageCode: "abap" },
     { title: "APL", mime: "text/apl" },
     { title: "ASN.1", mime: "text/x-ttcn-asn" },
     { title: "ASP.NET", mime: "application/x-aspx" },

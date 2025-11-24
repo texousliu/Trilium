@@ -64,6 +64,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/vnd.mermaid": async () => buildMermaid(),
     "text/mermaid": async () => buildMermaid(),
     "text/x-asm-mips": null,
+    "text/x-abap": async () => (await import('./languages/abap.js')).abapMode,
     "text/x-asterisk": async () => (await import('@codemirror/legacy-modes/mode/asterisk')).asterisk,
     "text/x-brainfuck": async () => (await import('@codemirror/legacy-modes/mode/brainfuck')).brainfuck,
     "text/x-c++src": async () => (await import('@codemirror/legacy-modes/mode/clike')).cpp,
