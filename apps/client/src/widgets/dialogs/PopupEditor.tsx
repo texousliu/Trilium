@@ -12,6 +12,9 @@ import NoteList from "../collections/NoteList";
 import StandaloneRibbonAdapter from "../ribbon/components/StandaloneRibbonAdapter";
 import FormattingToolbar from "../ribbon/FormattingToolbar";
 import PromotedAttributes from "../PromotedAttributes";
+import FloatingButtons from "../FloatingButtons";
+import { DESKTOP_FLOATING_BUTTONS, MOBILE_FLOATING_BUTTONS } from "../FloatingButtonsDefinitions";
+import utils from "../../services/utils";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
@@ -51,6 +54,7 @@ export default function PopupEditor() {
                 >
                     <PromotedAttributes />
                     <StandaloneRibbonAdapter component={FormattingToolbar} />
+                    <FloatingButtons items={utils.isMobile() ? MOBILE_FLOATING_BUTTONS : DESKTOP_FLOATING_BUTTONS} />
                     <NoteDetail />
                     <NoteList media="screen" displayOnlyCollections />
                 </Modal>
