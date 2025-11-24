@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import Modal from "../react/Modal";
 import "./PopupEditor.css";
 import { useNoteContext, useTriliumEvent } from "../react/hooks";
@@ -13,13 +13,18 @@ import StandaloneRibbonAdapter from "../ribbon/components/StandaloneRibbonAdapte
 import FormattingToolbar from "../ribbon/FormattingToolbar";
 import PromotedAttributes from "../PromotedAttributes";
 import FloatingButtons from "../FloatingButtons";
-import { DESKTOP_FLOATING_BUTTONS, MOBILE_FLOATING_BUTTONS } from "../FloatingButtonsDefinitions";
+import { DESKTOP_FLOATING_BUTTONS, MOBILE_FLOATING_BUTTONS, POPUP_HIDDEN_FLOATING_BUTTONS } from "../FloatingButtonsDefinitions";
 import utils from "../../services/utils";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
     const parentComponent = useContext(ParentComponent);
     const [ noteContext, setNoteContext ] = useState(new NoteContext("_popup-editor"));
+    const isMobile = utils.isMobile();
+    const items = useMemo(() => {
+        const baseItems = isMobile ? MOBILE_FLOATING_BUTTONS : DESKTOP_FLOATING_BUTTONS;
+        return baseItems.filter(item => !POPUP_HIDDEN_FLOATING_BUTTONS.includes(item));
+    }, [ isMobile ]);
 
     useTriliumEvent("openInPopup", async ({ noteIdOrPath }) => {
         const noteContext = new NoteContext("_popup-editor");
@@ -54,7 +59,7 @@ export default function PopupEditor() {
                 >
                     <PromotedAttributes />
                     <StandaloneRibbonAdapter component={FormattingToolbar} />
-                    <FloatingButtons items={utils.isMobile() ? MOBILE_FLOATING_BUTTONS : DESKTOP_FLOATING_BUTTONS} />
+                    <FloatingButtons items={items} />
                     <NoteDetail />
                     <NoteList media="screen" displayOnlyCollections />
                 </Modal>

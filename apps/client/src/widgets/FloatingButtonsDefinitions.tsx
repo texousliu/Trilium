@@ -64,7 +64,15 @@ export const MOBILE_FLOATING_BUTTONS: FloatingButtonsList = [
     RelationMapButtons,
     ExportImageButtons,
     Backlinks
-]
+];
+
+/**
+ * Floating buttons that should be hidden in popup editor (Quick edit).
+ */
+export const POPUP_HIDDEN_FLOATING_BUTTONS: FloatingButtonsList = [
+    InAppHelpButton,
+    ToggleReadOnlyButton
+];
 
 function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefaultViewMode }: FloatingButtonContext) {
     const isEnabled = (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
@@ -102,7 +110,7 @@ function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingBut
 function EditButton({ note, noteContext }: FloatingButtonContext) {
     const [animationClass, setAnimationClass] = useState("");
     const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
-    
+
     const isReadOnlyInfoBarDismissed = false; // TODO
 
     useEffect(() => {
