@@ -7,6 +7,12 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
     max-width: 75vw;
 }
 
+.modal.popup-editor-dialog {
+    border-bottom-left-radius: var(--bs-modal-border-radius);
+    border-bottom-right-radius: var(--bs-modal-border-radius);
+    overflow: hidden;
+}
+
 .modal.popup-editor-dialog .modal-header .modal-title {
     font-size: 1.1em;
 }
@@ -26,11 +32,7 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
     height: 75vh;
     overflow: auto;
     display: flex;
-    flex-direction: column;
-}
-
-.modal.popup-editor-dialog .note-detail-editable-text {
-    padding: 0 1em;
+    flex-direction: column;    
 }
 
 .modal.popup-editor-dialog .title-row,
@@ -59,6 +61,19 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
     z-index: 998;
 }
 
+.modal.popup-editor-dialog .note-detail-editable-text {
+    padding: 0 1em;
+}
+
 .modal.popup-editor-dialog .note-detail-file {
     padding: 0;
+}
+
+.modal.popup-editor-dialog .note-detail-code .note-detail-code-editor {
+    padding: 0;    
+
+    & .cm-editor {
+        margin: 0;
+        border-radius: 0;
+    }
 }
