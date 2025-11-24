@@ -321,6 +321,10 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
             return false;
         }
 
+        if (note.type === "search") {
+            return false;
+        }
+
         if (!["default", "contextual-help"].includes(this.viewScope?.viewMode ?? "")) {
             return false;
         }
