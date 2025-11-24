@@ -33,7 +33,7 @@ export function normalizeMimeTypeForCKEditor(mimeType: string) {
  * For highlight.js-supported languages, see https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md.
  */
 
-export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
+const MIME_TYPES_DICT_RAW = [
     { title: "Plain text", mime: "text/plain", mdLanguageCode: "plaintext", default: true },
 
     // Keep sorted alphabetically.
@@ -131,7 +131,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "Octave", mime: "text/x-octave" },
     { title: "Oz", mime: "text/x-oz" },
     { title: "Pascal", mime: "text/x-pascal", mdLanguageCode: "delphi" },
-    { title: "PEG.js", mime: "null" },
+    { title: "PEG.js", mime: "text/x-pegjs" },
     { title: "Perl", mime: "text/x-perl", default: true },
     { title: "PGP", mime: "application/pgp" },
     { title: "PHP", mime: "text/x-php", default: true },
@@ -175,7 +175,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "Swift", mime: "text/x-swift", default: true },
     { title: "SystemVerilog", mime: "text/x-systemverilog" },
     { title: "Tcl", mime: "text/x-tcl", mdLanguageCode: "tcl" },
-    { title: "Terraform (HCL)", mime: "text/x-hcl", highlightJs: "terraform" },
+    { title: "Terraform (HCL)", mime: "text/x-hcl", mdLanguageCode: "terraform" },
     { title: "Textile", mime: "text/x-textile" },
     { title: "TiddlyWiki ", mime: "text/x-tiddlywiki" },
     { title: "Tiki wiki", mime: "text/tiki" },
@@ -201,9 +201,13 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "Yacas", mime: "text/x-yacas" },
     { title: "YAML", mime: "text/x-yaml", mdLanguageCode: "yaml", default: true },
     { title: "Z80", mime: "text/x-z80" }
-]);
+] as const satisfies readonly MimeTypeDefinition[];
+export const MIME_TYPES_DICT = Object.freeze(MIME_TYPES_DICT_RAW as readonly MimeTypeDefinition[]);
 
 let byMarkdownNameMappings: Record<string, MimeTypeDefinition> | null = null;
+
+export type MermaidMimeType = "text/vnd.mermaid" | "text/mermaid";
+export type SupportedMimeTypes = typeof MIME_TYPES_DICT_RAW[number]["mime"] | MermaidMimeType;
 
 /**
  * Given a Markdown language tag (e.g. `css`), it returns a corresponding {@link MimeTypeDefinition} if found.

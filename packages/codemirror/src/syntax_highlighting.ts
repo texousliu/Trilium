@@ -1,6 +1,7 @@
 import { LanguageSupport, type StreamParser } from "@codemirror/language";
 import {linter as linterExtension, lintGutter } from "@codemirror/lint";
 import type { Extension } from "@codemirror/state";
+import { SupportedMimeTypes } from "@triliumnext/commons";
 
 async function buildJavaScript(mimeType: string) {
     const { javascript, esLint } = await import('@codemirror/lang-javascript');
@@ -22,7 +23,7 @@ async function buildMermaid() {
     return [ mermaid(), foldByIndent() ];
 }
 
-const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | LanguageSupport | Extension[]>) | null> = {
+const byMimeType: Record<SupportedMimeTypes, (() => Promise<StreamParser<unknown> | LanguageSupport | Extension[]>) | null> = {
     "text/plain": null,
 
     "application/dart": async () => (await import('@codemirror/legacy-modes/mode/clike')).dart,
@@ -115,6 +116,7 @@ const byMimeType: Record<string, (() => Promise<StreamParser<unknown> | Language
     "text/x-idl": async () => (await import('@codemirror/legacy-modes/mode/idl')).idl,
     "text/x-java": async () => (await import('@codemirror/legacy-modes/mode/clike')).java,
     "text/x-julia": async () => (await import('@codemirror/legacy-modes/mode/julia')).julia,
+    "text/x-pegjs": null,
     "text/x-kotlin": async () => (await import('@codemirror/legacy-modes/mode/clike')).kotlin,
     "text/x-latex": async () => (await import('@codemirror/legacy-modes/mode/stex')).stex,
     "text/x-less": async () => (await import('@codemirror/legacy-modes/mode/css')).less,
