@@ -2,21 +2,16 @@ import { LabeledFieldView, createLabeledTextarea, type Locale, type TextareaView
 
 /**
  * A labeled textarea view for direct LaTeX code editing.
- *
- * This provides a plain text input for users who prefer to write LaTeX syntax directly
- * or need to paste/edit raw LaTeX code.
  */
 export default class RawLatexInputView extends LabeledFieldView<TextareaView> {
 	/**
 	 * The current LaTeX value.
-	 *
 	 * @observable
 	 */
 	public declare value: string;
 
 	/**
 	 * Whether the input is in read-only mode.
-	 *
 	 * @observable
 	 */
 	public declare isReadOnly: boolean;
@@ -29,21 +24,23 @@ export default class RawLatexInputView extends LabeledFieldView<TextareaView> {
 
 		const fieldView = this.fieldView;
 
-		// Sync textarea input to observable value
+		// 1. Sync: DOM (Textarea) -> Observable
+		// We listen to the native 'input' event on the child view
 		fieldView.on( 'input', () => {
 			if ( fieldView.element ) {
 				this.value = fieldView.element.value;
 			}
 		} );
 
-		// Sync observable value changes back to textarea
+		// 2. Sync: Observable -> DOM (Textarea)
 		this.on( 'change:value', () => {
+			// Check for difference to avoid cursor jumping or unnecessary updates
 			if ( fieldView.element && fieldView.element.value !== this.value ) {
 				fieldView.element.value = this.value;
 			}
 		} );
 
-		// Sync readonly state (manual binding to avoid CKEditor observable rebind error)
+		// 3. Sync: ReadOnly State
 		this.on( 'change:isReadOnly', () => {
 			if ( fieldView.element ) {
 				fieldView.element.readOnly = this.isReadOnly;
@@ -51,12 +48,7 @@ export default class RawLatexInputView extends LabeledFieldView<TextareaView> {
 		} );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public override render(): void {
 		super.render();
-		// All styling is handled via CSS in mathform.css
-		// (Removed obsolete mousedown propagation; no longer needed after resize & gray-area click removal.)
 	}
 }

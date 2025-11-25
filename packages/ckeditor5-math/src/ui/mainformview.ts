@@ -1,174 +1,136 @@
-import { ButtonView, FocusCycler, LabelView, submitHandler, SwitchButtonView, View, ViewCollection, type FocusableView, Locale, FocusTracker, KeystrokeHandler } from 'ckeditor5';
+import {
+	ButtonView,
+	FocusCycler,
+	LabelView,
+	submitHandler,
+	SwitchButtonView,
+	View,
+	ViewCollection,
+	type FocusableView,
+	Locale,
+	FocusTracker,
+	KeystrokeHandler
+} from 'ckeditor5';
 import IconCheck from '@ckeditor/ckeditor5-icons/theme/icons/check.svg?raw';
 import IconCancel from '@ckeditor/ckeditor5-icons/theme/icons/cancel.svg?raw';
 import { extractDelimiters, hasDelimiters } from '../utils.js';
-import MathView from './mathview.js';
+import MathView, { type MathViewOptions } from './mathview.js';
 import MathLiveInputView from './mathliveinputview.js';
 import RawLatexInputView from './rawlatexinputview.js';
 import '../../theme/mathform.css';
-import type { KatexOptions } from '../typings-external.js';
 
 export default class MainFormView extends View {
 	public saveButtonView: ButtonView;
+	public cancelButtonView: ButtonView;
+	public displayButtonView: SwitchButtonView;
+
 	public mathLiveInputView: MathLiveInputView;
 	public rawLatexInputView: RawLatexInputView;
-	public rawLatexLabel: LabelView;
-	public displayButtonView: SwitchButtonView;
-	public cancelButtonView: ButtonView;
-	public previewEnabled: boolean;
-	public previewLabel?: LabelView;
 	public mathView?: MathView;
-	public override locale: Locale;
+
+	public focusTracker = new FocusTracker();
+	public keystrokes = new KeystrokeHandler();
+	private _focusables = new ViewCollection<FocusableView>();
+	private _focusCycler: FocusCycler;
 
 	constructor(
 		locale: Locale,
-		engine:
-			| 'mathjax'
-			| 'katex'
-			| ( (
-				equation: string,
-				element: HTMLElement,
-				display: boolean,
-			) => void ),
-		lazyLoad: undefined | ( () => Promise<void> ),
+		mathViewOptions: MathViewOptions,
 		previewEnabled = false,
-		previewUid: string,
-		previewClassName: Array<string>,
-		popupClassName: Array<string>,
-		katexRenderOptions: KatexOptions
+		popupClassName: string[] = []
 	) {
 		super( locale );
-		this.locale = locale;
-
 		const t = locale.t;
 
-		// Submit button
-		this.saveButtonView = this._createButton( t( 'Save' ), IconCheck, 'ck-button-save', null );
+		// --- 1. View Initialization ---
+
+		this.mathLiveInputView = new MathLiveInputView( locale );
+		this.rawLatexInputView = new RawLatexInputView( locale );
+		this.rawLatexInputView.label = t( 'LaTeX' );
+
+		this.saveButtonView = this._createButton( t( 'Save' ), IconCheck, 'ck-button-save' );
 		this.saveButtonView.type = 'submit';
 
-		// MathLive visual equation editor
-		this.mathLiveInputView = this._createMathLiveInput();
+		this.cancelButtonView = this._createButton( t( 'Cancel' ), IconCancel, 'ck-button-cancel' );
+		this.cancelButtonView.delegate( 'execute' ).to( this, 'cancel' );
 
-		// Raw LaTeX input
-		this.rawLatexInputView = this._createRawLatexInput();
+		this.displayButtonView = this._createDisplayButton( t );
 
-		// Raw LaTeX label
-		this.rawLatexLabel = new LabelView( locale );
-		this.rawLatexLabel.text = t( 'LaTeX' );
+		// --- 2. Construct Children & Preview ---
 
-		// Display button
-		this.displayButtonView = this._createDisplayButton();
+		const children: View[] = [
+			this.mathLiveInputView,
+			this.rawLatexInputView,
+			this.displayButtonView
+		];
 
-		// Cancel button
-		this.cancelButtonView = this._createButton( t( 'Cancel' ), IconCancel, 'ck-button-cancel', 'cancel' );
+		if ( previewEnabled ) {
+			const previewLabel = new LabelView( locale );
+			previewLabel.text = t( 'Equation preview' );
 
-		this.previewEnabled = previewEnabled;
+			// Clean instantiation using the options object
+			this.mathView = new MathView( locale, mathViewOptions );
 
-		let children = [];
-		if ( this.previewEnabled ) {
-			// Preview label
-			this.previewLabel = new LabelView( locale );
-			this.previewLabel.text = t( 'Equation preview' );
-
-			// Math element
-			this.mathView = new MathView( engine, lazyLoad, locale, previewUid, previewClassName, katexRenderOptions );
+			// Bind display mode: When button flips, preview updates automatically
 			this.mathView.bind( 'display' ).to( this.displayButtonView, 'isOn' );
 
-			children = [
-				this.mathLiveInputView,
-				this.rawLatexLabel,
-				this.rawLatexInputView,
-				this.displayButtonView,
-				this.previewLabel,
-				this.mathView
-			];
-		} else {
-			children = [
-				this.mathLiveInputView,
-				this.rawLatexLabel,
-				this.rawLatexInputView,
-				this.displayButtonView
-			];
+			children.push( previewLabel, this.mathView );
 		}
 
-		// Add UI elements to template
+		// --- 3. Sync Logic ---
+		this._setupInputSync( previewEnabled );
+
+		// --- 4. Template Setup ---
 		this.setTemplate( {
 			tag: 'form',
 			attributes: {
-				class: [
-					'ck',
-					'ck-math-form',
-					...popupClassName
-				],
+				class: [ 'ck', 'ck-math-form', ...popupClassName ],
 				tabindex: '-1',
 				spellcheck: 'false'
 			},
 			children: [
 				{
 					tag: 'div',
-					attributes: {
-						class: [ 'ck-math-scroll' ]
-					},
-					children: [
-						{
-							tag: 'div',
-							attributes: {
-								class: [ 'ck-math-view' ]
-							},
-							children
-						}
-					]
+					attributes: { class: [ 'ck-math-scroll' ] },
+					children: [ { tag: 'div', attributes: { class: [ 'ck-math-view' ] }, children } ]
 				},
 				{
 					tag: 'div',
-					attributes: {
-						class: [ 'ck-math-button-row' ]
-					},
-					children: [
-						this.saveButtonView,
-						this.cancelButtonView
-					]
+					attributes: { class: [ 'ck-math-button-row' ] },
+					children: [ this.saveButtonView, this.cancelButtonView ]
 				}
 			]
+		} );
+
+		// --- 5. Accessibility ---
+		this._focusCycler = new FocusCycler( {
+			focusables: this._focusables,
+			focusTracker: this.focusTracker,
+			keystrokeHandler: this.keystrokes,
+			actions: { focusPrevious: 'shift + tab', focusNext: 'tab' }
 		} );
 	}
 
 	public override render(): void {
 		super.render();
 
-		// Prevent default form submit event & trigger custom 'submit'
-		submitHandler( {
-			view: this
-		} );
+		submitHandler( { view: this } );
 
-		// Register form elements to focusable elements
-		const childViews = [
+		// Register focusables
+		[
 			this.mathLiveInputView,
 			this.rawLatexInputView,
 			this.displayButtonView,
 			this.saveButtonView,
 			this.cancelButtonView
-		];
-
-		childViews.forEach( v => {
+		].forEach( v => {
 			if ( v.element ) {
 				this._focusables.add( v );
 				this.focusTracker.add( v.element );
 			}
 		} );
 
-		// Listen to keypresses inside form element
-		if ( this.element ) {
-			this.keystrokes.listenTo( this.element );
-		}
-	}
-
-	public override destroy(): void {
-		super.destroy();
-	}
-
-	public focus(): void {
-		this._focusCycler.focusFirst();
+		if ( this.element ) this.keystrokes.listenTo( this.element );
 	}
 
 	public get equation(): string {
@@ -176,151 +138,82 @@ export default class MainFormView extends View {
 	}
 
 	public set equation( equation: string ) {
-		const normalizedEquation = equation.trim();
-		this.mathLiveInputView.value = normalizedEquation.length ? normalizedEquation : null;
-		this.rawLatexInputView.value = normalizedEquation;
-		if ( this.previewEnabled && this.mathView ) {
-			this.mathView.value = normalizedEquation;
-		}
+		const norm = equation.trim();
+		// Direct updates to the "source of truth"
+		this.mathLiveInputView.value = norm.length ? norm : null;
+		this.rawLatexInputView.value = norm;
+		if ( this.mathView ) this.mathView.value = norm;
 	}
 
-	public focusTracker: FocusTracker = new FocusTracker();
-	public keystrokes: KeystrokeHandler = new KeystrokeHandler();
-	private _focusables = new ViewCollection<FocusableView>();
-	private _focusCycler: FocusCycler = new FocusCycler( {
-		focusables: this._focusables,
-		focusTracker: this.focusTracker,
-		keystrokeHandler: this.keystrokes,
-		actions: {
-			focusPrevious: 'shift + tab',
-			focusNext: 'tab'
-		}
-	} );
+	public focus(): void {
+		this._focusCycler.focusFirst();
+	}
 
 	/**
-	 * Creates the MathLive visual equation editor.
-	 *
-	 * Handles bidirectional synchronization with the raw LaTeX textarea and preview.
+	 * Sets up split handlers for synchronization.
 	 */
-	private _createMathLiveInput() {
-		const mathLiveInput = new MathLiveInputView( this.locale );
+	private _setupInputSync( previewEnabled: boolean ): void {
+		// Handler 1: MathLive -> Raw LaTeX
+		this.mathLiveInputView.on( 'change:value', () => {
+			let eq = ( this.mathLiveInputView.value ?? '' ).trim();
 
-		const onInput = () => {
-			let equationInput = ( mathLiveInput.value ?? '' ).trim();
-
-			// If input has delimiters, strip them and update the display mode.
-			if ( hasDelimiters( equationInput ) ) {
-				const params = extractDelimiters( equationInput );
-				equationInput = params.equation;
+			// Delimiter Normalization
+			if ( hasDelimiters( eq ) ) {
+				const params = extractDelimiters( eq );
+				eq = params.equation;
 				this.displayButtonView.isOn = params.display;
+
+				// UX Fix: If we stripped delimiters, update the source
+				// so the visual editor doesn't show them.
+				if ( this.mathLiveInputView.value !== eq ) {
+					this.mathLiveInputView.value = eq;
+				}
 			}
 
-			const normalizedEquation = equationInput.length ? equationInput : null;
-
-			// Update self if needed.
-			if ( mathLiveInput.value !== normalizedEquation ) {
-				mathLiveInput.value = normalizedEquation;
+			// Sync to Raw LaTeX
+			if ( this.rawLatexInputView.value !== eq ) {
+				this.rawLatexInputView.value = eq;
 			}
 
-			// Sync to raw LaTeX textarea if its value is different.
-			if ( this.rawLatexInputView.value !== equationInput ) {
-				this.rawLatexInputView.value = equationInput;
+			// Sync to Preview
+			if ( previewEnabled && this.mathView && this.mathView.value !== eq ) {
+				this.mathView.value = eq;
+			}
+		} );
+
+		// Handler 2: Raw LaTeX -> MathLive
+		this.rawLatexInputView.on( 'change:value', () => {
+			const eq = ( this.rawLatexInputView.value ?? '' ).trim();
+			const normalized = eq.length ? eq : null;
+
+			// Sync to MathLive
+			if ( this.mathLiveInputView.value !== normalized ) {
+				this.mathLiveInputView.value = normalized;
 			}
 
-			// Update preview if enabled and its value is different.
-			if ( this.previewEnabled && this.mathView && this.mathView.value !== equationInput ) {
-				this.mathView.value = equationInput;
+			// Sync to Preview
+			if ( previewEnabled && this.mathView && this.mathView.value !== eq ) {
+				this.mathView.value = eq;
 			}
-		};
-
-		mathLiveInput.on( 'change:value', onInput );
-
-		return mathLiveInput;
+		} );
 	}
 
-	/**
-	 * Creates the raw LaTeX textarea editor.
-	 *
-	 * Provides direct LaTeX code editing and synchronizes changes with the MathLive visual editor.
-	 */
-	private _createRawLatexInput() {
-		const t = this.locale.t;
-		const rawLatexInput = new RawLatexInputView( this.locale );
-		rawLatexInput.label = t( 'LaTeX' );
-
-		// Sync raw LaTeX textarea changes to MathLive visual editor
-		rawLatexInput.on( 'change:value', () => {
-			const rawValue = rawLatexInput.value ?? '';
-			const equationInput = rawValue.trim();
-
-			// Update MathLive visual editor
-			const normalizedEquation = equationInput.length ? equationInput : null;
-			if ( this.mathLiveInputView.value !== normalizedEquation ) {
-				this.mathLiveInputView.value = normalizedEquation;
-			}
-
-			// Update preview
-			if ( this.previewEnabled && this.mathView ) {
-				this.mathView.value = equationInput;
-			}
-		} );
-
-		return rawLatexInput;
+	private _createButton( label: string, icon: string, className: string ): ButtonView {
+		const btn = new ButtonView( this.locale );
+		btn.set( { label, icon, tooltip: true } );
+		btn.extendTemplate( { attributes: { class: className } } );
+		return btn;
 	}
 
-	private _createButton(
-		label: string,
-		icon: string,
-		className: string,
-		eventName: string | null
-	) {
-		const button = new ButtonView( this.locale );
+	private _createDisplayButton( t: ( str: string ) => string ): SwitchButtonView {
+		const btn = new SwitchButtonView( this.locale );
+		btn.set( { label: t( 'Display mode' ), withText: true } );
+		btn.extendTemplate( { attributes: { class: 'ck-button-display-toggle' } } );
 
-		button.set( {
-			label,
-			icon,
-			tooltip: true
+		btn.on( 'execute', () => {
+			btn.isOn = !btn.isOn;
+			// mathView updates automatically via bind()
 		} );
-
-		button.extendTemplate( {
-			attributes: {
-				class: className
-			}
-		} );
-
-		if ( eventName ) {
-			button.delegate( 'execute' ).to( this, eventName );
-		}
-
-		return button;
-	}
-
-	private _createDisplayButton() {
-		const t = this.locale.t;
-
-		const switchButton = new SwitchButtonView( this.locale );
-
-		switchButton.set( {
-			label: t( 'Display mode' ),
-			withText: true
-		} );
-
-		switchButton.extendTemplate( {
-			attributes: {
-				class: 'ck-button-display-toggle'
-			}
-		} );
-
-		switchButton.on( 'execute', () => {
-			// Toggle state
-			switchButton.isOn = !switchButton.isOn;
-
-			if ( this.previewEnabled && this.mathView ) {
-				// Update preview view
-				this.mathView.display = switchButton.isOn;
-			}
-		} );
-
-		return switchButton;
+		return btn;
 	}
 }

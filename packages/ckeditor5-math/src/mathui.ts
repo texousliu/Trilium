@@ -71,22 +71,20 @@ export default class MathUI extends Plugin {
 			throw new CKEditorError( 'math-command' );
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
 		const mathConfig = editor.config.get( 'math' )!;
 
 		const formView = new MainFormView(
 			editor.locale,
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			mathConfig.engine!,
-			mathConfig.lazyLoad,
+			{
+				engine: mathConfig.engine!,
+				lazyLoad: mathConfig.lazyLoad,
+				previewUid: this._previewUid,
+				previewClassName: mathConfig.previewClassName!,
+				katexRenderOptions: mathConfig.katexRenderOptions!
+			},
 			mathConfig.enablePreview,
-			this._previewUid,
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			mathConfig.previewClassName!,
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			mathConfig.popupClassName!,
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			mathConfig.katexRenderOptions!
+			mathConfig.popupClassName!
 		);
 
 		formView.mathLiveInputView.bind( 'value' ).to( mathCommand, 'value' );
@@ -164,9 +162,9 @@ export default class MathUI extends Plugin {
 
 		// Show preview element
 		const previewEl = document.getElementById( this._previewUid );
-		if ( previewEl && this.formView.previewEnabled ) {
+		if ( previewEl && this.formView.mathView ) {
 			// Force refresh preview
-			this.formView.mathView?.updateMath();
+			this.formView.mathView.updateMath();
 		}
 
 		this.formView.equation = mathCommand.value ?? '';

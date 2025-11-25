@@ -1,33 +1,27 @@
 import { View, type Locale } from 'ckeditor5';
-import { MathfieldElement } from 'mathlive';
+import 'mathlive'; // Import side-effects only (registers the <math-field> tag)
 
 /**
- * A view that wraps the MathLive `<math-field>` web component for interactive LaTeX equation editing.
- *
- * MathLive provides a rich math input experience with live rendering, virtual keyboard support,
- * and various accessibility features.
- *
- * @see https://cortexjs.io/mathlive/
+ * A wrapper for the MathLive <math-field> component.
+ * Uses 'any' typing to avoid TypeScript module resolution errors.
  */
 export default class MathLiveInputView extends View {
 	/**
-	 * The current LaTeX value of the math field.
-	 *
+	 * The current LaTeX value.
 	 * @observable
 	 */
 	public declare value: string | null;
 
 	/**
-	 * Whether the input is in read-only mode.
-	 *
+	 * Read-only state.
 	 * @observable
 	 */
 	public declare isReadOnly: boolean;
 
 	/**
-	 * Reference to the `<math-field>` DOM element.
+	 * Reference to the DOM element (typed as any to prevent TS errors).
 	 */
-	public mathfield: HTMLElement | null = null;
+	public mathfield: any = null;
 
 	constructor( locale: Locale ) {
 		super( locale );
@@ -43,68 +37,53 @@ export default class MathLiveInputView extends View {
 		} );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public override render(): void {
 		super.render();
-		  // Disable sounds before creating mathfield
-        if (typeof MathfieldElement !== 'undefined') {
-            MathfieldElement.soundsDirectory = null;
-        }
 
-		// (Removed global area click-to-focus logic; focusing now relies on direct field interaction.)
-
-		// Create the MathLive math-field custom element
+		// 1. Create element using DOM API instead of Class constructor
+		// This avoids "Module has no exported member" errors.
 		const mathfield = document.createElement( 'math-field' ) as any;
-		this.mathfield = mathfield;
 
-		// Configure the virtual keyboard to be manually controlled (shown by user interaction)
-		mathfield.setAttribute( 'virtual-keyboard-mode', 'manual' );
+		// 2. Configure Options
+		mathfield.mathVirtualKeyboardPolicy = 'manual';
 
-		// Set initial value
-		const initialValue = this.value ?? '';
-		if ( initialValue ) {
-			( mathfield as any ).value = initialValue;
+		// Disable sounds
+		const MathfieldElement = customElements.get( 'math-field' );
+		if ( MathfieldElement ) {
+			( MathfieldElement as any ).soundsDirectory = null;
+			( MathfieldElement as any ).plonkSound = null;
 		}
 
-		// Bind readonly state
-		if ( this.isReadOnly ) {
-			( mathfield as any ).readOnly = true;
-		}
+		// 3. Set Initial State
+		mathfield.value = this.value ?? '';
+		mathfield.readOnly = this.isReadOnly;
 
-		// Sync math-field changes to observable value
+		// 4. Bind Events (DOM -> Observable)
 		mathfield.addEventListener( 'input', () => {
-			const nextValue: string = ( mathfield as any ).value;
-			this.value = nextValue.length ? nextValue : null;
+			const val = mathfield.value;
+			this.value = val.length ? val : null;
 		} );
 
-		// Sync observable value changes back to math-field
-		this.on( 'change:value', () => {
-			const nextValue = this.value ?? '';
-			if ( ( mathfield as any ).value !== nextValue ) {
-				( mathfield as any ).value = nextValue;
+		// 5. Bind Events (Observable -> DOM)
+		this.on( 'change:value', ( _evt, _name, nextValue ) => {
+			if ( mathfield.value !== nextValue ) {
+				mathfield.value = nextValue ?? '';
 			}
 		} );
 
-		// Sync readonly state to math-field
-		this.on( 'change:isReadOnly', () => {
-			( mathfield as any ).readOnly = this.isReadOnly;
+		this.on( 'change:isReadOnly', ( _evt, _name, nextValue ) => {
+			mathfield.readOnly = nextValue;
 		} );
 
+		// 6. Mount
 		this.element?.appendChild( mathfield );
+		this.mathfield = mathfield;
 	}
 
-	/**
-	 * Focuses the math-field element.
-	 */
 	public focus(): void {
 		this.mathfield?.focus();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public override destroy(): void {
 		if ( this.mathfield ) {
 			this.mathfield.remove();
