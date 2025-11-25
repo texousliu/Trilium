@@ -92,7 +92,7 @@ export default function NoteAutocomplete({ id, inputRef: externalInputRef, text,
             note_autocomplete.setText($autoComplete, text);
         } else {
             $autoComplete.setSelectedNotePath("");
-            $autoComplete.autocomplete("val", "").trigger("change");
+            $autoComplete.autocomplete("val", "");
             ref.current.value = "";
         }
     }, [text, noteId]);
