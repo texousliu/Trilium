@@ -56,7 +56,7 @@ export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollecti
     const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
     useEffect(() => {
         setEnabled(noteContext?.hasNoteList());
-    }, [ noteContext, viewType, viewScope?.viewMode ])
+    }, [ note, noteContext, viewType, viewScope?.viewMode ])
     return <CustomNoteList viewType={viewType} note={note} isEnabled={!!enabled} notePath={notePath} ntxId={ntxId} {...props} />
 }
 
