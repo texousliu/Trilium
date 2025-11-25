@@ -5,7 +5,7 @@ import { Attribute } from "../services/attribute_parser";
 import FAttribute from "../entities/fattribute";
 import clsx from "clsx";
 import { t } from "../services/i18n";
-import { DefinitionObject, LabelType } from "../services/promoted_attribute_definition_parser";
+import { DefinitionObject, extractAttributeDefinitionTypeAndName, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
 import FNote from "../entities/fnote";
 import { ComponentChild, HTMLInputTypeAttribute, InputHTMLAttributes, MouseEventHandler, TargetedEvent, TargetedInputEvent } from "preact";
@@ -78,8 +78,7 @@ function usePromotedAttributeData(note: FNote | null | undefined, componentId: s
 
         const cells: Cell[] = [];
         for (const definitionAttr of promotedDefAttrs) {
-            const valueType = definitionAttr.name.startsWith("label:") ? "label" : "relation";
-            const valueName = definitionAttr.name.substr(valueType.length + 1);
+            const [ valueType, valueName ] = extractAttributeDefinitionTypeAndName(definitionAttr.name);
 
             let valueAttrs = ownedAttributes.filter((el) => el.name === valueName && el.type === valueType) as Attribute[];
 

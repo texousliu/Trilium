@@ -87,7 +87,11 @@ export function buildNote(noteDef: NoteDefinition) {
     let position = 0;
     for (const [ key, value ] of Object.entries(noteDef)) {
         const attributeId = utils.randomString(12);
-        const name = key.substring(1);
+        let name = key.substring(1);
+        const isInheritable = key.endsWith("(inheritable)");
+        if (isInheritable) {
+            name = name.substring(0, name.length - "(inheritable)".length);
+        }
 
         let attribute: FAttribute | null = null;
         if (key.startsWith("#")) {
@@ -98,7 +102,7 @@ export function buildNote(noteDef: NoteDefinition) {
                 name,
                 value,
                 position,
-                isInheritable: false
+                isInheritable
             });
         }
 
@@ -110,7 +114,7 @@ export function buildNote(noteDef: NoteDefinition) {
                 name,
                 value,
                 position,
-                isInheritable: false
+                isInheritable
             });
         }
 
