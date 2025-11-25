@@ -74,6 +74,10 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
     padding: 0;
 }
 
+.modal.popup-editor-dialog .note-detail-readonly-text {
+    padding: 1em;
+}
+
 .modal.popup-editor-dialog .note-detail-code-editor {
     padding: 0;    
 
