@@ -64,7 +64,7 @@ Trilium Notes
 * 豊富な WYSIWYG ノートエディター 例:
   表、画像、[数式](https://triliumnext.github.io/Docs/Wiki/text-notes) とマークダウン
   [自動フォーマット](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat) など
-* 構文の強調表示を含む [ソースコード付きノート](https://triliumnext.github.io/Docs/Wiki/code-notes)
+* 構文ハイライト表示を含む [ソースコード付きノート](https://triliumnext.github.io/Docs/Wiki/code-notes)
   の編集をサポート
 * [ノート間のナビゲーション](https://triliumnext.github.io/Docs/Wiki/note-navigation)、全文検索、[ノートのホイスト](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
   が高速かつ簡単に行えます
