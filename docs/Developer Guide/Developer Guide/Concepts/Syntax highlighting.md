@@ -49,7 +49,7 @@ Steps:
     import { HLJSApi, Language } from "highlight.js";
     
     export default function (hljs: HLJSApi): Language {
-    	// [...]
+        // [...]
     }
     ```
 5.  Remove any module loading mechanism or shims outside the main highlight function.

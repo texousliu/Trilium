@@ -4,7 +4,7 @@ The <a class="reference-link" href="../Note%20Tree.md">Note Tree</a> comes wit
 *   Opening notes:
     *   <kbd>Click</kbd> to open the note in the current tab.
     *   <kbd>Ctrl</kbd>+<kbd>Click</kbd> or <kbd>Middle click</kbd> to open the note in a new tab.
-    *   <kbd>Ctrl</kbd>+<kbd>Right click</kbd> to open the note in <a class="reference-link" href="../Quick%20edit.md">Quick edit</a>.
+    *   <kbd>Ctrl</kbd>+<kbd>Right click</kbd> to open the note in <a class="reference-link" href="../../Navigation/Quick%20edit.md">Quick edit</a>.
 *   Navigation within the tree:
     *   <kbd>Up</kbd> and <kbd>Down</kbd> to navigate between notes.
     *   <kbd>Left</kbd> to collapse a note, or <kbd>Right</kbd> to expand it.

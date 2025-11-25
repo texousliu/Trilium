@@ -15,6 +15,8 @@ import PromotedAttributes from "../PromotedAttributes";
 import FloatingButtons from "../FloatingButtons";
 import { DESKTOP_FLOATING_BUTTONS, MOBILE_FLOATING_BUTTONS, POPUP_HIDDEN_FLOATING_BUTTONS } from "../FloatingButtonsDefinitions";
 import utils from "../../services/utils";
+import tree from "../../services/tree";
+import froca from "../../services/froca";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
@@ -28,9 +30,19 @@ export default function PopupEditor() {
 
     useTriliumEvent("openInPopup", async ({ noteIdOrPath }) => {
         const noteContext = new NoteContext("_popup-editor");
+        const resolvedNotePath = await tree.resolveNotePath(noteIdOrPath, noteContext.hoistedNoteId);
+        if (!resolvedNotePath) return;
+
+        const noteId = tree.getNoteIdAndParentIdFromUrl(resolvedNotePath);
+        if (!noteId.noteId) return;
+        const note = await froca.getNote(noteId.noteId);
+        if (!note) return;
+
+        const hasUserSetNoteReadOnly = note.hasLabel("readOnly");
         await noteContext.setNote(noteIdOrPath, {
             viewScope: {
-                readOnlyTemporarilyDisabled: true
+                // Override auto-readonly notes to be editable, but respect user's choice to have a read-only note.
+                readOnlyTemporarilyDisabled: !hasUserSetNoteReadOnly
             }
         });
 
