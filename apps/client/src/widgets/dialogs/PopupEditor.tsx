@@ -17,6 +17,7 @@ import { DESKTOP_FLOATING_BUTTONS, MOBILE_FLOATING_BUTTONS, POPUP_HIDDEN_FLOATIN
 import utils from "../../services/utils";
 import tree from "../../services/tree";
 import froca from "../../services/froca";
+import ReadOnlyNoteInfoBar from "../ReadOnlyNoteInfoBar";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
@@ -67,6 +68,7 @@ export default function PopupEditor() {
                     onHidden={() => setShown(false)}
                     keepInDom // needed for faster loading
                 >
+                    <ReadOnlyNoteInfoBar />
                     <PromotedAttributes />
                     <StandaloneRibbonAdapter component={FormattingToolbar} />
                     <FloatingButtons items={items} />
