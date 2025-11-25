@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "preact/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import "./ReadOnlyText.css";
 import { useNoteBlob, useNoteLabel, useTriliumEvent, useTriliumOptionBool } from "../../react/hooks";
-import RawHtml from "../../react/RawHtml";
+import { RawHtmlBlock } from "../../react/RawHtml";
 
 // we load CKEditor also for read only notes because they contain content styles required for correct rendering of even read only notes
 // we could load just ckeditor-content.css but that causes CSS conflicts when both build CSS and this content CSS is loaded at the same time
@@ -17,6 +17,7 @@ import TouchBar, { TouchBarButton, TouchBarSpacer } from "../../react/TouchBar";
 import appContext from "../../../components/app_context";
 import { applyReferenceLinks } from "./read_only_helper";
 import { applyInlineMermaid, rewriteMermaidDiagramsInContainer } from "../../../services/content_renderer";
+import clsx from "clsx";
 
 export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
@@ -52,14 +53,12 @@ export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetPro
     });
 
     return (
-        <div
-            className={`note-detail-readonly-text note-detail-printable ${codeBlockWordWrap ? "word-wrap" : ""}`}
-            tabindex={100}
-            dir={isRtl ? "rtl" : "ltr"}
-        >
-            <RawHtml
+        <>
+            <RawHtmlBlock
                 containerRef={contentRef}
-                className="note-detail-readonly-text-content ck-content use-tn-links"
+                className={clsx("note-detail-readonly-text-content ck-content use-tn-links", codeBlockWordWrap && "word-wrap")}
+                tabindex={100}
+                dir={isRtl ? "rtl" : "ltr"}
                 html={blob?.content}
             />
 
@@ -75,7 +74,7 @@ export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetPro
                     }}
                 />
             </TouchBar>
-        </div>
+        </>
     )
 }
 
