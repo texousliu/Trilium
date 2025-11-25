@@ -119,6 +119,17 @@ function setupContextMenu() {
                 uiIcon: "bx bx-search-alt",
                 handler: () => electron.shell.openExternal(searchUrl)
             });
+
+            items.push({
+                title: t("electron_context_menu.search_in_trilium", { term: shortenedSelection }),
+                uiIcon: "bx bx-search",
+                handler: async () => {
+                    const appContext = (await import("../components/app_context.js")).default;
+                    await appContext.triggerCommand("searchNotes", {
+                        searchString: params.selectionText
+                    });
+                }
+            });
         }
 
         if (items.length === 0) {
