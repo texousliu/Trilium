@@ -30,10 +30,8 @@ export default function PopupEditor() {
 
     useTriliumEvent("openInPopup", async ({ noteIdOrPath }) => {
         const noteContext = new NoteContext("_popup-editor");
-        const resolvedNotePath = await tree.resolveNotePath(noteIdOrPath, noteContext.hoistedNoteId);
-        if (!resolvedNotePath) return;
 
-        const noteId = tree.getNoteIdAndParentIdFromUrl(resolvedNotePath);
+        const noteId = tree.getNoteIdAndParentIdFromUrl(noteIdOrPath);
         if (!noteId.noteId) return;
         const note = await froca.getNote(noteId.noteId);
         if (!note) return;
