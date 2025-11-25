@@ -1626,7 +1626,10 @@
     "title": "Redattore"
   },
   "code_mime_types": {
-    "title": "Tipi MIME disponibili nel menu a discesa"
+    "title": "Tipi MIME disponibili nel menu a discesa",
+    "tooltip_syntax_highlighting": "Evidenziazione della sintassi",
+    "tooltip_code_block_syntax": "Blocchi di codice nelle note di testo",
+    "tooltip_code_note_syntax": "Note sul codice"
   },
   "vim_key_bindings": {
     "use_vim_keybindings_in_code_notes": "Combinazioni di tasti di Vim",
@@ -2095,5 +2098,10 @@
   },
   "calendar_view": {
     "delete_note": "Eliminazione nota..."
+  },
+  "note-color": {
+    "set-color": "Imposta colore nota",
+    "set-custom-color": "Imposta colore personalizzato per le note",
+    "clear-color": "Pulisci colore della nota"
   }
 }

@@ -1827,7 +1827,10 @@
     "app-restart-required": "（変更を有効にするにはアプリケーションの再起動が必要です）"
   },
   "code_mime_types": {
-    "title": "ドロップダウンで利用可能なMIMEタイプ"
+    "title": "ドロップダウンで利用可能なMIMEタイプ",
+    "tooltip_syntax_highlighting": "構文ハイライト表示",
+    "tooltip_code_block_syntax": "テキストノート内のコードブロック",
+    "tooltip_code_note_syntax": "コードノート"
   },
   "attachment_erasure_timeout": {
     "attachment_erasure_timeout": "添付ファイル消去のタイムアウト",
