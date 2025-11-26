@@ -764,7 +764,7 @@
     "grid": "Grid",
     "list": "List",
     "collapse_all_notes": "Collapse all notes",
-    "expand_all_children": "Expand all children",
+    "expand_tooltip": "Expands the direct children of this collection (one level deep). For more options, press the arrow on the right.",
     "collapse": "Collapse",
     "expand": "Expand",
     "expand_first_level": "Expand direct children",

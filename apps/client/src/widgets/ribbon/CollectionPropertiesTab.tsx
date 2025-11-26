@@ -120,6 +120,7 @@ function SplitButtonPropertyView({ note, property }: { note: FNote, property: Sp
     return <SplitButton
         text={property.label}
         icon={property.icon}
+        title={property.title}
         onClick={() => clickContext && property.onClick(clickContext)}
     >
         {parentComponent && <ItemsComponent note={note} parentComponent={parentComponent} />}

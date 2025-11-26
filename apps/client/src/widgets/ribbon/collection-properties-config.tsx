@@ -95,7 +95,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
             },
             {
                 label: t("book_properties.expand"),
-                title: t("book_properties.expand_all_children"),
+                title: t("book_properties.expand_tooltip"),
                 type: "split-button",
                 icon: "bx bx-move-vertical",
                 onClick: buildExpandListHandler(1),

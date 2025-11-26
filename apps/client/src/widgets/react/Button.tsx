@@ -81,9 +81,10 @@ export function ButtonGroup({ children }: { children: ComponentChildren }) {
     )
 }
 
-export function SplitButton({ text, icon, children, onClick }: {
+export function SplitButton({ text, icon, children, ...restProps }: {
     text: string;
     icon?: string;
+    title?: string;
     /** Click handler for the main button component (not the split). */
     onClick?: () => void;
     /** The children inside the dropdown of the split. */
@@ -91,7 +92,7 @@ export function SplitButton({ text, icon, children, onClick }: {
 }) {
     return (
         <ButtonGroup>
-            <button type="button" class="btn btn-secondary" onClick={onClick}>
+            <button type="button" class="btn btn-secondary" {...restProps}>
                 {icon && <Icon icon={`bx ${icon}`} />}
                 {text}
             </button>
