@@ -116,20 +116,13 @@ function SplitButtonPropertyView({ note, property }: { note: FNote, property: Sp
         triggerCommand: parentComponent.triggerCommand.bind(parentComponent)
     };
 
+    const ItemsComponent = property.items;
     return <SplitButton
         text={property.label}
         icon={property.icon}
         onClick={() => clickContext && property.onClick(clickContext)}
     >
-        {clickContext && property.items.map(subproperty => {
-            if ("type" in subproperty && subproperty) {
-                return <FormDropdownDivider />
-            }
-
-            return (
-                <FormListItem onClick={() => clickContext && subproperty.onClick(clickContext)}>{subproperty.label}</FormListItem>
-            );
-        })}
+        {parentComponent && <ItemsComponent note={note} parentComponent={parentComponent} />}
     </SplitButton>
 }
 

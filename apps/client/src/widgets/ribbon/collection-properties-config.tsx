@@ -6,6 +6,10 @@ import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS, type MapLayer } from "../collection
 import { ViewTypeOptions } from "../collections/interface";
 import { FilterLabelsByType } from "@triliumnext/commons";
 import { DEFAULT_THEME, getPresentationThemes } from "../collections/presentation/themes";
+import { VNode } from "preact";
+import { useNoteLabel } from "../react/hooks";
+import { FormDropdownDivider, FormListItem } from "../react/FormList";
+import Component from "../../components/component";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -27,12 +31,7 @@ export interface ButtonProperty {
 
 export interface SplitButtonProperty extends Omit<ButtonProperty, "type"> {
     type: "split-button";
-    items: ({
-        label: string;
-        onClick(context: BookContext): void;
-    } | {
-        type: "separator"
-    })[];
+    items({ note, parentComponent }: { note: FNote, parentComponent: Component }): VNode;
 }
 
 export interface NumberProperty {
@@ -100,34 +99,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 type: "split-button",
                 icon: "bx bx-move-vertical",
                 onClick: buildExpandListHandler(1),
-                items: [
-                    {
-                        label: "Expand 1 level",
-                        onClick: buildExpandListHandler(1)
-                    },
-                    { type: "separator" },
-                    {
-                        label: "Expand 2 levels",
-                        onClick: buildExpandListHandler(2),
-                    },
-                    {
-                        label: "Expand 3 levels",
-                        onClick: buildExpandListHandler(3),
-                    },
-                    {
-                        label: "Expand 4 levels",
-                        onClick: buildExpandListHandler(4),
-                    },
-                    {
-                        label: "Expand 5 levels",
-                        onClick: buildExpandListHandler(5),
-                    },
-                    { type: "separator" },
-                    {
-                        label: "Expand all children",
-                        onClick: buildExpandListHandler("all"),
-                    }
-                ]
+                items: ListExpandDepth
             }
         ]
     },
@@ -215,6 +187,33 @@ function buildMapLayer([ id, layer ]: [ string, MapLayer ]): ComboBoxItem {
         value: id,
         label: layer.name
     };
+}
+
+function ListExpandDepth(context: { note: FNote, parentComponent: Component }) {
+    const [ currentDepth ] = useNoteLabel(context.note, "expanded");
+
+    return (
+        <>
+            <ListExpandDepthButton label="Expand 1 level" depth={1} {...context} checked={currentDepth === ""} />
+            <FormDropdownDivider />
+            {Array.from({ length: 4 }, (_, i) => i + 2).map(depth => [
+                <ListExpandDepthButton label={`Expand ${depth} levels`} depth={depth} {...context} checked={!!currentDepth && parseInt(currentDepth, 10) === depth} />
+            ])}
+            <FormDropdownDivider />
+            <ListExpandDepthButton label="Expand all levels" depth="all" checked={currentDepth === "all"} {...context} />
+        </>
+    )
+}
+
+function ListExpandDepthButton({ label, depth, note, parentComponent, checked }: { label: string, depth: number | "all", note: FNote, parentComponent: Component, checked?: boolean }) {
+    const handler = buildExpandListHandler(depth);
+
+    return (
+        <FormListItem
+            onClick={() => handler({ note, triggerCommand: parentComponent.triggerCommand.bind(parentComponent) })}
+            checked={checked}
+        >{label}</FormListItem>
+    );
 }
 
 function buildExpandListHandler(depth: number | "all") {
