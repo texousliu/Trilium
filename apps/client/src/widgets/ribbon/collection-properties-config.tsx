@@ -194,13 +194,13 @@ function ListExpandDepth(context: { note: FNote, parentComponent: Component }) {
 
     return (
         <>
-            <ListExpandDepthButton label="Expand 1 level" depth={1} {...context} checked={currentDepth === ""} />
+            <ListExpandDepthButton label={t("book_properties.expand_first_level")} depth={1} {...context} checked={currentDepth === ""} />
             <FormDropdownDivider />
             {Array.from({ length: 4 }, (_, i) => i + 2).map(depth => [
-                <ListExpandDepthButton label={`Expand ${depth} levels`} depth={depth} {...context} checked={!!currentDepth && parseInt(currentDepth, 10) === depth} />
+                <ListExpandDepthButton label={t("book_properties.expand_nth_level", { depth })} depth={depth} {...context} checked={!!currentDepth && parseInt(currentDepth, 10) === depth} />
             ])}
             <FormDropdownDivider />
-            <ListExpandDepthButton label="Expand all levels" depth="all" checked={currentDepth === "all"} {...context} />
+            <ListExpandDepthButton label={t("book_properties.expand_all_levels")} depth="all" checked={currentDepth === "all"} {...context} />
         </>
     )
 }
