@@ -76,7 +76,7 @@
     position: relative;
     display: flex;
     justify-content: center;
-
+    overflow: hidden;
 }
 
 .note-color-picker .custom-color-cell.custom-color-cell-empty {
