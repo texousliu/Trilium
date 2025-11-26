@@ -298,8 +298,6 @@ class ContextMenu {
             // important to use mousedown instead of click since the former does not change focus
             // (especially important for focused text for spell check)
             .on("mousedown", (e) => {
-                e.stopPropagation();
-
                 if (e.which !== 1) {
                     // only left click triggers menu items
                     return false;
@@ -313,6 +311,11 @@ class ContextMenu {
                     return false;
                 }
 
+                // Prevent submenu from failing to expand on mobile
+                if (!("items" in item && item.items)) {
+                    this.hide();
+                }
+
                 if ("handler" in item && item.handler) {
                     item.handler(item, e);
                 }
@@ -323,16 +326,6 @@ class ContextMenu {
                 // might be handled again by top-level menu
                 return false;
             });
-
-        $item.on("mouseup", (e) => {
-            // Prevent submenu from failing to expand on mobile
-            if (!this.isMobile || !("items" in item && item.items)) {
-                e.stopPropagation();
-                // Hide the content menu on mouse up to prevent the mouse event from propagating to the elements below.
-                this.hide();
-                return false;
-            }
-        });
 
         if ("enabled" in item && item.enabled !== undefined && !item.enabled) {
             $item.addClass("disabled");
