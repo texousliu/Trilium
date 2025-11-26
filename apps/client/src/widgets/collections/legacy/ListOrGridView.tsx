@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import FNote from "../../../entities/fnote";
 import Icon from "../../react/Icon";
 import { ViewModeProps } from "../interface";
-import {  useNoteLabelBoolean, useImperativeSearchHighlighlighting } from "../../react/hooks";
+import {  useImperativeSearchHighlighlighting, useNoteLabel } from "../../react/hooks";
 import NoteLink from "../../react/NoteLink";
 import "./ListOrGridView.css";
 import content_renderer from "../../../services/content_renderer";
@@ -14,7 +14,7 @@ import attribute_renderer from "../../../services/attribute_renderer";
 import { filterChildNotes, useFilteredNoteIds } from "./utils";
 
 export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
-    const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
+    const expandDepth = useExpansionDepth(note);
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const { pageNotes, ...pagination } = usePagination(note, noteIds);
 
@@ -25,7 +25,7 @@ export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
 
                 <div class="note-list-container use-tn-links">
                     {pageNotes?.map(childNote => (
-                        <ListNoteCard note={childNote} parentNote={note} expand={isExpanded} highlightedTokens={highlightedTokens} />
+                        <ListNoteCard note={childNote} parentNote={note} expandDepth={expandDepth} highlightedTokens={highlightedTokens} currentLevel={1} />
                     ))}
                 </div>
 
@@ -56,12 +56,19 @@ export function GridView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
     );
 }
 
-function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: FNote, parentNote: FNote, expand?: boolean, highlightedTokens: string[] | null | undefined }) {
-    const [ isExpanded, setExpanded ] = useState(expand);
+function ListNoteCard({ note, parentNote, highlightedTokens, currentLevel, expandDepth }: {
+    note: FNote,
+    parentNote: FNote,
+    currentLevel: number,
+    expandDepth: number,
+    highlightedTokens: string[] | null | undefined
+}) {
+
+    const [ isExpanded, setExpanded ] = useState(currentLevel <= expandDepth);
     const notePath = getNotePath(parentNote, note);
 
     // Reset expand state if switching to another note, or if user manually toggled expansion state.
-    useEffect(() => setExpanded(expand), [ note, expand ]);
+    useEffect(() => setExpanded(currentLevel <= expandDepth), [ note, currentLevel, expandDepth ]);
 
     return (
         <div
@@ -81,7 +88,7 @@ function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: F
 
             {isExpanded && <>
                 <NoteContent note={note} highlightedTokens={highlightedTokens} noChildrenList />
-                <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} />
+                <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} currentLevel={currentLevel} expandDepth={expandDepth} />
             </>}
         </div>
     )
@@ -160,14 +167,25 @@ function NoteContent({ note, trim, noChildrenList, highlightedTokens }: { note: 
     return <div ref={contentRef} className="note-book-content" />;
 }
 
-function NoteChildren({ note, parentNote, highlightedTokens }: { note: FNote, parentNote: FNote, highlightedTokens: string[] | null | undefined }) {
+function NoteChildren({ note, parentNote, highlightedTokens, currentLevel, expandDepth }: {
+    note: FNote,
+    parentNote: FNote,
+    currentLevel: number,
+    expandDepth: number,
+    highlightedTokens: string[] | null | undefined
+}) {
     const [ childNotes, setChildNotes ] = useState<FNote[]>();
 
     useEffect(() => {
         filterChildNotes(note).then(setChildNotes);
     }, [ note ]);
 
-    return childNotes?.map(childNote => <ListNoteCard note={childNote} parentNote={parentNote} highlightedTokens={highlightedTokens} />)
+    return childNotes?.map(childNote => <ListNoteCard
+        note={childNote}
+        parentNote={parentNote}
+        highlightedTokens={highlightedTokens}
+        currentLevel={currentLevel + 1} expandDepth={expandDepth}
+    />)
 }
 
 function getNotePath(parentNote: FNote, childNote: FNote) {
@@ -176,5 +194,19 @@ function getNotePath(parentNote: FNote, childNote: FNote) {
         return childNote.noteId;
     } else {
         return `${parentNote.noteId}/${childNote.noteId}`
+    }
+}
+
+function useExpansionDepth(note: FNote) {
+    const [ expandDepth ] = useNoteLabel(note, "expanded");
+
+    if (expandDepth === null || expandDepth === undefined) { // not defined
+        return 0;
+    } else if (expandDepth === "") { // defined without value
+        return 1;
+    } else if (expandDepth === "all") {
+        return Number.MAX_SAFE_INTEGER;
+    } else {
+        return parseInt(expandDepth, 10);
     }
 }

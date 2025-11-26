@@ -29,7 +29,7 @@ type Labels = {
     status: string;
     pageSize: number;
     geolocation: string;
-    expanded: boolean;
+    expanded: string;
     "calendar:hideWeekends": boolean;
     "calendar:weekNumbers": boolean;
     "calendar:view": string;

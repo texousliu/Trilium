@@ -22,7 +22,17 @@ export interface ButtonProperty {
     label: string;
     title?: string;
     icon?: string;
-    onClick: (context: BookContext) => void;
+    onClick(context: BookContext): void;
+}
+
+export interface SplitButtonProperty extends Omit<ButtonProperty, "type"> {
+    type: "split-button";
+    items: ({
+        label: string;
+        onClick(context: BookContext): void;
+    } | {
+        type: "separator"
+    })[];
 }
 
 export interface NumberProperty {
@@ -55,7 +65,7 @@ export interface ComboBoxProperty {
     options: (ComboBoxItem | ComboBoxGroup)[];
 }
 
-export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty | ComboBoxProperty;
+export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty | ComboBoxProperty | SplitButtonProperty;
 
 interface BookContext {
     note: FNote;
@@ -87,16 +97,37 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
             {
                 label: t("book_properties.expand"),
                 title: t("book_properties.expand_all_children"),
-                type: "button",
+                type: "split-button",
                 icon: "bx bx-move-vertical",
-                async onClick({ note, triggerCommand }) {
-                    const { noteId } = note;
-                    if (!note.isLabelTruthy("expanded")) {
-                        await attributes.addLabel(noteId, "expanded");
+                onClick: buildExpandListHandler(1),
+                items: [
+                    {
+                        label: "Expand 1 level",
+                        onClick: buildExpandListHandler(1)
+                    },
+                    { type: "separator" },
+                    {
+                        label: "Expand 2 levels",
+                        onClick: buildExpandListHandler(2),
+                    },
+                    {
+                        label: "Expand 3 levels",
+                        onClick: buildExpandListHandler(3),
+                    },
+                    {
+                        label: "Expand 4 levels",
+                        onClick: buildExpandListHandler(4),
+                    },
+                    {
+                        label: "Expand 5 levels",
+                        onClick: buildExpandListHandler(5),
+                    },
+                    { type: "separator" },
+                    {
+                        label: "Expand all children",
+                        onClick: buildExpandListHandler("all"),
                     }
-
-                    triggerCommand("refreshNoteList", { noteId });
-                },
+                ]
             }
         ]
     },
@@ -184,4 +215,18 @@ function buildMapLayer([ id, layer ]: [ string, MapLayer ]): ComboBoxItem {
         value: id,
         label: layer.name
     };
+}
+
+function buildExpandListHandler(depth: number | "all") {
+    return async ({ note, triggerCommand }: BookContext) => {
+        const { noteId } = note;
+
+        const existingValue = note.getLabelValue("expanded");
+        let newValue: string | undefined = typeof depth === "number" ? depth.toString() : depth;
+        if (depth === 1) newValue = undefined; // maintain existing behaviour
+        if (newValue === existingValue) return;
+
+        await attributes.setLabel(noteId, "expanded", newValue);
+        triggerCommand("refreshNoteList", { noteId });
+    }
 }
