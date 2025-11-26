@@ -56,6 +56,10 @@ export default class MathView extends View {
 
 	public updateMath(): void {
 		if ( this.element ) {
+
+			// This prevents the new render from appending to the old one.
+			this.element.textContent = '';
+
 			void renderEquation(
 				this.value,
 				this.element,
