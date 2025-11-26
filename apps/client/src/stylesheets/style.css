@@ -439,7 +439,8 @@ body.desktop .tabulator-popup-container,
 }
 
 body.desktop .dropdown-menu:not(#context-menu-container) .dropdown-item,
-body #context-menu-container .dropdown-item > span {
+body #context-menu-container .dropdown-item > span,
+body.mobile .dropdown .dropdown-submenu > span {
     display: flex;
     align-items: center;
 }
