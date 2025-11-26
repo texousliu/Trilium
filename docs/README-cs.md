@@ -11,14 +11,14 @@
 
 # Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
-![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
+![Sponzoři GitHubu](https://img.shields.io/github/sponsors/eliandoran) ![Patroni
+LiberaPay](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![Stahování GitHubu (všechny soubory, všechna
+vydání)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Stav
+překladu](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [Angličtina](./README.md) | [Čínština (Zjednodušená)](./docs/README-ZH_CN.md) |
 [Čínština (Tradiční)](./docs/README-ZH_TW.md) | [Ruština](./docs/README-ru.md) |
@@ -28,8 +28,8 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 Trilium Notes je open-source, cross-platform aplikace pro hierarchiální psaní
 poznámek.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Pro rychlý přehled viz
+[screenshot](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
@@ -37,8 +37,7 @@ quick overview:
 - [Nejnovější verze](https://github.com/TriliumNext/Trilium/releases/latest) –
   stabilní verze, doporučena pro většinu uživatelů.
 - [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
-  unstable development version, updated daily with the latest features and
-  fixes.
+  nestabilní vývojová verze, denně aktualizovaná o nejnovější funkce a opravy.
 
 ## 📚 Dokumentace
 
@@ -61,62 +60,64 @@ Naše dokumenatce je dostupná ve vícero formátech:
   Dockeru](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Aktualizování
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+- [Základní pojmy a
+  funkce](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Vzory osobní znalostní
+  báze](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 Funkce
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
-  [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
+* Poznámky lze uspořádat do libovolně hlubokého stromu. Jedna poznámka může být
+  umístěna na více místech ve stromu (viz
+  [klonování](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
+* Bohatý editor poznámek WYSIWYG zahrnující např. tabulky, obrázky a
+  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) s automatickým
+  formátováním
   [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
-  highlighting
-* Fast and easy [navigation between
-  notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
-  search and [note
-  hoisting](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* Seamless [note
-  versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
-  used for note organization, querying and advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
-* Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  for more secure login
-* [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
-  with self-hosted sync server
-  * there's a [3rd party service for hosting synchronisation
-    server](https://trilium.cc/paid-hosting)
-* [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes
-  to public internet
-* Strong [note
-  encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
-  per-note granularity
-* Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type
-  "canvas")
-* [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
-  [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
-  notes and their relations
-* Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
-  location pins and GPX tracks
-* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
-  showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
-* Scales well in both usability and performance upwards of 100 000 notes
-* Touch optimized [mobile
-  frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) for
-  smartphones and tablets
-* Built-in [dark theme](https://triliumnext.github.io/Docs/Wiki/themes), support
-  for user themes
+* Podpora pro úpravy [poznámek se zdrojovým
+  kódem](https://triliumnext.github.io/Docs/Wiki/code-notes), včetně zvýraznění
+  syntaxe
+* Rychlá a snadná [navigace mezi
+  poznámkami](https://triliumnext.github.io/Docs/Wiki/note-navigation),
+  vyhledávání v plném textu a [zvedání
+  poznámek](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+* Bezproblémová [poznámka k
+  verzím](https://triliumnext.github.io/Docs/Wiki/note-revisions)
+* Poznámka [atributy](https://triliumnext.github.io/Docs/Wiki/attributes) lze
+  použít pro organizaci poznámek, dotazování a pokročilé
+  [skriptování](https://triliumnext.github.io/Docs/Wiki/scripts)
+* Uživatelské rozhraní je k dispozici v angličtině, češtině, němčině,
+  španělštině, francouzštině, rumunštině a čínštině (zjednodušené a tradiční)
+* Přímá integrace [OpenID a
+  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  pro bezpečnější přihlášení
+* [Synchronizace](https://triliumnext.github.io/Docs/Wiki/synchronization) s
+  vlastním synchronizačním serverem
+  * existuje [služba třetí strany pro hostování synchronizačního
+    serveru](https://trilium.cc/paid-hosting)
+* [Sdílení](https://triliumnext.github.io/Docs/Wiki/sharing) (zveřejňování)
+  poznámek na veřejném internetu
+* Silné [šifrování
+  poznámek](https://triliumnext.github.io/Docs/Wiki/protected-notes) s
+  granularitou na úrovni jednotlivých poznámek
+* Náčrt diagramů na základě [Excalidraw](https://excalidraw.com/) (poznámka typu
+  „plátno“)
+* [Mapy vztahů](https://triliumnext.github.io/Docs/Wiki/relation-map) a [mapy
+  odkazů](https://triliumnext.github.io/Docs/Wiki/link-map) pro vizualizaci
+  poznámek a jejich vztahů
+* Myšlenkové mapy založené na [Mind Elixir](https://docs.mind-elixir.com/)
+* [Geo mapy](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) s
+  lokalizačními značkami a trasami GPX
+* [Skriptování](https://triliumnext.github.io/Docs/Wiki/scripts) – viz
+  [Pokročilé ukázky](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
+* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) pro automatizaci
+* Dobře škálovatelný jak z hlediska použitelnosti, tak výkonu až do 100 000
+  poznámek
+* Optimalizované pro dotykové ovládání [mobilní
+  rozhraní](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) pro
+  smartphony a tablety
+* Vestavěný [tmavý motiv](https://triliumnext.github.io/Docs/Wiki/themes),
+  podpora uživatelských motivů
 * [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) and
   [Markdown import & export](https://triliumnext.github.io/Docs/Wiki/markdown)
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
