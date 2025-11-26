@@ -2000,7 +2000,8 @@
     "add-column-placeholder": "Ingresar título de la columna...",
     "edit-note-title": "Haga clic para editar el título de la nota",
     "edit-column-title": "Haga clic para editar el título de la columna",
-    "remove-from-board": "Eliminar del tablero"
+    "remove-from-board": "Eliminar del tablero",
+    "column-already-exists": "Esta columna ya existe en el tablero."
   },
   "content_renderer": {
     "open_externally": "Abrir externamente"
@@ -2100,5 +2101,10 @@
   },
   "calendar_view": {
     "delete_note": "Eliminar nota..."
+  },
+  "note-color": {
+    "clear-color": "Borrar color de nota",
+    "set-color": "Asignar color de nota",
+    "set-custom-color": "Asignar color de nota personalizado"
   }
 }
