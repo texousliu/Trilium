@@ -164,12 +164,12 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
             onWheel={onWheelHorizontalScroll}
         >
             <BoardViewContext.Provider value={boardViewContext}>
-                <div
+                {byColumn && columns && <div
                     className="board-view-container"
                     onDragOver={handleColumnDragOver}
                     onDrop={handleContainerDrop}
                 >
-                    {byColumn && columns?.map((column, index) => (
+                    {columns.map((column, index) => (
                         <>
                             {columnDropPosition === index && (
                                 <div className="column-drop-placeholder show" />
@@ -191,7 +191,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                     )}
 
                     <AddNewColumn api={api} isInRelationMode={isInRelationMode} />
-                </div>
+                </div>}
             </BoardViewContext.Provider>
         </div>
     )
