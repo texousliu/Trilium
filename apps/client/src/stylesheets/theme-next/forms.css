@@ -17,6 +17,10 @@ button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel, .c
     padding: 4px 16px;
     background: var(--cmd-button-background-color);
     color: var(--cmd-button-text-color);
+
+    &.dropdown-toggle-split {
+        min-width: unset;
+    }
 }
 
 button.btn.btn-primary:hover,
