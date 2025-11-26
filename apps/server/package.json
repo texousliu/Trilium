@@ -71,7 +71,7 @@
     "bootstrap": "5.3.8",
     "chardet": "2.1.1",
     "cheerio": "1.1.2",
-    "chokidar": "4.0.3",
+    "chokidar": "5.0.0",
     "cls-hooked": "4.2.2",
     "compression": "1.8.1",
     "cookie-parser": "1.4.7",
