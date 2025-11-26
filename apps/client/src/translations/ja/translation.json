@@ -1301,7 +1301,8 @@
     "copy-link": "リンクをコピー",
     "paste": "貼り付け",
     "paste-as-plain-text": "プレーンテキストで貼り付け",
-    "search_online": "{{searchEngine}} で \"{{term}}\" を検索"
+    "search_online": "{{searchEngine}} で \"{{term}}\" を検索",
+    "search_in_trilium": "Triliumで「{{term}}」を検索"
   },
   "duration": {
     "seconds": "秒",
