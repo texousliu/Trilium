@@ -16,7 +16,7 @@ import { formatCodeBlocks } from "../../../services/syntax_highlight";
 import TouchBar, { TouchBarButton, TouchBarSpacer } from "../../react/TouchBar";
 import appContext from "../../../components/app_context";
 import { applyReferenceLinks } from "./read_only_helper";
-import { applyInlineMermaid, rewriteMermaidDiagramsInContainer } from "../../../services/content_renderer";
+import { applyInlineMermaid, rewriteMermaidDiagramsInContainer } from "../../../services/content_renderer_text";
 import clsx from "clsx";
 
 export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetProps) {

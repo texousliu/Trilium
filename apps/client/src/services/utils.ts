@@ -274,7 +274,7 @@ function getMimeTypeClass(mime: string) {
     return `mime-${mime.toLowerCase().replace(/[\W_]+/g, "-")}`;
 }
 
-function isHtmlEmpty(html: string) {
+export function isHtmlEmpty(html: string) {
     if (!html) {
         return true;
     } else if (typeof html !== "string") {

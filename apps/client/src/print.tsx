@@ -2,8 +2,9 @@ import FNote from "./entities/fnote";
 import { render } from "preact";
 import { CustomNoteList, useNoteViewType } from "./widgets/collections/NoteList";
 import { useCallback, useLayoutEffect, useRef } from "preact/hooks";
-import content_renderer, { applyInlineMermaid } from "./services/content_renderer";
+import content_renderer from "./services/content_renderer";
 import { dynamicRequire, isElectron } from "./services/utils";
+import { applyInlineMermaid } from "./services/content_renderer_text";
 
 interface RendererProps {
     note: FNote;
