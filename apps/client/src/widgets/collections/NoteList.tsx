@@ -147,6 +147,7 @@ export function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefine
 export function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined, ntxId: string | null | undefined) {
     const [ noteIds, setNoteIds ] = useState<string[]>([]);
     const [ includeArchived ] = useNoteLabelBoolean(note, "includeArchived");
+    const directChildrenOnly = (viewType === "list" || viewType === "grid" || viewType === "table" || note?.type === "search");
 
     async function refreshNoteIds() {
         if (!note) {
@@ -157,7 +158,7 @@ export function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOpt
     }
 
     async function getNoteIds(note: FNote) {
-        if (viewType === "list" || viewType === "grid" || viewType === "table" || note.type === "search") {
+        if (directChildrenOnly) {
             return await note.getChildNoteIdsWithArchiveFiltering(includeArchived);
         } else {
             return await note.getSubtreeNoteIds(includeArchived);
@@ -165,7 +166,9 @@ export function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOpt
     }
 
     // Refresh on note switch.
-    useEffect(() => { refreshNoteIds() }, [ note, includeArchived ]);
+    useEffect(() => {
+        refreshNoteIds()
+    }, [ note, includeArchived, directChildrenOnly ]);
 
     // Refresh on alterations to the note subtree.
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
