@@ -8,7 +8,8 @@ interface MathFieldElement extends HTMLElement {
     value: string;
     readOnly: boolean;
     mathVirtualKeyboardPolicy: string;
-
+    // Interface includes the shortcuts property
+    inlineShortcuts: Record<string, string>;
 }
 
 /**
@@ -56,11 +57,23 @@ export default class MathLiveInputView extends View {
         // 2. Configure Options
         mathfield.mathVirtualKeyboardPolicy = 'manual';
 
-        // Disable sounds
+        //Disable differential D
+        mathfield.addEventListener( 'mount', () => {
+            mathfield.inlineShortcuts = {
+                ...mathfield.inlineShortcuts, // Safe to read now
+                dx: 'dx',
+                dy: 'dy',
+                dt: 'dt'
+            };
+        } );
+
+
+        // Disable sounds safely
         const MathfieldConstructor = customElements.get( 'math-field' );
         if ( MathfieldConstructor ) {
-            ( MathfieldConstructor as any ).soundsDirectory = null;
-            ( MathfieldConstructor as any ).plonkSound = null;
+            const proto = MathfieldConstructor as any;
+            if ( proto.soundsDirectory !== null ) proto.soundsDirectory = null;
+            if ( proto.plonkSound !== null ) proto.plonkSound = null;
         }
 
         // 3. Set Initial State
@@ -84,7 +97,7 @@ export default class MathLiveInputView extends View {
             mathfield.readOnly = nextValue;
         } );
 
-        // 6. Mount
+        // 6. Mount to the wrapper view
         this.element?.appendChild( mathfield );
         this.mathfield = mathfield;
     }
