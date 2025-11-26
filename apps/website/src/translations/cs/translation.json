@@ -49,6 +49,7 @@
         "canvas_title": "Plátno",
         "canvas_description": "Uspořádejte tvary, obrázky a text na nekonečném plátně pomocí stejné technologie, jaká se používá na webu excalidraw.com. Ideální pro diagramy, náčrtky a vizuální plánování.",
         "mermaid_title": "Mermaid diagramy",
-        "mermaid_description": "Vytvářejte diagramy, jako jsou vývojové diagramy, diagramy tříd a sekvencí, Ganttovy diagramy a mnoho dalších, pomocí syntaxe Mermaid."
+        "mermaid_description": "Vytvářejte diagramy, jako jsou vývojové diagramy, diagramy tříd a sekvencí, Ganttovy diagramy a mnoho dalších, pomocí syntaxe Mermaid.",
+        "mindmap_title": "Myšlenková mapa"
     }
 }
