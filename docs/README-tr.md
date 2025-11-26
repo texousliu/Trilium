@@ -34,19 +34,19 @@ görüntülerine](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) bakı
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## ⏬ Download
-- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  stable version, recommended for most users.
+## İndir
+- [Son sürüm](https://github.com/TriliumNext/Trilium/releases/latest) – stabil
+  versiyon, standart kullanıcılar için tavsiye edilir.
 - [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
-  unstable development version, updated daily with the latest features and
-  fixes.
+  kararsız geliştirme sürümü, son özellikler ve iyileştirmelerle günlük olarak
+  güncellenir.
 
-## 📚 Documentation
+## Dokümantasyon
 
-**Visit our comprehensive documentation at
-[docs.triliumnotes.org](https://docs.triliumnotes.org/)**
+**Kapsamlı dokümanlarımızı [docs.triliumnotes.org] adresinden ziyaret
+edin(https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
+Dokümantasyonumuz birden fazla formatta mevcuttur:
 - **Online Documentation**: Browse the full documentation at
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
