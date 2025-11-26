@@ -762,7 +762,6 @@
     "grid": "Grille",
     "list": "Liste",
     "collapse_all_notes": "Réduire toutes les notes",
-    "expand_all_children": "Développer tous les enfants",
     "collapse": "Réduire",
     "expand": "Développer",
     "invalid_view_type": "Type de vue non valide '{{type}}'",

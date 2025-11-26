@@ -279,7 +279,6 @@
     "collapse": "Minimizează",
     "collapse_all_notes": "Minimizează toate notițele",
     "expand": "Expandează",
-    "expand_all_children": "Expandează toate subnotițele",
     "grid": "Grilă",
     "invalid_view_type": "Mod de afișare incorect „{{type}}”",
     "list": "Listă",
@@ -2096,7 +2095,7 @@
   "calendar_view": {
     "delete_note": "Șterge notița..."
   },
-    "note-color": {
+  "note-color": {
     "clear-color": "Înlăturați culoarea notiței",
     "set-color": "Setați culoarea notiței",
     "set-custom-color": "Setați culoare personalizată pentru notiță"

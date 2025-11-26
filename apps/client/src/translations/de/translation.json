@@ -760,7 +760,6 @@
     "grid": "Gitter",
     "list": "Liste",
     "collapse_all_notes": "Alle Notizen einklappen",
-    "expand_all_children": "Unternotizen ausklappen",
     "collapse": "Einklappen",
     "expand": "Ausklappen",
     "invalid_view_type": "Ungültiger Ansichtstyp „{{type}}“",
