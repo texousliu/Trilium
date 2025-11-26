@@ -75,7 +75,10 @@ class ContextMenu {
         if (this.isMobile) {
             this.$cover.on("click", () => this.hide());
         } else {
-            $(document).on("click", (e) => this.hide());
+            $(document).on("click", (e) => {
+                console.log("Hide due to clickus")
+                this.hide()
+            });
         }
     }
 
@@ -238,6 +241,7 @@ class ContextMenu {
     private createCustomMenuItem(item: CustomMenuItem) {
         const element = document.createElement("li");
         element.classList.add("dropdown-custom-item");
+        element.onclick = () => this.hide();
         render(h(item.componentFn, {}), element);
         return element;
     }
