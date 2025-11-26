@@ -105,8 +105,22 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       <FormDropdownDivider />
 
       <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
+      {glob.isDev && <DevelopmentActions note={note} />}
     </Dropdown>
   );
+}
+
+function DevelopmentActions({ note }: { note: FNote }) {
+    return (
+        <>
+            <FormDropdownDivider />
+            <FormListItem disabled>Development-only Actions</FormListItem>
+            <FormListItem
+                icon="bx bx-printer"
+                onClick={() => window.open(`/?print=#root/${note.noteId}`, "_blank")}
+            >Open print page</FormListItem>
+        </>
+    )
 }
 
 function CommandItem({ icon, text, title, command, disabled }: { icon: string, text: string, title?: string, command: CommandNames | (() => void), disabled?: boolean, destructive?: boolean }) {
