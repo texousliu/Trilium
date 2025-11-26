@@ -1320,7 +1320,7 @@ body.mobile #context-menu-container.mobile-bottom-menu {
     overflow: auto !important;
     user-select: none;
     -webkit-user-select: none;
-    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-bottom: max(env(safe-area-inset-bottom), var(--padding, var(--menu-padding-size))) !important;
 }
 
 body.mobile .dropdown-menu {
