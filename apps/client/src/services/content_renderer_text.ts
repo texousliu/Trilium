@@ -7,7 +7,7 @@ import tree from "./tree.js";
 import froca from "./froca.js";
 import link from "./link.js";
 import { isHtmlEmpty } from "./utils.js";
-import type { RenderOptions } from "./content_renderer.js";
+import { default as content_renderer, type RenderOptions } from "./content_renderer.js";
 
 export default async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>, options: RenderOptions = {}) {
     // entity must be FNote
@@ -15,6 +15,7 @@ export default async function renderText(note: FNote | FAttachment, $renderedCon
 
     if (blob && !isHtmlEmpty(blob.content)) {
         $renderedContent.append($('<div class="ck-content">').html(blob.content));
+        await renderIncludedNotes($renderedContent[0]);
 
         if ($renderedContent.find("span.math-tex").length > 0) {
             renderMathInElement($renderedContent[0], { trust: true });
@@ -33,6 +34,33 @@ export default async function renderText(note: FNote | FAttachment, $renderedCon
         await formatCodeBlocks($renderedContent);
     } else if (note instanceof FNote && !options.noChildrenList) {
         await renderChildrenList($renderedContent, note);
+    }
+}
+
+async function renderIncludedNotes(contentEl: HTMLElement) {
+    // TODO: Consider duplicating with server's share/content_renderer.ts.
+    const includeNoteEls = contentEl.querySelectorAll("section.include-note");
+
+    // Gather the list of items to load.
+    const noteIds: string[] = [];
+    for (const includeNoteEl of includeNoteEls) {
+        const noteId = includeNoteEl.getAttribute("data-note-id");
+        if (noteId) {
+            noteIds.push(noteId);
+        }
+    }
+
+    // Load the required notes.
+    await froca.getNotes(noteIds);
+
+    // Render and integrate the notes.
+    for (const includeNoteEl of includeNoteEls) {
+        const noteId = includeNoteEl.getAttribute("data-note-id");
+        if (!noteId) return;
+
+        const note = froca.getNoteFromCache(noteId);
+        const renderedContent = (await content_renderer.getRenderedContent(note)).$renderedContent;
+        includeNoteEl.replaceChildren(...renderedContent);
     }
 }
 
