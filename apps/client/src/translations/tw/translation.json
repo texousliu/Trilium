@@ -770,7 +770,11 @@
     "geo-map": "地理地圖",
     "board": "看板",
     "include_archived_notes": "顯示已封存筆記",
-    "presentation": "簡報"
+    "presentation": "簡報",
+    "expand_tooltip": "展開此集合的直接子級（單層深度）。按下右側箭頭以查看更多選項。",
+    "expand_first_level": "展開直接子級",
+    "expand_nth_level": "展開 {{depth}} 層",
+    "expand_all_levels": "展開所有層級"
   },
   "edited_notes": {
     "no_edited_notes_found": "今天還沒有編輯過的筆記...",
@@ -1147,7 +1151,10 @@
     "unit": "字元"
   },
   "code_mime_types": {
-    "title": "下拉選單可用的 MIME 文件類型"
+    "title": "下拉選單可用的 MIME 文件類型",
+    "tooltip_syntax_highlighting": "語法高亮顯示",
+    "tooltip_code_block_syntax": "文字筆記中的程式碼區塊",
+    "tooltip_code_note_syntax": "程式碼筆記"
   },
   "vim_key_bindings": {
     "use_vim_keybindings_in_code_notes": "Vim 快捷鍵",
@@ -1653,7 +1660,8 @@
     "copy-link": "複製連結",
     "paste": "貼上",
     "paste-as-plain-text": "以純文字貼上",
-    "search_online": "用 {{searchEngine}} 搜尋 \"{{term}}\""
+    "search_online": "用 {{searchEngine}} 搜尋 \"{{term}}\"",
+    "search_in_trilium": "在 Trilium 中搜尋 \"{{term}}\""
   },
   "image_context_menu": {
     "copy_reference_to_clipboard": "複製引用到剪貼簿",
