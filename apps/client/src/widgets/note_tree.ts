@@ -508,7 +508,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                         (data.hitMode === "over" && node.data.noteType === "search") ||
                         (["after", "before"].includes(data.hitMode) && (node.data.noteId === hoistedNoteService.getHoistedNoteId() || node.getParent().data.noteType === "search"))
                     ) {
-                        await dialogService.info("Dropping notes into this location is not allowed.");
+                        await dialogService.info(t("note_tree.dropping-not-allowed"));
 
                         return;
                     }
