@@ -769,7 +769,8 @@
     "geo-map": "Weltkarte",
     "board": "Tafel",
     "include_archived_notes": "Zeige archivierte Notizen",
-    "presentation": "Präsentation"
+    "presentation": "Präsentation",
+    "expand_all_levels": "Alle Ebenen erweitern"
   },
   "edited_notes": {
     "no_edited_notes_found": "An diesem Tag wurden noch keine Notizen bearbeitet...",

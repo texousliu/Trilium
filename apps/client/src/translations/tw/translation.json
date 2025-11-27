@@ -1661,7 +1661,7 @@
     "paste": "貼上",
     "paste-as-plain-text": "以純文字貼上",
     "search_online": "用 {{searchEngine}} 搜尋 \"{{term}}\"",
-    "search_in_trilium": "在 Trilium 中搜尋 \"{{term}}\""
+    "search_in_trilium": "在 Trilium 中搜尋「{{term}}」"
   },
   "image_context_menu": {
     "copy_reference_to_clipboard": "複製引用到剪貼簿",
