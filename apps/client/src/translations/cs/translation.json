@@ -70,7 +70,7 @@
     "cancel": "Zrušit",
     "ok": "OK",
     "confirmation": "Potvrzení",
-    "are_you_sure_remove_note": "Opravdu chcete odstranit poznámku „{{title}}“ z mapy vztahů? ",
+    "are_you_sure_remove_note": "Opravdu chcete odstranit poznámku „{{title}}“ z mapy vztahů?",
     "if_you_dont_check": "Pokud tuto možnost nezaškrtnete, poznámka bude odstraněna pouze z mapy vztahů.",
     "also_delete_note": "Odstraňte také poznámku"
   },
@@ -84,7 +84,7 @@
     "erase_notes_warning": "Trvale smažte poznámky (nelze vrátit zpět), včetně všech klonů. Tím se vynutí opětovné načtení aplikace.",
     "notes_to_be_deleted": "Následující poznámky budou smazány ({{notesCount}})",
     "no_note_to_delete": "Žádná poznámka nebude smazána (pouze klony).",
-    "broken_relations_to_be_deleted": "Následující vazby budou přerušeny a smazány ({{ relationCount}})",
+    "broken_relations_to_be_deleted": "Následující vazby budou přerušeny a smazány ({{relationCount}})",
     "deleted_relation_text": "Poznámka {{- note}} (bude smazána) je odkazována vazbou {{- relation}} pocházející z {{- source}}."
   },
   "export": {
