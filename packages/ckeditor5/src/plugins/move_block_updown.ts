@@ -2,7 +2,7 @@
  * https://github.com/TriliumNext/Trilium/issues/1002
  */
 
-import { Command, ModelDocumentSelection, ModelElement, ModelNode, Plugin, ModelRange, _isMac } from 'ckeditor5';
+import { Command, ModelDocumentSelection, ModelElement, ModelNode, Plugin, ModelRange, _isMac, Editor } from 'ckeditor5';
 
 const keyMap = {
     ArrowUp: 'moveBlockUp',
@@ -33,7 +33,21 @@ export default class MoveBlockUpDownPlugin extends Plugin {
                 const isOnlyMeta = (!e.ctrlKey && !e.altKey && e.metaKey);
                 const isOnlyAlt = (!e.ctrlKey && e.altKey && !e.metaKey);
 
-				if ((!isMac && isOnlyMeta) || isOnlyAlt) {
+                // on Mac, Cmd+Up and Cmd+Down are supposed to jump to the beginning/end of the document.
+                // Cmd+Down works in CKEditor, but Cmd+Up doesn't for some reason.
+                if (isMac && isOnlyMeta) {
+                    e.preventDefault();
+					e.stopImmediatePropagation();
+
+                    editor.model.change(writer => {
+                        const position = (command === "moveBlockUp" ? 0 : "end");
+                        writer.setSelection(writer.createPositionAt( editor.model.document.getRoot(), position));
+                        scrollToSelection(editor);
+                    } );
+                    return;
+                }
+
+				if (isOnlyMeta || isOnlyAlt) {
 					e.preventDefault();
 					e.stopImmediatePropagation();
 					editor.execute(command);
@@ -102,8 +116,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 			}
 			writer.setSelection(range);
 			this.editor.editing.view.focus();
-
-			this.scrollToSelection();
+			scrollToSelection(this.editor);
 		});
     }
 
@@ -131,13 +144,6 @@ abstract class MoveBlockUpDownCommand extends Command {
 		// Deduplicate adjacent duplicates (e.g., nested selections resolving to same block)
 		return resolved.filter((blk, idx) => idx === 0 || blk !== resolved[idx - 1]);
 	}
-
-	scrollToSelection() {
-		// Ensure scroll happens in sync with DOM updates
-		requestAnimationFrame(() => {
-			this.editor.editing.view.scrollToTheSelection();
-		});
-	};
 }
 
 class MoveBlockUpCommand extends MoveBlockUpDownCommand {
@@ -164,3 +170,10 @@ class MoveBlockDownCommand extends MoveBlockUpDownCommand {
 		return "after" as const;
 	}
 }
+
+function scrollToSelection(editor: Editor) {
+    // Ensure scroll happens in sync with DOM updates
+    requestAnimationFrame(() => {
+        editor.editing.view.scrollToTheSelection();
+    });
+};
