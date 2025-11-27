@@ -58,6 +58,7 @@ function initOnElectron() {
 
     initDarkOrLightMode(style);
     initTransparencyEffects(style, currentWindow);
+    initFullScreenDetection(currentWindow);
 
     if (options.get("nativeTitleBarVisible") !== "true") {
         initTitleBarButtons(style, currentWindow);
@@ -85,6 +86,11 @@ function initTitleBarButtons(style: CSSStyleDeclaration, currentWindow: Electron
         const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
         currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
     }
+}
+
+function initFullScreenDetection(currentWindow: Electron.BrowserWindow) {
+    currentWindow.on("enter-full-screen", () => document.body.classList.add("full-screen"));
+    currentWindow.on("leave-full-screen", () => document.body.classList.remove("full-screen"));
 }
 
 function initTransparencyEffects(style: CSSStyleDeclaration, currentWindow: Electron.BrowserWindow) {
