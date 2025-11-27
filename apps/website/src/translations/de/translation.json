@@ -49,8 +49,8 @@
         "calendar_title": "Kalender"
     },
     "download_helper_desktop_macos": {
-        "quick_start": "Installieren mit Homebrew :",
-        "download_dmg": "Installer (.dmg) Herunterladen",
+        "quick_start": "Installieren mit Homebrew:",
+        "download_dmg": "Installer (.dmg) herunterladen",
         "download_zip": "Portable (.zip)",
         "download_homebrew_cask": "Die Homebrew Cask",
         "description_arm64": "Für Apple Silicon Macs, beispielsweise mit M1-, M2-, M3- oder M4-Chips.",

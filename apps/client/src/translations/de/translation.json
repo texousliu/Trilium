@@ -40,8 +40,8 @@
     "prefix": "Präfix: ",
     "save": "Speichern",
     "branch_prefix_saved": "Zweigpräfix wurde gespeichert.",
-    "branch_prefix_saved_multiple": "Der Zweigpräfix wurde für {{count}} -Zweige gespeichert.",
-    "edit_branch_prefix_multiple": "Zweigpräfix {{ZZZZ}} bearbeiten"
+    "branch_prefix_saved_multiple": "Der Zweigpräfix wurde für {{count}} Zweige gespeichert.",
+    "edit_branch_prefix_multiple": "Präfix für {{count}} Zweige bearbeiten"
   },
   "bulk_actions": {
     "bulk_actions": "Massenaktionen",
@@ -1147,7 +1147,7 @@
   },
   "code_mime_types": {
     "title": "Verfügbare MIME-Typen im Dropdown-Menü",
-    "tooltip_syntax_highlighting": "Syntax hervorhebung",
+    "tooltip_syntax_highlighting": "Syntaxhervorhebung",
     "tooltip_code_block_syntax": "Code-Blöcke in Textnotizen",
     "tooltip_code_note_syntax": "Code-Notizen"
   },
@@ -2099,6 +2099,6 @@
   "note-color": {
     "clear-color": "Notizfarbe entfernen",
     "set-color": "Notizfarbe wählen",
-    "set-custom-color": "Eigene Notzfarbe wählen"
+    "set-custom-color": "Eigene Notizfarbe wählen"
   }
 }
