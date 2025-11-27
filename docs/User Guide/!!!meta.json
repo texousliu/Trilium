@@ -2381,13 +2381,6 @@
                                                     "position": 20
                                                 },
                                                 {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "yTjUdsOi4CIE",
-                                                    "isInheritable": false,
-                                                    "position": 30
-                                                },
-                                                {
                                                     "type": "label",
                                                     "name": "iconClass",
                                                     "value": "bx bxs-keyboard",
@@ -2400,6 +2393,20 @@
                                                     "value": "keyboard-shortcuts",
                                                     "isInheritable": false,
                                                     "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "IakOLONlIfGI",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "yTjUdsOi4CIE",
+                                                    "isInheritable": false,
+                                                    "position": 60
                                                 }
                                             ],
                                             "format": "markdown",
@@ -5214,13 +5221,6 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "IakOLONlIfGI",
-                                    "isInheritable": false,
-                                    "position": 30
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
                                     "value": "iPIMuisry3hd",
                                     "isInheritable": false,
                                     "position": 40
@@ -5259,6 +5259,20 @@
                                     "value": "bx bxs-keyboard",
                                     "isInheritable": false,
                                     "position": 80
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "DvdZhoQZY9Yd",
+                                    "isInheritable": false,
+                                    "position": 90
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "TBwsyfadTA18",
+                                    "isInheritable": false,
+                                    "position": 100
                                 }
                             ],
                             "format": "markdown",
@@ -10577,6 +10591,13 @@
                                     "position": 30
                                 },
                                 {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "HI6GBBIduIgv",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
                                     "type": "label",
                                     "name": "iconClass",
                                     "value": "bx bx-list-ul",
@@ -10589,13 +10610,6 @@
                                     "value": "list",
                                     "isInheritable": false,
                                     "position": 30
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "HI6GBBIduIgv",
-                                    "isInheritable": false,
-                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
