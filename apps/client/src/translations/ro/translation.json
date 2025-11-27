@@ -279,7 +279,6 @@
     "collapse": "Minimizează",
     "collapse_all_notes": "Minimizează toate notițele",
     "expand": "Expandează",
-    "expand_all_children": "Expandează toate subnotițele",
     "grid": "Grilă",
     "invalid_view_type": "Mod de afișare incorect „{{type}}”",
     "list": "Listă",
@@ -290,7 +289,11 @@
     "geo-map": "Hartă geografică",
     "board": "Tablă Kanban",
     "include_archived_notes": "Afișează notițele arhivate",
-    "presentation": "Prezentare"
+    "presentation": "Prezentare",
+    "expand_tooltip": "Expandează subnotițele directe ale acestei colecții (un singur nivel de adâncime). Pentru mai multe opțiuni, apăsați săgeata din dreapta.",
+    "expand_first_level": "Expandează subnotițele directe",
+    "expand_nth_level": "Expandează pe {{depth}} nivele",
+    "expand_all_levels": "Expandează pe toate nivelele"
   },
   "bookmark_switch": {
     "bookmark": "Semn de carte",
@@ -384,7 +387,10 @@
     "trilium_api_docs_button_title": "Deschide documentația API pentru Trilium"
   },
   "code_mime_types": {
-    "title": "Tipuri MIME disponibile în meniul derulant"
+    "title": "Tipuri MIME disponibile în meniul derulant",
+    "tooltip_syntax_highlighting": "Evidențiere de sintaxă",
+    "tooltip_code_block_syntax": "Blocuri de cod în notițe text",
+    "tooltip_code_note_syntax": "Notițe de tip cod"
   },
   "confirm": {
     "also_delete_note": "Șterge și notița",
@@ -1659,7 +1665,8 @@
     "cut": "Decupează",
     "paste": "Lipește",
     "paste-as-plain-text": "Lipește doar textul",
-    "search_online": "Caută „{{term}}” cu {{searchEngine}}"
+    "search_online": "Caută „{{term}}” cu {{searchEngine}}",
+    "search_in_trilium": "Caută „{{term}}” în Trilium"
   },
   "image_context_menu": {
     "copy_image_to_clipboard": "Copiază imaginea în clipboard",
@@ -2096,7 +2103,7 @@
   "calendar_view": {
     "delete_note": "Șterge notița..."
   },
-    "note-color": {
+  "note-color": {
     "clear-color": "Înlăturați culoarea notiței",
     "set-color": "Setați culoarea notiței",
     "set-custom-color": "Setați culoare personalizată pentru notiță"

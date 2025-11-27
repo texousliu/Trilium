@@ -1013,7 +1013,6 @@
     "book_properties": "Свойства коллекции",
     "geo-map": "Карта",
     "invalid_view_type": "Недопустимый тип представления '{{type}}'",
-    "expand_all_children": "Развернуть все дочерние элементы",
     "collapse_all_notes": "Свернуть все заметки",
     "include_archived_notes": "Показать заархивированные заметки"
   },

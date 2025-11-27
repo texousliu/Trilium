@@ -36,7 +36,9 @@
         "code_title": "Code Notizen",
         "canvas_title": "Canvas",
         "mermaid_title": "Mermaid Diagramm",
-        "mindmap_title": "Mind Map"
+        "mindmap_title": "Mind Map",
+        "text_description": "Die Notizen werden mit einem visuellen Editor (WYSIWYG) bearbeitet, der Tabellen, Bilder, mathematische Ausdrücke und Code-Blöcke mit Syntaxhervorhebung unterstützt. Formatieren Sie den Text schnell mit einer Markdown-ähnlichen Syntax oder mit Slash-Befehlen.",
+        "code_description": "Große Quellcode- oder Skriptdateien werden mit einem speziellen Editor bearbeitet, der Syntaxhervorhebung für viele Programmiersprachen und diverse Farbschemata bietet."
     },
     "extensibility_benefits": {
         "import_export_title": "Import/Export",
@@ -45,5 +47,41 @@
     },
     "collections": {
         "calendar_title": "Kalender"
+    },
+    "download_helper_desktop_macos": {
+        "quick_start": "Installieren mit Homebrew:",
+        "download_dmg": "Installer (.dmg) herunterladen",
+        "download_zip": "Portable (.zip)",
+        "download_homebrew_cask": "Die Homebrew Cask",
+        "description_arm64": "Für Apple Silicon Macs, beispielsweise mit M1-, M2-, M3- oder M4-Chips.",
+        "description_x64": "Für Intel-Macs ab macOS Monterey und neuer.",
+        "title_x64": "macOS für Intel",
+        "title_arm64": "macOS für Apple Silicon"
+    },
+    "download_helper_server_docker": {
+        "title": "Self-hosted mit Docker",
+        "description": "Schnelle Installation auf Windows, Linux oder macOS mit einem Docker-Container.",
+        "download_dockerhub": "Docker-Hub",
+        "download_ghcr": "ghcr.io"
+    },
+    "download_helper_desktop_linux": {
+        "download_aur": "AUR",
+        "download_nixpkgs": "nixpkgs",
+        "download_zip": "Portable (.zip)",
+        "download_flatpak": ".flatpak",
+        "download_rpm": ".rpm"
+    },
+    "download_helper_server_linux": {
+        "title": "Self-hosted auf Linux",
+        "description": "Trilium Notes auf Ihrem eigenen Server oder VPS bereitstellen – kompatibel mit den meisten Linux-Distributionen.",
+        "download_tar_x64": "x64 (.tar.xz)",
+        "download_tar_arm64": "ARM (.tar.xz)",
+        "download_nixos": "NixOS Module"
+    },
+    "download_helper_server_hosted": {
+        "title": "Kostenpflichtiges Hosting",
+        "description": "Trilium Notes wird auf PikaPods gehostet, einem kostenpflichtigen Dienst für einfachen Zugriff und Verwaltung. Es besteht keine direkte Verbindung zum Trilium-Team.",
+        "download_pikapod": "Auf PikaPods installieren",
+        "download_triliumcc": "Alternativ siehe trilium.cc"
     }
 }

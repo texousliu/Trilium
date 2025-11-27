@@ -764,7 +764,6 @@
     "grid": "网格",
     "list": "列表",
     "collapse_all_notes": "折叠所有笔记",
-    "expand_all_children": "展开所有子项",
     "collapse": "折叠",
     "expand": "展开",
     "invalid_view_type": "无效的查看类型 '{{type}}'",
@@ -774,7 +773,11 @@
     "geo-map": "地理地图",
     "board": "看板",
     "include_archived_notes": "展示归档笔记",
-    "presentation": "演示"
+    "presentation": "演示",
+    "expand_tooltip": "展开此集合的直接子代（单层深度）。点击右方箭头以查看更多选项。",
+    "expand_first_level": "展开直接子代",
+    "expand_nth_level": "展开 {{depth}} 层",
+    "expand_all_levels": "展开所有层级"
   },
   "edited_notes": {
     "no_edited_notes_found": "今天还没有编辑过的笔记...",
@@ -1151,7 +1154,10 @@
     "unit": "字符"
   },
   "code_mime_types": {
-    "title": "下拉菜单可用的MIME文件类型"
+    "title": "下拉菜单可用的MIME文件类型",
+    "tooltip_syntax_highlighting": "语法高亮",
+    "tooltip_code_block_syntax": "文本笔记中的代码块",
+    "tooltip_code_note_syntax": "代码笔记"
   },
   "vim_key_bindings": {
     "use_vim_keybindings_in_code_notes": "Vim 快捷键",
@@ -1695,7 +1701,8 @@
     "copy-link": "复制链接",
     "paste": "粘贴",
     "paste-as-plain-text": "以纯文本粘贴",
-    "search_online": "用 {{searchEngine}} 搜索 \"{{term}}\""
+    "search_online": "用 {{searchEngine}} 搜索 \"{{term}}\"",
+    "search_in_trilium": "在 Trilium 中查找搜索 \"{{term}}\""
   },
   "image_context_menu": {
     "copy_reference_to_clipboard": "复制引用到剪贴板",

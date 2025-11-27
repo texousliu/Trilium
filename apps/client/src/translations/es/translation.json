@@ -690,7 +690,8 @@
     "convert_into_attachment_failed": "La conversión de nota '{{title}}' falló.",
     "convert_into_attachment_successful": "La nota '{{title}}' ha sido convertida a un archivo adjunto.",
     "convert_into_attachment_prompt": "¿Está seguro que desea convertir la nota '{{title}}' en un archivo adjunto de la nota padre?",
-    "print_pdf": "Exportar como PDF..."
+    "print_pdf": "Exportar como PDF...",
+    "open_note_on_server": "Abrir nota en el servidor"
   },
   "onclick_button": {
     "no_click_handler": "El widget de botón '{{componentId}}' no tiene un controlador de clics definido"
@@ -763,7 +764,6 @@
     "grid": "Cuadrícula",
     "list": "Lista",
     "collapse_all_notes": "Contraer todas las notas",
-    "expand_all_children": "Ampliar todas las subnotas",
     "collapse": "Colapsar",
     "expand": "Expandir",
     "invalid_view_type": "Tipo de vista inválida '{{type}}'",
@@ -773,7 +773,11 @@
     "geo-map": "Mapa Geo",
     "board": "Tablero",
     "include_archived_notes": "Mostrar notas archivadas",
-    "presentation": "Presentación"
+    "presentation": "Presentación",
+    "expand_tooltip": "Expande las notas hijas inmediatas de esta colección (un nivel). Para más opciones, pulsa la flecha a la derecha.",
+    "expand_first_level": "Expandir hijos inmediatos",
+    "expand_nth_level": "Expandir {{depth}} niveles",
+    "expand_all_levels": "Expandir todos los niveles"
   },
   "edited_notes": {
     "no_edited_notes_found": "Aún no hay notas editadas en este día...",
@@ -1301,7 +1305,10 @@
     "title": "Editor"
   },
   "code_mime_types": {
-    "title": "Tipos MIME disponibles en el menú desplegable"
+    "title": "Tipos MIME disponibles en el menú desplegable",
+    "tooltip_syntax_highlighting": "Resaltado de sintaxis",
+    "tooltip_code_block_syntax": "Bloques de código en notas de texto",
+    "tooltip_code_note_syntax": "Notas de código"
   },
   "vim_key_bindings": {
     "use_vim_keybindings_in_code_notes": "Atajos de teclas de Vim",
@@ -1851,7 +1858,8 @@
     "copy-link": "Copiar enlace",
     "paste": "Pegar",
     "paste-as-plain-text": "Pegar como texto plano",
-    "search_online": "Buscar \"{{term}}\" con {{searchEngine}}"
+    "search_online": "Buscar \"{{term}}\" con {{searchEngine}}",
+    "search_in_trilium": "Buscar \"{{term}}\" en Trilium"
   },
   "image_context_menu": {
     "copy_reference_to_clipboard": "Copiar referencia al portapapeles",
@@ -1992,7 +2000,8 @@
     "add-column-placeholder": "Ingresar título de la columna...",
     "edit-note-title": "Haga clic para editar el título de la nota",
     "edit-column-title": "Haga clic para editar el título de la columna",
-    "remove-from-board": "Eliminar del tablero"
+    "remove-from-board": "Eliminar del tablero",
+    "column-already-exists": "Esta columna ya existe en el tablero."
   },
   "content_renderer": {
     "open_externally": "Abrir externamente"
@@ -2092,5 +2101,10 @@
   },
   "calendar_view": {
     "delete_note": "Eliminar nota..."
+  },
+  "note-color": {
+    "clear-color": "Borrar color de nota",
+    "set-color": "Asignar color de nota",
+    "set-custom-color": "Asignar color de nota personalizado"
   }
 }

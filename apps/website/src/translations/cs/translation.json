@@ -3,10 +3,53 @@
         "title": "Začínáme",
         "desktop_title": "Stažení aplikace pro osobní počítače (v{{version}})",
         "architecture": "Architektura:",
-        "older_releases": "Starší vydání"
+        "older_releases": "Starší vydání",
+        "server_title": "Nastavte server pro přístup z více zařízení"
     },
     "hero_section": {
         "get_started": "Start",
-        "github": "GitHub"
+        "github": "GitHub",
+        "title": "Uspořádejte si myšlenky. Vytvořte si osobní znalostní bázi.",
+        "subtitle": "Trilium je open-source řešení pro pořizování poznámek a organizaci osobní znalostní báze. Používejte jej lokálně na svém počítači nebo jej synchronizujte se svým vlastním serverem, abyste měli své poznámky vždy po ruce, ať jste kdekoli.",
+        "dockerhub": "Docker Hub",
+        "screenshot_alt": "Snímek obrazovky desktopové aplikace Trilium Notes"
+    },
+    "organization_benefits": {
+        "title": "Organizace",
+        "note_structure_title": "Struktura poznámek",
+        "note_structure_description": "Poznámky lze uspořádat hierarchicky. Není třeba používat složky, protože každá poznámka může obsahovat podpoznámky. Jednu poznámku lze přidat na více míst v hierarchii.",
+        "attributes_title": "Poznámky k štítkům a vztahům",
+        "attributes_description": "Využijte vztahy mezi poznámkami nebo přidejte štítky pro snadnou kategorizaci. Pomocí propagovaných atributů zadejte strukturované informace, které lze použít v tabulkách.",
+        "hoisting_title": "Pracovní prostředí a hoisting",
+        "hoisting_description": "Snadno oddělte své osobní a pracovní poznámky tím, že je seskupíte do pracovního prostoru, který zaměří strom poznámek tak, aby zobrazoval pouze konkrétní sadu poznámek."
+    },
+    "productivity_benefits": {
+        "title": "Produktivita a bezpečnost",
+        "revisions_title": "Revize poznámek",
+        "revisions_content": "Poznámky se pravidelně ukládají na pozadí a revize lze použít k přezkoumání nebo ke zrušení náhodných změn. Revize lze také vytvářet na požádání.",
+        "search_content": "Nebo vyhledávejte text uvnitř poznámek a zúžte vyhledávání filtrováním podle nadřazené poznámky nebo podle hloubky.",
+        "web_clipper_title": "Webový výstřižek",
+        "web_clipper_content": "Zachyťte webové stránky (nebo snímky obrazovky) a vložte je přímo do Trilium pomocí rozšíření prohlížeče Webového výstřižku.",
+        "sync_title": "Synchoronizace",
+        "sync_content": "Pomocí vlastní nebo cloudové instance můžete snadno synchronizovat své poznámky mezi více zařízeními a přistupovat k nim ze svého mobilního telefonu pomocí PWA.",
+        "protected_notes_title": "Chráněné poznámky",
+        "protected_notes_content": "Chraňte citlivé osobní údaje šifrováním poznámek a jejich uzamčením za heslem chráněnou relací.",
+        "jump_to_title": "Rychlé hledání a příkazy",
+        "jump_to_content": "Rychle přejděte k poznámkám nebo příkazům uživatelského rozhraní v celé hierarchii pomocí vyhledávání podle názvu, přičemž fuzzy vyhledávání zohledňuje překlepy nebo drobné rozdíly.",
+        "search_title": "Výkonné vyhledávání"
+    },
+    "note_types": {
+        "title": "Několik způsobů, jak prezentovat vaše informace",
+        "text_title": "Textová poznámka",
+        "text_description": "Poznámky se upravují pomocí vizuálního editoru (WYSIWYG) s podporou tabulek, obrázků, matematických výrazů a bloků kódu se zvýrazněním syntaxe. Text lze rychle formátovat pomocí syntaxe podobné Markdownu nebo pomocí příkazů s lomítkem.",
+        "code_title": "Poznámka kódu",
+        "code_description": "Velké vzorky zdrojového kódu nebo skriptů používají speciální editor s barevným zvýrazněním syntaxe pro mnoho programovacích jazyků a s různými barevnými motivy.",
+        "file_title": "Souborové poznámky",
+        "file_description": "Vložte multimediální soubory, jako jsou PDF, obrázky, videa, s náhledem v aplikaci.",
+        "canvas_title": "Plátno",
+        "canvas_description": "Uspořádejte tvary, obrázky a text na nekonečném plátně pomocí stejné technologie, jaká se používá na webu excalidraw.com. Ideální pro diagramy, náčrtky a vizuální plánování.",
+        "mermaid_title": "Mermaid diagramy",
+        "mermaid_description": "Vytvářejte diagramy, jako jsou vývojové diagramy, diagramy tříd a sekvencí, Ganttovy diagramy a mnoho dalších, pomocí syntaxe Mermaid.",
+        "mindmap_title": "Myšlenková mapa"
     }
 }

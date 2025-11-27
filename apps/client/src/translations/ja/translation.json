@@ -531,7 +531,6 @@
     "grid": "グリッド",
     "list": "リスト",
     "collapse_all_notes": "すべてのノートを折りたたむ",
-    "expand_all_children": "すべての子を展開",
     "collapse": "折りたたむ",
     "expand": "展開",
     "book_properties": "コレクションプロパティ",
@@ -1301,7 +1300,8 @@
     "copy-link": "リンクをコピー",
     "paste": "貼り付け",
     "paste-as-plain-text": "プレーンテキストで貼り付け",
-    "search_online": "{{searchEngine}} で \"{{term}}\" を検索"
+    "search_online": "{{searchEngine}} で \"{{term}}\" を検索",
+    "search_in_trilium": "Triliumで「{{term}}」を検索"
   },
   "duration": {
     "seconds": "秒",

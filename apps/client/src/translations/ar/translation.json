@@ -230,7 +230,6 @@
     "geo-map": "الخريطة الجغرافية",
     "collapse_all_notes": "طي كل الملاحظات",
     "include_archived_notes": "عرض الملاحظات المؤرشفة",
-    "expand_all_children": "توسيع جميع العناصر الفرعية",
     "presentation": "عرض تقديمي",
     "invalid_view_type": "نوع العرض {{type}} غير صالح"
   },

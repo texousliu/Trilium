@@ -63,7 +63,8 @@
     "bulk_actions_executed": "Hromadné akce byly úspěšně provedeny.",
     "labels": "Štítky",
     "relations": "Relace",
-    "other": "Ostatní"
+    "other": "Ostatní",
+    "none_yet": "Zatím žádné akce... přidejte akci kliknutím na jednu z dostupných výše."
   },
   "confirm": {
     "cancel": "Zrušit",
