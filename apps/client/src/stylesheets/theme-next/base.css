@@ -323,8 +323,9 @@ body.desktop .dropdown-menu.static .dropdown-item.active {
 
 /* #region Mobile tweaks for dropdown menus */
 body.mobile .dropdown-menu {
-    --dropdown-menu-padding-vertical: 0.4em;
+    --dropdown-menu-padding-vertical: 0.7em;
     --dropdown-menu-padding-horizontal: 1em;
+    font-size: 1em !important;
 
     .dropdown-toggle::after {
         top: var(--dropdown-menu-padding-vertical);
