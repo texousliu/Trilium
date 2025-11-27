@@ -33,21 +33,7 @@ export default class MoveBlockUpDownPlugin extends Plugin {
                 const isOnlyMeta = (!e.ctrlKey && !e.altKey && e.metaKey);
                 const isOnlyAlt = (!e.ctrlKey && e.altKey && !e.metaKey);
 
-                // on Mac, Cmd+Up and Cmd+Down are supposed to jump to the beginning/end of the document.
-                // Cmd+Down works in CKEditor, but Cmd+Up doesn't for some reason.
-                if (isMac && isOnlyMeta) {
-                    e.preventDefault();
-					e.stopImmediatePropagation();
-
-                    editor.model.change(writer => {
-                        const position = (command === "moveBlockUp" ? 0 : "end");
-                        writer.setSelection(writer.createPositionAt( editor.model.document.getRoot(), position));
-                        scrollToSelection(editor);
-                    } );
-                    return;
-                }
-
-				if (isOnlyMeta || isOnlyAlt) {
+				if ((!isMac && isOnlyMeta) || isOnlyAlt) {
 					e.preventDefault();
 					e.stopImmediatePropagation();
 					editor.execute(command);
