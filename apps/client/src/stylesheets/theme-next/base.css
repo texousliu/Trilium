@@ -316,7 +316,7 @@ body.mobile .dropdown-menu {
     --hover-item-background-color: var(--card-background-color);
     font-size: 1em !important;
     backdrop-filter: var(--dropdown-backdrop-filter);
-    border-radius: var(--dropdown-border-radius);
+    border-radius: var(--dropdown-border-radius) var(--dropdown-border-radius) 0 0;
     position: relative;
 
     .dropdown-toggle::after {
@@ -374,6 +374,7 @@ body.mobile .dropdown-menu {
 
             .dropdown-menu {
                 --menu-background-color: rgba(0, 0, 0, 0.15);
+                border-radius: 0;
 
                 .dropdown-item {
                     background: transparent;
