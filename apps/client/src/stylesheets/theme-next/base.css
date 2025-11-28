@@ -367,19 +367,26 @@ body.mobile .dropdown-menu {
             padding: var(--dropdown-menu-padding-vertical) var(--dropdown-menu-padding-horizontal);
         }
 
+        .dropdown-menu {
+            --menu-background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 0;
+            max-height: 0;            
+            transition: max-height 100ms ease-in;
+            display: block !important;
+
+            &.show {
+                max-height: 1000px;
+            }
+
+            .dropdown-item {
+                background: transparent;
+            }
+        }
+
         &.submenu-open {
             .dropdown-toggle {
                 padding-bottom: var(--dropdown-menu-padding-vertical);
-            }
-
-            .dropdown-menu {
-                --menu-background-color: rgba(0, 0, 0, 0.15);
-                border-radius: 0;
-
-                .dropdown-item {
-                    background: transparent;
-                }
-            }
+            }            
         }
     }
 }
