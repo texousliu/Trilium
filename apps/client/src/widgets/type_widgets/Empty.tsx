@@ -45,10 +45,10 @@ function NoteSearch() {
                         if (!suggestion?.notePath) {
                             return false;
                         }
-
-                        const activeContext = appContext.tabManager.getActiveContext();
-                        if (activeContext) {
-                            activeContext.setNote(suggestion.notePath);
+                        const ntxId = autocompleteRef.current?.closest(".note-split")?.getAttribute("data-ntx-id") ?? null;
+                        const activeNoteContext = appContext.tabManager.getNoteContextById(ntxId) ?? appContext.tabManager.getActiveContext();
+                        if (activeNoteContext) {
+                            activeNoteContext.setNote(suggestion.notePath);
                         }
                     }}
                 />
