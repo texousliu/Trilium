@@ -1727,7 +1727,8 @@
     "refresh-saved-search-results": "Refresh saved search results",
     "create-child-note": "Create child note",
     "unhoist": "Unhoist",
-    "toggle-sidebar": "Toggle sidebar"
+    "toggle-sidebar": "Toggle sidebar",
+    "dropping-not-allowed": "Dropping notes into this location is not allowed."
   },
   "title_bar_buttons": {
     "window-on-top": "Keep Window on Top"
@@ -1830,7 +1831,8 @@
     "duplicate-launcher": "Duplicate launcher <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
-    "auto-detect-language": "Auto-detected"
+    "auto-detect-language": "Auto-detected",
+    "keeps-crashing": "Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report."
   },
   "highlighting": {
     "title": "Code Blocks",

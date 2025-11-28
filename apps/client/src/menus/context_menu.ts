@@ -75,10 +75,7 @@ class ContextMenu {
         if (this.isMobile) {
             this.$cover.on("click", () => this.hide());
         } else {
-            $(document).on("click", (e) => {
-                console.log("Hide due to clickus")
-                this.hide()
-            });
+            $(document).on("click", (e) => this.hide());
         }
     }
 

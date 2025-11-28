@@ -17,6 +17,7 @@ import TouchBar, { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl } fro
 import { RefObject } from "preact";
 import { buildSelectedBackgroundColor } from "../../../components/touch_bar";
 import { deferred } from "@triliumnext/commons";
+import { t } from "../../../services/i18n";
 
 /**
  * The editor can operate into two distinct modes:
@@ -279,7 +280,7 @@ function onWatchdogStateChange(watchdog: EditorWatchdog) {
     logError(`CKEditor crash logs: ${JSON.stringify(watchdog.crashes, null, 4)}`);
 
     if (currentState === "crashedPermanently") {
-        dialog.info(`Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report.`);
+        dialog.info(t("editable-text.keeps-crashing"));
         watchdog.editor?.enableReadOnlyMode("crashed-editor");
     }
 }

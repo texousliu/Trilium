@@ -1702,7 +1702,7 @@
     "paste": "粘贴",
     "paste-as-plain-text": "以纯文本粘贴",
     "search_online": "用 {{searchEngine}} 搜索 \"{{term}}\"",
-    "search_in_trilium": "在 Trilium 中查找搜索 \"{{term}}\""
+    "search_in_trilium": "在 Trilium 中搜索「{{term}}」"
   },
   "image_context_menu": {
     "copy_reference_to_clipboard": "复制引用到剪贴板",
