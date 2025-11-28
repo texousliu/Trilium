@@ -119,17 +119,6 @@ body.backdrop-effects-disabled {
     font-size: 0.9rem !important;
 }
 
-body.mobile .dropdown-menu {
-    backdrop-filter: var(--dropdown-backdrop-filter);
-    border-radius: var(--dropdown-border-radius);
-    position: relative;
-}
-
-body.mobile .dropdown-menu .dropdown-menu {
-    backdrop-filter: unset !important;
-    border-radius: unset !important;
-}
-
 body.desktop .dropdown-menu::before,
 :root .ck.ck-dropdown__panel::before,
 :root .excalidraw .popover::before,
@@ -326,6 +315,9 @@ body.mobile .dropdown-menu {
     --dropdown-menu-padding-horizontal: 1em;
     --hover-item-background-color: var(--card-background-color);
     font-size: 1em !important;
+    backdrop-filter: var(--dropdown-backdrop-filter);
+    border-radius: var(--dropdown-border-radius);
+    position: relative;
 
     .dropdown-toggle::after {
         top: 0.5em;
@@ -369,6 +361,7 @@ body.mobile .dropdown-menu {
 
     .dropdown-submenu {
         padding: 0 !important;
+        backdrop-filter: unset !important;
 
         .dropdown-toggle {
             padding: var(--dropdown-menu-padding-vertical) var(--dropdown-menu-padding-horizontal);
