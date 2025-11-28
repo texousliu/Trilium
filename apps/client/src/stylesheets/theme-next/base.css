@@ -359,16 +359,24 @@ body.mobile .dropdown-menu {
         visibility: hidden;
     }
 
-    .dropdown-submenu.submenu-open {
+    .dropdown-submenu {
+        padding: 0 !important;
+
         .dropdown-toggle {
-            padding-bottom: var(--dropdown-menu-padding-vertical);
+            padding: var(--dropdown-menu-padding-vertical) var(--dropdown-menu-padding-horizontal);
         }
 
-        .dropdown-menu {
-            --menu-background-color: transparent;
+        &.submenu-open {
+            .dropdown-toggle {
+                padding-bottom: var(--dropdown-menu-padding-vertical);
+            }
 
-            .dropdown-item {
-                background: transparent;
+            .dropdown-menu {
+                --menu-background-color: rgba(0, 0, 0, 0.15);
+
+                .dropdown-item {
+                    background: transparent;
+                }
             }
         }
     }
