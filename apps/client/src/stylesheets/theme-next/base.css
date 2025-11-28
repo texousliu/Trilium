@@ -313,6 +313,14 @@ body.desktop .dropdown-menu.static .dropdown-item.active {
 }
 
 /* #region Mobile tweaks for dropdown menus */
+body.mobile #context-menu-cover {
+    transition: background-color 150ms ease-in;
+
+    &.show {
+        background: rgba(0, 0, 0, 0.7);
+    }
+}
+
 body.mobile .dropdown-menu {
     --dropdown-menu-padding-vertical: 0.7em;
     --dropdown-menu-padding-horizontal: 1em;
@@ -320,7 +328,7 @@ body.mobile .dropdown-menu {
     font-size: 1em !important;
 
     .dropdown-toggle::after {
-        top: var(--dropdown-menu-padding-vertical);
+        top: 0.5em;
         right: var(--dropdown-menu-padding-horizontal);
         transform: translateX(50%) rotate(90deg);
     }
