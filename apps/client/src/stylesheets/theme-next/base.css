@@ -163,7 +163,6 @@ body.desktop .dropdown-submenu .dropdown-menu {
 }
 
 .dropdown-item,
-body.mobile .dropdown-submenu .dropdown-toggle,
 .excalidraw .context-menu .context-menu-item {
     --menu-item-start-padding: 8px;
     --menu-item-end-padding: 22px;
@@ -358,6 +357,20 @@ body.mobile .dropdown-menu {
 
     .dropdown-divider {
         visibility: hidden;
+    }
+
+    .dropdown-submenu.submenu-open {
+        .dropdown-toggle {
+            padding-bottom: var(--dropdown-menu-padding-vertical);
+        }
+
+        .dropdown-menu {
+            --menu-background-color: transparent;
+
+            .dropdown-item {
+                background: transparent;
+            }
+        }
     }
 }
 /* #endregion */
