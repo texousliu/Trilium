@@ -157,10 +157,6 @@ body.desktop .dropdown-submenu .dropdown-menu::before {
     content: unset;
 }
 
-body.mobile .dropdown-submenu .dropdown-menu {
-    background: transparent !important;
-}
-
 body.desktop .dropdown-submenu .dropdown-menu {
     backdrop-filter: var(--dropdown-backdrop-filter);
     background: transparent;
@@ -199,10 +195,6 @@ body.mobile .dropdown-submenu {
 
 body.mobile .dropdown-item:not(:last-of-type) {
     margin-bottom: 0.5em;
-}
-
-body.mobile .dropdown-submenu:hover {
-    background: transparent !important;
 }
 
 html body .dropdown-item.disabled,
@@ -325,6 +317,7 @@ body.desktop .dropdown-menu.static .dropdown-item.active {
 body.mobile .dropdown-menu {
     --dropdown-menu-padding-vertical: 0.7em;
     --dropdown-menu-padding-horizontal: 1em;
+    --hover-item-background-color: var(--card-background-color);
     font-size: 1em !important;
 
     .dropdown-toggle::after {
