@@ -59,7 +59,7 @@
 .modal .modal-header .help-button,
 .modal .modal-header .custom-title-bar-button {
     margin-inline-end: 0;
-    font-size: calc(var(--modal-control-button-size) * .65);
+    font-size: calc(var(--modal-control-button-size) * .70);
     font-family: unset;
     font-weight: bold;
 }
