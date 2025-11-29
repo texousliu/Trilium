@@ -38,7 +38,7 @@ function createClassForColor(colorString: string | null) {
         registeredClasses.add(className);
     }
 
-    return className;
+    return `color ${className}`;
 }
 
 function parseColor(color: string) {
