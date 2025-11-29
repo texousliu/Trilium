@@ -3,6 +3,7 @@ import appContext, { type CommandData, type CommandListenerData, type EventData,
 import type BasicWidget from "../basic_widget.js";
 import Component from "../../components/component.js";
 import splitService from "../../services/resizer.js";
+import { isMobile } from "../../services/utils.js";
 
 interface SplitNoteWidget extends BasicWidget {
     hasBeenAlreadyShown?: boolean;
@@ -49,7 +50,7 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
 
         this.child(widget);
 
-        if (noteContext.mainNtxId && noteContext.ntxId) {
+        if (noteContext.mainNtxId && noteContext.ntxId && !isMobile()) {
             splitService.setupNoteSplitResizer([noteContext.mainNtxId,noteContext.ntxId]);
         }
     }
