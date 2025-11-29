@@ -308,6 +308,10 @@ body.mobile #context-menu-cover {
     &.show {
         background: rgba(0, 0, 0, 0.7);
     }
+
+    &.global-menu-cover {
+        bottom: 54px;
+    }
 }
 
 body.mobile .dropdown-menu {
