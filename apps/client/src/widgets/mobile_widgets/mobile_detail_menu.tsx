@@ -1,6 +1,6 @@
 import { useContext } from "preact/hooks";
 import appContext, { CommandMappings } from "../../components/app_context";
-import contextMenu from "../../menus/context_menu";
+import contextMenu, { MenuItem } from "../../menus/context_menu";
 import branches from "../../services/branches";
 import { t } from "../../services/i18n";
 import note_create from "../../services/note_create";
@@ -18,18 +18,22 @@ export default function MobileDetailMenu() {
             text=""
             onClick={(e) => {
                 const note = appContext.tabManager.getActiveContextNote();
+                const noteContext = appContext.tabManager.getActiveContext();
+
+                const items: (MenuItem<keyof CommandMappings> | false)[] = [
+                    { title: t("mobile_detail_menu.insert_child_note"), command: "insertChildNote", uiIcon: "bx bx-plus", enabled: note?.type !== "search" },
+                    { title: t("mobile_detail_menu.delete_this_note"), command: "delete", uiIcon: "bx bx-trash", enabled: note?.noteId !== "root" },
+                    { kind: "separator" },
+                    { title: t("mobile_detail_menu.note_revisions"), command: "showRevisions", uiIcon: "bx bx-history" },
+                    { kind: "separator" },
+                    { title: t("create_pane_button.create_new_split"), command: "openNewNoteSplit", uiIcon: "bx bx-dock-right" },
+                    !noteContext?.isMainContext() && { title: t("close_pane_button.close_this_pane"), command: "closeThisNoteSplit", uiIcon: "bx bx-x" }
+                ];
 
                 contextMenu.show<keyof CommandMappings>({
                     x: e.pageX,
                     y: e.pageY,
-                    items: [
-                        { title: t("mobile_detail_menu.insert_child_note"), command: "insertChildNote", uiIcon: "bx bx-plus", enabled: note?.type !== "search" },
-                        { title: t("mobile_detail_menu.delete_this_note"), command: "delete", uiIcon: "bx bx-trash", enabled: note?.noteId !== "root" },
-                        { kind: "separator" },
-                        { title: t("mobile_detail_menu.note_revisions"), command: "showRevisions", uiIcon: "bx bx-history" },
-                        { kind: "separator" },
-                        { title: t("create_pane_button.create_new_split"), command: "openNewNoteSplit", uiIcon: "bx bx-dock-right" },
-                    ],
+                    items: items.filter(i => !!i),
                     selectMenuItemHandler: async ({ command }) => {
                         if (command === "insertChildNote") {
                             note_create.createNote(appContext.tabManager.getActiveContextNotePath() ?? undefined);
