@@ -110,7 +110,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     private weekNotes: string[] = [];
 
     constructor(title: string = "", icon: string = "") {
-        super(title, icon, DROPDOWN_TPL);
+        super(title, icon, DROPDOWN_TPL, "calendar-dropdown-menu");
     }
 
     doRender() {

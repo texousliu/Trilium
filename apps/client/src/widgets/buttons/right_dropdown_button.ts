@@ -24,14 +24,16 @@ export default class RightDropdownButtonWidget extends BasicWidget {
     protected dropdown!: Dropdown;
     protected $tooltip!: JQuery<HTMLElement>;
     protected tooltip!: Tooltip;
+    private dropdownClass?: string;
     public $dropdownContent!: JQuery<HTMLElement>;
 
-    constructor(title: string, iconClass: string, dropdownTpl: string) {
+    constructor(title: string, iconClass: string, dropdownTpl: string, dropdownClass?: string) {
         super();
 
         this.iconClass = iconClass;
         this.title = title;
         this.dropdownTpl = dropdownTpl;
+        this.dropdownClass = dropdownClass;
 
         this.settings = {
             titlePlacement: "right"
@@ -41,6 +43,9 @@ export default class RightDropdownButtonWidget extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$dropdownMenu = this.$widget.find(".dropdown-menu");
+        if (this.dropdownClass) {
+            this.$dropdownMenu.addClass(this.dropdownClass);
+        }
         this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0], {
             popperConfig: {
                 placement: this.settings.titlePlacement,
