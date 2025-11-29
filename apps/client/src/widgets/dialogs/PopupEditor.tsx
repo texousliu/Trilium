@@ -67,6 +67,7 @@ export default function PopupEditor() {
                     }}
                     onHidden={() => setShown(false)}
                     keepInDom // needed for faster loading
+                    noFocus // automatic focus breaks block popup
                 >
                     <ReadOnlyNoteInfoBar />
                     <PromotedAttributes />
