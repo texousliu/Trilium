@@ -2633,5 +2633,9 @@ iframe.print-iframe {
         .note-split {
             width: 100%;
         }
+
+        .note-split.visible + .note-split.visible {
+            border-top: 1px solid var(--main-border-color);
+        }
     }
 }
