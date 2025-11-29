@@ -150,7 +150,7 @@ function fillInAdditionalProperties(entityChange: EntityChange) {
             entityChange.entity = sql.getRow(/*sql*/`SELECT * FROM options WHERE name = ?`, [entityChange.entityId]);
         }
     } else if (entityChange.entityName === "attachments") {
-        entityChange.entity = becca.getAttachment(entityChange.entityId);
+        entityChange.entity = becca.getAttachment(entityChange.entityId, { includeContentLength: true });
 
         if (!entityChange.entity) {
             entityChange.entity = sql.getRow(
