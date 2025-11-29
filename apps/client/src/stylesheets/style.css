@@ -1131,10 +1131,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     display: inline-block;
 }
 
-.note-detail-empty {
-    margin: 50px;
-}
-
 .modal-header {
     padding: 0.5rem 1rem 0.5rem 1rem !important; /* make modal header padding slightly smaller */
 }
