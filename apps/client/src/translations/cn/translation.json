@@ -1662,7 +1662,7 @@
   },
   "editable-text": {
     "auto-detect-language": "自动检测",
-    "keeps-crashing": "编辑组件时崩溃。请尝试重启 Trilium。如果问题仍然存在，请考虑提交错误报告。"
+    "keeps-crashing": "编辑组件时持续崩溃。请尝试重启 Trilium。如果问题仍然存在，请考虑提交错误报告。"
   },
   "highlighting": {
     "title": "代码块",
