@@ -19,6 +19,10 @@ body.mobile .modal.popup-editor-dialog .modal-dialog {
     height: 100%;
 }
 
+.modal.popup-editor-dialog .modal-content {
+    transition: background-color 250ms ease-in;
+}
+
 .modal.popup-editor-dialog .modal-header .modal-title {
     font-size: 1.1em;
 }
@@ -58,12 +62,16 @@ body.mobile .modal.popup-editor-dialog .modal-dialog {
     font-size: 1em;
 }
 
+.modal.popup-editor-dialog .classic-toolbar-outer-container.visible {
+    background-color: transparent;
+}
+
 .modal.popup-editor-dialog .classic-toolbar-widget {
     position: sticky;
     top: 0;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    background: var(--modal-background-color);
+    background: transparent;
     z-index: 998;
     align-items: flex-start;
 }
