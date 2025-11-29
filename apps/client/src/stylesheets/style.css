@@ -2626,10 +2626,12 @@ iframe.print-iframe {
     width: 100%;
 }
 
-body.mobile .split-note-container-widget {
-    flex-direction: column !important;
-
-    .note-split {
-        width: 100%;
+@media (max-width: 991px) {
+    body.mobile .split-note-container-widget {
+        flex-direction: column !important;
+        
+        .note-split {
+            width: 100%;
+        }
     }
 }

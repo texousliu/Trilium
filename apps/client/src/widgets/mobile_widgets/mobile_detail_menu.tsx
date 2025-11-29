@@ -28,7 +28,7 @@ export default function MobileDetailMenu() {
                         { kind: "separator" },
                         { title: t("mobile_detail_menu.note_revisions"), command: "showRevisions", uiIcon: "bx bx-history" },
                         { kind: "separator" },
-                        { title: t("create_pane_button.create_new_split"), command: "openNewNoteSplit", uiIcon: "bx bx-dock-right" }
+                        { title: t("create_pane_button.create_new_split"), command: "openNewNoteSplit", uiIcon: "bx bx-dock-right" },
                     ],
                     selectMenuItemHandler: async ({ command }) => {
                         if (command === "insertChildNote") {
