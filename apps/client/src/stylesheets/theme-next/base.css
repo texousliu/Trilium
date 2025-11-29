@@ -314,15 +314,19 @@ body.mobile #context-menu-cover {
     }
 }
 
+body.mobile .dropdown-menu.mobile-bottom-menu,
+body.mobile .dropdown.global-menu .dropdown-menu {
+    border-radius: var(--dropdown-border-radius) var(--dropdown-border-radius) 0 0;
+}
+
 body.mobile .dropdown-menu {
     --dropdown-menu-padding-vertical: 0.7em;
     --dropdown-menu-padding-horizontal: 1em;
     --hover-item-background-color: var(--card-background-color);
     font-size: 1em !important;
     backdrop-filter: var(--dropdown-backdrop-filter);
-    border-radius: var(--dropdown-border-radius) var(--dropdown-border-radius) 0 0;
     position: relative;
-
+    
     .dropdown-toggle::after {
         top: 0.5em;
         right: var(--dropdown-menu-padding-horizontal);
