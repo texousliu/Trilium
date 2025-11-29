@@ -461,27 +461,31 @@ export function useNoteLabelInt(note: FNote | undefined | null, labelName: Filte
 
 export function useNoteBlob(note: FNote | null | undefined, componentId?: string): FBlob | null | undefined {
     const [ blob, setBlob ] = useState<FBlob | null>();
+    const requestIdRef = useRef(0);
 
-    function refresh() {
-        note?.getBlob().then(setBlob);
+    async function refresh() {
+        const requestId = ++requestIdRef.current;
+        const newBlob = await note?.getBlob();
+
+        // Only update if this is the latest request.
+        if (requestId === requestIdRef.current) {
+            setBlob(newBlob);
+        }
     }
 
-    useEffect(refresh, [ note?.noteId ]);
+    useEffect(() => { refresh() }, [ note?.noteId ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (!note) return;
 
         // Check if the note was deleted.
         if (loadResults.getEntityRow("notes", note.noteId)?.isDeleted) {
+            requestIdRef.current++; // invalidate pending results
             setBlob(null);
             return;
         }
 
-        // Check if a revision occurred.
-        if (loadResults.hasRevisionForNote(note.noteId)) {
-            refresh();
-        }
-
-        if (loadResults.isNoteContentReloaded(note.noteId, componentId)) {
+        if (loadResults.hasRevisionForNote(note.noteId) ||
+            loadResults.isNoteContentReloaded(note.noteId, componentId)) {
             refresh();
         }
     });
