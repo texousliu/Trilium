@@ -105,9 +105,11 @@ export default function NoteDetail() {
     });
 
     // Automatically focus the editor.
-    useTriliumEvent("activeNoteChanged", () => {
-        // Restore focus to the editor when switching tabs, but only if the note tree is not already focused.
-        if (!document.activeElement?.classList.contains("fancytree-title")) {
+    useTriliumEvent("activeNoteChanged", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId != ntxId) return;
+        // Restore focus to the editor when switching tabs,
+        // but only if the note tree and the note panel (e.g., note title or note detail) are not focused.
+        if (!document.activeElement?.classList.contains("fancytree-title") && !parentComponent.$widget[0].closest(".note-split")?.contains(document.activeElement)) {
             parentComponent.triggerCommand("focusOnDetail", { ntxId });
         }
     });
