@@ -62,6 +62,7 @@
 
     --menu-padding-size: 8px;
     --menu-item-icon-vert-offset: -2px;
+    --menu-submenu-mobile-background-color: rgba(255, 255, 255, 0.15);
 
     --more-accented-background-color: var(--card-background-hover-color);
 
@@ -376,7 +377,7 @@ body.mobile .dropdown-menu {
         }
 
         .dropdown-menu {
-            --menu-background-color: rgba(0, 0, 0, 0.15);
+            --menu-background-color: --menu-submenu-mobile-background-color;
             border-radius: 0;
             max-height: 0;            
             transition: max-height 100ms ease-in;
