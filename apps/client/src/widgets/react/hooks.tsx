@@ -795,7 +795,7 @@ export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", conta
  * and provides a way to switch to editing mode.
  */
 export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: NoteContext | undefined) {
-    const [isReadOnly, setIsReadOnly] = useState<boolean | undefined>(undefined);
+    const [ isReadOnly, setIsReadOnly ] = useState<boolean | undefined>(undefined);
 
     const enableEditing = useCallback(() => {
         if (noteContext?.viewScope) {
@@ -810,7 +810,7 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
                 setIsReadOnly(readOnly);
             });
         }
-    }, [note, noteContext]);
+    }, [ note, noteContext, noteContext?.viewScope ]);
 
     useTriliumEvent("readOnlyTemporarilyDisabled", ({noteContext: eventNoteContext}) => {
         if (noteContext?.ntxId === eventNoteContext.ntxId) {
@@ -818,7 +818,7 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
         }
     });
 
-    return {isReadOnly, enableEditing};
+    return { isReadOnly, enableEditing };
 }
 
 async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
