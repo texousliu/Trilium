@@ -389,6 +389,20 @@ body.mobile .dropdown-menu {
             }            
         }
     }
+
+    .dropdown-custom-item:has(.note-color-picker) {
+        overflow-x: auto;
+    }
+
+    .note-color-picker {
+        padding: 0;
+        width: fit-content;
+
+        .color-cell {
+            --color-picker-cell-size: 26px;
+            flex-shrink: 0;
+        }
+    }
 }
 /* #endregion */
 
