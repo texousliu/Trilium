@@ -28,7 +28,7 @@ export default function NoteDetail() {
     const { note, type, mime, noteContext, parentComponent } = useNoteInfo();
     const { ntxId, viewScope } = noteContext ?? {};
     const isFullHeight = checkFullHeight(noteContext, type);
-    const noteTypesToRender = useRef<{ [ key in ExtendedNoteType ]?: (props: TypeWidgetProps) => VNode }>({});
+    const [ noteTypesToRender, setNoteTypesToRender ] = useState<{ [ key in ExtendedNoteType ]?: (props: TypeWidgetProps) => VNode }>({});
     const [ activeNoteType, setActiveNoteType ] = useState<ExtendedNoteType>();
 
     const props: TypeWidgetProps = {
@@ -38,19 +38,23 @@ export default function NoteDetail() {
         parentComponent,
         noteContext
     };
+
     useEffect(() => {
         if (!type) return;
 
-        if (!noteTypesToRender.current[type]) {
+        if (!noteTypesToRender[type]) {
             getCorrespondingWidget(type).then((el) => {
                 if (!el) return;
-                noteTypesToRender.current[type] = el;
+                setNoteTypesToRender(prev => ({
+                    ...prev,
+                    [type]: el
+                }));
                 setActiveNoteType(type);
             });
         } else {
             setActiveNoteType(type);
         }
-    }, [ note, viewScope, type ]);
+    }, [ note, viewScope, type, noteTypesToRender ]);
 
     // Detect note type changes.
     useTriliumEvent("entitiesReloaded", async ({ loadResults }) => {
@@ -192,7 +196,7 @@ export default function NoteDetail() {
             ref={containerRef}
             class={`note-detail ${isFullHeight ? "full-height" : ""}`}
         >
-            {Object.entries(noteTypesToRender.current).map(([ itemType, Element ]) => {
+            {Object.entries(noteTypesToRender).map(([ itemType, Element ]) => {
                 return <NoteDetailWrapper
                     Element={Element}
                     key={itemType}
