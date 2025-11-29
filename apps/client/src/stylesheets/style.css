@@ -212,6 +212,12 @@ input::placeholder,
     background-color: var(--modal-backdrop-color) !important;
 }
 
+body.mobile .modal .modal-dialog {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
 body.mobile .modal .modal-content {
     border-radius: var(--bs-modal-border-radius) var(--bs-modal-border-radius) 0 0;
 }
