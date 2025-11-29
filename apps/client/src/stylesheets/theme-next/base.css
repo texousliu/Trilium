@@ -342,8 +342,8 @@ body.mobile .dropdown-menu {
         margin-bottom: 0;
         padding: var(--dropdown-menu-padding-vertical) var(--dropdown-menu-padding-horizontal) !important;
         background: var(--card-background-color);
-        border-bottom: 1px solid var(--main-border-color) !important;
-        border-radius: 0;
+        border-bottom: 1px solid var(--menu-item-delimiter-color) !important;
+        border-radius: 0;        
     }
 
     .dropdown-item:first-of-type,
