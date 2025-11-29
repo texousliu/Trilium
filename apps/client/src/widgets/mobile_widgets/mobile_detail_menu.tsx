@@ -17,8 +17,11 @@ export default function MobileDetailMenu() {
             icon="bx bx-dots-vertical-rounded"
             text=""
             onClick={(e) => {
-                const note = appContext.tabManager.getActiveContextNote();
-                const noteContext = appContext.tabManager.getActiveContext();
+                const ntxId = (parentComponent as BasicWidget).getClosestNtxId();
+                if (!ntxId) return;
+
+                const noteContext = appContext.tabManager.getNoteContextById(ntxId);
+                const note = noteContext.note;
 
                 const items: (MenuItem<keyof CommandMappings> | false)[] = [
                     { title: t("mobile_detail_menu.insert_child_note"), command: "insertChildNote", uiIcon: "bx bx-plus", enabled: note?.type !== "search" },
@@ -53,7 +56,6 @@ export default function MobileDetailMenu() {
                                 parentComponent.triggerCommand("setActiveScreen", { screen: "tree" });
                             }
                         } else if (command && parentComponent) {
-                            const ntxId = (parentComponent as BasicWidget).getClosestNtxId();
                             parentComponent.triggerCommand(command, { ntxId });
                         }
                     },
