@@ -30,6 +30,7 @@ export default function NoteDetail() {
     const isFullHeight = checkFullHeight(noteContext, type);
     const [ noteTypesToRender, setNoteTypesToRender ] = useState<{ [ key in ExtendedNoteType ]?: (props: TypeWidgetProps) => VNode }>({});
     const [ activeNoteType, setActiveNoteType ] = useState<ExtendedNoteType>();
+    const widgetRequestId = useRef(0);
 
     const props: TypeWidgetProps = {
         note: note!,
@@ -41,10 +42,15 @@ export default function NoteDetail() {
 
     useEffect(() => {
         if (!type) return;
+        const requestId = ++widgetRequestId.current;
 
         if (!noteTypesToRender[type]) {
             getCorrespondingWidget(type).then((el) => {
                 if (!el) return;
+
+                // Ignore stale requests
+                if (requestId !== widgetRequestId.current) return;
+
                 setNoteTypesToRender(prev => ({
                     ...prev,
                     [type]: el
