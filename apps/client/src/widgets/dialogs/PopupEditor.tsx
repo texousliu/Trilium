@@ -18,6 +18,7 @@ import utils from "../../services/utils";
 import tree from "../../services/tree";
 import froca from "../../services/froca";
 import ReadOnlyNoteInfoBar from "../ReadOnlyNoteInfoBar";
+import MobileEditorToolbar from "../type_widgets/text/mobile_editor_toolbar";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
@@ -71,7 +72,11 @@ export default function PopupEditor() {
                 >
                     <ReadOnlyNoteInfoBar />
                     <PromotedAttributes />
-                    <StandaloneRibbonAdapter component={FormattingToolbar} />
+
+                    {isMobile
+                    ? <MobileEditorToolbar inPopupEditor />
+                    : <StandaloneRibbonAdapter component={FormattingToolbar} />}
+
                     <FloatingButtons items={items} />
                     <NoteDetail />
                     <NoteList media="screen" displayOnlyCollections />

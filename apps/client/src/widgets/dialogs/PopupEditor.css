@@ -59,6 +59,7 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
     inset-inline-end: 0;
     background: var(--modal-background-color);
     z-index: 998;
+    align-items: flex-start;
 }
 
 .modal.popup-editor-dialog .note-detail.full-height {
