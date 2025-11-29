@@ -320,6 +320,10 @@ body.mobile #context-menu-cover {
 
     &.global-menu-cover {
         bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size));
+
+        @media (min-width: 992px) {
+            bottom: 0;
+        }
     }
 }
 
