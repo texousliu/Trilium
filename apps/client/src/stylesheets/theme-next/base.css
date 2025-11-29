@@ -378,29 +378,15 @@ body.mobile .dropdown-menu {
 
         .dropdown-menu {
             --menu-background-color: --menu-submenu-mobile-background-color;
+            --bs-dropdown-divider-margin-y: 0.25rem;
             border-radius: 0;
             max-height: 0;            
             transition: max-height 100ms ease-in;
-            display: block !important;
-
+            display: block !important;            
+            
             &.show {
                 max-height: 1000px;
-            }
-
-            .dropdown-item {
-                background: transparent;
-            }
-        }
-
-        .dropdown-divider {
-            visibility: visible;
-            margin: 0;
-            height: 3px;
-            border-top: unset;
-            background-color: rgba(0, 0, 0, 0.2);
-
-            &:after {
-                content: unset;
+                padding: 0.5rem 0.75rem !important;
             }
         }
 
