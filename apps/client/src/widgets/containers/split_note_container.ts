@@ -4,6 +4,7 @@ import type BasicWidget from "../basic_widget.js";
 import Component from "../../components/component.js";
 import splitService from "../../services/resizer.js";
 import { isMobile } from "../../services/utils.js";
+import NoteContext from "../../components/note_context.js";
 
 interface SplitNoteWidget extends BasicWidget {
     hasBeenAlreadyShown?: boolean;
@@ -56,7 +57,8 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
     }
 
     async openNewNoteSplitEvent({ ntxId, notePath, hoistedNoteId, viewScope }: EventData<"openNewNoteSplit">) {
-        const mainNtxId = appContext.tabManager.getActiveMainContext()?.ntxId;
+        const activeContext = appContext.tabManager.getActiveMainContext();
+        const mainNtxId = activeContext?.ntxId;
         if (!mainNtxId) {
             console.warn("Missing main note context ID");
             return;
@@ -70,7 +72,14 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
 
         hoistedNoteId = hoistedNoteId || appContext.tabManager.getActiveContext()?.hoistedNoteId;
 
-        const noteContext = await appContext.tabManager.openEmptyTab(null, hoistedNoteId, mainNtxId);
+
+        const subContexts = activeContext.getSubContexts();
+        let noteContext: NoteContext;
+        if (isMobile() && subContexts.length > 1) {
+            noteContext = subContexts.find(s => s.ntxId !== ntxId)!;
+        } else {
+            noteContext = await appContext.tabManager.openEmptyTab(null, hoistedNoteId, mainNtxId);
+        }
         if (!noteContext.ntxId) {
             logError("Failed to create new note context!");
             return;
