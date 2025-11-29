@@ -41,7 +41,6 @@ export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetPro
 
     // React to included note changes.
     useTriliumEvent("refreshIncludedNote", ({ noteId }) => {
-        console.log("Refresh ", noteId);
         if (!contentRef.current) return;
         refreshIncludedNote(contentRef.current, noteId);
     });
