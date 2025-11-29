@@ -99,6 +99,14 @@
     --tree-item-dark-theme-min-color-lightness: 65;
 }
 
+body {
+    user-select: none;
+}
+
+.selectable-text {
+    user-select: text;
+}
+
 body.backdrop-effects-disabled {
     /* Backdrop effects are disabled, replace the menu background color with the
      * no-backdrop fallback color */
