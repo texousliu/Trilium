@@ -706,11 +706,6 @@ table.promoted-attributes-in-tooltip th {
     z-index: 32767 !important;
 }
 
-.tooltip-trigger {
-    background: transparent;
-    pointer-events: none;
-}
-
 .bs-tooltip-bottom .tooltip-arrow::before {
     border-bottom-color: var(--main-border-color) !important;
 }
@@ -1377,6 +1372,20 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 .right-dropdown-widget {
     flex-shrink: 0;
+}
+
+.right-dropdown-widget .right-dropdown-button {
+    position: relative;
+}
+
+.tooltip-trigger {
+    background: transparent;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 #launcher-pane.horizontal .right-dropdown-widget {
