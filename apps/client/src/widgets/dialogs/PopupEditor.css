@@ -13,6 +13,10 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
     overflow: hidden;
 }
 
+body.mobile .modal.popup-editor-dialog .modal-dialog {
+    max-width: 90vw;
+}
+
 .modal.popup-editor-dialog .modal-header .modal-title {
     font-size: 1.1em;
 }
