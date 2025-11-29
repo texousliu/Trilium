@@ -310,7 +310,7 @@ body.mobile #context-menu-cover {
     }
 
     &.global-menu-cover {
-        bottom: 54px;
+        bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size));
     }
 }
 

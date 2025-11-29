@@ -1554,12 +1554,15 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 @media (max-width: 991px) {
     body.mobile #launcher-pane .dropdown.global-menu > .dropdown-menu.show,
     body.mobile #launcher-container .dropdown > .dropdown-menu.show {
+        --dropdown-bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size));
         position: fixed !important;
-        bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
+        bottom: var(--dropdown-bottom) !important;
         top: unset !important;
         inset-inline-start: 0 !important;
         inset-inline-end: 0 !important;
         transform: unset !important;
+        overflow-y: auto;
+        max-height: calc(90vh - var(--dropdown-bottom));
     }
 
     #mobile-sidebar-container {
