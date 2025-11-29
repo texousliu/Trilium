@@ -2625,3 +2625,11 @@ iframe.print-iframe {
     flex-grow: 1;
     width: 100%;
 }
+
+body.mobile .split-note-container-widget {
+    flex-direction: column !important;
+
+    .note-split {
+        width: 100%;
+    }
+}
