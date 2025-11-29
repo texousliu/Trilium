@@ -1001,9 +1001,17 @@ div[data-notify="container"] {
     font-family: var(--monospace-font-family);
 }
 
-svg.ck-icon .note-icon {
-    color: var(--main-text-color);
-    font-size: 20px;
+svg.ck-icon {
+    &.ck-icon_inherit-color {
+        * {
+            fill: currentColor;
+        }
+    }
+
+    &.note-icon {
+        color: var(--main-text-color);
+        font-size: 20px;
+    }
 }
 
 .ck-content {
