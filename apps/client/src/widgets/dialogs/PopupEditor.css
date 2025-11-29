@@ -15,7 +15,7 @@ body.desktop .modal.popup-editor-dialog .modal-dialog {
 
 body.mobile .modal.popup-editor-dialog .modal-dialog {
     max-width: 90vw;
-    max-height: 90vh;
+    max-height: var(--tn-modal-max-height);
     height: 100%;
 }
 
