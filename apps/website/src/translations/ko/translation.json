@@ -85,5 +85,8 @@
         "title_arm64": "ARM 기반 리눅스",
         "description_x64": "대부분의 리눅스 배포판에서 x86_64 아키텍처와 호환됩니다.",
         "description_arm64": "ARM 기반 리눅스 배포판에서 aarch64 아키텍처와 호환됩니다."
+    },
+    "note_types": {
+        "text_title": "텍스트 노트"
     }
 }
