@@ -3,6 +3,7 @@ import { t } from "../services/i18n";
 import { useIsNoteReadOnly, useNoteContext, useTriliumEvent } from "./react/hooks"
 import Button from "./react/Button";
 import InfoBar from "./react/InfoBar";
+import HelpButton from "./react/HelpButton";
 
 export default function ReadOnlyNoteInfoBar(props: {}) {
     const {note, noteContext} = useNoteContext();
@@ -17,17 +18,13 @@ export default function ReadOnlyNoteInfoBar(props: {}) {
                         {(isExplicitReadOnly) ? (
                             <div>{t("read-only-info.read-only-note")}</div>
                         ) : (
-                            <div> 
+                            <div>
                                 {t("read-only-info.auto-read-only-note")}
-                                &nbsp;
-                                <a class="tn-link"
-                                href="https://docs.triliumnotes.org/user-guide/concepts/notes/read-only-notes#automatic-read-only-mode">
-                                    
-                                    {t("read-only-info.auto-read-only-learn-more")}
-                                </a>
+                                {" "}
+                                <HelpButton helpPage="CoFPLs3dRlXc" />
                             </div>
                         )}
-                        
+
                         <Button text={t("read-only-info.edit-note")}
                                 icon="bx-pencil" onClick={() => enableEditing()} />
                     </div>
