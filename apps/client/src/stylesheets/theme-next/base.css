@@ -391,6 +391,18 @@ body.mobile .dropdown-menu {
             }
         }
 
+        .dropdown-divider {
+            visibility: visible;
+            margin: 0;
+            height: 3px;
+            border-top: unset;
+            background-color: rgba(0, 0, 0, 0.2);
+
+            &:after {
+                content: unset;
+            }
+        }
+
         &.submenu-open {
             .dropdown-toggle {
                 padding-bottom: var(--dropdown-menu-padding-vertical);
