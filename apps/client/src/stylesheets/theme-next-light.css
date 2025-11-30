@@ -271,6 +271,7 @@
 
     --calendar-coll-event-background-lightness: 95%;
     --calendar-coll-event-background-saturation: 80%;
+    --calendar-coll-event-background-color: #eaeaea;
     --calendar-coll-event-text-color: black;
     --calendar-cell-event-hover-filter: brightness(.95) saturate(1.25);
 }
