@@ -279,7 +279,7 @@ described in the "Discuss with us" section above.
   of the application.
 * [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
   application icon.
-* [nriver](https://github.com/nriver) for his work on internationalization.
+* [nriver](https://github.com/nriver) for his work on internationalisation.
 * [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
 * [antoniotejada](https://github.com/nriver) for the original syntax highlight
   widget.
