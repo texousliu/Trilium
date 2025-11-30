@@ -345,7 +345,7 @@ body[dir=ltr] #launcher-container {
  */
 
  .calendar-dropdown-widget {
-    padding: 12px;
+    padding: 18px;
     color: var(--calendar-color);
     user-select: none;
 }
@@ -1446,6 +1446,14 @@ div.promoted-attribute-cell .multiplicity:has(span) span {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+div.promoted-attribute-cell.promoted-attribute-label-color {
+    justify-content: space-between;
+}
+
+div.promoted-attribute-cell.promoted-attribute-label-color .input-group {
+    width: auto;
 }
 
 /*

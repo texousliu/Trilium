@@ -41,6 +41,9 @@
     --cmd-button-keyboard-shortcut-color: white;
     --cmd-button-disabled-opacity: 0.5;
 
+    --button-group-active-button-background: #ffffff4e;
+    --button-group-active-button-text-color: white;
+
     --icon-button-color: currentColor;
     --icon-button-hover-background: var(--hover-item-background-color);
     --icon-button-hover-color: var(--hover-item-text-color);
@@ -98,6 +101,7 @@
     --menu-item-delimiter-color: #ffffff1c;
     --menu-item-group-header-color: #ffffff91;
     --menu-section-background-color: #fefefe08;
+    --menu-submenu-mobile-background-color: rgba(0, 0, 0, 0.15);
 
     --modal-backdrop-color: #000;
     --modal-shadow-color: rgba(0, 0, 0, .5);
@@ -300,7 +304,7 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
     border-color: var(--muted-text-color) !important;
 }
 
-.tinted-quick-edit-dialog {
+.quick-edit-dialog-wrapper.with-hue {
     --modal-background-color: hsl(var(--custom-color-hue), 8.8%, 11.2%);
     --modal-border-color: hsl(var(--custom-color-hue), 9.4%, 25.1%);
     --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 13.2%, 20.8%);
