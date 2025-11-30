@@ -1686,46 +1686,6 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     body.mobile .modal-dialog.modal-dialog-scrollable {
         height: unset;
     }
-
-    body.mobile .revisions-dialog .modal-dialog {
-        height: 95vh;
-    }
-
-    body.mobile .revisions-dialog .modal-body {
-        height: 100% !important;
-        flex-direction: column;
-        padding: 0;
-    }
-
-    body.mobile .revisions-dialog .revision-list {
-        height: unset;
-        max-height: 20vh;
-        border-bottom: 1px solid var(--main-border-color) !important;
-        padding: 0 1em;
-    }
-
-    body.mobile .revisions-dialog .modal-body > .revision-content-wrapper {
-        flex-grow: 1;
-        height: 100%;
-        overflow: auto;
-        margin: 0;
-    }
-
-    body.mobile .revisions-dialog .modal-body > .revision-content-wrapper > div:first-of-type {
-        flex-direction: column;
-    }
-
-    body.mobile .revisions-dialog .revision-title {
-        font-size: 1rem;
-    }
-
-    body.mobile .revisions-dialog .revision-title-buttons {
-        text-align: center;
-    }
-
-    body.mobile .revisions-dialog .revision-content {
-        padding: 0.5em;
-    }
 }
 
 /* Mobile, tablet mode */
