@@ -76,7 +76,7 @@ body.mobile .modal.popup-editor-dialog .modal-dialog {
     top: 0;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    background: transparent;
+    background: var(--modal-background-color);
     z-index: 998;
     align-items: flex-start;
 }
