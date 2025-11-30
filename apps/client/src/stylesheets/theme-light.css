@@ -80,6 +80,9 @@ html {
 
     --mermaid-theme: default;
     --native-titlebar-background: #ffffff00;
+
+    --calendar-coll-event-background-lightness: 95%;
+    --calendar-coll-event-background-saturation: 80%;
 }
 
 #left-pane .fancytree-node.tinted {

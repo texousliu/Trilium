@@ -1,3 +1,12 @@
+:root {
+    /* Default values to be overridden by themes */
+    --calendar-coll-event-background-lightness: 95%;
+    --calendar-coll-event-background-saturation: 80%;
+    --calendar-coll-event-background-color: var(--accented-background-color);
+    --calendar-coll-event-text-color: var(--primary-button-text-color);
+    --calendar-cell-event-hover-filter: none;
+}
+
 .calendar-view {
     --fc-event-border-color: var(--calendar-coll-event-text-color);
     --fc-event-bg-color: var(--calendar-coll-event-background-color);
@@ -115,8 +124,8 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
     color: currentColor;
 }
 
-.fc-timegrid-event.with-hue,
-.fc-daygrid-event:not(.fc-daygrid-dot-event).with-hue {
+.calendar-view .fc-timegrid-event.with-hue,
+.calendar-view .fc-daygrid-event:not(.fc-daygrid-dot-event).with-hue {
     --fc-event-text-color: var(--custom-color);
 
     background: hsl(var(--custom-color-hue),
@@ -124,7 +133,7 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
                     var(--calendar-coll-event-background-lightness)) !important;
 }
 
-.fc-event-time {
+.calendar-view .fc-event-time {
     opacity: .75;
 }
 
