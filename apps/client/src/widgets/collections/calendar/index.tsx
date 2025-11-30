@@ -77,6 +77,7 @@ export const LOCALE_MAPPINGS: Record<DISPLAYABLE_LOCALE_IDS, (() => Promise<{ de
     "pt_br": () => import("@fullcalendar/core/locales/pt-br"),
     uk: () => import("@fullcalendar/core/locales/uk"),
     en: null,
+    "en-GB": () => import("@fullcalendar/core/locales/en-gb"),
     "en_rtl": null,
     ar: () => import("@fullcalendar/core/locales/ar")
 };

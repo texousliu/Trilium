@@ -28,6 +28,7 @@ const LOCALE_MAPPINGS: Record<DISPLAYABLE_LOCALE_IDS, Options["locale"] | null> 
     de: null,
     en: "en",
     en_rtl: "en",
+    "en-GB": "en",
     es: "es",
     fr: "fr",
     it: "it",
