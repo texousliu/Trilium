@@ -20,6 +20,7 @@ import ActionButton from "../react/ActionButton";
 import options from "../../services/options";
 import { useTriliumEvent } from "../react/hooks";
 import { diffWords } from "diff";
+import "./revisions.css";
 
 export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();

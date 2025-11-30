@@ -1,0 +1,41 @@
+body.mobile .revisions-dialog {
+    .modal-dialog {
+        height: 95vh;
+    }
+    
+    .modal-body {
+        height: 100% !important;
+        flex-direction: column;
+        padding: 0;
+    }
+    
+    .revision-list {
+        height: unset;
+        max-height: 20vh;
+        border-bottom: 1px solid var(--main-border-color) !important;
+        padding: 0 1em;
+    }
+    
+    .modal-body > .revision-content-wrapper {
+        flex-grow: 1;
+        height: 100%;
+        overflow: auto;
+        margin: 0;
+    }
+    
+    .modal-body > .revision-content-wrapper > div:first-of-type {
+        flex-direction: column;
+    }
+    
+    .revision-title {
+        font-size: 1rem;
+    }
+    
+    .revision-title-buttons {
+        text-align: center;
+    }
+    
+    .revision-content {
+        padding: 0.5em;
+    }
+}
