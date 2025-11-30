@@ -26,7 +26,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
             && !(await noteContext?.isReadOnly()),
         toggleCommand: "toggleRibbonTabClassicEditor",
         content: FormattingToolbar,
-        activate: true,
+        activate: () => !options.is("editedNotesOpenInRibbon"),
         stayInDom: true
     },
     {
