@@ -79,22 +79,22 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
             noteContext = subContexts.find(s => s.ntxId !== ntxId)!;
         } else {
             noteContext = await appContext.tabManager.openEmptyTab(null, hoistedNoteId, mainNtxId);
+            // remove the original position of newly created note context
+            const ntxIds = appContext.tabManager.children.map((c) => c.ntxId).filter((id) => id !== noteContext.ntxId) as string[];
+
+            // insert the note context after the originating note context
+            if (!noteContext.ntxId) {
+                logError("Failed to create new note context!");
+                return;
+            }
+            ntxIds.splice(ntxIds.indexOf(ntxId) + 1, 0, noteContext.ntxId);
+
+            this.triggerCommand("noteContextReorder", { ntxIdsInOrder: ntxIds });
+
+            // move the note context rendered widget after the originating widget
+            this.$widget.find(`[data-ntx-id="${noteContext.ntxId}"]`).insertAfter(this.$widget.find(`[data-ntx-id="${ntxId}"]`));
         }
-        if (!noteContext.ntxId) {
-            logError("Failed to create new note context!");
-            return;
-        }
 
-        // remove the original position of newly created note context
-        const ntxIds = appContext.tabManager.children.map((c) => c.ntxId).filter((id) => id !== noteContext.ntxId) as string[];
-
-        // insert the note context after the originating note context
-        ntxIds.splice(ntxIds.indexOf(ntxId) + 1, 0, noteContext.ntxId);
-
-        this.triggerCommand("noteContextReorder", { ntxIdsInOrder: ntxIds });
-
-        // move the note context rendered widget after the originating widget
-        this.$widget.find(`[data-ntx-id="${noteContext.ntxId}"]`).insertAfter(this.$widget.find(`[data-ntx-id="${ntxId}"]`));
 
         await appContext.tabManager.activateNoteContext(noteContext.ntxId);
 
