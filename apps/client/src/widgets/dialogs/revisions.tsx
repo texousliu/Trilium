@@ -138,7 +138,7 @@ export default function RevisionsDialog() {
 
 function RevisionsList({ revisions, onSelect, currentRevision }: { revisions: RevisionItem[], onSelect: (val: string) => void, currentRevision?: RevisionItem }) {
     return (
-        <FormList onSelect={onSelect} fullHeight>
+        <FormList onSelect={onSelect} fullHeight wrapperClassName="revision-list">
             {revisions.map((item) =>
                 <FormListItem
                     value={item.revisionId}
