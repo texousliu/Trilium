@@ -76,3 +76,29 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
     padding-inline-end: unset !important;
 }
 /* #endregion */
+
+.calendar-view {
+    --fc-event-text-color: var(--calendar-coll-event-text-color);
+}
+
+.calendar-view a.fc-timegrid-event,
+.calendar-view a.fc-daygrid-event {
+    font-weight: 500;
+}
+
+.calendar-view a.fc-timegrid-event:hover,
+.calendar-view a.fc-daygrid-event:hover {
+    text-decoration: none;    
+    filter: var(--calendar-cell-event-hover-filter);
+}
+
+.fc-timegrid-event.with-hue, .fc-daygrid-event:not(.fc-daygrid-dot-event).with-hue {
+    --fc-event-text-color: var(--custom-color);
+
+    border: unset;
+    border-left: 4px solid;
+    padding-left: 8px;
+    background: hsl(var(--custom-color-hue),
+                    var(--calendar-coll-event-background-saturation),
+                    var(--calendar-coll-event-background-lightness)) !important;
+}

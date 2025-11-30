@@ -3,6 +3,7 @@ import froca from "../../../services/froca";
 import { formatDateToLocalISO, getCustomisableLabel, getMonthsInDateRange, offsetDate } from "./utils";
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
+import clsx from "clsx";
 
 interface Event {
     startDate: string,
@@ -81,6 +82,7 @@ export async function buildEvent(note: FNote, { startDate, endDate, startTime, e
     const customTitleAttributeName = note.getLabelValue("calendar:title");
     const titles = await parseCustomTitle(customTitleAttributeName, note);
     const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
+    const colorClass = note.getColorClass();
     const events: EventInput[] = [];
 
     const calendarDisplayedAttributes = note.getLabelValue("calendar:displayedAttributes")?.split(",");
@@ -111,7 +113,7 @@ export async function buildEvent(note: FNote, { startDate, endDate, startTime, e
             color: color ?? undefined,
             iconClass: note.getLabelValue("iconClass"),
             promotedAttributes: displayedAttributesData,
-            className: isArchived ? "archived" : ""
+            className: clsx({archived: isArchived}, colorClass)
         };
         if (endDate) {
             eventData.end = endDate;
