@@ -279,7 +279,7 @@ described in the "Discuss with us" section above.
   of the application.
 * [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
   application icon.
-* [nriver](https://github.com/nriver) for his work on internationalization.
+* [nriver](https://github.com/nriver) for his work on internationalisation.
 * [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
 * [antoniotejada](https://github.com/nriver) for the original syntax highlight
   widget.
@@ -328,5 +328,5 @@ Copyright 2017-2025 zadam, Elian Doran, and other contributors
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Affero General Public License as published by the Free
-Software Foundation, either version 3 of the License, or (at your option) any
+Software Foundation, either version 3 of the Licence, or (at your option) any
 later version.
