@@ -1,4 +1,9 @@
 .calendar-view {
+    --fc-event-border-color: var(--calendar-coll-event-text-color);
+    --fc-event-bg-color: var(--calendar-coll-event-background-color);
+    --fc-event-text-color: var(--calendar-coll-event-text-color);
+    --fc-event-selected-overlay-color: transparent;
+
     overflow: hidden;
     position: relative;
     outline: 0;
@@ -77,30 +82,50 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
 }
 /* #endregion */
 
-.calendar-view {
-    --fc-event-text-color: var(--calendar-coll-event-text-color);
-    --fc-event-bg-color: var(--calendar-coll-event-background-color);
-}
+/* #region Events */
 
 .calendar-view a.fc-timegrid-event,
 .calendar-view a.fc-daygrid-event {
-    border: unset;
-    border-left: 4px solid;
-    padding-left: 8px;
     font-weight: 500;
+}
+
+.calendar-view a.fc-timegrid-event,
+.calendar-view a.fc-daygrid-event:not(.fc-daygrid-dot-event) {
+    --border-color: transparent;
+
+    border-width: 2px 2px 2px 4px;
+    border-color: var(--border-color) var(--border-color) var(--border-color)
+                  var(--fc-event-text-color) !important;
+
+    padding-left: 8px;
+}
+
+.calendar-view a.fc-timegrid-event.fc-event-selected,
+.calendar-view a.fc-timegrid-event.fc-event:focus,
+.calendar-view a.fc-daygrid-event.fc-event-selected,
+.calendar-view a.fc-daygrid-event.fc-event:focus {
+    --border-color: var(--custom-color, var(--input-focus-outline-color));
 }
 
 .calendar-view a.fc-timegrid-event:hover,
 .calendar-view a.fc-daygrid-event:hover {
-    text-decoration: none;
-    border-color: var(--fc-event-text-color);
     filter: var(--calendar-cell-event-hover-filter);
+    border-color: var(--fc-event-text-color);
+    text-decoration: none;
+    color: currentColor;
 }
 
-.fc-timegrid-event.with-hue, .fc-daygrid-event:not(.fc-daygrid-dot-event).with-hue {
+.fc-timegrid-event.with-hue,
+.fc-daygrid-event:not(.fc-daygrid-dot-event).with-hue {
     --fc-event-text-color: var(--custom-color);
 
     background: hsl(var(--custom-color-hue),
                     var(--calendar-coll-event-background-saturation),
                     var(--calendar-coll-event-background-lightness)) !important;
 }
+
+.fc-event-time {
+    opacity: .75;
+}
+
+/* #endregion */
