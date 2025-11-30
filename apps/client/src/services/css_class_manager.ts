@@ -44,7 +44,7 @@ function createClassForColor(colorString: string | null) {
         }
     }
 
-    return clsx(className, colorsWithHue.has(className) && "with-hue");
+    return clsx("use-note-color", className, colorsWithHue.has(className) && "with-hue");
 }
 
 function parseColor(color: string) {
