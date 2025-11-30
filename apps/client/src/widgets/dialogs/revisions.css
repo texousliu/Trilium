@@ -16,7 +16,7 @@ body.mobile .revisions-dialog {
     }
     
     .modal-body {
-        height: 100% !important;
+        height: fit-content !important;
         flex-direction: column;
         padding: 0;
     }
@@ -30,14 +30,15 @@ body.mobile .revisions-dialog {
         max-height: 20vh;
         border-bottom: 1px solid var(--main-border-color) !important;
         padding: 0 1em;
+        flex-shrink: 0;
     }
     
     .modal-body > .revision-content-wrapper {
         flex-grow: 1;
         max-width: unset !important;
         height: 100%;
-        overflow: auto;
         margin: 0;
+        display: block !important;
     }
     
     .modal-body > .revision-content-wrapper > div:first-of-type {
@@ -57,5 +58,6 @@ body.mobile .revisions-dialog {
     
     .revision-content {
         padding: 0.5em;
+        height: fit-content;
     }
 }
