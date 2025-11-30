@@ -2107,5 +2107,8 @@
     "clear-color": "Clear note color",
     "set-color": "Set note color",
     "set-custom-color": "Set custom note color"
+  },
+  "popup-editor": {
+    "maximize": "Switch to full editor"
   }
 }
