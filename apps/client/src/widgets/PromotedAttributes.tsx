@@ -14,8 +14,10 @@ import ws from "../services/ws";
 import { UpdateAttributeResponse } from "@triliumnext/commons";
 import attributes from "../services/attributes";
 import debounce from "../services/debounce";
+import { randomString } from "../services/utils";
 
 interface Cell {
+    uniqueId: string;
     definitionAttr: FAttribute;
     definition: DefinitionObject;
     valueAttr: Attribute;
@@ -44,6 +46,7 @@ export default function PromotedAttributes() {
         <div className="promoted-attributes-widget">
             {cells && cells.length > 0 && <div className="promoted-attributes-container">
                 {note && cells?.map(cell => <PromotedAttributeCell
+                    key={cell.uniqueId}
                     cell={cell}
                     cells={cells} setCells={setCells}
                     shouldFocus={cell === cellToFocus} setCellToFocus={setCellToFocus}
@@ -103,7 +106,8 @@ function usePromotedAttributeData(note: FNote | null | undefined, componentId: s
                     valueAttr.attributeId = "";
                 }
 
-                cells.push({  definitionAttr, definition, valueAttr, valueName });
+                const uniqueId = randomString(10);
+                cells.push({  definitionAttr, definition, valueAttr, valueName, uniqueId });
             }
         }
         setCells(cells);
