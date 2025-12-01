@@ -1590,8 +1590,6 @@
     "this_launcher_doesnt_define_target_note": "このランチャーはターゲットノートを定義していません。"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} バックリンク",
-    "backlinks": "{{count}} バックリンク",
     "relation": "リレーション"
   },
   "mobile_detail_menu": {

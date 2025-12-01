@@ -839,8 +839,6 @@
     "zoom_out_title": "Зменшити масштаб"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Зворотне посилання",
-    "backlinks": "{{count}} Зворотні посилання",
     "relation": "зв'язок"
   },
   "mobile_detail_menu": {

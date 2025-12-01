@@ -200,9 +200,7 @@
     "open_sql_console_history": "فتح سجل لوحة تحكم SQL"
   },
   "zpetne_odkazy": {
-    "relation": "العلاقة",
-    "backlink": "{{count}} رابط راجع",
-    "backlinks": "{{count}} روابط راجعة"
+    "relation": "العلاقة"
   },
   "note_icon": {
     "category": "الفئة:",

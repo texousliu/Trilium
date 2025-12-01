@@ -1363,7 +1363,6 @@
   },
   "zpetne_odkazy": {
     "backlink_one": "{{count}} legătură de retur",
-    "backlink_few": "{{count}} legături de retur",
     "backlink_other": "{{count}} de legături de retur",
     "relation": "relație"
   },
