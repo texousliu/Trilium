@@ -170,4 +170,11 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
     display: none;
 }
 
+/* List view */
+
+.fc-list-table .fc-list-event-dot {
+    /* Apply note colors to the list item dots */
+    --fc-event-border-color: var(--custom-color);
+}
+
 /* #endregion */
