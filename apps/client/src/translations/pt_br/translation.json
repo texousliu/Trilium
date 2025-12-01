@@ -970,7 +970,10 @@
     "reset_pan_zoom_title": "Redefinir pan & zoom para coordenadas e ampliação iniciais"
   },
   "zpetne_odkazy": {
-    "relation": "relação"
+    "relation": "relação",
+    "backlink_one": "",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Links Reversos"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Inserir nota filha",
