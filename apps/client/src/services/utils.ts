@@ -207,7 +207,7 @@ function toObject<T, R>(array: T[], fn: (arg0: T) => [key: string, value: R]) {
     return obj;
 }
 
-function randomString(len: number) {
+export function randomString(len: number) {
     let text = "";
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 

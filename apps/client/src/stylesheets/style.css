@@ -27,6 +27,9 @@
     --bs-body-bg: var(--main-background-color) !important;    
     --ck-mention-list-max-height: 500px;    
     --tn-modal-max-height: 90vh;
+
+    --tree-item-light-theme-max-color-lightness: 50;
+    --tree-item-dark-theme-min-color-lightness: 75;
 }
 
 body#trilium-app.motion-disabled *,
@@ -252,6 +255,11 @@ button.close {
 
 button.close:hover {
     color: var(--hover-item-text-color);
+}
+
+button.custom-title-bar-button {
+    background: transparent;
+    border: unset;
 }
 
 .modal-content {
@@ -2579,4 +2587,12 @@ iframe.print-iframe {
     position: relative;
     flex-grow: 1;
     width: 100%;
+}
+
+/* Calendar collection */
+
+.calendar-view a.fc-timegrid-event,
+.calendar-view a.fc-daygrid-event {
+    /* Workaround: set font weight only if the theme-next is not active */
+    font-weight: var(--root-background, 800);
 }

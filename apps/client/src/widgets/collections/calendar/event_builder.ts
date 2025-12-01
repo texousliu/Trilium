@@ -81,7 +81,6 @@ export async function buildEventsForCalendar(note: FNote, e: EventSourceFuncArg)
 export async function buildEvent(note: FNote, { startDate, endDate, startTime, endTime, isArchived }: Event) {
     const customTitleAttributeName = note.getLabelValue("calendar:title");
     const titles = await parseCustomTitle(customTitleAttributeName, note);
-    const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
     const colorClass = note.getColorClass();
     const events: EventInput[] = [];
 
@@ -110,7 +109,6 @@ export async function buildEvent(note: FNote, { startDate, endDate, startTime, e
             start: startDate,
             url: `#${note.noteId}?popup`,
             noteId: note.noteId,
-            color: color ?? undefined,
             iconClass: note.getLabelValue("iconClass"),
             promotedAttributes: displayedAttributesData,
             className: clsx({archived: isArchived}, colorClass)

@@ -307,9 +307,11 @@ function useEventDisplayCustomization(parentNote: FNote) {
             $(mainContainer ?? e.el).append($(promotedAttributesHtml));
         }
 
-        e.el.addEventListener("contextmenu", (contextMenuEvent) => {
-            const noteId = e.event.extendedProps.noteId;
-            openCalendarContextMenu(contextMenuEvent, noteId, parentNote);
+        e.el.addEventListener("contextmenu", async (contextMenuEvent) => {
+            const note = await froca.getNote(e.event.extendedProps.noteId);
+            if (!note) return;
+
+            openCalendarContextMenu(contextMenuEvent, note, parentNote);
         });
     }, []);
     return { eventDidMount };

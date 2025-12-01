@@ -162,7 +162,8 @@
     "inPageSearch": "页面内搜索",
     "newTabWithActivationNoteLink": "在新标签页打开笔记链接并激活该标签页",
     "title": "资料表",
-    "newTabNoteLink": "在新标签页开启链接"
+    "newTabNoteLink": "在新标签页开启链接",
+    "editShortcuts": "编辑键盘快捷键"
   },
   "import": {
     "importIntoNote": "导入到笔记",
@@ -2104,5 +2105,8 @@
     "clear-color": "清除笔记颜色",
     "set-color": "设置笔记颜色",
     "set-custom-color": "设置自定义笔记颜色"
+  },
+  "popup-editor": {
+    "maximize": "切换至完整编辑器"
   }
 }
