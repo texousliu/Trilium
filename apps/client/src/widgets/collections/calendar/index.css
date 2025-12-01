@@ -4,7 +4,7 @@
     --calendar-coll-event-background-saturation: 80%;
     --calendar-coll-event-background-color: var(--accented-background-color);
     --calendar-coll-event-text-color: var(--main-text-color);
-    --calendar-cell-event-hover-filter: none;
+    --calendar-coll-event-hover-filter: none;
     --callendar-coll-event-archived-sripe-color: #00000013;
     --calendar-coll-today-background-color: var(--more-accented-background-color);
 }
@@ -146,7 +146,7 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
 
 .calendar-view a.fc-timegrid-event:hover,
 .calendar-view a.fc-daygrid-event:hover {
-    filter: var(--calendar-cell-event-hover-filter);
+    filter: var(--calendar-coll-event-hover-filter);
     border-color: var(--fc-event-text-color);
     text-decoration: none;
     color: currentColor;
