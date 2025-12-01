@@ -3,9 +3,9 @@
     --calendar-coll-event-background-lightness: 95%;
     --calendar-coll-event-background-saturation: 80%;
     --calendar-coll-event-background-color: var(--accented-background-color);
-    --calendar-coll-event-text-color: var(--primary-button-text-color);
+    --calendar-coll-event-text-color: var(--main-text-color);
     --calendar-cell-event-hover-filter: none;
-    --callendar-coll-event-archived-sripe-color: #0000000d;
+    --callendar-coll-event-archived-sripe-color: #00000013;
     --calendar-coll-today-background-color: var(--more-accented-background-color);
 }
 
