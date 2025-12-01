@@ -1231,7 +1231,10 @@
     "zoom_out_title": "Pomniejsz"
   },
   "zpetne_odkazy": {
-    "relation": "relacja"
+    "relation": "relacja",
+    "backlink_one": "{{count}} Backlink",
+    "backlink_few": "",
+    "backlink_many": "{{count}} Backlinków"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Wstaw notatkę podrzędną",
