@@ -984,7 +984,10 @@
     "new-version-available": "Доступно обновление"
   },
   "zpetne_odkazy": {
-    "relation": "отношение"
+    "relation": "отношение",
+    "backlink_one": "{{count}} ссылки",
+    "backlink_few": "",
+    "backlink_many": "{{count}} ссылок"
   },
   "note_icon": {
     "category": "Категория:",
