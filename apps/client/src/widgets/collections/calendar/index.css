@@ -22,7 +22,7 @@
 }
 
 .calendar-view a {
-    color: unset;
+    color: var(--fc-event-text-color);
 }
 
 .search-result-widget-content .calendar-view {
@@ -94,15 +94,22 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
 /* #region Events */
 
 .calendar-view a.fc-timegrid-event,
-.calendar-view a.fc-daygrid-event {
+.calendar-view a.fc-daygrid-event,
+.fc-daygrid-dot-event .fc-event-title {
     font-weight: 500;
 }
 
-.calendar-view a.fc-timegrid-event,
-.calendar-view a.fc-daygrid-event:not(.fc-daygrid-dot-event) {
-    --border-color: transparent;
+.calendar-view a.fc-timegrid-event:focus-visible,
+.calendar-view a.fc-daygrid-event:focus-visible {
+    outline: none;
+}
 
-    border-width: 2px 2px 2px 4px;
+.calendar-view a.fc-timegrid-event,
+.calendar-view a.fc-daygrid-event {
+    --border-color: transparent;
+    
+    border: 2px solid;
+    border-left-width: 4px;
     border-color: var(--border-color) var(--border-color) var(--border-color)
                   var(--fc-event-text-color) !important;
     background: var(--fc-event-bg-color) !important;
@@ -126,7 +133,7 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
 }
 
 .calendar-view .fc-timegrid-event.with-hue,
-.calendar-view .fc-daygrid-event:not(.fc-daygrid-dot-event).with-hue {
+.calendar-view .fc-daygrid-event.with-hue {
     --fc-event-text-color: var(--custom-color);
 
     background: hsl(var(--custom-color-hue),
@@ -136,6 +143,10 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
 
 .calendar-view .fc-event-time {
     opacity: .75;
+}
+
+.fc-daygrid-event-dot {
+    display: none;
 }
 
 /* #endregion */
