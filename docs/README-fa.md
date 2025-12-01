@@ -44,15 +44,15 @@ quick overview:
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
-  [docs.triliumnotes.org](https://docs.triliumnotes.org/)
+مستندات ما در چندین قالب مختلف در دسترس است:
+- مستندات آنلاین: می‌توانید نسخهٔ کامل مستندات را در
+  ‎[docs.triliumnotes.org](https://docs.triliumnotes.org/)‎ مرور کنید
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
   directly in the application
 - **GitHub**: Navigate through the [User
   Guide](./docs/User%20Guide/User%20Guide/) in this repository
 
-### Quick Links
+### لینک‌های سریع
 - [Getting Started Guide](https://docs.triliumnotes.org/)
 - [Installation
   Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
@@ -65,7 +65,7 @@ Our documentation is available in multiple formats:
 - [Patterns of Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 ویژگی‌ها
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed
   into multiple places in the tree (see
