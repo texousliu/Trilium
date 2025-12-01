@@ -732,7 +732,9 @@
     "zoom_out_title": "Herauszoomen"
   },
   "zpetne_odkazy": {
-    "relation": "Beziehung"
+    "relation": "Beziehung",
+    "backlink_one": "{{count}} Rückverlinkung",
+    "backlink_other": "{{count}} Rückverlinkungen"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Untergeordnete Notiz einfügen",
