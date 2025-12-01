@@ -162,7 +162,8 @@
     "inPageSearch": "頁面內搜尋",
     "title": "列表",
     "newTabNoteLink": "在新分頁開啟筆記連結",
-    "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結"
+    "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結",
+    "editShortcuts": "編輯鍵盤快捷鍵"
   },
   "import": {
     "importIntoNote": "匯入至筆記",
@@ -2098,12 +2099,14 @@
   "read-only-info": {
     "read-only-note": "目前正在檢視唯讀筆記。",
     "auto-read-only-note": "此筆記以唯讀模式顯示以加快載入速度。",
-    "auto-read-only-learn-more": "了解更多",
     "edit-note": "編輯筆記"
   },
   "note-color": {
     "clear-color": "清除筆記顏色",
     "set-color": "設定筆記顏色",
     "set-custom-color": "設定自訂筆記顏色"
+  },
+  "popup-editor": {
+    "maximize": "切換至完整編輯器"
   }
 }

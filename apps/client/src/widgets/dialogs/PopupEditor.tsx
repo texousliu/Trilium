@@ -19,6 +19,8 @@ import tree from "../../services/tree";
 import froca from "../../services/froca";
 import ReadOnlyNoteInfoBar from "../ReadOnlyNoteInfoBar";
 import MobileEditorToolbar from "../type_widgets/text/mobile_editor_toolbar";
+import { t } from "../../services/i18n";
+import appContext from "../../components/app_context";
 
 export default function PopupEditor() {
     const [ shown, setShown ] = useState(false);
@@ -60,6 +62,16 @@ export default function PopupEditor() {
             <DialogWrapper>
                 <Modal
                     title={<TitleRow />}
+                    customTitleBarButtons={[{
+                        iconClassName: "bx-expand-alt",
+                        title: t("popup-editor.maximize"),
+                        onClick: async () => {
+                            if (!noteContext.noteId) return;
+                            const { noteId, hoistedNoteId } = noteContext;
+                            await appContext.tabManager.openInNewTab(noteId, hoistedNoteId, true);
+                            setShown(false);
+                        }
+                    }]}
                     className="popup-editor-dialog"
                     size="lg"
                     show={shown}

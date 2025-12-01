@@ -77,6 +77,7 @@ export const LOCALE_MAPPINGS: Record<DISPLAYABLE_LOCALE_IDS, (() => Promise<{ de
     "pt_br": () => import("@fullcalendar/core/locales/pt-br"),
     uk: () => import("@fullcalendar/core/locales/uk"),
     en: null,
+    "en-GB": () => import("@fullcalendar/core/locales/en-gb"),
     "en_rtl": null,
     ar: () => import("@fullcalendar/core/locales/ar")
 };
@@ -306,9 +307,11 @@ function useEventDisplayCustomization(parentNote: FNote) {
             $(mainContainer ?? e.el).append($(promotedAttributesHtml));
         }
 
-        e.el.addEventListener("contextmenu", (contextMenuEvent) => {
-            const noteId = e.event.extendedProps.noteId;
-            openCalendarContextMenu(contextMenuEvent, noteId, parentNote);
+        e.el.addEventListener("contextmenu", async (contextMenuEvent) => {
+            const note = await froca.getNote(e.event.extendedProps.noteId);
+            if (!note) return;
+
+            openCalendarContextMenu(contextMenuEvent, note, parentNote);
         });
     }, []);
     return { eventDidMount };

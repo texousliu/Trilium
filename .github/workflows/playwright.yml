@@ -79,7 +79,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v5
         with:
-          name: e2e report
+          name: e2e report ${{ matrix.arch }}
           path: apps/server-e2e/test-output
 
       - name: Kill the server

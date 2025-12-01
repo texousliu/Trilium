@@ -1362,8 +1362,9 @@
     "title": "Factorul de zoom (doar pentru versiunea desktop)"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} legături de retur",
-    "backlinks": "{{count}} legături de retur",
+    "backlink_one": "{{count}} legătură de retur",
+    "backlink_few": "{{count}} legături de retur",
+    "backlink_other": "{{count}} de legături de retur",
     "relation": "relație"
   },
   "svg_export_button": {
@@ -2097,7 +2098,6 @@
   "read-only-info": {
     "read-only-note": "Vizualizați o notiță în modul doar în citire.",
     "auto-read-only-note": "Această notiță este afișată în modul doar în citire din motive de performanță.",
-    "auto-read-only-learn-more": "Mai multe detalii",
     "edit-note": "Editează notița"
   },
   "calendar_view": {

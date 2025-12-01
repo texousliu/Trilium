@@ -7,11 +7,13 @@ import hidden_subtree from "./hidden_subtree.js";
 import { LOCALES, type Locale, type LOCALE_IDS } from "@triliumnext/commons";
 import dayjs, { Dayjs } from "dayjs";
 
+// When adding a new locale, prefer the version with hyphen instead of underscore.
 export const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs/locale/en.js")>> = {
     "ar": () => import("dayjs/locale/ar.js"),
     "cn": () => import("dayjs/locale/zh-cn.js"),
     "de": () => import("dayjs/locale/de.js"),
     "en": () => import("dayjs/locale/en.js"),
+    "en-GB": () => import("dayjs/locale/en-gb.js"),
     "en_rtl": () => import("dayjs/locale/en.js"),
     "es": () => import("dayjs/locale/es.js"),
     "fa": () => import("dayjs/locale/fa.js"),

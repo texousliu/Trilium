@@ -112,6 +112,7 @@
   },
   "help": {
     "title": "Cheatsheet",
+    "editShortcuts": "Edit keyboard shortcuts",
     "noteNavigation": "Note navigation",
     "goUpDown": "go up/down in the list of notes",
     "collapseExpand": "collapse/expand node",
@@ -735,8 +736,8 @@
     "zoom_out_title": "Zoom Out"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Backlink",
-    "backlinks": "{{count}} Backlinks",
+    "backlink_one": "{{count}} Backlink",
+    "backlink_other": "{{count}} Backlinks",
     "relation": "relation"
   },
   "mobile_detail_menu": {
@@ -2106,5 +2107,8 @@
     "clear-color": "Clear note color",
     "set-color": "Set note color",
     "set-custom-color": "Set custom note color"
+  },
+  "popup-editor": {
+    "maximize": "Switch to full editor"
   }
 }

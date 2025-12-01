@@ -3,11 +3,10 @@ import FNote from "../../../entities/fnote";
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
 import branches from "../../../services/branches";
-import froca from "../../../services/froca";
-import { note } from "mermaid/dist/rendering-util/rendering-elements/shapes/note.js";
+import { getArchiveMenuItem } from "../../../menus/context_menu_utils";
 import { t } from "../../../services/i18n";
 
-export function openCalendarContextMenu(e: ContextMenuEvent, noteId: string, parentNote: FNote) {
+export function openCalendarContextMenu(e: ContextMenuEvent, note: FNote, parentNote: FNote) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -17,15 +16,13 @@ export function openCalendarContextMenu(e: ContextMenuEvent, noteId: string, par
         items: [
             ...link_context_menu.getItems(),
             { kind: "separator" },
+            getArchiveMenuItem(note),
             {
                 title: t("calendar_view.delete_note"),
                 uiIcon: "bx bx-trash",
                 handler: async () => {
-                    const noteToDelete = await froca.getNote(noteId);
-                    if (!noteToDelete) return;
-
                     let branchIdToDelete: string | null = null;
-                    for (const parentBranch of noteToDelete.getParentBranches()) {
+                    for (const parentBranch of note.getParentBranches()) {
                         const parentNote = await parentBranch.getNote();
                         if (parentNote?.hasAncestor(parentNote.noteId)) {
                             branchIdToDelete = parentBranch.branchId;
@@ -40,9 +37,9 @@ export function openCalendarContextMenu(e: ContextMenuEvent, noteId: string, par
             { kind: "separator" },
             {
                 kind: "custom",
-                componentFn: () => NoteColorPicker({note: noteId})
+                componentFn: () => NoteColorPicker({note: note})
             }
         ],
-        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),
+        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, note.noteId),
     })
 }

@@ -2,9 +2,9 @@ import FNote from "../../../entities/fnote";
 import NoteColorPicker from "../../../menus/custom-items/NoteColorPicker";
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
-import attributes from "../../../services/attributes";
 import branches from "../../../services/branches";
 import dialog from "../../../services/dialog";
+import { getArchiveMenuItem } from "../../../menus/context_menu_utils";
 import { t } from "../../../services/i18n";
 import Api from "./api";
 
@@ -44,17 +44,6 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
             ...link_context_menu.getItems(),
             { kind: "separator" },
             {
-                title: t("board_view.move-to"),
-                uiIcon: "bx bx-transfer",
-                items: api.columns.map(columnToMoveTo => ({
-                    title: columnToMoveTo,
-                    enabled: columnToMoveTo !== column,
-                    handler: () => api.changeColumn(note.noteId, columnToMoveTo)
-                })),
-            },
-            getArchiveMenuItem(note),
-            { kind: "separator" },
-            {
                 title: t("board_view.insert-above"),
                 uiIcon: "bx bx-list-plus",
                 handler: () => api.insertRowAtPosition(column, branchId, "before")
@@ -65,6 +54,17 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
                 handler: () => api.insertRowAtPosition(column, branchId, "after")
             },
             { kind: "separator" },
+            {
+                title: t("board_view.move-to"),
+                uiIcon: "bx bx-transfer",
+                items: api.columns.map(columnToMoveTo => ({
+                    title: columnToMoveTo,
+                    enabled: columnToMoveTo !== column,
+                    handler: () => api.changeColumn(note.noteId, columnToMoveTo)
+                })),
+            },
+            { kind: "separator" },
+            getArchiveMenuItem(note),
             {
                 title: t("board_view.remove-from-board"),
                 uiIcon: "bx bx-task-x",
@@ -85,20 +85,3 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
     });
 }
 
-function getArchiveMenuItem(note: FNote) {
-    if (!note.isArchived) {
-        return {
-            title: t("board_view.archive-note"),
-            uiIcon: "bx bx-archive",
-            handler: () => attributes.addLabel(note.noteId, "archived")
-        }
-    } else {
-        return {
-            title: t("board_view.unarchive-note"),
-            uiIcon: "bx bx-archive-out",
-            handler: async () => {
-                attributes.removeOwnedLabelByName(note, "archived")
-            }
-        }
-    }
-}
