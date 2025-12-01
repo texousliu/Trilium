@@ -839,7 +839,10 @@
     "zoom_out_title": "Зменшити масштаб"
   },
   "zpetne_odkazy": {
-    "relation": "зв'язок"
+    "relation": "зв'язок",
+    "backlink_one": "{{count}} Зворотне посилання",
+    "backlink_few": "{{count}} Зворотні посилання",
+    "backlink_many": "{{count}} Зворотні посилання"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Вставити дочірню нотатку",
