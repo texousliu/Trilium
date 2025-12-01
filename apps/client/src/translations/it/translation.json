@@ -640,12 +640,6 @@
     "friday": "Venerdì"
   },
   "ai_llm": {
-    "n_notes_queued_0": "{{ count }} nota in coda per l'indicizzazione",
-    "n_notes_queued_1": "{{ count }} note in coda per l'indicizzazione",
-    "n_notes_queued_2": "{{ count }} note in coda per l'indicizzazione",
-    "notes_indexed_0": "{{ count }} nota indicizzata",
-    "notes_indexed_1": "{{ count }} note indicizzate",
-    "notes_indexed_2": "{{ count }} note indicizzate",
     "not_started": "Non iniziato",
     "title": "Impostazioni AI",
     "processed_notes": "Note elaborate",
