@@ -49,30 +49,6 @@
     z-index: 50;
 }
 
-.calendar-container a.fc-event {
-    text-decoration: none;
-}
-
-.calendar-container a.fc-event.archived {
-    opacity: .65;
-}
-
-.calendar-container a.fc-event.archived::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-
-    --c1: transparent;
-    --c2: var(--callendar-coll-event-archived-sripe-color);
-
-    background: repeating-linear-gradient(45deg, var(--c1), var(--c1) 8px,
-                                          var(--c2) 8px, var(--c2) 16px) !important;
-}
-
 .calendar-container .fc-button {
     padding: 0.2em 0.5em;
 }
@@ -112,6 +88,34 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
 /* #endregion */
 
 /* #region Events */
+
+/*
+ * week, month, year views
+ */
+
+ .calendar-container a.fc-event {
+    text-decoration: none;
+}
+
+.calendar-container a.fc-event.archived {
+    opacity: .65;
+}
+
+.calendar-container a.fc-event.archived::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+
+    --c1: transparent;
+    --c2: var(--callendar-coll-event-archived-sripe-color);
+
+    background: repeating-linear-gradient(45deg, var(--c1), var(--c1) 8px,
+                                          var(--c2) 8px, var(--c2) 16px) !important;
+}
 
 .calendar-view a.fc-timegrid-event,
 .calendar-view a.fc-daygrid-event,
@@ -170,7 +174,9 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
     display: none;
 }
 
-/* List view */
+/* 
+ * List view
+ */
 
 .fc-list-table tr.fc-event.archived {
     opacity: .5;
