@@ -733,7 +733,8 @@
     "zoom_out_title": "縮小"
   },
   "zpetne_odkazy": {
-    "relation": "關聯"
+    "relation": "關聯",
+    "backlink_one": "{{count}} 個反連結"
   },
   "mobile_detail_menu": {
     "insert_child_note": "插入子筆記",
