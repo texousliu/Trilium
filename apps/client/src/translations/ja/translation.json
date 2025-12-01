@@ -1515,7 +1515,11 @@
     "ai_disabled": "AI 機能が無効",
     "no_models_found_online": "モデルが見つかりません。API キーと設定を確認してください。",
     "no_models_found_ollama": "Ollama モデルが見つかりません。Ollama が実行中かどうかを確認してください。",
-    "error_fetching": "モデルの取得エラー: {{error}}"
+    "error_fetching": "モデルの取得エラー: {{error}}",
+    "n_notes_queued": "{{ count }} 個のノートがインデックス登録待ちになっています",
+    "n_notes_queued_plural": "{{ count }} 個のノートがインデックス登録待ちになっています",
+    "notes_indexed": "{{ count }} 個のノートがインデックス登録されています",
+    "notes_indexed_plural": "{{ count }} 個のノートがインデックス登録されています"
   },
   "add_label": {
     "add_label": "ラベルを追加",
@@ -1588,7 +1592,8 @@
     "this_launcher_doesnt_define_target_note": "このランチャーはターゲットノートを定義していません。"
   },
   "zpetne_odkazy": {
-    "relation": "リレーション"
+    "relation": "リレーション",
+    "backlink_other": "{{count}} 個のバックリンク"
   },
   "mobile_detail_menu": {
     "delete_this_note": "このノートを削除",
