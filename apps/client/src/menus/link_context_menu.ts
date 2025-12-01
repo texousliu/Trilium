@@ -2,13 +2,15 @@ import { t } from "../services/i18n.js";
 import contextMenu, { type ContextMenuEvent, type MenuItem } from "./context_menu.js";
 import appContext, { type CommandNames } from "../components/app_context.js";
 import type { ViewScope } from "../services/link.js";
+import utils from "../services/utils.js";
+import { getClosestNtxId } from "../widgets/widget_utils.js";
 
 function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewScope = {}, hoistedNoteId: string | null = null) {
     contextMenu.show({
         x: e.pageX,
         y: e.pageY,
         items: getItems(),
-        selectMenuItemHandler: ({ command }) => handleLinkContextMenuItem(command, notePath, viewScope, hoistedNoteId)
+        selectMenuItemHandler: ({ command }) => handleLinkContextMenuItem(command, e, notePath, viewScope, hoistedNoteId)
     });
 }
 
@@ -21,7 +23,7 @@ function getItems(): MenuItem<CommandNames>[] {
     ];
 }
 
-function handleLinkContextMenuItem(command: string | undefined, notePath: string, viewScope = {}, hoistedNoteId: string | null = null) {
+function handleLinkContextMenuItem(command: string | undefined, e: ContextMenuEvent, notePath: string, viewScope = {}, hoistedNoteId: string | null = null) {
     if (!hoistedNoteId) {
         hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId ?? null;
     }
@@ -29,20 +31,23 @@ function handleLinkContextMenuItem(command: string | undefined, notePath: string
     if (command === "openNoteInNewTab") {
         appContext.tabManager.openContextWithNote(notePath, { hoistedNoteId, viewScope });
     } else if (command === "openNoteInNewSplit") {
-        const subContexts = appContext.tabManager.getActiveContext()?.getSubContexts();
-
-        if (!subContexts) {
-            logError("subContexts is null");
-            return;
-        }
-
-        const { ntxId } = subContexts[subContexts.length - 1];
-
+        const ntxId = getNtxId(e);
+        if (!ntxId) return;
         appContext.triggerCommand("openNewNoteSplit", { ntxId, notePath, hoistedNoteId, viewScope });
     } else if (command === "openNoteInNewWindow") {
         appContext.triggerCommand("openInWindow", { notePath, hoistedNoteId, viewScope });
     } else if (command === "openNoteInPopup") {
         appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath })
+    }
+}
+
+function getNtxId(e: ContextMenuEvent) {
+    if (utils.isDesktop()) {
+        const subContexts = appContext.tabManager.getActiveContext()?.getSubContexts();
+        if (!subContexts) return null;
+        return subContexts[subContexts.length - 1].ntxId;
+    } else {
+        return getClosestNtxId(e.target);
     }
 }
 
