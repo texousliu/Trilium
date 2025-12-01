@@ -21,7 +21,8 @@
     padding: 10px;
 }
 
-.calendar-view a {
+.calendar-view a,
+:root .calendar-view a.fc-daygrid-event:hover {
     color: var(--fc-event-text-color);
 }
 
