@@ -105,6 +105,7 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
     border-width: 2px 2px 2px 4px;
     border-color: var(--border-color) var(--border-color) var(--border-color)
                   var(--fc-event-text-color) !important;
+    background: var(--fc-event-bg-color) !important;
 
     padding-left: 8px;
 }
