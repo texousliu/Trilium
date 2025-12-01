@@ -2627,15 +2627,22 @@ iframe.print-iframe {
 }
 
 @media (max-width: 991px) {
-    body.mobile .split-note-container-widget {
-        flex-direction: column !important;
-        
-        .note-split {
-            width: 100%;
+    body.mobile {
+        .split-note-container-widget {
+            flex-direction: column !important;
+            
+            .note-split {
+                width: 100%;
+            }
+
+            .note-split.visible + .note-split.visible {
+                border-top: 1px solid var(--main-border-color);
+            }
         }
 
-        .note-split.visible + .note-split.visible {
-            border-top: 1px solid var(--main-border-color);
+        #root-widget.virtual-keyboard-opened .note-split:not(:focus-within) {
+            max-height: 80px;
+            opacity: 0.4;
         }
     }
 }
