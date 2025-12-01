@@ -862,7 +862,6 @@
     "error_generating_response": "Błąd generowania odpowiedzi AI",
     "notes_indexed_0": "{{ count }} notatka zaindeksowana",
     "notes_indexed_1": "{{ count }} notatek zaindeksowanych",
-    "notes_indexed_2": "",
     "sources": "Źródła",
     "start_indexing": "Rozpocznij indeksowanie",
     "use_advanced_context": "Użyj zaawansowanego kontekstu",

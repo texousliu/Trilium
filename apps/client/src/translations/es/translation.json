@@ -1262,7 +1262,6 @@
     "last_indexed": "Último indexado",
     "n_notes_queued_0": "{{ count }} nota agregada a la cola para indexar",
     "n_notes_queued_1": "{{ count }} notas agregadas a la cola para indexar",
-    "n_notes_queued_2": "",
     "note_chat": "Chat de nota",
     "notes_indexed": "{{ count }} nota indexada",
     "notes_indexed_plural": "{{ count }} notas indexadas",
