@@ -17,7 +17,7 @@ export default function MobileDetailMenu() {
             icon="bx bx-dots-vertical-rounded"
             text=""
             onClick={(e) => {
-                const ntxId = (parentComponent as BasicWidget).getClosestNtxId();
+                const ntxId = (parentComponent as BasicWidget | null)?.getClosestNtxId();
                 if (!ntxId) return;
 
                 const noteContext = appContext.tabManager.getNoteContextById(ntxId);

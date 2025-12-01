@@ -74,13 +74,14 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
 
 
         const subContexts = activeContext.getSubContexts();
-        let noteContext: NoteContext;
+        let noteContext: NoteContext | undefined = undefined;
         if (isMobile() && subContexts.length > 1) {
-            noteContext = subContexts.find(s => s.ntxId !== ntxId)!;
-        } else {
+            noteContext = subContexts.find(s => s.ntxId !== ntxId);
+        }
+        if (!noteContext) {
             noteContext = await appContext.tabManager.openEmptyTab(null, hoistedNoteId, mainNtxId);
             // remove the original position of newly created note context
-            const ntxIds = appContext.tabManager.children.map((c) => c.ntxId).filter((id) => id !== noteContext.ntxId) as string[];
+            const ntxIds = appContext.tabManager.children.map((c) => c.ntxId).filter((id) => id !== noteContext?.ntxId) as string[];
 
             // insert the note context after the originating note context
             if (!noteContext.ntxId) {

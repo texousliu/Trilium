@@ -49,8 +49,10 @@ function getNtxId(e: ContextMenuEvent) {
         const subContexts = appContext.tabManager.getActiveContext()?.getSubContexts();
         if (!subContexts) return null;
         return subContexts[subContexts.length - 1].ntxId;
-    } else {
+    } else if (e.target instanceof HTMLElement) {
         return getClosestNtxId(e.target);
+    } else {
+        return null;
     }
 }
 
