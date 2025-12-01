@@ -1304,7 +1304,10 @@
     "zoom_out_title": "Rimpicciolisci"
   },
   "zpetne_odkazy": {
-    "relation": "relazione"
+    "relation": "relazione",
+    "backlink_one": "{{count}} Backlink",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Backlink"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Inserisci nota secondaria",
