@@ -44,16 +44,6 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
             ...link_context_menu.getItems(),
             { kind: "separator" },
             {
-                title: t("board_view.move-to"),
-                uiIcon: "bx bx-transfer",
-                items: api.columns.map(columnToMoveTo => ({
-                    title: columnToMoveTo,
-                    enabled: columnToMoveTo !== column,
-                    handler: () => api.changeColumn(note.noteId, columnToMoveTo)
-                })),
-            },
-            { kind: "separator" },
-            {
                 title: t("board_view.insert-above"),
                 uiIcon: "bx bx-list-plus",
                 handler: () => api.insertRowAtPosition(column, branchId, "before")
@@ -62,6 +52,16 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
                 title: t("board_view.insert-below"),
                 uiIcon: "bx bx-empty",
                 handler: () => api.insertRowAtPosition(column, branchId, "after")
+            },
+            { kind: "separator" },
+            {
+                title: t("board_view.move-to"),
+                uiIcon: "bx bx-transfer",
+                items: api.columns.map(columnToMoveTo => ({
+                    title: columnToMoveTo,
+                    enabled: columnToMoveTo !== column,
+                    handler: () => api.changeColumn(note.noteId, columnToMoveTo)
+                })),
             },
             { kind: "separator" },
             getArchiveMenuItem(note),
