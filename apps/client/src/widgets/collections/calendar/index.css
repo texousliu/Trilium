@@ -5,6 +5,7 @@
     --calendar-coll-event-background-color: var(--accented-background-color);
     --calendar-coll-event-text-color: var(--primary-button-text-color);
     --calendar-cell-event-hover-filter: none;
+    --callendar-coll-event-archived-sripe-color: #0000000d;
     --calendar-coll-today-background-color: var(--more-accented-background-color);
 }
 
@@ -53,7 +54,23 @@
 }
 
 .calendar-container a.fc-event.archived {
-    opacity: 0.5;
+    opacity: .65;
+}
+
+.calendar-container a.fc-event.archived::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+
+    --c1: transparent;
+    --c2: var(--callendar-coll-event-archived-sripe-color);
+
+    background: repeating-linear-gradient(45deg, var(--c1), var(--c1) 8px,
+                                          var(--c2) 8px, var(--c2) 16px) !important;
 }
 
 .calendar-container .fc-button {
@@ -133,13 +150,14 @@ body.desktop:not(.zen) .calendar-view .calendar-header {
     border-color: var(--fc-event-text-color);
     text-decoration: none;
     color: currentColor;
+    opacity: 1;
 }
 
 .calendar-view .fc-timegrid-event.with-hue,
 .calendar-view .fc-daygrid-event.with-hue {
     --fc-event-text-color: var(--custom-color);
 
-    background: hsl(var(--custom-color-hue),
+    --fc-event-bg-color: hsl(var(--custom-color-hue),
                     var(--calendar-coll-event-background-saturation),
                     var(--calendar-coll-event-background-lightness)) !important;
 }
