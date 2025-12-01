@@ -2105,5 +2105,8 @@
     "clear-color": "ノートの色をクリア",
     "set-color": "ノートの色を設定",
     "set-custom-color": "ノートの色をカスタム設定"
+  },
+  "popup-editor": {
+    "maximize": "フルエディターに切り替え"
   }
 }
