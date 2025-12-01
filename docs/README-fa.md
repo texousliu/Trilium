@@ -33,50 +33,39 @@ quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## ⏬ Download
-- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  stable version, recommended for most users.
+## ⏬ دانلود
+- [آخرین انتشار]{‍‏1} – نسخه پایدار، برای بیشتر کاربران ‎ پیشنهاد می‌شود.
 - [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
   unstable development version, updated daily with the latest features and
   fixes.
 
-## 📚 Documentation
+## 📚 کتابچه راهنما
 
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
-  [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+مستندات ما در چندین قالب مختلف در دسترس است:
+- مستندات آنلاین: می‌توانید نسخهٔ کامل مستندات را در
+  ‎[docs.triliumnotes.org](https://docs.triliumnotes.org/)‎ مرور کنید
+- ** In-App Help **: Press `F1 ` در Trilium برای دسترسی به همان اسناد به طور
+  مستقیم در برنامه
+- ** GitHub **: از طریق [راهنمای کاربر] در این مخزن حرکت کنید
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+### لینک‌های سریع
+- راهنمای شروع کار
+- دستورالعمل‌های نصب
+- راه‌اندازی داکر
+- ارتقای TriliumNext
+- مفاهیم و ویژگی‌های پایه
+- الگوهای پایگاه دانشی شخصی
 
-## 🎁 Features
+## 🎁 ویژگی‌ها
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
-  [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
-  [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
-  highlighting
+* یادداشت‌ها می‌توانند در یک درخت با عمق دلخواه سازمان‌دهی شوند. یک یادداشت
+  می‌تواند در چندین نقطهٔ مختلف از درخت قرار گیرد.
+* ویرایشگر یادداشت غنی WYSIWYG از جمله جداول، تصاویر و [math] [1] با علامت گذاری
+  [autoformat] [2]
+* پشتیبانی از ویرایش [یادداشت با کد منبع][۱]، از جمله نحو برجسته
 * Fast and easy [navigation between
   notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
   search and [note

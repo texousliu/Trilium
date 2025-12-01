@@ -162,7 +162,8 @@
     "inPageSearch": "頁面內搜尋",
     "title": "列表",
     "newTabNoteLink": "在新分頁開啟筆記連結",
-    "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結"
+    "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結",
+    "editShortcuts": "編輯鍵盤快捷鍵"
   },
   "import": {
     "importIntoNote": "匯入至筆記",
@@ -2104,5 +2105,8 @@
     "clear-color": "清除筆記顏色",
     "set-color": "設定筆記顏色",
     "set-custom-color": "設定自訂筆記顏色"
+  },
+  "popup-editor": {
+    "maximize": "切換至完整編輯器"
   }
 }
