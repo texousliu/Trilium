@@ -18,6 +18,7 @@ import froca from "../services/froca";
 import NoteLink from "./react/NoteLink";
 import RawHtml from "./react/RawHtml";
 import { ViewTypeOptions } from "./collections/interface";
+import attributes from "../services/attributes";
 
 export interface FloatingButtonContext {
     parentComponent: Component;
@@ -310,13 +311,24 @@ function Backlinks({ note, isDefaultViewMode }: FloatingButtonContext) {
     let [ popupOpen, setPopupOpen ] = useState(false);
     const backlinksContainerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    function refresh() {
         if (!isDefaultViewMode) return;
 
         server.get<BacklinkCountResponse>(`note-map/${note.noteId}/backlink-count`).then(resp => {
             setBacklinkCount(resp.count);
         });
-    }, [ note ]);
+    }
+
+    useEffect(() => refresh(), [ note ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        loadResults.getAttributeRows().some(attr =>
+            attr.type === "relation" &&
+            attr.name === "internalLink" &&
+            attributes.isAffecting(attr, note))
+        {
+            refresh();
+        }
+    });
 
     // Determine the max height of the container.
     const { windowHeight } = useWindowSize();
