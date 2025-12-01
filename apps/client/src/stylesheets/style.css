@@ -257,6 +257,11 @@ button.close:hover {
     color: var(--hover-item-text-color);
 }
 
+button.custom-title-bar-button {
+    background: transparent;
+    border: unset;
+}
+
 .modal-content {
     background-color: var(--modal-background-color) !important;
 }
