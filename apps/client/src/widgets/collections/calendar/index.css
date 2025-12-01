@@ -5,6 +5,7 @@
     --calendar-coll-event-background-color: var(--accented-background-color);
     --calendar-coll-event-text-color: var(--primary-button-text-color);
     --calendar-cell-event-hover-filter: none;
+    --calendar-coll-today-background-color: var(--more-accented-background-color);
 }
 
 .calendar-view {
@@ -12,6 +13,7 @@
     --fc-event-bg-color: var(--calendar-coll-event-background-color);
     --fc-event-text-color: var(--calendar-coll-event-text-color);
     --fc-event-selected-overlay-color: transparent;
+    --fc-today-bg-color: var(--calendar-coll-today-background-color);
 
     overflow: hidden;
     position: relative;

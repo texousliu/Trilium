@@ -274,6 +274,7 @@
     --calendar-coll-event-background-color: #eaeaea;
     --calendar-coll-event-text-color: black;
     --calendar-cell-event-hover-filter: brightness(.95) saturate(1.25);
+    --calendar-coll-today-background-color: #00000006;
 }
 
 #left-pane .fancytree-node.tinted {
