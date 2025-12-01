@@ -733,7 +733,10 @@
     "zoom_out_title": "Zoom arrière"
   },
   "zpetne_odkazy": {
-    "relation": "relation"
+    "relation": "relation",
+    "backlink_one": "{{count}} Lien inverse",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Liens inverses"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Insérer une note enfant",
