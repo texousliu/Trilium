@@ -2,22 +2,25 @@ import { t } from "../services/i18n.js";
 import contextMenu, { type ContextMenuEvent, type MenuItem } from "./context_menu.js";
 import appContext, { type CommandNames } from "../components/app_context.js";
 import type { ViewScope } from "../services/link.js";
-import utils from "../services/utils.js";
+import utils, { isMobile } from "../services/utils.js";
 import { getClosestNtxId } from "../widgets/widget_utils.js";
 
 function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewScope = {}, hoistedNoteId: string | null = null) {
     contextMenu.show({
         x: e.pageX,
         y: e.pageY,
-        items: getItems(),
+        items: getItems(e),
         selectMenuItemHandler: ({ command }) => handleLinkContextMenuItem(command, e, notePath, viewScope, hoistedNoteId)
     });
 }
 
-function getItems(): MenuItem<CommandNames>[] {
+function getItems(e: ContextMenuEvent): MenuItem<CommandNames>[] {
+    const ntxId = getNtxId(e);
+    const isMobileSplitOpen = isMobile() && appContext.tabManager.getNoteContextById(ntxId).getMainContext().getSubContexts().length > 1;
+
     return [
         { title: t("link_context_menu.open_note_in_new_tab"), command: "openNoteInNewTab", uiIcon: "bx bx-link-external" },
-        { title: t("link_context_menu.open_note_in_new_split"), command: "openNoteInNewSplit", uiIcon: "bx bx-dock-right" },
+        { title: !isMobileSplitOpen ? t("link_context_menu.open_note_in_new_split") : t("link_context_menu.open_note_in_other_split"), command: "openNoteInNewSplit", uiIcon: "bx bx-dock-right" },
         { title: t("link_context_menu.open_note_in_new_window"), command: "openNoteInNewWindow", uiIcon: "bx bx-window-open" },
         { title: t("link_context_menu.open_note_in_popup"), command: "openNoteInPopup", uiIcon: "bx bx-edit" }
     ];
