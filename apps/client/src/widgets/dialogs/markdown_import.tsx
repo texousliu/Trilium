@@ -34,6 +34,13 @@ export default function MarkdownImportDialog() {
         }
     });
 
+    function submit() {
+        setShown(false);
+        if (editorApiRef.current) {
+            convertMarkdownToHtml(text, editorApiRef.current);
+        }
+    }
+
     return (
         <Modal
             className="markdown-import-dialog" title={t("markdown_import.dialog_title")} size="lg"
@@ -42,12 +49,7 @@ export default function MarkdownImportDialog() {
                     className="markdown-import-button"
                     text={t("markdown_import.import_button")}
                     keyboardShortcut="Ctrl+Enter"
-                    onClick={async () => {
-                        setShown(false);
-                        if (editorApiRef.current) {
-                            await convertMarkdownToHtml(text, editorApiRef.current);
-                        }
-                    }}
+                    onClick={submit}
                 />
             }
             onShown={() => markdownImportTextArea.current?.focus()}
@@ -64,10 +66,7 @@ export default function MarkdownImportDialog() {
                 onKeyDown={(e) => {
                     if (e.key === "Enter" && e.ctrlKey) {
                         e.preventDefault();
-                        setShown(false);
-                        if (editorApiRef.current) {
-                            convertMarkdownToHtml(text, editorApiRef.current);
-                        }
+                        submit();
                     }
                 }}></textarea>
         </Modal>
