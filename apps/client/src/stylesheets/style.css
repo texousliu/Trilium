@@ -1016,10 +1016,8 @@ div[data-notify="container"] {
 }
 
 svg.ck-icon {
-    &.ck-icon_inherit-color {
-        * {
-            fill: currentColor;
-        }
+    &.ck-icon_inherit-color path[fill="#333"] {
+        fill: currentColor;
     }
 
     &.note-icon {
