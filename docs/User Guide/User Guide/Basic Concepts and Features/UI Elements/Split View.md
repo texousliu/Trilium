@@ -29,6 +29,8 @@ Since v0.100.0, it's possible to have a split view on the mobile view as well, w
 
 *   On smartphones, the split views are laid out vertically (one on the top and one on the bottom), instead of horizontally as on the desktop.
 *   There can be only one split open per tab.
+*   It's not possible to resize the two split panes.
+*   When the keyboard is opened, the active note will be “maximized”, thus allowing for more space even when a split is open. When the keyboard is closed, the splits become equal in size again.
 
 Interaction:
 
