@@ -1158,7 +1158,8 @@
     "open_note_in_popup": "クイック編集",
     "open_note_in_new_tab": "新しいタブでノートを開く",
     "open_note_in_new_split": "新しく分割してノートを開く",
-    "open_note_in_new_window": "新しいウィンドウでノートを開く"
+    "open_note_in_new_window": "新しいウィンドウでノートを開く",
+    "open_note_in_other_split": "他の分割画面でノートを開く"
   },
   "note_tooltip": {
     "quick-edit": "クイック編集",
