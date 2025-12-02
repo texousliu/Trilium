@@ -1264,8 +1264,6 @@
     "indexing_in_progress": "Indexado en progreso...",
     "last_indexed": "Último indexado",
     "note_chat": "Chat de nota",
-    "notes_indexed": "{{ count }} nota indexada",
-    "notes_indexed_plural": "{{ count }} notas indexadas",
     "sources": "Fuentes",
     "start_indexing": "Comenzar indexado",
     "use_advanced_context": "Usar contexto avanzado",

@@ -96,11 +96,5 @@
     "are_you_sure_remove_note": "\"{{title}}\" notunu ilişki haritasından kaldırmak istediğinize emin misiniz?. ",
     "also_delete_note": "Notu da sil",
     "if_you_dont_check": "Bunu işaretlemezseniz, not yalnızca ilişki haritasından kaldırılacaktır."
-  },
-  "ai_llm": {
-    "n_notes_queued": "{{ count }} not dizinleme için sıraya alındı",
-    "n_notes_queued_plural": "{{ count }} adet not dizinleme için sıraya alındı",
-    "notes_indexed": "{{ count }} not dizinlendi",
-    "notes_indexed_plural": "{{ count }} adet not dizinlendi"
   }
 }
