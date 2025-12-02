@@ -19,6 +19,7 @@ import NoteLink from "./react/NoteLink";
 import RawHtml from "./react/RawHtml";
 import { ViewTypeOptions } from "./collections/interface";
 import attributes from "../services/attributes";
+import LoadResults from "../services/load_results";
 
 export interface FloatingButtonContext {
     parentComponent: Component;
@@ -321,13 +322,7 @@ function Backlinks({ note, isDefaultViewMode }: FloatingButtonContext) {
 
     useEffect(() => refresh(), [ note ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        loadResults.getAttributeRows().some(attr =>
-            attr.type === "relation" &&
-            attr.name === "internalLink" &&
-            attributes.isAffecting(attr, note))
-        {
-            refresh();
-        }
+        if (needsRefresh(note, loadResults)) refresh();
     });
 
     // Determine the max height of the container.
@@ -353,18 +348,18 @@ function Backlinks({ note, isDefaultViewMode }: FloatingButtonContext) {
 
             {popupOpen && (
                 <div ref={backlinksContainerRef} className="backlinks-items dropdown-menu" style={{ display: "block" }}>
-                    <BacklinksList noteId={note.noteId} />
+                    <BacklinksList note={note} />
                 </div>
             )}
         </div>
     );
 }
 
-function BacklinksList({ noteId }: { noteId: string }) {
+function BacklinksList({ note }: { note: FNote }) {
     const [ backlinks, setBacklinks ] = useState<BacklinksResponse>([]);
 
-    useEffect(() => {
-        server.get<BacklinksResponse>(`note-map/${noteId}/backlinks`).then(async (backlinks) => {
+    function refresh() {
+        server.get<BacklinksResponse>(`note-map/${note.noteId}/backlinks`).then(async (backlinks) => {
             // prefetch all
             const noteIds = backlinks
                     .filter(bl => "noteId" in bl)
@@ -372,7 +367,12 @@ function BacklinksList({ noteId }: { noteId: string }) {
             await froca.getNotes(noteIds);
             setBacklinks(backlinks);
         });
-    }, [ noteId ]);
+    }
+
+    useEffect(() => refresh(), [ note ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (needsRefresh(note, loadResults)) refresh();
+    });
 
     return backlinks.map(backlink => (
         <div>
@@ -391,4 +391,10 @@ function BacklinksList({ noteId }: { noteId: string }) {
             )}
         </div>
     ));
+}
+
+function needsRefresh(note: FNote, loadResults: LoadResults) {
+    return loadResults.getAttributeRows().some(attr =>
+        attr.type === "relation" &&
+        attributes.isAffecting(attr, note));
 }
