@@ -201,8 +201,12 @@
   },
   "zpetne_odkazy": {
     "relation": "العلاقة",
-    "backlink": "{{count}} رابط راجع",
-    "backlinks": "{{count}} روابط راجعة"
+    "backlink_zero": "",
+    "backlink_one": "{{count}} رابط راجع",
+    "backlink_two": "",
+    "backlink_few": "",
+    "backlink_many": "{{count}} روابط راجعة",
+    "backlink_other": ""
   },
   "note_icon": {
     "category": "الفئة:",

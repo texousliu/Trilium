@@ -54,12 +54,12 @@ Onze documentatie is beschikbaar in meerdere formaten:
 - **GitHub**: Navigeer door de [User Guide](./docs/User%20Guide/User%20Guide/)
   in deze repository
 
-### Quick Links
+### Snelkoppelingen
 - [Getting Started Gids](https://docs.triliumnotes.org/)
 - [Vertaal
   Instructies](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Installatie](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [TriliumNext
   Upgraden](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Basis Concepten en
@@ -67,7 +67,7 @@ Onze documentatie is beschikbaar in meerdere formaten:
 - [Patronen van Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Kenmerken
 
 * Notes kunnen in een diepe boomstructuur geplaatst worden. Een enkele note kan
   op meerdere plekken in de boom geplaatst worden. (zie
@@ -78,22 +78,22 @@ Onze documentatie is beschikbaar in meerdere formaten:
 * Ondersteuning voor bewerken van [notes met source
   code](https://triliumnext.github.io/Docs/Wiki/code-notes), inclusief syntax
   highlighting
-* Fast and easy [navigation between
-  notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
-  search and [note
-  hoisting](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* Seamless [note
-  versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
-  used for note organization, querying and advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
-* Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  for more secure login
-* [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
-  with self-hosted sync server
+* Snelle en gemakkelijke [navigatie tussen
+  notities](https://triliumnext.github.io/Docs/Wiki/note-navigation),
+  uitgebreide text zoekopdrachten en [notities
+  promoveren](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+* Naadloze [notitie
+  versiegeschiedenis](https://triliumnext.github.io/Docs/Wiki/note-revisions)
+* Notitie[-attributen](https://triliumnext.github.io/Docs/Wiki/attributes)
+  kunnen worden ingezet voor notitie-organisatie, queries en geavanceerd
+  [scripten](https://triliumnext.github.io/Docs/Wiki/scripts)
+* Gebruikersinterfacevariabele in het Engels, Duits, Spaans, Frans, Roemeens en
+  Chinees (versimpeld en traditioneel)
+* Directe [OpenID en TOTP
+  integratie](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  voor beter beveiligde aanmelding
+* [Synchronisatie](https://triliumnext.github.io/Docs/Wiki/synchronization) met
+  zelfgehoste synchronisatieserver
   * there's a [3rd party service for hosting synchronisation
     server](https://trilium.cc/paid-hosting)
 * [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes

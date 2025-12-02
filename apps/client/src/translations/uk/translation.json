@@ -839,9 +839,10 @@
     "zoom_out_title": "Зменшити масштаб"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Зворотне посилання",
-    "backlinks": "{{count}} Зворотні посилання",
-    "relation": "зв'язок"
+    "relation": "зв'язок",
+    "backlink_one": "{{count}} Зворотне посилання",
+    "backlink_few": "{{count}} Зворотні посилання",
+    "backlink_many": "{{count}} Зворотні посилання"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Вставити дочірню нотатку",
@@ -1350,13 +1351,7 @@
     "indexing_stopped": "Індексацію зупинено",
     "indexing_in_progress": "Триває індексація...",
     "last_indexed": "Остання індексація",
-    "n_notes_queued_0": "{{ count }} нотатка в черзі на індексацію",
-    "n_notes_queued_1": "{{ count }} нотатки в черзі на індексацію",
-    "n_notes_queued_2": "{{ count }} нотаток в черзі на індексацію",
     "note_chat": "Нотатка Чат",
-    "notes_indexed_0": "{{ count }} нотатка індексовано",
-    "notes_indexed_1": "{{ count }} нотатки індексовано",
-    "notes_indexed_2": "{{ count }} нотаток індексовано",
     "sources": "Джерела",
     "start_indexing": "Почати індексацію",
     "use_advanced_context": "Використовувати розширений контекст",

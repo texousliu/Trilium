@@ -324,7 +324,8 @@
     "copy-link": "Copia collegamento",
     "paste-as-plain-text": "Incolla come testo semplice",
     "add-term-to-dictionary": "Aggiungi \"{{term}}\" al dizionario",
-    "search_online": "Cerca \"{{term}}\" con {{searchEngine}}"
+    "search_online": "Cerca \"{{term}}\" con {{searchEngine}}",
+    "search_in_trilium": "Cerca \"{{term}}\" in Trilium"
   },
   "editing": {
     "editor_type": {
@@ -614,7 +615,8 @@
     "showSQLConsole": "mostra console SQL",
     "other": "Altro",
     "quickSearch": "concentrati sull'input della ricerca rapida",
-    "inPageSearch": "ricerca all'interno della pagina"
+    "inPageSearch": "ricerca all'interno della pagina",
+    "editShortcuts": "Modifica scorciatoie da tastiera"
   },
   "i18n": {
     "saturday": "Sabato",
@@ -638,12 +640,6 @@
     "friday": "Venerdì"
   },
   "ai_llm": {
-    "n_notes_queued_0": "{{ count }} nota in coda per l'indicizzazione",
-    "n_notes_queued_1": "{{ count }} note in coda per l'indicizzazione",
-    "n_notes_queued_2": "{{ count }} note in coda per l'indicizzazione",
-    "notes_indexed_0": "{{ count }} nota indicizzata",
-    "notes_indexed_1": "{{ count }} note indicizzate",
-    "notes_indexed_2": "{{ count }} note indicizzate",
     "not_started": "Non iniziato",
     "title": "Impostazioni AI",
     "processed_notes": "Note elaborate",
@@ -1308,9 +1304,10 @@
     "zoom_out_title": "Rimpicciolisci"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Backlink",
-    "backlinks": "{{count}} Backlinks",
-    "relation": "relazione"
+    "relation": "relazione",
+    "backlink_one": "{{count}} Backlink",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Backlink"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Inserisci nota secondaria",
@@ -1346,7 +1343,11 @@
     "geo-map": "Mappa geografica",
     "board": "Asse",
     "presentation": "Presentazione",
-    "include_archived_notes": "Mostra note archiviate"
+    "include_archived_notes": "Mostra note archiviate",
+    "expand_tooltip": "Espande i figli diretti di questa raccolta (a un livello di profondità). Per ulteriori opzioni, premere la freccia a destra.",
+    "expand_first_level": "Espandi figli diretti",
+    "expand_nth_level": "Espandi {{depth}} livelli",
+    "expand_all_levels": "Espandi tutti i livelli"
   },
   "edited_notes": {
     "no_edited_notes_found": "Nessuna nota modificata per questo giorno...",
@@ -1852,7 +1853,8 @@
     "refresh-saved-search-results": "Aggiorna i risultati della ricerca salvati",
     "create-child-note": "Crea nota figlio",
     "unhoist": "Sganciare",
-    "toggle-sidebar": "Attiva/disattiva la barra laterale"
+    "toggle-sidebar": "Attiva/disattiva la barra laterale",
+    "dropping-not-allowed": "Non è consentito lasciare appunti in questa posizione."
   },
   "title_bar_buttons": {
     "window-on-top": "Mantieni la finestra in primo piano"
@@ -1936,7 +1938,8 @@
     "duplicate-launcher": "Duplica il launcher <kbd data-command=\"duplicateSubtree\">"
   },
   "editable-text": {
-    "auto-detect-language": "Rilevato automaticamente"
+    "auto-detect-language": "Rilevato automaticamente",
+    "keeps-crashing": "Il componente di modifica continua a bloccarsi. Prova a riavviare Trilium. Se il problema persiste, valuta la possibilità di creare una segnalazione di bug."
   },
   "highlighting": {
     "title": "Blocchi di codice",
@@ -2101,5 +2104,8 @@
     "set-color": "Imposta colore nota",
     "set-custom-color": "Imposta colore personalizzato per le note",
     "clear-color": "Pulisci colore della nota"
+  },
+  "popup-editor": {
+    "maximize": "Passa all'editor completo"
   }
 }
