@@ -75,12 +75,6 @@
     "note_cloned": "A nota \"{{clonedTitle}}\" foi clonada para \"{{targetTitle}}\""
   },
   "ai_llm": {
-    "n_notes_queued_0": "{{ count }} nota enfileirada para indexação",
-    "n_notes_queued_1": "{{ count }} notas enfileiradas para indexação",
-    "n_notes_queued_2": "{{ count }} notas enfileiradas para indexação",
-    "notes_indexed_0": "{{ count }} nota indexada",
-    "notes_indexed_1": "{{ count }} notas indexadas",
-    "notes_indexed_2": "{{ count }} notas indexadas",
     "temperature": "Temperatura",
     "retry_queued": "Nota enfileirada para nova tentativa",
     "queued_notes": "Notas Enfileiradas",
@@ -976,9 +970,10 @@
     "reset_pan_zoom_title": "Redefinir pan & zoom para coordenadas e ampliação iniciais"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Links Reversos",
-    "backlinks": "{{count}} Links Reversos",
-    "relation": "relação"
+    "relation": "relação",
+    "backlink_one": "",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Links Reversos"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Inserir nota filha",

@@ -312,7 +312,8 @@
     "moveNoteUpDown": "ノートリストでノートを上/下に移動",
     "notSet": "未設定",
     "goUpDown": "ノートのリストで上下する",
-    "editBranchPrefix": "アクティブノートのクローンの <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/tree-concepts.html#prefix\">プレフィックス</a> を編集する"
+    "editBranchPrefix": "アクティブノートのクローンの <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/tree-concepts.html#prefix\">プレフィックス</a> を編集する",
+    "editShortcuts": "キーボードショートカットを編集"
   },
   "import": {
     "importIntoNote": "ノートにインポート",
@@ -1506,9 +1507,7 @@
     "indexing_stopped": "インデックス登録を停止しました",
     "indexing_in_progress": "インデックス登録中です...",
     "last_indexed": "最終インデックス作成日時",
-    "n_notes_queued_0": "{{ count }} 件のノートがインデックス作成待ちです",
     "note_chat": "ノートチャット",
-    "notes_indexed_0": "{{ count }} 件のノートをインデックスしました",
     "sources": "ソース",
     "start_indexing": "インデックス作成を開始",
     "use_advanced_context": "高度なコンテキストを使用",
@@ -1589,9 +1588,8 @@
     "this_launcher_doesnt_define_target_note": "このランチャーはターゲットノートを定義していません。"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} バックリンク",
-    "backlinks": "{{count}} バックリンク",
-    "relation": "リレーション"
+    "relation": "リレーション",
+    "backlink_other": "{{count}} 個のバックリンク"
   },
   "mobile_detail_menu": {
     "delete_this_note": "このノートを削除",
@@ -2104,5 +2102,8 @@
     "clear-color": "ノートの色をクリア",
     "set-color": "ノートの色を設定",
     "set-custom-color": "ノートの色をカスタム設定"
+  },
+  "popup-editor": {
+    "maximize": "フルエディターに切り替え"
   }
 }

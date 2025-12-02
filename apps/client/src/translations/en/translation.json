@@ -736,8 +736,8 @@
     "zoom_out_title": "Zoom Out"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Backlink",
-    "backlinks": "{{count}} Backlinks",
+    "backlink_one": "{{count}} Backlink",
+    "backlink_other": "{{count}} Backlinks",
     "relation": "relation"
   },
   "mobile_detail_menu": {
@@ -1271,11 +1271,7 @@
     "indexing_stopped": "Indexing stopped",
     "indexing_in_progress": "Indexing in progress...",
     "last_indexed": "Last Indexed",
-    "n_notes_queued": "{{ count }} note queued for indexing",
-    "n_notes_queued_plural": "{{ count }} notes queued for indexing",
     "note_chat": "Note Chat",
-    "notes_indexed": "{{ count }} note indexed",
-    "notes_indexed_plural": "{{ count }} notes indexed",
     "sources": "Sources",
     "start_indexing": "Start Indexing",
     "use_advanced_context": "Use Advanced Context",
@@ -1883,6 +1879,7 @@
   "link_context_menu": {
     "open_note_in_new_tab": "Open note in a new tab",
     "open_note_in_new_split": "Open note in a new split",
+    "open_note_in_other_split": "Open note in the other split",
     "open_note_in_new_window": "Open note in a new window",
     "open_note_in_popup": "Quick edit"
   },
@@ -2107,5 +2104,8 @@
     "clear-color": "Clear note color",
     "set-color": "Set note color",
     "set-custom-color": "Set custom note color"
+  },
+  "popup-editor": {
+    "maximize": "Switch to full editor"
   }
 }

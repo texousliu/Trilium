@@ -732,9 +732,9 @@
     "zoom_out_title": "Herauszoomen"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Rückverlinkung",
-    "backlinks": "{{count}} Rückverlinkungen",
-    "relation": "Beziehung"
+    "relation": "Beziehung",
+    "backlink_one": "{{count}} Rückverlinkung",
+    "backlink_other": "{{count}} Rückverlinkungen"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Untergeordnete Notiz einfügen",
@@ -1729,10 +1729,6 @@
     "help_title": "Zeige mehr Informationen zu diesem Fenster"
   },
   "ai_llm": {
-    "n_notes_queued": "{{ count }} Notiz zur Indizierung vorgemerkt",
-    "n_notes_queued_plural": "{{ count }} Notizen zur Indizierung vorgemerkt",
-    "notes_indexed": "{{ count }} Notiz indiziert",
-    "notes_indexed_plural": "{{ count }} Notizen indiziert",
     "not_started": "Nicht gestartet",
     "title": "KI Einstellungen",
     "processed_notes": "Verarbeitete Notizen",

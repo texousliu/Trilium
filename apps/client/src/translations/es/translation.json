@@ -735,9 +735,10 @@
     "zoom_out_title": "Alejar"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Vínculo de retroceso",
-    "backlinks": "{{count}} vínculos de retroceso",
-    "relation": "relación"
+    "relation": "relación",
+    "backlink_one": "{{count}} Vínculo de retroceso",
+    "backlink_many": "",
+    "backlink_other": "{{count}} vínculos de retroceso"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Insertar subnota",
@@ -1262,12 +1263,7 @@
     "indexing_stopped": "Indexado detenido",
     "indexing_in_progress": "Indexado en progreso...",
     "last_indexed": "Último indexado",
-    "n_notes_queued_0": "{{ count }} nota agregada a la cola para indexar",
-    "n_notes_queued_1": "{{ count }} notas agregadas a la cola para indexar",
-    "n_notes_queued_2": "",
     "note_chat": "Chat de nota",
-    "notes_indexed": "{{ count }} nota indexada",
-    "notes_indexed_plural": "{{ count }} notas indexadas",
     "sources": "Fuentes",
     "start_indexing": "Comenzar indexado",
     "use_advanced_context": "Usar contexto avanzado",

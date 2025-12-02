@@ -162,7 +162,8 @@
     "inPageSearch": "頁面內搜尋",
     "title": "列表",
     "newTabNoteLink": "在新分頁開啟筆記連結",
-    "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結"
+    "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結",
+    "editShortcuts": "編輯鍵盤快捷鍵"
   },
   "import": {
     "importIntoNote": "匯入至筆記",
@@ -732,9 +733,8 @@
     "zoom_out_title": "縮小"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} 個反連結",
-    "backlinks": "{{count}} 個反連結",
-    "relation": "關聯"
+    "relation": "關聯",
+    "backlink_one": "{{count}} 個反連結"
   },
   "mobile_detail_menu": {
     "insert_child_note": "插入子筆記",
@@ -1797,9 +1797,7 @@
     "indexing_stopped": "已停止索引",
     "indexing_in_progress": "正在進行索引…",
     "last_indexed": "最後索引時間",
-    "n_notes_queued_0": "{{ count }} 條筆記已加入索引隊列",
     "note_chat": "筆記聊天",
-    "notes_indexed_0": "已索引 {{ count }} 條筆記",
     "sources": "來源",
     "start_indexing": "開始索引",
     "use_advanced_context": "使用進階上下文",
@@ -2104,5 +2102,8 @@
     "clear-color": "清除筆記顏色",
     "set-color": "設定筆記顏色",
     "set-custom-color": "設定自訂筆記顏色"
+  },
+  "popup-editor": {
+    "maximize": "切換至完整編輯器"
   }
 }

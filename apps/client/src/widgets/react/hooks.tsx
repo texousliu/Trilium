@@ -484,8 +484,7 @@ export function useNoteBlob(note: FNote | null | undefined, componentId?: string
             return;
         }
 
-        if (loadResults.hasRevisionForNote(note.noteId) ||
-            loadResults.isNoteContentReloaded(note.noteId, componentId)) {
+        if (loadResults.isNoteContentReloaded(note.noteId, componentId)) {
             refresh();
         }
     });

@@ -27,6 +27,9 @@
     --bs-body-bg: var(--main-background-color) !important;    
     --ck-mention-list-max-height: 500px;    
     --tn-modal-max-height: 90vh;
+
+    --tree-item-light-theme-max-color-lightness: 50;
+    --tree-item-dark-theme-min-color-lightness: 75;
 }
 
 body#trilium-app.motion-disabled *,
@@ -252,6 +255,11 @@ button.close {
 
 button.close:hover {
     color: var(--hover-item-text-color);
+}
+
+button.custom-title-bar-button {
+    background: transparent;
+    border: unset;
 }
 
 .modal-content {
@@ -1008,10 +1016,8 @@ div[data-notify="container"] {
 }
 
 svg.ck-icon {
-    &.ck-icon_inherit-color {
-        path {
-            fill: currentColor;
-        }
+    &.ck-icon_inherit-color path[fill="#333"] {
+        fill: currentColor;
     }
 
     &.note-icon {
@@ -1685,46 +1691,6 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
     body.mobile .modal-dialog.modal-dialog-scrollable {
         height: unset;
-    }
-
-    body.mobile .revisions-dialog .modal-dialog {
-        height: 95vh;
-    }
-
-    body.mobile .revisions-dialog .modal-body {
-        height: 100% !important;
-        flex-direction: column;
-        padding: 0;
-    }
-
-    body.mobile .revisions-dialog .revision-list {
-        height: unset;
-        max-height: 20vh;
-        border-bottom: 1px solid var(--main-border-color) !important;
-        padding: 0 1em;
-    }
-
-    body.mobile .revisions-dialog .modal-body > .revision-content-wrapper {
-        flex-grow: 1;
-        height: 100%;
-        overflow: auto;
-        margin: 0;
-    }
-
-    body.mobile .revisions-dialog .modal-body > .revision-content-wrapper > div:first-of-type {
-        flex-direction: column;
-    }
-
-    body.mobile .revisions-dialog .revision-title {
-        font-size: 1rem;
-    }
-
-    body.mobile .revisions-dialog .revision-title-buttons {
-        text-align: center;
-    }
-
-    body.mobile .revisions-dialog .revision-content {
-        padding: 0.5em;
     }
 }
 
@@ -2619,4 +2585,33 @@ iframe.print-iframe {
     position: relative;
     flex-grow: 1;
     width: 100%;
+}
+
+/* Calendar collection */
+
+.calendar-view a.fc-timegrid-event,
+.calendar-view a.fc-daygrid-event {
+    /* Workaround: set font weight only if the theme-next is not active */
+    font-weight: var(--root-background, 800);
+}
+
+@media (max-width: 991px) {
+    body.mobile {
+        .split-note-container-widget {
+            flex-direction: column !important;
+            
+            .note-split {
+                width: 100%;
+            }
+
+            .note-split.visible + .note-split.visible {
+                border-top: 1px solid var(--main-border-color);
+            }
+        }
+
+        #root-widget.virtual-keyboard-opened .note-split:not(:focus-within) {
+            max-height: 80px;
+            opacity: 0.4;
+        }
+    }
 }

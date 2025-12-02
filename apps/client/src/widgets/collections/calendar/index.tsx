@@ -77,6 +77,7 @@ export const LOCALE_MAPPINGS: Record<DISPLAYABLE_LOCALE_IDS, (() => Promise<{ de
     "pt_br": () => import("@fullcalendar/core/locales/pt-br"),
     uk: () => import("@fullcalendar/core/locales/uk"),
     en: null,
+    "en-GB": () => import("@fullcalendar/core/locales/en-gb"),
     "en_rtl": null,
     ar: () => import("@fullcalendar/core/locales/ar")
 };
@@ -116,7 +117,10 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
         if (loadResults.getNoteIds().some(noteId => noteIds.includes(noteId)) // note title change.
             || loadResults.getAttributeRows().some((a) => noteIds.includes(a.noteId ?? ""))) // subnote change.
         {
-            calendarRef.current?.refetchEvents();
+            // Defer execution after the load results are processed so that the event builder has the updated data to work with.
+            setTimeout(() => {
+                calendarRef.current?.refetchEvents();
+            }, 0);
         }
     });
 
@@ -306,9 +310,11 @@ function useEventDisplayCustomization(parentNote: FNote) {
             $(mainContainer ?? e.el).append($(promotedAttributesHtml));
         }
 
-        e.el.addEventListener("contextmenu", (contextMenuEvent) => {
-            const noteId = e.event.extendedProps.noteId;
-            openCalendarContextMenu(contextMenuEvent, noteId, parentNote);
+        e.el.addEventListener("contextmenu", async (contextMenuEvent) => {
+            const note = await froca.getNote(e.event.extendedProps.noteId);
+            if (!note) return;
+
+            openCalendarContextMenu(contextMenuEvent, note, parentNote);
         });
     }, []);
     return { eventDidMount };

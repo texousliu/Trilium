@@ -80,6 +80,9 @@ html {
 
     --mermaid-theme: default;
     --native-titlebar-background: #ffffff00;
+
+    --calendar-coll-event-background-lightness: 95%;
+    --calendar-coll-event-background-saturation: 80%;
 }
 
 #left-pane .fancytree-node.tinted {
@@ -91,4 +94,8 @@ html {
 .ck-content a.reference-link > span,
 .board-note {
     color: var(--light-theme-custom-color, inherit);
+}
+
+.use-note-color {
+    --custom-color: var(--light-theme-custom-color);
 }

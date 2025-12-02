@@ -733,9 +733,10 @@
     "zoom_out_title": "Zoom arrière"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Lien inverse",
-    "backlinks": "{{count}} Liens inverses",
-    "relation": "relation"
+    "relation": "relation",
+    "backlink_one": "{{count}} Lien inverse",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Liens inverses"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Insérer une note enfant",
@@ -1766,12 +1767,6 @@
     "not_started": "Non démarré",
     "title": "Paramètres IA",
     "processed_notes": "Notes traitées",
-    "n_notes_queued_0": "{{ count }} note en attente d’indexation",
-    "n_notes_queued_1": "{{ count }} notes en attente d’indexation",
-    "n_notes_queued_2": "",
-    "notes_indexed_0": "{{ count }} note indexée",
-    "notes_indexed_1": "{{ count }} notes indexées",
-    "notes_indexed_2": "",
     "anthropic_url_description": "URL de base pour l'API Anthropic (par défaut : https ://api.anthropic.com)",
     "anthropic_model_description": "Modèles Anthropic Claude pour la complétion",
     "voyage_settings": "Réglages d'IA Voyage",

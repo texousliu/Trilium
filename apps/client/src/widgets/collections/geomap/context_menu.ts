@@ -12,7 +12,7 @@ export default function openContextMenu(noteId: string, e: LeafletMouseEvent, is
     let items: MenuItem<keyof CommandMappings>[] = [
         ...buildGeoLocationItem(e),
         { kind: "separator" },
-        ...linkContextMenu.getItems(),
+        ...linkContextMenu.getItems(e),
     ];
 
     if (isEditable) {
@@ -32,14 +32,14 @@ export default function openContextMenu(noteId: string, e: LeafletMouseEvent, is
         x: e.originalEvent.pageX,
         y: e.originalEvent.pageY,
         items,
-        selectMenuItemHandler: ({ command }, e) => {
+        selectMenuItemHandler: ({ command }) => {
             if (command === "deleteFromMap") {
                 appContext.triggerCommand(command, { noteId });
                 return;
             }
 
             // Pass the events to the link context menu
-            linkContextMenu.handleLinkContextMenuItem(command, noteId);
+            linkContextMenu.handleLinkContextMenuItem(command, e, noteId);
         }
     });
 }

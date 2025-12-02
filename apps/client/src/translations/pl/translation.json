@@ -750,9 +750,6 @@
     "indexing_stopped": "Indeksowanie zatrzymane",
     "indexing_in_progress": "Indeksowanie w trakcie...",
     "last_indexed": "Ostatnio zindeksowane",
-    "n_notes_queued_0": "{{ count }} notatka zakolejkowana do indeksowania",
-    "n_notes_queued_1": "{{ count }} notatek zakolejkowanych do indeksowania",
-    "n_notes_queued_2": "{{ count }} notatek zakolejkowanych do indeksowania",
     "note_chat": "Czat notatki",
     "note_title": "Tytuł notatki",
     "error": "Błąd",
@@ -860,9 +857,6 @@
     "enter_message": "Wpisz swoją wiadomość...",
     "error_contacting_provider": "Błąd kontaktu z dostawcą AI. Sprawdź ustawienia i połączenie internetowe.",
     "error_generating_response": "Błąd generowania odpowiedzi AI",
-    "notes_indexed_0": "{{ count }} notatka zaindeksowana",
-    "notes_indexed_1": "{{ count }} notatek zaindeksowanych",
-    "notes_indexed_2": "",
     "sources": "Źródła",
     "start_indexing": "Rozpocznij indeksowanie",
     "use_advanced_context": "Użyj zaawansowanego kontekstu",
@@ -1237,9 +1231,10 @@
     "zoom_out_title": "Pomniejsz"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Backlink",
-    "backlinks": "{{count}} Backlinków",
-    "relation": "relacja"
+    "relation": "relacja",
+    "backlink_one": "{{count}} Backlink",
+    "backlink_few": "",
+    "backlink_many": "{{count}} Backlinków"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Wstaw notatkę podrzędną",

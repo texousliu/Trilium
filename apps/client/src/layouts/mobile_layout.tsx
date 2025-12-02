@@ -29,6 +29,7 @@ import type AppContext from "../components/app_context.js";
 import NoteDetail from "../widgets/NoteDetail.jsx";
 import MobileEditorToolbar from "../widgets/type_widgets/text/mobile_editor_toolbar.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
+import SplitNoteContainer from "../widgets/containers/split_note_container.js";
 
 const MOBILE_CSS = `
 <style>
@@ -142,33 +143,35 @@ export default class MobileLayout {
                             .id("detail-container")
                             .class("d-sm-flex d-md-flex d-lg-flex d-xl-flex col-12 col-sm-7 col-md-8 col-lg-9")
                             .child(
-                                new NoteWrapperWidget()
-                                    .child(
-                                        new FlexContainer("row")
-                                            .contentSized()
-                                            .css("font-size", "larger")
-                                            .css("align-items", "center")
-                                            .child(<ToggleSidebarButton />)
-                                            .child(<NoteTitleWidget />)
-                                            .child(<MobileDetailMenu />)
-                                    )
-                                    .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
-                                    .child(<PromotedAttributes />)
-                                    .child(
-                                        new ScrollingContainer()
-                                            .filling()
-                                            .contentSized()
-                                            .child(new ContentHeader()
-                                                .child(<ReadOnlyNoteInfoBar />)
-                                                .child(<SharedInfoWidget />)
-                                            )
-                                            .child(<NoteDetail />)
-                                            .child(<NoteList media="screen" />)
-                                            .child(<StandaloneRibbonAdapter component={SearchDefinitionTab} />)
-                                            .child(<SearchResult />)
-                                            .child(<FilePropertiesWrapper />)
-                                    )
-                                    .child(<MobileEditorToolbar />)
+                                new SplitNoteContainer(() =>
+                                    new NoteWrapperWidget()
+                                        .child(
+                                            new FlexContainer("row")
+                                                .contentSized()
+                                                .css("font-size", "larger")
+                                                .css("align-items", "center")
+                                                .child(<ToggleSidebarButton />)
+                                                .child(<NoteTitleWidget />)
+                                                .child(<MobileDetailMenu />)
+                                        )
+                                        .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
+                                        .child(<PromotedAttributes />)
+                                        .child(
+                                            new ScrollingContainer()
+                                                .filling()
+                                                .contentSized()
+                                                .child(new ContentHeader()
+                                                    .child(<ReadOnlyNoteInfoBar />)
+                                                    .child(<SharedInfoWidget />)
+                                                )
+                                                .child(<NoteDetail />)
+                                                .child(<NoteList media="screen" />)
+                                                .child(<StandaloneRibbonAdapter component={SearchDefinitionTab} />)
+                                                .child(<SearchResult />)
+                                                .child(<FilePropertiesWrapper />)
+                                        )
+                                        .child(<MobileEditorToolbar />)
+                                )
                             )
                     )
             )

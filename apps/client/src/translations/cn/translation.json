@@ -162,7 +162,8 @@
     "inPageSearch": "页面内搜索",
     "newTabWithActivationNoteLink": "在新标签页打开笔记链接并激活该标签页",
     "title": "资料表",
-    "newTabNoteLink": "在新标签页开启链接"
+    "newTabNoteLink": "在新标签页开启链接",
+    "editShortcuts": "编辑键盘快捷键"
   },
   "import": {
     "importIntoNote": "导入到笔记",
@@ -735,9 +736,8 @@
     "zoom_out_title": "缩小"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} 个反链",
-    "backlinks": "{{count}} 个反链",
-    "relation": "关系"
+    "relation": "关系",
+    "backlink_other": "{{count}} 个反链"
   },
   "mobile_detail_menu": {
     "insert_child_note": "插入子笔记",
@@ -1897,9 +1897,7 @@
     "indexing_stopped": "索引已停止",
     "indexing_in_progress": "索引进行中...",
     "last_indexed": "最后索引时间",
-    "n_notes_queued_0": "{{ count }} 条笔记已加入索引队列",
     "note_chat": "笔记聊天",
-    "notes_indexed_0": "{{ count }} 条笔记已索引",
     "sources": "来源",
     "start_indexing": "开始索引",
     "use_advanced_context": "使用高级上下文",
@@ -2104,5 +2102,8 @@
     "clear-color": "清除笔记颜色",
     "set-color": "设置笔记颜色",
     "set-custom-color": "设置自定义笔记颜色"
+  },
+  "popup-editor": {
+    "maximize": "切换至完整编辑器"
   }
 }

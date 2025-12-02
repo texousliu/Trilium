@@ -20,6 +20,7 @@ import ActionButton from "../react/ActionButton";
 import options from "../../services/options";
 import { useTriliumEvent } from "../react/hooks";
 import { diffWords } from "diff";
+import "./revisions.css";
 
 export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();
@@ -137,7 +138,7 @@ export default function RevisionsDialog() {
 
 function RevisionsList({ revisions, onSelect, currentRevision }: { revisions: RevisionItem[], onSelect: (val: string) => void, currentRevision?: RevisionItem }) {
     return (
-        <FormList onSelect={onSelect} fullHeight>
+        <FormList onSelect={onSelect} fullHeight wrapperClassName="revision-list">
             {revisions.map((item) =>
                 <FormListItem
                     value={item.revisionId}
