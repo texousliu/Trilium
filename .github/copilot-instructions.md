@@ -197,7 +197,7 @@ When adding query parameters to ETAPI endpoints (`apps/server/src/etapi/`), main
 
 2. **Protected notes require session check** - Before accessing `note.title` or `note.getContent()` on protected notes, check `note.isContentAvailable()` or use `note.getTitleOrProtected()` which handles this automatically.
 
-3. **Widget lifecycle matters** - Override `refreshWithNote()` for note changes, `doRenderBody()` for initial render, `entitiesReloadedEvent()` for entity updates. Widgets use jQuery (`this.$body`) - don't mix React patterns.
+3. **Widget lifecycle matters** - Override `refreshWithNote()` for note changes, `doRenderBody()` for initial render, `entitiesReloadedEvent()` for entity updates. Widgets use jQuery (`this.$widget`) - don't mix React patterns.
 
 4. **Tests run differently** - Server tests must run sequentially (shared database state), client tests can run in parallel. Use `pnpm test:sequential` for backend, `pnpm test:parallel` for frontend.
 
