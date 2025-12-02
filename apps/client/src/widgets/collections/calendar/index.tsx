@@ -117,7 +117,10 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
         if (loadResults.getNoteIds().some(noteId => noteIds.includes(noteId)) // note title change.
             || loadResults.getAttributeRows().some((a) => noteIds.includes(a.noteId ?? ""))) // subnote change.
         {
-            calendarRef.current?.refetchEvents();
+            // Defer execution after the load results are processed so that the event builder has the updated data to work with.
+            setTimeout(() => {
+                calendarRef.current?.refetchEvents();
+            }, 0);
         }
     });
 
