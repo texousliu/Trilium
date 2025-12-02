@@ -53,10 +53,9 @@ Use `TaskContext` for operations with progress reporting (imports, exports, bulk
 
 ```typescript
 const taskContext = new TaskContext("task-id", "import", "Import Notes");
-taskContext.reportProgress(50, "Processing...");
+taskContext.increaseProgressCount();
 
-// WebSocket messages: { type: 'task-progress-update', taskId, progress, message }
-```
+// WebSocket messages: { type: 'taskProgressCount', taskId, taskType, data, progressCount }
 
 **Pattern**: All long-running operations (delete note trees, export, import) use TaskContext to send WebSocket updates to the frontend.
 
