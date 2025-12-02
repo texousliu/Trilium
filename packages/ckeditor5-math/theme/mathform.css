@@ -212,3 +212,13 @@
     outline: none !important;
     box-shadow: none !important;
 }
+
+.ck-math-render-error {
+    color: var(--ck-color-error-text, #db1d1d);
+    padding: var(--ck-spacing-small);
+    font-style: italic;
+    font-size: 0.9em;
+    border: 1px dashed var(--ck-color-error-text, #db1d1d);
+    border-radius: 2px;
+    background: var(--ck-color-base-background, #fff);
+}
