@@ -48,8 +48,7 @@ export default class MainFormView extends View {
 		this.rawLatexInputView = new RawLatexInputView( locale );
 		this.rawLatexInputView.label = t( 'LaTeX' );
 
-		this.saveButtonView = this._createButton( t( 'Save' ), IconCheck, 'ck-button-save' );
-		this.saveButtonView.type = 'submit';
+		this.saveButtonView = this._createButton( t( 'Save' ), IconCheck, 'ck-button-save', 'submit' );
 
 		this.cancelButtonView = this._createButton( t( 'Cancel' ), IconCancel, 'ck-button-cancel' );
 		this.cancelButtonView.delegate( 'execute' ).to( this, 'cancel' );
@@ -150,58 +149,67 @@ export default class MainFormView extends View {
 	}
 
 	/**
-	 * Sets up split handlers for synchronization.
+	 * Checks if a view currently has focus.
 	 */
-	private _setupInputSync( previewEnabled: boolean ): void {
-		// Handler 1: MathLive -> Raw LaTeX
-		this.mathLiveInputView.on( 'change:value', () => {
-			let eq = ( this.mathLiveInputView.value ?? '' ).trim();
+	private _isViewFocused(view: View): boolean {
+		const el = view.element;
+		const active = document.activeElement;
+		return !!(el && active && el.contains(active));
+	}
 
-			// Delimiter Normalization
-			if ( hasDelimiters( eq ) ) {
-				const params = extractDelimiters( eq );
+	/**
+	 * Sets up synchronization with Focus Gating.
+	 */
+	private _setupInputSync(previewEnabled: boolean): void {
+		const updatePreview = (eq: string) => {
+			if (previewEnabled && this.mathView && this.mathView.value !== eq) {
+				this.mathView.value = eq;
+			}
+		};
+
+		// Handler 1: MathLive -> Raw LaTeX + Preview
+		this.mathLiveInputView.on('change:value', () => {
+			let eq = (this.mathLiveInputView.value ?? '').trim();
+
+			// Strip delimiters if present (e.g. pasted content)
+			if (hasDelimiters(eq)) {
+				const params = extractDelimiters(eq);
 				eq = params.equation;
 				this.displayButtonView.isOn = params.display;
 
-				// UX Fix: If we stripped delimiters, update the source
-				// so the visual editor doesn't show them.
-				if ( this.mathLiveInputView.value !== eq ) {
+				// Only strip delimiters if not actively editing
+				if (!this._isViewFocused(this.mathLiveInputView) && this.mathLiveInputView.value !== eq) {
 					this.mathLiveInputView.value = eq;
 				}
 			}
 
-			// Sync to Raw LaTeX
-			if ( this.rawLatexInputView.value !== eq ) {
+			// Sync to Raw LaTeX only if user isn't typing there
+			if (!this._isViewFocused(this.rawLatexInputView) && this.rawLatexInputView.value !== eq) {
 				this.rawLatexInputView.value = eq;
 			}
 
-			// Sync to Preview
-			if ( previewEnabled && this.mathView && this.mathView.value !== eq ) {
-				this.mathView.value = eq;
-			}
-		} );
+			updatePreview(eq);
+		});
 
-		// Handler 2: Raw LaTeX -> MathLive
-		this.rawLatexInputView.on( 'change:value', () => {
-			const eq = ( this.rawLatexInputView.value ?? '' ).trim();
+		// Handler 2: Raw LaTeX -> MathLive + Preview
+		this.rawLatexInputView.on('change:value', () => {
+			const eq = (this.rawLatexInputView.value ?? '').trim();
 			const normalized = eq.length ? eq : null;
 
-			// Sync to MathLive
-			if ( this.mathLiveInputView.value !== normalized ) {
+			// Sync to MathLive only if user isn't interacting with it
+			if (!this._isViewFocused(this.mathLiveInputView) && this.mathLiveInputView.value !== normalized) {
 				this.mathLiveInputView.value = normalized;
 			}
 
-			// Sync to Preview
-			if ( previewEnabled && this.mathView && this.mathView.value !== eq ) {
-				this.mathView.value = eq;
-			}
-		} );
+			updatePreview(eq);
+		});
 	}
 
-	private _createButton( label: string, icon: string, className: string ): ButtonView {
+	private _createButton( label: string, icon: string, className: string, type?: 'submit' | 'button' ): ButtonView {
 		const btn = new ButtonView( this.locale );
 		btn.set( { label, icon, tooltip: true } );
 		btn.extendTemplate( { attributes: { class: className } } );
+		if (type) btn.type = type;
 		return btn;
 	}
 
