@@ -174,7 +174,7 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
 
     contextMenu.show({
         items: [
-            ...link_context_menu.getItems(),
+            ...link_context_menu.getItems(e),
             { kind: "separator" },
             {
                 title: t("table_view.row-insert-above"),
@@ -227,7 +227,7 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
                 componentFn: () => NoteColorPicker({note: rowData.noteId})
             }
         ],
-        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, rowData.noteId),
+        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, e, rowData.noteId),
         x: e.pageX,
         y: e.pageY
     });

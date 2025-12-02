@@ -4,6 +4,7 @@ import appContext, { type CommandNames } from "../components/app_context.js";
 import type { ViewScope } from "../services/link.js";
 import utils, { isMobile } from "../services/utils.js";
 import { getClosestNtxId } from "../widgets/widget_utils.js";
+import type { LeafletMouseEvent } from "leaflet";
 
 function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewScope = {}, hoistedNoteId: string | null = null) {
     contextMenu.show({
@@ -14,7 +15,7 @@ function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewS
     });
 }
 
-function getItems(e: ContextMenuEvent): MenuItem<CommandNames>[] {
+function getItems(e: ContextMenuEvent | LeafletMouseEvent): MenuItem<CommandNames>[] {
     const ntxId = getNtxId(e);
     const isMobileSplitOpen = isMobile() && appContext.tabManager.getNoteContextById(ntxId).getMainContext().getSubContexts().length > 1;
 
@@ -26,7 +27,7 @@ function getItems(e: ContextMenuEvent): MenuItem<CommandNames>[] {
     ];
 }
 
-function handleLinkContextMenuItem(command: string | undefined, e: ContextMenuEvent, notePath: string, viewScope = {}, hoistedNoteId: string | null = null) {
+function handleLinkContextMenuItem(command: string | undefined, e: ContextMenuEvent | LeafletMouseEvent, notePath: string, viewScope = {}, hoistedNoteId: string | null = null) {
     if (!hoistedNoteId) {
         hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId ?? null;
     }
@@ -44,7 +45,7 @@ function handleLinkContextMenuItem(command: string | undefined, e: ContextMenuEv
     }
 }
 
-function getNtxId(e: ContextMenuEvent) {
+function getNtxId(e: ContextMenuEvent | LeafletMouseEvent) {
     if (utils.isDesktop()) {
         const subContexts = appContext.tabManager.getActiveContext()?.getSubContexts();
         if (!subContexts) return null;
