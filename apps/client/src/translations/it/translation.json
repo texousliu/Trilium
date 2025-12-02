@@ -1306,8 +1306,8 @@
   "zpetne_odkazy": {
     "relation": "relazione",
     "backlink_one": "{{count}} Backlink",
-    "backlink_many": "",
-    "backlink_other": "{{count}} Backlink"
+    "backlink_many": "{{count}} Backlinks",
+    "backlink_other": "{{count}} Backlinks"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Inserisci nota secondaria",
@@ -1801,8 +1801,8 @@
     "relation-map": "Mappa delle relazioni",
     "note-map": "Nota Mappa",
     "render-note": "Nota di rendering",
-    "book": "Collezione",
-    "mermaid-diagram": "Diagramma della sirena",
+    "book": "Raccolta",
+    "mermaid-diagram": "Diagramma Mermaid",
     "canvas": "Tela",
     "web-view": "Visualizzazione Web",
     "mind-map": "Mappa mentale",
@@ -1967,7 +1967,8 @@
     "open_note_in_new_tab": "Apri la nota in una nuova scheda",
     "open_note_in_new_split": "Apri nota in una nuova divisione",
     "open_note_in_new_window": "Apri la nota in una nuova finestra",
-    "open_note_in_popup": "Modifica rapida"
+    "open_note_in_popup": "Modifica rapida",
+    "open_note_in_other_split": "Apri nota nell'altra finestra"
   },
   "help-button": {
     "title": "Apri la pagina di aiuto pertinente"
