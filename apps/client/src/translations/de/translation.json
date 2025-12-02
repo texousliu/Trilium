@@ -1729,10 +1729,6 @@
     "help_title": "Zeige mehr Informationen zu diesem Fenster"
   },
   "ai_llm": {
-    "n_notes_queued": "{{ count }} Notiz zur Indizierung vorgemerkt",
-    "n_notes_queued_plural": "{{ count }} Notizen zur Indizierung vorgemerkt",
-    "notes_indexed": "{{ count }} Notiz indiziert",
-    "notes_indexed_plural": "{{ count }} Notizen indiziert",
     "not_started": "Nicht gestartet",
     "title": "KI Einstellungen",
     "processed_notes": "Verarbeitete Notizen",

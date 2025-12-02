@@ -1919,8 +1919,7 @@
     "ai_disabled": "已禁用 AI 功能",
     "no_models_found_online": "找不到模型。请检查您的 API 密钥及设置。",
     "no_models_found_ollama": "找不到 Ollama 模型。请确认 Ollama 是否正在运行。",
-    "error_fetching": "获取模型失败：{{error}}",
-    "n_notes_queued": "{{ count }} 条笔记已加入索引队列"
+    "error_fetching": "获取模型失败：{{error}}"
   },
   "code-editor-options": {
     "title": "编辑器"
