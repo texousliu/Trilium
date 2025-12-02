@@ -41,7 +41,7 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
         x: event.pageX,
         y: event.pageY,
         items: [
-            ...link_context_menu.getItems(),
+            ...link_context_menu.getItems(event),
             { kind: "separator" },
             {
                 title: t("board_view.insert-above"),
@@ -81,7 +81,7 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
                 componentFn: () => NoteColorPicker({note})
             }
         ],
-        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, note.noteId),
+        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, event, note.noteId),
     });
 }
 

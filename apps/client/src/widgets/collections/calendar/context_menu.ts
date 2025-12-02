@@ -14,7 +14,7 @@ export function openCalendarContextMenu(e: ContextMenuEvent, note: FNote, parent
         x: e.pageX,
         y: e.pageY,
         items: [
-            ...link_context_menu.getItems(),
+            ...link_context_menu.getItems(e),
             { kind: "separator" },
             getArchiveMenuItem(note),
             {
@@ -40,6 +40,6 @@ export function openCalendarContextMenu(e: ContextMenuEvent, note: FNote, parent
                 componentFn: () => NoteColorPicker({note: note})
             }
         ],
-        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, note.noteId),
+        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, e, note.noteId),
     })
 }

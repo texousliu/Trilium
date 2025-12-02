@@ -2596,3 +2596,24 @@ iframe.print-iframe {
     /* Workaround: set font weight only if the theme-next is not active */
     font-weight: var(--root-background, 800);
 }
+
+@media (max-width: 991px) {
+    body.mobile {
+        .split-note-container-widget {
+            flex-direction: column !important;
+            
+            .note-split {
+                width: 100%;
+            }
+
+            .note-split.visible + .note-split.visible {
+                border-top: 1px solid var(--main-border-color);
+            }
+        }
+
+        #root-widget.virtual-keyboard-opened .note-split:not(:focus-within) {
+            max-height: 80px;
+            opacity: 0.4;
+        }
+    }
+}
