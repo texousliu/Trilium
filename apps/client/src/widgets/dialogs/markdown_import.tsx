@@ -36,7 +36,7 @@ export default function MarkdownImportDialog() {
 
     function submit() {
         setShown(false);
-        if (editorApiRef.current) {
+        if (editorApiRef.current && text) {
             convertMarkdownToHtml(text, editorApiRef.current);
         }
     }
