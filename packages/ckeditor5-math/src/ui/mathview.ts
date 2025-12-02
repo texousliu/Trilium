@@ -55,23 +55,39 @@ export default class MathView extends View {
 	}
 
 	public updateMath(): void {
-		if ( this.element ) {
-
-			// This prevents the new render from appending to the old one.
-			this.element.textContent = '';
-
-			void renderEquation(
-				this.value,
-				this.element,
-				this.options.engine,
-				this.options.lazyLoad,
-				this.display,
-				true, // isPreview
-				this.options.previewUid,
-				this.options.previewClassName,
-				this.options.katexRenderOptions
-			);
+		if (!this.element) {
+			return;
 		}
+
+		// Handle empty equations
+		if (!this.value || !this.value.trim()) {
+			this.element.textContent = '';
+			this.element.classList.remove('ck-math-render-error');
+			return;
+		}
+
+		// Clear previous render
+		this.element.textContent = '';
+		this.element.classList.remove('ck-math-render-error');
+
+		renderEquation(
+			this.value,
+			this.element,
+			this.options.engine,
+			this.options.lazyLoad,
+			this.display,
+			true, // isPreview
+			this.options.previewUid,
+			this.options.previewClassName,
+			this.options.katexRenderOptions
+		).catch(error => {
+			console.error('Math rendering failed:', error);
+
+			if (this.element) {
+				this.element.textContent = 'Error rendering equation';
+				this.element.classList.add('ck-math-render-error');
+			}
+		});
 	}
 
 	public override render(): void {

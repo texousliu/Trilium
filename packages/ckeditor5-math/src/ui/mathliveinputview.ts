@@ -1,104 +1,98 @@
 import { View, type Locale } from 'ckeditor5';
-import 'mathlive'; // Import side-effects only (registers the <math-field> tag)
 
-/**
- * Interface describing the custom <math-field> element.
- */
 interface MathFieldElement extends HTMLElement {
     value: string;
     readOnly: boolean;
     mathVirtualKeyboardPolicy: string;
-    // Interface includes the shortcuts property
-    inlineShortcuts: Record<string, string>;
+    inlineShortcuts?: Record<string, string>;
 }
 
-/**
- * A wrapper for the MathLive <math-field> component.
- */
 export default class MathLiveInputView extends View {
-    /**
-     * The current LaTeX value.
-     * @observable
-     */
     public declare value: string | null;
-
-    /**
-     * Read-only state.
-     * @observable
-     */
     public declare isReadOnly: boolean;
-
-    /**
-     * Reference to the DOM element.
-     * Typed as MathFieldElement | null for proper TS support.
-     */
     public mathfield: MathFieldElement | null = null;
 
-    constructor( locale: Locale ) {
-        super( locale );
+    constructor(locale: Locale) {
+        super(locale);
+        this.set('value', null);
+        this.set('isReadOnly', false);
 
-        this.set( 'value', null );
-        this.set( 'isReadOnly', false );
-
-        this.setTemplate( {
+        this.setTemplate({
             tag: 'div',
             attributes: {
-                class: [ 'ck', 'ck-mathlive-input' ]
+                class: ['ck', 'ck-mathlive-input']
             }
-        } );
+        });
     }
 
     public override render(): void {
         super.render();
+        this._loadMathLive();
+    }
 
-        // 1. Create element with the specific type
-        const mathfield = document.createElement( 'math-field' ) as MathFieldElement;
+    private async _loadMathLive(): Promise<void> {
+        try {
+            await import('mathlive');
+            await customElements.whenDefined('math-field');
 
-        // 2. Configure Options
+            // Configure global MathLive settings
+            const MathfieldClass = customElements.get( 'math-field' ) as any;
+            if ( MathfieldClass ) {
+                MathfieldClass.soundsDirectory = null;
+                MathfieldClass.plonkSound = null;
+            }
+
+            if (!this.element) return;
+
+            this._createMathField();
+        } catch (error) {
+            console.error('MathLive load failed:', error);
+            if (this.element) {
+                this.element.textContent = 'Math editor unavailable';
+            }
+        }
+    }
+
+    private _createMathField(): void {
+        if (!this.element) return;
+
+        const mathfield = document.createElement('math-field') as MathFieldElement;
+
+        // Instance-level config (no prototype pollution)
         mathfield.mathVirtualKeyboardPolicy = 'manual';
 
-        //Disable differential D
-        mathfield.addEventListener( 'mount', () => {
+        // Configure shortcuts after mount
+        mathfield.addEventListener('mount', () => {
             mathfield.inlineShortcuts = {
-                ...mathfield.inlineShortcuts, // Safe to read now
+                ...mathfield.inlineShortcuts,
                 dx: 'dx',
                 dy: 'dy',
                 dt: 'dt'
             };
-        } );
+        }, { once: true });
 
-
-        // Disable sounds safely
-        const MathfieldConstructor = customElements.get( 'math-field' );
-        if ( MathfieldConstructor ) {
-            const proto = MathfieldConstructor as any;
-            if ( proto.soundsDirectory !== null ) proto.soundsDirectory = null;
-            if ( proto.plonkSound !== null ) proto.plonkSound = null;
-        }
-
-        // 3. Set Initial State
+        // Initial state
         mathfield.value = this.value ?? '';
         mathfield.readOnly = this.isReadOnly;
 
-        // 4. Bind Events (DOM -> Observable)
-        mathfield.addEventListener( 'input', () => {
+        // DOM -> Observable
+        mathfield.addEventListener('input', () => {
             const val = mathfield.value;
             this.value = val.length ? val : null;
-        } );
+        });
 
-        // 5. Bind Events (Observable -> DOM)
-        this.on( 'change:value', ( _evt, _name, nextValue ) => {
-            if ( mathfield.value !== nextValue ) {
+        // Observable -> DOM
+        this.on('change:value', (_evt, _name, nextValue) => {
+            if (mathfield.value !== nextValue) {
                 mathfield.value = nextValue ?? '';
             }
-        } );
+        });
 
-        this.on( 'change:isReadOnly', ( _evt, _name, nextValue ) => {
+        this.on('change:isReadOnly', (_evt, _name, nextValue) => {
             mathfield.readOnly = nextValue;
-        } );
+        });
 
-        // 6. Mount to the wrapper view
-        this.element?.appendChild( mathfield );
+        this.element.appendChild(mathfield);
         this.mathfield = mathfield;
     }
 
@@ -107,7 +101,7 @@ export default class MathLiveInputView extends View {
     }
 
     public override destroy(): void {
-        if ( this.mathfield ) {
+        if (this.mathfield) {
             this.mathfield.remove();
             this.mathfield = null;
         }
