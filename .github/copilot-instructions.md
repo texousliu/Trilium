@@ -113,7 +113,7 @@ class MyNoteWidget extends NoteContextAwareWidget {
 }
 ```
 
-**Important**: Widgets use jQuery (`this.$body`) for DOM manipulation. Don't mix React patterns here.
+**Important**: Widgets use jQuery (`this.$widget`) for DOM manipulation. Don't mix React patterns here.
 
 ## Development Workflow
 
