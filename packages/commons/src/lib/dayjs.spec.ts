@@ -16,6 +16,11 @@ describe("dayjs", () => {
             expect(dayjs("2023-10-01").format("Q")).not.toBe("Q");
         });
 
+        it("duration plugin is available", () => {
+            const d = dayjs.duration({ hours: 2, minutes: 30 });
+            expect(d.asMinutes()).toBe(150);
+        });
+
         it("is-between is available", () => {
             expect(dayjs("2023-10-02").isBetween(dayjs("2023-10-01"), dayjs("2023-10-03"))).toBe(true);
         });

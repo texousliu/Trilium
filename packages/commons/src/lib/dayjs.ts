@@ -2,6 +2,7 @@ import { default as dayjs, type Dayjs } from "dayjs";
 
 //#region Plugins
 import advancedFormat from "dayjs/plugin/advancedFormat.js";
+import duration from "dayjs/plugin/duration.js";
 import isBetween from "dayjs/plugin/isBetween.js";
 import isoWeek from "dayjs/plugin/isoWeek.js";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
@@ -11,6 +12,7 @@ import utc from "dayjs/plugin/utc.js";
 import { LOCALE_IDS } from "./i18n.js";
 
 dayjs.extend(advancedFormat);
+dayjs.extend(duration);
 dayjs.extend(isBetween);
 dayjs.extend(isoWeek);
 dayjs.extend(isSameOrAfter);
