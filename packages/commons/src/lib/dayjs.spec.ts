@@ -12,6 +12,19 @@ describe("dayjs", () => {
     });
 
     describe("Plugins", () => {
+        it("advanced format is available", () => {
+            expect(dayjs("2023-10-01").format("Q")).not.toBe("Q");
+        });
+
+        it("is-between is available", () => {
+            expect(dayjs("2023-10-02").isBetween(dayjs("2023-10-01"), dayjs("2023-10-03"))).toBe(true);
+        });
+
+        it("iso-week is available", () => {
+            // ISO week number: 2023-01-01 is ISO week 52 of previous year
+            expect(dayjs("2023-01-01").isoWeek()).toBe(52);
+        });
+
         it("is-same-or-before is available", () => {
             expect(dayjs("2023-10-01").isSameOrBefore(dayjs("2023-10-02"))).toBe(true);
         });
@@ -20,12 +33,13 @@ describe("dayjs", () => {
             expect(dayjs("2023-10-02").isSameOrAfter(dayjs("2023-10-01"))).toBe(true);
         });
 
-        it("is-between is available", () => {
-            expect(dayjs("2023-10-02").isBetween(dayjs("2023-10-01"), dayjs("2023-10-03"))).toBe(true);
+        it("quarter-year is available", () => {
+            expect(dayjs("2023-05-15").quarter()).toBe(2);
         });
 
-        it("advanced format is available", () => {
-            expect(dayjs("2023-10-01").format("Q")).not.toBe("Q");
+        it("utc is available", () => {
+            const utcDate = dayjs("2023-10-01T12:00:00").utc();
+            expect(utcDate.utcOffset()).toBe(0);
         });
     });
 });
