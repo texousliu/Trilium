@@ -56,9 +56,14 @@ async function renderIncludedNotes(contentEl: HTMLElement) {
     // Render and integrate the notes.
     for (const includeNoteEl of includeNoteEls) {
         const noteId = includeNoteEl.getAttribute("data-note-id");
-        if (!noteId) return;
+        if (!noteId) continue;
 
         const note = froca.getNoteFromCache(noteId);
+        if (!note) {
+            console.warn(`Unable to include ${noteId} because it could not be found.`);
+            continue;
+        }
+
         const renderedContent = (await content_renderer.getRenderedContent(note)).$renderedContent;
         includeNoteEl.replaceChildren(...renderedContent);
     }

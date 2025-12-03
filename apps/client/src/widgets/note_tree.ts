@@ -574,6 +574,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                         .loadSearchNote(noteId)
                         .then(() => {
                             const note = froca.getNoteFromCache(noteId);
+                            if (!note) return [];
 
                             let childNoteIds = note.getChildNoteIds();
 
@@ -585,6 +586,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                         })
                         .then(() => {
                             const note = froca.getNoteFromCache(noteId);
+                            if (!note) return [];
 
                             return this.prepareChildren(note);
                         });
@@ -740,7 +742,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const node = $.ui.fancytree.getNode(e as unknown as Event);
         const note = froca.getNoteFromCache(node.data.noteId);
 
-        if (note.isLaunchBarConfig()) {
+        if (note?.isLaunchBarConfig()) {
             import("../menus/launcher_context_menu.js").then(({ default: LauncherContextMenu }) => {
                 const launcherContextMenu = new LauncherContextMenu(this, node);
                 launcherContextMenu.show(e);
@@ -775,7 +777,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             if (hideArchivedNotes) {
                 const note = branch.getNoteFromCache();
 
-                if (note.hasLabel("archived")) {
+                if (!note || note.hasLabel("archived")) {
                     continue;
                 }
             }
@@ -1754,7 +1756,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         for (const nodeToDuplicate of nodesToDuplicate) {
             const note = froca.getNoteFromCache(nodeToDuplicate.data.noteId);
 
-            if (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable()) {
+            if (note?.isProtected && !protectedSessionHolder.isProtectedSessionAvailable()) {
                 continue;
             }
 

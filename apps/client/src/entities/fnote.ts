@@ -240,7 +240,7 @@ export default class FNote {
 
             const aNote = this.froca.getNoteFromCache(aNoteId);
 
-            if (aNote.isArchived || aNote.isHiddenCompletely()) {
+            if (!aNote || aNote.isArchived || aNote.isHiddenCompletely()) {
                 return 1;
             }
 
