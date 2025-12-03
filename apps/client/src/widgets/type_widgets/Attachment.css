@@ -63,6 +63,7 @@
 
 .attachment-detail-wrapper.list-view .attachment-content-wrapper pre {
     max-height: 400px;
+    padding: 0;
 }
 
 .attachment-content-wrapper img {
