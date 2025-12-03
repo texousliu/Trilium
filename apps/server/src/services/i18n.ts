@@ -4,31 +4,8 @@ import sql_init from "./sql_init.js";
 import { join } from "path";
 import { getResourceDir } from "./utils.js";
 import hidden_subtree from "./hidden_subtree.js";
-import { LOCALES, type Locale, type LOCALE_IDS } from "@triliumnext/commons";
+import { LOCALES, setDayjsLocale, type Locale, type LOCALE_IDS } from "@triliumnext/commons";
 import dayjs, { Dayjs } from "dayjs";
-
-// When adding a new locale, prefer the version with hyphen instead of underscore.
-export const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs/locale/en.js")>> = {
-    "ar": () => import("dayjs/locale/ar.js"),
-    "cn": () => import("dayjs/locale/zh-cn.js"),
-    "de": () => import("dayjs/locale/de.js"),
-    "en": () => import("dayjs/locale/en.js"),
-    "en-GB": () => import("dayjs/locale/en-gb.js"),
-    "en_rtl": () => import("dayjs/locale/en.js"),
-    "es": () => import("dayjs/locale/es.js"),
-    "fa": () => import("dayjs/locale/fa.js"),
-    "fr": () => import("dayjs/locale/fr.js"),
-    "it": () => import("dayjs/locale/it.js"),
-    "he": () => import("dayjs/locale/he.js"),
-    "ja": () => import("dayjs/locale/ja.js"),
-    "ku": () => import("dayjs/locale/ku.js"),
-    "pt_br": () => import("dayjs/locale/pt-br.js"),
-    "pt": () => import("dayjs/locale/pt.js"),
-    "ro": () => import("dayjs/locale/ro.js"),
-    "ru": () => import("dayjs/locale/ru.js"),
-    "tw": () => import("dayjs/locale/zh-tw.js"),
-    "uk": () => import("dayjs/locale/uk.js"),
-}
 
 export async function initializeTranslations() {
     const resourceDir = getResourceDir();
@@ -46,10 +23,7 @@ export async function initializeTranslations() {
     });
 
     // Initialize dayjs locale.
-    const dayjsLocale = DAYJS_LOADER[locale];
-    if (dayjsLocale) {
-        dayjs.locale(await dayjsLocale());
-    }
+    await setDayjsLocale(locale);
 }
 
 export function ordinal(date: Dayjs) {
