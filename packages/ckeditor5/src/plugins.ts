@@ -50,7 +50,7 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     CodeBlockLanguageDropdown,
     CodeBlockToolbar,
     MoveBlockUpDownPlugin,
-	ScrollOnUndoRedoPlugin,
+    ScrollOnUndoRedoPlugin,
     InlineCodeNoSpellcheck,
 ];
 
