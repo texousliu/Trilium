@@ -320,12 +320,12 @@ function renderText(result: Result, note: SNote | BNote) {
                 continue;
             }
 
-            if (linkEl.classList.contains("reference-link")) {
-                cleanUpReferenceLinks(linkEl, getNote);
-            }
-
             if (href?.startsWith("#")) {
                 handleAttachmentLink(linkEl, href, getNote, getAttachment);
+            }
+
+            if (linkEl.classList.contains("reference-link")) {
+                cleanUpReferenceLinks(linkEl, getNote);
             }
         }
 
@@ -402,8 +402,8 @@ function cleanUpReferenceLinks(linkEl: HTMLElement, getNote: GetNoteFunction) {
     const noteId = href.split("/").at(-1);
     const note = noteId ? getNote(noteId) : undefined;
     if (!note) {
-        console.warn("Unable to find note ", noteId);
-        linkEl.innerHTML = "[missing note]";
+        // If a note is not found, simply replace it with a text.
+        linkEl.replaceWith(new TextNode(linkEl.innerText));
     } else if (note.isProtected) {
         linkEl.innerHTML = "[protected]";
     } else {
