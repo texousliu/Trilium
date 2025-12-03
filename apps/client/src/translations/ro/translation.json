@@ -680,7 +680,8 @@
     "tabShortcuts": "Scurtături pentru tab-uri",
     "troubleshooting": "Unelte pentru depanare",
     "newTabWithActivationNoteLink": "pe o legătură către o notiță deschide și activează notița într-un tab nou",
-    "title": "Ghid rapid"
+    "title": "Ghid rapid",
+    "editShortcuts": "Editează scurtăturile de la tastatură"
   },
   "hide_floating_buttons_button": {
     "button_title": "Ascunde butoanele"
@@ -1511,7 +1512,8 @@
     "hoist-this-note-workspace": "Focalizează spațiul de lucru",
     "refresh-saved-search-results": "Reîmprospătează căutarea salvată",
     "unhoist": "Defocalizează notița",
-    "toggle-sidebar": "Comută bara laterală"
+    "toggle-sidebar": "Comută bara laterală",
+    "dropping-not-allowed": "Aici nu este permisă plasarea notițelor."
   },
   "title_bar_buttons": {
     "window-on-top": "Menține fereastra mereu vizibilă"
@@ -1625,7 +1627,8 @@
     "reset": "Resetează"
   },
   "editable-text": {
-    "auto-detect-language": "Automat"
+    "auto-detect-language": "Automat",
+    "keeps-crashing": "Componenta de editare se blochează în continuu. Încercați să reporniți Trilium. Dacă problema persistă, luați în considerare să raportați această problemă."
   },
   "highlighting": {
     "color-scheme": "Temă de culori",
@@ -1677,7 +1680,8 @@
     "open_note_in_new_split": "Deschide notița într-un panou nou",
     "open_note_in_new_tab": "Deschide notița într-un tab nou",
     "open_note_in_new_window": "Deschide notița într-o fereastră nouă",
-    "open_note_in_popup": "Editare rapidă"
+    "open_note_in_popup": "Editare rapidă",
+    "open_note_in_other_split": "Deschide notița în celălalt panou"
   },
   "note_autocomplete": {
     "clear-text-field": "Șterge conținutul casetei",
@@ -2101,5 +2105,8 @@
     "clear-color": "Înlăturați culoarea notiței",
     "set-color": "Setați culoarea notiței",
     "set-custom-color": "Setați culoare personalizată pentru notiță"
+  },
+  "popup-editor": {
+    "maximize": "Comută la editorul principal"
   }
 }
