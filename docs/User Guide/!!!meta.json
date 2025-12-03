@@ -15928,6 +15928,41 @@
                                     ],
                                     "dataFileName": "Backend API.dat",
                                     "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "ApVHZ8JY5ofC",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "CdNpE2pqjmI6",
+                                        "GLks18SNjxmC",
+                                        "ApVHZ8JY5ofC"
+                                    ],
+                                    "title": "Day.js",
+                                    "notePosition": 30,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "day.js",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-calendar",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Day.js.md",
+                                    "attachments": []
                                 }
                             ]
                         },
