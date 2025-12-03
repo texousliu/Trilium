@@ -4,7 +4,7 @@ import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/u
 import { ParentComponent } from "../react/react_utils";
 import { t } from "../../services/i18n"
 import { useContext } from "preact/hooks";
-import { useIsNoteReadOnly } from "../react/hooks";
+import { useIsNoteReadOnly, useNoteLabel, useNoteProperty } from "../react/hooks";
 import { useTriliumOption } from "../react/hooks";
 import ActionButton from "../react/ActionButton"
 import appContext, { CommandNames } from "../../components/app_context";
@@ -46,14 +46,16 @@ function RevisionsButton({ note }: { note: FNote }) {
 
 function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
   const parentComponent = useContext(ParentComponent);
+  const noteType = useNoteProperty(note, "type") ?? "";
+  const [ viewType ] = useNoteLabel(note, "viewType");
   const canBeConvertedToAttachment = note?.isEligibleForConversionToAttachment();
-  const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(note.type);
+  const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(noteType);
   const isInOptionsOrHelp = note?.noteId.startsWith("_options") || note?.noteId.startsWith("_help");
-  const isPrintable = ["text", "code"].includes(note.type) || (note.type === "book" && ["presentation", "list", "table"].includes(note.getLabelValue("viewType") ?? ""));
+  const isPrintable = ["text", "code"].includes(noteType) || (noteType === "book" && ["presentation", "list", "table"].includes(viewType ?? ""));
   const isElectron = getIsElectron();
   const isMac = getIsMac();
-  const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(note.type);
-  const isSearchOrBook = ["search", "book"].includes(note.type);
+  const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(noteType);
+  const isSearchOrBook = ["search", "book"].includes(noteType);
   const [ syncServerHost ] = useTriliumOption("syncServerHost");
   const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
 
