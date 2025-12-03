@@ -23,7 +23,19 @@ function getBundle(script: string) {
         title: "Script note"
     }).noteId;
     const bundle: Bundle = {
-        script: `\napiContext.modules['${id}'] = { exports: {} };\nreturn await ((async function(exports, module, require, api) {\ntry {\n${script}\n;\n} catch (e) { throw new Error(\"Load of script note \\\"Client\\\" (${id}) failed with: \" + e.message); }\nfor (const exportKey in exports) module.exports[exportKey] = exports[exportKey];\nreturn module.exports;\n}).call({}, {}, apiContext.modules['${id}'], apiContext.require([]), apiContext.apis['${id}']));\n`,
+        script: [
+            '',
+            `apiContext.modules['${id}'] = { exports: {} };`,
+            `return await ((async function(exports, module, require, api) {`,
+            `try {`,
+            `${script}`,
+            `;`,
+            `} catch (e) { throw new Error(\"Load of script note \\\"Client\\\" (${id}) failed with: \" + e.message); }`,
+            `for (const exportKey in exports) module.exports[exportKey] = exports[exportKey];`,
+            `return module.exports;`,
+            `}).call({}, {}, apiContext.modules['${id}'], apiContext.require([]), apiContext.apis['${id}']));`,
+            ''
+        ].join('\n'),
         html: "",
         noteId: id,
         allNoteIds: [ id ]
