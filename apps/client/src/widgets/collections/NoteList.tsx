@@ -1,5 +1,5 @@
 import { allViewTypes, ViewModeMedia, ViewModeProps, ViewTypeOptions } from "./interface";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent } from "../react/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
 import { useEffect, useRef, useState } from "preact/hooks";
@@ -53,10 +53,11 @@ const ViewComponents: Record<ViewTypeOptions, { normal: LazyLoadedComponent, pri
 export default function NoteList(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady" | "onProgressChanged">) {
     const { note, noteContext, notePath, ntxId, viewScope } = useNoteContext();
     const viewType = useNoteViewType(note);
+    const noteType = useNoteProperty(note, "type");
     const [ enabled, setEnabled ] = useState(noteContext?.hasNoteList());
     useEffect(() => {
         setEnabled(noteContext?.hasNoteList());
-    }, [ note, noteContext, viewType, viewScope?.viewMode ])
+    }, [ note, noteContext, viewType, viewScope?.viewMode, noteType ])
     return <CustomNoteList viewType={viewType} note={note} isEnabled={!!enabled} notePath={notePath} ntxId={ntxId} {...props} />
 }
 
