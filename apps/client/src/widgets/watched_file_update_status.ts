@@ -2,7 +2,7 @@ import { t } from "../services/i18n.js";
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import server from "../services/server.js";
 import fileWatcher from "../services/file_watcher.js";
-import dayjs from "dayjs";
+import { dayjs } from "@triliumnext/commons";
 import type { EventData } from "../components/app_context.js";
 import type FNote from "../entities/fnote.js";
 

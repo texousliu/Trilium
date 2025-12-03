@@ -17,7 +17,7 @@ import shortcutService from "./shortcuts.js";
 import dialogService from "./dialog.js";
 import type FNote from "../entities/fnote.js";
 import { t } from "./i18n.js";
-import dayjs from "dayjs";
+import { dayjs } from "@triliumnext/commons";
 import type NoteContext from "../components/note_context.js";
 import type Component from "../components/component.js";
 import { formatLogMessage } from "@triliumnext/commons";

@@ -10,5 +10,9 @@
     "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
     "url": "https://triliumnotes.org"
+  },
+  "dependencies": {
+    "dayjs": "1.11.19",
+    "dayjs-plugin-utc": "0.1.2"
   }
 }

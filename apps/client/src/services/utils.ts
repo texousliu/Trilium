@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { dayjs } from "@triliumnext/commons";
 import type { ViewScope } from "./link.js";
 import FNote from "../entities/fnote";
 
