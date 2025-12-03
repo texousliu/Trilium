@@ -734,7 +734,8 @@
   },
   "zpetne_odkazy": {
     "relation": "關聯",
-    "backlink_one": "{{count}} 個反連結"
+    "backlink_one": "{{count}} 個反連結",
+    "backlink_other": ""
   },
   "mobile_detail_menu": {
     "insert_child_note": "插入子筆記",
