@@ -1,5 +1,14 @@
 import { default as dayjs, type Dayjs } from "dayjs";
 
+import "dayjs/plugin/advancedFormat";
+import "dayjs/plugin/duration";
+import "dayjs/plugin/isBetween";
+import "dayjs/plugin/isoWeek";
+import "dayjs/plugin/isSameOrAfter";
+import "dayjs/plugin/isSameOrBefore";
+import "dayjs/plugin/quarterOfYear";
+import "dayjs/plugin/utc";
+
 //#region Plugins
 import advancedFormat from "dayjs/plugin/advancedFormat.js";
 import duration from "dayjs/plugin/duration.js";
