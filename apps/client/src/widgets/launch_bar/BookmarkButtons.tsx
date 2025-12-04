@@ -1,16 +1,13 @@
 import { useMemo } from "preact/hooks";
-import type { LaunchBarWidgetProps } from "./launch_bar_widget";
+import { LaunchBarActionButton, LaunchBarDropdownButton, type LaunchBarWidgetProps } from "./launch_bar_widgets";
 import { CSSProperties } from "preact";
 import type FNote from "../../entities/fnote";
 import { useChildNotes, useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../react/hooks";
-import ActionButton from "../react/ActionButton";
 import appContext from "../../components/app_context";
 import { escapeHtml, isCtrlKey } from "../../services/utils";
 import link_context_menu from "../../menus/link_context_menu";
 import "./BookmarkButtons.css";
-import Dropdown from "../react/Dropdown";
 import Icon from "../react/Icon";
-import NoteList from "../react/NoteList";
 import NoteLink from "../react/NoteLink";
 
 const PARENT_NOTE_ID = "_lbBookmarks";
@@ -57,12 +54,9 @@ function OpenNoteButtonWidget({ note }: { note: FNote }) {
     }
 
     return title && iconClass && (
-        <ActionButton
+        <LaunchBarActionButton
             icon={iconClass}
             text={escapeHtml(title)}
-            className="button-widget launcher-button"
-            noIconActionClass
-            titlePosition="right"
             onClick={launch}
             onAuxClick={launch}
             onContextMenu={evt => {
@@ -79,10 +73,7 @@ function BookmarkFolder({ note }: { note: FNote }) {
     const childNotes = useChildNotes(note.noteId);
 
     return title && iconClass && (
-        <Dropdown
-            className="right-dropdown-widget"
-            buttonClassName="right-dropdown-button launcher-button"
-            hideToggleArrow
+        <LaunchBarDropdownButton
             title={escapeHtml(title)}
             text={<Icon icon={iconClass} />}
         >
@@ -99,7 +90,7 @@ function BookmarkFolder({ note }: { note: FNote }) {
                     ))}
                 </ul>
             </div>
-        </Dropdown>
+        </LaunchBarDropdownButton>
     )
 }
 
