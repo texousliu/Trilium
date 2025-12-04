@@ -76,7 +76,7 @@ For each note of the calendar, the following attributes can be used:
 | `#startTime` | The time the event starts at. If this value is missing, then the event is considered a full-day event. The format is `HH:MM` (hours in 24-hour format and minutes). |
 | `#endTime` | Similar to `startTime`, it mentions the time at which the event ends (in relation with `endDate` if present, or `startDate`). |
 | `#color` | Displays the event with a specified color (named such as `red`, `gray` or hex such as `#FF0000`). This will also change the color of the note in other places such as the note tree. |
-| `#calendar:color` | Similar to `#color`, but applies the color only for the event in the calendar and not for other places such as the note tree. (_Deprecated_) |
+| `#calendar:color` | **❌️ Removed since v0.100.0. Use** `**#color**` **instead.**<br><br>Similar to `#color`, but applies the color only for the event in the calendar and not for other places such as the note tree. |
 | `#iconClass` | If present, the icon of the note will be displayed to the left of the event title. |
 | `#calendar:title` | Changes the title of an event to point to an attribute of the note other than the title, can either a label or a relation (without the `#` or `~` symbol). See _Use-cases_ for more information. |
 | `#calendar:displayedAttributes` | Allows displaying the value of one or more attributes in the calendar like this:       <br>  <br>![](9_Calendar_image.png)      <br>  <br>`#weight="70" #Mood="Good" #calendar:displayedAttributes="weight,Mood"`     <br>  <br>It can also be used with relations, case in which it will display the title of the target note:      <br>  <br>`~assignee=@My assignee #calendar:displayedAttributes="assignee"` |
