@@ -21,9 +21,10 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
     forceShown?: boolean;
     onShown?: () => void;
     onHidden?: () => void;
+    dropdownOptions?: Partial<BootstrapDropdown.Options>;
 }
 
-export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden }: DropdownProps) {
+export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -32,7 +33,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
     useEffect(() => {
         if (!triggerRef.current) return;
 
-        const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current);
+        const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current, dropdownOptions);
         if (forceShown) {
             dropdown.show();
             setShown(true);

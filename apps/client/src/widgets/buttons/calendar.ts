@@ -10,20 +10,7 @@ import type { EventData } from "../../components/app_context.js";
 import { dayjs, type Dayjs } from "@triliumnext/commons";
 import type { AttributeRow, OptionDefinitions } from "@triliumnext/commons";
 
-const MONTHS = [
-    t("calendar.january"),
-    t("calendar.february"),
-    t("calendar.march"),
-    t("calendar.april"),
-    t("calendar.may"),
-    t("calendar.june"),
-    t("calendar.july"),
-    t("calendar.august"),
-    t("calendar.september"),
-    t("calendar.october"),
-    t("calendar.november"),
-    t("calendar.december")
-];
+
 
 const DROPDOWN_TPL = `
 <div class="calendar-dropdown-widget">
@@ -33,11 +20,6 @@ const DROPDOWN_TPL = `
                 data-bs-toggle="dropdown" data-bs-auto-close="true"
                 aria-expanded="false"
                 data-calendar-input="month"></button>
-            <ul class="dropdown-menu" data-calendar-input="month-list">
-                ${Object.entries(MONTHS)
-        .map(([i, month]) => `<li><button class="dropdown-item" data-value=${i}>${month}</button></li>`)
-        .join("")}
-            </ul>
 
             <button class="calendar-btn tn-tool-button bx bx-chevron-right" data-calendar-toggle="next"></button>
         </div>

@@ -20,7 +20,7 @@ export function LaunchBarActionButton(props: Omit<ActionButtonProps, "className"
     )
 }
 
-export function LaunchBarDropdownButton({ children, icon, ...props }: Pick<DropdownProps, "title" | "children" | "onShown"> & { icon: string }) {
+export function LaunchBarDropdownButton({ children, icon, ...props }: Pick<DropdownProps, "title" | "children" | "onShown" | "dropdownOptions"> & { icon: string }) {
     return (
         <Dropdown
             className="right-dropdown-widget"
