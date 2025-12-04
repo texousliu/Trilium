@@ -1,7 +1,6 @@
 import CalendarWidget from "../buttons/calendar.js";
 import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
-import ScriptLauncher from "../buttons/launcher/script_launcher.js";
 import utils, { isMobile } from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
@@ -16,6 +15,7 @@ import { useLegacyWidget } from "../react/hooks.jsx";
 import QuickSearchWidget from "../quick_search.js";
 import { ParentComponent } from "../react/react_utils.jsx";
 import { useContext } from "preact/hooks";
+import { LaunchBarActionButton, useLauncherIconAndTitle } from "../launch_bar/launch_bar_widgets.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -62,7 +62,7 @@ export default class LauncherWidget extends BasicWidget {
         } else if (launcherType === "note") {
             widget = wrapReactWidgets<BasicWidget>([ <NoteLauncher launcherNote={note} /> ])[0];
         } else if (launcherType === "script") {
-            widget = new ScriptLauncher(note).class("launcher-button");
+            widget = wrapReactWidgets<BasicWidget>([ <ScriptLauncher launcherNote={note} /> ])[0];
         } else if (launcherType === "customWidget") {
             widget = await this.initCustomWidget(note);
         } else if (launcherType === "builtinWidget") {
@@ -125,6 +125,26 @@ export default class LauncherWidget extends BasicWidget {
                 throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
         }
     }
+}
+
+function ScriptLauncher({ launcherNote }: { launcherNote: FNote }) {
+    const { icon, title } = useLauncherIconAndTitle(launcherNote);
+    return (
+        <LaunchBarActionButton
+            icon={icon}
+            text={title}
+            onClick={async () => {
+                if (launcherNote.isLabelTruthy("scriptInLauncherContent")) {
+                    await launcherNote.executeScript();
+                } else {
+                    const script = await launcherNote.getRelationTarget("script");
+                    if (script) {
+                        await script.executeScript();
+                    }
+                }
+            }}
+        />
+    )
 }
 
 function TodayLauncher({ launcherNote }: { launcherNote: FNote }) {
