@@ -28,7 +28,7 @@ function SingleBookmark({ note }: { note: FNote }) {
     const [ bookmarkFolder ] = useNoteLabelBoolean(note, "bookmarkFolder");
     return bookmarkFolder
         ? <BookmarkFolder note={note} />
-        : <CustomNoteLauncher launcherNote={note} targetNoteId={note.noteId} />
+        : <CustomNoteLauncher launcherNote={note} getTargetNoteId={() => note.noteId} />
 }
 
 function BookmarkFolder({ note }: { note: FNote }) {

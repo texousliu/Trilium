@@ -12,7 +12,7 @@ import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWi
 import { VNode } from "preact";
 import { CommandButton, CustomNoteLauncher, NoteLauncher } from "../launch_bar/GenericButtons.jsx";
 import date_notes from "../../services/date_notes.js";
-import { useLegacyWidget, useNoteContext } from "../react/hooks.jsx";
+import { useLegacyWidget } from "../react/hooks.jsx";
 import QuickSearchWidget from "../quick_search.js";
 import { ParentComponent } from "../react/react_utils.jsx";
 import { useContext } from "preact/hooks";
