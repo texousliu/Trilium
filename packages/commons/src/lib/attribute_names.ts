@@ -59,7 +59,10 @@ type Labels = {
  */
 type Relations = [
     "searchScript",
-    "ancestor"
+    "ancestor",
+
+    // Launcher-specific
+    "target"
 ];
 
 export type LabelNames = keyof Labels;

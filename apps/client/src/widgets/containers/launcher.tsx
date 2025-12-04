@@ -1,7 +1,6 @@
 import CalendarWidget from "../buttons/calendar.js";
 import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
-import NoteLauncher from "../buttons/launcher/note_launcher.js";
 import ScriptLauncher from "../buttons/launcher/script_launcher.js";
 import utils from "../../services/utils.js";
 import TodayLauncher from "../buttons/launcher/today_launcher.js";
@@ -13,7 +12,7 @@ import HistoryNavigationButton from "../launch_bar/HistoryNavigation.jsx";
 import AiChatButton from "../launch_bar/AiChatButton.jsx";
 import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWidget.jsx";
 import { VNode } from "preact";
-import { CommandButton } from "../launch_bar/GenericButtons.jsx";
+import { CommandButton, NoteLauncher } from "../launch_bar/GenericButtons.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -58,7 +57,7 @@ export default class LauncherWidget extends BasicWidget {
         if (launcherType === "command") {
             widget = wrapReactWidgets<BasicWidget>([ <CommandButton launcherNote={note} /> ])[0];
         } else if (launcherType === "note") {
-            widget = new NoteLauncher(note).class("launcher-button");
+            widget = wrapReactWidgets<BasicWidget>([ <NoteLauncher launcherNote={note} /> ])[0];
         } else if (launcherType === "script") {
             widget = new ScriptLauncher(note).class("launcher-button");
         } else if (launcherType === "customWidget") {

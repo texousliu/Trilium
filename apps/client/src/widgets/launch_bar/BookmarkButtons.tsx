@@ -5,7 +5,7 @@ import type FNote from "../../entities/fnote";
 import { useChildNotes, useNoteLabelBoolean } from "../react/hooks";
 import "./BookmarkButtons.css";
 import NoteLink from "../react/NoteLink";
-import { NoteLauncher } from "./GenericButtons";
+import { CustomNoteLauncher } from "./GenericButtons";
 
 const PARENT_NOTE_ID = "_lbBookmarks";
 
@@ -28,7 +28,7 @@ function SingleBookmark({ note }: { note: FNote }) {
     const [ bookmarkFolder ] = useNoteLabelBoolean(note, "bookmarkFolder");
     return bookmarkFolder
         ? <BookmarkFolder note={note} />
-        : <NoteLauncher launcherNote={note} targetNoteId={note.noteId} />
+        : <CustomNoteLauncher launcherNote={note} targetNoteId={note.noteId} />
 }
 
 function BookmarkFolder({ note }: { note: FNote }) {
