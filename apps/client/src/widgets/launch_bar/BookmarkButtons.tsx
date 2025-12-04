@@ -1,13 +1,12 @@
 import { useMemo } from "preact/hooks";
-import { LaunchBarActionButton, LaunchBarDropdownButton, type LaunchBarWidgetProps } from "./launch_bar_widgets";
+import { LaunchBarDropdownButton, type LaunchBarWidgetProps } from "./launch_bar_widgets";
 import { CSSProperties } from "preact";
 import type FNote from "../../entities/fnote";
 import { useChildNotes, useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../react/hooks";
-import appContext from "../../components/app_context";
-import { escapeHtml, isCtrlKey } from "../../services/utils";
-import link_context_menu from "../../menus/link_context_menu";
+import { escapeHtml } from "../../services/utils";
 import "./BookmarkButtons.css";
 import NoteLink from "../react/NoteLink";
+import { NoteLauncher } from "./GenericButtons";
 
 const PARENT_NOTE_ID = "_lbBookmarks";
 
@@ -30,40 +29,7 @@ function SingleBookmark({ note }: { note: FNote }) {
     const [ bookmarkFolder ] = useNoteLabelBoolean(note, "bookmarkFolder");
     return bookmarkFolder
         ? <BookmarkFolder note={note} />
-        : <OpenNoteButtonWidget note={note} />
-}
-
-function OpenNoteButtonWidget({ note }: { note: FNote }) {
-    const [ iconClass ] = useNoteLabel(note, "iconClass");
-    const title = useNoteProperty(note, "title");
-
-    async function launch(evt: MouseEvent) {
-        if (evt.which === 3) {
-            return;
-        }
-        const hoistedNoteId = getHoistedNoteId(note);
-        const ctrlKey = isCtrlKey(evt);
-
-        if ((evt.which === 1 && ctrlKey) || evt.which === 2) {
-            const activate = evt.shiftKey ? true : false;
-            await appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId, activate);
-        } else {
-            await appContext.tabManager.openInSameTab(note.noteId);
-        }
-    }
-
-    return title && iconClass && (
-        <LaunchBarActionButton
-            icon={iconClass}
-            text={escapeHtml(title)}
-            onClick={launch}
-            onAuxClick={launch}
-            onContextMenu={evt => {
-                evt.preventDefault();
-                link_context_menu.openContextMenu(note.noteId, evt);
-            }}
-        />
-    )
+        : <NoteLauncher launcherNote={note} targetNoteId={note.noteId} />
 }
 
 function BookmarkFolder({ note }: { note: FNote }) {
@@ -91,8 +57,4 @@ function BookmarkFolder({ note }: { note: FNote }) {
             </div>
         </LaunchBarDropdownButton>
     )
-}
-
-function getHoistedNoteId(noteToOpen: FNote) {
-    return noteToOpen.getRelationValue("hoistedNote") || appContext.tabManager.getActiveContext()?.hoistedNoteId;
 }

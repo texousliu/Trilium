@@ -13,7 +13,7 @@ import HistoryNavigationButton from "../launch_bar/HistoryNavigation.jsx";
 import AiChatButton from "../launch_bar/AiChatButton.jsx";
 import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWidget.jsx";
 import { VNode } from "preact";
-import CommandButton from "../launch_bar/CommandButton.jsx";
+import { CommandButton } from "../launch_bar/GenericButtons.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
