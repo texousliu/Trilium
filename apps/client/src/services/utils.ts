@@ -684,7 +684,10 @@ async function downloadAsSvg(nameWithoutExtension: string, svgSource: string | S
     const { element, cleanup } = prepareElementForSnapdom(svgSource);
 
     try {
-        const result = await snapdom(element);
+        const result = await snapdom(element, {
+                backgroundColor: "transparent",
+                scale: 2
+            });
         await triggerDownload(`${nameWithoutExtension}.svg`, result.url);
     } finally {
         cleanup();
@@ -719,7 +722,10 @@ async function downloadAsPng(nameWithoutExtension: string, svgSource: string | S
     const { element, cleanup } = prepareElementForSnapdom(svgSource);
 
     try {
-        const result = await snapdom(element);
+        const result = await snapdom(element, {
+                backgroundColor: "transparent",
+                scale: 2
+            });
         const pngImg = await result.toPng();
         await triggerDownload(`${nameWithoutExtension}.png`, pngImg.src);
     } finally {

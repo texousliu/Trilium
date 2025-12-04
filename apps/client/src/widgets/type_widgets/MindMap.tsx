@@ -47,11 +47,6 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
 
-    // Shared options for snapdom screenshot generation used in both attachment saving and exports
-    const imageOptions : SnapdomOptions = {
-        backgroundColor: "transparent",
-        scale: 2
-    };
 
     const spacedUpdate = useEditorSpacedUpdate({
         note,
@@ -59,7 +54,10 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
         getData: async () => {
             if (!apiRef.current) return;
 
-            const result = await snapdom(apiRef.current.nodes, imageOptions);
+            const result = await snapdom(apiRef.current.nodes, {
+                backgroundColor: "transparent",
+                scale: 2
+            });
 
             // a data URL in the format: "data:image/svg+xml;charset=utf-8,<url-encoded-svg>"
             // We need to extract the content after the comma and decode the URL encoding (%3C to <, %20 to space, etc.)
