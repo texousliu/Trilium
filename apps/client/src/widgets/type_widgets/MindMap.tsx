@@ -102,7 +102,7 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
     // Export as PNG or SVG.
     useTriliumEvents([ "exportSvg", "exportPng" ], async ({ ntxId: eventNtxId }, eventName) => {
         if (eventNtxId !== ntxId || !apiRef.current) return;
-            const nodes = apiRef.current.nodes;
+        const nodes = apiRef.current.nodes;
         if (eventName === "exportSvg") {
             await utils.downloadAsSvg(note.title, nodes);
         } else {

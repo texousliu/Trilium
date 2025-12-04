@@ -688,7 +688,7 @@ async function downloadAsSvg(nameWithoutExtension: string, svgSource: string | S
                 backgroundColor: "transparent",
                 scale: 2
             });
-        await triggerDownload(`${nameWithoutExtension}.svg`, result.url);
+        triggerDownload(`${nameWithoutExtension}.svg`, result.url);
     } finally {
         cleanup();
     }

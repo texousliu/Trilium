@@ -83,7 +83,7 @@ export default function SvgSplitEditor({ ntxId, note, attachmentName, renderSvg,
         try {
             const svgEl = containerRef.current?.querySelector("svg");
             if (!svgEl) throw new Error("SVG element not found");
-            await utils.downloadAsSvg(note.title + '.svg', svgEl);
+            await utils.downloadAsSvg(note.title, svgEl);
         } catch (e) {
             console.warn(e);
             toast.showError(t("svg.export_to_svg"));
@@ -95,7 +95,7 @@ export default function SvgSplitEditor({ ntxId, note, attachmentName, renderSvg,
         try {
             const svgEl = containerRef.current?.querySelector("svg");
             if (!svgEl) throw new Error("SVG element not found");
-            await utils.downloadAsPng(note.title + '.png', svgEl);
+            await utils.downloadAsPng(note.title, svgEl);
         } catch (e) {
             console.warn(e);
             toast.showError(t("svg.export_to_png"));
