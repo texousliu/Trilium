@@ -370,6 +370,16 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: Re
     ] as const;
 }
 
+export function useNoteRelationTarget(note: FNote, relationName: RelationNames) {
+    const [ targetNote, setTargetNote ] = useState<FNote | null>();
+
+    useEffect(() => {
+        note.getRelationTarget(relationName).then(setTargetNote);
+    }, [ note ]);
+
+    return [ targetNote ] as const;
+}
+
 /**
  * Allows a React component to read or write a note's label while also reacting to changes in value.
  *

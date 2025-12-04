@@ -11,10 +11,10 @@ import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWi
 import { VNode } from "preact";
 import { CommandButton, CustomNoteLauncher, NoteLauncher } from "../launch_bar/GenericButtons.jsx";
 import date_notes from "../../services/date_notes.js";
-import { useLegacyWidget } from "../react/hooks.jsx";
+import { useLegacyWidget, useNoteContext, useNoteRelation, useNoteRelationTarget } from "../react/hooks.jsx";
 import QuickSearchWidget from "../quick_search.js";
 import { ParentComponent } from "../react/react_utils.jsx";
-import { useContext } from "preact/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "../launch_bar/launch_bar_widgets.jsx";
 
 interface InnerWidget extends BasicWidget {
@@ -64,7 +64,7 @@ export default class LauncherWidget extends BasicWidget {
         } else if (launcherType === "script") {
             widget = wrapReactWidgets<BasicWidget>([ <ScriptLauncher launcherNote={note} /> ])[0];
         } else if (launcherType === "customWidget") {
-            widget = await this.initCustomWidget(note);
+            widget = wrapReactWidgets<BasicWidget>([ <CustomWidget launcherNote={note} /> ])[0];
         } else if (launcherType === "builtinWidget") {
             widget = wrapReactWidgets<BasicWidget>([ this.initBuiltinWidget(note) ])[0];
         } else {
@@ -160,14 +160,39 @@ function TodayLauncher({ launcherNote }: { launcherNote: FNote }) {
 }
 
 function QuickSearchLauncherWidget({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {
-    const [ widgetEl ] = useLegacyWidget(() => new QuickSearchWidget());
+    const widget = useMemo(() => new QuickSearchWidget(), []);
     const parentComponent = useContext(ParentComponent) as BasicWidget | null;
     const isEnabled = isHorizontalLayout && !isMobile();
     parentComponent?.contentSized();
 
     return (
         <div>
-            {isEnabled && widgetEl}
+            {isEnabled && <LegacyWidgetRenderer widget={widget} />}
         </div>
     )
+}
+
+function CustomWidget({ launcherNote }: { launcherNote: FNote }) {
+    const [ widgetNote ] = useNoteRelationTarget(launcherNote, "widget");
+    const [ widget, setWidget ] = useState<BasicWidget>();
+    const parentComponent = useContext(ParentComponent) as BasicWidget | null;
+    parentComponent?.contentSized();
+
+    useEffect(() => {
+        widgetNote?.executeScript().then(setWidget);
+    }, [ widgetNote ]);
+
+    return (
+        <div>
+            {widget && <LegacyWidgetRenderer widget={widget} />}
+        </div>
+    )
+}
+
+function LegacyWidgetRenderer({ widget }: { widget: BasicWidget }) {
+    const { noteContext } = useNoteContext();
+    const [ widgetEl ] = useLegacyWidget(() => widget, {
+        noteContext
+    });
+    return widgetEl;
 }

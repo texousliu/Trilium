@@ -62,7 +62,8 @@ type Relations = [
     "ancestor",
 
     // Launcher-specific
-    "target"
+    "target",
+    "widget"
 ];
 
 export type LabelNames = keyof Labels;
