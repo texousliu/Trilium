@@ -175,3 +175,7 @@
     color: var(--hover-item-text-color);
     text-decoration: underline;
 }
+
+.calendar-dropdown-widget .form-control {
+    padding: 0;
+}

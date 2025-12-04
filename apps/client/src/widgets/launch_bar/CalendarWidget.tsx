@@ -9,6 +9,7 @@ import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { t } from "../../services/i18n";
 import FormDropdownList from "../react/FormDropdownList";
+import FormTextBox from "../react/FormTextBox";
 
 const MONTHS = [
     t("calendar.january"),
@@ -60,6 +61,7 @@ function CalendarHeader(props: CalendarHeaderProps) {
     return (
         <div className="calendar-header">
             <CalendarMonthSelector {...props} />
+            <CalendarYearSelector {...props} />
         </div>
     )
 }
@@ -70,7 +72,6 @@ function CalendarMonthSelector({ date, setDate }: CalendarHeaderProps) {
             index: index.toString(), text
         })))
     ), []);
-    console.log("Got months ", months);
 
     return (
         <div className="calendar-month-selector">
@@ -87,9 +88,30 @@ function CalendarMonthSelector({ date, setDate }: CalendarHeaderProps) {
     );
 }
 
+function CalendarYearSelector({ date, setDate }: CalendarHeaderProps) {
+    return (
+        <div className="calendar-year-selector">
+            <AdjustDateButton date={date} setDate={setDate} direction="prev" unit="year" />
+            <FormTextBox
+                type="number"
+                min="1900" max="2999" step="1"
+                currentValue={date.year().toString()}
+                onChange={(newValue) => {
+                    const year = parseInt(newValue, 10);
+                    if (!Number.isNaN(year)) {
+                        setDate(date.set("year", year));
+                    }
+                }}
+                data-calendar-input="year"
+            />
+            <AdjustDateButton date={date} setDate={setDate} direction="next" unit="year" />
+        </div>
+    )
+}
+
 function AdjustDateButton({ date, setDate, unit, direction }: CalendarHeaderProps & {
     direction: "prev" | "next",
-    unit: "month"
+    unit: "month" | "year"
 }) {
     return (
         <ActionButton

@@ -10,32 +10,6 @@ import type { EventData } from "../../components/app_context.js";
 import { dayjs, type Dayjs } from "@triliumnext/commons";
 import type { AttributeRow, OptionDefinitions } from "@triliumnext/commons";
 
-
-
-const DROPDOWN_TPL = `
-<div class="calendar-dropdown-widget">
-    <div class="calendar-header">
-        <div class="calendar-month-selector">
-            <button class="btn dropdown-toggle select-button" type="button"
-                data-bs-toggle="dropdown" data-bs-auto-close="true"
-                aria-expanded="false"
-                data-calendar-input="month"></button>
-
-            <button class="calendar-btn tn-tool-button bx bx-chevron-right" data-calendar-toggle="next"></button>
-        </div>
-
-        <div class="calendar-year-selector">
-            <button class="calendar-btn tn-tool-button bx bx-chevron-left" data-calendar-toggle="previousYear"></button>
-
-            <input type="number" min="1900" max="2999" step="1" data-calendar-input="year" />
-
-            <button class="calendar-btn tn-tool-button bx bx-chevron-right" data-calendar-toggle="nextYear"></button>
-        </div>
-    </div>
-
-
-</div>`;
-
 interface WeekCalculationOptions {
     firstWeekType: number;
     minDaysInFirstWeek: number;
