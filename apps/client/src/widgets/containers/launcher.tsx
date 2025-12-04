@@ -10,10 +10,10 @@ import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandNames } from "../../components/app_context.js";
-import AiChatButton from "../buttons/ai_chat_button.js";
 import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
 import SpacerWidget from "../launch_bar/SpacerWidget.jsx";
 import HistoryNavigationButton from "../launch_bar/HistoryNavigation.jsx";
+import AiChatButton from "../launch_bar/AiChatButton.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -125,7 +125,7 @@ export default class LauncherWidget extends BasicWidget {
             case "quickSearch":
                 return new QuickSearchLauncherWidget(this.isHorizontalLayout);
             case "aiChatLauncher":
-                return new AiChatButton(note);
+                return <AiChatButton launcherNote={note} />
             default:
                 throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
         }
