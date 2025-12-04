@@ -7,7 +7,6 @@ import appContext from "../../components/app_context";
 import { escapeHtml, isCtrlKey } from "../../services/utils";
 import link_context_menu from "../../menus/link_context_menu";
 import "./BookmarkButtons.css";
-import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 
 const PARENT_NOTE_ID = "_lbBookmarks";
@@ -74,8 +73,8 @@ function BookmarkFolder({ note }: { note: FNote }) {
 
     return title && iconClass && (
         <LaunchBarDropdownButton
+            icon={iconClass}
             title={escapeHtml(title)}
-            text={<Icon icon={iconClass} />}
         >
             <div className="bookmark-folder-widget">
                 <div className="parent-note">
