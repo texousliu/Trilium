@@ -1,5 +1,4 @@
 import CalendarWidget from "../buttons/calendar.js";
-import ProtectedSessionStatusWidget from "../buttons/protected_session_status.js";
 import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
 import NoteLauncher from "../buttons/launcher/note_launcher.js";
@@ -14,6 +13,7 @@ import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
 import SpacerWidget from "../launch_bar/SpacerWidget.jsx";
 import HistoryNavigationButton from "../launch_bar/HistoryNavigation.jsx";
 import AiChatButton from "../launch_bar/AiChatButton.jsx";
+import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWidget.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -113,7 +113,7 @@ export default class LauncherWidget extends BasicWidget {
             case "bookmarks":
                 return <BookmarkButtons isHorizontalLayout={this.isHorizontalLayout} />
             case "protectedSession":
-                return new ProtectedSessionStatusWidget();
+                return <ProtectedSessionStatusWidget />
             case "syncStatus":
                 return new SyncStatusWidget();
             case "backInHistoryButton":
