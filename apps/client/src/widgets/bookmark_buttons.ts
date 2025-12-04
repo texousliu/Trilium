@@ -34,14 +34,6 @@ export default class BookmarkButtons extends FlexContainer<Component> {
             let buttonWidget: OpenNoteButtonWidget | BookmarkFolderWidget = note.isLabelTruthy("bookmarkFolder")
                 ? new BookmarkFolderWidget(note);
 
-            if (this.settings.titlePlacement) {
-                if (!("settings" in buttonWidget)) {
-                    (buttonWidget as any).settings = {};
-                }
-
-                (buttonWidget as any).settings.titlePlacement = this.settings.titlePlacement;
-            }
-
             this.child(buttonWidget);
 
             this.$widget.append(buttonWidget.render());

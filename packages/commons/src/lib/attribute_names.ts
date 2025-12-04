@@ -24,6 +24,9 @@ type Labels = {
     orderBy: string;
     orderDirection: string;
 
+    // Launch bar
+    bookmarkFolder: boolean;
+
     // Collection-specific
     viewType: string;
     status: string;
