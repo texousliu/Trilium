@@ -21,6 +21,7 @@ import ActionButton from "../../react/ActionButton";
 import { RefObject } from "preact";
 import TouchBar, { TouchBarButton, TouchBarLabel, TouchBarSegmentedControl, TouchBarSpacer } from "../../react/TouchBar";
 import { openCalendarContextMenu } from "./context_menu";
+import { isMobile } from "../../../services/utils";
 
 interface CalendarViewData {
 
@@ -266,7 +267,7 @@ function useEventDisplayCustomization(parentNote: FNote) {
 
         // Prepend the icon to the title, if any.
         if (iconClass) {
-            let titleContainer;
+            let titleContainer: HTMLElement | null = null;
             switch (e.view.type) {
                 case "timeGridWeek":
                 case "dayGridMonth":
@@ -284,6 +285,9 @@ function useEventDisplayCustomization(parentNote: FNote) {
                 titleContainer.insertAdjacentHTML("afterbegin", icon);
             }
         }
+
+        // Disable the default context menu.
+        e.el.dataset.noContextMenu = "true";
 
         // Append promoted attributes to the end of the event container.
         if (promotedAttributes) {
@@ -310,12 +314,18 @@ function useEventDisplayCustomization(parentNote: FNote) {
             $(mainContainer ?? e.el).append($(promotedAttributesHtml));
         }
 
-        e.el.addEventListener("contextmenu", async (contextMenuEvent) => {
+        async function onContextMenu(contextMenuEvent: PointerEvent) {
             const note = await froca.getNote(e.event.extendedProps.noteId);
             if (!note) return;
 
             openCalendarContextMenu(contextMenuEvent, note, parentNote);
-        });
+        }
+
+        if (isMobile()) {
+            e.el.addEventListener("click", onContextMenu);
+        } else {
+            e.el.addEventListener("contextmenu", onContextMenu);
+        }
     }, []);
     return { eventDidMount };
 }
