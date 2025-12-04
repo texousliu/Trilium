@@ -7,16 +7,9 @@ import toastService from "../../services/toast.js";
 import options from "../../services/options.js";
 import { Dropdown } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
-import dayjs, { Dayjs } from "dayjs";
-import isoWeek from "dayjs/plugin/isoWeek.js";
-import utc from "dayjs/plugin/utc.js";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+import { dayjs, type Dayjs } from "@triliumnext/commons";
 import "../../stylesheets/calendar.css";
 import type { AttributeRow, OptionDefinitions } from "@triliumnext/commons";
-
-dayjs.extend(utc);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isoWeek);
 
 const MONTHS = [
     t("calendar.january"),

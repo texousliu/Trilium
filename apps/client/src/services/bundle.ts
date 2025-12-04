@@ -27,7 +27,7 @@ async function getAndExecuteBundle(noteId: string, originEntity = null, script =
     return await executeBundle(bundle, originEntity);
 }
 
-async function executeBundle(bundle: Bundle, originEntity?: Entity | null, $container?: JQuery<HTMLElement>) {
+export async function executeBundle(bundle: Bundle, originEntity?: Entity | null, $container?: JQuery<HTMLElement>) {
     const apiContext = await ScriptContext(bundle.noteId, bundle.allNoteIds, originEntity, $container);
 
     try {

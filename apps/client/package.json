@@ -38,8 +38,6 @@
     "boxicons": "2.1.4",
     "clsx": "2.1.1",
     "color": "5.0.3",
-    "dayjs": "1.11.19",
-    "dayjs-plugin-utc": "0.1.2",
     "debounce": "3.0.0",
     "draggabilly": "3.0.0",
     "force-graph": "1.51.0",

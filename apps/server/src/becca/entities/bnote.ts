@@ -11,8 +11,7 @@ import AbstractBeccaEntity from "./abstract_becca_entity.js";
 import BRevision from "./brevision.js";
 import BAttachment from "./battachment.js";
 import TaskContext from "../../services/task_context.js";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
+import { dayjs } from "@triliumnext/commons";
 import eventService from "../../services/events.js";
 import type { AttachmentRow, AttributeType, CloneResponse, NoteRow, NoteType, RevisionRow } from "@triliumnext/commons";
 import type BBranch from "./bbranch.js";
@@ -22,7 +21,6 @@ import searchService from "../../services/search/services/search.js";
 import cloningService from "../../services/cloning.js";
 import noteService from "../../services/notes.js";
 import handlers from "../../services/handlers.js";
-dayjs.extend(utc);
 
 const LABEL = "label";
 const RELATION = "relation";
