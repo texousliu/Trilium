@@ -29,8 +29,6 @@ const DROPDOWN_TPL = `
 <div class="calendar-dropdown-widget">
     <div class="calendar-header">
         <div class="calendar-month-selector">
-            <button class="calendar-btn tn-tool-button bx bx-chevron-left" data-calendar-toggle="previous"></button>
-
             <button class="btn dropdown-toggle select-button" type="button"
                 data-bs-toggle="dropdown" data-bs-auto-close="true"
                 aria-expanded="false"
@@ -106,17 +104,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
                 this.date = this.date.month(parseInt(value));
                 this.createMonth();
             }
-        });
-
-        this.$next = this.$dropdownContent.find('[data-calendar-toggle="next"]');
-        this.$next.on("click", () => {
-            this.date = this.date.add(1, 'month');
-            this.createMonth();
-        });
-        this.$previous = this.$dropdownContent.find('[data-calendar-toggle="previous"]');
-        this.$previous.on("click", () => {
-            this.date = this.date.subtract(1, 'month');
-            this.createMonth();
         });
 
         // Year navigation
