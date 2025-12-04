@@ -30,7 +30,6 @@ import ScrollingContainer from "../widgets/containers/scrolling_container.js";
 import ScrollPadding from "../widgets/scroll_padding.js";
 import SearchResult from "../widgets/search_result.jsx";
 import SharedInfo from "../widgets/shared_info.jsx";
-import SpacerWidget from "../widgets/spacer.js";
 import SplitNoteContainer from "../widgets/containers/split_note_container.js";
 import SqlResults from "../widgets/sql_result.js";
 import SqlTableSchemas from "../widgets/sql_table_schemas.js";
@@ -43,8 +42,8 @@ import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import utils from "../services/utils.js";
 import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
 import NoteDetail from "../widgets/NoteDetail.jsx";
-import RightPanelWidget from "../widgets/sidebar/RightPanelWidget.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
+import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 
 export default class DesktopLayout {
 
@@ -125,7 +124,7 @@ export default class DesktopLayout {
                                                                 .cssBlock(".title-row > * { margin: 5px; }")
                                                                 .child(<NoteIconWidget />)
                                                                 .child(<NoteTitleWidget />)
-                                                                .child(new SpacerWidget(0, 1))
+                                                                .child(<SpacerWidget baseSize={0} growthFactor={1} />)
                                                                 .child(<MovePaneButton direction="left" />)
                                                                 .child(<MovePaneButton direction="right" />)
                                                                 .child(<ClosePaneButton />)
