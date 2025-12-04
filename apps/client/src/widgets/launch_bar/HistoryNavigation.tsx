@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "preact/hooks";
 import FNote from "../../entities/fnote";
-import { dynamicRequire, escapeHtml, isElectron } from "../../services/utils";
-import { useNoteLabel, useNoteProperty } from "../react/hooks";
-import { LaunchBarActionButton } from "./launch_bar_widgets";
+import { dynamicRequire, isElectron } from "../../services/utils";
+import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import type { WebContents } from "electron";
 import contextMenu, { MenuCommandItem } from "../../menus/context_menu";
 import tree from "../../services/tree";
@@ -14,8 +13,7 @@ interface HistoryNavigationProps {
 }
 
 export default function HistoryNavigationButton({ launcherNote, command }: HistoryNavigationProps) {
-    const [ iconClass ] = useNoteLabel(launcherNote, "iconClass");
-    const title = useNoteProperty(launcherNote, "title");
+    const { icon, title } = useLauncherIconAndTitle(launcherNote);
     const webContentsRef = useRef<WebContents>(null);
 
     useEffect(() => {
@@ -27,10 +25,10 @@ export default function HistoryNavigationButton({ launcherNote, command }: Histo
         }
     }, []);
 
-    return iconClass && title && (
+    return (
         <LaunchBarActionButton
-            icon={iconClass}
-            text={escapeHtml(title)}
+            icon={icon}
+            text={title}
             triggerCommand={command}
             onContextMenu={async (e) => {
                 e.preventDefault();

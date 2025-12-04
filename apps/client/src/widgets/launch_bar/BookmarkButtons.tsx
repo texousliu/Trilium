@@ -1,9 +1,8 @@
 import { useMemo } from "preact/hooks";
-import { LaunchBarDropdownButton, type LaunchBarWidgetProps } from "./launch_bar_widgets";
+import { LaunchBarDropdownButton, useLauncherIconAndTitle, type LaunchBarWidgetProps } from "./launch_bar_widgets";
 import { CSSProperties } from "preact";
 import type FNote from "../../entities/fnote";
-import { useChildNotes, useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../react/hooks";
-import { escapeHtml } from "../../services/utils";
+import { useChildNotes, useNoteLabelBoolean } from "../react/hooks";
 import "./BookmarkButtons.css";
 import NoteLink from "../react/NoteLink";
 import { NoteLauncher } from "./GenericButtons";
@@ -33,14 +32,13 @@ function SingleBookmark({ note }: { note: FNote }) {
 }
 
 function BookmarkFolder({ note }: { note: FNote }) {
-    const [ iconClass ] = useNoteLabel(note, "iconClass");
-    const title = useNoteProperty(note, "title");
+    const { icon, title } = useLauncherIconAndTitle(note);
     const childNotes = useChildNotes(note.noteId);
 
-    return title && iconClass && (
+    return (
         <LaunchBarDropdownButton
-            icon={iconClass}
-            title={escapeHtml(title)}
+            icon={icon}
+            title={title}
         >
             <div className="bookmark-folder-widget">
                 <div className="parent-note">

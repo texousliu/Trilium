@@ -1,17 +1,15 @@
 import FNote from "../../entities/fnote";
-import { escapeHtml } from "../../services/utils";
-import { useNoteLabel, useNoteProperty, useTriliumOptionBool } from "../react/hooks";
-import { LaunchBarActionButton } from "./launch_bar_widgets";
+import { useTriliumOptionBool } from "../react/hooks";
+import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 
 export default function AiChatButton({ launcherNote }: { launcherNote: FNote }) {
     const [ aiEnabled ] = useTriliumOptionBool("aiEnabled");
-    const [ iconClass ] = useNoteLabel(launcherNote, "iconClass");
-    const title = useNoteProperty(launcherNote, "title");
+    const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
-    return aiEnabled && iconClass && title && (
+    return aiEnabled && (
         <LaunchBarActionButton
-            icon={iconClass}
-            text={escapeHtml(title)}
+            icon={icon}
+            text={title}
             triggerCommand="createAiChat"
         />
     )

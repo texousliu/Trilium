@@ -3,25 +3,23 @@ import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
 import { escapeHtml, isCtrlKey } from "../../services/utils";
 import { useNoteLabel, useNoteProperty } from "../react/hooks";
-import { LaunchBarActionButton } from "./launch_bar_widgets";
+import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 
 export function CommandButton({ launcherNote }: { launcherNote: FNote }) {
-    const [ iconClass ] = useNoteLabel(launcherNote, "iconClass");
+    const { icon, title } = useLauncherIconAndTitle(launcherNote);
     const [ command ] = useNoteLabel(launcherNote, "command");
-    const title = useNoteProperty(launcherNote, "title");
 
-    return iconClass && title && command && (
+    return command && (
         <LaunchBarActionButton
-            icon={iconClass}
-            text={escapeHtml(title)}
+            icon={icon}
+            text={title}
             triggerCommand={command as CommandNames}
         />
     )
 }
 
 export function NoteLauncher({ launcherNote, targetNoteId, hoistedNoteId }: { launcherNote: FNote, targetNoteId: string, hoistedNoteId?: string }) {
-    const [ iconClass ] = useNoteLabel(launcherNote, "iconClass");
-    const title = useNoteProperty(launcherNote, "title");
+    const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
     async function launch(evt: MouseEvent) {
         if (evt.which === 3) {
@@ -38,9 +36,9 @@ export function NoteLauncher({ launcherNote, targetNoteId, hoistedNoteId }: { la
         }
     }
 
-    return title && iconClass && (
+    return (
         <LaunchBarActionButton
-            icon={iconClass}
+            icon={icon}
             text={escapeHtml(title)}
             onClick={launch}
             onAuxClick={launch}
