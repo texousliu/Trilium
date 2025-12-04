@@ -1,11 +1,16 @@
 import { Dropdown as BootstrapDropdown } from "bootstrap";
-import { ComponentChildren } from "preact";
+import { ComponentChildren, HTMLAttributes } from "preact";
 import { CSSProperties, HTMLProps } from "preact/compat";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useUniqueName } from "./hooks";
 
+type DataAttributes = {
+  [key: `data-${string}`]: string | number | boolean | undefined;
+};
+
 export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "className"> {
     buttonClassName?: string;
+    buttonProps?: Partial<HTMLAttributes<HTMLButtonElement> & DataAttributes>;
     isStatic?: boolean;
     children: ComponentChildren;
     title?: string;
@@ -24,7 +29,7 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
     dropdownOptions?: Partial<BootstrapDropdown.Options>;
 }
 
-export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions }: DropdownProps) {
+export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -80,6 +85,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
                 title={title}
                 id={id ?? ariaId}
                 disabled={disabled}
+                {...buttonProps}
             >
                 {text}
                 <span className="caret"></span>

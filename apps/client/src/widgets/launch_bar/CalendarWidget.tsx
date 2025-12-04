@@ -6,7 +6,6 @@ import appContext from "../../components/app_context";
 import "./CalendarWidget.css";
 import Calendar from "./Calendar";
 import ActionButton from "../react/ActionButton";
-import Dropdown from "../react/Dropdown";
 import { t } from "../../services/i18n";
 import FormDropdownList from "../react/FormDropdownList";
 import FormTextBox from "../react/FormTextBox";
@@ -82,6 +81,7 @@ function CalendarMonthSelector({ date, setDate }: CalendarHeaderProps) {
                 onChange={value => {
 
                 }}
+                buttonProps={{ "data-calendar-input": "month" }}
             />
             <AdjustDateButton date={date} setDate={setDate} direction="next" unit="month" />
         </div>

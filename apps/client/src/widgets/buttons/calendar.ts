@@ -62,26 +62,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             }
         });
 
-        // Year navigation
-        this.$yearSelect = this.$dropdownContent.find('[data-calendar-input="year"]');
-        this.$yearSelect.on("input", (e) => {
-            const target = e.target as HTMLInputElement;
-            this.date = this.date.year(parseInt(target.value));
-            this.createMonth();
-        });
-
-        this.$nextYear = this.$dropdownContent.find('[data-calendar-toggle="nextYear"]');
-        this.$nextYear.on("click", () => {
-            this.date = this.date.add(1, 'year');
-            this.createMonth();
-        });
-
-        this.$previousYear = this.$dropdownContent.find('[data-calendar-toggle="previousYear"]');
-        this.$previousYear.on("click", () => {
-            this.date = this.date.subtract(1, 'year');
-            this.createMonth();
-        });
-
         // Date click
         this.$dropdownContent.on("click", ".calendar-date", async (ev) => {
             const date = $(ev.target).closest(".calendar-date").attr("data-calendar-date");
