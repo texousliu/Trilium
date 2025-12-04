@@ -7,13 +7,13 @@ import ScriptLauncher from "../buttons/launcher/script_launcher.js";
 import CommandButtonWidget from "../buttons/command_button.js";
 import utils from "../../services/utils.js";
 import TodayLauncher from "../buttons/launcher/today_launcher.js";
-import HistoryNavigationButton from "../buttons/history_navigation.js";
 import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandNames } from "../../components/app_context.js";
 import AiChatButton from "../buttons/ai_chat_button.js";
 import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
 import SpacerWidget from "../launch_bar/SpacerWidget.jsx";
+import HistoryNavigationButton from "../launch_bar/HistoryNavigation.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -117,9 +117,9 @@ export default class LauncherWidget extends BasicWidget {
             case "syncStatus":
                 return new SyncStatusWidget();
             case "backInHistoryButton":
-                return new HistoryNavigationButton(note, "backInNoteHistory");
+                return <HistoryNavigationButton launcherNote={note} command="backInNoteHistory" />
             case "forwardInHistoryButton":
-                return new HistoryNavigationButton(note, "forwardInNoteHistory");
+                return <HistoryNavigationButton launcherNote={note} command="forwardInNoteHistory" />
             case "todayInJournal":
                 return new TodayLauncher(note);
             case "quickSearch":
