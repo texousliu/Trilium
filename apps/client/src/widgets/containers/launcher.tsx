@@ -2,8 +2,7 @@ import CalendarWidget from "../buttons/calendar.js";
 import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
 import ScriptLauncher from "../buttons/launcher/script_launcher.js";
-import utils from "../../services/utils.js";
-import QuickSearchLauncherWidget from "../quick_search_launcher.js";
+import utils, { isMobile } from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
 import SpacerWidget from "../launch_bar/SpacerWidget.jsx";
@@ -13,6 +12,10 @@ import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWi
 import { VNode } from "preact";
 import { CommandButton, CustomNoteLauncher, NoteLauncher } from "../launch_bar/GenericButtons.jsx";
 import date_notes from "../../services/date_notes.js";
+import { useLegacyWidget, useNoteContext } from "../react/hooks.jsx";
+import QuickSearchWidget from "../quick_search.js";
+import { ParentComponent } from "../react/react_utils.jsx";
+import { useContext } from "preact/hooks";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -115,7 +118,7 @@ export default class LauncherWidget extends BasicWidget {
             case "todayInJournal":
                 return <TodayLauncher launcherNote={note} />
             case "quickSearch":
-                return new QuickSearchLauncherWidget(this.isHorizontalLayout);
+                return <QuickSearchLauncherWidget isHorizontalLayout={this.isHorizontalLayout} />
             case "aiChatLauncher":
                 return <AiChatButton launcherNote={note} />
             default:
@@ -134,4 +137,17 @@ function TodayLauncher({ launcherNote }: { launcherNote: FNote }) {
             }}
         />
     );
+}
+
+function QuickSearchLauncherWidget({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {
+    const [ widgetEl ] = useLegacyWidget(() => new QuickSearchWidget());
+    const parentComponent = useContext(ParentComponent) as BasicWidget | null;
+    const isEnabled = isHorizontalLayout && !isMobile();
+    parentComponent?.contentSized();
+
+    return (
+        <div>
+            {isEnabled && widgetEl}
+        </div>
+    )
 }
