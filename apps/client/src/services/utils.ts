@@ -925,6 +925,7 @@ export default {
     areObjectsEqual,
     copyHtmlToClipboard,
     createImageSrcUrl,
+    triggerDownload,
     downloadSvg,
     downloadSvgAsPng,
     compareVersions,

@@ -11,6 +11,7 @@ import { useEditorSpacedUpdate, useNoteLabelBoolean, useSyncedRef, useTriliumEve
 import { refToJQuerySelector } from "../react/react_utils";
 import utils from "../../services/utils";
 import { DISPLAYABLE_LOCALE_IDS } from "@triliumnext/commons";
+import { snapdom, SnapdomOptions } from "@zumer/snapdom";
 
 const NEW_TOPIC_NAME = "";
 
@@ -45,11 +46,26 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
     const apiRef = useRef<MindElixirInstance>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
+
+    // Shared options for snapdom screenshot generation used in both attachment saving and exports
+    const imageOptions : SnapdomOptions = {
+        backgroundColor: "transparent",
+        scale: 2
+    };
+
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         noteContext,
         getData: async () => {
             if (!apiRef.current) return;
+
+            const result = await snapdom(apiRef.current.nodes, imageOptions);
+
+            // a data URL in the format: "data:image/svg+xml;charset=utf-8,<url-encoded-svg>"
+            // We need to extract the content after the comma and decode the URL encoding (%3C to <, %20 to space, etc.)
+            // to get raw SVG content that Trilium's backend can store as an attachment
+            const svgContent = decodeURIComponent(result.url.split(',')[1]);
+
             return {
                 content: apiRef.current.getDataString(),
                 attachments: [
@@ -57,7 +73,7 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
                         role: "image",
                         title: "mindmap-export.svg",
                         mime: "image/svg+xml",
-                        content: await apiRef.current.exportSvg().text(),
+                        content: svgContent,
                         position: 0
                     }
                 ]
@@ -88,13 +104,18 @@ export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
     // Export as PNG or SVG.
     useTriliumEvents([ "exportSvg", "exportPng" ], async ({ ntxId: eventNtxId }, eventName) => {
         if (eventNtxId !== ntxId || !apiRef.current) return;
-        const title = note.title;
-        const svg = await apiRef.current.exportSvg().text();
+
+        const result = await snapdom(apiRef.current.nodes, imageOptions);
+
+        let dataUrl;
         if (eventName === "exportSvg") {
-            utils.downloadSvg(title, svg);
+            dataUrl = result.url;  // Native SVG Data URL
         } else {
-            utils.downloadSvgAsPng(title, svg);
+            const pngImg = await result.toPng();
+            dataUrl = pngImg.src;  // PNG Data URL
         }
+
+        await utils.triggerDownload(`${note.title}.${eventName === "exportSvg" ? "svg" : "png"}`, dataUrl);
     });
 
     const onKeyDown = useCallback((e: KeyboardEvent) => {
