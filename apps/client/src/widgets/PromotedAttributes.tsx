@@ -14,7 +14,6 @@ import ws from "../services/ws";
 import { UpdateAttributeResponse } from "@triliumnext/commons";
 import attributes from "../services/attributes";
 import debounce from "../services/debounce";
-import { randomString } from "../services/utils";
 
 interface Cell {
     uniqueId: string;
@@ -30,7 +29,7 @@ interface CellProps {
     cell: Cell,
     cells: Cell[],
     shouldFocus: boolean;
-    setCells(cells: Cell[]): void;
+    setCells: Dispatch<StateUpdater<Cell[] | undefined>>;
     setCellToFocus(cell: Cell): void;
 }
 
@@ -98,7 +97,7 @@ function usePromotedAttributeData(note: FNote | null | undefined, componentId: s
                 valueAttrs = valueAttrs.slice(0, 1);
             }
 
-            for (const valueAttr of valueAttrs) {
+            for (const [ i, valueAttr ] of valueAttrs.entries()) {
                 const definition = definitionAttr.getDefinition();
 
                 // if not owned, we'll force creation of a new attribute instead of updating the inherited one
@@ -106,7 +105,7 @@ function usePromotedAttributeData(note: FNote | null | undefined, componentId: s
                     valueAttr.attributeId = "";
                 }
 
-                const uniqueId = randomString(10);
+                const uniqueId = `${note.noteId}-${valueAttr.name}-${i}`;
                 cells.push({  definitionAttr, definition, valueAttr, valueName, uniqueId });
             }
         }
@@ -292,8 +291,8 @@ function RelationInput({ inputId, ...props }: CellProps & { inputId: string }) {
             id={inputId}
             noteId={props.cell.valueAttr.value}
             noteIdChanged={async (value) => {
-                const { note, cell, componentId } = props;
-                cell.valueAttr.attributeId = (await updateAttribute(note, cell, componentId, value)).attributeId;
+                const { note, cell, componentId, setCells } = props;
+                await updateAttribute(note, cell, componentId, value, setCells);
             }}
         />
     )
@@ -423,7 +422,7 @@ function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, 
     });
 }
 
-function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, ...props }: CellProps): OnChangeListener {
+function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, setCells }: CellProps): OnChangeListener {
     async function onChange(e: OnChangeEventData) {
         const inputEl = e.target as HTMLInputElement;
         let value: string;
@@ -434,14 +433,14 @@ function buildPromotedAttributeLabelChangedListener({ note, cell, componentId, .
             value = inputEl.value;
         }
 
-        cell.valueAttr.attributeId = (await updateAttribute(note, cell, componentId, value)).attributeId;
+        await updateAttribute(note, cell, componentId, value, setCells);
     }
 
     return debounce(onChange, 250);
 }
 
-function updateAttribute(note: FNote, cell: Cell, componentId: string, value: string | undefined) {
-    return server.put<UpdateAttributeResponse>(
+async function updateAttribute(note: FNote, cell: Cell, componentId: string, value: string | undefined, setCells: Dispatch<StateUpdater<Cell[] | undefined>>) {
+    const { attributeId } = await server.put<UpdateAttributeResponse>(
         `notes/${note.noteId}/attribute`,
         {
             attributeId: cell.valueAttr.attributeId,
@@ -450,5 +449,16 @@ function updateAttribute(note: FNote, cell: Cell, componentId: string, value: st
             value: value || ""
         },
         componentId
+    );
+    setCells(prev =>
+        prev?.map(c =>
+            c.uniqueId === cell.uniqueId
+                ? { ...c, valueAttr: {
+                    ...c.valueAttr,
+                    attributeId,
+                    value
+                } }
+                : c
+        )
     );
 }
