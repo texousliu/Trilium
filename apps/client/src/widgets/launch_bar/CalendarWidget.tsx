@@ -8,6 +8,7 @@ import { VNode } from "preact";
 import clsx from "clsx";
 import "./CalendarWidget.css";
 import server from "../../services/server";
+import { getMonthInformation } from "./CalendarWidgetUtils";
 
 interface DateNotesForMonth {
     [date: string]: string;
@@ -45,19 +46,19 @@ function Calendar({ date, firstDayOfWeekISO }: { date: Dayjs, firstDayOfWeekISO:
     const month = date.format('YYYY-MM');
     const firstDay = date.startOf('month');
     const firstDayISO = firstDay.isoWeekday();
+    const monthInfo = getMonthInformation(date, firstDayISO, firstDayOfWeekISO);
 
     return (
         <div className="calendar-body" data-calendar-area="month">
-            {firstDayISO !== firstDayOfWeekISO && <PreviousMonthDays date={date} firstDayISO={firstDayISO} firstDayOfWeekISO={firstDayOfWeekISO} />}
-            <CurrentMonthDays date={date} firstDayOfWeekISO={firstDayOfWeekISO} />
-            <NextMonthDays date={date} firstDayOfWeekISO={firstDayOfWeekISO} />
+            {firstDayISO !== firstDayOfWeekISO && <PreviousMonthDays date={date} dates={monthInfo.prevMonth.dates} />}
+            <CurrentMonthDays date={date} dates={monthInfo.currentMonth.dates} />
+            <NextMonthDays date={date} dates={monthInfo.nextMonth.dates} />
         </div>
     )
 }
 
-function PreviousMonthDays({ date, firstDayISO, firstDayOfWeekISO }: { date: Dayjs, firstDayISO: number, firstDayOfWeekISO: number }) {
+function PreviousMonthDays({ date, dates }: { date: Dayjs, dates: Dayjs[] }) {
     const prevMonth = date.subtract(1, 'month').format('YYYY-MM');
-    const { weekNumber, dates } = getPrevMonthDays(date, firstDayISO, firstDayOfWeekISO);
     const [ dateNotesForPrevMonth, setDateNotesForPrevMonth ] = useState<DateNotesForMonth>();
 
     useEffect(() => {
@@ -69,18 +70,13 @@ function PreviousMonthDays({ date, firstDayISO, firstDayOfWeekISO }: { date: Day
     ));
 }
 
-function CurrentMonthDays({ date, firstDayOfWeekISO }: { date: Dayjs, firstDayOfWeekISO: number }) {
-    const dates = getCurMonthDays(date, firstDayOfWeekISO);
-
+function CurrentMonthDays({ date, dates }: { date: Dayjs, dates: Dayjs[] }) {
     return dates.map(date => (
         <CalendarDay date={date} dateNotesForMonth={{}} />
     ));
 }
 
-function NextMonthDays({ date, firstDayOfWeekISO }: { date: Dayjs, firstDayOfWeekISO: number }) {
-    const lastDayOfMonth = date.endOf('month');
-    const lastDayISO = lastDayOfMonth.isoWeekday();
-    const lastDayOfUserWeek = ((firstDayOfWeekISO + 6 - 1) % 7) + 1;
+function NextMonthDays({ date, dates }: { date: Dayjs, dates: Dayjs[] }) {
     const nextMonth = date.add(1, 'month').format('YYYY-MM');
     const [ dateNotesForNextMonth, setDateNotesForNextMonth ] = useState<DateNotesForMonth>();
 
@@ -88,7 +84,6 @@ function NextMonthDays({ date, firstDayOfWeekISO }: { date: Dayjs, firstDayOfWee
         server.get<DateNotesForMonth>(`special-notes/notes-for-month/${nextMonth}`).then(setDateNotesForNextMonth);
     }, [ date ]);
 
-    const dates = lastDayISO !== lastDayOfUserWeek ? getNextMonthDays(date, lastDayISO, firstDayOfWeekISO) : [];
     return dates.map(date => (
         <CalendarDay date={date} dateNotesForMonth={dateNotesForNextMonth} className="calendar-date-next-month" />
     ));
@@ -107,53 +102,3 @@ function CalendarDay({ date, dateNotesForMonth, className }: { date: Dayjs, date
     );
 }
 
-function getPrevMonthDays(date: Dayjs, firstDayISO: number, firstDayOfWeekISO: number): { weekNumber: number, dates: Dayjs[] } {
-    const prevMonthLastDay = date.subtract(1, 'month').endOf('month');
-    const daysToAdd = (firstDayISO - firstDayOfWeekISO + 7) % 7;
-    const dates: Dayjs[] = [];
-
-    const firstDay = date.startOf('month');
-    const weekNumber = getWeekNumber(firstDay, firstDayOfWeekISO);
-
-    // Get dates from previous month
-    for (let i = daysToAdd - 1; i >= 0; i--) {
-        dates.push(prevMonthLastDay.subtract(i, 'day'));
-    }
-
-    return { weekNumber, dates };
-}
-
-function getCurMonthDays(date: Dayjs, firstDayOfWeekISO: number) {
-    let dateCursor = date;
-    const currentMonth = date.month();
-    const dates: Dayjs[] = [];
-    while (dateCursor.month() === currentMonth) {
-        dates.push(dateCursor);
-        dateCursor = dateCursor.add(1, "day");
-    }
-    return dates;
-}
-
-function getNextMonthDays(date: Dayjs, lastDayISO: number, firstDayOfWeekISO): Dayjs[] {
-    const nextMonthFirstDay = date.add(1, 'month').startOf('month');
-    const dates: Dayjs[] = [];
-
-    const lastDayOfUserWeek = ((firstDayOfWeekISO + 6 - 1) % 7) + 1; // ISO wrap
-    const daysToAdd = (lastDayOfUserWeek - lastDayISO + 7) % 7;
-
-    for (let i = 0; i < daysToAdd; i++) {
-        dates.push(nextMonthFirstDay.add(i, 'day'));
-    }
-    return dates;
-}
-
-function getWeekNumber(date: Dayjs, firstDayOfWeekISO: number): number {
-    const weekStart = getWeekStartDate(date, firstDayOfWeekISO);
-    return weekStart.isoWeek();
-}
-
-function getWeekStartDate(date: Dayjs, firstDayOfWeekISO: number): Dayjs {
-    const currentISO = date.isoWeekday();
-    const diff = (currentISO - firstDayOfWeekISO + 7) % 7;
-    return date.clone().subtract(diff, "day").startOf("day");
-}
