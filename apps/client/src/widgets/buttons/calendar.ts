@@ -53,7 +53,7 @@ const DROPDOWN_TPL = `
         </div>
     </div>
 
-    <div class="calendar-week"></div>
+
 </div>`;
 
 const DAYS_OF_WEEK = [
@@ -262,11 +262,10 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
                 $newWeekNumber.addClass("calendar-date-exists").attr("data-href", `#root/${weekNoteId}`);
             }
         } else {
-            $newWeekNumber = $("<span>").addClass("calendar-week-number-disabled");
+
         }
 
         $newWeekNumber.addClass("calendar-week-number").attr("data-calendar-week-number", weekNoteId);
-        $newWeekNumber.append($("<span>").html(String(weekNumber)));
         return $newWeekNumber;
     }
 

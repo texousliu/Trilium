@@ -4,11 +4,11 @@ import { LaunchBarDropdownButton, useLauncherIconAndTitle } from "./launch_bar_w
 import { Dayjs, dayjs } from "@triliumnext/commons";
 import appContext from "../../components/app_context";
 import { useTriliumOptionInt } from "../react/hooks";
-import { VNode } from "preact";
 import clsx from "clsx";
 import "./CalendarWidget.css";
 import server from "../../services/server";
-import { getMonthInformation } from "./CalendarWidgetUtils";
+import { DateRangeInfo, getMonthInformation, getWeekNumber } from "./CalendarWidgetUtils";
+import { VNode } from "preact";
 
 interface DateNotesForMonth {
     [date: string]: string;
@@ -50,14 +50,14 @@ function Calendar({ date, firstDayOfWeekISO }: { date: Dayjs, firstDayOfWeekISO:
 
     return (
         <div className="calendar-body" data-calendar-area="month">
-            {firstDayISO !== firstDayOfWeekISO && <PreviousMonthDays date={date} dates={monthInfo.prevMonth.dates} />}
-            <CurrentMonthDays date={date} dates={monthInfo.currentMonth.dates} />
+            {firstDayISO !== firstDayOfWeekISO && <PreviousMonthDays date={date} info={monthInfo.prevMonth} />}
+            <CurrentMonthDays date={date} firstDayOfWeekISO={firstDayOfWeekISO} />
             <NextMonthDays date={date} dates={monthInfo.nextMonth.dates} />
         </div>
     )
 }
 
-function PreviousMonthDays({ date, dates }: { date: Dayjs, dates: Dayjs[] }) {
+function PreviousMonthDays({ date, info: { dates, weekNumbers } }: { date: Dayjs, info: DateRangeInfo }) {
     const prevMonth = date.subtract(1, 'month').format('YYYY-MM');
     const [ dateNotesForPrevMonth, setDateNotesForPrevMonth ] = useState<DateNotesForMonth>();
 
@@ -65,15 +65,29 @@ function PreviousMonthDays({ date, dates }: { date: Dayjs, dates: Dayjs[] }) {
         server.get<DateNotesForMonth>(`special-notes/notes-for-month/${prevMonth}`).then(setDateNotesForPrevMonth);
     }, [ date ]);
 
-    return dates.map(date => (
-        <CalendarDay date={date} dateNotesForMonth={dateNotesForPrevMonth} className="calendar-date-prev-month" />
-    ));
+    return (
+        <>
+            <CalendarWeek weekNumber={weekNumbers[0]} />
+            {dates.map(date => <CalendarDay date={date} dateNotesForMonth={dateNotesForPrevMonth} className="calendar-date-prev-month" />)}
+        </>
+    )
 }
 
-function CurrentMonthDays({ date, dates }: { date: Dayjs, dates: Dayjs[] }) {
-    return dates.map(date => (
-        <CalendarDay date={date} dateNotesForMonth={{}} />
-    ));
+function CurrentMonthDays({ date, firstDayOfWeekISO }: { date: Dayjs, firstDayOfWeekISO: number }) {
+    let dateCursor = date;
+    const currentMonth = date.month();
+    const items: VNode[] = [];
+    while (dateCursor.month() === currentMonth) {
+        const weekNumber = getWeekNumber(dateCursor, firstDayOfWeekISO);
+        if (dateCursor.isoWeekday() === firstDayOfWeekISO) {
+            items.push(<CalendarWeek weekNumber={weekNumber} />)
+        }
+
+        items.push(<CalendarDay date={dateCursor} dateNotesForMonth={{}} />)
+        dateCursor = dateCursor.add(1, "day");
+    }
+
+    return items;
 }
 
 function NextMonthDays({ date, dates }: { date: Dayjs, dates: Dayjs[] }) {
@@ -102,3 +116,8 @@ function CalendarDay({ date, dateNotesForMonth, className }: { date: Dayjs, date
     );
 }
 
+function CalendarWeek({ weekNumber }: { weekNumber: number }) {
+    return (
+        <span className="calendar-week-number calendar-week-number-disabled">{weekNumber}</span>
+    )
+}

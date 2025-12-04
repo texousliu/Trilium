@@ -1,6 +1,6 @@
 import { Dayjs } from "@triliumnext/commons";
 
-interface DateRangeInfo {
+export interface DateRangeInfo {
     weekNumbers: number[];
     dates: Dayjs[];
 }
@@ -8,7 +8,6 @@ interface DateRangeInfo {
 export function getMonthInformation(date: Dayjs, firstDayISO: number, firstDayOfWeekISO: number) {
     return {
         prevMonth: getPrevMonthDays(date, firstDayISO, firstDayOfWeekISO),
-        currentMonth: getCurMonthDays(date, firstDayOfWeekISO),
         nextMonth: getNextMonthDays(date, firstDayOfWeekISO)
     }
 }
@@ -29,24 +28,6 @@ function getPrevMonthDays(date: Dayjs, firstDayISO: number, firstDayOfWeekISO: n
     return { weekNumbers: [ weekNumber ], dates };
 }
 
-function getCurMonthDays(date: Dayjs, firstDayOfWeekISO: number): DateRangeInfo {
-    let dateCursor = date;
-    const currentMonth = date.month();
-    const dates: Dayjs[] = [];
-    const weekNumbers: number[] = [];
-    while (dateCursor.month() === currentMonth) {
-        const weekNumber = getWeekNumber(date, firstDayOfWeekISO);
-        if (date.isoWeekday() === firstDayOfWeekISO) {
-            weekNumbers.push(weekNumber);
-        }
-
-        dates.push(dateCursor);
-        dateCursor = dateCursor.add(1, "day");
-
-    }
-    return { weekNumbers, dates };
-}
-
 function getNextMonthDays(date: Dayjs, firstDayOfWeekISO: number): DateRangeInfo {
     const lastDayOfMonth = date.endOf('month');
     const lastDayISO = lastDayOfMonth.isoWeekday();
@@ -64,7 +45,7 @@ function getNextMonthDays(date: Dayjs, firstDayOfWeekISO: number): DateRangeInfo
     return { weekNumbers: [], dates };
 }
 
-function getWeekNumber(date: Dayjs, firstDayOfWeekISO: number): number {
+export function getWeekNumber(date: Dayjs, firstDayOfWeekISO: number): number {
     const weekStart = getWeekStartDate(date, firstDayOfWeekISO);
     return weekStart.isoWeek();
 }
