@@ -75,8 +75,8 @@ quick overview:
 * Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
   used for note organization, querying and advanced
   [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
+* محیط کاربری به زبان‌های انگیلیسی، آلمانی، اسپانیایی، فرانسوی، رومانیایی، و
+  چینی (ساده‌شده و سنتی)
 * Direct [OpenID and TOTP
   integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   for more secure login
