@@ -1,9 +1,8 @@
 import CalendarWidget from "../buttons/calendar.js";
 import SpacerWidget from "../spacer.js";
-import BookmarkButtons from "../bookmark_buttons.js";
 import ProtectedSessionStatusWidget from "../buttons/protected_session_status.js";
 import SyncStatusWidget from "../sync_status.js";
-import BasicWidget from "../basic_widget.js";
+import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
 import NoteLauncher from "../buttons/launcher/note_launcher.js";
 import ScriptLauncher from "../buttons/launcher/script_launcher.js";
 import CommandButtonWidget from "../buttons/command_button.js";
@@ -14,6 +13,7 @@ import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandNames } from "../../components/app_context.js";
 import AiChatButton from "../buttons/ai_chat_button.js";
+import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -64,7 +64,7 @@ export default class LauncherWidget extends BasicWidget {
         } else if (launcherType === "customWidget") {
             widget = await this.initCustomWidget(note);
         } else if (launcherType === "builtinWidget") {
-            widget = this.initBuiltinWidget(note);
+            widget = wrapReactWidgets<BasicWidget>([ this.initBuiltinWidget(note) ])[0];
         } else {
             throw new Error(`Unrecognized launcher type '${launcherType}' for launcher '${note.noteId}' title '${note.title}'`);
         }
@@ -111,7 +111,7 @@ export default class LauncherWidget extends BasicWidget {
 
                 return new SpacerWidget(baseSize, growthFactor);
             case "bookmarks":
-                return new BookmarkButtons(this.isHorizontalLayout);
+                return <BookmarkButtons isHorizontalLayout={this.isHorizontalLayout} />
             case "protectedSession":
                 return new ProtectedSessionStatusWidget();
             case "syncStatus":
