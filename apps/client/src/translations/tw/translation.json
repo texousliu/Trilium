@@ -734,7 +734,8 @@
   },
   "zpetne_odkazy": {
     "relation": "關聯",
-    "backlink_one": "{{count}} 個反連結"
+    "backlink_one": "{{count}} 個反連結",
+    "backlink_other": "{{count}} 個反連結"
   },
   "mobile_detail_menu": {
     "insert_child_note": "插入子筆記",
@@ -1428,7 +1429,7 @@
     "import-into-note": "匯入至筆記",
     "apply-bulk-actions": "套用批次操作",
     "converted-to-attachments": "{{count}} 個筆記已被轉換為附件。",
-    "convert-to-attachment-confirm": "確定要將所選的筆記轉換為其父級筆記的附件嗎？",
+    "convert-to-attachment-confirm": "確定要將所選的筆記轉換為其父級筆記的附件嗎？此操作僅適用於圖像筆記，其他筆記將被跳過。",
     "duplicate": "複製副本",
     "open-in-popup": "快速編輯",
     "archive": "封存",
@@ -1673,7 +1674,8 @@
     "open_note_in_new_tab": "在新分頁中打開筆記",
     "open_note_in_new_split": "在新頁面分割中打開筆記",
     "open_note_in_new_window": "在新視窗中打開筆記",
-    "open_note_in_popup": "快速編輯"
+    "open_note_in_popup": "快速編輯",
+    "open_note_in_other_split": "在另一個頁面分割中打開筆記"
   },
   "zen_mode": {
     "button_exit": "退出禪模式"
