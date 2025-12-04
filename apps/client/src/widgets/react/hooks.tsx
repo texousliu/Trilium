@@ -23,6 +23,7 @@ import toast, { ToastOptions } from "../../services/toast";
 import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
 import server from "../../services/server";
 import { removeIndividualBinding } from "../../services/shortcuts";
+import froca from "../../services/froca";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -835,4 +836,16 @@ async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
     }
 
     return true;
+}
+
+export function useChildNotes(parentNoteId: string) {
+    const [ childNotes, setChildNotes ] = useState<FNote[]>([]);
+    async function refreshChildNotes() {
+        const parentNote = await froca.getNote(parentNoteId);
+        const childNotes = await parentNote?.getChildNotes();
+        setChildNotes(childNotes ?? []);
+    }
+    useEffect(() => { refreshChildNotes() }, [ parentNoteId ]);
+
+    return childNotes;
 }

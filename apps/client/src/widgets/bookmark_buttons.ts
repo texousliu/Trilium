@@ -1,5 +1,4 @@
 import FlexContainer from "./containers/flex_container.js";
-import OpenNoteButtonWidget from "./buttons/open_note_button_widget.js";
 import BookmarkFolderWidget from "./buttons/bookmark_folder.js";
 import froca from "../services/froca.js";
 import utils from "../services/utils.js";
@@ -23,10 +22,6 @@ export default class BookmarkButtons extends FlexContainer<Component> {
     }
 
     async refresh(): Promise<void> {
-        this.$widget.empty();
-        this.children = [];
-        this.noteIds = [];
-
         const bookmarkParentNote = await froca.getNote("_lbBookmarks");
 
         if (!bookmarkParentNote) {
@@ -37,8 +32,7 @@ export default class BookmarkButtons extends FlexContainer<Component> {
             this.noteIds.push(note.noteId);
 
             let buttonWidget: OpenNoteButtonWidget | BookmarkFolderWidget = note.isLabelTruthy("bookmarkFolder")
-                ? new BookmarkFolderWidget(note)
-                : new OpenNoteButtonWidget(note).class("launcher-button");
+                ? new BookmarkFolderWidget(note);
 
             if (this.settings.titlePlacement) {
                 if (!("settings" in buttonWidget)) {
