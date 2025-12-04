@@ -7,7 +7,7 @@ import { useTriliumOptionInt } from "../react/hooks";
 import clsx from "clsx";
 import "./CalendarWidget.css";
 import server from "../../services/server";
-import { DateRangeInfo, getMonthInformation, getWeekNumber } from "./CalendarWidgetUtils";
+import { DateRangeInfo, DAYS_OF_WEEK, getMonthInformation, getWeekNumber } from "./CalendarWidgetUtils";
 import { VNode } from "preact";
 
 interface DateNotesForMonth {
@@ -17,8 +17,6 @@ interface DateNotesForMonth {
 export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }) {
     const { title, icon } = useLauncherIconAndTitle(launcherNote);
     const [ date, setDate ] = useState<Dayjs>();
-    const [ rawFirstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek") ?? 0;
-    const firstDayOfWeekISO = (rawFirstDayOfWeek === 0 ? 7 : rawFirstDayOfWeek);
 
     useEffect(() => {
 
@@ -36,23 +34,41 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
             }}
         >
             {date && <div className="calendar-dropdown-widget" style={{ width: 400 }}>
-                <Calendar date={date} firstDayOfWeekISO={firstDayOfWeekISO} />
+                <Calendar date={date} />
             </div>}
         </LaunchBarDropdownButton>
     )
 }
 
-function Calendar({ date, firstDayOfWeekISO }: { date: Dayjs, firstDayOfWeekISO: number }) {
+function Calendar({ date }: { date: Dayjs }) {
+    const [ rawFirstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek") ?? 0;
+    const firstDayOfWeekISO = (rawFirstDayOfWeek === 0 ? 7 : rawFirstDayOfWeek);
+
     const month = date.format('YYYY-MM');
     const firstDay = date.startOf('month');
     const firstDayISO = firstDay.isoWeekday();
     const monthInfo = getMonthInformation(date, firstDayISO, firstDayOfWeekISO);
 
     return (
-        <div className="calendar-body" data-calendar-area="month">
-            {firstDayISO !== firstDayOfWeekISO && <PreviousMonthDays date={date} info={monthInfo.prevMonth} />}
-            <CurrentMonthDays date={date} firstDayOfWeekISO={firstDayOfWeekISO} />
-            <NextMonthDays date={date} dates={monthInfo.nextMonth.dates} />
+        <>
+            <CalendarWeekHeader rawFirstDayOfWeek={rawFirstDayOfWeek} />
+            <div className="calendar-body" data-calendar-area="month">
+                {firstDayISO !== firstDayOfWeekISO && <PreviousMonthDays date={date} info={monthInfo.prevMonth} />}
+                <CurrentMonthDays date={date} firstDayOfWeekISO={firstDayOfWeekISO} />
+                <NextMonthDays date={date} dates={monthInfo.nextMonth.dates} />
+            </div>
+        </>
+    )
+}
+
+function CalendarWeekHeader({ rawFirstDayOfWeek }: { rawFirstDayOfWeek: number }) {
+    let localeDaysOfWeek = [...DAYS_OF_WEEK];
+    const shifted = localeDaysOfWeek.splice(0, rawFirstDayOfWeek);
+    localeDaysOfWeek = ['', ...localeDaysOfWeek, ...shifted];
+
+    return (
+        <div className="calendar-week">
+            {localeDaysOfWeek.map(dayOfWeek => <span>{dayOfWeek}</span>)}
         </div>
     )
 }

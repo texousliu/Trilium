@@ -1,4 +1,15 @@
 import { Dayjs } from "@triliumnext/commons";
+import { t } from "../../services/i18n";
+
+export const DAYS_OF_WEEK = [
+    t("calendar.sun"),
+    t("calendar.mon"),
+    t("calendar.tue"),
+    t("calendar.wed"),
+    t("calendar.thu"),
+    t("calendar.fri"),
+    t("calendar.sat")
+];
 
 export interface DateRangeInfo {
     weekNumbers: number[];

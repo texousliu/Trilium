@@ -56,18 +56,6 @@ const DROPDOWN_TPL = `
 
 </div>`;
 
-const DAYS_OF_WEEK = [
-    t("calendar.sun"),
-    t("calendar.mon"),
-    t("calendar.tue"),
-    t("calendar.wed"),
-    t("calendar.thu"),
-    t("calendar.fri"),
-    t("calendar.sat")
-];
-
-
-
 interface WeekCalculationOptions {
     firstWeekType: number;
     minDaysInFirstWeek: number;
@@ -100,7 +88,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         super.doRender();
 
         this.$month = this.$dropdownContent.find('[data-calendar-area="month"]');
-        this.$weekHeader = this.$dropdownContent.find(".calendar-week");
 
         this.manageFirstDayOfWeek();
         this.initWeekCalculation();
@@ -214,14 +201,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         }
         const noteAttributes = await server.get<AttributeRow[]>(`notes/${noteId}/attributes`);
         this.weekNoteEnable = noteAttributes.some(a => a.name === 'enableWeekNote');
-    }
-
-    // Store firstDayOfWeek as ISO (1–7)
-    manageFirstDayOfWeek() {
-        let localeDaysOfWeek = [...DAYS_OF_WEEK];
-        const shifted = localeDaysOfWeek.splice(0, rawFirstDayOfWeek);
-        localeDaysOfWeek = ['', ...localeDaysOfWeek, ...shifted];
-        this.$weekHeader.html(localeDaysOfWeek.map((el) => `<span>${el}</span>`).join(''));
     }
 
     initWeekCalculation() {
