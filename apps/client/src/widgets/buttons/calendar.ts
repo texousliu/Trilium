@@ -8,7 +8,6 @@ import options from "../../services/options.js";
 import { Dropdown } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
 import { dayjs, type Dayjs } from "@triliumnext/commons";
-import "../../stylesheets/calendar.css";
 import type { AttributeRow, OptionDefinitions } from "@triliumnext/commons";
 
 const MONTHS = [
@@ -28,12 +27,6 @@ const MONTHS = [
 
 const DROPDOWN_TPL = `
 <div class="calendar-dropdown-widget">
-    <style>
-        .calendar-dropdown-widget {
-            width: 400px;
-        }
-    </style>
-
     <div class="calendar-header">
         <div class="calendar-month-selector">
             <button class="calendar-btn tn-tool-button bx bx-chevron-left" data-calendar-toggle="previous"></button>
@@ -61,7 +54,6 @@ const DROPDOWN_TPL = `
     </div>
 
     <div class="calendar-week"></div>
-    <div class="calendar-body" data-calendar-area="month"></div>
 </div>`;
 
 const DAYS_OF_WEEK = [
@@ -74,9 +66,7 @@ const DAYS_OF_WEEK = [
     t("calendar.sat")
 ];
 
-interface DateNotesForMonth {
-    [date: string]: string;
-}
+
 
 interface WeekCalculationOptions {
     firstWeekType: number;
@@ -228,9 +218,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
 
     // Store firstDayOfWeek as ISO (1–7)
     manageFirstDayOfWeek() {
-        const rawFirstDayOfWeek = options.getInt("firstDayOfWeek") || 0;
-        this.firstDayOfWeekISO = rawFirstDayOfWeek === 0 ? 7 : rawFirstDayOfWeek;
-
         let localeDaysOfWeek = [...DAYS_OF_WEEK];
         const shifted = localeDaysOfWeek.splice(0, rawFirstDayOfWeek);
         localeDaysOfWeek = ['', ...localeDaysOfWeek, ...shifted];
@@ -244,34 +231,13 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         };
     }
 
-    getWeekStartDate(date: Dayjs): Dayjs {
-        const currentISO = date.isoWeekday();
-        const diff = (currentISO - this.firstDayOfWeekISO + 7) % 7;
-        return date.clone().subtract(diff, "day").startOf("day");
-    }
-
-    getWeekNumber(date: Dayjs): number {
-        const weekStart = this.getWeekStartDate(date);
-        return weekStart.isoWeek();
-    }
-
     async dropdownShown() {
         await this.getWeekNoteEnable();
         this.weekNotes = await server.get<string[]>(`attribute-values/weekNote`);
-        this.init(appContext.tabManager.getActiveContextNote()?.getOwnedLabelValue("dateNote") ?? null);
+        this.init( ?? null);
     }
 
-    init(activeDate: string | null) {
-        this.activeDate = activeDate ? dayjs(`${activeDate}T12:00:00`) : null;
-        this.todaysDate = dayjs();
-        this.date = dayjs(this.activeDate || this.todaysDate).startOf('month');
-        this.createMonth();
-    }
-
-    createDay(dateNotesForMonth: DateNotesForMonth, num: number) {
-        const $newDay = $("<a>")
-            .addClass("calendar-date")
-            .attr("data-calendar-date", this.date.local().format('YYYY-MM-DD'));
+    createDay() {
         const $date = $("<span>").html(String(num));
         const dateNoteId = dateNotesForMonth[this.date.local().format('YYYY-MM-DD')];
 
@@ -302,105 +268,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         $newWeekNumber.addClass("calendar-week-number").attr("data-calendar-week-number", weekNoteId);
         $newWeekNumber.append($("<span>").html(String(weekNumber)));
         return $newWeekNumber;
-    }
-
-    // Use isoWeekday() consistently
-    private getPrevMonthDays(firstDayISO: number): { weekNumber: number, dates: Dayjs[] } {
-        const prevMonthLastDay = this.date.subtract(1, 'month').endOf('month');
-        const daysToAdd = (firstDayISO - this.firstDayOfWeekISO + 7) % 7;
-        const dates: Dayjs[] = [];
-
-        const firstDay = this.date.startOf('month');
-        const weekNumber = this.getWeekNumber(firstDay);
-
-        // Get dates from previous month
-        for (let i = daysToAdd - 1; i >= 0; i--) {
-            dates.push(prevMonthLastDay.subtract(i, 'day'));
-        }
-
-        return { weekNumber, dates };
-    }
-
-    private getNextMonthDays(lastDayISO: number): Dayjs[] {
-        const nextMonthFirstDay = this.date.add(1, 'month').startOf('month');
-        const dates: Dayjs[] = [];
-
-        const lastDayOfUserWeek = ((this.firstDayOfWeekISO + 6 - 1) % 7) + 1; // ISO wrap
-        const daysToAdd = (lastDayOfUserWeek - lastDayISO + 7) % 7;
-
-        for (let i = 0; i < daysToAdd; i++) {
-            dates.push(nextMonthFirstDay.add(i, 'day'));
-        }
-        return dates;
-    }
-
-    async createMonth() {
-        const month = this.date.format('YYYY-MM');
-        const dateNotesForMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${month}`);
-
-        this.$month.empty();
-
-        const firstDay = this.date.startOf('month');
-        const firstDayISO = firstDay.isoWeekday();
-
-        // Previous month filler
-        if (firstDayISO !== this.firstDayOfWeekISO) {
-            const { weekNumber, dates } = this.getPrevMonthDays(firstDayISO);
-            const prevMonth = this.date.subtract(1, 'month').format('YYYY-MM');
-            const dateNotesForPrevMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${prevMonth}`);
-
-            const $weekNumber = this.createWeekNumber(weekNumber);
-            this.$month.append($weekNumber);
-
-            dates.forEach(date => {
-                const tempDate = this.date;
-                this.date = date;
-                const $day = this.createDay(dateNotesForPrevMonth, date.date());
-                $day.addClass('calendar-date-prev-month');
-                this.$month.append($day);
-                this.date = tempDate;
-            });
-        }
-
-        const currentMonth = this.date.month();
-
-        // Main month
-        while (this.date.month() === currentMonth) {
-            const weekNumber = this.getWeekNumber(this.date);
-            if (this.date.isoWeekday() === this.firstDayOfWeekISO) {
-                const $weekNumber = this.createWeekNumber(weekNumber);
-                this.$month.append($weekNumber);
-            }
-
-            const $day = this.createDay(dateNotesForMonth, this.date.date());
-            this.$month.append($day);
-            this.date = this.date.add(1, 'day');
-        }
-        // while loop trips over and day is at 30/31, bring it back
-        this.date = this.date.startOf('month').subtract(1, 'month');
-
-        // Add dates from next month
-        const lastDayOfMonth = this.date.endOf('month');
-        const lastDayISO = lastDayOfMonth.isoWeekday();
-        const lastDayOfUserWeek = ((this.firstDayOfWeekISO + 6 - 1) % 7) + 1;
-
-        if (lastDayISO !== lastDayOfUserWeek) {
-            const dates = this.getNextMonthDays(lastDayISO);
-            const nextMonth = this.date.add(1, 'month').format('YYYY-MM');
-            const dateNotesForNextMonth: DateNotesForMonth = await server.get(`special-notes/notes-for-month/${nextMonth}`);
-
-            dates.forEach(date => {
-                const tempDate = this.date;
-                this.date = date;
-                const $day = this.createDay(dateNotesForNextMonth, date.date());
-                $day.addClass('calendar-date-next-month');
-                this.$month.append($day);
-                this.date = tempDate;
-            });
-        }
-
-        this.$monthSelect.text(MONTHS[this.date.month()]);
-        this.$yearSelect.val(this.date.year());
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

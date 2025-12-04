@@ -1,4 +1,3 @@
-import CalendarWidget from "../buttons/calendar.js";
 import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
 import utils, { isMobile } from "../../services/utils.js";
@@ -16,6 +15,7 @@ import QuickSearchWidget from "../quick_search.js";
 import { ParentComponent } from "../react/react_utils.jsx";
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "../launch_bar/launch_bar_widgets.jsx";
+import CalendarWidget from "../launch_bar/CalendarWidget.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -98,7 +98,7 @@ export default class LauncherWidget extends BasicWidget {
         const builtinWidget = note.getLabelValue("builtinWidget");
         switch (builtinWidget) {
             case "calendar":
-                return new CalendarWidget(note.title, note.getIcon());
+                return <CalendarWidget launcherNote={note} />
             case "spacer":
                 // || has to be inside since 0 is a valid value
                 const baseSize = parseInt(note.getLabelValue("baseSize") || "40");
