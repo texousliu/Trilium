@@ -3,7 +3,6 @@ import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
 import ScriptLauncher from "../buttons/launcher/script_launcher.js";
 import utils from "../../services/utils.js";
-import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 import type FNote from "../../entities/fnote.js";
 import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
@@ -12,7 +11,8 @@ import HistoryNavigationButton from "../launch_bar/HistoryNavigation.jsx";
 import AiChatButton from "../launch_bar/AiChatButton.jsx";
 import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWidget.jsx";
 import { VNode } from "preact";
-import { CommandButton, NoteLauncher } from "../launch_bar/GenericButtons.jsx";
+import { CommandButton, CustomNoteLauncher, NoteLauncher } from "../launch_bar/GenericButtons.jsx";
+import date_notes from "../../services/date_notes.js";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -113,7 +113,7 @@ export default class LauncherWidget extends BasicWidget {
             case "forwardInHistoryButton":
                 return <HistoryNavigationButton launcherNote={note} command="forwardInNoteHistory" />
             case "todayInJournal":
-                return new TodayLauncher(note);
+                return <TodayLauncher launcherNote={note} />
             case "quickSearch":
                 return new QuickSearchLauncherWidget(this.isHorizontalLayout);
             case "aiChatLauncher":
@@ -122,4 +122,16 @@ export default class LauncherWidget extends BasicWidget {
                 throw new Error(`Unrecognized builtin widget ${builtinWidget} for launcher ${note.noteId} "${note.title}"`);
         }
     }
+}
+
+function TodayLauncher({ launcherNote }: { launcherNote: FNote }) {
+    return (
+        <CustomNoteLauncher
+            launcherNote={launcherNote}
+            getTargetNoteId={async () => {
+                const todayNote = await date_notes.getTodayNote();
+                return todayNote?.noteId ?? null;
+            }}
+        />
+    );
 }

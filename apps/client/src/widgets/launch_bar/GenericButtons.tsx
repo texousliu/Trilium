@@ -2,7 +2,7 @@ import appContext, { CommandNames } from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
 import { escapeHtml, isCtrlKey } from "../../services/utils";
-import { useNoteLabel, useNoteProperty, useNoteRelation } from "../react/hooks";
+import { useNoteLabel } from "../react/hooks";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import dialog from "../../services/dialog";
 import { t } from "../../services/i18n";
@@ -20,7 +20,11 @@ export function CommandButton({ launcherNote }: { launcherNote: FNote }) {
     )
 }
 
-export function CustomNoteLauncher({ launcherNote, targetNoteId, hoistedNoteId }: { launcherNote: FNote, targetNoteId: string | null, hoistedNoteId?: string }) {
+export function CustomNoteLauncher({ launcherNote, getTargetNoteId, getHoistedNoteId }: {
+    launcherNote: FNote,
+    getTargetNoteId: (launcherNote: FNote) => string | null | Promise<string | null>,
+    getHoistedNoteId?: (launcherNote: FNote) => string | null
+}) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
     async function launch(evt: MouseEvent) {
@@ -28,12 +32,10 @@ export function CustomNoteLauncher({ launcherNote, targetNoteId, hoistedNoteId }
             return;
         }
 
-        if (!targetNoteId) {
-            dialog.info(t("note_launcher.this_launcher_doesnt_define_target_note"));
-            return;
-        }
+        const targetNoteId = await getTargetNoteId(launcherNote);
+        if (!targetNoteId) return;
 
-        const hoistedNoteIdWithDefault = hoistedNoteId || launcherNote.getRelationValue("hoistedNote") || appContext.tabManager.getActiveContext()?.hoistedNoteId;
+        const hoistedNoteIdWithDefault = getHoistedNoteId?.(launcherNote) || appContext.tabManager.getActiveContext()?.hoistedNoteId;
         const ctrlKey = isCtrlKey(evt);
 
         if ((evt.which === 1 && ctrlKey) || evt.which === 2) {
@@ -50,8 +52,9 @@ export function CustomNoteLauncher({ launcherNote, targetNoteId, hoistedNoteId }
             text={escapeHtml(title)}
             onClick={launch}
             onAuxClick={launch}
-            onContextMenu={evt => {
+            onContextMenu={async evt => {
                 evt.preventDefault();
+                const targetNoteId = await getTargetNoteId(launcherNote);
                 if (targetNoteId) {
                     link_context_menu.openContextMenu(targetNoteId, evt);
                 }
@@ -68,6 +71,19 @@ export function CustomNoteLauncher({ launcherNote, targetNoteId, hoistedNoteId }
 // The only downside is more work in setting up the typical case
 // where you actually want to have both title and icon in sync, but for those cases there are bookmarks
 export function NoteLauncher({ launcherNote, ...restProps }: { launcherNote: FNote, hoistedNoteId?: string }) {
-    const [ targetNote ] = useNoteRelation(launcherNote, "target");
-    return <CustomNoteLauncher launcherNote={launcherNote} targetNoteId={targetNote ?? null} {...restProps} />
+    return (
+        <CustomNoteLauncher
+            launcherNote={launcherNote}
+            getTargetNoteId={(launcherNote) => {
+                const targetNoteId = launcherNote.getRelationValue("target");
+                if (!targetNoteId) {
+                    dialog.info(t("note_launcher.this_launcher_doesnt_define_target_note"));
+                    return null;
+                }
+                return targetNoteId;
+            }}
+            getHoistedNoteId={launcherNote => launcherNote.getRelationValue("hoistedNote")}
+            {...restProps}
+        />
+    );
 }
