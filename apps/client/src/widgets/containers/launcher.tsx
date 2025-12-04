@@ -3,17 +3,17 @@ import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
 import NoteLauncher from "../buttons/launcher/note_launcher.js";
 import ScriptLauncher from "../buttons/launcher/script_launcher.js";
-import CommandButtonWidget from "../buttons/command_button.js";
 import utils from "../../services/utils.js";
 import TodayLauncher from "../buttons/launcher/today_launcher.js";
 import QuickSearchLauncherWidget from "../quick_search_launcher.js";
 import type FNote from "../../entities/fnote.js";
-import type { CommandNames } from "../../components/app_context.js";
 import BookmarkButtons from "../launch_bar/BookmarkButtons.jsx";
 import SpacerWidget from "../launch_bar/SpacerWidget.jsx";
 import HistoryNavigationButton from "../launch_bar/HistoryNavigation.jsx";
 import AiChatButton from "../launch_bar/AiChatButton.jsx";
 import ProtectedSessionStatusWidget from "../launch_bar/ProtectedSessionStatusWidget.jsx";
+import { VNode } from "preact";
+import CommandButton from "../launch_bar/CommandButton.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -54,9 +54,9 @@ export default class LauncherWidget extends BasicWidget {
             return false;
         }
 
-        let widget: BasicWidget;
+        let widget: BasicWidget | VNode;
         if (launcherType === "command") {
-            widget = this.initCommandLauncherWidget(note).class("launcher-button");
+            widget = wrapReactWidgets<BasicWidget>([ <CommandButton launcherNote={note} /> ])[0];
         } else if (launcherType === "note") {
             widget = new NoteLauncher(note).class("launcher-button");
         } else if (launcherType === "script") {
@@ -80,13 +80,6 @@ export default class LauncherWidget extends BasicWidget {
         }
 
         return true;
-    }
-
-    initCommandLauncherWidget(note: FNote) {
-        return new CommandButtonWidget()
-            .title(() => note.title)
-            .icon(() => note.getIcon())
-            .command(() => note.getLabelValue("command") as CommandNames);
     }
 
     async initCustomWidget(note: FNote) {

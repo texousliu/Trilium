@@ -26,6 +26,7 @@ type Labels = {
 
     // Launch bar
     bookmarkFolder: boolean;
+    command: string;
 
     // Collection-specific
     viewType: string;
