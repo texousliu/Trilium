@@ -4,8 +4,7 @@ import sql_init from "./sql_init.js";
 import { join } from "path";
 import { getResourceDir } from "./utils.js";
 import hidden_subtree from "./hidden_subtree.js";
-import { LOCALES, setDayjsLocale, type Locale, type LOCALE_IDS } from "@triliumnext/commons";
-import dayjs, { Dayjs } from "dayjs";
+import { dayjs, LOCALES, setDayjsLocale, type Dayjs, type Locale, type LOCALE_IDS } from "@triliumnext/commons";
 
 export async function initializeTranslations() {
     const resourceDir = getResourceDir();
