@@ -61,7 +61,12 @@ export function CustomWidget({ launcherNote }: { launcherNote: FNote }) {
     parentComponent?.contentSized();
 
     useEffect(() => {
-        widgetNote?.executeScript().then(setWidget);
+        widgetNote?.executeScript().then(widget => {
+            if (widget instanceof BasicWidget) {
+                widget._noteId = widgetNote.noteId;
+            }
+            setWidget(widget);
+        });
     }, [ widgetNote ]);
 
     return (
