@@ -13,6 +13,11 @@ export const LaunchBarContext = createContext<{
     isHorizontalLayout: false
 })
 
+export interface LauncherNoteProps {
+    /** The corresponding {@link FNote} of type {@code launcher} in the hidden subtree of this launcher. Generally this launcher note holds information about the launcher via labels and relations, but also the title and the icon of the launcher. Not to be confused with the target note, which is specific to some launchers. */
+    launcherNote: FNote;
+}
+
 export function LaunchBarActionButton(props: Omit<ActionButtonProps, "className" | "noIconActionClass" | "titlePosition">) {
     const { isHorizontalLayout } = useContext(LaunchBarContext);
 

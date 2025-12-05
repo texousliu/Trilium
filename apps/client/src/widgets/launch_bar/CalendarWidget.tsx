@@ -1,6 +1,6 @@
 import { Dispatch, StateUpdater, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
-import { LaunchBarDropdownButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
+import { LaunchBarDropdownButton, LauncherNoteProps, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import { Dayjs, dayjs } from "@triliumnext/commons";
 import appContext from "../../components/app_context";
 import "./CalendarWidget.css";
@@ -30,7 +30,7 @@ const MONTHS = [
     t("calendar.december")
 ];
 
-export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }) {
+export default function CalendarWidget({ launcherNote }: LauncherNoteProps) {
     const { title, icon } = useLauncherIconAndTitle(launcherNote);
     const [ calendarArgs, setCalendarArgs ] = useState<Pick<CalendarArgs, "activeDate" | "todaysDate">>();
     const [ date, setDate ] = useState<Dayjs>();

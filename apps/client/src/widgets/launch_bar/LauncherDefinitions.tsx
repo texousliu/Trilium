@@ -7,12 +7,12 @@ import QuickSearchWidget from "../quick_search";
 import { isMobile } from "../../services/utils";
 import date_notes from "../../services/date_notes";
 import { CustomNoteLauncher } from "./GenericButtons";
-import { LaunchBarActionButton, LaunchBarContext, useLauncherIconAndTitle } from "./launch_bar_widgets";
+import { LaunchBarActionButton, LaunchBarContext, LauncherNoteProps, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import dialog from "../../services/dialog";
 import { t } from "../../services/i18n";
 import { CommandNames } from "../../components/app_context";
 
-export function CommandButton({ launcherNote }: { launcherNote: FNote }) {
+export function CommandButton({ launcherNote }: LauncherNoteProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
     const [ command ] = useNoteLabel(launcherNote, "command");
 
@@ -50,7 +50,7 @@ export function NoteLauncher({ launcherNote, ...restProps }: { launcherNote: FNo
     );
 }
 
-export function ScriptLauncher({ launcherNote }: { launcherNote: FNote }) {
+export function ScriptLauncher({ launcherNote }: LauncherNoteProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
     return (
         <LaunchBarActionButton
@@ -70,7 +70,7 @@ export function ScriptLauncher({ launcherNote }: { launcherNote: FNote }) {
     )
 }
 
-export default function AiChatButton({ launcherNote }: { launcherNote: FNote }) {
+export default function AiChatButton({ launcherNote }: LauncherNoteProps) {
     const [ aiEnabled ] = useTriliumOptionBool("aiEnabled");
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
@@ -83,7 +83,7 @@ export default function AiChatButton({ launcherNote }: { launcherNote: FNote }) 
     )
 }
 
-export function TodayLauncher({ launcherNote }: { launcherNote: FNote }) {
+export function TodayLauncher({ launcherNote }: LauncherNoteProps) {
     return (
         <CustomNoteLauncher
             launcherNote={launcherNote}
@@ -109,7 +109,7 @@ export function QuickSearchLauncherWidget() {
     )
 }
 
-export function CustomWidget({ launcherNote }: { launcherNote: FNote }) {
+export function CustomWidget({ launcherNote }: LauncherNoteProps) {
     const [ widgetNote ] = useNoteRelationTarget(launcherNote, "widget");
     const [ widget, setWidget ] = useState<BasicWidget>();
     const parentComponent = useContext(ParentComponent) as BasicWidget | null;
