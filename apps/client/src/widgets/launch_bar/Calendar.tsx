@@ -143,7 +143,13 @@ function CalendarDay({ date, dateNotesForMonth, className, activeDate, todaysDat
 }
 
 function CalendarWeek({ date, weekNumber, weekNotes, onWeekClicked }: { weekNumber: number, weekNotes: string[] } & Pick<CalendarArgs, "date" | "onWeekClicked">) {
-    const weekString = date.local().format('YYYY-') + 'W' + String(weekNumber).padStart(2, '0');
+    const localDate = date.local();
+
+    // Handle case where week is in between years.
+    let year = localDate.year();
+    if (localDate.month() === 11 && weekNumber === 1) year++;
+
+    const weekString = `${year}-W${String(weekNumber).padStart(2, '0')}`;
 
     if (onWeekClicked) {
         return (
@@ -151,6 +157,7 @@ function CalendarWeek({ date, weekNumber, weekNotes, onWeekClicked }: { weekNumb
                 className={clsx("calendar-week-number", "calendar-date",
                     weekNotes.includes(weekString) && "calendar-date-exists")}
                 data-calendar-week-number={weekNumber}
+                data-date={date.local().format("YYYY-MM-DD")}
                 onClick={(e) => onWeekClicked(weekString, e)}
             >{weekNumber}</a>
         )
