@@ -20,7 +20,7 @@ export default function BookmarkButtons() {
 
     return (
         <div style={style}>
-            {childNotes?.map(childNote => <SingleBookmark note={childNote} />)}
+            {childNotes?.map(childNote => <SingleBookmark key={childNote.noteId} note={childNote} />)}
         </div>
     )
 }
@@ -48,8 +48,8 @@ function BookmarkFolder({ note }: { note: FNote }) {
 
                 <ul className="children-notes">
                     {childNotes.map(childNote => (
-                        <li>
-                            <NoteLink key={childNote.noteId} notePath={childNote.noteId} noPreview showNoteIcon containerClassName="note-link" noTnLink />
+                        <li key={childNote.noteId}>
+                            <NoteLink notePath={childNote.noteId} noPreview showNoteIcon containerClassName="note-link" noTnLink />
                         </li>
                     ))}
                 </ul>

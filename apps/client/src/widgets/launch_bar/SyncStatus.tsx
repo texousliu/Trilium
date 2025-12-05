@@ -88,7 +88,7 @@ function useSyncStatus() {
             // First, read last synced push.
             if ("lastSyncedPush" in message) {
                 lastSyncedPush = message.lastSyncedPush;
-            } else if ("data" in message && message.data && "lastSyncedPush" in message.data && lastSyncedPush) {
+            } else if ("data" in message && message.data && "lastSyncedPush" in message.data && lastSyncedPush !== undefined) {
                 lastSyncedPush = message.data.lastSyncedPush;
             }
 

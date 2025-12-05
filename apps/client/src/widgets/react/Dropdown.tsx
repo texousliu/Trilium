@@ -67,7 +67,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
             resizeObserver.disconnect();
             dropdown.dispose();
         }
-    }, [ triggerRef, dropdownContainerRef ]);
+    }, []);
 
     const onShown = useCallback(() => {
         setShown(true);
@@ -101,7 +101,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
             $dropdown.off("show.bs.dropdown", onShown);
             $dropdown.off("hide.bs.dropdown", onHidden);
         };
-    }, []); // Add dependency array
+    }, [ onShown, onHidden ]);
 
     const ariaId = useUniqueName("button");
 

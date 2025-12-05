@@ -72,6 +72,5 @@ export default function NoteLink({ className, containerClassName, notePath, show
         $linkEl?.addClass(className);
     }
 
-    return <span className={containerClassName} ref={ref} />
-
+    return <span className={containerClassName} ref={ref} />;
 }

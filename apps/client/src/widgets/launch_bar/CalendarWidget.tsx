@@ -1,4 +1,4 @@
-import { Dispatch, StateUpdater, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useMemo, useRef, useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import { LaunchBarDropdownButton, LauncherNoteProps, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import { Dayjs, dayjs } from "@triliumnext/commons";
@@ -59,7 +59,7 @@ export default function CalendarWidget({ launcherNote }: LauncherNoteProps) {
     return (
         <LaunchBarDropdownButton
             icon={icon} title={title}
-            onShown={() => {
+            onShown={async () => {
                 const dateNote = appContext.tabManager.getActiveContextNote()?.getOwnedLabelValue("dateNote");
                 const activeDate = dateNote ? dayjs(`${dateNote}T12:00:00`) : null
                 const todaysDate = dayjs();
@@ -68,7 +68,11 @@ export default function CalendarWidget({ launcherNote }: LauncherNoteProps) {
                     todaysDate,
                 });
                 setDate(dayjs(activeDate || todaysDate).startOf('month'));
-                checkEnableWeekNotes();
+                try {
+                    await checkEnableWeekNotes();
+                } catch (e: unknown) {
+                    // Non-critical.
+                }
             }}
             dropdownRef={dropdownRef}
             dropdownOptions={{

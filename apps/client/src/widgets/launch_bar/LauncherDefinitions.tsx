@@ -1,16 +1,17 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "preact/hooks";
-import { useGlobalShortcut, useLegacyWidget, useNoteContext, useNoteLabel, useNoteRelationTarget, useTriliumOptionBool } from "../react/hooks";
+import { useGlobalShortcut, useLegacyWidget, useNoteLabel, useNoteRelationTarget, useTriliumOptionBool } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import BasicWidget from "../basic_widget";
 import FNote from "../../entities/fnote";
 import QuickSearchWidget from "../quick_search";
-import { isMobile } from "../../services/utils";
+import { getErrorMessage, isMobile } from "../../services/utils";
 import date_notes from "../../services/date_notes";
 import { CustomNoteLauncher } from "./GenericButtons";
 import { LaunchBarActionButton, LaunchBarContext, LauncherNoteProps, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import dialog from "../../services/dialog";
 import { t } from "../../services/i18n";
 import appContext, { CommandNames } from "../../components/app_context";
+import toast from "../../services/toast";
 
 export function CommandButton({ launcherNote }: LauncherNoteProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
@@ -77,7 +78,7 @@ export function ScriptLauncher({ launcherNote }: LauncherNoteProps) {
     )
 }
 
-export default function AiChatButton({ launcherNote }: LauncherNoteProps) {
+export function AiChatButton({ launcherNote }: LauncherNoteProps) {
     const [ aiEnabled ] = useTriliumOptionBool("aiEnabled");
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
@@ -123,12 +124,24 @@ export function CustomWidget({ launcherNote }: LauncherNoteProps) {
     parentComponent?.contentSized();
 
     useEffect(() => {
-        widgetNote?.executeScript().then(widget => {
-            if (widget instanceof BasicWidget) {
+        (async function() {
+            let widget: BasicWidget;
+            try {
+                widget = await widgetNote?.executeScript();
+            } catch (e) {
+                toast.showError(t("toast.bundle-error.message", {
+                    id: widgetNote?.noteId,
+                    title: widgetNote?.title,
+                    message: getErrorMessage(e)
+                }));
+                return;
+            }
+
+            if (widgetNote && widget instanceof BasicWidget) {
                 widget._noteId = widgetNote.noteId;
             }
             setWidget(widget);
-        });
+        })();
     }, [ widgetNote ]);
 
     return (

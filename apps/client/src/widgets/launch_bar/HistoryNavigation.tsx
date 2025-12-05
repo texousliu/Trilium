@@ -12,6 +12,8 @@ interface HistoryNavigationProps {
     command: "backInNoteHistory" | "forwardInNoteHistory";
 }
 
+const HISTORY_LIMIT = 20;
+
 export default function HistoryNavigationButton({ launcherNote, command }: HistoryNavigationProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
     const webContentsRef = useRef<WebContents>(null);
@@ -63,8 +65,8 @@ export default function HistoryNavigationButton({ launcherNote, command }: Histo
 
                 items.reverse();
 
-                if (items.length > 20) {
-                    items = items.slice(0, 50);
+                if (items.length > HISTORY_LIMIT) {
+                    items = items.slice(0, HISTORY_LIMIT);
                 }
 
                 contextMenu.show({

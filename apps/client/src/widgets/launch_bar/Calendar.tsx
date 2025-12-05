@@ -35,11 +35,10 @@ export interface CalendarArgs {
 }
 
 export default function Calendar(args: CalendarArgs) {
-    const [ rawFirstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek") ?? 0;
+    const [ rawFirstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek");
     const firstDayOfWeekISO = (rawFirstDayOfWeek === 0 ? 7 : rawFirstDayOfWeek);
 
     const date = args.date;
-    const month = date.format('YYYY-MM');
     const firstDay = date.startOf('month');
     const firstDayISO = firstDay.isoWeekday();
     const monthInfo = getMonthInformation(date, firstDayISO, firstDayOfWeekISO);

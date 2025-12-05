@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "preact/hooks";
+import { useCallback, useLayoutEffect, useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 import { isDesktop, isMobile } from "../../services/utils";
@@ -8,7 +8,7 @@ import BookmarkButtons from "./BookmarkButtons";
 import ProtectedSessionStatusWidget from "./ProtectedSessionStatusWidget";
 import SyncStatus from "./SyncStatus";
 import HistoryNavigationButton from "./HistoryNavigation";
-import AiChatButton, { CommandButton, CustomWidget, NoteLauncher, QuickSearchLauncherWidget, ScriptLauncher, TodayLauncher } from "./LauncherDefinitions";
+import { AiChatButton, CommandButton, CustomWidget, NoteLauncher, QuickSearchLauncherWidget, ScriptLauncher, TodayLauncher } from "./LauncherDefinitions";
 import { useTriliumEvent } from "../react/hooks";
 import { onWheelHorizontalScroll } from "../widget_utils";
 import { LaunchBarContext } from "./launch_bar_widgets";
@@ -111,10 +111,10 @@ function useLauncherChildNotes() {
     }, []);
 
     // Load the children.
-    function refresh() {
+    const refresh = useCallback(() => {
         if (!visibleLaunchersRoot) return;
         visibleLaunchersRoot.getChildNotes().then(setChildNotes);
-    }
+    }, [ visibleLaunchersRoot, setChildNotes ]);
     useLayoutEffect(refresh, [ visibleLaunchersRoot ]);
 
     // React to position changes.

@@ -813,7 +813,7 @@ export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", conta
 }
 
 /**
- * Register a global shortcut. Internally it uses the shortcut service and assignes a random namespace to make it unique.
+ * Register a global shortcut. Internally it uses the shortcut service and assigns a random namespace to make it unique.
  *
  * @param keyboardShortcut the keyboard shortcut combination to register.
  * @param handler the corresponding handler to be called when the keyboard shortcut is invoked by the user.
@@ -877,12 +877,13 @@ async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
 
 export function useChildNotes(parentNoteId: string) {
     const [ childNotes, setChildNotes ] = useState<FNote[]>([]);
-    async function refreshChildNotes() {
-        const parentNote = await froca.getNote(parentNoteId);
-        const childNotes = await parentNote?.getChildNotes();
-        setChildNotes(childNotes ?? []);
-    }
-    useEffect(() => { refreshChildNotes() }, [ parentNoteId ]);
+    useEffect(() => {
+        (async function() {
+            const parentNote = await froca.getNote(parentNoteId);
+            const childNotes = await parentNote?.getChildNotes();
+            setChildNotes(childNotes ?? []);
+        })();
+     }, [ parentNoteId ]);
 
     return childNotes;
 }
