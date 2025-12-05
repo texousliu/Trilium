@@ -633,6 +633,8 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
     return { showTooltip, hideTooltip };
 }
 
+let tooltips = new Set<Tooltip>();
+
 /**
  * Similar to {@link useTooltip}, but doesn't expose methods to imperatively hide or show the tooltip.
  *
@@ -645,7 +647,17 @@ export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Too
         if (!elRef?.current || !hasTooltip) return;
 
         const tooltip = Tooltip.getOrCreateInstance(elRef.current, config);
+        elRef.current.addEventListener("show.bs.tooltip", () => {
+            // Hide all the other tooltips.
+            for (const otherTooltip of tooltips) {
+                if (otherTooltip === tooltip) continue;
+                otherTooltip.hide();
+            }
+        });
+        tooltips.add(tooltip);
+
         return () => {
+            tooltips.delete(tooltip);
             tooltip.dispose();
             // workaround for https://github.com/twbs/bootstrap/issues/37474
             (tooltip as any)._activeTrigger = {};
