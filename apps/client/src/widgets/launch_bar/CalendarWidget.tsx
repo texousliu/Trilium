@@ -134,9 +134,7 @@ function CalendarMonthSelector({ date, setDate }: CalendarHeaderProps) {
             <FormDropdownList
                 values={months} currentValue={date.month().toString()}
                 keyProperty="index" titleProperty="text"
-                onChange={value => {
-
-                }}
+                onChange={(index) => setDate(date.set("month", parseInt(index, 10)))}
                 buttonProps={{ "data-calendar-input": "month" }}
                 dropdownOptions={{ popperConfig: { placement: "bottom" } }}
             />

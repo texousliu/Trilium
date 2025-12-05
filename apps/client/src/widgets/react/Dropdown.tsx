@@ -75,7 +75,11 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
         if (externalContainerRef) externalContainerRef.current = containerRef.current;
 
         const $dropdown = $(containerRef.current);
-        $dropdown.on("show.bs.dropdown", onShown);
+        $dropdown.on("show.bs.dropdown", (e) => {
+            // Stop propagation causing multiple shows for nested dropdowns.
+            e.stopPropagation();
+            onShown();
+        });
         $dropdown.on("hide.bs.dropdown", (e) => {
             // Stop propagation causing multiple hides for nested dropdowns.
             e.stopPropagation();
