@@ -107,12 +107,12 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       <FormDropdownDivider />
 
       <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
-      {glob.isDev && <DevelopmentActions note={note} />}
+      {glob.isDev && <DevelopmentActions note={note} noteContext={noteContext} />}
     </Dropdown>
   );
 }
 
-function DevelopmentActions({ note }: { note: FNote }) {
+function DevelopmentActions({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
     return (
         <>
             <FormListHeader text="Development-only Actions" />
@@ -120,6 +120,16 @@ function DevelopmentActions({ note }: { note: FNote }) {
                 icon="bx bx-printer"
                 onClick={() => window.open(`/?print=#root/${note.noteId}`, "_blank")}
             >Open print page</FormListItem>
+            {note.type === "text" && (
+                <FormListItem
+                    icon="bx bx-error"
+                    onClick={() => {
+                        noteContext?.getTextEditor(editor => {
+                            editor.editing.view.change(() => {
+                                throw new Error("Editor crashed.");
+                            });
+                        });
+                }}>Crash editor</FormListItem>)}
         </>
     )
 }

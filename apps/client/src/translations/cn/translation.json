@@ -1469,7 +1469,7 @@
     "import-into-note": "导入到笔记",
     "apply-bulk-actions": "应用批量操作",
     "converted-to-attachments": "{{count}} 个笔记已被转换为附件。",
-    "convert-to-attachment-confirm": "确定要将选中的笔记转换为其父笔记的附件吗？",
+    "convert-to-attachment-confirm": "确定要将选中的笔记转换为其父笔记的附件吗？此操作仅适用于图像笔记，其他笔记将被跳过。",
     "duplicate": "复制",
     "open-in-popup": "快速编辑",
     "archive": "归档",
@@ -1714,7 +1714,8 @@
     "open_note_in_new_tab": "在新标签页中打开笔记",
     "open_note_in_new_split": "在新分屏中打开笔记",
     "open_note_in_new_window": "在新窗口中打开笔记",
-    "open_note_in_popup": "快速编辑"
+    "open_note_in_popup": "快速编辑",
+    "open_note_in_other_split": "在另一个分屏中打开笔记"
   },
   "electron_integration": {
     "desktop-application": "桌面应用程序",
