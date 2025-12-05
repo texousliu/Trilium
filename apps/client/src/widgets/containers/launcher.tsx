@@ -1,4 +1,3 @@
-import SyncStatusWidget from "../sync_status.js";
 import BasicWidget, { wrapReactWidgets } from "../basic_widget.js";
 import utils, { isMobile } from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
@@ -16,6 +15,7 @@ import { ParentComponent } from "../react/react_utils.jsx";
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "../launch_bar/launch_bar_widgets.jsx";
 import CalendarWidget from "../launch_bar/CalendarWidget.jsx";
+import SyncStatus from "../launch_bar/SyncStatus.jsx";
 
 interface InnerWidget extends BasicWidget {
     settings?: {
@@ -106,11 +106,11 @@ export default class LauncherWidget extends BasicWidget {
 
                 return <SpacerWidget baseSize={baseSize} growthFactor={growthFactor} />;
             case "bookmarks":
-                return <BookmarkButtons isHorizontalLayout={this.isHorizontalLayout} />
+                return <BookmarkButtons isHorizontalLayout={this.isHorizontalLayout} />;
             case "protectedSession":
-                return <ProtectedSessionStatusWidget />
+                return <ProtectedSessionStatusWidget />;
             case "syncStatus":
-                return new SyncStatusWidget();
+                return <SyncStatus />;
             case "backInHistoryButton":
                 return <HistoryNavigationButton launcherNote={note} command="backInNoteHistory" />
             case "forwardInHistoryButton":
