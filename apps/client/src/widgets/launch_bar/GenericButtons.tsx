@@ -2,16 +2,22 @@ import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
 import { escapeHtml, isCtrlKey } from "../../services/utils";
+import { useGlobalShortcut, useNoteLabel } from "../react/hooks";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 
 export function CustomNoteLauncher({ launcherNote, getTargetNoteId, getHoistedNoteId }: {
-    launcherNote: FNote,
-    getTargetNoteId: (launcherNote: FNote) => string | null | Promise<string | null>,
-    getHoistedNoteId?: (launcherNote: FNote) => string | null
+    launcherNote: FNote;
+    getTargetNoteId: (launcherNote: FNote) => string | null | Promise<string | null>;
+    getHoistedNoteId?: (launcherNote: FNote) => string | null;
+    keyboardShortcut?: string;
 }) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
-    async function launch(evt: MouseEvent) {
+    // Keyboard shortcut.
+    const [ shortcut ] = useNoteLabel(launcherNote, "keyboardShortcut");
+    useGlobalShortcut(shortcut, launch);
+
+    async function launch(evt: MouseEvent | KeyboardEvent) {
         if (evt.which === 3) {
             return;
         }

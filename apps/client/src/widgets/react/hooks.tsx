@@ -20,9 +20,9 @@ import options, { type OptionValue } from "../../services/options";
 import protected_session_holder from "../../services/protected_session_holder";
 import SpacedUpdate from "../../services/spaced_update";
 import toast, { ToastOptions } from "../../services/toast";
-import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
+import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../services/utils";
 import server from "../../services/server";
-import { removeIndividualBinding } from "../../services/shortcuts";
+import shortcuts, { Handler, removeIndividualBinding } from "../../services/shortcuts";
 import froca from "../../services/froca";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
@@ -810,6 +810,21 @@ export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", conta
             }
         }
     }, [ scope, containerRef, parentComponent, ntxId ]);
+}
+
+/**
+ * Register a global shortcut. Internally it uses the shortcut service and assignes a random namespace to make it unique.
+ *
+ * @param keyboardShortcut the keyboard shortcut combination to register.
+ * @param handler the corresponding handler to be called when the keyboard shortcut is invoked by the user.
+ */
+export function useGlobalShortcut(keyboardShortcut: string | null | undefined, handler: Handler) {
+    useEffect(() => {
+        if (!keyboardShortcut) return;
+        const namespace = randomString(10);
+        shortcuts.bindGlobalShortcut(keyboardShortcut, handler, namespace);
+        return () => shortcuts.removeGlobalShortcut(namespace);
+    }, [ keyboardShortcut, handler ]);
 }
 
 /**

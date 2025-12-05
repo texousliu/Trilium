@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
-import { useLegacyWidget, useNoteContext, useNoteLabel, useNoteRelationTarget, useTriliumOptionBool } from "../react/hooks";
+import { useGlobalShortcut, useLegacyWidget, useNoteContext, useNoteLabel, useNoteRelationTarget, useTriliumOptionBool } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import BasicWidget from "../basic_widget";
 import FNote from "../../entities/fnote";
@@ -52,20 +52,27 @@ export function NoteLauncher({ launcherNote, ...restProps }: { launcherNote: FNo
 
 export function ScriptLauncher({ launcherNote }: LauncherNoteProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
+
+    async function launch() {
+        if (launcherNote.isLabelTruthy("scriptInLauncherContent")) {
+            await launcherNote.executeScript();
+        } else {
+            const script = await launcherNote.getRelationTarget("script");
+            if (script) {
+                await script.executeScript();
+            }
+        }
+    }
+
+    // Keyboard shortcut.
+    const [ shortcut ] = useNoteLabel(launcherNote, "keyboardShortcut");
+    useGlobalShortcut(shortcut, launch);
+
     return (
         <LaunchBarActionButton
             icon={icon}
             text={title}
-            onClick={async () => {
-                if (launcherNote.isLabelTruthy("scriptInLauncherContent")) {
-                    await launcherNote.executeScript();
-                } else {
-                    const script = await launcherNote.getRelationTarget("script");
-                    if (script) {
-                        await script.executeScript();
-                    }
-                }
-            }}
+            onClick={launch}
         />
     )
 }

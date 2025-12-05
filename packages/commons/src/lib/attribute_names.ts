@@ -27,6 +27,7 @@ type Labels = {
     // Launch bar
     bookmarkFolder: boolean;
     command: string;
+    keyboardShortcut: string;
 
     // Collection-specific
     viewType: string;
