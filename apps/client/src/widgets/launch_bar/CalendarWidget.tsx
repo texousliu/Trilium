@@ -1,4 +1,4 @@
-import { Dispatch, StateUpdater, useEffect, useMemo, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import { LaunchBarDropdownButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import { Dayjs, dayjs } from "@triliumnext/commons";
@@ -11,6 +11,7 @@ import FormDropdownList from "../react/FormDropdownList";
 import FormTextBox from "../react/FormTextBox";
 import toast from "../../services/toast";
 import date_notes from "../../services/date_notes";
+import { Dropdown } from "bootstrap";
 
 const MONTHS = [
     t("calendar.january"),
@@ -31,6 +32,7 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
     const { title, icon } = useLauncherIconAndTitle(launcherNote);
     const [ calendarArgs, setCalendarArgs ] = useState<Pick<CalendarArgs, "activeDate" | "todaysDate">>();
     const [ date, setDate ] = useState<Dayjs>();
+    const dropdownRef = useRef<Dropdown>(null);
 
     return (
         <LaunchBarDropdownButton
@@ -45,6 +47,7 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
                 });
                 setDate(dayjs(activeDate || todaysDate).startOf('month'));
             }}
+            dropdownRef={dropdownRef}
             dropdownOptions={{
                 autoClose: "outside"
             }}
@@ -57,7 +60,7 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
                         const note = await date_notes.getDayNote(date);
                         if (note) {
                             appContext.tabManager.getActiveContext()?.setNote(note.noteId);
-                            // this.dropdown?.hide();
+                            dropdownRef.current?.hide();
                         } else {
                             toast.showError(t("calendar.cannot_find_day_note"));
                         }

@@ -1,7 +1,7 @@
 import { Dropdown as BootstrapDropdown } from "bootstrap";
 import { ComponentChildren, HTMLAttributes } from "preact";
 import { CSSProperties, HTMLProps } from "preact/compat";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { MutableRef, useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useUniqueName } from "./hooks";
 
 type DataAttributes = {
@@ -27,10 +27,11 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
     onShown?: () => void;
     onHidden?: () => void;
     dropdownOptions?: Partial<BootstrapDropdown.Options>;
+    dropdownRef?: MutableRef<BootstrapDropdown | null>;
 }
 
-export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps }: DropdownProps) {
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
+export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef }: DropdownProps) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
     const [ shown, setShown ] = useState(false);
@@ -39,6 +40,9 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
         if (!triggerRef.current) return;
 
         const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current, dropdownOptions);
+        if (dropdownRef) {
+            dropdownRef.current = dropdown;
+        }
         if (forceShown) {
             dropdown.show();
             setShown(true);
@@ -57,9 +61,9 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
     }, []);
 
     useEffect(() => {
-        if (!dropdownRef.current) return;
+        if (!containerRef.current) return;
 
-        const $dropdown = $(dropdownRef.current);
+        const $dropdown = $(containerRef.current);
         $dropdown.on("show.bs.dropdown", onShown);
         $dropdown.on("hide.bs.dropdown", onHidden);
 
@@ -73,7 +77,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
     const ariaId = useUniqueName("button");
 
     return (
-        <div ref={dropdownRef} class={`dropdown ${className ?? ""}`} style={{ display: "flex" }}>
+        <div ref={containerRef} class={`dropdown ${className ?? ""}`} style={{ display: "flex" }}>
             <button
                 className={`${iconAction ? "icon-action" : "btn"} ${!noSelectButtonStyle ? "select-button" : ""} ${buttonClassName ?? ""} ${!hideToggleArrow ? "dropdown-toggle" : ""}`}
                 ref={triggerRef}
