@@ -2,7 +2,7 @@ import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import { ComponentChildren, HTMLAttributes } from "preact";
 import { CSSProperties, HTMLProps } from "preact/compat";
 import { MutableRef, useCallback, useEffect, useRef, useState } from "preact/hooks";
-import { useStaticTooltip, useUniqueName } from "./hooks";
+import { useTooltip, useUniqueName } from "./hooks";
 
 type DataAttributes = {
   [key: `data-${string}`]: string | number | boolean | undefined;
@@ -35,10 +35,11 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
 export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef, titlePosition, titleOptions }: DropdownProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
-    useStaticTooltip(containerRef, {
+    const { showTooltip, hideTooltip } = useTooltip(containerRef, {
         ...titleOptions,
         placement: titlePosition ?? "bottom",
         fallbackPlacements: [ titlePosition ?? "bottom" ],
+        trigger: "manual"
     });
 
     const [ shown, setShown ] = useState(false);
@@ -60,7 +61,8 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
     const onShown = useCallback(() => {
         setShown(true);
         externalOnShown?.();
-    }, [])
+        hideTooltip();
+    }, [ hideTooltip ])
 
     const onHidden = useCallback(() => {
         setShown(false);
@@ -95,6 +97,8 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
                 aria-expanded="false"
                 id={id ?? ariaId}
                 disabled={disabled}
+                onMouseOver={() => showTooltip()}
+                onMouseLeave={() => hideTooltip()}
                 {...buttonProps}
             >
                 {text}
