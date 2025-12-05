@@ -8,9 +8,8 @@ import BookmarkButtons from "./BookmarkButtons";
 import ProtectedSessionStatusWidget from "./ProtectedSessionStatusWidget";
 import SyncStatus from "./SyncStatus";
 import HistoryNavigationButton from "./HistoryNavigation";
-import { CustomWidget, QuickSearchLauncherWidget, ScriptLauncher, TodayLauncher } from "./LauncherDefinitions";
+import { CommandButton, CustomWidget, NoteLauncher, QuickSearchLauncherWidget, ScriptLauncher, TodayLauncher } from "./LauncherDefinitions";
 import AiChatButton from "./AiChatButton";
-import { CommandButton, NoteLauncher } from "./GenericButtons";
 import { useTriliumEvent } from "../react/hooks";
 
 export default function LauncherContainer({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {

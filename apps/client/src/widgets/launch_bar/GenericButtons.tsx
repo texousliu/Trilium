@@ -1,24 +1,8 @@
-import appContext, { CommandNames } from "../../components/app_context";
+import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
 import { escapeHtml, isCtrlKey } from "../../services/utils";
-import { useNoteLabel } from "../react/hooks";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
-import dialog from "../../services/dialog";
-import { t } from "../../services/i18n";
-
-export function CommandButton({ launcherNote }: { launcherNote: FNote }) {
-    const { icon, title } = useLauncherIconAndTitle(launcherNote);
-    const [ command ] = useNoteLabel(launcherNote, "command");
-
-    return command && (
-        <LaunchBarActionButton
-            icon={icon}
-            text={title}
-            triggerCommand={command as CommandNames}
-        />
-    )
-}
 
 export function CustomNoteLauncher({ launcherNote, getTargetNoteId, getHoistedNoteId }: {
     launcherNote: FNote,
@@ -61,29 +45,4 @@ export function CustomNoteLauncher({ launcherNote, getTargetNoteId, getHoistedNo
             }}
         />
     )
-}
-
-// we're intentionally displaying the launcher title and icon instead of the target,
-// e.g. you want to make launchers to 2 mermaid diagrams which both have mermaid icon (ok),
-// but on the launchpad you want them distinguishable.
-// for titles, the note titles may follow a different scheme than maybe desirable on the launchpad
-// another reason is the discrepancy between what user sees on the launchpad and in the config (esp. icons).
-// The only downside is more work in setting up the typical case
-// where you actually want to have both title and icon in sync, but for those cases there are bookmarks
-export function NoteLauncher({ launcherNote, ...restProps }: { launcherNote: FNote, hoistedNoteId?: string }) {
-    return (
-        <CustomNoteLauncher
-            launcherNote={launcherNote}
-            getTargetNoteId={(launcherNote) => {
-                const targetNoteId = launcherNote.getRelationValue("target");
-                if (!targetNoteId) {
-                    dialog.info(t("note_launcher.this_launcher_doesnt_define_target_note"));
-                    return null;
-                }
-                return targetNoteId;
-            }}
-            getHoistedNoteId={launcherNote => launcherNote.getRelationValue("hoistedNote")}
-            {...restProps}
-        />
-    );
 }
