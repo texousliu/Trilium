@@ -147,9 +147,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
             $newDay.addClass("calendar-date-exists").attr("data-href", `#root/${dateNoteId}`);
         }
 
-        if (this.date.isSame(this.activeDate, 'day')) $newDay.addClass("calendar-date-active");
-        if (this.date.isSame(this.todaysDate, 'day')) $newDay.addClass("calendar-date-today");
-
         $newDay.append($date);
         return $newDay;
     }

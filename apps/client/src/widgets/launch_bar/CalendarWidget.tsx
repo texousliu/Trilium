@@ -4,7 +4,7 @@ import { LaunchBarDropdownButton, useLauncherIconAndTitle } from "./launch_bar_w
 import { Dayjs, dayjs } from "@triliumnext/commons";
 import appContext from "../../components/app_context";
 import "./CalendarWidget.css";
-import Calendar from "./Calendar";
+import Calendar, { CalendarArgs } from "./Calendar";
 import ActionButton from "../react/ActionButton";
 import { t } from "../../services/i18n";
 import FormDropdownList from "../react/FormDropdownList";
@@ -27,6 +27,7 @@ const MONTHS = [
 
 export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }) {
     const { title, icon } = useLauncherIconAndTitle(launcherNote);
+    const [ calendarArgs, setCalendarArgs ] = useState<Omit<CalendarArgs, "date">>();
     const [ date, setDate ] = useState<Dayjs>();
 
     return (
@@ -34,18 +35,21 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
             icon={icon} title={title}
             onShown={() => {
                 const dateNote = appContext.tabManager.getActiveContextNote()?.getOwnedLabelValue("dateNote");
-                const activeDate = dateNote ? dayjs(`${dateNote}T12:00:00`) : null;
+                const activeDate = dateNote ? dayjs(`${dateNote}T12:00:00`) : null
                 const todaysDate = dayjs();
-                const date = dayjs(activeDate || todaysDate).startOf('month');
-                setDate(date);
+                setCalendarArgs({
+                    activeDate,
+                    todaysDate,
+                });
+                setDate(dayjs(activeDate || todaysDate).startOf('month'));
             }}
             dropdownOptions={{
                 autoClose: "outside"
             }}
         >
-            {date && <div className="calendar-dropdown-widget" style={{ width: 400 }}>
+            {calendarArgs && date && <div className="calendar-dropdown-widget" style={{ width: 400 }}>
                 <CalendarHeader date={date} setDate={setDate} />
-                <Calendar date={date} />
+                <Calendar date={date} {...calendarArgs} />
             </div>}
         </LaunchBarDropdownButton>
     )
