@@ -10,6 +10,7 @@ import SyncStatus from "./SyncStatus";
 import HistoryNavigationButton from "./HistoryNavigation";
 import AiChatButton, { CommandButton, CustomWidget, NoteLauncher, QuickSearchLauncherWidget, ScriptLauncher, TodayLauncher } from "./LauncherDefinitions";
 import { useTriliumEvent } from "../react/hooks";
+import { onWheelHorizontalScroll } from "../widget_utils";
 
 export default function LauncherContainer({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {
     const childNotes = useLauncherChildNotes();
@@ -22,6 +23,7 @@ export default function LauncherContainer({ isHorizontalLayout }: { isHorizontal
                 flexGrow: 1,
                 flexDirection: isHorizontalLayout ? "row" : "column"
             }}
+            onWheel={isHorizontalLayout ? onWheelHorizontalScroll : undefined}
         >
             {childNotes?.map(childNote => {
                 if (childNote.type !== "launcher") {
