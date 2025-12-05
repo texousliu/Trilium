@@ -212,7 +212,8 @@ body[dir=ltr] #launcher-container {
 }
 
 #launcher-pane .launcher-button,
-#launcher-pane .right-dropdown-widget {
+#launcher-pane .right-dropdown-widget,
+#launcher-pane .global-menu {
     width: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     height: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     margin: var(--launcher-pane-button-gap) var(--launcher-pane-button-margin);
