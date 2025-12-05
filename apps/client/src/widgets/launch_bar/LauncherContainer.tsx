@@ -24,7 +24,10 @@ export default function LauncherContainer({ isHorizontalLayout }: { isHorizontal
                 flexGrow: 1,
                 flexDirection: isHorizontalLayout ? "row" : "column"
             }}
-            onWheel={isHorizontalLayout ? onWheelHorizontalScroll : undefined}
+            onWheel={isHorizontalLayout ? (e) => {
+                if ((e.target as HTMLElement).closest(".dropdown-menu")) return;
+                onWheelHorizontalScroll(e);
+            } : undefined}
         >
             <LaunchBarContext.Provider value={{
                 isHorizontalLayout
