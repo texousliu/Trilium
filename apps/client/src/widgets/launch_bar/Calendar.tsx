@@ -85,13 +85,20 @@ function CurrentMonthDays({ date, firstDayOfWeekISO, ...args }: { date: Dayjs, f
     let dateCursor = date;
     const currentMonth = date.month();
     const items: VNode[] = [];
+    const curMonthString = date.format('YYYY-MM');
+    const [ dateNotesForCurMonth, setDateNotesForCurMonth ] = useState<DateNotesForMonth>();
+
+    useEffect(() => {
+        server.get<DateNotesForMonth>(`special-notes/notes-for-month/${curMonthString}`).then(setDateNotesForCurMonth);
+    }, [ date ]);
+
     while (dateCursor.month() === currentMonth) {
         const weekNumber = getWeekNumber(dateCursor, firstDayOfWeekISO);
         if (dateCursor.isoWeekday() === firstDayOfWeekISO) {
             items.push(<CalendarWeek weekNumber={weekNumber} />)
         }
 
-        items.push(<CalendarDay date={dateCursor} dateNotesForMonth={{}} {...args} />)
+        items.push(<CalendarDay date={dateCursor} dateNotesForMonth={dateNotesForCurMonth} {...args} />)
         dateCursor = dateCursor.add(1, "day");
     }
 
@@ -112,13 +119,16 @@ function NextMonthDays({ date, dates, ...args }: { date: Dayjs, dates: Dayjs[] }
 }
 
 function CalendarDay({ date, dateNotesForMonth, className, activeDate, todaysDate }: { date: Dayjs, dateNotesForMonth?: DateNotesForMonth, className?: string } & CalendarArgs) {
+    const dateNoteId = dateNotesForMonth?.[date.local().format('YYYY-MM-DD')];
     return (
         <a
             className={clsx("calendar-date", className,
+                dateNoteId && "calendar-date-exists",
                 date.isSame(activeDate, "day") && "calendar-date-active",
                 date.isSame(todaysDate, "day") && "calendar-date-today"
             )}
             data-calendar-date={date.local().format("YYYY-MM-DD")}
+            data-href={dateNoteId && `#root/${dateNoteId}`}
         >
             <span>
                 {date.date()}

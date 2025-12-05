@@ -46,22 +46,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         this.manageFirstDayOfWeek();
         this.initWeekCalculation();
 
-        // Month navigation
-        this.$monthSelect = this.$dropdownContent.find('[data-calendar-input="month"]');
-        this.$monthSelect.on("show.bs.dropdown", (e) => {
-            // Don't trigger dropdownShown() at widget level when the month selection dropdown is shown, since it would cause a redundant refresh.
-            e.stopPropagation();
-        });
-        this.monthDropdown = Dropdown.getOrCreateInstance(this.$monthSelect[0]);
-        this.$dropdownContent.find('[data-calendar-input="month-list"] button').on("click", (e) => {
-            const target = e.target as HTMLElement;
-            const value = target.dataset.value;
-            if (value) {
-                this.date = this.date.month(parseInt(value));
-                this.createMonth();
-            }
-        });
-
         // Date click
         this.$dropdownContent.on("click", ".calendar-date", async (ev) => {
             const date = $(ev.target).closest(".calendar-date").attr("data-calendar-date");
@@ -137,18 +121,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         await this.getWeekNoteEnable();
         this.weekNotes = await server.get<string[]>(`attribute-values/weekNote`);
         this.init( ?? null);
-    }
-
-    createDay() {
-        const $date = $("<span>").html(String(num));
-        const dateNoteId = dateNotesForMonth[this.date.local().format('YYYY-MM-DD')];
-
-        if (dateNoteId) {
-            $newDay.addClass("calendar-date-exists").attr("data-href", `#root/${dateNoteId}`);
-        }
-
-        $newDay.append($date);
-        return $newDay;
     }
 
     createWeekNumber(weekNumber: number) {
