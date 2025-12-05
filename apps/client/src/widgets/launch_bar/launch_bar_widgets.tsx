@@ -27,12 +27,15 @@ export function LaunchBarActionButton(props: Omit<ActionButtonProps, "className"
 }
 
 export function LaunchBarDropdownButton({ children, icon, ...props }: Pick<DropdownProps, "title" | "children" | "onShown" | "dropdownOptions" | "dropdownRef"> & { icon: string }) {
+    const { isHorizontalLayout } = useContext(LaunchBarContext);
+
     return (
         <Dropdown
             className="right-dropdown-widget"
             buttonClassName="right-dropdown-button launcher-button"
             hideToggleArrow
             text={<Icon icon={icon} />}
+            titlePosition={isHorizontalLayout ? "bottom" : "right"}
             {...props}
         >{children}</Dropdown>
     )
