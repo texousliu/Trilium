@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
-import { useLegacyWidget, useNoteContext, useNoteLabel, useNoteRelationTarget } from "../react/hooks";
+import { useLegacyWidget, useNoteContext, useNoteLabel, useNoteRelationTarget, useTriliumOptionBool } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import BasicWidget from "../basic_widget";
 import FNote from "../../entities/fnote";
@@ -66,6 +66,19 @@ export function ScriptLauncher({ launcherNote }: { launcherNote: FNote }) {
                     }
                 }
             }}
+        />
+    )
+}
+
+export default function AiChatButton({ launcherNote }: { launcherNote: FNote }) {
+    const [ aiEnabled ] = useTriliumOptionBool("aiEnabled");
+    const { icon, title } = useLauncherIconAndTitle(launcherNote);
+
+    return aiEnabled && (
+        <LaunchBarActionButton
+            icon={icon}
+            text={title}
+            triggerCommand="createAiChat"
         />
     )
 }
