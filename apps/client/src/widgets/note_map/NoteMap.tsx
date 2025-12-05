@@ -101,7 +101,7 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     useEffect(() => {
         if (!containerSize || !graphRef.current) return;
         graphRef.current.width(containerSize.width).height(containerSize.height);
-    }, [ containerSize?.width, containerSize?.height ]);
+    }, [ containerSize?.width, containerSize?.height, mapType ]);
 
     // Fixing nodes when dragged.
     useEffect(() => {
