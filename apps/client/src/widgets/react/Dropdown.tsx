@@ -36,6 +36,8 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
 export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, dropdownContainerRef: externalContainerRef, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef, titlePosition, titleOptions }: DropdownProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
+    const dropdownContainerRef = useRef<HTMLUListElement | null>(null);
+
     const { showTooltip, hideTooltip } = useTooltip(containerRef, {
         ...titleOptions,
         placement: titlePosition ?? "bottom",
@@ -46,7 +48,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
     const [ shown, setShown ] = useState(false);
 
     useEffect(() => {
-        if (!triggerRef.current) return;
+        if (!triggerRef.current || !dropdownContainerRef) return;
 
         const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current, dropdownOptions);
         if (dropdownRef) {
@@ -56,8 +58,19 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
             dropdown.show();
             setShown(true);
         }
-        return () => dropdown.dispose();
-    }, []);
+
+        const dropdownContainer = dropdownContainerRef.current;
+        if (!dropdownContainer) return;
+
+        // React to popup container size changes, which can affect the positioning.
+        const resizeObserver = new ResizeObserver(() => dropdown.update());
+        resizeObserver.observe(dropdownContainer);
+
+        return () => {
+            resizeObserver.disconnect();
+            dropdown.dispose();
+        }
+    }, [ triggerRef, dropdownContainerRef ]);
 
     const onShown = useCallback(() => {
         setShown(true);
@@ -119,6 +132,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
                 class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} ${!noDropdownListStyle ? "tn-dropdown-list" : ""}`}
                 style={dropdownContainerStyle}
                 aria-labelledby={ariaId}
+                ref={dropdownContainerRef}
             >
                 {shown && children}
             </ul>
