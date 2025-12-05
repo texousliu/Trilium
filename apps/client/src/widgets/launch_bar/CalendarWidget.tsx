@@ -12,6 +12,7 @@ import FormTextBox from "../react/FormTextBox";
 import toast from "../../services/toast";
 import date_notes from "../../services/date_notes";
 import { Dropdown } from "bootstrap";
+import search from "../../services/search";
 
 const MONTHS = [
     t("calendar.january"),
@@ -33,6 +34,19 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
     const [ calendarArgs, setCalendarArgs ] = useState<Pick<CalendarArgs, "activeDate" | "todaysDate">>();
     const [ date, setDate ] = useState<Dayjs>();
     const dropdownRef = useRef<Dropdown>(null);
+    const [ enableWeekNotes, setEnableWeekNotes ] = useState(false);
+    const calendarRootRef = useRef<FNote>();
+
+    async function checkEnableWeekNotes() {
+        if (!calendarRootRef.current) {
+            const notes = await search.searchForNotes("#calendarRoot");
+            if (!notes.length) return;
+            calendarRootRef.current = notes[0];
+        }
+
+        if (!calendarRootRef.current) return;
+        setEnableWeekNotes(calendarRootRef.current.hasLabel("enableWeekNote"));
+    }
 
     return (
         <LaunchBarDropdownButton
@@ -46,6 +60,7 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
                     todaysDate,
                 });
                 setDate(dayjs(activeDate || todaysDate).startOf('month'));
+                checkEnableWeekNotes();
             }}
             dropdownRef={dropdownRef}
             dropdownOptions={{
@@ -66,6 +81,16 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
                         }
                         e.stopPropagation();
                     }}
+                    onWeekClicked={enableWeekNotes ? async (week, e) => {
+                        const note = await date_notes.getWeekNote(week);
+                        if (note) {
+                            appContext.tabManager.getActiveContext()?.setNote(note.noteId);
+                            dropdownRef.current?.hide();
+                        } else {
+                            toast.showError(t("calendar.cannot_find_week_note"));
+                        }
+                        e.stopPropagation();
+                    } : undefined}
                     {...calendarArgs}
                 />
             </div>}

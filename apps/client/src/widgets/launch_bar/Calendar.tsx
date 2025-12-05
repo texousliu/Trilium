@@ -30,6 +30,7 @@ export interface CalendarArgs {
     todaysDate: Dayjs;
     activeDate: Dayjs | null;
     onDateClicked(date: string, e: TargetedMouseEvent<HTMLAnchorElement>): void;
+    onWeekClicked?: (week: string, e: TargetedMouseEvent<HTMLAnchorElement>) => void;
 }
 
 export default function Calendar(args: CalendarArgs) {
@@ -76,7 +77,7 @@ function PreviousMonthDays({ date, info: { dates, weekNumbers }, ...args }: { da
 
     return (
         <>
-            <CalendarWeek weekNumber={weekNumbers[0]} />
+            <CalendarWeek date={date} weekNumber={weekNumbers[0]} onWeekClicked={args.onWeekClicked} />
             {dates.map(date => <CalendarDay date={date} dateNotesForMonth={dateNotesForPrevMonth} className="calendar-date-prev-month" {...args} />)}
         </>
     )
@@ -96,7 +97,7 @@ function CurrentMonthDays({ date, firstDayOfWeekISO, ...args }: { date: Dayjs, f
     while (dateCursor.month() === currentMonth) {
         const weekNumber = getWeekNumber(dateCursor, firstDayOfWeekISO);
         if (dateCursor.isoWeekday() === firstDayOfWeekISO) {
-            items.push(<CalendarWeek weekNumber={weekNumber} />)
+            items.push(<CalendarWeek date={dateCursor} weekNumber={weekNumber} onWeekClicked={args.onWeekClicked} />)
         }
 
         items.push(<CalendarDay date={dateCursor} dateNotesForMonth={dateNotesForCurMonth} {...args} />)
@@ -140,10 +141,18 @@ function CalendarDay({ date, dateNotesForMonth, className, activeDate, todaysDat
     );
 }
 
-function CalendarWeek({ weekNumber }: { weekNumber: number }) {
-    return (
-        <span className="calendar-week-number calendar-week-number-disabled">{weekNumber}</span>
-    )
+function CalendarWeek({ date, weekNumber, onWeekClicked }: { weekNumber: number } & Pick<CalendarArgs, "date" | "onWeekClicked">) {
+    if (onWeekClicked) {
+        const weekNoteId = date.local().format('YYYY-') + 'W' + String(weekNumber).padStart(2, '0');
+        return (
+            <a
+                className="calendar-week-number calendar-date"
+                onClick={(e) => onWeekClicked(weekNoteId, e)}
+            >{weekNumber}</a>
+        )
+    }
+
+    return (<span className="calendar-week-number calendar-week-number-disabled">{weekNumber}</span>);
 }
 
 export function getMonthInformation(date: Dayjs, firstDayISO: number, firstDayOfWeekISO: number) {

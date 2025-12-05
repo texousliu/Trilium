@@ -46,28 +46,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         this.manageFirstDayOfWeek();
         this.initWeekCalculation();
 
-        // Week click
-        this.$dropdownContent.on("click", ".calendar-week-number", async (ev) => {
-            if (!this.weekNoteEnable) {
-                return;
-            }
-
-            const week = $(ev.target).closest(".calendar-week-number").attr("data-calendar-week-number");
-
-            if (week) {
-                const note = await dateNoteService.getWeekNote(week);
-
-                if (note) {
-                    appContext.tabManager.getActiveContext()?.setNote(note.noteId);
-                    this.dropdown?.hide();
-                } else {
-                    toastService.showError(t("calendar.cannot_find_week_note"));
-                }
-            }
-
-            ev.stopPropagation();
-        });
-
         // Handle click events for the entire calendar widget
         this.$dropdownContent.on("click", (e) => {
             const $target = $(e.target);
@@ -85,16 +63,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         });
     }
 
-    private async getWeekNoteEnable() {
-        const noteId = await server.get<string[]>(`search/${encodeURIComponent('#calendarRoot')}`);
-        if (noteId.length === 0) {
-            this.weekNoteEnable = false;
-            return;
-        }
-        const noteAttributes = await server.get<AttributeRow[]>(`notes/${noteId}/attributes`);
-        this.weekNoteEnable = noteAttributes.some(a => a.name === 'enableWeekNote');
-    }
-
     initWeekCalculation() {
         this.weekCalculationOptions = {
             firstWeekType: options.getInt("firstWeekOfYear") || 0,
@@ -109,11 +77,10 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     createWeekNumber(weekNumber: number) {
-        const weekNoteId = this.date.local().format('YYYY-') + 'W' + String(weekNumber).padStart(2, '0');
+
         let $newWeekNumber;
 
         if (this.weekNoteEnable) {
-            $newWeekNumber = $("<a>").addClass("calendar-date");
             if (this.weekNotes.includes(weekNoteId)) {
                 $newWeekNumber.addClass("calendar-date-exists").attr("data-href", `#root/${weekNoteId}`);
             }
