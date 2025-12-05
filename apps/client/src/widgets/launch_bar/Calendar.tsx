@@ -1,7 +1,7 @@
 import { useTriliumOptionInt } from "../react/hooks";
 import clsx from "clsx";
 import server from "../../services/server";
-import { VNode } from "preact";
+import { TargetedMouseEvent, VNode } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { Dayjs } from "@triliumnext/commons";
 import { t } from "../../services/i18n";
@@ -29,6 +29,7 @@ export interface CalendarArgs {
     date: Dayjs;
     todaysDate: Dayjs;
     activeDate: Dayjs | null;
+    onDateClicked(date: string, e: TargetedMouseEvent<HTMLAnchorElement>): void;
 }
 
 export default function Calendar(args: CalendarArgs) {
@@ -118,8 +119,9 @@ function NextMonthDays({ date, dates, ...args }: { date: Dayjs, dates: Dayjs[] }
     ));
 }
 
-function CalendarDay({ date, dateNotesForMonth, className, activeDate, todaysDate }: { date: Dayjs, dateNotesForMonth?: DateNotesForMonth, className?: string } & CalendarArgs) {
-    const dateNoteId = dateNotesForMonth?.[date.local().format('YYYY-MM-DD')];
+function CalendarDay({ date, dateNotesForMonth, className, activeDate, todaysDate, onDateClicked }: { date: Dayjs, dateNotesForMonth?: DateNotesForMonth, className?: string } & CalendarArgs) {
+    const dateString = date.local().format('YYYY-MM-DD');
+    const dateNoteId = dateNotesForMonth?.[dateString];
     return (
         <a
             className={clsx("calendar-date", className,
@@ -129,6 +131,7 @@ function CalendarDay({ date, dateNotesForMonth, className, activeDate, todaysDat
             )}
             data-calendar-date={date.local().format("YYYY-MM-DD")}
             data-href={dateNoteId && `#root/${dateNoteId}`}
+            onClick={(e) => onDateClicked(dateString, e)}
         >
             <span>
                 {date.date()}

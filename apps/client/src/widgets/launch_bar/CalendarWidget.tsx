@@ -9,6 +9,8 @@ import ActionButton from "../react/ActionButton";
 import { t } from "../../services/i18n";
 import FormDropdownList from "../react/FormDropdownList";
 import FormTextBox from "../react/FormTextBox";
+import toast from "../../services/toast";
+import date_notes from "../../services/date_notes";
 
 const MONTHS = [
     t("calendar.january"),
@@ -27,7 +29,7 @@ const MONTHS = [
 
 export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }) {
     const { title, icon } = useLauncherIconAndTitle(launcherNote);
-    const [ calendarArgs, setCalendarArgs ] = useState<Omit<CalendarArgs, "date">>();
+    const [ calendarArgs, setCalendarArgs ] = useState<Pick<CalendarArgs, "activeDate" | "todaysDate">>();
     const [ date, setDate ] = useState<Dayjs>();
 
     return (
@@ -49,7 +51,20 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
         >
             {calendarArgs && date && <div className="calendar-dropdown-widget" style={{ width: 400 }}>
                 <CalendarHeader date={date} setDate={setDate} />
-                <Calendar date={date} {...calendarArgs} />
+                <Calendar
+                    date={date}
+                    onDateClicked={async (date, e) => {
+                        const note = await date_notes.getDayNote(date);
+                        if (note) {
+                            appContext.tabManager.getActiveContext()?.setNote(note.noteId);
+                            // this.dropdown?.hide();
+                        } else {
+                            toast.showError(t("calendar.cannot_find_day_note"));
+                        }
+                        e.stopPropagation();
+                    }}
+                    {...calendarArgs}
+                />
             </div>}
         </LaunchBarDropdownButton>
     )

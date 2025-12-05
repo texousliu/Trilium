@@ -46,21 +46,6 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
         this.manageFirstDayOfWeek();
         this.initWeekCalculation();
 
-        // Date click
-        this.$dropdownContent.on("click", ".calendar-date", async (ev) => {
-            const date = $(ev.target).closest(".calendar-date").attr("data-calendar-date");
-            if (date) {
-                const note = await dateNoteService.getDayNote(date);
-                if (note) {
-                    appContext.tabManager.getActiveContext()?.setNote(note.noteId);
-                    this.dropdown?.hide();
-                } else {
-                    toastService.showError(t("calendar.cannot_find_day_note"));
-                }
-            }
-            ev.stopPropagation();
-        });
-
         // Week click
         this.$dropdownContent.on("click", ".calendar-week-number", async (ev) => {
             if (!this.weekNoteEnable) {
