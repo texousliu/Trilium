@@ -1,4 +1,4 @@
-import { Dropdown as BootstrapDropdown } from "bootstrap";
+import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import { ComponentChildren, HTMLAttributes } from "preact";
 import { CSSProperties, HTMLProps } from "preact/compat";
 import { MutableRef, useCallback, useEffect, useRef, useState } from "preact/hooks";
@@ -29,14 +29,16 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
     dropdownOptions?: Partial<BootstrapDropdown.Options>;
     dropdownRef?: MutableRef<BootstrapDropdown | null>;
     titlePosition?: "top" | "right" | "bottom" | "left";
+    titleOptions?: Partial<Tooltip.Options>;
 }
 
-export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef, titlePosition }: DropdownProps) {
+export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef, titlePosition, titleOptions }: DropdownProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
     useStaticTooltip(triggerRef, {
+        ...titleOptions,
         placement: titlePosition ?? "bottom",
-        fallbackPlacements: [ titlePosition ?? "bottom" ]
+        fallbackPlacements: [ titlePosition ?? "bottom" ],
     });
 
     const [ shown, setShown ] = useState(false);

@@ -36,6 +36,7 @@ export function LaunchBarDropdownButton({ children, icon, ...props }: Pick<Dropd
             hideToggleArrow
             text={<Icon icon={icon} />}
             titlePosition={isHorizontalLayout ? "bottom" : "right"}
+            titleOptions={{ animation: false }}
             {...props}
         >{children}</Dropdown>
     )
