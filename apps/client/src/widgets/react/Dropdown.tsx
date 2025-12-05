@@ -16,6 +16,7 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
     title?: string;
     dropdownContainerStyle?: CSSProperties;
     dropdownContainerClassName?: string;
+    dropdownContainerRef?: MutableRef<HTMLDivElement | null>;
     hideToggleArrow?: boolean;
     /** If set to true, then the dropdown button will be considered an icon action (without normal border and sized for icons only). */
     iconAction?: boolean;
@@ -32,7 +33,7 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
     titleOptions?: Partial<Tooltip.Options>;
 }
 
-export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef, titlePosition, titleOptions }: DropdownProps) {
+export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, dropdownContainerRef: externalContainerRef, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef, titlePosition, titleOptions }: DropdownProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
     const { showTooltip, hideTooltip } = useTooltip(containerRef, {
@@ -71,10 +72,15 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
 
     useEffect(() => {
         if (!containerRef.current) return;
+        if (externalContainerRef) externalContainerRef.current = containerRef.current;
 
         const $dropdown = $(containerRef.current);
         $dropdown.on("show.bs.dropdown", onShown);
-        $dropdown.on("hide.bs.dropdown", onHidden);
+        $dropdown.on("hide.bs.dropdown", (e) => {
+            // Stop propagation causing multiple hides for nested dropdowns.
+            e.stopPropagation();
+            onHidden();
+        });
 
         // Add proper cleanup
         return () => {
