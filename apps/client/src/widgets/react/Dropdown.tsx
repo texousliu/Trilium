@@ -35,7 +35,7 @@ export interface DropdownProps extends Pick<HTMLProps<HTMLDivElement>, "id" | "c
 export default function Dropdown({ id, className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown, onShown: externalOnShown, onHidden: externalOnHidden, dropdownOptions, buttonProps, dropdownRef, titlePosition, titleOptions }: DropdownProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
-    useStaticTooltip(triggerRef, {
+    useStaticTooltip(containerRef, {
         ...titleOptions,
         placement: titlePosition ?? "bottom",
         fallbackPlacements: [ titlePosition ?? "bottom" ],
@@ -84,7 +84,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
     const ariaId = useUniqueName("button");
 
     return (
-        <div ref={containerRef} class={`dropdown ${className ?? ""}`} style={{ display: "flex" }}>
+        <div ref={containerRef} class={`dropdown ${className ?? ""}`} style={{ display: "flex" }} title={title}>
             <button
                 className={`${iconAction ? "icon-action" : "btn"} ${!noSelectButtonStyle ? "select-button" : ""} ${buttonClassName ?? ""} ${!hideToggleArrow ? "dropdown-toggle" : ""}`}
                 ref={triggerRef}
@@ -93,7 +93,6 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
                 data-bs-display={ isStatic ? "static" : undefined }
                 aria-haspopup="true"
                 aria-expanded="false"
-                title={title}
                 id={id ?? ariaId}
                 disabled={disabled}
                 {...buttonProps}
