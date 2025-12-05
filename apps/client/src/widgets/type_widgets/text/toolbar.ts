@@ -144,8 +144,7 @@ export function buildFloatingToolbar() {
             "imageUpload",
             "markdownImport",
             "specialCharacters",
-            "emoji",
-            "findAndReplace"
+            "emoji"
         ]
     };
 }
