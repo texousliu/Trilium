@@ -236,7 +236,7 @@ export function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent);
 }
 
-function isDesktop() {
+export function isDesktop() {
     return (
         window.glob?.device === "desktop" ||
         // window.glob.device is not available in setup
