@@ -138,6 +138,7 @@ function CalendarMonthSelector({ date, setDate }: CalendarHeaderProps) {
 
                 }}
                 buttonProps={{ "data-calendar-input": "month" }}
+                dropdownOptions={{ popperConfig: { placement: "bottom" } }}
             />
             <AdjustDateButton date={date} setDate={setDate} direction="next" unit="month" />
         </div>
