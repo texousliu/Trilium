@@ -13,6 +13,7 @@ import toast from "../../services/toast";
 import date_notes from "../../services/date_notes";
 import { Dropdown } from "bootstrap";
 import search from "../../services/search";
+import server from "../../services/server";
 
 const MONTHS = [
     t("calendar.january"),
@@ -35,6 +36,7 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
     const [ date, setDate ] = useState<Dayjs>();
     const dropdownRef = useRef<Dropdown>(null);
     const [ enableWeekNotes, setEnableWeekNotes ] = useState(false);
+    const [ weekNotes, setWeekNotes ] = useState<string[]>([]);
     const calendarRootRef = useRef<FNote>();
 
     async function checkEnableWeekNotes() {
@@ -45,7 +47,13 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
         }
 
         if (!calendarRootRef.current) return;
-        setEnableWeekNotes(calendarRootRef.current.hasLabel("enableWeekNote"));
+
+        const enableWeekNotes = calendarRootRef.current.hasLabel("enableWeekNote");
+        setEnableWeekNotes(enableWeekNotes);
+
+        if (enableWeekNotes) {
+            server.get<string[]>(`attribute-values/weekNote`).then(setWeekNotes);
+        }
     }
 
     return (
@@ -91,6 +99,7 @@ export default function CalendarWidget({ launcherNote }: { launcherNote: FNote }
                         }
                         e.stopPropagation();
                     } : undefined}
+                    weekNotes={weekNotes}
                     {...calendarArgs}
                 />
             </div>}
