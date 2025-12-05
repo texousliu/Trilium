@@ -10,7 +10,7 @@ import { CustomNoteLauncher } from "./GenericButtons";
 import { LaunchBarActionButton, LaunchBarContext, LauncherNoteProps, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import dialog from "../../services/dialog";
 import { t } from "../../services/i18n";
-import { CommandNames } from "../../components/app_context";
+import appContext, { CommandNames } from "../../components/app_context";
 
 export function CommandButton({ launcherNote }: LauncherNoteProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
@@ -132,9 +132,9 @@ export function CustomWidget({ launcherNote }: LauncherNoteProps) {
 }
 
 export function LegacyWidgetRenderer({ widget }: { widget: BasicWidget }) {
-    const { noteContext } = useNoteContext();
     const [ widgetEl ] = useLegacyWidget(() => widget, {
-        noteContext
+        noteContext: appContext.tabManager.getActiveContext() ?? undefined
     });
+
     return widgetEl;
 }
