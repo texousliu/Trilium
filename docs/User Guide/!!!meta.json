@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.99.5",
+    "appVersion": "0.100.0",
     "files": [
         {
             "isClone": false,
@@ -15641,6 +15641,176 @@
                                                     "mime": "image/png",
                                                     "position": 10,
                                                     "dataFileName": "Using promoted attributes .png"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "4Gn3psZKsfSm",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "CdNpE2pqjmI6",
+                                        "yIhgI5H7A2Sm",
+                                        "4Gn3psZKsfSm"
+                                    ],
+                                    "title": "Launch Bar Widgets",
+                                    "notePosition": 30,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-dock-left",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "launch-bar-widgets",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "MgibgPcfeuGz",
+                                            "isInheritable": false,
+                                            "position": 50
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "xYmIYSP6wE3F",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "x3i7MxGccDuM",
+                                            "isInheritable": false,
+                                            "position": 70
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "OFXdgB2nNk1F",
+                                            "isInheritable": false,
+                                            "position": 80
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "IPArqVfDQ4We",
+                                            "isInheritable": false,
+                                            "position": 90
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "gcI7RPbaNSh3",
+                                            "isInheritable": false,
+                                            "position": 100
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Launch Bar Widgets.md",
+                                    "attachments": [],
+                                    "dirFileName": "Launch Bar Widgets",
+                                    "children": [
+                                        {
+                                            "isClone": false,
+                                            "noteId": "IPArqVfDQ4We",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "4Gn3psZKsfSm",
+                                                "IPArqVfDQ4We"
+                                            ],
+                                            "title": "Note Title Widget",
+                                            "notePosition": 10,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "note-title",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "note-title-widget",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "x0JgW8UqGXvq",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Note Title Widget.md",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "hgXS32zcBfVp",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "Note Title Widget_image.png"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "gcI7RPbaNSh3",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "4Gn3psZKsfSm",
+                                                "gcI7RPbaNSh3"
+                                            ],
+                                            "title": "Analog Watch",
+                                            "notePosition": 20,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "analog-watch",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Analog Watch.md",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "49vpwjjOEAm7",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "Analog Watch_image.png"
                                                 }
                                             ]
                                         }
