@@ -48,7 +48,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
     const [ shown, setShown ] = useState(false);
 
     useEffect(() => {
-        if (!triggerRef.current || !dropdownContainerRef) return;
+        if (!triggerRef.current || !dropdownContainerRef.current) return;
 
         const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current, dropdownOptions);
         if (dropdownRef) {
@@ -59,12 +59,9 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
             setShown(true);
         }
 
-        const dropdownContainer = dropdownContainerRef.current;
-        if (!dropdownContainer) return;
-
         // React to popup container size changes, which can affect the positioning.
         const resizeObserver = new ResizeObserver(() => dropdown.update());
-        resizeObserver.observe(dropdownContainer);
+        resizeObserver.observe(dropdownContainerRef.current);
 
         return () => {
             resizeObserver.disconnect();

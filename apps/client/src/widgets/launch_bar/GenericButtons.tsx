@@ -1,3 +1,4 @@
+import { useCallback } from "preact/hooks";
 import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
@@ -13,11 +14,7 @@ export function CustomNoteLauncher({ launcherNote, getTargetNoteId, getHoistedNo
 }) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
-    // Keyboard shortcut.
-    const [ shortcut ] = useNoteLabel(launcherNote, "keyboardShortcut");
-    useGlobalShortcut(shortcut, launch);
-
-    async function launch(evt: MouseEvent | KeyboardEvent) {
+    const launch = useCallback(async (evt: MouseEvent | KeyboardEvent) => {
         if (evt.which === 3) {
             return;
         }
@@ -34,7 +31,11 @@ export function CustomNoteLauncher({ launcherNote, getTargetNoteId, getHoistedNo
         } else {
             await appContext.tabManager.openInSameTab(targetNoteId);
         }
-    }
+    }, [ launcherNote, getTargetNoteId, getHoistedNoteId ]);
+
+    // Keyboard shortcut.
+    const [ shortcut ] = useNoteLabel(launcherNote, "keyboardShortcut");
+    useGlobalShortcut(shortcut, launch);
 
     return (
         <LaunchBarActionButton

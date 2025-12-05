@@ -63,7 +63,7 @@ function CalendarWeekHeader({ rawFirstDayOfWeek }: { rawFirstDayOfWeek: number }
 
     return (
         <div className="calendar-week">
-            {localeDaysOfWeek.map(dayOfWeek => <span>{dayOfWeek}</span>)}
+            {localeDaysOfWeek.map(dayOfWeek => <span key={dayOfWeek}>{dayOfWeek}</span>)}
         </div>
     )
 }
@@ -79,7 +79,7 @@ function PreviousMonthDays({ date, info: { dates, weekNumbers }, ...args }: { da
     return (
         <>
             <CalendarWeek date={date} weekNumber={weekNumbers[0]} {...args} />
-            {dates.map(date => <CalendarDay date={date} dateNotesForMonth={dateNotesForPrevMonth} className="calendar-date-prev-month" {...args} />)}
+            {dates.map(date => <CalendarDay key={date.toISOString()} date={date} dateNotesForMonth={dateNotesForPrevMonth} className="calendar-date-prev-month" {...args} />)}
         </>
     )
 }
@@ -98,10 +98,10 @@ function CurrentMonthDays({ date, firstDayOfWeekISO, ...args }: { date: Dayjs, f
     while (dateCursor.month() === currentMonth) {
         const weekNumber = getWeekNumber(dateCursor, firstDayOfWeekISO);
         if (dateCursor.isoWeekday() === firstDayOfWeekISO) {
-            items.push(<CalendarWeek date={dateCursor} weekNumber={weekNumber} {...args}/>)
+            items.push(<CalendarWeek key={`${dateCursor.year()}-W${weekNumber}`} date={dateCursor} weekNumber={weekNumber} {...args}/>)
         }
 
-        items.push(<CalendarDay date={dateCursor} dateNotesForMonth={dateNotesForCurMonth} {...args} />)
+        items.push(<CalendarDay key={dateCursor.toISOString()} date={dateCursor} dateNotesForMonth={dateNotesForCurMonth} {...args} />)
         dateCursor = dateCursor.add(1, "day");
     }
 
@@ -117,7 +117,7 @@ function NextMonthDays({ date, dates, ...args }: { date: Dayjs, dates: Dayjs[] }
     }, [ date ]);
 
     return dates.map(date => (
-        <CalendarDay date={date} dateNotesForMonth={dateNotesForNextMonth} className="calendar-date-next-month" {...args} />
+        <CalendarDay key={date.toISOString()} date={date} dateNotesForMonth={dateNotesForNextMonth} className="calendar-date-next-month" {...args} />
     ));
 }
 

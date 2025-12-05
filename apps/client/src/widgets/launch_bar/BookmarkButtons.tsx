@@ -49,7 +49,7 @@ function BookmarkFolder({ note }: { note: FNote }) {
                 <ul className="children-notes">
                     {childNotes.map(childNote => (
                         <li>
-                            <NoteLink notePath={childNote.noteId} noPreview showNoteIcon containerClassName="note-link" noTnLink />
+                            <NoteLink key={childNote.noteId} notePath={childNote.noteId} noPreview showNoteIcon containerClassName="note-link" noTnLink />
                         </li>
                     ))}
                 </ul>

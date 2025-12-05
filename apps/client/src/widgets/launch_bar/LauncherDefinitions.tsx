@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { useGlobalShortcut, useLegacyWidget, useNoteContext, useNoteLabel, useNoteRelationTarget, useTriliumOptionBool } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import BasicWidget from "../basic_widget";
@@ -53,7 +53,7 @@ export function NoteLauncher({ launcherNote, ...restProps }: { launcherNote: FNo
 export function ScriptLauncher({ launcherNote }: LauncherNoteProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
 
-    async function launch() {
+    const launch = useCallback(async () => {
         if (launcherNote.isLabelTruthy("scriptInLauncherContent")) {
             await launcherNote.executeScript();
         } else {
@@ -62,7 +62,7 @@ export function ScriptLauncher({ launcherNote }: LauncherNoteProps) {
                 await script.executeScript();
             }
         }
-    }
+    }, [ launcherNote ]);
 
     // Keyboard shortcut.
     const [ shortcut ] = useNoteLabel(launcherNote, "keyboardShortcut");
