@@ -11,6 +11,7 @@ import HistoryNavigationButton from "./HistoryNavigation";
 import AiChatButton, { CommandButton, CustomWidget, NoteLauncher, QuickSearchLauncherWidget, ScriptLauncher, TodayLauncher } from "./LauncherDefinitions";
 import { useTriliumEvent } from "../react/hooks";
 import { onWheelHorizontalScroll } from "../widget_utils";
+import { LaunchBarContext } from "./launch_bar_widgets";
 
 export default function LauncherContainer({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {
     const childNotes = useLauncherChildNotes();
@@ -25,17 +26,21 @@ export default function LauncherContainer({ isHorizontalLayout }: { isHorizontal
             }}
             onWheel={isHorizontalLayout ? onWheelHorizontalScroll : undefined}
         >
-            {childNotes?.map(childNote => {
-                if (childNote.type !== "launcher") {
-                    throw new Error(`Note '${childNote.noteId}' '${childNote.title}' is not a launcher even though it's in the launcher subtree`);
-                }
+            <LaunchBarContext.Provider value={{
+                isHorizontalLayout
+            }}>
+                {childNotes?.map(childNote => {
+                    if (childNote.type !== "launcher") {
+                        throw new Error(`Note '${childNote.noteId}' '${childNote.title}' is not a launcher even though it's in the launcher subtree`);
+                    }
 
-                if (!isDesktop() && childNote.isLabelTruthy("desktopOnly")) {
-                    return false;
-                }
+                    if (!isDesktop() && childNote.isLabelTruthy("desktopOnly")) {
+                        return false;
+                    }
 
-                return <Launcher key={childNote.noteId} note={childNote} isHorizontalLayout={isHorizontalLayout} />
-            })}
+                    return <Launcher key={childNote.noteId} note={childNote} isHorizontalLayout={isHorizontalLayout} />
+                })}
+            </LaunchBarContext.Provider>
         </div>
     )
 }
@@ -72,7 +77,7 @@ function initBuiltinWidget(note: FNote, isHorizontalLayout: boolean) {
 
             return <SpacerWidget baseSize={baseSize} growthFactor={growthFactor} />;
         case "bookmarks":
-            return <BookmarkButtons isHorizontalLayout={isHorizontalLayout} />;
+            return <BookmarkButtons />;
         case "protectedSession":
             return <ProtectedSessionStatusWidget />;
         case "syncStatus":
@@ -84,7 +89,7 @@ function initBuiltinWidget(note: FNote, isHorizontalLayout: boolean) {
         case "todayInJournal":
             return <TodayLauncher launcherNote={note} />
         case "quickSearch":
-            return <QuickSearchLauncherWidget isHorizontalLayout={isHorizontalLayout} />
+            return <QuickSearchLauncherWidget />
         case "aiChatLauncher":
             return <AiChatButton launcherNote={note} />
         default:

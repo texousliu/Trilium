@@ -1,5 +1,5 @@
-import { useMemo } from "preact/hooks";
-import { LaunchBarDropdownButton, useLauncherIconAndTitle, type LaunchBarWidgetProps } from "./launch_bar_widgets";
+import { useContext, useMemo } from "preact/hooks";
+import { LaunchBarContext, LaunchBarDropdownButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import { CSSProperties } from "preact";
 import type FNote from "../../entities/fnote";
 import { useChildNotes, useNoteLabelBoolean } from "../react/hooks";
@@ -9,7 +9,8 @@ import { CustomNoteLauncher } from "./GenericButtons";
 
 const PARENT_NOTE_ID = "_lbBookmarks";
 
-export default function BookmarkButtons({ isHorizontalLayout }: LaunchBarWidgetProps) {
+export default function BookmarkButtons() {
+    const { isHorizontalLayout } = useContext(LaunchBarContext);
     const style = useMemo<CSSProperties>(() => ({
         display: "flex",
         flexDirection: isHorizontalLayout ? "row" : "column",

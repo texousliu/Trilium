@@ -1,20 +1,26 @@
+import { createContext } from "preact";
 import FNote from "../../entities/fnote";
 import { escapeHtml } from "../../services/utils";
 import ActionButton, { ActionButtonProps } from "../react/ActionButton";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { useNoteLabel, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
+import { useContext } from "preact/hooks";
 
-export interface LaunchBarWidgetProps {
+export const LaunchBarContext = createContext<{
     isHorizontalLayout: boolean;
-}
+}>({
+    isHorizontalLayout: false
+})
 
 export function LaunchBarActionButton(props: Omit<ActionButtonProps, "className" | "noIconActionClass" | "titlePosition">) {
+    const { isHorizontalLayout } = useContext(LaunchBarContext);
+
     return (
         <ActionButton
             className="button-widget launcher-button"
             noIconActionClass
-            titlePosition="right"
+            titlePosition={isHorizontalLayout ? "bottom" : "right"}
             {...props}
         />
     )

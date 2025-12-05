@@ -7,7 +7,7 @@ import QuickSearchWidget from "../quick_search";
 import { isMobile } from "../../services/utils";
 import date_notes from "../../services/date_notes";
 import { CustomNoteLauncher } from "./GenericButtons";
-import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
+import { LaunchBarActionButton, LaunchBarContext, useLauncherIconAndTitle } from "./launch_bar_widgets";
 import dialog from "../../services/dialog";
 import { t } from "../../services/i18n";
 import { CommandNames } from "../../components/app_context";
@@ -95,7 +95,8 @@ export function TodayLauncher({ launcherNote }: { launcherNote: FNote }) {
     );
 }
 
-export function QuickSearchLauncherWidget({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {
+export function QuickSearchLauncherWidget() {
+    const { isHorizontalLayout } = useContext(LaunchBarContext);
     const widget = useMemo(() => new QuickSearchWidget(), []);
     const parentComponent = useContext(ParentComponent) as BasicWidget | null;
     const isEnabled = isHorizontalLayout && !isMobile();
