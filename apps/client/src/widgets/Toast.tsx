@@ -26,7 +26,7 @@ function Toast({ id, title, autohide, delay, progress, message, icon }: ToastOpt
     }, [ autohide, id, delay ]);
 
     const closeButton = <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" />;
-    const toastIcon = <Icon icon={icon} />;
+    const toastIcon = <Icon icon={icon.startsWith("bx ") ? icon : `bx bx-${icon}`} />;
 
     return (
         <div
