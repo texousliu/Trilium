@@ -1,3 +1,5 @@
+import { signal } from "@preact/signals";
+
 import utils from "./utils.js";
 
 export interface ToastOptions {
@@ -5,116 +7,79 @@ export interface ToastOptions {
     icon: string;
     title?: string;
     message: string;
-    delay?: number;
-    autohide?: boolean;
-    closeAfter?: number;
+    timeout?: number;
     progress?: number;
 }
 
-function toast({ title, icon, message, id, delay, autohide, progress }: ToastOptions) {
-    const $toast = $(title
-        ? `\
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">
-                        <span class="bx bx-${icon}"></span>
-                        <span class="toast-title"></span>
-                    </strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body"></div>
-                <div class="toast-progress"></div>
-            </div>`
-        : `
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-icon">
-                    <span class="bx bx-${icon}"></span>
-                </div>
-                <div class="toast-body"></div>
-                <div class="toast-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-progress"></div>
-            </div>`
-    );
+export type ToastOptionsWithRequiredId = Omit<ToastOptions, "id"> & Required<Pick<ToastOptions, "id">>;
 
-    $toast.toggleClass("no-title", !title);
-    $toast.find(".toast-title").text(title ?? "");
-    $toast.find(".toast-body").html(message);
-    $toast.find(".toast-progress").css("width", `${(progress ?? 0) * 100}%`);
-
-    if (id) {
-        $toast.attr("id", `toast-${id}`);
-    }
-
-    $("#toast-container").append($toast);
-
-    $toast.toast({
-        delay: delay || 3000,
-        autohide: !!autohide
-    });
-
-    $toast.on("hidden.bs.toast", (e) => e.target.remove());
-
-    $toast.toast("show");
-
-    return $toast;
-}
-
-function showPersistent(options: ToastOptions) {
-    let $toast = $(`#toast-${options.id}`);
-
-    if ($toast.length > 0) {
-        $toast.find(".toast-body").html(options.message);
-        $toast.find(".toast-progress").css("width", `${(options.progress ?? 0) * 100}%`);
+function showPersistent(options: ToastOptionsWithRequiredId) {
+    const existingToast = toasts.value.find(toast => toast.id === options.id);
+    if (existingToast) {
+        updateToast(options.id, options);
     } else {
-        options.autohide = false;
-
-        $toast = toast(options);
-    }
-
-    if (options.closeAfter) {
-        setTimeout(() => $toast.remove(), options.closeAfter);
+        addToast(options);
     }
 }
 
 function closePersistent(id: string) {
-    $(`#toast-${id}`).remove();
+    removeToastFromStore(id);
 }
 
-function showMessage(message: string, delay = 2000, icon = "check") {
+function showMessage(message: string, timeout = 2000, icon = "bx bx-check") {
     console.debug(utils.now(), "message:", message);
 
-    toast({
+    addToast({
         icon,
-        message: message,
-        autohide: true,
-        delay
+        message,
+        timeout
     });
 }
 
-export function showError(message: string, delay = 10000) {
+export function showError(message: string, timeout = 10000) {
     console.log(utils.now(), "error: ", message);
 
-    toast({
+    addToast({
         icon: "bx bx-error-circle",
-        message: message,
-        autohide: true,
-        delay
+        message,
+        timeout
     });
 }
 
-function showErrorTitleAndMessage(title: string, message: string, delay = 10000) {
+function showErrorTitleAndMessage(title: string, message: string, timeout = 10000) {
     console.log(utils.now(), "error: ", message);
 
-    toast({
-        title: title,
+    addToast({
+        title,
         icon: "bx bx-error-circle",
-        message: message,
-        autohide: true,
-        delay
+        message,
+        timeout
     });
 }
+
+//#region Toast store
+export const toasts = signal<ToastOptionsWithRequiredId[]>([]);
+
+function addToast(opts: ToastOptions) {
+    const id = opts.id ?? crypto.randomUUID();
+    const toast = { ...opts, id };
+    toasts.value = [ ...toasts.value, toast ];
+    return id;
+}
+
+function updateToast(id: string, partial: Partial<ToastOptions>) {
+    toasts.value = toasts.value.map(toast => {
+        if (toast.id === id) {
+            return { ...toast, ...partial }
+        }
+        return toast;
+    });
+}
+
+export function removeToastFromStore(id: string) {
+    toasts.value = toasts.value.filter(toast => toast.id !== id);
+}
+//#endregion
 
 export default {
     showMessage,

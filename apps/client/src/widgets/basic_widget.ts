@@ -169,10 +169,11 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
         console.log("Got issue in widget ", this);
         console.error(e);
 
-        let noteId = this._noteId;
+        const noteId = this._noteId;
         if (this._noteId) {
             froca.getNote(noteId, true).then((note) => {
                 toastService.showPersistent({
+                    id: `custom-widget-failure-${noteId}`,
                     title: t("toast.widget-error.title"),
                     icon: "bx bx-error-circle",
                     message: t("toast.widget-error.message-custom", {
@@ -182,16 +183,16 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
                     })
                 });
             });
-            return;
+        } else {
+            toastService.showPersistent({
+                id: `custom-widget-failure-unknown-${crypto.randomUUID()}`,
+                title: t("toast.widget-error.title"),
+                icon: "bx bx-error-circle",
+                message: t("toast.widget-error.message-unknown", {
+                    message: e.message || e.toString()
+                })
+            });
         }
-
-        toastService.showPersistent({
-            title: t("toast.widget-error.title"),
-            icon: "bx bx-error-circle",
-            message: t("toast.widget-error.message-unknown", {
-                message: e.message || e.toString()
-            })
-        });
     }
 
     /**

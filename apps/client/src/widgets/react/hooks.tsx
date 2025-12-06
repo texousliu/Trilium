@@ -725,7 +725,7 @@ export function useImperativeSearchHighlighlighting(highlightedTokens: string[] 
 
 export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | undefined>, { dragEnabled, dragNotEnabledMessage, callback }: {
     dragEnabled: boolean,
-    dragNotEnabledMessage: Omit<ToastOptions, "id" | "closeAfter">;
+    dragNotEnabledMessage: Omit<ToastOptions, "id">;
     callback: (data: DragData[], e: DragEvent) => void
 }) {
     useEffect(() => {
@@ -737,7 +737,7 @@ export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | un
                 toast.showPersistent({
                     ...dragNotEnabledMessage,
                     id: "drag-not-enabled",
-                    closeAfter: 5000
+                    timeout: 5000
                 });
             }
         }
