@@ -9,5 +9,5 @@ Since Git only migrates the code and not the GitHub-specific data, we had to cre
 * Issues, using the "Transfer" function for each issue (via `gh cli`).
   * The migration logs are available in `migrated-issues.txt`.
 * Discussions, which transferred each discussion from the original repo. This one is a bit more complicated (and potentially flaky) since it works via playwright, by manually selecting the "Transfer" function (no API available at the time).
-  * The migration logs are available in`migrated-discussions.txt`.
+  * The migration logs are available in `migrated-discussions.txt`.
 * Releases, by manually downloading the assets from the source repo and creating new releases into the destination repo.
