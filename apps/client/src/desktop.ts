@@ -22,6 +22,7 @@ bundleService.getWidgetBundlesByParent().then(async (widgetBundles) => {
     appContext.setLayout(new DesktopLayout(widgetBundles));
     appContext.start().catch((e) => {
         toastService.showPersistent({
+            id: "critical-error",
             title: t("toast.critical-error.title"),
             icon: "alert",
             message: t("toast.critical-error.message", { message: e.message })

@@ -1,6 +1,6 @@
 import utils from "./utils.js";
 import server from "./server.js";
-import toastService, { type ToastOptions } from "./toast.js";
+import toastService, { type ToastOptionsWithRequiredId } from "./toast.js";
 import froca from "./froca.js";
 import hoistedNoteService from "./hoisted_note.js";
 import ws from "./ws.js";
@@ -195,11 +195,11 @@ function filterRootNote(branchIds: string[]) {
     });
 }
 
-function makeToast(id: string, message: string): ToastOptions {
+function makeToast(id: string, message: string): ToastOptionsWithRequiredId {
     return {
-        id: id,
+        id,
         title: t("branches.delete-status"),
-        message: message,
+        message,
         icon: "trash"
     };
 }
@@ -242,7 +242,7 @@ ws.subscribeToMessages(async (message) => {
 
 async function cloneNoteToBranch(childNoteId: string, parentBranchId: string, prefix?: string) {
     const resp = await server.put<Response>(`notes/${childNoteId}/clone-to-branch/${parentBranchId}`, {
-        prefix: prefix
+        prefix
     });
 
     if (!resp.success) {
@@ -252,7 +252,7 @@ async function cloneNoteToBranch(childNoteId: string, parentBranchId: string, pr
 
 async function cloneNoteToParentNote(childNoteId: string, parentNoteId: string, prefix?: string) {
     const resp = await server.put<Response>(`notes/${childNoteId}/clone-to-note/${parentNoteId}`, {
-        prefix: prefix
+        prefix
     });
 
     if (!resp.success) {

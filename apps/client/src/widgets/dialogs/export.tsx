@@ -6,7 +6,7 @@ import FormRadioGroup from "../react/FormRadioGroup";
 import Modal from "../react/Modal";
 import "./export.css";
 import ws from "../../services/ws";
-import toastService, { ToastOptions } from "../../services/toast";
+import toastService, { type ToastOptionsWithRequiredId } from "../../services/toast";
 import utils from "../../services/utils";
 import open from "../../services/open";
 import froca from "../../services/froca";
@@ -132,11 +132,11 @@ function exportBranch(branchId: string, type: string, format: string, version: s
 }
 
 ws.subscribeToMessages(async (message) => {
-    function makeToast(id: string, message: string): ToastOptions {
+    function makeToast(id: string, message: string): ToastOptionsWithRequiredId {
         return {
-            id: id,
+            id,
             title: t("export.export_status"),
-            message: message,
+            message,
             icon: "export"
         };
     }

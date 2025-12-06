@@ -1,7 +1,7 @@
 import server from "./server.js";
 import protectedSessionHolder from "./protected_session_holder.js";
 import toastService from "./toast.js";
-import type { ToastOptions } from "./toast.js";
+import type { ToastOptionsWithRequiredId } from "./toast.js";
 import ws from "./ws.js";
 import appContext from "../components/app_context.js";
 import froca from "./froca.js";
@@ -97,7 +97,7 @@ async function protectNote(noteId: string, protect: boolean, includingSubtree: b
     await server.put(`notes/${noteId}/protect/${protect ? 1 : 0}?subtree=${includingSubtree ? 1 : 0}`);
 }
 
-function makeToast(message: Message, title: string, text: string): ToastOptions {
+function makeToast(message: Message, title: string, text: string): ToastOptionsWithRequiredId {
     return {
         id: message.taskId,
         title,

@@ -37,6 +37,7 @@ export async function executeBundle(bundle: Bundle, originEntity?: Entity | null
     } catch (e: any) {
         const note = await froca.getNote(bundle.noteId);
         toastService.showPersistent({
+            id: `custom-script-failure-${note?.noteId}`,
             title: t("toast.bundle-error.title"),
             icon: "bx bx-error-circle",
             message: t("toast.bundle-error.message", {
@@ -108,6 +109,7 @@ async function getWidgetBundlesByParent() {
             const noteId = bundle.noteId;
             const note = await froca.getNote(noteId);
             toastService.showPersistent({
+                id: `custom-script-failure-${noteId}`,
                 title: t("toast.bundle-error.title"),
                 icon: "bx bx-error-circle",
                 message: t("toast.bundle-error.message", {
