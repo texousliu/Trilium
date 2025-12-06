@@ -275,10 +275,19 @@ async function reportError(method: string, url: string, statusCode: number, resp
         });
     } else {
         const { t } = await import("./i18n.js");
-        toastService.showErrorTitleAndMessage(
-            t("server.unknown_http_error_title"),
-            t("server.unknown_http_error_content", { statusCode, method, url, message: messageStr }),
-            15_000);
+        if (statusCode === 400 && (url.includes("%23") || url.includes("%2F"))) {
+            toastService.showPersistent({
+                id: "trafik-blocked",
+                icon: "bx bx-unlink",
+                title: t("server.unknown_http_error_title"),
+                message: t("server.traefik_blocks_requests")
+            });
+        } else {
+            toastService.showErrorTitleAndMessage(
+                t("server.unknown_http_error_title"),
+                t("server.unknown_http_error_content", { statusCode, method, url, message: messageStr }),
+                15_000);
+        }
         const { throwError } = await import("./ws.js");
         throwError(`${statusCode} ${method} ${url} - ${message}`);
     }

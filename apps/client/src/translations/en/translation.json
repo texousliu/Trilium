@@ -2110,6 +2110,7 @@
   },
   "server": {
     "unknown_http_error_title": "Communication error with the server",
-    "unknown_http_error_content": "Status code: {{statusCode}}\nURL: {{method}} {{url}}\nMessage: {{message}}"
+    "unknown_http_error_content": "Status code: {{statusCode}}\nURL: {{method}} {{url}}\nMessage: {{message}}",
+    "traefik_blocks_requests": "If you are using the Traefik reverse proxy, it introduced a breaking change which affects the communication with the server."
   }
 }
