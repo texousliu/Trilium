@@ -1135,13 +1135,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     margin: 0 12px;
 }
 
-#toast-container {
-    position: absolute;
-    width: 100%;
-    top: 20px;
-    pointer-events: none;
-}
-
 .toast {
     --bs-toast-bg: var(--accented-background-color);
     --bs-toast-color: var(--main-text-color);

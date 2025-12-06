@@ -1,0 +1,11 @@
+#toast-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    top: 20px;
+    pointer-events: none;
+    contain: none;
+}

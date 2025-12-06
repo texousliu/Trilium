@@ -24,6 +24,7 @@ import InfoDialog from "../widgets/dialogs/info.js";
 import IncorrectCpuArchDialog from "../widgets/dialogs/incorrect_cpu_arch.js";
 import CallToActionDialog from "../widgets/dialogs/call_to_action.jsx";
 import PopupEditorDialog from "../widgets/dialogs/PopupEditor.jsx";
+import ToastContainer from "../widgets/Toast.jsx";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -50,5 +51,6 @@ export function applyModals(rootContainer: RootContainer) {
         .child(<PromptDialog />)
         .child(<IncorrectCpuArchDialog />)
         .child(<PopupEditorDialog />)
-        .child(<CallToActionDialog />);
+        .child(<CallToActionDialog />)
+        .child(<ToastContainer />)
 }
