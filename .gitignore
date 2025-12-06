@@ -49,3 +49,4 @@ upload
 
 # docs
 site/
+apps/*/coverage

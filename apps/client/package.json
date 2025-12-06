@@ -12,6 +12,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build",
     "test": "vitest",
+    "coverage": "vitest --coverage",
     "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
   },
   "dependencies": {
