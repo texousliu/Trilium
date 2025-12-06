@@ -42,7 +42,7 @@
     "@fast-csv/parse": "5.0.5",
     "@playwright/test": "1.57.0",
     "@triliumnext/server": "workspace:*",
-    "@types/express": "5.0.5",
+    "@types/express": "5.0.6",
     "@types/node": "24.10.1",
     "@vitest/browser-webdriverio": "4.0.14",
     "@vitest/coverage-v8": "4.0.14",
