@@ -7,6 +7,21 @@ import simpleImportSort from "eslint-plugin-simple-import-sort";
 import playwright from "eslint-plugin-playwright";
 import tsParser from "@typescript-eslint/parser";
 import preact from "eslint-config-preact";
+import stylistic from "@stylistic/eslint-plugin";
+
+// Go to https://eslint.style/rules/default/${rule_without_prefix} to check the rule details
+export const stylisticRules = {
+    "@stylistic/indent": ["error", 4],
+    // "@stylistic/quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: "always" }],
+    "@stylistic/semi": ["error", "always"],
+    // "@stylistic/quote-props": ["error", "consistent-as-needed"],
+    // "@stylistic/max-len": ["error", { code: 100 }],
+    // "@stylistic/comma-dangle": ["error", "never"],
+    // "@stylistic/linebreak-style": ["error", "unix"],
+    // "@stylistic/array-bracket-spacing": ["error", "always"],
+    // "@stylistic/object-curly-spacing": ["error", "always"],
+    // "@stylistic/padded-blocks": ["error", { classes: "always" }]
+};
 
 const mainConfig = [
   ...preact,
@@ -45,6 +60,21 @@ const mainConfig = [
     rules: {
       "simple-import-sort/imports": "warn",
       "simple-import-sort/exports": "warn"
+    }
+  },
+  {
+    files: ["**/*.{js,ts,mjs,cjs}"],
+
+    languageOptions: {
+      parser: tsParser
+    },
+
+    plugins: {
+      "@stylistic": stylistic
+    },
+
+    rules: {
+      ...stylisticRules
     }
   }
 ];
