@@ -10,7 +10,6 @@ import FlexContainer from "../widgets/containers/flex_container.js";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import GlobalMenu from "../widgets/buttons/global_menu.jsx";
 import HighlightsListWidget from "../widgets/highlights_list.js";
-import LauncherContainer from "../widgets/containers/launcher_container.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
@@ -30,7 +29,6 @@ import ScrollingContainer from "../widgets/containers/scrolling_container.js";
 import ScrollPadding from "../widgets/scroll_padding.js";
 import SearchResult from "../widgets/search_result.jsx";
 import SharedInfo from "../widgets/shared_info.jsx";
-import SpacerWidget from "../widgets/spacer.js";
 import SplitNoteContainer from "../widgets/containers/split_note_container.js";
 import SqlResults from "../widgets/sql_result.js";
 import SqlTableSchemas from "../widgets/sql_table_schemas.js";
@@ -43,8 +41,9 @@ import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import utils from "../services/utils.js";
 import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
 import NoteDetail from "../widgets/NoteDetail.jsx";
-import RightPanelWidget from "../widgets/sidebar/RightPanelWidget.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
+import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
+import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
 
 export default class DesktopLayout {
 
@@ -125,7 +124,7 @@ export default class DesktopLayout {
                                                                 .cssBlock(".title-row > * { margin: 5px; }")
                                                                 .child(<NoteIconWidget />)
                                                                 .child(<NoteTitleWidget />)
-                                                                .child(new SpacerWidget(0, 1))
+                                                                .child(<SpacerWidget baseSize={0} growthFactor={1} />)
                                                                 .child(<MovePaneButton direction="left" />)
                                                                 .child(<MovePaneButton direction="right" />)
                                                                 .child(<ClosePaneButton />)
@@ -185,14 +184,14 @@ export default class DesktopLayout {
             launcherPane = new FlexContainer("row")
                 .css("height", "53px")
                 .class("horizontal")
-                .child(new LauncherContainer(true))
+                .child(<LauncherContainer isHorizontalLayout={true} />)
                 .child(<GlobalMenu isHorizontalLayout={true} />);
         } else {
             launcherPane = new FlexContainer("column")
                 .css("width", "53px")
                 .class("vertical")
                 .child(<GlobalMenu isHorizontalLayout={false} />)
-                .child(new LauncherContainer(false))
+                .child(<LauncherContainer isHorizontalLayout={false} />)
                 .child(<LeftPaneToggle isHorizontalLayout={false} />);
         }
 

@@ -10,7 +10,6 @@
 
 .calendar-dropdown-widget {
     margin: 0 auto;
-    overflow: hidden;
     width: 100%;
 }
 
@@ -174,4 +173,13 @@
     background-color: var(--hover-item-background-color);
     color: var(--hover-item-text-color);
     text-decoration: underline;
+}
+
+.calendar-dropdown-widget .form-control {
+    padding: 0;
+}
+
+.calendar-dropdown-widget .calendar-month-selector .dropdown-menu {
+    left: 50%;
+    transform: translateX(-50%);
 }

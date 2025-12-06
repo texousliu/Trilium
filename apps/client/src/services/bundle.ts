@@ -36,10 +36,16 @@ export async function executeBundle(bundle: Bundle, originEntity?: Entity | null
         }.call(apiContext);
     } catch (e: any) {
         const note = await froca.getNote(bundle.noteId);
-
-        const message = `Execution of JS note "${note?.title}" with ID ${bundle.noteId} failed with error: ${e?.message}`;
-        showError(message);
-        logError(message);
+        toastService.showPersistent({
+            title: t("toast.bundle-error.title"),
+            icon: "bx bx-error-circle",
+            message: t("toast.bundle-error.message", {
+                id: note?.noteId,
+                title: note?.title,
+                message: e.message
+            })
+        });
+        logError("Widget initialization failed: ", e);
     }
 }
 
@@ -103,7 +109,7 @@ async function getWidgetBundlesByParent() {
             const note = await froca.getNote(noteId);
             toastService.showPersistent({
                 title: t("toast.bundle-error.title"),
-                icon: "alert",
+                icon: "bx bx-error-circle",
                 message: t("toast.bundle-error.message", {
                     id: noteId,
                     title: note?.title,

@@ -20,9 +20,10 @@ import options, { type OptionValue } from "../../services/options";
 import protected_session_holder from "../../services/protected_session_holder";
 import SpacedUpdate from "../../services/spaced_update";
 import toast, { ToastOptions } from "../../services/toast";
-import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
+import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../services/utils";
 import server from "../../services/server";
-import { removeIndividualBinding } from "../../services/shortcuts";
+import shortcuts, { Handler, removeIndividualBinding } from "../../services/shortcuts";
+import froca from "../../services/froca";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -369,6 +370,16 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: Re
     ] as const;
 }
 
+export function useNoteRelationTarget(note: FNote, relationName: RelationNames) {
+    const [ targetNote, setTargetNote ] = useState<FNote | null>();
+
+    useEffect(() => {
+        note.getRelationTarget(relationName).then(setTargetNote);
+    }, [ note ]);
+
+    return [ targetNote ] as const;
+}
+
 /**
  * Allows a React component to read or write a note's label while also reacting to changes in value.
  *
@@ -622,6 +633,8 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
     return { showTooltip, hideTooltip };
 }
 
+let tooltips = new Set<Tooltip>();
+
 /**
  * Similar to {@link useTooltip}, but doesn't expose methods to imperatively hide or show the tooltip.
  *
@@ -634,7 +647,17 @@ export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Too
         if (!elRef?.current || !hasTooltip) return;
 
         const tooltip = Tooltip.getOrCreateInstance(elRef.current, config);
+        elRef.current.addEventListener("show.bs.tooltip", () => {
+            // Hide all the other tooltips.
+            for (const otherTooltip of tooltips) {
+                if (otherTooltip === tooltip) continue;
+                otherTooltip.hide();
+            }
+        });
+        tooltips.add(tooltip);
+
         return () => {
+            tooltips.delete(tooltip);
             tooltip.dispose();
             // workaround for https://github.com/twbs/bootstrap/issues/37474
             (tooltip as any)._activeTrigger = {};
@@ -790,6 +813,21 @@ export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", conta
 }
 
 /**
+ * Register a global shortcut. Internally it uses the shortcut service and assigns a random namespace to make it unique.
+ *
+ * @param keyboardShortcut the keyboard shortcut combination to register.
+ * @param handler the corresponding handler to be called when the keyboard shortcut is invoked by the user.
+ */
+export function useGlobalShortcut(keyboardShortcut: string | null | undefined, handler: Handler) {
+    useEffect(() => {
+        if (!keyboardShortcut) return;
+        const namespace = randomString(10);
+        shortcuts.bindGlobalShortcut(keyboardShortcut, handler, namespace);
+        return () => shortcuts.removeGlobalShortcut(namespace);
+    }, [ keyboardShortcut, handler ]);
+}
+
+/**
  * Indicates that the current note is in read-only mode, while an editing mode is available,
  * and provides a way to switch to editing mode.
  */
@@ -835,4 +873,17 @@ async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
     }
 
     return true;
+}
+
+export function useChildNotes(parentNoteId: string) {
+    const [ childNotes, setChildNotes ] = useState<FNote[]>([]);
+    useEffect(() => {
+        (async function() {
+            const parentNote = await froca.getNote(parentNoteId);
+            const childNotes = await parentNote?.getChildNotes();
+            setChildNotes(childNotes ?? []);
+        })();
+     }, [ parentNoteId ]);
+
+    return childNotes;
 }
