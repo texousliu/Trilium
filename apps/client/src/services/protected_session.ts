@@ -124,7 +124,7 @@ ws.subscribeToMessages(async (message) => {
     } else if (message.type === "taskSucceeded") {
         const text = isProtecting ? t("protected_session.protecting-finished-successfully") : t("protected_session.unprotecting-finished-successfully");
         const toast = makeToast(message, title, text);
-        toast.delay = 3000;
+        toast.timeout = 3000;
 
         toastService.showPersistent(toast);
     }

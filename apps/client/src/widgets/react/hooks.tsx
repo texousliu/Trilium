@@ -737,7 +737,7 @@ export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | un
                 toast.showPersistent({
                     ...dragNotEnabledMessage,
                     id: "drag-not-enabled",
-                    delay: 5000
+                    timeout: 5000
                 });
             }
         }

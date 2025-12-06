@@ -7,7 +7,7 @@ export interface ToastOptions {
     icon: string;
     title?: string;
     message: string;
-    delay?: number;
+    timeout?: number;
     autohide?: boolean;
     progress?: number;
 }
@@ -28,29 +28,29 @@ function closePersistent(id: string) {
     removeToastFromStore(id);
 }
 
-function showMessage(message: string, delay = 2000, icon = "bx bx-check") {
+function showMessage(message: string, timeout = 2000, icon = "bx bx-check") {
     console.debug(utils.now(), "message:", message);
 
     addToast({
         icon,
         message,
         autohide: true,
-        delay
+        timeout
     });
 }
 
-export function showError(message: string, delay = 10000) {
+export function showError(message: string, timeout = 10000) {
     console.log(utils.now(), "error: ", message);
 
     addToast({
         icon: "bx bx-error-circle",
         message,
         autohide: true,
-        delay
+        timeout
     })
 }
 
-function showErrorTitleAndMessage(title: string, message: string, delay = 10000) {
+function showErrorTitleAndMessage(title: string, message: string, timeout = 10000) {
     console.log(utils.now(), "error: ", message);
 
     addToast({
@@ -58,7 +58,7 @@ function showErrorTitleAndMessage(title: string, message: string, delay = 10000)
         icon: "bx bx-error-circle",
         message,
         autohide: true,
-        delay
+        timeout
     });
 }
 

@@ -216,7 +216,7 @@ ws.subscribeToMessages(async (message) => {
         toastService.showPersistent(makeToast(message.taskId, t("branches.delete-notes-in-progress", { count: message.progressCount })));
     } else if (message.type === "taskSucceeded") {
         const toast = makeToast(message.taskId, t("branches.delete-finished-successfully"));
-        toast.delay = 5000;
+        toast.timeout = 5000;
 
         toastService.showPersistent(toast);
     }
@@ -234,7 +234,7 @@ ws.subscribeToMessages(async (message) => {
         toastService.showPersistent(makeToast(message.taskId, t("branches.undeleting-notes-in-progress", { count: message.progressCount })));
     } else if (message.type === "taskSucceeded") {
         const toast = makeToast(message.taskId, t("branches.undeleting-notes-finished-successfully"));
-        toast.delay = 5000;
+        toast.timeout = 5000;
 
         toastService.showPersistent(toast);
     }
