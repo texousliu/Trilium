@@ -6,8 +6,10 @@ import tseslint from 'typescript-eslint';
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import playwright from "eslint-plugin-playwright";
 import tsParser from "@typescript-eslint/parser";
+import preact from "eslint-config-preact";
 
-const mainConfig = defineConfig(
+const mainConfig = [
+  ...preact,
   eslint.configs.recommended,
   tseslint.configs.recommended,
   // consider using rules below, once we have a full TS codebase and can be more strict
@@ -45,7 +47,7 @@ const mainConfig = defineConfig(
       "simple-import-sort/exports": "error"
     }
   }
-);
+];
 
 const playwrightConfig = {
   files: [
