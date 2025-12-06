@@ -263,7 +263,7 @@ async function reportError(method: string, url: string, statusCode: number, resp
 
     const toastService = (await import("./toast.js")).default;
 
-    const messageStr = typeof message === "string" ? message : JSON.stringify(message);
+    const messageStr = (typeof message === "string" ? message : JSON.stringify(message)) || "-";
 
     if ([400, 404].includes(statusCode) && response && typeof response === "object") {
         toastService.showError(messageStr);
@@ -274,10 +274,13 @@ async function reportError(method: string, url: string, statusCode: number, resp
             ...response
         });
     } else {
-        const title = `${statusCode} ${method} ${url}`;
-        toastService.showErrorTitleAndMessage(title, messageStr);
+        const { t } = await import("./i18n.js");
+        toastService.showErrorTitleAndMessage(
+            t("server.unknown_http_error_title"),
+            t("server.unknown_http_error_content", { statusCode, method, url, message: messageStr }),
+            15_000);
         const { throwError } = await import("./ws.js");
-        throwError(`${title} - ${message}`);
+        throwError(`${statusCode} ${method} ${url} - ${message}`);
     }
 }
 
