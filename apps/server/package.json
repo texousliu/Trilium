@@ -22,7 +22,8 @@
     "docker-start-debian": "pnpm docker-build-debian && docker run -p 8081:8080 triliumnext-debian",
     "docker-start-alpine": "pnpm docker-build-alpine && docker run -p 8081:8080 triliumnext-alpine",
     "docker-start-rootless-debian": "pnpm docker-build-rootless-debian && docker run -p 8081:8080 triliumnext-rootless-debian",
-    "docker-start-rootless-alpine": "pnpm docker-build-rootless-alpine && docker run -p 8081:8080 triliumnext-rootless-alpine"
+    "docker-start-rootless-alpine": "pnpm docker-build-rootless-alpine && docker run -p 8081:8080 triliumnext-rootless-alpine",
+    "generate-document": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=src tsx ./scripts/generate_document.ts"
   },
   "dependencies": {
     "better-sqlite3": "12.5.0",
@@ -102,6 +103,7 @@
     "is-animated": "2.0.2",
     "is-svg": "6.1.0",
     "jimp": "1.6.0",
+    "lorem-ipsum": "2.0.8",
     "marked": "17.0.1",
     "mime-types": "3.0.2",
     "multer": "2.0.2",

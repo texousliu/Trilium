@@ -60,13 +60,13 @@ async function start() {
             const parentNoteId = getRandomNoteId();
             const prefix = Math.random() > 0.8 ? "prefix" : "";
 
-            const result = await cloningService.cloneNoteToBranch(noteIdToClone, parentNoteId, prefix);
+            const result = cloningService.cloneNoteToBranch(noteIdToClone, parentNoteId, prefix);
 
             console.log(`Cloning ${i}:`, result.success ? "succeeded" : "FAILED");
         }
 
         // does not have to be for the current note
-        await attributeService.createAttribute({
+        attributeService.createAttribute({
             noteId: getRandomNoteId(),
             type: "label",
             name: "label",
@@ -74,7 +74,7 @@ async function start() {
             isInheritable: Math.random() > 0.1 // 10% are inheritable
         });
 
-        await attributeService.createAttribute({
+        attributeService.createAttribute({
             noteId: getRandomNoteId(),
             type: "relation",
             name: "relation",
