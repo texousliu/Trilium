@@ -29,7 +29,7 @@ function closePersistent(id: string) {
     removeToastFromStore(id);
 }
 
-function showMessage(message: string, delay = 2000, icon = "check") {
+function showMessage(message: string, delay = 2000, icon = "bx bx-check") {
     console.debug(utils.now(), "message:", message);
 
     addToast({
