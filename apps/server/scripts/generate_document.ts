@@ -7,7 +7,7 @@ import sqlInit from "../src/services/sql_init.js";
 import noteService from "../src/services/notes.js";
 import attributeService from "../src/services/attributes.js";
 import cloningService from "../src/services/cloning.js";
-import * as loremIpsum from "lorem-ipsum";
+import { loremIpsum } from "lorem-ipsum";
 import "../src/becca/entity_constructor.js";
 import { initializeTranslations } from "../src/services/i18n.js";
 import cls from "../src/services/cls.js";
@@ -39,7 +39,7 @@ async function start() {
     await sqlInit.dbReady;
 
     for (let i = 0; i < noteCount; i++) {
-        const title = loremIpsum.loremIpsum({
+        const title = loremIpsum({
             count: 1,
             units: "sentences",
             sentenceLowerBound: 1,
@@ -47,7 +47,7 @@ async function start() {
         });
 
         const paragraphCount = Math.floor(Math.random() * Math.random() * 100);
-        const content = loremIpsum.loremIpsum({
+        const content = loremIpsum({
             count: paragraphCount,
             units: "paragraphs",
             sentenceLowerBound: 1,
