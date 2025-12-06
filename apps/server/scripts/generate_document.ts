@@ -6,10 +6,11 @@
 import sqlInit from "../src/services/sql_init.js";
 import noteService from "../src/services/notes.js";
 import attributeService from "../src/services/attributes.js";
-import cls from "../src/services/cls.js";
 import cloningService from "../src/services/cloning.js";
-import loremIpsum from "lorem-ipsum";
+import { loremIpsum } from "lorem-ipsum";
 import "../src/becca/entity_constructor.js";
+import { initializeTranslations } from "../src/services/i18n.js";
+import cls from "../src/services/cls.js";
 
 const noteCount = parseInt(process.argv[2]);
 
@@ -27,8 +28,18 @@ function getRandomNoteId() {
 }
 
 async function start() {
+    if (!sqlInit.isDbInitialized()) {
+        console.error("Database not initialized.");
+        process.exit(1);
+    }
+
+    await initializeTranslations();
+
+    sqlInit.initializeDb();
+    await sqlInit.dbReady;
+
     for (let i = 0; i < noteCount; i++) {
-        const title = loremIpsum.loremIpsum({
+        const title = loremIpsum({
             count: 1,
             units: "sentences",
             sentenceLowerBound: 1,
@@ -36,7 +47,7 @@ async function start() {
         });
 
         const paragraphCount = Math.floor(Math.random() * Math.random() * 100);
-        const content = loremIpsum.loremIpsum({
+        const content = loremIpsum({
             count: paragraphCount,
             units: "paragraphs",
             sentenceLowerBound: 1,
@@ -60,13 +71,13 @@ async function start() {
             const parentNoteId = getRandomNoteId();
             const prefix = Math.random() > 0.8 ? "prefix" : "";
 
-            const result = await cloningService.cloneNoteToBranch(noteIdToClone, parentNoteId, prefix);
+            const result = cloningService.cloneNoteToBranch(noteIdToClone, parentNoteId, prefix);
 
             console.log(`Cloning ${i}:`, result.success ? "succeeded" : "FAILED");
         }
 
         // does not have to be for the current note
-        await attributeService.createAttribute({
+        attributeService.createAttribute({
             noteId: getRandomNoteId(),
             type: "label",
             name: "label",
@@ -74,7 +85,7 @@ async function start() {
             isInheritable: Math.random() > 0.1 // 10% are inheritable
         });
 
-        await attributeService.createAttribute({
+        attributeService.createAttribute({
             noteId: getRandomNoteId(),
             type: "relation",
             name: "relation",
@@ -90,6 +101,4 @@ async function start() {
     process.exit(0);
 }
 
-// @TriliumNextTODO sqlInit.dbReady never seems to resolve so program hangs
-// see https://github.com/TriliumNext/Trilium/issues/1020
-sqlInit.dbReady.then(cls.wrap(start)).catch((err) => console.error(err));
+cls.init(() => start());
