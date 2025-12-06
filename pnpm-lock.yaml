@@ -85,6 +85,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: 7.0.1
         version: 7.0.1(eslint@9.39.1(jiti@2.6.1))
+      eslint-plugin-simple-import-sort:
+        specifier: 12.1.1
+        version: 12.1.1(eslint@9.39.1(jiti@2.6.1))
       happy-dom:
         specifier: ~20.0.0
         version: 20.0.11
@@ -154,9 +157,6 @@ importers:
 
   apps/client:
     dependencies:
-      '@eslint/js':
-        specifier: 9.39.1
-        version: 9.39.1
       '@excalidraw/excalidraw':
         specifier: 0.18.0
         version: 0.18.0(@types/react-dom@19.1.6(@types/react@19.1.7))(@types/react@19.1.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -7812,6 +7812,11 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
 
+  eslint-plugin-simple-import-sort@12.1.1:
+    resolution: {integrity: sha512-6nuzu4xwQtE3332Uz0to+TxDQYRLTKRESSc2hefVT48Zc8JthmN23Gx9lnYhu0FtkRSL1oxny3kJ2aveVhmOVA==}
+    peerDependencies:
+      eslint: '>=5.0.0'
+
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
     engines: {node: '>=8.0.0'}
@@ -15305,8 +15310,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@47.3.0':
     dependencies:
@@ -15358,8 +15361,6 @@ snapshots:
       '@ckeditor/ckeditor5-table': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-emoji@47.3.0':
     dependencies:
@@ -23277,6 +23278,10 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
+
+  eslint-plugin-simple-import-sort@12.1.1(eslint@9.39.1(jiti@2.6.1)):
+    dependencies:
+      eslint: 9.39.1(jiti@2.6.1)
 
   eslint-scope@5.1.1:
     dependencies:
