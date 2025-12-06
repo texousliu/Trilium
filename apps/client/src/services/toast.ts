@@ -43,7 +43,7 @@ export function showError(message: string, timeout = 10000) {
         icon: "bx bx-error-circle",
         message,
         timeout
-    })
+    });
 }
 
 function showErrorTitleAndMessage(title: string, message: string, timeout = 10000) {
@@ -73,7 +73,7 @@ function updateToast(id: string, partial: Partial<ToastOptions>) {
             return { ...toast, ...partial }
         }
         return toast;
-    })
+    });
 }
 
 export function removeToastFromStore(id: string) {

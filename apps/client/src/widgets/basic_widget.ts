@@ -185,7 +185,7 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
             });
         } else {
             toastService.showPersistent({
-                id: `custom-widget-failure-${noteId}`,
+                id: `custom-widget-failure-unknown-${crypto.randomUUID()}`,
                 title: t("toast.widget-error.title"),
                 icon: "bx bx-error-circle",
                 message: t("toast.widget-error.message-unknown", {

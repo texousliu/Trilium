@@ -23,7 +23,12 @@ function Toast({ id, title, timeout, progress, message, icon }: ToastOptionsWith
         return () => clearTimeout(timerId);
     }, [ id, timeout ]);
 
-    const closeButton = <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" />;
+    const closeButton = (
+        <button
+            type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
+            onClick={() => removeToastFromStore(id)}
+        />
+    );
     const toastIcon = <Icon icon={icon.startsWith("bx ") ? icon : `bx bx-${icon}`} />;
 
     return (

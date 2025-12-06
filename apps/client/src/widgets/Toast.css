@@ -55,5 +55,5 @@
     inset-inline-end: 0;
     background-color: var(--toast-text-color) !important;
     height: 4px;
-    transition: width 0.1s linear;    
+    transition: width 0.1s linear;
 }
