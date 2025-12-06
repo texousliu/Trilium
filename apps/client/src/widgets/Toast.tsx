@@ -17,13 +17,12 @@ export default function ToastContainer() {
     )
 }
 
-function Toast({ id, title, autohide, timeout, progress, message, icon }: ToastOptionsWithRequiredId) {
+function Toast({ id, title, timeout, progress, message, icon }: ToastOptionsWithRequiredId) {
     // Autohide.
     useEffect(() => {
-        if (!autohide || !id) return;
         const timerId = setTimeout(() => removeToastFromStore(id), timeout || DEFAULT_DELAY);
         return () => clearTimeout(timerId);
-    }, [ autohide, id, timeout ]);
+    }, [ id, timeout ]);
 
     const closeButton = <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" />;
     const toastIcon = <Icon icon={icon.startsWith("bx ") ? icon : `bx bx-${icon}`} />;

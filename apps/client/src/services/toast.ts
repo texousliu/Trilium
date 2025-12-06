@@ -8,7 +8,6 @@ export interface ToastOptions {
     title?: string;
     message: string;
     timeout?: number;
-    autohide?: boolean;
     progress?: number;
 }
 
@@ -19,7 +18,6 @@ function showPersistent(options: ToastOptionsWithRequiredId) {
     if (existingToast) {
         updateToast(options.id, options);
     } else {
-        options.autohide = false;
         addToast(options);
     }
 }
@@ -34,7 +32,6 @@ function showMessage(message: string, timeout = 2000, icon = "bx bx-check") {
     addToast({
         icon,
         message,
-        autohide: true,
         timeout
     });
 }
@@ -45,7 +42,6 @@ export function showError(message: string, timeout = 10000) {
     addToast({
         icon: "bx bx-error-circle",
         message,
-        autohide: true,
         timeout
     })
 }
@@ -57,7 +53,6 @@ function showErrorTitleAndMessage(title: string, message: string, timeout = 1000
         title,
         icon: "bx bx-error-circle",
         message,
-        autohide: true,
         timeout
     });
 }
