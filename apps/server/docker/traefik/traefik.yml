@@ -1,6 +1,10 @@
 entryPoints:
   web:
     address: ":8090"
+    http:
+      encodedCharacters:
+        allowEncodedSlash: true
+        allowEncodedHash: true
 
 providers:
   file:

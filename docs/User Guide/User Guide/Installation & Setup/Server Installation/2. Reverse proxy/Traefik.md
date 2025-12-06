@@ -1,5 +1,23 @@
 # Traefik
-Configure Traefik proxy and HTTPS. See [#7768](https://github.com/TriliumNext/Trilium/issues/7768#issuecomment-3539165814) for reference
+The goal of this article is to configure Traefik proxy and HTTPS. See [#7768](https://github.com/TriliumNext/Trilium/issues/7768#issuecomment-3539165814) for reference.
+
+## Breaking change in Traefik 3.6.4
+
+Traefik 3.6.4 introduced a [breaking change](https://doc.traefik.io/traefik/migrate/v3/#encoded-characters-in-request-path) regarding how percent-encoded characters are handled in URLs. More specifically some URLs used by Trilium (such as `search/%23workspace%20%23!template`) are automatically rejected by Traefik, resulting in HTTP 400 errors.
+
+To solve this, the Traefik [**static** configuration](https://doc.traefik.io/traefik/getting-started/configuration-overview/#the-install-configuration) must be modified in order to allow those characters:
+
+```yaml
+entryPoints:
+  web:
+    http:
+      encodedCharacters:
+        allowEncodedSlash: true
+        allowEncodedHash: true
+```
+
+> [!TIP]
+> If you still have issues, depending on how Trilium is used (especially regarding search), you might need to enable more encoded character groups. For more information, see [the relevant GitHub issue](https://github.com/TriliumNext/Trilium/issues/7968); feel free to report your findings.
 
 ### Build the docker-compose file
 
@@ -23,7 +41,7 @@ Setting up Traefik as reverse proxy requires setting the following labels:
 
 ### Setup needed environment variables
 
-After setting up a reverse proxy, make sure to configure the <a class="reference-link" href="Trusted%20proxy.md">[missing note]</a>.
+After setting up a reverse proxy, make sure to configure the <a class="reference-link" href="Trusted%20proxy.md">Trusted proxy</a>.
 
 ### Example `docker-compose.yaml`
 
