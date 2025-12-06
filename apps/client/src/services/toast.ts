@@ -9,7 +9,6 @@ export interface ToastOptions {
     message: string;
     delay?: number;
     autohide?: boolean;
-    closeAfter?: number;
     progress?: number;
 }
 
