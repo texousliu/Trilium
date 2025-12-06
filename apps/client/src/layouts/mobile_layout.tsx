@@ -6,7 +6,6 @@ import FilePropertiesTab from "../widgets/ribbon/FilePropertiesTab.jsx";
 import FlexContainer from "../widgets/containers/flex_container.js";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
-import LauncherContainer from "../widgets/containers/launcher_container.js";
 import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import NoteList from "../widgets/collections/NoteList.jsx";
 import NoteTitleWidget from "../widgets/note_title.js";
@@ -30,6 +29,7 @@ import NoteDetail from "../widgets/NoteDetail.jsx";
 import MobileEditorToolbar from "../widgets/type_widgets/text/mobile_editor_toolbar.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 import SplitNoteContainer from "../widgets/containers/split_note_container.js";
+import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -183,7 +183,7 @@ export default class MobileLayout {
                     .child(new FlexContainer("row")
                         .class("horizontal")
                         .css("height", "53px")
-                        .child(new LauncherContainer(true))
+                        .child(<LauncherContainer isHorizontalLayout />)
                         .child(<GlobalMenuWidget isHorizontalLayout />)
                         .id("launcher-pane"))
             )

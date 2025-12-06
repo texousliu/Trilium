@@ -97,7 +97,7 @@ export function showError(message: string, delay = 10000) {
     console.log(utils.now(), "error: ", message);
 
     toast({
-        icon: "alert",
+        icon: "bx bx-error-circle",
         message: message,
         autohide: true,
         delay
@@ -109,7 +109,7 @@ function showErrorTitleAndMessage(title: string, message: string, delay = 10000)
 
     toast({
         title: title,
-        icon: "alert",
+        icon: "bx bx-error-circle",
         message: message,
         autohide: true,
         delay

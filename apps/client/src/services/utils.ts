@@ -150,7 +150,7 @@ export function isMac() {
 
 export const hasTouchBar = (isMac() && isElectron());
 
-function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent | JQuery.ContextMenuEvent | JQuery.TriggeredEvent | React.PointerEvent<HTMLCanvasElement> | JQueryEventObject) {
+export function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent | JQuery.ContextMenuEvent | JQuery.TriggeredEvent | React.PointerEvent<HTMLCanvasElement> | JQueryEventObject) {
     return (!isMac() && evt.ctrlKey) || (isMac() && evt.metaKey);
 }
 
@@ -236,7 +236,7 @@ export function isIOS() {
     return /iPad|iPhone|iPod/.test(navigator.userAgent);
 }
 
-function isDesktop() {
+export function isDesktop() {
     return (
         window.glob?.device === "desktop" ||
         // window.glob.device is not available in setup

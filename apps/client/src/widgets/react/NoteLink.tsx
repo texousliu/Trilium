@@ -4,6 +4,7 @@ import { useImperativeSearchHighlighlighting, useTriliumEvent } from "./hooks";
 
 interface NoteLinkOpts {
     className?: string;
+    containerClassName?: string;
     notePath: string | string[];
     showNotePath?: boolean;
     showNoteIcon?: boolean;
@@ -17,7 +18,7 @@ interface NoteLinkOpts {
     noContextMenu?: boolean;
 }
 
-export default function NoteLink({ className, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens, title, viewScope, noContextMenu }: NoteLinkOpts) {
+export default function NoteLink({ className, containerClassName, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens, title, viewScope, noContextMenu }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
     const noteId = stringifiedNotePath.split("/").at(-1);
     const ref = useRef<HTMLSpanElement>(null);
@@ -71,6 +72,5 @@ export default function NoteLink({ className, notePath, showNotePath, showNoteIc
         $linkEl?.addClass(className);
     }
 
-    return <span ref={ref} />
-
+    return <span className={containerClassName} ref={ref} />;
 }

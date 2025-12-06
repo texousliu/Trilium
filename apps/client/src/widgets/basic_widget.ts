@@ -174,11 +174,11 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
             froca.getNote(noteId, true).then((note) => {
                 toastService.showPersistent({
                     title: t("toast.widget-error.title"),
-                    icon: "alert",
+                    icon: "bx bx-error-circle",
                     message: t("toast.widget-error.message-custom", {
                         id: noteId,
                         title: note?.title,
-                        message: e.message
+                        message: e.message || e.toString()
                     })
                 });
             });
@@ -187,9 +187,9 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
 
         toastService.showPersistent({
             title: t("toast.widget-error.title"),
-            icon: "alert",
+            icon: "bx bx-error-circle",
             message: t("toast.widget-error.message-unknown", {
-                message: e.message
+                message: e.message || e.toString()
             })
         });
     }
