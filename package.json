@@ -88,8 +88,7 @@
   "pnpm": {
     "patchedDependencies": {
       "@ckeditor/ckeditor5-mention": "patches/@ckeditor__ckeditor5-mention.patch",
-      "@ckeditor/ckeditor5-code-block": "patches/@ckeditor__ckeditor5-code-block.patch",
-      "ckeditor5": "patches/ckeditor5.patch"
+      "@ckeditor/ckeditor5-code-block": "patches/@ckeditor__ckeditor5-code-block.patch"
     },
     "overrides": {
       "mermaid": "11.12.1",
