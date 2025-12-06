@@ -7,8 +7,6 @@ import { removeToastFromStore, ToastOptionsWithRequiredId, toasts } from "../ser
 import Icon from "./react/Icon";
 import { RawHtmlBlock } from "./react/RawHtml";
 
-const DEFAULT_DELAY = 3_000;
-
 export default function ToastContainer() {
     return (
         <div id="toast-container">
@@ -20,7 +18,8 @@ export default function ToastContainer() {
 function Toast({ id, title, timeout, progress, message, icon }: ToastOptionsWithRequiredId) {
     // Autohide.
     useEffect(() => {
-        const timerId = setTimeout(() => removeToastFromStore(id), timeout || DEFAULT_DELAY);
+        if (!timeout || timeout <= 0) return;
+        const timerId = setTimeout(() => removeToastFromStore(id), timeout);
         return () => clearTimeout(timerId);
     }, [ id, timeout ]);
 
