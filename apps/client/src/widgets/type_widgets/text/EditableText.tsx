@@ -322,7 +322,7 @@ function useWatchdogCrashHandling() {
                 // timeout: 20_000
             });
         } else if (currentState === "crashedPermanently") {
-            dialog.info(t("editable-text.keeps-crashing"));
+            dialog.info(t("editable_text.keeps-crashing"));
             watchdog.editor?.enableReadOnlyMode("crashed-editor");
         }
     }, []);
