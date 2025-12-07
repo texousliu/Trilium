@@ -182,7 +182,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
         watchdog.create(container);
 
         return () => watchdog.destroy();
-    }, [ containerRef, externalWatchdogRef, onEditorInitialized, onWatchdogStateChange, contentLanguage, templates, uiLanguage, watchdogConfig, isClassicEditor ]);
+    }, [ contentLanguage, templates, uiLanguage ]); // TODO: adding all dependencies here will cause errors during CK init.
 
     // React to notification warning callback.
     useEffect(() => {
