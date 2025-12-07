@@ -77,6 +77,10 @@ export interface Api {
 
     /**
      * Entity whose event triggered this execution.
+     *
+     * <p>
+     * For front-end scripts, generally there's no origin entity specified since the scripts are run by the user or automatically by the UI (widgets).
+     * If there is an origin entity specified, then it's going to be a note entity.
      */
     originEntity: unknown | null;
 
@@ -278,12 +282,16 @@ export interface Api {
     getActiveContextNote(): FNote;
 
     /**
-     * @returns returns active context (split)
+     * Obtains the currently active/focused split in the current tab.
+     *
+     * Note that this method does not return the note context of the "Quick edit" panel, it will return the note context behind it.
      */
     getActiveContext(): NoteContext;
 
     /**
-     * @returns returns active main context (first split in a tab, represents the tab as a whole)
+     * Obtains the main context of the current tab. This is the left-most split.
+     *
+     * Note that this method does not return the note context of the "Quick edit" panel, it will return the note context behind it.
      */
     getActiveMainContext(): NoteContext;
 
