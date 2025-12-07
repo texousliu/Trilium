@@ -491,7 +491,9 @@
     "placeholder": "Scrieți conținutul notiței de cod aici..."
   },
   "editable_text": {
-    "placeholder": "Scrieți conținutul notiței aici..."
+    "placeholder": "Scrieți conținutul notiței aici...",
+    "auto-detect-language": "Automat",
+    "keeps-crashing": "Componenta de editare se blochează în continuu. Încercați să reporniți Trilium. Dacă problema persistă, luați în considerare să raportați această problemă."
   },
   "edited_notes": {
     "deleted": "(șters)",
@@ -1625,10 +1627,6 @@
     "move-to-available-launchers": "Mută în Lansatoare disponibile",
     "move-to-visible-launchers": "Mută în Lansatoare vizibile",
     "reset": "Resetează"
-  },
-  "editable-text": {
-    "auto-detect-language": "Automat",
-    "keeps-crashing": "Componenta de editare se blochează în continuu. Încercați să reporniți Trilium. Dacă problema persistă, luați în considerare să raportați această problemă."
   },
   "highlighting": {
     "color-scheme": "Temă de culori",

@@ -1330,7 +1330,8 @@
     "placeholder": "Wpisz tutaj treść swojej notatki kodowej..."
   },
   "editable_text": {
-    "placeholder": "Wpisz tutaj treść swojej notatki..."
+    "placeholder": "Wpisz tutaj treść swojej notatki...",
+    "auto-detect-language": "Wykryto automatycznie"
   },
   "empty": {
     "open_note_instruction": "Otwórz notatkę, wpisując jej tytuł w poniższe pole lub wybierz notatkę z drzewa.",
@@ -2013,9 +2014,6 @@
     "move-to-visible-launchers": "Przenieś do widocznych programów uruchamiających",
     "move-to-available-launchers": "Przenieś do dostępnych programów uruchamiających",
     "duplicate-launcher": "Duplikuj program uruchamiający <kbd data-command=\"duplicateSubtree\">"
-  },
-  "editable-text": {
-    "auto-detect-language": "Wykryto automatycznie"
   },
   "highlighting": {
     "title": "Bloki kodu",

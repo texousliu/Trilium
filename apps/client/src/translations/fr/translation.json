@@ -981,7 +981,8 @@
     "placeholder": "Saisir le contenu de votre note de code ici..."
   },
   "editable_text": {
-    "placeholder": "Saisir le contenu de votre note ici..."
+    "placeholder": "Saisir le contenu de votre note ici...",
+    "auto-detect-language": "Détecté automatiquement"
   },
   "empty": {
     "open_note_instruction": "Ouvrez une note en tapant son titre dans la zone ci-dessous ou choisissez une note dans l'arborescence.",
@@ -1616,9 +1617,6 @@
     "move-to-visible-launchers": "Déplacer vers les raccourcis visibles",
     "move-to-available-launchers": "Déplacer vers les raccourcis disponibles",
     "duplicate-launcher": "Dupliquer le raccourci <kbd data-command=\"duplicateSubtree\">"
-  },
-  "editable-text": {
-    "auto-detect-language": "Détecté automatiquement"
   },
   "highlighting": {
     "description": "Contrôle la coloration syntaxique des blocs de code à l'intérieur des notes texte, les notes de code ne seront pas affectées.",

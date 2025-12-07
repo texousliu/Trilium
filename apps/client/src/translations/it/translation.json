@@ -1491,7 +1491,9 @@
     "placeholder": "Digita qui il contenuto della tua nota di codice..."
   },
   "editable_text": {
-    "placeholder": "Digita qui il contenuto della tua nota..."
+    "placeholder": "Digita qui il contenuto della tua nota...",
+    "auto-detect-language": "Rilevato automaticamente",
+    "keeps-crashing": "Il componente di modifica continua a bloccarsi. Prova a riavviare Trilium. Se il problema persiste, valuta la possibilità di creare una segnalazione di bug."
   },
   "empty": {
     "open_note_instruction": "Apri una nota digitandone il titolo nel campo sottostante oppure scegli una nota nell'albero.",
@@ -1936,10 +1938,6 @@
     "move-to-visible-launchers": "Passa ai launcher visibili",
     "move-to-available-launchers": "Passa ai launcher disponibili",
     "duplicate-launcher": "Duplica il launcher <kbd data-command=\"duplicateSubtree\">"
-  },
-  "editable-text": {
-    "auto-detect-language": "Rilevato automaticamente",
-    "keeps-crashing": "Il componente di modifica continua a bloccarsi. Prova a riavviare Trilium. Se il problema persiste, valuta la possibilità di creare una segnalazione di bug."
   },
   "highlighting": {
     "title": "Blocchi di codice",

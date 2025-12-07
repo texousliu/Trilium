@@ -130,9 +130,6 @@
     "move-to-available-launchers": "Перейти до доступних лаунчерів",
     "duplicate-launcher": "Дублікат програми запуску <kbd data-command=\"duplicateSubtree\">"
   },
-  "editable-text": {
-    "auto-detect-language": "Автовизначено"
-  },
   "highlighting": {
     "color-scheme": "Схема кольорів",
     "title": "Блоки коду",
@@ -1076,7 +1073,8 @@
     "placeholder": "Введіть тут вміст вашої нотатки з кодом..."
   },
   "editable_text": {
-    "placeholder": "Введіть тут вміст вашої нотатки..."
+    "placeholder": "Введіть тут вміст вашої нотатки...",
+    "auto-detect-language": "Автовизначено"
   },
   "empty": {
     "open_note_instruction": "Відкрийте нотатку, ввівши її заголовок в поле нижче, або виберіть нотатку в дереві.",

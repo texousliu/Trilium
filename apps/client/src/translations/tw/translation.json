@@ -984,7 +984,9 @@
     "placeholder": "在這裡輸入您的程式碼筆記內容…"
   },
   "editable_text": {
-    "placeholder": "在這裡輸入您的筆記內容…"
+    "placeholder": "在這裡輸入您的筆記內容…",
+    "auto-detect-language": "自動檢測",
+    "keeps-crashing": "編輯元件持續發生崩潰。請嘗試重新啟動 Trilium。若問題仍存在，請考慮提交錯誤報告。"
   },
   "empty": {
     "open_note_instruction": "透過在下面的輸入框中輸入筆記標題或在樹中選擇筆記來打開筆記。",
@@ -1619,10 +1621,6 @@
     "move-to-visible-launchers": "移動至可見啟動器",
     "move-to-available-launchers": "移動至可用啟動器",
     "duplicate-launcher": "複製啟動器 <kbd data-command=\"duplicateSubtree\">"
-  },
-  "editable-text": {
-    "auto-detect-language": "自動檢測",
-    "keeps-crashing": "編輯元件持續發生崩潰。請嘗試重新啟動 Trilium。若問題仍存在，請考慮提交錯誤報告。"
   },
   "highlighting": {
     "description": "控制文字筆記程式碼區塊中的語法高亮，程式碼筆記不會受到影響。",

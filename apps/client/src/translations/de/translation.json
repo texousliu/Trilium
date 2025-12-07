@@ -983,7 +983,9 @@
     "placeholder": "Gebe hier den Inhalt deiner Codenotiz ein..."
   },
   "editable_text": {
-    "placeholder": "Gebe hier den Inhalt deiner Notiz ein..."
+    "placeholder": "Gebe hier den Inhalt deiner Notiz ein...",
+    "auto-detect-language": "Automatisch erkannt",
+    "keeps-crashing": "Die Bearbeitungskomponente stürzt immer wieder ab. Bitte starten Sie Trilium neu. Wenn das Problem weiterhin besteht, erstellen Sie einen Fehlerbericht."
   },
   "empty": {
     "open_note_instruction": "Öffne eine Notiz, indem du den Titel der Notiz in die Eingabe unten eingibst oder eine Notiz in der Baumstruktur auswählst.",
@@ -1623,10 +1625,6 @@
     "move-to-visible-launchers": "Zu sichtbaren Launchern verschieben",
     "move-to-available-launchers": "Zu verfügbaren Launchern verschieben",
     "duplicate-launcher": "Launcher duplizieren <kbd data-command=\"duplicateSubtree\">"
-  },
-  "editable-text": {
-    "auto-detect-language": "Automatisch erkannt",
-    "keeps-crashing": "Die Bearbeitungskomponente stürzt immer wieder ab. Bitte starten Sie Trilium neu. Wenn das Problem weiterhin besteht, erstellen Sie einen Fehlerbericht."
   },
   "highlighting": {
     "description": "Steuert die Syntaxhervorhebung für Codeblöcke in Textnotizen, Code-Notizen sind nicht betroffen.",

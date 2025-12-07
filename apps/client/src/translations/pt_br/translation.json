@@ -1191,7 +1191,8 @@
     "placeholder": "Digite o conteúdo da sua nota de código aqui…"
   },
   "editable_text": {
-    "placeholder": "Digite o conteúdo da sua nota aqui…"
+    "placeholder": "Digite o conteúdo da sua nota aqui…",
+    "auto-detect-language": "Detectado automaticamente"
   },
   "empty": {
     "search_placeholder": "buscar uma nota pelo nome",
@@ -1688,9 +1689,6 @@
     "move-to-visible-launchers": "Mover para lançadores visíveis",
     "move-to-available-launchers": "Mover para lançadores disponíveis",
     "duplicate-launcher": "Duplicar o lançador <kbd data-command=\"duplicateSubtree\">"
-  },
-  "editable-text": {
-    "auto-detect-language": "Detectado automaticamente"
   },
   "highlighting": {
     "title": "Blocos de Código",
