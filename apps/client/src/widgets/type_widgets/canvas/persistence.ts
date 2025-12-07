@@ -3,7 +3,7 @@ import NoteContext from "../../../components/note_context";
 import FNote from "../../../entities/fnote";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
 import { useRef } from "preact/hooks";
-import { useEditorSpacedUpdate } from "../../react/hooks";
+import { SavedData, useEditorSpacedUpdate } from "../../react/hooks";
 import { ExcalidrawElement, NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { exportToSvg, getSceneVersion } from "@excalidraw/excalidraw";
 import server from "../../../services/server";
@@ -77,7 +77,7 @@ export default function useCanvasPersistence(note: FNote, noteContext: NoteConte
             const api = apiRef.current;
             if (!api) return;
             const { content, svg } = await getData(api);
-            const attachments = [{ role: "image", title: "canvas-export.svg", mime: "image/svg+xml", content: svg, position: 0 }];
+            const attachments: SavedData["attachments"] = [{ role: "image", title: "canvas-export.svg", mime: "image/svg+xml", content: svg, position: 0 }];
 
             // libraryChanged is unset in dataSaved()
             if (libraryChanged.current) {
@@ -124,7 +124,7 @@ export default function useCanvasPersistence(note: FNote, noteContext: NoteConte
                         title: libraryItem.id + libraryItem.name,
                         mime: "application/json",
                         content: JSON.stringify(libraryItem),
-                        position: position
+                        position
                     });
 
                     position += 10;

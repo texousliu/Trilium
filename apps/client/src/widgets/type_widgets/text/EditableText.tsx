@@ -57,6 +57,10 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         onContentChange(newContent) {
             contentRef.current = newContent;
             watchdogRef.current?.editor?.setData(newContent);
+        },
+        dataSaved(savedData) {
+            // Store back the saved data in order to retrieve it in case the CKEditor crashes.
+            contentRef.current = savedData.content;
         }
     });
     const templates = useTemplates();
@@ -245,7 +249,9 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     }
 
                     initialized.current.resolve();
-                    editor.setData(contentRef.current ?? "");
+                    // Restore the data, either on the first render or if the editor crashes.
+                    // We are not using CKEditor's built-in watch dog content, instead we are using the data we store regularly in the spaced update (see `dataSaved`).
+                    editor.setData(contentRef.current);
                     parentComponent?.triggerEvent("textEditorRefreshed", { ntxId, editor });
                 }}
             />}
