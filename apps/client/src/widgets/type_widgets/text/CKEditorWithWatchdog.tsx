@@ -25,7 +25,7 @@ interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "cla
     watchdogRef: RefObject<EditorWatchdog>;
     watchdogConfig?: WatchdogConfig;
     onNotificationWarning?: (evt: any, data: any) => void;
-    onWatchdogStateChange?: (watchdog: EditorWatchdog<any>) => void;
+    onWatchdogStateChange?: (watchdog: EditorWatchdog) => void;
     onChange: () => void;
     /** Called upon whenever a new CKEditor instance is initialized, whether it's the first initialization, after a crash or after a config change that requires it (e.g. content language). */
     onEditorInitialized?: (editor: CKTextEditor) => void;
@@ -182,7 +182,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
         watchdog.create(container);
 
         return () => watchdog.destroy();
-    }, [ contentLanguage, templates, uiLanguage ]);
+    }, [ contentLanguage, templates, uiLanguage ]); // TODO: adding all dependencies here will cause errors during CK init.
 
     // React to notification warning callback.
     useEffect(() => {
@@ -204,7 +204,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
     );
 }
 
-function buildWatchdog(isClassicEditor: boolean, watchdogConfig?: WatchdogConfig): EditorWatchdog<CKTextEditor> {
+function buildWatchdog(isClassicEditor: boolean, watchdogConfig?: WatchdogConfig): EditorWatchdog {
     if (isClassicEditor) {
         return new EditorWatchdog(ClassicEditor, watchdogConfig);
     } else {

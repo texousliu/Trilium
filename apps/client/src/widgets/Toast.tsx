@@ -6,6 +6,7 @@ import { useEffect } from "preact/hooks";
 import { removeToastFromStore, ToastOptionsWithRequiredId, toasts } from "../services/toast";
 import Icon from "./react/Icon";
 import { RawHtmlBlock } from "./react/RawHtml";
+import Button from "./react/Button";
 
 export default function ToastContainer() {
     return (
@@ -15,7 +16,7 @@ export default function ToastContainer() {
     )
 }
 
-function Toast({ id, title, timeout, progress, message, icon }: ToastOptionsWithRequiredId) {
+function Toast({ id, title, timeout, progress, message, icon, buttons }: ToastOptionsWithRequiredId) {
     // Autohide.
     useEffect(() => {
         if (!timeout || timeout <= 0) return;
@@ -23,10 +24,14 @@ function Toast({ id, title, timeout, progress, message, icon }: ToastOptionsWith
         return () => clearTimeout(timerId);
     }, [ id, timeout ]);
 
+    function dismissToast() {
+        removeToastFromStore(id);
+    }
+
     const closeButton = (
         <button
             type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
-            onClick={() => removeToastFromStore(id)}
+            onClick={dismissToast}
         />
     );
     const toastIcon = <Icon icon={icon.startsWith("bx ") ? icon : `bx bx-${icon}`} />;
@@ -52,6 +57,15 @@ function Toast({ id, title, timeout, progress, message, icon }: ToastOptionsWith
             <RawHtmlBlock className="toast-body" html={message} />
 
             {!title && <div class="toast-header">{closeButton}</div>}
+
+            {buttons && (
+                <div class="toast-buttons">
+                    {buttons.map(({ text, onClick }) => (
+                        <Button text={text} onClick={() => onClick({ dismissToast })} />
+                    ))}
+                </div>
+            )}
+
             <div
                 class="toast-progress"
                 style={{ width: `${(progress ?? 0) * 100}%` }}

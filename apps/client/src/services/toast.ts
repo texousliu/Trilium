@@ -9,6 +9,10 @@ export interface ToastOptions {
     message: string;
     timeout?: number;
     progress?: number;
+    buttons?: {
+        text: string;
+        onClick: (api: { dismissToast: () => void }) => void;
+    }[];
 }
 
 export type ToastOptionsWithRequiredId = Omit<ToastOptions, "id"> & Required<Pick<ToastOptions, "id">>;

@@ -78,12 +78,23 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     return spacedUpdateRef.current;
 }
 
+export interface SavedData {
+    content: string;
+    attachments?: {
+        role: string;
+        title: string;
+        mime: string;
+        content: string;
+        position: number;
+    }[];
+}
+
 export function useEditorSpacedUpdate({ note, noteContext, getData, onContentChange, dataSaved, updateInterval }: {
     note: FNote,
     noteContext: NoteContext | null | undefined,
-    getData: () => Promise<object | undefined> | object | undefined,
+    getData: () => Promise<SavedData | undefined> | SavedData | undefined,
     onContentChange: (newContent: string) => void,
-    dataSaved?: () => void,
+    dataSaved?: (savedData: SavedData) => void,
     updateInterval?: number;
 }) {
     const parentComponent = useContext(ParentComponent);
@@ -99,7 +110,7 @@ export function useEditorSpacedUpdate({ note, noteContext, getData, onContentCha
             protected_session_holder.touchProtectedSessionIfNecessary(note);
             await server.put(`notes/${note.noteId}/data`, data, parentComponent?.componentId);
 
-            dataSaved?.();
+            dataSaved?.(data);
         }
     }, [ note, getData, dataSaved ])
     const spacedUpdate = useSpacedUpdate(callback);

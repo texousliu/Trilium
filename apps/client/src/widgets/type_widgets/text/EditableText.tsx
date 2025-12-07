@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import utils, { hasTouchBar, isMobile } from "../../../services/utils";
@@ -57,6 +57,10 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         onContentChange(newContent) {
             contentRef.current = newContent;
             watchdogRef.current?.editor?.setData(newContent);
+        },
+        dataSaved(savedData) {
+            // Store back the saved data in order to retrieve it in case the CKEditor crashes.
+            contentRef.current = savedData.content;
         }
     });
     const templates = useTemplates();
@@ -121,7 +125,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
 
             const resp = await note_create.createNoteWithTypePrompt(notePath, {
                 activate: false,
-                title: title
+                title
             });
 
             if (!resp || !resp.note) return;
@@ -210,6 +214,8 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         addTextToEditor(text);
     });
 
+    const onWatchdogStateChange = useWatchdogCrashHandling();
+
     return (
         <>
             {note && !!templates && <CKEditorWithWatchdog
@@ -226,7 +232,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     // A threshold specifying the number of errors (defaults to 3). After this limit is reached and the time between last errors is shorter than minimumNonErrorTimePeriod, the watchdog changes its state to crashedPermanently, and it stops restarting the editor. This prevents an infinite restart loop.
                     crashNumberLimit: 10,
                     // A minimum number of milliseconds between saving the editor data internally (defaults to 5000). Note that for large documents, this might impact the editor performance.
-                    saveInterval: 5000
+                    saveInterval: Number.MAX_SAFE_INTEGER
                 }}
                 templates={templates}
                 onNotificationWarning={onNotificationWarning}
@@ -245,7 +251,9 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     }
 
                     initialized.current.resolve();
-                    editor.setData(contentRef.current ?? "");
+                    // Restore the data, either on the first render or if the editor crashes.
+                    // We are not using CKEditor's built-in watch dog content, instead we are using the data we store regularly in the spaced update (see `dataSaved`).
+                    editor.setData(contentRef.current);
                     parentComponent?.triggerEvent("textEditorRefreshed", { ntxId, editor });
                 }}
             />}
@@ -269,20 +277,57 @@ function useTemplates() {
     return templates;
 }
 
-function onWatchdogStateChange(watchdog: EditorWatchdog) {
-    const currentState = watchdog.state;
-    logInfo(`CKEditor state changed to ${currentState}`);
+function useWatchdogCrashHandling() {
+    const hasCrashed = useRef(false);
+    const onWatchdogStateChange = useCallback((watchdog: EditorWatchdog) => {
+        const currentState = watchdog.state;
+        logInfo(`CKEditor state changed to ${currentState}`);
 
-    if (!["crashed", "crashedPermanently"].includes(currentState)) {
-        return;
-    }
+        if (currentState === "ready") {
+            hasCrashed.current = false;
+            watchdog.editor?.focus();
+        }
 
-    logError(`CKEditor crash logs: ${JSON.stringify(watchdog.crashes, null, 4)}`);
+        if (!["crashed", "crashedPermanently"].includes(currentState)) {
+            return;
+        }
 
-    if (currentState === "crashedPermanently") {
-        dialog.info(t("editable-text.keeps-crashing"));
-        watchdog.editor?.enableReadOnlyMode("crashed-editor");
-    }
+        hasCrashed.current = true;
+        const formattedCrash = JSON.stringify(watchdog.crashes, null, 4);
+        logError(`CKEditor crash logs: ${formattedCrash}`);
+
+        if (currentState === "crashed") {
+            toast.showPersistent({
+                id: "editor-crashed",
+                icon: "bx bx-bug",
+                title: t("editable_text.editor_crashed_title"),
+                message: t("editable_text.editor_crashed_content"),
+                buttons: [
+                    {
+                        text: t("editable_text.editor_crashed_details_button"),
+                        onClick: ({ dismissToast }) => {
+                            dismissToast();
+                            dialog.info(<>
+                                <p>{t("editable_text.editor_crashed_details_intro")}</p>
+                                <h3>{t("editable_text.editor_crashed_details_title")}</h3>
+                                <pre><code class="language-application-json">{formattedCrash}</code></pre>
+                            </>, {
+                                title: t("editable_text.editor_crashed_title"),
+                                size: "lg",
+                                copyToClipboardButton: true
+                            });
+                        }
+                    }
+                ],
+                timeout: 20_000
+            });
+        } else if (currentState === "crashedPermanently") {
+            dialog.info(t("editable_text.keeps-crashing"));
+            watchdog.editor?.enableReadOnlyMode("crashed-editor");
+        }
+    }, []);
+
+    return onWatchdogStateChange;
 }
 
 function onNotificationWarning(data, evt) {
@@ -302,7 +347,7 @@ function EditableTextTouchBar({ watchdogRef, refreshTouchBarRef }: { watchdogRef
     const [ headingSelectedIndex, setHeadingSelectedIndex ] = useState<number>();
 
     function refresh() {
-        let headingSelectedIndex: number | undefined = undefined;
+        let headingSelectedIndex: number | undefined;
         const editor = watchdogRef.current?.editor;
         const headingCommand = editor?.commands.get("heading");
         const paragraphCommand = editor?.commands.get("paragraph");
@@ -316,7 +361,7 @@ function EditableTextTouchBar({ watchdogRef, refreshTouchBarRef }: { watchdogRef
         setHeadingSelectedIndex(headingSelectedIndex);
     }
 
-    useEffect(refresh, []);
+    useEffect(refresh, [ watchdogRef ]);
     refreshTouchBarRef.current = refresh;
 
     return (
