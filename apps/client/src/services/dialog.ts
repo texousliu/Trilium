@@ -1,6 +1,6 @@
 import { Modal } from "bootstrap";
 import appContext from "../components/app_context.js";
-import type { ConfirmDialogOptions, ConfirmDialogResult, ConfirmWithMessageOptions } from "../widgets/dialogs/confirm.js";
+import type { ConfirmDialogOptions, ConfirmDialogResult, ConfirmWithMessageOptions, MessageType } from "../widgets/dialogs/confirm.js";
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import { focusSavedElement, saveFocusedElement } from "./focus.js";
 
@@ -37,7 +37,7 @@ export function closeActiveDialog() {
     }
 }
 
-async function info(message: string) {
+async function info(message: MessageType) {
     return new Promise((res) => appContext.triggerCommand("showInfoDialog", { message, callback: res }));
 }
 

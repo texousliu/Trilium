@@ -4,12 +4,13 @@ import { t } from "../../services/i18n";
 import { useState } from "preact/hooks";
 import FormCheckbox from "../react/FormCheckbox";
 import { useTriliumEvent } from "../react/hooks";
+import type { VNode } from "preact";
 
 interface ConfirmDialogProps {
     title?: string;
     message?: string | HTMLElement;
     callback?: ConfirmDialogCallback;
-    isConfirmDeleteNoteBox?: boolean;   
+    isConfirmDeleteNoteBox?: boolean;
 }
 
 export default function ConfirmDialog() {
@@ -30,7 +31,7 @@ export default function ConfirmDialog() {
     useTriliumEvent("showConfirmDialog", ({ message, callback }) => showDialog(null, message, callback, false));
     useTriliumEvent("showConfirmDeleteNoteBoxWithNoteDialog", ({ title, callback }) => showDialog(title, t("confirm.are_you_sure_remove_note", { title: title }), callback, true));
 
-    return ( 
+    return (
         <Modal
             className="confirm-dialog"
             title={opts?.title ?? t("confirm.confirmation")}
@@ -74,7 +75,7 @@ export default function ConfirmDialog() {
 
 export type ConfirmDialogResult = false | ConfirmDialogOptions;
 export type ConfirmDialogCallback = (val?: ConfirmDialogResult) => void;
-type MessageType = string | HTMLElement | JQuery<HTMLElement>;
+export type MessageType = string | HTMLElement | JQuery<HTMLElement> | VNode;
 
 export interface ConfirmDialogOptions {
     confirmed: boolean;
