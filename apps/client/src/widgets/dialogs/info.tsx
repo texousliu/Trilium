@@ -7,6 +7,7 @@ import { RawHtmlBlock } from "../react/RawHtml";
 import { useTriliumEvent } from "../react/hooks";
 import { isValidElement } from "preact";
 import { ConfirmWithMessageOptions } from "./confirm";
+import "./info.css";
 
 export type InfoExtraProps = Partial<Pick<ModalProps, "size">>;
 export type InfoProps = ConfirmWithMessageOptions & InfoExtraProps;
