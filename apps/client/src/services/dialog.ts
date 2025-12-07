@@ -38,7 +38,7 @@ export function closeActiveDialog() {
     }
 }
 
-async function info(message: MessageType, extraProps: InfoExtraProps) {
+async function info(message: MessageType, extraProps?: InfoExtraProps) {
     return new Promise((res) => appContext.triggerCommand("showInfoDialog", { ...extraProps, message, callback: res }));
 }
 
