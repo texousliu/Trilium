@@ -125,7 +125,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
 
             const resp = await note_create.createNoteWithTypePrompt(notePath, {
                 activate: false,
-                title: title
+                title
             });
 
             if (!resp || !resp.note) return;
@@ -321,7 +321,7 @@ function EditableTextTouchBar({ watchdogRef, refreshTouchBarRef }: { watchdogRef
     const [ headingSelectedIndex, setHeadingSelectedIndex ] = useState<number>();
 
     function refresh() {
-        let headingSelectedIndex: number | undefined = undefined;
+        let headingSelectedIndex: number | undefined;
         const editor = watchdogRef.current?.editor;
         const headingCommand = editor?.commands.get("heading");
         const paragraphCommand = editor?.commands.get("paragraph");
@@ -335,7 +335,7 @@ function EditableTextTouchBar({ watchdogRef, refreshTouchBarRef }: { watchdogRef
         setHeadingSelectedIndex(headingSelectedIndex);
     }
 
-    useEffect(refresh, []);
+    useEffect(refresh, [ watchdogRef ]);
     refreshTouchBarRef.current = refresh;
 
     return (
