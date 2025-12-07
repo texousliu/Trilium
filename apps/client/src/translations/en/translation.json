@@ -987,7 +987,9 @@
     "placeholder": "Type the content of your code note here..."
   },
   "editable_text": {
-    "placeholder": "Type the content of your note here..."
+    "placeholder": "Type the content of your note here...",
+    "editor_crashed_title": "The text editor crashed",
+    "editor_crashed_content": "Your content was recovered successfully, but a few of your most recent changes may not have been saved."
   },
   "empty": {
     "open_note_instruction": "Open a note by typing the note's title into the input below or choose a note in the tree.",

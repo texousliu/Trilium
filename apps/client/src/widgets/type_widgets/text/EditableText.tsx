@@ -295,7 +295,15 @@ function useWatchdogCrashHandling() {
         hasCrashed.current = true;
         logError(`CKEditor crash logs: ${JSON.stringify(watchdog.crashes, null, 4)}`);
 
-        if (currentState === "crashedPermanently") {
+        if (currentState === "crashed") {
+            toast.showPersistent({
+                id: "editor-crashed",
+                icon: "bx bx-bug",
+                title: t("editable_text.editor_crashed_title"),
+                message: t("editable_text.editor_crashed_content"),
+                timeout: 20_000
+            })
+        } else if (currentState === "crashedPermanently") {
             dialog.info(t("editable-text.keeps-crashing"));
             watchdog.editor?.enableReadOnlyMode("crashed-editor");
         }
