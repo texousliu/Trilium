@@ -4,11 +4,12 @@ import { t } from "../../services/i18n";
 import { useState } from "preact/hooks";
 import FormCheckbox from "../react/FormCheckbox";
 import { useTriliumEvent } from "../react/hooks";
-import type { VNode } from "preact";
+import { isValidElement, type VNode } from "preact";
+import { RawHtmlBlock } from "../react/RawHtml";
 
 interface ConfirmDialogProps {
     title?: string;
-    message?: string | HTMLElement;
+    message?: MessageType;
     callback?: ConfirmDialogCallback;
     isConfirmDeleteNoteBox?: boolean;
 }
@@ -21,7 +22,7 @@ export default function ConfirmDialog() {
     function showDialog(title: string | null, message: MessageType, callback: ConfirmDialogCallback, isConfirmDeleteNoteBox: boolean) {
         setOpts({
             title: title ?? undefined,
-            message: (typeof message === "object" && "length" in message ? message[0] : message),
+            message,
             callback,
             isConfirmDeleteNoteBox
         });
@@ -58,9 +59,10 @@ export default function ConfirmDialog() {
             show={shown}
             stackable
         >
-            {!opts?.message || typeof opts?.message === "string"
-                ? <div>{(opts?.message as string) ?? ""}</div>
-                : <div dangerouslySetInnerHTML={{ __html: opts?.message.outerHTML ?? "" }} />}
+            {isValidElement(opts?.message)
+            ? opts?.message
+            : <RawHtmlBlock html={opts?.message} />
+            }
 
             {opts?.isConfirmDeleteNoteBox && (
                 <FormCheckbox

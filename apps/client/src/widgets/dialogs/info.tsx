@@ -67,7 +67,7 @@ export default function InfoDialog() {
     >
         {isValidElement(opts?.message)
         ? opts?.message
-        : <RawHtmlBlock className="info-dialog-content" html={opts?.message ?? ""} />
+        : <RawHtmlBlock className="info-dialog-content" html={opts?.message} />
         }
     </Modal>);
 }
