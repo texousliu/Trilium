@@ -9,7 +9,7 @@ import { isValidElement } from "preact";
 import { ConfirmWithMessageOptions } from "./confirm";
 import "./info.css";
 
-export type InfoExtraProps = Partial<Pick<ModalProps, "size">>;
+export type InfoExtraProps = Partial<Pick<ModalProps, "size" | "title">>;
 export type InfoProps = ConfirmWithMessageOptions & InfoExtraProps;
 
 export default function InfoDialog() {
@@ -25,7 +25,7 @@ export default function InfoDialog() {
     return (<Modal
         className="info-dialog"
         size={opts?.size ?? "sm"}
-        title={t("info.modalTitle")}
+        title={opts?.title ?? t("info.modalTitle")}
         onHidden={() => {
             opts?.callback?.();
             setShown(false);

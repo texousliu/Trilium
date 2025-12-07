@@ -312,13 +312,14 @@ function useWatchdogCrashHandling() {
                                 <h3>{t("editable_text.editor_crashed_details_title")}</h3>
                                 <pre>{formattedCrash}</pre>
                             </>, {
+                                title: t("editable_text.editor_crashed_title"),
                                 size: "lg"
                             });
                         }
                     }
                 ]
                 // timeout: 20_000
-            })
+            });
         } else if (currentState === "crashedPermanently") {
             dialog.info(t("editable-text.keeps-crashing"));
             watchdog.editor?.enableReadOnlyMode("crashed-editor");
