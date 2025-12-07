@@ -311,7 +311,9 @@ function useWatchdogCrashHandling() {
                                 <p>{t("editable_text.editor_crashed_details_intro")}</p>
                                 <h3>{t("editable_text.editor_crashed_details_title")}</h3>
                                 <pre>{formattedCrash}</pre>
-                            </>);
+                            </>, {
+                                size: "lg"
+                            });
                         }
                     }
                 ]

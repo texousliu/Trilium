@@ -1,11 +1,15 @@
 import { EventData } from "../../components/app_context";
-import Modal from "../react/Modal";
+import Modal, { type ModalProps } from "../react/Modal";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import { useRef, useState } from "preact/hooks";
 import { RawHtmlBlock } from "../react/RawHtml";
 import { useTriliumEvent } from "../react/hooks";
 import { isValidElement } from "preact";
+import { ConfirmWithMessageOptions } from "./confirm";
+
+export type InfoExtraProps = Partial<Pick<ModalProps, "size">>;
+export type InfoProps = ConfirmWithMessageOptions & InfoExtraProps;
 
 export default function InfoDialog() {
     const [ opts, setOpts ] = useState<EventData<"showInfoDialog">>();
@@ -19,7 +23,7 @@ export default function InfoDialog() {
 
     return (<Modal
         className="info-dialog"
-        size="sm"
+        size={opts?.size ?? "sm"}
         title={t("info.modalTitle")}
         onHidden={() => {
             opts?.callback?.();

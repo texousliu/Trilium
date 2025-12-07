@@ -14,7 +14,7 @@ interface CustomTitleBarButton {
     onClick: () => void;
 }
 
-interface ModalProps {
+export interface ModalProps {
     className: string;
     title: string | ComponentChildren;
     customTitleBarButtons?: (CustomTitleBarButton | null)[];
@@ -164,7 +164,7 @@ export default function Modal({ children, className, size, title, customTitleBar
                                     onClick={titleBarButton.onClick}>
                             </button>
                         ))}
-                        
+
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label={t("modal.close")}></button>
 
                     </div>
