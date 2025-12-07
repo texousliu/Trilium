@@ -205,7 +205,8 @@
   "info": {
     "modalTitle": "Info message",
     "closeButton": "Close",
-    "okButton": "OK"
+    "okButton": "OK",
+    "copy_to_clipboard": "Copy to clipboard"
   },
   "jump_to_note": {
     "search_placeholder": "Search for note by its name or type > for commands...",

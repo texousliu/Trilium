@@ -310,10 +310,11 @@ function useWatchdogCrashHandling() {
                             dialog.info(<>
                                 <p>{t("editable_text.editor_crashed_details_intro")}</p>
                                 <h3>{t("editable_text.editor_crashed_details_title")}</h3>
-                                <pre>{formattedCrash}</pre>
+                                <pre><code class="language-application-json">{formattedCrash}</code></pre>
                             </>, {
                                 title: t("editable_text.editor_crashed_title"),
-                                size: "lg"
+                                size: "lg",
+                                copyToClipboardButton: true
                             });
                         }
                     }

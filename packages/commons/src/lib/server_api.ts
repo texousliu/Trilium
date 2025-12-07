@@ -277,3 +277,11 @@ export interface NoteMapPostResponse {
 export interface UpdateAttributeResponse {
     attributeId: string;
 }
+
+export interface RenderMarkdownResponse {
+    htmlContent: string;
+}
+
+export interface ToMarkdownResponse {
+    markdownContent: string;
+}

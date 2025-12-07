@@ -7,13 +7,10 @@ import Modal from "../react/Modal";
 import Button from "../react/Button";
 import { useTriliumEvent } from "../react/hooks";
 import { CKEditorApi } from "../type_widgets/text/CKEditorWithWatchdog";
+import { RenderMarkdownResponse } from "@triliumnext/commons";
 
 export interface MarkdownImportOpts {
     editorApi: CKEditorApi;
-}
-
-interface RenderMarkdownResponse {
-    htmlContent: string;
 }
 
 export default function MarkdownImportDialog() {

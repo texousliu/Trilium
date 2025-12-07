@@ -2,6 +2,8 @@ import type { Request } from "express";
 
 import becca from "../../becca/becca.js";
 import markdownService from "../../services/import/markdown.js";
+import markdown from "../../services/export/markdown.js";
+import { RenderMarkdownResponse, ToMarkdownResponse } from "@triliumnext/commons";
 
 function getIconUsage() {
     const iconClassToCountMap: Record<string, number> = {};
@@ -29,13 +31,20 @@ function getIconUsage() {
 
 function renderMarkdown(req: Request) {
     const { markdownContent } = req.body;
-
     return {
         htmlContent: markdownService.renderToHtml(markdownContent, "")
-    };
+    } satisfies RenderMarkdownResponse;
+}
+
+function toMarkdown(req: Request) {
+    const { htmlContent } = req.body;
+    return {
+        markdownContent: markdown.toMarkdown(htmlContent)
+    } satisfies ToMarkdownResponse;
 }
 
 export default {
     getIconUsage,
-    renderMarkdown
+    renderMarkdown,
+    toMarkdown
 };
