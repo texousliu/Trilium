@@ -168,13 +168,13 @@ describe( 'MathUI', () => {
 
 			command.isEnabled = true;
 
-			expect( formView!.mathLiveInputView.isReadOnly ).to.be.false;
+			expect( formView!.mathInputView.isReadOnly ).to.be.false;
 			expect( formView!.saveButtonView.isEnabled ).to.be.false;
 			expect( formView!.cancelButtonView.isEnabled ).to.be.true;
 
 			command.isEnabled = false;
 
-			expect( formView!.mathLiveInputView.isReadOnly ).to.be.true;
+			expect( formView!.mathInputView.isReadOnly ).to.be.true;
 			expect( formView!.saveButtonView.isEnabled ).to.be.false;
 			expect( formView!.cancelButtonView.isEnabled ).to.be.true;
 		} );
@@ -407,30 +407,30 @@ describe( 'MathUI', () => {
 					setModelData( editor.model, '<paragraph>f[o]o</paragraph>' );
 				} );
 
-				it( 'should bind mainFormView.mathLiveInputView#value to math command value', () => {
+				it( 'should bind mainFormView.mathInputView#value to math command value', () => {
 					const command = editor.commands.get( 'math' );
 
-					expect( formView!.mathLiveInputView.value ).to.be.null;
+					expect( formView!.mathInputView.value ).to.be.null;
 
 					command!.value = 'x^2';
-					expect( formView!.mathLiveInputView.value ).to.equal( 'x^2' );
+					expect( formView!.mathInputView.value ).to.equal( 'x^2' );
 				} );
 
 				it( 'should execute math command on mainFormView#submit event', () => {
 					const executeSpy = vi.spyOn( editor, 'execute' );
 
-					formView!.mathLiveInputView.value = 'x^2';
+					formView!.mathInputView.value = 'x^2';
 					formView!.fire( 'submit' );
 
 					expect( executeSpy.mock.lastCall?.slice( 0, 2 ) ).toMatchObject( [ 'math', 'x^2' ] );
 				} );
 
-				it( 'should sync mathLiveInputView and rawLatexInputView', () => {
-					formView!.mathLiveInputView.value = 'x^2';
-					expect( formView!.rawLatexInputView.value ).to.equal( 'x^2' );
+				it( 'should update equation value when mathInputView changes', () => {
+					formView!.mathInputView.value = 'x^2';
+					expect( formView!.equation ).to.equal( 'x^2' );
 
-					formView!.rawLatexInputView.value = '\\frac{1}{2}';
-					expect( formView!.mathLiveInputView.value ).to.equal( '\\frac{1}{2}' );
+					formView!.mathInputView.value = '\\frac{1}{2}';
+					expect( formView!.equation ).to.equal( '\\frac{1}{2}' );
 				} );
 
 				it( 'should hide the balloon on mainFormView#cancel if math command does not have a value', () => {

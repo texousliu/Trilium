@@ -15,8 +15,7 @@ import IconCheck from '@ckeditor/ckeditor5-icons/theme/icons/check.svg?raw';
 import IconCancel from '@ckeditor/ckeditor5-icons/theme/icons/cancel.svg?raw';
 import { extractDelimiters, hasDelimiters } from '../utils.js';
 import MathView, { type MathViewOptions } from './mathview.js';
-import MathLiveInputView from './mathliveinputview.js';
-import RawLatexInputView from './rawlatexinputview.js';
+import MathInputView from './mathinputview.js';
 import '../../theme/mathform.css';
 
 export default class MainFormView extends View {
@@ -24,8 +23,7 @@ export default class MainFormView extends View {
 	public cancelButtonView: ButtonView;
 	public displayButtonView: SwitchButtonView;
 
-	public mathLiveInputView: MathLiveInputView;
-	public rawLatexInputView: RawLatexInputView;
+	public mathInputView: MathInputView;
 	public mathView?: MathView;
 
 	public focusTracker = new FocusTracker();
@@ -42,24 +40,17 @@ export default class MainFormView extends View {
 		super( locale );
 		const t = locale.t;
 
-		// --- 1. View Initialization ---
-
-		this.mathLiveInputView = new MathLiveInputView( locale );
-		this.rawLatexInputView = new RawLatexInputView( locale );
-		this.rawLatexInputView.label = t( 'LaTeX' );
-
+		// Create views
+		this.mathInputView = new MathInputView( locale );
 		this.saveButtonView = this._createButton( t( 'Save' ), IconCheck, 'ck-button-save', 'submit' );
-
 		this.cancelButtonView = this._createButton( t( 'Cancel' ), IconCancel, 'ck-button-cancel' );
 		this.cancelButtonView.delegate( 'execute' ).to( this, 'cancel' );
-
 		this.displayButtonView = this._createDisplayButton( t );
 
-		// --- 2. Construct Children & Preview ---
+		// Build children
 
 		const children: View[] = [
-			this.mathLiveInputView,
-			this.rawLatexInputView,
+			this.mathInputView,
 			this.displayButtonView
 		];
 
@@ -67,19 +58,14 @@ export default class MainFormView extends View {
 			const previewLabel = new LabelView( locale );
 			previewLabel.text = t( 'Equation preview' );
 
-			// Clean instantiation using the options object
 			this.mathView = new MathView( locale, mathViewOptions );
-
-			// Bind display mode: When button flips, preview updates automatically
 			this.mathView.bind( 'display' ).to( this.displayButtonView, 'isOn' );
 
 			children.push( previewLabel, this.mathView );
 		}
 
-		// --- 3. Sync Logic ---
-		this._setupInputSync( previewEnabled );
+		this._setupSync( previewEnabled );
 
-		// --- 4. Template Setup ---
 		this.setTemplate( {
 			tag: 'form',
 			attributes: {
@@ -101,7 +87,6 @@ export default class MainFormView extends View {
 			]
 		} );
 
-		// --- 5. Accessibility ---
 		this._focusCycler = new FocusCycler( {
 			focusables: this._focusables,
 			focusTracker: this.focusTracker,
@@ -117,8 +102,7 @@ export default class MainFormView extends View {
 
 		// Register focusables
 		[
-			this.mathLiveInputView,
-			this.rawLatexInputView,
+			this.mathInputView,
 			this.displayButtonView,
 			this.saveButtonView,
 			this.cancelButtonView
@@ -133,14 +117,12 @@ export default class MainFormView extends View {
 	}
 
 	public get equation(): string {
-		return this.mathLiveInputView.value ?? '';
+		return this.mathInputView.value ?? '';
 	}
 
 	public set equation( equation: string ) {
 		const norm = equation.trim();
-		// Direct updates to the "source of truth"
-		this.mathLiveInputView.value = norm.length ? norm : null;
-		this.rawLatexInputView.value = norm;
+		this.mathInputView.value = norm.length ? norm : null;
 		if ( this.mathView ) this.mathView.value = norm;
 	}
 
@@ -148,28 +130,10 @@ export default class MainFormView extends View {
 		this._focusCycler.focusFirst();
 	}
 
-	/**
-	 * Checks if a view currently has focus.
-	 */
-	private _isViewFocused(view: View): boolean {
-		const el = view.element;
-		const active = document.activeElement;
-		return !!(el && active && el.contains(active));
-	}
-
-	/**
-	 * Sets up synchronization with Focus Gating.
-	 */
-	private _setupInputSync(previewEnabled: boolean): void {
-		const updatePreview = (eq: string) => {
-			if (previewEnabled && this.mathView && this.mathView.value !== eq) {
-				this.mathView.value = eq;
-			}
-		};
-
-		// Handler 1: MathLive -> Raw LaTeX + Preview
-		this.mathLiveInputView.on('change:value', () => {
-			let eq = (this.mathLiveInputView.value ?? '').trim();
+	/** Handle delimiter stripping and preview updates. */
+	private _setupSync(previewEnabled: boolean): void {
+		this.mathInputView.on('change:value', () => {
+			let eq = (this.mathInputView.value ?? '').trim();
 
 			// Strip delimiters if present (e.g. pasted content)
 			if (hasDelimiters(eq)) {
@@ -177,31 +141,16 @@ export default class MainFormView extends View {
 				eq = params.equation;
 				this.displayButtonView.isOn = params.display;
 
-				// Only strip delimiters if not actively editing
-				if (!this._isViewFocused(this.mathLiveInputView) && this.mathLiveInputView.value !== eq) {
-					this.mathLiveInputView.value = eq;
+				// Update the input with stripped delimiters
+				if (this.mathInputView.value !== eq) {
+					this.mathInputView.value = eq.length ? eq : null;
 				}
 			}
 
-			// Sync to Raw LaTeX only if user isn't typing there
-			if (!this._isViewFocused(this.rawLatexInputView) && this.rawLatexInputView.value !== eq) {
-				this.rawLatexInputView.value = eq;
+			// Update preview
+			if (previewEnabled && this.mathView && this.mathView.value !== eq) {
+				this.mathView.value = eq;
 			}
-
-			updatePreview(eq);
-		});
-
-		// Handler 2: Raw LaTeX -> MathLive + Preview
-		this.rawLatexInputView.on('change:value', () => {
-			const eq = (this.rawLatexInputView.value ?? '').trim();
-			const normalized = eq.length ? eq : null;
-
-			// Sync to MathLive only if user isn't interacting with it
-			if (!this._isViewFocused(this.mathLiveInputView) && this.mathLiveInputView.value !== normalized) {
-				this.mathLiveInputView.value = normalized;
-			}
-
-			updatePreview(eq);
 		});
 	}
 
@@ -220,7 +169,6 @@ export default class MainFormView extends View {
 
 		btn.on( 'execute', () => {
 			btn.isOn = !btn.isOn;
-			// mathView updates automatically via bind()
 		} );
 		return btn;
 	}
