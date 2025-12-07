@@ -232,7 +232,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     // A threshold specifying the number of errors (defaults to 3). After this limit is reached and the time between last errors is shorter than minimumNonErrorTimePeriod, the watchdog changes its state to crashedPermanently, and it stops restarting the editor. This prevents an infinite restart loop.
                     crashNumberLimit: 10,
                     // A minimum number of milliseconds between saving the editor data internally (defaults to 5000). Note that for large documents, this might impact the editor performance.
-                    saveInterval: 5000
+                    saveInterval: Number.MAX_SAFE_INTEGER
                 }}
                 templates={templates}
                 onNotificationWarning={onNotificationWarning}

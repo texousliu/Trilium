@@ -182,7 +182,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
         watchdog.create(container);
 
         return () => watchdog.destroy();
-    }, [ contentLanguage, templates, uiLanguage ]);
+    }, [ containerRef, externalWatchdogRef, onEditorInitialized, onWatchdogStateChange, contentLanguage, templates, uiLanguage, watchdogConfig, isClassicEditor ]);
 
     // React to notification warning callback.
     useEffect(() => {
