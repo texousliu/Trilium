@@ -48,12 +48,22 @@
     background-color: unset !important;
 }
 
-.toast .toast-progress {
-    position: absolute;
-    bottom: 0;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
-    background-color: var(--toast-text-color) !important;
-    height: 4px;
-    transition: width 0.1s linear;
+.toast {
+    .toast-buttons {
+        padding: 0 1em 1em 1em;
+        display: flex;
+        gap: 1em;
+        justify-content: space-between;
+    }
+
+    .toast-progress {
+        position: absolute;
+        bottom: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        background-color: var(--toast-text-color) !important;
+        height: 4px;
+        transition: width 0.1s linear;
+    }
 }
+
