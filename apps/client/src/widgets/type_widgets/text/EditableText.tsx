@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import utils, { hasTouchBar, isMobile } from "../../../services/utils";
@@ -214,6 +214,8 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         addTextToEditor(text);
     });
 
+    const onWatchdogStateChange = useWatchdogCrashHandling();
+
     return (
         <>
             {note && !!templates && <CKEditorWithWatchdog
@@ -275,20 +277,31 @@ function useTemplates() {
     return templates;
 }
 
-function onWatchdogStateChange(watchdog: EditorWatchdog) {
-    const currentState = watchdog.state;
-    logInfo(`CKEditor state changed to ${currentState}`);
+function useWatchdogCrashHandling() {
+    const hasCrashed = useRef(false);
+    const onWatchdogStateChange = useCallback((watchdog: EditorWatchdog) => {
+        const currentState = watchdog.state;
+        logInfo(`CKEditor state changed to ${currentState}`);
 
-    if (!["crashed", "crashedPermanently"].includes(currentState)) {
-        return;
-    }
+        if (currentState === "ready") {
+            hasCrashed.current = false;
+            watchdog.editor?.focus();
+        }
 
-    logError(`CKEditor crash logs: ${JSON.stringify(watchdog.crashes, null, 4)}`);
+        if (!["crashed", "crashedPermanently"].includes(currentState)) {
+            return;
+        }
 
-    if (currentState === "crashedPermanently") {
-        dialog.info(t("editable-text.keeps-crashing"));
-        watchdog.editor?.enableReadOnlyMode("crashed-editor");
-    }
+        hasCrashed.current = true;
+        logError(`CKEditor crash logs: ${JSON.stringify(watchdog.crashes, null, 4)}`);
+
+        if (currentState === "crashedPermanently") {
+            dialog.info(t("editable-text.keeps-crashing"));
+            watchdog.editor?.enableReadOnlyMode("crashed-editor");
+        }
+    }, []);
+
+    return onWatchdogStateChange;
 }
 
 function onNotificationWarning(data, evt) {
