@@ -64,6 +64,11 @@ declare global {
         EXCALIDRAW_ASSET_PATH?: string;
     }
 
+    interface WindowEventMap {
+        "note-ready": Event;
+        "note-load-progress": CustomEvent<{ progress: number }>;
+    }
+
     interface AutoCompleteConfig {
         appendTo?: HTMLElement | null;
         hint?: boolean;

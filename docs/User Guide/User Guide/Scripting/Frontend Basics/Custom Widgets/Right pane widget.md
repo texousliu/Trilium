@@ -20,10 +20,7 @@ class ToDoListWidget extends api.RightPanelWidget {
     }   
     
     async refreshWithNote(note) {
-        this.toggleInt(false);                
-        this.triggerCommand("reEvaluateRightPaneVisibility");
-        this.toggleInt(true);
-        this.triggerCommand("reEvaluateRightPaneVisibility");
+    	// Do something when the note changes.
     }
 }
 
@@ -31,3 +28,13 @@ module.exports = new ToDoListWidget();
 ```
 
 The implementation is in `src/public/app/widgets/right_panel_widget.js`.
+
+## Conditionally changing visibility
+
+In `refreshWithNote`:
+
+```
+const visible = true;	// replace with your own visibility logic
+this.toggleInt(visible);
+this.triggerCommand("reEvaluateRightPaneVisibility");
+```

@@ -3,10 +3,13 @@ import { render } from "preact";
 import { CustomNoteList, useNoteViewType } from "./widgets/collections/NoteList";
 import { useCallback, useLayoutEffect, useRef } from "preact/hooks";
 import content_renderer from "./services/content_renderer";
+import { dynamicRequire, isElectron } from "./services/utils";
+import { applyInlineMermaid } from "./services/content_renderer_text";
 
 interface RendererProps {
     note: FNote;
     onReady: () => void;
+    onProgressChanged?: (progress: number) => void;
 }
 
 async function main() {
@@ -23,13 +26,21 @@ async function main() {
 
 function App({ note, noteId }: { note: FNote | null | undefined, noteId: string }) {
     const sentReadyEvent = useRef(false);
+    const onProgressChanged = useCallback((progress: number) => {
+        if (isElectron()) {
+            const { ipcRenderer } = dynamicRequire('electron');
+            ipcRenderer.send("print-progress", progress);
+        } else {
+            window.dispatchEvent(new CustomEvent("note-load-progress", { detail: { progress } }));
+        }
+    }, []);
     const onReady = useCallback(() => {
         if (sentReadyEvent.current) return;
         window.dispatchEvent(new Event("note-ready"));
         window._noteReady = true;
         sentReadyEvent.current = true;
     }, []);
-    const props: RendererProps | undefined | null = note && { note, onReady };
+    const props: RendererProps | undefined | null = note && { note, onReady, onProgressChanged };
 
     if (!note || !props) return <Error404 noteId={noteId} />
 
@@ -71,6 +82,11 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
                 })
             );
 
+            // Initialize mermaid.
+            if (note.type === "text") {
+                await applyInlineMermaid(container);
+            }
+
             // Check custom CSS.
             await loadCustomCss(note);
         }
@@ -84,7 +100,7 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
     </>;
 }
 
-function CollectionRenderer({ note, onReady }: RendererProps) {
+function CollectionRenderer({ note, onReady, onProgressChanged }: RendererProps) {
     const viewType = useNoteViewType(note);
     return <CustomNoteList
         viewType={viewType}
@@ -98,6 +114,7 @@ function CollectionRenderer({ note, onReady }: RendererProps) {
             await loadCustomCss(note);
             onReady();
         }}
+        onProgressChanged={onProgressChanged}
     />;
 }
 

@@ -34,6 +34,7 @@ import { AddLinkOpts } from "../widgets/dialogs/add_link.jsx";
 import { IncludeNoteOpts } from "../widgets/dialogs/include_note.jsx";
 import { ReactWrappedWidget } from "../widgets/basic_widget.js";
 import type { MarkdownImportOpts } from "../widgets/dialogs/markdown_import.jsx";
+import type { InfoProps } from "../widgets/dialogs/info.jsx";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootContainer;
@@ -124,7 +125,7 @@ export type CommandMappings = {
         isNewNote?: boolean;
     };
     showPromptDialog: PromptDialogOptions;
-    showInfoDialog: ConfirmWithMessageOptions;
+    showInfoDialog: InfoProps;
     showConfirmDialog: ConfirmWithMessageOptions;
     showRecentChanges: CommandData & { ancestorNoteId: string };
     showImportDialog: CommandData & { noteId: string };
@@ -445,6 +446,7 @@ type EventMappings = {
         error: string;
     };
     searchRefreshed: { ntxId?: string | null };
+    textEditorRefreshed: { ntxId?: string | null, editor: CKTextEditor };
     hoistedNoteChanged: {
         noteId: string;
         ntxId: string | null;
@@ -486,7 +488,7 @@ type EventMappings = {
     relationMapResetPanZoom: { ntxId: string | null | undefined };
     relationMapResetZoomIn: { ntxId: string | null | undefined };
     relationMapResetZoomOut: { ntxId: string | null | undefined };
-    activeNoteChanged: {};
+    activeNoteChanged: {ntxId: string | null | undefined};
     showAddLinkDialog: AddLinkOpts;
     showIncludeDialog: IncludeNoteOpts;
     openBulkActionsDialog: {

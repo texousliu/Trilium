@@ -1,10 +1,10 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
-import { FormDropdownDivider, FormListItem } from "../react/FormList";
+import { FormDropdownDivider, FormListHeader, FormListItem } from "../react/FormList";
 import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/utils";
 import { ParentComponent } from "../react/react_utils";
 import { t } from "../../services/i18n"
 import { useContext } from "preact/hooks";
-import { useIsNoteReadOnly } from "../react/hooks";
+import { useIsNoteReadOnly, useNoteLabel, useNoteProperty } from "../react/hooks";
 import { useTriliumOption } from "../react/hooks";
 import ActionButton from "../react/ActionButton"
 import appContext, { CommandNames } from "../../components/app_context";
@@ -46,14 +46,16 @@ function RevisionsButton({ note }: { note: FNote }) {
 
 function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
   const parentComponent = useContext(ParentComponent);
+  const noteType = useNoteProperty(note, "type") ?? "";
+  const [ viewType ] = useNoteLabel(note, "viewType");
   const canBeConvertedToAttachment = note?.isEligibleForConversionToAttachment();
-  const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(note.type);
+  const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(noteType);
   const isInOptionsOrHelp = note?.noteId.startsWith("_options") || note?.noteId.startsWith("_help");
-  const isPrintable = ["text", "code"].includes(note.type) || (note.type === "book" && note.getLabelValue("viewType") === "presentation");
+  const isPrintable = ["text", "code"].includes(noteType) || (noteType === "book" && ["presentation", "list", "table"].includes(viewType ?? ""));
   const isElectron = getIsElectron();
   const isMac = getIsMac();
-  const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(note.type);
-  const isSearchOrBook = ["search", "book"].includes(note.type);
+  const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(noteType);
+  const isSearchOrBook = ["search", "book"].includes(noteType);
   const [ syncServerHost ] = useTriliumOption("syncServerHost");
   const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
 
@@ -105,8 +107,31 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       <FormDropdownDivider />
 
       <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
+      {glob.isDev && <DevelopmentActions note={note} noteContext={noteContext} />}
     </Dropdown>
   );
+}
+
+function DevelopmentActions({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
+    return (
+        <>
+            <FormListHeader text="Development-only Actions" />
+            <FormListItem
+                icon="bx bx-printer"
+                onClick={() => window.open(`/?print=#root/${note.noteId}`, "_blank")}
+            >Open print page</FormListItem>
+            {note.type === "text" && (
+                <FormListItem
+                    icon="bx bx-error"
+                    onClick={() => {
+                        noteContext?.getTextEditor(editor => {
+                            editor.editing.view.change(() => {
+                                throw new Error("Editor crashed.");
+                            });
+                        });
+                }}>Crash editor</FormListItem>)}
+        </>
+    )
 }
 
 function CommandItem({ icon, text, title, command, disabled }: { icon: string, text: string, title?: string, command: CommandNames | (() => void), disabled?: boolean, destructive?: boolean }) {

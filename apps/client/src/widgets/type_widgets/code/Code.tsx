@@ -77,7 +77,7 @@ export function EditableCode({ note, ntxId, noteContext, debounceUpdate, parentC
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         noteContext,
-        getData: () => ({ content: editorRef.current?.getText() }),
+        getData: () => ({ content: editorRef.current?.getText() ?? "" }),
         onContentChange: (content) => {
             const codeEditor = editorRef.current;
             if (!codeEditor) return;
@@ -100,7 +100,7 @@ export function EditableCode({ note, ntxId, noteContext, debounceUpdate, parentC
         }
     });
 
-    useKeyboardShortcuts("code-detail", containerRef, parentComponent);
+    useKeyboardShortcuts("code-detail", containerRef, parentComponent, ntxId);
 
     return (
         <>

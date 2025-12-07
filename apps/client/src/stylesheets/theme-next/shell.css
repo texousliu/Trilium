@@ -212,7 +212,8 @@ body[dir=ltr] #launcher-container {
 }
 
 #launcher-pane .launcher-button,
-#launcher-pane .dropdown {
+#launcher-pane .right-dropdown-widget,
+#launcher-pane .global-menu {
     width: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     height: calc(var(--launcher-pane-size) - (var(--launcher-pane-button-margin) * 2)) !important;
     margin: var(--launcher-pane-button-gap) var(--launcher-pane-button-margin);
@@ -345,7 +346,7 @@ body[dir=ltr] #launcher-container {
  */
 
  .calendar-dropdown-widget {
-    padding: 12px;
+    padding: 18px;
     color: var(--calendar-color);
     user-select: none;
 }
@@ -1428,9 +1429,7 @@ div.promoted-attribute-cell .tn-checkbox {
     height: 1cap;
 }
 
-/* Relocate the checkbox before the label */
 div.promoted-attribute-cell.promoted-attribute-label-boolean > div:first-of-type {
-    order: -1;
     margin-inline-end: 1.5em;
 }
 
@@ -1450,12 +1449,20 @@ div.promoted-attribute-cell .multiplicity:has(span) span {
     justify-content: center;
 }
 
+div.promoted-attribute-cell.promoted-attribute-label-color {
+    justify-content: space-between;
+}
+
+div.promoted-attribute-cell.promoted-attribute-label-color .input-group {
+    width: auto;
+}
+
 /*
  * Floating buttons
  */
 
  /* Floating buttons container */
-div#center-pane .floating-buttons-children {
+.floating-buttons-children {
     opacity: 1;
     min-height: var(--floating-button-height);
     transform-origin: right;
@@ -1467,12 +1474,12 @@ div#center-pane .floating-buttons-children {
                 opacity 250ms ease-out;
 }
 
-body[dir=rtl] div#center-pane .floating-buttons-children {
+body[dir=rtl] .floating-buttons-children {
     transform-origin: left;
 }
 
  /* Floating buttons container (collapsed) */
- div#center-pane .floating-buttons-children.temporarily-hidden {
+ .floating-buttons-children.temporarily-hidden {
     display: flex !important;
     opacity: 0;
     transform: scaleX(0);

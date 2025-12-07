@@ -41,6 +41,9 @@
     --cmd-button-keyboard-shortcut-color: white;
     --cmd-button-disabled-opacity: 0.5;
 
+    --button-group-active-button-background: #ffffff4e;
+    --button-group-active-button-text-color: white;
+
     --icon-button-color: currentColor;
     --icon-button-hover-background: var(--hover-item-background-color);
     --icon-button-hover-color: var(--hover-item-text-color);
@@ -98,6 +101,7 @@
     --menu-item-delimiter-color: #ffffff1c;
     --menu-item-group-header-color: #ffffff91;
     --menu-section-background-color: #fefefe08;
+    --menu-submenu-mobile-background-color: rgba(0, 0, 0, 0.15);
 
     --modal-backdrop-color: #000;
     --modal-shadow-color: rgba(0, 0, 0, .5);
@@ -266,6 +270,14 @@
     --ck-editor-toolbar-button-on-color: white;
     --ck-editor-toolbar-button-on-shadow: 1px 1px 2px rgba(0, 0, 0, .75);
     --ck-editor-toolbar-dropdown-button-open-background: #ffffff14;
+
+    --calendar-coll-event-background-saturation: 25%;
+    --calendar-coll-event-background-lightness: 20%;
+    --calendar-coll-event-background-color: #3c3c3c;
+    --calendar-coll-event-text-color: white;
+    --calendar-coll-event-hover-filter: brightness(1.25);
+    --callendar-coll-event-archived-sripe-color: #00000026;
+    --calendar-coll-today-background-color: #ffffff08;
 }
 
 /*
@@ -300,8 +312,12 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
     border-color: var(--muted-text-color) !important;
 }
 
-.tinted-quick-edit-dialog {
+.quick-edit-dialog-wrapper.with-hue {
     --modal-background-color: hsl(var(--custom-color-hue), 8.8%, 11.2%);
     --modal-border-color: hsl(var(--custom-color-hue), 9.4%, 25.1%);
     --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 13.2%, 20.8%);
+}
+
+.use-note-color {
+    --custom-color: var(--dark-theme-custom-color);
 }

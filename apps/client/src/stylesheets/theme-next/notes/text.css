@@ -526,9 +526,12 @@ button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel).ck
 .ck-mermaid__editing-view {
     border: 0;
     border-radius: 6px;
-    box-shadow: var(--code-block-box-shadow);
-    padding: 0;
+    box-shadow: var(--code-block-box-shadow);    
     margin-top: 2px !important;
+}
+
+:root .ck-content pre:has(> code) {
+    padding: 0;
 }
 
 :root .ck-content pre {
@@ -643,7 +646,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
     }
 }
 
-.note-detail-printable:not(.word-wrap) pre code {
+.ck-content:not(.word-wrap) pre code {
     white-space: pre;
 }
 

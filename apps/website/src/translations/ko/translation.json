@@ -28,7 +28,8 @@
         "attributes_title": "노트 라벨과 관계",
         "attributes_description": "쉬운 분류를 위해 노트 사이의 관계를 이용하거나 라벨을 추가할 수 있습니다. 테이블이나 보드에서 사용될 수 있는 구조화된 정보를 입력하려면 승격된 속성을 사용하세요.",
         "hoisting_title": "작업 공간과 끌어올리기",
-        "hoisting_description": "작업 공간에 개인 노트와 업무 노트를 그룹화하여 쉽게 분리할 수 있으며 메모 트리가 특정 메모 세트만 표시하도록 할 수 있습니다."
+        "hoisting_description": "작업 공간에 개인 노트와 업무 노트를 그룹화하여 쉽게 분리할 수 있으며 메모 트리가 특정 메모 세트만 표시하도록 할 수 있습니다.",
+        "note_structure_title": "노트 구조"
     },
     "productivity_benefits": {
         "title": "생산성과 안전성",
@@ -37,7 +38,13 @@
         "sync_title": "동기화",
         "sync_content": "자체 호스팅 또는 클라우드 인스턴스를 이용하여 여러 기기 사이에서 노트를 쉽게 동기화하고 PWA를 통해 모바일 폰에서 접근할 수 있습니다.",
         "protected_notes_title": "보호된 노트",
-        "protected_notes_content": "노트를 암호화하고 비밀번호로 보호되는 세션 뒤에 잠궈 민감한 개인 정보를 보호하세요."
+        "protected_notes_content": "노트를 암호화하고 비밀번호로 보호되는 세션 뒤에 잠궈 민감한 개인 정보를 보호하세요.",
+        "jump_to_title": "빠른 검색 및 명령어",
+        "jump_to_content": "제목을 검색하고 오타나 약간의 차이를 설명하기 위해 퍼지 매칭을 통해 계층 전반에 걸쳐 노트나 UI 명령으로 빠르게 이동하세요.",
+        "search_title": "상세 검색",
+        "search_content": "또는 노트 내부에서 문자를 검색하거나 부모 노트 또는 단계별로 필터링 하는 등 검색 범위를 조정하세요.",
+        "web_clipper_title": "웹 클리퍼",
+        "web_clipper_content": "웹 클리퍼 확장 프로그램을 사용하여 웹 페이지(또는 스크린샷)를 Trilium으로 가져와 문서에 사용하세요."
     },
     "header": {
         "get-started": "시작하기",
@@ -78,5 +85,24 @@
         "title_arm64": "ARM 기반 리눅스",
         "description_x64": "대부분의 리눅스 배포판에서 x86_64 아키텍처와 호환됩니다.",
         "description_arm64": "ARM 기반 리눅스 배포판에서 aarch64 아키텍처와 호환됩니다."
+    },
+    "note_types": {
+        "text_title": "텍스트 노트",
+        "text_description": "노트는 WYSIWYG 편집기를 사용하며 표, 이미지, 수학 표현식, 구문 강조 기능의 코드 블록을 지원합니다. 특수문자를 사용한 마크다운 유사 구문이나 슬래시(/) 명령으로 텍스트 서식을 빠르게 지정할 수 있습니다.",
+        "code_title": "코드 노트",
+        "title": "당신의 정보를 보여주는 다양한 방법",
+        "code_description": "대규모 소스 코드나 스크립트 샘플은 전용 편집기를 사용하여 다양한 프로그래밍 언어에 대한 구문 강조 기능과 다양한 색상 테마를 제공합니다.",
+        "file_title": "파일 노트",
+        "file_description": "PDF, 이미지, 인앱 어플리케이션 미리보기를 포함한 비디오와 같은 멀티미디어 파일을 저장하세요.",
+        "canvas_title": "캔버스",
+        "canvas_description": "excalidraw.com과 동일한 기술을 사용하여 무한한 캔버스에 도형, 이미지, 텍스트를 배치하세요. 다이어그램, 스케치, 시각적 계획에 이상적입니다.",
+        "mermaid_title": "Mermaid 다이어그램",
+        "mermaid_description": "Mermaid 구문을 사용하여 순서도(Flowchart), 클래스 및 시퀀스 다이어그램, 간트(Gantt) 차트 등의 다이어그램을 만들어 보세요.",
+        "mindmap_title": "마인드맵",
+        "mindmap_description": "생각을 시각적으로 정리하거나 브레인스토밍 세션을 진행하세요.",
+        "others_list": "기타: <0>노트 맵</0>, <1>관계 맵</1>, <2>저장된 검색</2>, <3>렌더링 노트</3>, <4>웹 뷰</4>."
+    },
+    "extensibility_benefits": {
+        "title": "공유 및 확장성"
     }
 }

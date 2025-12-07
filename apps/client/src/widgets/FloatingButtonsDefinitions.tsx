@@ -18,6 +18,8 @@ import froca from "../services/froca";
 import NoteLink from "./react/NoteLink";
 import RawHtml from "./react/RawHtml";
 import { ViewTypeOptions } from "./collections/interface";
+import attributes from "../services/attributes";
+import LoadResults from "../services/load_results";
 
 export interface FloatingButtonContext {
     parentComponent: Component;
@@ -64,7 +66,15 @@ export const MOBILE_FLOATING_BUTTONS: FloatingButtonsList = [
     RelationMapButtons,
     ExportImageButtons,
     Backlinks
-]
+];
+
+/**
+ * Floating buttons that should be hidden in popup editor (Quick edit).
+ */
+export const POPUP_HIDDEN_FLOATING_BUTTONS: FloatingButtonsList = [
+    InAppHelpButton,
+    ToggleReadOnlyButton
+];
 
 function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefaultViewMode }: FloatingButtonContext) {
     const isEnabled = (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
@@ -102,7 +112,7 @@ function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingBut
 function EditButton({ note, noteContext }: FloatingButtonContext) {
     const [animationClass, setAnimationClass] = useState("");
     const {isReadOnly, enableEditing} = useIsNoteReadOnly(note, noteContext);
-    
+
     const isReadOnlyInfoBarDismissed = false; // TODO
 
     useEffect(() => {
@@ -302,13 +312,18 @@ function Backlinks({ note, isDefaultViewMode }: FloatingButtonContext) {
     let [ popupOpen, setPopupOpen ] = useState(false);
     const backlinksContainerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    function refresh() {
         if (!isDefaultViewMode) return;
 
         server.get<BacklinkCountResponse>(`note-map/${note.noteId}/backlink-count`).then(resp => {
             setBacklinkCount(resp.count);
         });
-    }, [ note ]);
+    }
+
+    useEffect(() => refresh(), [ note ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (needsRefresh(note, loadResults)) refresh();
+    });
 
     // Determine the max height of the container.
     const { windowHeight } = useWindowSize();
@@ -333,18 +348,18 @@ function Backlinks({ note, isDefaultViewMode }: FloatingButtonContext) {
 
             {popupOpen && (
                 <div ref={backlinksContainerRef} className="backlinks-items dropdown-menu" style={{ display: "block" }}>
-                    <BacklinksList noteId={note.noteId} />
+                    <BacklinksList note={note} />
                 </div>
             )}
         </div>
     );
 }
 
-function BacklinksList({ noteId }: { noteId: string }) {
+function BacklinksList({ note }: { note: FNote }) {
     const [ backlinks, setBacklinks ] = useState<BacklinksResponse>([]);
 
-    useEffect(() => {
-        server.get<BacklinksResponse>(`note-map/${noteId}/backlinks`).then(async (backlinks) => {
+    function refresh() {
+        server.get<BacklinksResponse>(`note-map/${note.noteId}/backlinks`).then(async (backlinks) => {
             // prefetch all
             const noteIds = backlinks
                     .filter(bl => "noteId" in bl)
@@ -352,7 +367,12 @@ function BacklinksList({ noteId }: { noteId: string }) {
             await froca.getNotes(noteIds);
             setBacklinks(backlinks);
         });
-    }, [ noteId ]);
+    }
+
+    useEffect(() => refresh(), [ note ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (needsRefresh(note, loadResults)) refresh();
+    });
 
     return backlinks.map(backlink => (
         <div>
@@ -371,4 +391,10 @@ function BacklinksList({ noteId }: { noteId: string }) {
             )}
         </div>
     ));
+}
+
+function needsRefresh(note: FNote, loadResults: LoadResults) {
+    return loadResults.getAttributeRows().some(attr =>
+        attr.type === "relation" &&
+        attributes.isAffecting(attr, note));
 }

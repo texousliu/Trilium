@@ -279,7 +279,6 @@
     "collapse": "Minimizează",
     "collapse_all_notes": "Minimizează toate notițele",
     "expand": "Expandează",
-    "expand_all_children": "Expandează toate subnotițele",
     "grid": "Grilă",
     "invalid_view_type": "Mod de afișare incorect „{{type}}”",
     "list": "Listă",
@@ -290,7 +289,11 @@
     "geo-map": "Hartă geografică",
     "board": "Tablă Kanban",
     "include_archived_notes": "Afișează notițele arhivate",
-    "presentation": "Prezentare"
+    "presentation": "Prezentare",
+    "expand_tooltip": "Expandează subnotițele directe ale acestei colecții (un singur nivel de adâncime). Pentru mai multe opțiuni, apăsați săgeata din dreapta.",
+    "expand_first_level": "Expandează subnotițele directe",
+    "expand_nth_level": "Expandează pe {{depth}} nivele",
+    "expand_all_levels": "Expandează pe toate nivelele"
   },
   "bookmark_switch": {
     "bookmark": "Semn de carte",
@@ -384,7 +387,10 @@
     "trilium_api_docs_button_title": "Deschide documentația API pentru Trilium"
   },
   "code_mime_types": {
-    "title": "Tipuri MIME disponibile în meniul derulant"
+    "title": "Tipuri MIME disponibile în meniul derulant",
+    "tooltip_syntax_highlighting": "Evidențiere de sintaxă",
+    "tooltip_code_block_syntax": "Blocuri de cod în notițe text",
+    "tooltip_code_note_syntax": "Notițe de tip cod"
   },
   "confirm": {
     "also_delete_note": "Șterge și notița",
@@ -485,7 +491,9 @@
     "placeholder": "Scrieți conținutul notiței de cod aici..."
   },
   "editable_text": {
-    "placeholder": "Scrieți conținutul notiței aici..."
+    "placeholder": "Scrieți conținutul notiței aici...",
+    "auto-detect-language": "Automat",
+    "keeps-crashing": "Componenta de editare se blochează în continuu. Încercați să reporniți Trilium. Dacă problema persistă, luați în considerare să raportați această problemă."
   },
   "edited_notes": {
     "deleted": "(șters)",
@@ -674,7 +682,8 @@
     "tabShortcuts": "Scurtături pentru tab-uri",
     "troubleshooting": "Unelte pentru depanare",
     "newTabWithActivationNoteLink": "pe o legătură către o notiță deschide și activează notița într-un tab nou",
-    "title": "Ghid rapid"
+    "title": "Ghid rapid",
+    "editShortcuts": "Editează scurtăturile de la tastatură"
   },
   "hide_floating_buttons_button": {
     "button_title": "Ascunde butoanele"
@@ -1356,8 +1365,9 @@
     "title": "Factorul de zoom (doar pentru versiunea desktop)"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} legături de retur",
-    "backlinks": "{{count}} legături de retur",
+    "backlink_one": "{{count}} legătură de retur",
+    "backlink_few": "{{count}} legături de retur",
+    "backlink_other": "{{count}} de legături de retur",
     "relation": "relație"
   },
   "svg_export_button": {
@@ -1504,7 +1514,8 @@
     "hoist-this-note-workspace": "Focalizează spațiul de lucru",
     "refresh-saved-search-results": "Reîmprospătează căutarea salvată",
     "unhoist": "Defocalizează notița",
-    "toggle-sidebar": "Comută bara laterală"
+    "toggle-sidebar": "Comută bara laterală",
+    "dropping-not-allowed": "Aici nu este permisă plasarea notițelor."
   },
   "title_bar_buttons": {
     "window-on-top": "Menține fereastra mereu vizibilă"
@@ -1617,9 +1628,6 @@
     "move-to-visible-launchers": "Mută în Lansatoare vizibile",
     "reset": "Resetează"
   },
-  "editable-text": {
-    "auto-detect-language": "Automat"
-  },
   "highlighting": {
     "color-scheme": "Temă de culori",
     "description": "Controlează evidențierea de sintaxă pentru blocurile de cod în interiorul notițelor text, notițele de tip cod nu vor fi afectate de aceste setări.",
@@ -1659,7 +1667,8 @@
     "cut": "Decupează",
     "paste": "Lipește",
     "paste-as-plain-text": "Lipește doar textul",
-    "search_online": "Caută „{{term}}” cu {{searchEngine}}"
+    "search_online": "Caută „{{term}}” cu {{searchEngine}}",
+    "search_in_trilium": "Caută „{{term}}” în Trilium"
   },
   "image_context_menu": {
     "copy_image_to_clipboard": "Copiază imaginea în clipboard",
@@ -1669,7 +1678,8 @@
     "open_note_in_new_split": "Deschide notița într-un panou nou",
     "open_note_in_new_tab": "Deschide notița într-un tab nou",
     "open_note_in_new_window": "Deschide notița într-o fereastră nouă",
-    "open_note_in_popup": "Editare rapidă"
+    "open_note_in_popup": "Editare rapidă",
+    "open_note_in_other_split": "Deschide notița în celălalt panou"
   },
   "note_autocomplete": {
     "clear-text-field": "Șterge conținutul casetei",
@@ -1880,13 +1890,7 @@
     "indexing_stopped": "Indexarea s-a oprit",
     "indexing_in_progress": "Indexare în curs...",
     "last_indexed": "Ultima indexare",
-    "n_notes_queued_0": "O notiță adăugată în coada de indexare",
-    "n_notes_queued_1": "{{ count }} notițe adăugate în coada de indexare",
-    "n_notes_queued_2": "{{ count }} de notițe adăugate în coada de indexare",
     "note_chat": "Discuție pe baza notițelor",
-    "notes_indexed_0": "O notiță indexată",
-    "notes_indexed_1": "{{ count }} notițe indexate",
-    "notes_indexed_2": "{{ count }} de notițe indexate",
     "sources": "Surse",
     "start_indexing": "Indexează",
     "use_advanced_context": "Folosește context îmbogățit",
@@ -2090,10 +2094,17 @@
   "read-only-info": {
     "read-only-note": "Vizualizați o notiță în modul doar în citire.",
     "auto-read-only-note": "Această notiță este afișată în modul doar în citire din motive de performanță.",
-    "auto-read-only-learn-more": "Mai multe detalii",
     "edit-note": "Editează notița"
   },
   "calendar_view": {
     "delete_note": "Șterge notița..."
+  },
+  "note-color": {
+    "clear-color": "Înlăturați culoarea notiței",
+    "set-color": "Setați culoarea notiței",
+    "set-custom-color": "Setați culoare personalizată pentru notiță"
+  },
+  "popup-editor": {
+    "maximize": "Comută la editorul principal"
   }
 }

@@ -24,12 +24,17 @@ type Labels = {
     orderBy: string;
     orderDirection: string;
 
+    // Launch bar
+    bookmarkFolder: boolean;
+    command: string;
+    keyboardShortcut: string;
+
     // Collection-specific
     viewType: string;
     status: string;
     pageSize: number;
     geolocation: string;
-    expanded: boolean;
+    expanded: string;
     "calendar:hideWeekends": boolean;
     "calendar:weekNumbers": boolean;
     "calendar:view": string;
@@ -55,7 +60,11 @@ type Labels = {
  */
 type Relations = [
     "searchScript",
-    "ancestor"
+    "ancestor",
+
+    // Launcher-specific
+    "target",
+    "widget"
 ];
 
 export type LabelNames = keyof Labels;

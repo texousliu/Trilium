@@ -24,9 +24,18 @@
     flex-direction: column;
 }
 
+.attachment-title {
+    font-size: 1.1rem;
+    margin: 0;
+    
+    a {
+        color: inherit !important;
+    }
+}
+
 .attachment-title-line {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 1em;
 }
 
@@ -50,6 +59,7 @@
 
 .attachment-detail-wrapper.list-view .attachment-content-wrapper {
     max-height: 300px;
+    overflow: auto;
 }
 
 .attachment-detail-wrapper.full-detail {
@@ -60,8 +70,16 @@
     height: 100%;
 }
 
+.attachment-detail-wrapper.list-view {
+    border-radius: 12px;
+    background-color: var(--card-background-color);    
+    padding: 0 6px;
+    box-shadow: var(--card-box-shadow);
+}
+
 .attachment-detail-wrapper.list-view .attachment-content-wrapper pre {
     max-height: 400px;
+    padding: 0;
 }
 
 .attachment-content-wrapper img {

@@ -6,15 +6,17 @@ import "./FormList.css";
 import { CommandNames } from "../../components/app_context";
 import { useStaticTooltip } from "./hooks";
 import { handleRightToLeftPlacement, isMobile } from "../../services/utils";
+import clsx from "clsx";
 
 interface FormListOpts {
     children: ComponentChildren;
     onSelect?: (value: string) => void;
     style?: CSSProperties;
+    wrapperClassName?: string;
     fullHeight?: boolean;
 }
 
-export default function FormList({ children, onSelect, style, fullHeight }: FormListOpts) {
+export default function FormList({ children, onSelect, style, fullHeight, wrapperClassName }: FormListOpts) {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -43,7 +45,7 @@ export default function FormList({ children, onSelect, style, fullHeight }: Form
     }, [ fullHeight ]);
 
     return (
-        <div className="dropdownWrapper" ref={wrapperRef} style={builtinStyles}>
+        <div className={clsx("dropdownWrapper", wrapperClassName)} ref={wrapperRef} style={builtinStyles}>
             <div className="dropdown" style={builtinStyles}>
                 <button
                     ref={triggerRef}

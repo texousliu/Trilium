@@ -4,14 +4,15 @@ import FormSelect, { FormSelectWithGroups } from "../react/FormSelect";
 import { TabContext } from "./ribbon-interface";
 import { mapToKeyValueArray } from "../../services/utils";
 import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxProperty, NumberProperty } from "./collection-properties-config";
-import Button from "../react/Button";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxProperty, NumberProperty, SplitButtonProperty } from "./collection-properties-config";
+import Button, { SplitButton } from "../react/Button";
 import { ParentComponent } from "../react/react_utils";
 import FNote from "../../entities/fnote";
 import FormCheckbox from "../react/FormCheckbox";
 import FormTextBox from "../react/FormTextBox";
 import { ComponentChildren } from "preact";
 import { ViewTypeOptions } from "../collections/interface";
+import { FormDropdownDivider, FormListItem } from "../react/FormList";
 
 const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
   grid: t("book_properties.grid"),
@@ -80,6 +81,8 @@ function mapPropertyView({ note, property }: { note: FNote, property: BookProper
   switch (property.type) {
     case "button":
       return <ButtonPropertyView note={note} property={property} />
+    case "split-button":
+      return <SplitButtonPropertyView note={note} property={property} />
     case "checkbox":
       return <CheckboxPropertyView note={note} property={property} />
     case "number":
@@ -97,13 +100,31 @@ function ButtonPropertyView({ note, property }: { note: FNote, property: ButtonP
     title={property.title}
     icon={property.icon}
     onClick={() => {
-      if (!parentComponent) return;
-      property.onClick({
-        note,
-        triggerCommand: parentComponent.triggerCommand.bind(parentComponent)
-    });
+        if (!parentComponent) return;
+        property.onClick({
+            note,
+            triggerCommand: parentComponent.triggerCommand.bind(parentComponent)
+        });
     }}
   />
+}
+
+function SplitButtonPropertyView({ note, property }: { note: FNote, property: SplitButtonProperty }) {
+    const parentComponent = useContext(ParentComponent);
+    const clickContext = parentComponent && {
+        note,
+        triggerCommand: parentComponent.triggerCommand.bind(parentComponent)
+    };
+
+    const ItemsComponent = property.items;
+    return <SplitButton
+        text={property.label}
+        icon={property.icon}
+        title={property.title}
+        onClick={() => clickContext && property.onClick(clickContext)}
+    >
+        {parentComponent && <ItemsComponent note={note} parentComponent={parentComponent} />}
+    </SplitButton>
 }
 
 function CheckboxPropertyView({ note, property }: { note: FNote, property: CheckBoxProperty }) {

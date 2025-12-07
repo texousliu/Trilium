@@ -148,11 +148,8 @@ describe("content_renderer", () => {
                     `
                 });
                 const result = getContent(note);
-                expect(result.content).toStrictEqual(trimIndentation`\
-                    <p>
-                        <a class="reference-link">[missing note]</a>
-                    </p>
-                `);
+                const content = (result.content as string).replaceAll(/\s/g, "");
+                expect(content).toStrictEqual("<p>Foo</p>");
             });
 
             it("properly escapes note title", () => {

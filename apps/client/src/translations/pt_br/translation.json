@@ -75,12 +75,6 @@
     "note_cloned": "A nota \"{{clonedTitle}}\" foi clonada para \"{{targetTitle}}\""
   },
   "ai_llm": {
-    "n_notes_queued_0": "{{ count }} nota enfileirada para indexação",
-    "n_notes_queued_1": "{{ count }} notas enfileiradas para indexação",
-    "n_notes_queued_2": "{{ count }} notas enfileiradas para indexação",
-    "notes_indexed_0": "{{ count }} nota indexada",
-    "notes_indexed_1": "{{ count }} notas indexadas",
-    "notes_indexed_2": "{{ count }} notas indexadas",
     "temperature": "Temperatura",
     "retry_queued": "Nota enfileirada para nova tentativa",
     "queued_notes": "Notas Enfileiradas",
@@ -976,9 +970,10 @@
     "reset_pan_zoom_title": "Redefinir pan & zoom para coordenadas e ampliação iniciais"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Links Reversos",
-    "backlinks": "{{count}} Links Reversos",
-    "relation": "relação"
+    "relation": "relação",
+    "backlink_one": "",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Links Reversos"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Inserir nota filha",
@@ -1004,7 +999,6 @@
     "grid": "Grade",
     "list": "Lista",
     "collapse_all_notes": "Recolher todas as notas",
-    "expand_all_children": "Expandir todos os filhos",
     "collapse": "Recolher",
     "expand": "Expandir",
     "book_properties": "Propriedades da Coleção",
@@ -1197,7 +1191,8 @@
     "placeholder": "Digite o conteúdo da sua nota de código aqui…"
   },
   "editable_text": {
-    "placeholder": "Digite o conteúdo da sua nota aqui…"
+    "placeholder": "Digite o conteúdo da sua nota aqui…",
+    "auto-detect-language": "Detectado automaticamente"
   },
   "empty": {
     "search_placeholder": "buscar uma nota pelo nome",
@@ -1694,9 +1689,6 @@
     "move-to-visible-launchers": "Mover para lançadores visíveis",
     "move-to-available-launchers": "Mover para lançadores disponíveis",
     "duplicate-launcher": "Duplicar o lançador <kbd data-command=\"duplicateSubtree\">"
-  },
-  "editable-text": {
-    "auto-detect-language": "Detectado automaticamente"
   },
   "highlighting": {
     "title": "Blocos de Código",

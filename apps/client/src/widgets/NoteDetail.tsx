@@ -28,8 +28,9 @@ export default function NoteDetail() {
     const { note, type, mime, noteContext, parentComponent } = useNoteInfo();
     const { ntxId, viewScope } = noteContext ?? {};
     const isFullHeight = checkFullHeight(noteContext, type);
-    const noteTypesToRender = useRef<{ [ key in ExtendedNoteType ]?: (props: TypeWidgetProps) => VNode }>({});
+    const [ noteTypesToRender, setNoteTypesToRender ] = useState<{ [ key in ExtendedNoteType ]?: (props: TypeWidgetProps) => VNode }>({});
     const [ activeNoteType, setActiveNoteType ] = useState<ExtendedNoteType>();
+    const widgetRequestId = useRef(0);
 
     const props: TypeWidgetProps = {
         note: note!,
@@ -38,19 +39,28 @@ export default function NoteDetail() {
         parentComponent,
         noteContext
     };
+
     useEffect(() => {
         if (!type) return;
+        const requestId = ++widgetRequestId.current;
 
-        if (!noteTypesToRender.current[type]) {
+        if (!noteTypesToRender[type]) {
             getCorrespondingWidget(type).then((el) => {
                 if (!el) return;
-                noteTypesToRender.current[type] = el;
+
+                // Ignore stale requests
+                if (requestId !== widgetRequestId.current) return;
+
+                setNoteTypesToRender(prev => ({
+                    ...prev,
+                    [type]: el
+                }));
                 setActiveNoteType(type);
             });
         } else {
             setActiveNoteType(type);
         }
-    }, [ note, viewScope, type ]);
+    }, [ note, viewScope, type, noteTypesToRender ]);
 
     // Detect note type changes.
     useTriliumEvent("entitiesReloaded", async ({ loadResults }) => {
@@ -95,9 +105,11 @@ export default function NoteDetail() {
     });
 
     // Automatically focus the editor.
-    useTriliumEvent("activeNoteChanged", () => {
-        // Restore focus to the editor when switching tabs, but only if the note tree is not already focused.
-        if (!document.activeElement?.classList.contains("fancytree-title")) {
+    useTriliumEvent("activeNoteChanged", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId != ntxId) return;
+        // Restore focus to the editor when switching tabs,
+        // but only if the note tree and the note panel (e.g., note title or note detail) are not focused.
+        if (!document.activeElement?.classList.contains("fancytree-title") && !parentComponent.$widget[0].closest(".note-split")?.contains(document.activeElement)) {
             parentComponent.triggerCommand("focusOnDetail", { ntxId });
         }
     });
@@ -113,11 +125,14 @@ export default function NoteDetail() {
     useEffect(() => {
         if (!isElectron()) return;
         const { ipcRenderer } = dynamicRequire("electron");
-        const listener = () => {
-            toast.closePersistent("printing");
+        const onPrintProgress = (_e: any, { progress, action }: { progress: number, action: "printing" | "exporting_pdf" }) => showToast(action, progress);
+        const onPrintDone = () => toast.closePersistent("printing");
+        ipcRenderer.on("print-progress", onPrintProgress);
+        ipcRenderer.on("print-done", onPrintDone);
+        return () => {
+            ipcRenderer.off("print-progress", onPrintProgress);
+            ipcRenderer.off("print-done", onPrintDone);
         };
-        ipcRenderer.on("print-done", listener);
-        return () => ipcRenderer.off("print-done", listener);
     }, []);
 
     useTriliumEvent("executeInActiveNoteDetailWidget", ({ callback }) => {
@@ -139,11 +154,7 @@ export default function NoteDetail() {
     useTriliumEvent("printActiveNote", () => {
         if (!noteContext?.isActive() || !note) return;
 
-        toast.showPersistent({
-            icon: "bx bx-loader-circle bx-spin",
-            message: t("note_detail.printing"),
-            id: "printing"
-        });
+        showToast("printing");
 
         if (isElectron()) {
             const { ipcRenderer } = dynamicRequire("electron");
@@ -162,6 +173,10 @@ export default function NoteDetail() {
                     return;
                 }
 
+                iframe.contentWindow.addEventListener("note-load-progress", (e) => {
+                    showToast("printing", e.detail.progress);
+                });
+
                 iframe.contentWindow.addEventListener("note-ready", () => {
                     toast.closePersistent("printing");
                     iframe.contentWindow?.print();
@@ -173,11 +188,7 @@ export default function NoteDetail() {
 
     useTriliumEvent("exportAsPdf", () => {
         if (!noteContext?.isActive() || !note) return;
-        toast.showPersistent({
-            icon: "bx bx-loader-circle bx-spin",
-            message: t("note_detail.printing_pdf"),
-            id: "printing"
-        });
+        showToast("exporting_pdf");
 
         const { ipcRenderer } = dynamicRequire("electron");
         ipcRenderer.send("export-as-pdf", {
@@ -193,7 +204,7 @@ export default function NoteDetail() {
             ref={containerRef}
             class={`note-detail ${isFullHeight ? "full-height" : ""}`}
         >
-            {Object.entries(noteTypesToRender.current).map(([ itemType, Element ]) => {
+            {Object.entries(noteTypesToRender).map(([ itemType, Element ]) => {
                 return <NoteDetailWrapper
                     Element={Element}
                     key={itemType}
@@ -321,4 +332,13 @@ function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNot
     return (!noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
         || noteContext?.viewScope?.viewMode === "attachments"
         || isBackendNote;
+}
+
+function showToast(type: "printing" | "exporting_pdf", progress: number = 0) {
+    toast.showPersistent({
+        icon: "bx bx-loader-circle bx-spin",
+        message: type === "printing" ? t("note_detail.printing") : t("note_detail.printing_pdf"),
+        id: "printing",
+        progress
+    });
 }

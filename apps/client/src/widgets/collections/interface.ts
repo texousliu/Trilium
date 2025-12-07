@@ -5,6 +5,8 @@ export type ViewTypeOptions = typeof allViewTypes[number];
 
 export type ViewModeMedia = "screen" | "print";
 
+export type ProgressChangedFn = (progress: number) => void;
+
 export interface ViewModeProps<T extends object> {
     note: FNote;
     notePath: string;
@@ -17,4 +19,5 @@ export interface ViewModeProps<T extends object> {
     saveConfig(newConfig: T): void;
     media: ViewModeMedia;
     onReady(): void;
+    onProgressChanged?: ProgressChangedFn;
 }

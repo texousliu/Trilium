@@ -20,13 +20,12 @@ export interface CKEditorApi {
 }
 
 interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "className" | "tabIndex"> {
-    content: string | undefined;
     contentLanguage: string | null | undefined;
     isClassicEditor?: boolean;
     watchdogRef: RefObject<EditorWatchdog>;
     watchdogConfig?: WatchdogConfig;
     onNotificationWarning?: (evt: any, data: any) => void;
-    onWatchdogStateChange?: (watchdog: EditorWatchdog<any>) => void;
+    onWatchdogStateChange?: (watchdog: EditorWatchdog) => void;
     onChange: () => void;
     /** Called upon whenever a new CKEditor instance is initialized, whether it's the first initialization, after a crash or after a config change that requires it (e.g. content language). */
     onEditorInitialized?: (editor: CKTextEditor) => void;
@@ -35,14 +34,14 @@ interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "cla
     containerRef?: RefObject<HTMLDivElement>;
 }
 
-export default function CKEditorWithWatchdog({ containerRef: externalContainerRef, content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized, editorApi, templates }: CKEditorWithWatchdogProps) {
+export default function CKEditorWithWatchdog({ containerRef: externalContainerRef, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized, editorApi, templates }: CKEditorWithWatchdogProps) {
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ uiLanguage ] = useTriliumOption("locale");
     const [ editor, setEditor ] = useState<CKTextEditor>();
-    const { parentComponent } = useNoteContext();
+    const { parentComponent, ntxId } = useNoteContext();
 
-    useKeyboardShortcuts("text-detail", containerRef, parentComponent);
+    useKeyboardShortcuts("text-detail", containerRef, parentComponent, ntxId);
 
     useImperativeHandle(editorApi, () => ({
         hasSelection() {
@@ -183,10 +182,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
         watchdog.create(container);
 
         return () => watchdog.destroy();
-    }, [ contentLanguage, templates, uiLanguage ]);
-
-    // React to content changes.
-    useEffect(() => editor?.setData(content ?? ""), [ editor, content ]);
+    }, [ contentLanguage, templates, uiLanguage ]); // TODO: adding all dependencies here will cause errors during CK init.
 
     // React to notification warning callback.
     useEffect(() => {
@@ -208,7 +204,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
     );
 }
 
-function buildWatchdog(isClassicEditor: boolean, watchdogConfig?: WatchdogConfig): EditorWatchdog<CKTextEditor> {
+function buildWatchdog(isClassicEditor: boolean, watchdogConfig?: WatchdogConfig): EditorWatchdog {
     if (isClassicEditor) {
         return new EditorWatchdog(ClassicEditor, watchdogConfig);
     } else {

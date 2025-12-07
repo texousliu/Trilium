@@ -1,9 +1,10 @@
 import "ckeditor5/ckeditor5.css";
+import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
 import "./theme/code_block_toolbar.css";
 import { COMMON_PLUGINS, CORE_PLUGINS, POPUP_EDITOR_PLUGINS } from "./plugins.js";
 import { BalloonEditor, DecoupledEditor, FindAndReplaceEditing, FindCommand } from "ckeditor5";
 import "./translation_overrides.js";
-export { EditorWatchdog } from "ckeditor5";
+export { default as EditorWatchdog } from "./custom_watchdog";
 export { PREMIUM_PLUGINS } from "./plugins.js";
 export type { EditorConfig, MentionFeed, MentionFeedObjectItem, ModelNode, ModelPosition, ModelElement, WatchdogConfig, WatchdogState } from "ckeditor5";
 export type { TemplateDefinition } from "ckeditor5-premium-features";

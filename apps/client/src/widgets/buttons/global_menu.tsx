@@ -26,7 +26,8 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
     const isVerticalLayout = !isHorizontalLayout;
     const parentComponent = useContext(ParentComponent);
     const { isUpdateAvailable, latestVersion } = useTriliumUpdateStatus();
-    
+    const isMobileLocal = isMobile();
+
     return (
         <Dropdown
             className="global-menu"
@@ -38,6 +39,8 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
                 </div>}
             </>}
             noDropdownListStyle
+            onShown={isMobileLocal ? () => document.getElementById("context-menu-cover")?.classList.add("show", "global-menu-cover") : undefined}
+            onHidden={isMobileLocal ? () => document.getElementById("context-menu-cover")?.classList.remove("show", "global-menu-cover") : undefined}
         >
 
             <MenuItem command="openNewWindow" icon="bx bx-window-open" text={t("global_menu.open_new_window")} />
@@ -58,14 +61,14 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             <KeyboardActionMenuItem command="showHelp" icon="bx bx-help-circle" text={t("global_menu.show_help")} />
             <KeyboardActionMenuItem command="showCheatsheet" icon="bx bxs-keyboard" text={t("global_menu.show-cheatsheet")} />
             <MenuItem command="openAboutDialog" icon="bx bx-info-circle" text={t("global_menu.about")} />
-            
+
             {isUpdateAvailable &&  <>
                 <FormListHeader text={t("global_menu.new-version-available")} />
                 <MenuItem command={() => window.open("https://github.com/TriliumNext/Trilium/releases/latest")}
                           icon="bx bx-download"
                           text={t("global_menu.download-update", {latestVersion})} />
             </>}
-            
+
             {!isElectron() && <BrowserOnlyOptions />}
         </Dropdown>
     )
@@ -221,9 +224,15 @@ function useTriliumUpdateStatus() {
     async function updateVersionStatus() {
         const RELEASES_API_URL = "https://api.github.com/repos/TriliumNext/Trilium/releases/latest";
 
-        const resp = await fetch(RELEASES_API_URL);
-        const data = await resp.json();
-        const latestVersion = data?.tag_name?.substring(1);
+        let latestVersion: string | undefined = undefined;
+        try {
+            const resp = await fetch(RELEASES_API_URL);
+            const data = await resp.json();
+            latestVersion = data?.tag_name?.substring(1);
+        } catch (e) {
+            console.warn("Unable to fetch latest version info from GitHub releases API", e);
+        }
+
         setLatestVersion(latestVersion);
     }
 

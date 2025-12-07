@@ -2,7 +2,7 @@ import { CSSProperties } from "preact/compat";
 import { DragData } from "../note_tree";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
 import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { ParentComponent, refToJQuerySelector } from "./react_utils";
+import { NoteContextContext, ParentComponent, refToJQuerySelector } from "./react_utils";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
 import { ViewMode, ViewScope } from "../../services/link";
@@ -20,9 +20,10 @@ import options, { type OptionValue } from "../../services/options";
 import protected_session_holder from "../../services/protected_session_holder";
 import SpacedUpdate from "../../services/spaced_update";
 import toast, { ToastOptions } from "../../services/toast";
-import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
+import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../services/utils";
 import server from "../../services/server";
-import { removeIndividualBinding } from "../../services/shortcuts";
+import shortcuts, { Handler, removeIndividualBinding } from "../../services/shortcuts";
+import froca from "../../services/froca";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -77,12 +78,23 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     return spacedUpdateRef.current;
 }
 
+export interface SavedData {
+    content: string;
+    attachments?: {
+        role: string;
+        title: string;
+        mime: string;
+        content: string;
+        position: number;
+    }[];
+}
+
 export function useEditorSpacedUpdate({ note, noteContext, getData, onContentChange, dataSaved, updateInterval }: {
     note: FNote,
     noteContext: NoteContext | null | undefined,
-    getData: () => Promise<object | undefined> | object | undefined,
+    getData: () => Promise<SavedData | undefined> | SavedData | undefined,
     onContentChange: (newContent: string) => void,
-    dataSaved?: () => void,
+    dataSaved?: (savedData: SavedData) => void,
     updateInterval?: number;
 }) {
     const parentComponent = useContext(ParentComponent);
@@ -98,7 +110,7 @@ export function useEditorSpacedUpdate({ note, noteContext, getData, onContentCha
             protected_session_holder.touchProtectedSessionIfNecessary(note);
             await server.put(`notes/${note.noteId}/data`, data, parentComponent?.componentId);
 
-            dataSaved?.();
+            dataSaved?.(data);
         }
     }, [ note, getData, dataSaved ])
     const spacedUpdate = useSpacedUpdate(callback);
@@ -257,7 +269,8 @@ export function useUniqueName(prefix?: string) {
 }
 
 export function useNoteContext() {
-    const [ noteContext, setNoteContext ] = useState<NoteContext>();
+    const noteContextContext = useContext(NoteContextContext);
+    const [ noteContext, setNoteContext ] = useState<NoteContext | undefined>(noteContextContext ?? undefined);
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ , setViewScope ] = useState<ViewScope>();
@@ -265,10 +278,20 @@ export function useNoteContext() {
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useEffect(() => {
+        if (!noteContextContext) return;
+        setNoteContext(noteContextContext);
+        setNote(noteContextContext.note);
+        setNotePath(noteContextContext.notePath);
+        setViewScope(noteContextContext.viewScope);
+        setIsReadOnlyTemporarilyDisabled(noteContextContext?.viewScope?.readOnlyTemporarilyDisabled);
+    }, [ noteContextContext ]);
+
+    useEffect(() => {
         setNote(noteContext?.note);
     }, [ notePath ]);
 
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
+        if (noteContextContext) return;
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);
         setViewScope(noteContext.viewScope);
@@ -282,6 +305,7 @@ export function useNoteContext() {
         }
     });
     useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
+        if (noteContextContext) return;
         if (eventNoteContext.ntxId === noteContext?.ntxId) {
             setIsReadOnlyTemporarilyDisabled(eventNoteContext?.viewScope?.readOnlyTemporarilyDisabled);
         }
@@ -355,6 +379,16 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: Re
         relationValue,
         setter
     ] as const;
+}
+
+export function useNoteRelationTarget(note: FNote, relationName: RelationNames) {
+    const [ targetNote, setTargetNote ] = useState<FNote | null>();
+
+    useEffect(() => {
+        note.getRelationTarget(relationName).then(setTargetNote);
+    }, [ note ]);
+
+    return [ targetNote ] as const;
 }
 
 /**
@@ -449,24 +483,27 @@ export function useNoteLabelInt(note: FNote | undefined | null, labelName: Filte
 
 export function useNoteBlob(note: FNote | null | undefined, componentId?: string): FBlob | null | undefined {
     const [ blob, setBlob ] = useState<FBlob | null>();
+    const requestIdRef = useRef(0);
 
-    function refresh() {
-        note?.getBlob().then(setBlob);
+    async function refresh() {
+        const requestId = ++requestIdRef.current;
+        const newBlob = await note?.getBlob();
+
+        // Only update if this is the latest request.
+        if (requestId === requestIdRef.current) {
+            setBlob(newBlob);
+        }
     }
 
-    useEffect(refresh, [ note?.noteId ]);
+    useEffect(() => { refresh() }, [ note?.noteId ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (!note) return;
 
         // Check if the note was deleted.
         if (loadResults.getEntityRow("notes", note.noteId)?.isDeleted) {
+            requestIdRef.current++; // invalidate pending results
             setBlob(null);
             return;
-        }
-
-        // Check if a revision occurred.
-        if (loadResults.hasRevisionForNote(note.noteId)) {
-            refresh();
         }
 
         if (loadResults.isNoteContentReloaded(note.noteId, componentId)) {
@@ -607,6 +644,8 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
     return { showTooltip, hideTooltip };
 }
 
+let tooltips = new Set<Tooltip>();
+
 /**
  * Similar to {@link useTooltip}, but doesn't expose methods to imperatively hide or show the tooltip.
  *
@@ -619,7 +658,17 @@ export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Too
         if (!elRef?.current || !hasTooltip) return;
 
         const tooltip = Tooltip.getOrCreateInstance(elRef.current, config);
+        elRef.current.addEventListener("show.bs.tooltip", () => {
+            // Hide all the other tooltips.
+            for (const otherTooltip of tooltips) {
+                if (otherTooltip === tooltip) continue;
+                otherTooltip.hide();
+            }
+        });
+        tooltips.add(tooltip);
+
         return () => {
+            tooltips.delete(tooltip);
             tooltip.dispose();
             // workaround for https://github.com/twbs/bootstrap/issues/37474
             (tooltip as any)._activeTrigger = {};
@@ -687,7 +736,7 @@ export function useImperativeSearchHighlighlighting(highlightedTokens: string[] 
 
 export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | undefined>, { dragEnabled, dragNotEnabledMessage, callback }: {
     dragEnabled: boolean,
-    dragNotEnabledMessage: Omit<ToastOptions, "id" | "closeAfter">;
+    dragNotEnabledMessage: Omit<ToastOptions, "id">;
     callback: (data: DragData[], e: DragEvent) => void
 }) {
     useEffect(() => {
@@ -699,7 +748,7 @@ export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | un
                 toast.showPersistent({
                     ...dragNotEnabledMessage,
                     id: "drag-not-enabled",
-                    closeAfter: 5000
+                    timeout: 5000
                 });
             }
         }
@@ -760,18 +809,33 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => v
     }, [ callback, ref ]);
 }
 
-export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined) {
+export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined, ntxId: string | null | undefined) {
     useEffect(() => {
         if (!parentComponent) return;
         const $container = refToJQuerySelector(containerRef);
-        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent);
+        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent, ntxId);
         return async () => {
             const bindings = await bindingPromise;
             for (const binding of bindings) {
                 removeIndividualBinding(binding);
             }
         }
-    }, []);
+    }, [ scope, containerRef, parentComponent, ntxId ]);
+}
+
+/**
+ * Register a global shortcut. Internally it uses the shortcut service and assigns a random namespace to make it unique.
+ *
+ * @param keyboardShortcut the keyboard shortcut combination to register.
+ * @param handler the corresponding handler to be called when the keyboard shortcut is invoked by the user.
+ */
+export function useGlobalShortcut(keyboardShortcut: string | null | undefined, handler: Handler) {
+    useEffect(() => {
+        if (!keyboardShortcut) return;
+        const namespace = randomString(10);
+        shortcuts.bindGlobalShortcut(keyboardShortcut, handler, namespace);
+        return () => shortcuts.removeGlobalShortcut(namespace);
+    }, [ keyboardShortcut, handler ]);
 }
 
 /**
@@ -779,7 +843,7 @@ export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", conta
  * and provides a way to switch to editing mode.
  */
 export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: NoteContext | undefined) {
-    const [isReadOnly, setIsReadOnly] = useState<boolean | undefined>(undefined);
+    const [ isReadOnly, setIsReadOnly ] = useState<boolean | undefined>(undefined);
 
     const enableEditing = useCallback(() => {
         if (noteContext?.viewScope) {
@@ -794,7 +858,7 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
                 setIsReadOnly(readOnly);
             });
         }
-    }, [note, noteContext]);
+    }, [ note, noteContext, noteContext?.viewScope ]);
 
     useTriliumEvent("readOnlyTemporarilyDisabled", ({noteContext: eventNoteContext}) => {
         if (noteContext?.ntxId === eventNoteContext.ntxId) {
@@ -802,7 +866,7 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
         }
     });
 
-    return {isReadOnly, enableEditing};
+    return { isReadOnly, enableEditing };
 }
 
 async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
@@ -820,4 +884,17 @@ async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
     }
 
     return true;
+}
+
+export function useChildNotes(parentNoteId: string) {
+    const [ childNotes, setChildNotes ] = useState<FNote[]>([]);
+    useEffect(() => {
+        (async function() {
+            const parentNote = await froca.getNote(parentNoteId);
+            const childNotes = await parentNote?.getChildNotes();
+            setChildNotes(childNotes ?? []);
+        })();
+     }, [ parentNoteId ]);
+
+    return childNotes;
 }

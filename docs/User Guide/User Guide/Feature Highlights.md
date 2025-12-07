@@ -4,7 +4,7 @@ This section presents the most important changes by version. For a full set of c
 *   v0.97.0:
     *   Books are now <a class="reference-link" href="Collections.md">Collections</a>.
     *   <a class="reference-link" href="Collections/Table.md">Table View</a> is a new collection type displaying notes and attributes in an editable grid.
-    *   <a class="reference-link" href="Basic%20Concepts%20and%20Features/UI%20Elements/Quick%20edit.md">Quick edit</a> is introduced, adding a new way to edit notes in a popup instead of opening a new tab. It also integrates well with <a class="reference-link" href="Collections.md">Collections</a>.
+    *   <a class="reference-link" href="Basic%20Concepts%20and%20Features/Navigation/Quick%20edit.md">Quick edit</a> is introduced, adding a new way to edit notes in a popup instead of opening a new tab. It also integrates well with <a class="reference-link" href="Collections.md">Collections</a>.
 *   v0.96.0:
     *   <a class="reference-link" href="Note%20Types/Text.md">Text</a> gain premium features thanks to a collaboration with the CKEditor team:
         *   <a class="reference-link" href="Note%20Types/Text/Premium%20features/Slash%20Commands.md">Slash Commands</a>

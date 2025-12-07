@@ -41,6 +41,9 @@
     --cmd-button-keyboard-shortcut-color: black;
     --cmd-button-disabled-opacity: 0.5;
 
+    --button-group-active-button-background: #00000026;
+    --button-group-active-button-text-color: black;
+
     --icon-button-color: currentColor;
     --icon-button-hover-background: var(--hover-item-background-color);
     --icon-button-hover-color: var(--hover-item-text-color);
@@ -265,6 +268,14 @@
     --ck-editor-toolbar-button-on-color: black;
     --ck-editor-toolbar-button-on-shadow: none;
     --ck-editor-toolbar-dropdown-button-open-background: #0000000f;
+
+    --calendar-coll-event-background-lightness: 95%;
+    --calendar-coll-event-background-saturation: 80%;
+    --calendar-coll-event-background-color: #eaeaea;
+    --calendar-coll-event-text-color: black;
+    --calendar-coll-event-hover-filter: brightness(.95) saturate(1.25);
+    --callendar-coll-event-archived-sripe-color: #0000000a;
+    --calendar-coll-today-background-color: #00000006;
 }
 
 #left-pane .fancytree-node.tinted {
@@ -276,7 +287,7 @@
     --custom-bg-color: hsl(var(--custom-color-hue), 37%, 89%, 1);
 }
 
-.tinted-quick-edit-dialog {
+.quick-edit-dialog-wrapper.with-hue {
     --modal-background-color: hsl(var(--custom-color-hue), 56%, 96%);
     --modal-border-color: hsl(var(--custom-color-hue), 33%, 41%);
     --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 40%, 88%);

@@ -201,8 +201,12 @@
   },
   "zpetne_odkazy": {
     "relation": "العلاقة",
-    "backlink": "{{count}} رابط راجع",
-    "backlinks": "{{count}} روابط راجعة"
+    "backlink_zero": "",
+    "backlink_one": "{{count}} رابط راجع",
+    "backlink_two": "",
+    "backlink_few": "",
+    "backlink_many": "{{count}} روابط راجعة",
+    "backlink_other": ""
   },
   "note_icon": {
     "category": "الفئة:",
@@ -230,7 +234,6 @@
     "geo-map": "الخريطة الجغرافية",
     "collapse_all_notes": "طي كل الملاحظات",
     "include_archived_notes": "عرض الملاحظات المؤرشفة",
-    "expand_all_children": "توسيع جميع العناصر الفرعية",
     "presentation": "عرض تقديمي",
     "invalid_view_type": "نوع العرض {{type}} غير صالح"
   },
@@ -945,7 +948,7 @@
     "move-to-available-launchers": "نقل الى المشغلات المتوفرة",
     "duplicate-launcher": "تكرار المشغل <kbd data-command=\"duplicateSubtree\">"
   },
-  "editable-text": {
+  "editable_text": {
     "auto-detect-language": "تم اكتشافه تلقائيا"
   },
   "classic_editor_toolbar": {
