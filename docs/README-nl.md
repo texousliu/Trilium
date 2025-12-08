@@ -20,18 +20,20 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Vertaling
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[Engels](../README.md) [Chinees (Versimpeld)](./README-ZH_CN.md) [Chinees
-(Traditioneel)](./README-ZH_TW.md) [Russisch](./README-ru.md)
-[Japans](./README-ja.md) [Italiaans](./README-it.md) [Spaans](./README-es.md)
+<!-- translate:off -->
+<!-- LANGUAGE SWITCHER -->
+[English](../README.md) | [Chinese (Simplified Han script)](./README-ZH_CN.md) |
+[Chinese (Traditional Han script)](./README-ZH_TW.md) |
+[Spanish](./README-es.md) | [Italian](./README-it.md) |
+[Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
+[German](./README-de.md) | [Greek](./README-el.md) | [French](./README-fr.md)
+<!-- translate:on -->
 
 Trillium Notes is een gratis en open-source, platformonafhankelijke,
 hiërarchische notitie-applicatie die zich richt op het opbouwen van grote
 persoonlijke kennisbanken.
 
-Bekijk [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
-voor een snel overzicht:
-
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
+<img src="./app.png" alt="Trilium Screenshot" width="1000">
 
 ## Download
 - [Laatse release](https://github.com/TriliumNext/Trilium/releases/latest) -
@@ -55,76 +57,78 @@ Onze documentatie is beschikbaar in meerdere formaten:
 
 ### Snelkoppelingen
 - [Getting Started Gids](https://docs.triliumnotes.org/)
-- [Vertaal
-  Instructies](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Vertaal Instructies](https://docs.triliumnotes.org/user-guide/setup)
 - [Docker
-  Installatie](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Installatie](https://docs.triliumnotes.org/user-guide/setup/server/installation/docker)
 - [TriliumNext
-  Upgraden](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  Upgraden](https://docs.triliumnotes.org/user-guide/setup/upgrading)
 - [Basis Concepten en
-  Features](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  Features](https://docs.triliumnotes.org/user-guide/concepts/notes)
 - [Patronen van Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+  Base](https://docs.triliumnotes.org/user-guide/misc/patterns-of-personal-knowledge)
 
 ## 🎁 Kenmerken
 
 * Notes kunnen in een diepe boomstructuur geplaatst worden. Een enkele note kan
   op meerdere plekken in de boom geplaatst worden. (zie
-  [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
+  [cloning](https://docs.triliumnotes.org/user-guide/concepts/notes/cloning))
 * Rijke WYSIWYG note editor inclusief e.g. tabellen, afbeeldingen en
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) met markdown
-  [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
+  [math](https://docs.triliumnotes.org/user-guide/note-types/text) met markdown
+  [autoformat](https://docs.triliumnotes.org/user-guide/note-types/text/markdown-formatting)
 * Ondersteuning voor bewerken van [notes met source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), inclusief syntax
-  highlighting
+  code](https://docs.triliumnotes.org/user-guide/note-types/code), inclusief
+  syntax highlighting
 * Snelle en gemakkelijke [navigatie tussen
-  notities](https://triliumnext.github.io/Docs/Wiki/note-navigation),
+  notities](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-navigation),
   uitgebreide text zoekopdrachten en [notities
-  promoveren](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+  promoveren](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-hoisting)
 * Naadloze [notitie
-  versiegeschiedenis](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Notitie[-attributen](https://triliumnext.github.io/Docs/Wiki/attributes)
+  versiegeschiedenis](https://docs.triliumnotes.org/user-guide/concepts/notes/note-revisions)
+* Notitie[-attributen](https://docs.triliumnotes.org/user-guide/advanced-usage/attributes)
   kunnen worden ingezet voor notitie-organisatie, queries en geavanceerd
-  [scripten](https://triliumnext.github.io/Docs/Wiki/scripts)
+  [scripten](https://docs.triliumnotes.org/user-guide/scripts)
 * Gebruikersinterfacevariabele in het Engels, Duits, Spaans, Frans, Roemeens en
   Chinees (versimpeld en traditioneel)
 * Directe [OpenID en TOTP
-  integratie](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  voor beter beveiligde aanmelding
-* [Synchronisatie](https://triliumnext.github.io/Docs/Wiki/synchronization) met
-  zelfgehoste synchronisatieserver
-  * there's a [3rd party service for hosting synchronisation
-    server](https://trilium.cc/paid-hosting)
-* [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes
-  to public internet
+  integratie](https://docs.triliumnotes.org/user-guide/setup/server/mfa) voor
+  beter beveiligde aanmelding
+* [Synchronisatie](https://docs.triliumnotes.org/user-guide/setup/synchronization)
+  met zelfgehoste synchronisatieserver
+  * there are [3rd party services for hosting synchronisation
+    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+* [Sharing](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
+  (publishing) notes to public internet
 * Strong [note
-  encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
-  per-note granularity
+  encryption](https://docs.triliumnotes.org/user-guide/concepts/notes/protected-notes)
+  with per-note granularity
 * Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type
   "canvas")
-* [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
-  [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
-  notes and their relations
+* [Relation
+  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
+  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
+  for visualizing notes and their relations
 * Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
+* [Geo maps](https://docs.triliumnotes.org/user-guide/collections/geomap) with
   location pins and GPX tracks
-* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
-  showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
+* [Scripting](https://docs.triliumnotes.org/user-guide/scripts) - see [Advanced
+  showcases](https://docs.triliumnotes.org/user-guide/advanced-usage/advanced-showcases)
+* [REST API](https://docs.triliumnotes.org/user-guide/advanced-usage/etapi) for
+  automation
 * Scales well in both usability and performance upwards of 100 000 notes
 * Touch optimized [mobile
-  frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) for
+  frontend](https://docs.triliumnotes.org/user-guide/setup/mobile-frontend) for
   smartphones and tablets
-* Built-in [dark theme](https://triliumnext.github.io/Docs/Wiki/themes), support
-  for user themes
-* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) and
-  [Markdown import & export](https://triliumnext.github.io/Docs/Wiki/markdown)
-* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
-  saving of web content
+* Built-in [dark
+  theme](https://docs.triliumnotes.org/user-guide/concepts/themes), support for
+  user themes
+* [Evernote](https://docs.triliumnotes.org/user-guide/concepts/import-export/evernote)
+  and [Markdown import &
+  export](https://docs.triliumnotes.org/user-guide/concepts/import-export/markdown)
+* [Web Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper) for
+  easy saving of web content
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with
-  a [Grafana
-  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
+  along with a Grafana Dashboard.
 
 ✨ Check out the following third-party resources/communities for more TriliumNext
 related goodies:
@@ -216,7 +220,7 @@ TriliumDroid since the sync version must match between Trilium and TriliumDroid.
 
 To install TriliumNext on your own server (including via Docker from
 [Dockerhub](https://hub.docker.com/r/triliumnext/trilium)) follow [the server
-installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
+installation docs](https://docs.triliumnotes.org/user-guide/setup/server).
 
 
 ## 💻 Contribute
@@ -305,8 +309,9 @@ Trilium would not be possible without the technologies behind it:
   without real competition.
 * [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library.
   Used in [relation
-  maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
-  maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
+  [link
+  maps](https://docs.triliumnotes.org/user-guide/advanced-usage/note-map#link-map)
 
 ## 🤝 Support
 
