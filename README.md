@@ -18,7 +18,7 @@
 
 <!-- translate:off -->
 <!-- LANGUAGE SWITCHER -->
-[English](./docs/README.md) | [Chinese (Simplified Han script)](./docs/README-ZH_CN.md) | [Chinese (Traditional Han script)](./docs/README-ZH_TW.md) | [Spanish](./docs/README-es.md) | [Italian](./docs/README-it.md) | [Japanese](./docs/README-ja.md) | [Romanian](./docs/README-ro.md) | [German](./docs/README-de.md) | [Greek](./docs/README-el.md) | [French](./docs/README-fr.md)
+[Chinese (Simplified Han script)](./docs/README-ZH_CN.md) | [Chinese (Traditional Han script)](./docs/README-ZH_TW.md) | [English](./docs/README.md) | [French](./docs/README-fr.md) | [German](./docs/README-de.md) | [Greek](./docs/README-el.md) | [Italian](./docs/README-it.md) | [Japanese](./docs/README-ja.md) | [Romanian](./docs/README-ro.md) | [Spanish](./docs/README-es.md)
 <!-- translate:on -->
 
 Trilium Notes is a free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
