@@ -18,7 +18,10 @@ export default function Breadcrumb() {
 
 function BreadcrumbItem({ notePath }: { notePath: string }) {
     return (
-        <NoteLink notePath={notePath} />
+        <NoteLink
+            notePath={notePath}
+            noPreview
+        />
     )
 }
 
