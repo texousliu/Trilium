@@ -47,7 +47,7 @@ function BreadcrumbSeparator({ notePath, noteContext }: { notePath: string, note
 
 function BreadcrumbSeparatorDropdownContent({ notePath, noteContext }: { notePath: string, noteContext: NoteContext | undefined }) {
     const notePathComponents = notePath.split("/");
-    const parentNoteId = notePathComponents.pop();
+    const parentNoteId = notePathComponents.length > 1 ? notePathComponents.pop() : "root";
     const childNotes = useChildNotes(parentNoteId);
     const notePathPrefix = notePathComponents.join("/");    // last item was removed already.
 
