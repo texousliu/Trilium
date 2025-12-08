@@ -526,7 +526,7 @@
     "button_title": "ボタンを表示"
   },
   "svg_export_button": {
-    "button_title": "図をSVGとしてエクスポート"
+    "button_title": "図をSVG形式でエクスポート"
   },
   "book_properties": {
     "grid": "グリッド",
@@ -1342,7 +1342,7 @@
   },
   "svg": {
     "export_to_png": "図をPNG形式でエクスポートできませんでした。",
-    "export_to_svg": "図を SVG にエクスポートできませんでした。"
+    "export_to_svg": "図をSVG形式でエクスポートできませんでした。"
   },
   "code_theme": {
     "title": "外観",
