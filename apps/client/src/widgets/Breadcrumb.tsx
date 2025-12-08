@@ -13,10 +13,10 @@ export default function Breadcrumb() {
 
     return (
         <div className="breadcrumb">
-            {notePath.map(item => (
+            {notePath.map((item, index) => (
                 <Fragment key={item}>
                     <BreadcrumbItem notePath={item} />
-                    <BreadcrumbSeparator notePath={item} noteContext={noteContext} />
+                    <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />
                 </Fragment>
             ))}
         </div>
@@ -35,7 +35,7 @@ function BreadcrumbItem({ notePath }: { notePath: string }) {
     )
 }
 
-function BreadcrumbSeparator({ notePath, noteContext }: { notePath: string, noteContext: NoteContext | undefined }) {
+function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
     return (
         <Dropdown
             text={<Icon icon="bx bx-chevron-right" />}
@@ -43,27 +43,29 @@ function BreadcrumbSeparator({ notePath, noteContext }: { notePath: string, note
             buttonClassName="icon-action"
             hideToggleArrow
         >
-            <BreadcrumbSeparatorDropdownContent notePath={notePath} noteContext={noteContext} />
+            <BreadcrumbSeparatorDropdownContent notePath={notePath} noteContext={noteContext} activeNotePath={activeNotePath} />
         </Dropdown>
     )
 }
 
-function BreadcrumbSeparatorDropdownContent({ notePath, noteContext }: { notePath: string, noteContext: NoteContext | undefined }) {
+function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
     const notePathComponents = notePath.split("/");
+    const notePathPrefix = notePathComponents.join("/");    // last item was removed already.
     const parentNoteId = notePathComponents.length > 1 ? notePathComponents.pop() : "root";
     const childNotes = useChildNotes(parentNoteId);
-    const notePathPrefix = notePathComponents.join("/");    // last item was removed already.
 
     return (
         <ul class="breadcrumb-child-list">
-            {childNotes.map((note) => (
-                <li key={note.noteId}>
+            {childNotes.map((note) => {
+                const childNotePath = `${notePathPrefix}/${note.noteId}`
+                return <li key={note.noteId}>
                     <FormListItem
                         icon={note.getIcon()}
-                        onClick={() => noteContext?.setNote(`${notePathPrefix}/${note.noteId}`)}
+                        onClick={() => noteContext?.setNote(childNotePath)}
+                        checked={childNotePath === activeNotePath}
                     >{note.title}</FormListItem>
                 </li>
-            ))}
+        })}
         </ul>
     )
 }
