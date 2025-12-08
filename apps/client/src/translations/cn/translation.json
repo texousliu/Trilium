@@ -205,7 +205,8 @@
   "info": {
     "modalTitle": "信息消息",
     "closeButton": "关闭",
-    "okButton": "确定"
+    "okButton": "确定",
+    "copy_to_clipboard": "复制到剪切板"
   },
   "jump_to_note": {
     "search_button": "全文搜索",
@@ -988,7 +989,12 @@
   "editable_text": {
     "placeholder": "在这里输入您的笔记内容...",
     "auto-detect-language": "自动检测",
-    "keeps-crashing": "编辑组件时持续崩溃。请尝试重启 Trilium。如果问题仍然存在，请考虑提交错误报告。"
+    "keeps-crashing": "编辑组件时持续崩溃。请尝试重启 Trilium。如果问题仍然存在，请考虑提交错误报告。",
+    "editor_crashed_title": "文本编辑器崩溃",
+    "editor_crashed_content": "您的内容已经成功恢复，但是某些最近的内容可能没有保存。",
+    "editor_crashed_details_button": "浏览更多明细...",
+    "editor_crashed_details_intro": "如果您多次经历此错误，考虑在Github上提交这些信息。",
+    "editor_crashed_details_title": "技术信息"
   },
   "empty": {
     "open_note_instruction": "通过在下面的输入框中输入笔记标题或在树中选择笔记来打开笔记。",
@@ -1952,7 +1958,8 @@
     "button_title": "将图表导出为PNG"
   },
   "svg": {
-    "export_to_png": "无法将图表导出为PNG。"
+    "export_to_png": "无法将图表导出为PNG。",
+    "export_to_svg": "此图像无法导出为SVG。"
   },
   "code_theme": {
     "title": "外观",
