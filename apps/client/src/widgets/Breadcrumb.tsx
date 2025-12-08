@@ -73,7 +73,7 @@ function buildNotePaths(notePathArray: string[] | undefined) {
 
     let prefix = "";
     const output: string[] = [];
-    for (const notePath of notePathArray.slice(0, notePathArray.length - 1)) {
+    for (const notePath of notePathArray) {
         output.push(`${prefix}${notePath}`);
         prefix += `${notePath}/`;
     }
