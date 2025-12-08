@@ -99,7 +99,7 @@ async function createLink(notePath: string | undefined, options: CreateLinkOptio
     const viewMode = viewScope.viewMode || "default";
     let linkTitle = options.title;
 
-    if (!linkTitle) {
+    if (linkTitle === undefined) {
         if (viewMode === "attachments" && viewScope.attachmentId) {
             const attachment = await froca.getAttachment(viewScope.attachmentId);
 

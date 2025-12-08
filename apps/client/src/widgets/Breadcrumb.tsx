@@ -24,10 +24,13 @@ export default function Breadcrumb() {
 }
 
 function BreadcrumbItem({ notePath }: { notePath: string }) {
+    const isRootNote = (notePath === "root");
     return (
         <NoteLink
             notePath={notePath}
             noPreview
+            title={isRootNote ? "" : undefined}
+            showNoteIcon={isRootNote}
         />
     )
 }
