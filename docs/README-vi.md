@@ -20,10 +20,10 @@ hành)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Tình trạng dịch
 thuật](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[Tiếng Anh](./README.md) | [Tiếng Trung (Giản thể)](./docs/README-ZH_CN.md) |
-[Tiếng Trung (Phồn thể)](./docs/README-ZH_TW.md) | [Tiếng
-Nga](./docs/README-ru.md) | [Tiếng Nhật](./docs/README-ja.md) | [Tiếng
-Ý](./docs/README-it.md) | [Tiếng Tây Ban Nha](./docs/README-es.md)
+[Tiếng Anh](../README.md) | [Tiếng Trung (Giản thể)](./README-ZH_CN.md) | [Tiếng
+Trung (Phồn thể)](./README-ZH_TW.md) | [Tiếng Nga](./README-ru.md) | [Tiếng
+Nhật](./README-ja.md) | [Tiếng Ý](./README-it.md) | [Tiếng Tây Ban
+Nha](./README-es.md)
 
 Trilium Notes là một ứng dụng ghi chú phân cấp miễn phí, mã nguồn mở, đa nền
 tảng tập trung vào việc xây dựng cơ sở tri thức cá nhân lớn.
@@ -31,7 +31,7 @@ tảng tập trung vào việc xây dựng cơ sở tri thức cá nhân lớn.
 Xem [ảnh chụp màn hình](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
 để tổng quan nhanh:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Tải xuống
 - [Bản phát hành mới
@@ -57,13 +57,13 @@ Tài liệu của chúng tôi có sẵn ở nhiều định dạng:
 ### Liên Kết Nhanh
 - [Hướng Dẫn Bắt Đầu](https://docs.triliumnotes.org/)
 - [Hướng Dẫn Cài
-  Đặt](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  Đặt](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Thiết Lập
-  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Docker](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Cập Nhật
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Khái Niệm Và Chức Năng Cơ
-  Bản](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  Bản](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Các Mẫu Cơ Sở Tri Thức Cá
   Nhân](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -91,7 +91,7 @@ Tài liệu của chúng tôi có sẵn ở nhiều định dạng:
 * Giao diện sẵn có cho Tiếng Anh, Tiếng Đức, Tiếng Tây Ban Nha, Tiếng Pháp,
   Tiếng Rumani, và Tiếng Trung (giản thể và phồn thể)
 * [Tích hợp OpenID và
-  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   trực tiếp để đăng nhập bảo mật hơn
 * [Đồng bộ hóa](https://triliumnext.github.io/Docs/Wiki/synchronization) với máy
   chủ đồng bộ tự triển khai
@@ -107,8 +107,8 @@ Tài liệu của chúng tôi có sẵn ở nhiều định dạng:
   đồ liên kết](https://triliumnext.github.io/Docs/Wiki/link-map) để trực quan
   hóa các ghi chú và mối quan hệ giữa chúng
 * Sơ đồ tư duy, dựa trên [Mind Elixir](https://docs.mind-elixir.com/)
-* [Bản đồ địa lý](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
-  với các chấm chỉ vị trí và các đường GPX
+* [Bản đồ địa lý](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) với các
+  chấm chỉ vị trí và các đường GPX
 * [Viết script](https://triliumnext.github.io/Docs/Wiki/scripts) - xem [Mục
   trưng bày nâng
   cao](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
@@ -125,9 +125,9 @@ Tài liệu của chúng tôi có sẵn ở nhiều định dạng:
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) để lưu trữ
   nội dung web dễ dàng
 * Giao diện tùy biến (nút thanh bên, widget do người dùng tự tạo,...)
-* [Các thông số](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md),
-  cùng với một [Bảng điều khiển
-  Grafana](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Các thông số](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), cùng
+  với một [Bảng điều khiển
+  Grafana](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Hãy xem thử các nguồn tài nguyên/cộng đồng bên thứ ba dưới đây để tìm thêm
 nhiều tiện ích liên quan đến TriliumNext:

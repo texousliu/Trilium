@@ -19,16 +19,15 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
 [![翻譯狀態](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[英文](./README.md) | [簡體中文](./docs/README-ZH_CN.md) |
-[正體中文](./docs/README-ZH_TW.md) | [俄文](./docs/README-ru.md) |
-[日文](./docs/README-ja.md) | [義大利文](./docs/README-it.md) |
-[西班牙文](./docs/README-es.md)
+[英文](../README.md) | [簡體中文](./README-ZH_CN.md) | [正體中文](./README-ZH_TW.md) |
+[俄文](./README-ru.md) | [日文](./README-ja.md) | [義大利文](./README-it.md) |
+[西班牙文](./README-es.md)
 
 Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式，專注於建立大型個人知識庫。
 
 想快速了解，請查看[螢幕截圖](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)：
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ 下載
 - [最新版本](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -43,16 +42,16 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 我們的使用說明包含多種格式：
 - **線上文件**：可於 [docs.triliumnotes.org](https://docs.triliumnotes.org/) 查看完整使用說明
 - **應用程式內說明**：在 Trilium 中按下 `F1` 即可直接於應用程式內存取相同文件
-- **GitHub**：請參閱此儲存庫中的[使用說明](./docs/User%20Guide/User%20Guide/)
+- **GitHub**：請參閱此儲存庫中的[使用說明](./User%20Guide/User%20Guide/)
 
 ### 快速連結
 - [上手指南](https://docs.triliumnotes.org/)
-- [安裝說明](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [安裝說明](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
-  設定](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  設定](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [升級
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [基礎觀念與功能](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [基礎觀念與功能](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [個人知識庫的模式](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 功能
@@ -67,7 +66,7 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 * 筆記[屬性](https://triliumnext.github.io/Docs/Wiki/attributes)可用於筆記的組織、查詢與進階[腳本](https://triliumnext.github.io/Docs/Wiki/scripts)
 * 介面提供英文、德文、西班牙文、法文、羅馬尼亞文與中文（簡體與正體）
 * 直接[整合 OpenID 與
-  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   以實現更安全的登入
 * 與自架的同步伺服器進行[同步](https://triliumnext.github.io/Docs/Wiki/synchronization)
   * 另有[第三方同步伺服器託管服務](https://trilium.cc/paid-hosting)
@@ -76,7 +75,7 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 * 手繪/示意圖：基於 [Excalidraw](https://excalidraw.com/)（筆記類型為「canvas」）
 * 用於視覺化筆記及其關係的[關聯圖](https://triliumnext.github.io/Docs/Wiki/relation-map)與[連結圖](https://triliumnext.github.io/Docs/Wiki/link-map)
 * 心智圖：基於 [Mind Elixir](https://docs.mind-elixir.com/)
-* 具有定位釘與 GPX 軌跡的[地圖](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+* 具有定位釘與 GPX 軌跡的[地圖](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
 * [腳本](https://triliumnext.github.io/Docs/Wiki/scripts)——參見[進階展示](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
 * 用於自動化的 [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)
 * 在可用性與效能上均可良好擴展，支援超過十萬筆筆記
@@ -86,9 +85,9 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
   [Markdown 匯入與匯出](https://triliumnext.github.io/Docs/Wiki/markdown)
 * 用於快速保存網頁內容的 [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)
 * 可自訂的 UI（側邊欄按鈕、使用者自訂小工具等）
-* [度量指標（Metrics）](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，並附有
+* [度量指標（Metrics）](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，並附有
   [Grafana
-  儀表板](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+  儀表板](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ 想要更多 Trilium Notes 的主題、腳本、外掛與資源，亦可參考以下第三方資源 / 社群：
 

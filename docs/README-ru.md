@@ -20,10 +20,10 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Процесс
 перевода](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[Английский](./README.md) | [Китайский (Упрощенный)](./docs/README-ZH_CN.md) |
-[Китайский (Традиционный)](./docs/README-ZH_TW.md) |
-[Русский](./docs/README-ru.md) | [Японский](./docs/README-ja.md) |
-[Итальянский](./docs/README-it.md) | [Испанский](./docs/README-es.md)
+[Английский](../README.md) | [Китайский (Упрощенный)](./README-ZH_CN.md) |
+[Китайский (Традиционный)](./README-ZH_TW.md) | [Русский](./README-ru.md) |
+[Японский](./README-ja.md) | [Итальянский](./README-it.md) |
+[Испанский](./README-es.md)
 
 Trilium Notes – это приложение для заметок с иерархической структурой,
 ориентированное на создание больших персональных баз знаний.
@@ -31,7 +31,7 @@ Trilium Notes – это приложение для заметок с иера�
 Для быстрого ознакомления посмотрите
 [скриншот-тур](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Загрузка
 - [Последний релиз](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -50,19 +50,19 @@ Trilium Notes – это приложение для заметок с иера�
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **Справка в приложении**: Нажмите`F1` в Trilium для доступа к этой
   документации прямо в приложении
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **GitHub**: Navigate through the [User Guide](./User%20Guide/User%20Guide/) in
+  this repository
 
 ### Важные Ссылки
 - [Руководство по началу работы](https://docs.triliumnotes.org/)
 - [Инструкция по
-  установке](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  установке](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Установка
-  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Docker](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Обновление
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Основные идеи и
-  возможности](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  возможности](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Шаблоны Персональный Базы
   Знаний](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -91,7 +91,7 @@ Trilium Notes – это приложение для заметок с иера�
 * Интерфейс доступен на Английском, Немецком, Испанском, Французском, Румынском
   и Китайском (упрощённом и традиционном)
 * Интеграция [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  integration](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   для более безопасного входа
 * [Синхронизация](https://triliumnext.github.io/Docs/Wiki/synchronization)
   заметок со своим сервером
@@ -107,7 +107,7 @@ Trilium Notes – это приложение для заметок с иера�
   ссылок](https://triliumnext.github.io/Docs/Wiki/link-map) для визуализации их
   взяимосвязей
 * Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
+* [Geo maps](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
   location pins and GPX tracks
 * [Скрипты](https://triliumnext.github.io/Docs/Wiki/scripts) - см. [продвинутые
   примеры](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
@@ -124,9 +124,9 @@ Trilium Notes – это приложение для заметок с иера�
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) для
   удобного сохранения веб-контента
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with
+  a [Grafana
+  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Check out the following third-party resources/communities for more TriliumNext
 related goodies:

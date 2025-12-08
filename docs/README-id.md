@@ -20,10 +20,9 @@ rilis)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Status
 terjemahan](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[Inggris](./README.md) | [Tiongkok (Sederhana)](./docs/README-ZH_CN.md) |
-[Tiongkok (Tradisional)](./docs/README-ZH_TW.md) | [Rusia](./docs/README-ru.md)
-| [Jepang](./docs/README-ja.md) | [Italia](./docs/README-it.md) |
-[Spanyol](./docs/README-es.md)
+[Inggris](../README.md) | [Tiongkok (Sederhana)](./README-ZH_CN.md) | [Tiongkok
+(Tradisional)](./README-ZH_TW.md) | [Rusia](./README-ru.md) |
+[Jepang](./README-ja.md) | [Italia](./README-it.md) | [Spanyol](./README-es.md)
 
 Trilium Notes adalah aplikasi pencatatan hierarkis lintas platform yang gratis
 dan sumber terbuka dengan fokus untuk mengembangkan pengetahuan pribadi yang
@@ -32,7 +31,7 @@ luas.
 Lihat [tangkapan layar](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
 untuk ikhtisar cepat:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Unduh
 - [Rilis terbaru](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -51,19 +50,19 @@ Dokumentasi kami tersedia dalam berbagai format:
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **Bantuan Dalam Aplikasi**: Tekan `F1` di dalam Trilium untuk mengakses
   dokumentasi yang sama langsung di aplikasi
-- **GitHub**: Navigasi melalui [Panduan
-  Pengguna](./docs/User%20Guide/User%20Guide/) di repositori ini
+- **GitHub**: Navigasi melalui [Panduan Pengguna](./User%20Guide/User%20Guide/)
+  di repositori ini
 
 ### Tautan Cepat
 - [Panduan Memulai](https://docs.triliumnotes.org/)
 - [Petunjuk
-  Instalasi](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  Instalasi](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Pengaturan
-  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Docker](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Pembaharuan
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Konsep dan Fitur
-  Dasar](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  Dasar](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Pola Basis Pengetahuan
   Pribadi](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -90,7 +89,7 @@ Dokumentasi kami tersedia dalam berbagai format:
 * UI available in English, German, Spanish, French, Romanian, and Chinese
   (simplified and traditional)
 * Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  integration](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   for more secure login
 * [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
   with self-hosted sync server
@@ -107,7 +106,7 @@ Dokumentasi kami tersedia dalam berbagai format:
   [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
   notes and their relations
 * Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
+* [Geo maps](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
   location pins and GPX tracks
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
   showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
@@ -123,9 +122,9 @@ Dokumentasi kami tersedia dalam berbagai format:
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
   saving of web content
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with
+  a [Grafana
+  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Check out the following third-party resources/communities for more TriliumNext
 related goodies:

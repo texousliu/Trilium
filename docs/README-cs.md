@@ -20,10 +20,10 @@ vydání)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Stav
 překladu](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[Angličtina](./README.md) | [Čínština (Zjednodušená)](./docs/README-ZH_CN.md) |
-[Čínština (Tradiční)](./docs/README-ZH_TW.md) | [Ruština](./docs/README-ru.md) |
-[Japonština](./docs/README-ja.md) | [Italština](./docs/README-it.md) |
-[Španělština](./docs/README-es.md)
+[Angličtina](../README.md) | [Čínština (Zjednodušená)](./README-ZH_CN.md) |
+[Čínština (Tradiční)](./README-ZH_TW.md) | [Ruština](./README-ru.md) |
+[Japonština](./README-ja.md) | [Italština](./README-it.md) |
+[Španělština](./README-es.md)
 
 Trilium Notes je open-source, cross-platform aplikace pro hierarchiální psaní
 poznámek.
@@ -31,7 +31,7 @@ poznámek.
 Pro rychlý přehled viz
 [screenshot](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Stáhnout
 - [Nejnovější verze](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -49,19 +49,19 @@ Naše dokumenatce je dostupná ve vícero formátech:
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **Pomoc v aplikaci**: V Trilium stiskněte `F1`, pro přístup k stejné
   dokumentaci přímo v aplikaci
-- **GitHub**: Projděte si [Uživatelskou
-  příručku](./docs/User%20Guide/User%20Guide/) v tomto repozitáři
+- **GitHub**: Projděte si [Uživatelskou příručku](./User%20Guide/User%20Guide/)
+  v tomto repozitáři
 
 ### Rychlé odkazy
 - [Návod pro začátečníky](https://docs.triliumnotes.org/)
 - [Pokyny pro
-  instalaci](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  instalaci](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Nastavení
-  Dockeru](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Dockeru](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Aktualizování
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Základní pojmy a
-  funkce](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  funkce](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Vzory osobní znalostní
   báze](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -89,7 +89,7 @@ Naše dokumenatce je dostupná ve vícero formátech:
 * Uživatelské rozhraní je k dispozici v angličtině, češtině, němčině,
   španělštině, francouzštině, rumunštině a čínštině (zjednodušené a tradiční)
 * Přímá integrace [OpenID a
-  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   pro bezpečnější přihlášení
 * [Synchronizace](https://triliumnext.github.io/Docs/Wiki/synchronization) s
   vlastním synchronizačním serverem
@@ -106,7 +106,7 @@ Naše dokumenatce je dostupná ve vícero formátech:
   odkazů](https://triliumnext.github.io/Docs/Wiki/link-map) pro vizualizaci
   poznámek a jejich vztahů
 * Myšlenkové mapy založené na [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo mapy](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) s
+* [Geo mapy](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) s
   lokalizačními značkami a trasami GPX
 * [Skriptování](https://triliumnext.github.io/Docs/Wiki/scripts) – viz
   [Pokročilé ukázky](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
@@ -123,9 +123,9 @@ Naše dokumenatce je dostupná ve vícero formátech:
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
   saving of web content
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with
+  a [Grafana
+  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Check out the following third-party resources/communities for more TriliumNext
 related goodies:

@@ -20,10 +20,10 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[Anglès](./README.md) | [Xinès (simplificado)](./docs/README-ZH_CN.md) | [Xinès
-(tradicional)](./docs/README-ZH_TW.md) | [Rus](./docs/README-ru.md) |
-[Japonès](./docs/README-ja.md) | [Italià](./docs/README-it.md) |
-[Castellà](./docs/README-es.md)
+[Anglès](../README.md) | [Xinès (simplificado)](./README-ZH_CN.md) | [Xinès
+(tradicional)](./README-ZH_TW.md) | [Rus](./README-ru.md) |
+[Japonès](./README-ja.md) | [Italià](./README-it.md) |
+[Castellà](./README-es.md)
 
 Trillium Notes és una aplicació gratuïta i de codi obert, multiplataforma, per
 prendre notes jeràrquiques, amb l'objectiu de crear grans bases de coneixement
@@ -32,7 +32,7 @@ personal.
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Download
 - [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -51,19 +51,19 @@ Our documentation is available in multiple formats:
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
   directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **GitHub**: Navigate through the [User Guide](./User%20Guide/User%20Guide/) in
+  this repository
 
 ### Quick Links
 - [Getting Started Guide](https://docs.triliumnotes.org/)
 - [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  Instructions](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Setup](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  Features](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Patterns of Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -90,7 +90,7 @@ Our documentation is available in multiple formats:
 * UI available in English, German, Spanish, French, Romanian, and Chinese
   (simplified and traditional)
 * Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  integration](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   for more secure login
 * [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
   with self-hosted sync server
@@ -107,7 +107,7 @@ Our documentation is available in multiple formats:
   [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
   notes and their relations
 * Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
+* [Geo maps](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
   location pins and GPX tracks
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
   showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
@@ -123,9 +123,9 @@ Our documentation is available in multiple formats:
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
   saving of web content
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with
+  a [Grafana
+  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Check out the following third-party resources/communities for more TriliumNext
 related goodies:
