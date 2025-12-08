@@ -1,10 +1,11 @@
 import { Fragment } from "preact/jsx-runtime";
 import "./Breadcrumb.css";
-import ActionButton from "./react/ActionButton";
-import { useNoteContext } from "./react/hooks";
+import { useChildNotes, useNoteContext } from "./react/hooks";
 import NoteLink from "./react/NoteLink";
 import Dropdown from "./react/Dropdown";
 import Icon from "./react/Icon";
+import { FormListItem } from "./react/FormList";
+import NoteContext from "../components/note_context";
 
 export default function Breadcrumb() {
     const { noteContext } = useNoteContext();
@@ -15,7 +16,7 @@ export default function Breadcrumb() {
             {notePath.map(item => (
                 <Fragment key={item}>
                     <BreadcrumbItem notePath={item} />
-                    <BreadcrumbSeparator notePath={item} />
+                    <BreadcrumbSeparator notePath={item} noteContext={noteContext} />
                 </Fragment>
             ))}
         </div>
@@ -31,7 +32,7 @@ function BreadcrumbItem({ notePath }: { notePath: string }) {
     )
 }
 
-function BreadcrumbSeparator({ notePath }: { notePath: string}) {
+function BreadcrumbSeparator({ notePath, noteContext }: { notePath: string, noteContext: NoteContext | undefined }) {
     return (
         <Dropdown
             text={<Icon icon="bx bx-chevron-right" />}
@@ -39,8 +40,28 @@ function BreadcrumbSeparator({ notePath }: { notePath: string}) {
             buttonClassName="icon-action"
             hideToggleArrow
         >
-            Content goes here.
+            <BreadcrumbSeparatorDropdownContent notePath={notePath} noteContext={noteContext} />
         </Dropdown>
+    )
+}
+
+function BreadcrumbSeparatorDropdownContent({ notePath, noteContext }: { notePath: string, noteContext: NoteContext | undefined }) {
+    const notePathComponents = notePath.split("/");
+    const parentNoteId = notePathComponents.pop();
+    const childNotes = useChildNotes(parentNoteId);
+    const notePathPrefix = notePathComponents.join("/");    // last item was removed already.
+
+    return (
+        <ul class="breadcrumb-child-list">
+            {childNotes.map((note) => (
+                <li key={note.noteId}>
+                    <FormListItem
+                        icon={note.getIcon()}
+                        onClick={() => noteContext?.setNote(`${notePathPrefix}/${note.noteId}`)}
+                    >{note.title}</FormListItem>
+                </li>
+            ))}
+        </ul>
     )
 }
 
