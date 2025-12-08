@@ -20,16 +20,15 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[영어](./README.md) | [중국어 (간체)](./docs/README-ZH_CN.md) | [중국어
-(번체)](./docs/README-ZH_TW.md) | [러시아어](./docs/README-ru.md) |
-[일본어](./docs/README-ja.md) | [이탈리아어](./docs/README-it.md) |
-[스페인어](./docs/README-es.md)
+[영어](../README.md) | [중국어 (간체)](./README-ZH_CN.md) | [중국어
+(번체)](./README-ZH_TW.md) | [러시아어](./README-ru.md) | [일본어](./README-ja.md) |
+[이탈리아어](./README-it.md) | [스페인어](./README-es.md)
 
 Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 오픈 소스 크로스 플랫폼 계층적 메모 작성 애플리케이션입니다.
 
 [스크린샷](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)에서 간략한 개요를 확인하세요:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ 내려받기
 - [최신 릴리스](https://github.com/TriliumNext/Trilium/releases/latest) – 안정된 버전으로
@@ -45,18 +44,18 @@ Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 �
 - **온라인 문서**: [docs.triliumnotes.org](https://docs.triliumnotes.org/)에서 모든 문서를
   보여줍니다
 - **도움말**: 트릴리움 어플리케이션에서 `F1` 버튼을 눌러 같은 문서를 직접 볼 수 있습니다
-- **GitHub**: 이 레포지토리의 [사용자 가이드](./docs/User%20Guide/User%20Guide/)에서 확인할 수 있습니다
+- **GitHub**: 이 레포지토리의 [사용자 가이드](./User%20Guide/User%20Guide/)에서 확인할 수 있습니다
 
 ### 바로가기
 - [시작하기 가이드](https://docs.triliumnotes.org/)
 - [설치
-  방법](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  방법](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [도커
-  설치](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  설치](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [TriliumNext로
-  업그레이드](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  업그레이드](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [기본 개념 및
-  기능](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  기능](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [개인 지식 베이스의
   패턴들](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -76,7 +75,7 @@ Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 �
   고급 기능인 [스크립팅](https://triliumnext.github.io/Docs/Wiki/scripts)에 사용
 * 영어, 독일어, 스페인어, 프랑스어, 루마니아어, 중국어 (간체, 번체) UI 제공
 * 더욱 안전한 로그인을 위해 직접 [OpenID 및 TOTP
-  통합](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  통합](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
 * self-hosted 동기화 서버를 통한
   [동기화](https://triliumnext.github.io/Docs/Wiki/synchronization)
   * [동기화 서버 호스팅을 위한 제3자 서비스](https://trilium.cc/paid-hosting) 제공
@@ -88,7 +87,7 @@ Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 �
   지도](https://triliumnext.github.io/Docs/Wiki/relation-map)과 [link
   지도](https://triliumnext.github.io/Docs/Wiki/link-map)
 * [Mind Elixir](https://docs.mind-elixir.com/) 기반 마인드맵
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
+* [Geo maps](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
   location pins and GPX tracks
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
   showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
@@ -104,9 +103,9 @@ Trilium Notes는 대규모 개인 지식 기반 구축에 중점을 둔 무료 �
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
   saving of web content
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with
+  a [Grafana
+  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Check out the following third-party resources/communities for more TriliumNext
 related goodies:

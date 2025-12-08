@@ -19,10 +19,9 @@
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
 [![翻訳状況](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[英語](./README.md) | [中国語（簡体）](./docs/README-ZH_CN.md) |
-[中国語（繁体）](./docs/README-ZH_TW.md) | [ロシア語](./docs/README-ru.md) |
-[日本語](./docs/README-ja.md) | [イタリア語](./docs/README-it.md) |
-[スペイン語](./docs/README-es.md)
+[英語](../README.md) | [中国語（簡体）](./README-ZH_CN.md) | [中国語（繁体）](./README-ZH_TW.md)
+| [ロシア語](./README-ru.md) | [日本語](./README-ja.md) | [イタリア語](./README-it.md) |
+[スペイン語](./README-es.md)
 
 Trilium Notes
 は、大規模な個人知識ベースの構築に重点を置いた、無料かつオープンソースのクロスプラットフォームの階層型ノート作成アプリケーションです。
@@ -30,7 +29,7 @@ Trilium Notes
 概要については [スクリーンショット](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
 を参照してください:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ ダウンロード
 - [最新リリース](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -46,16 +45,16 @@ Trilium Notes
 - **オンラインドキュメント**: [docs.triliumnotes.org](https://docs.triliumnotes.org/)
   で完全なドキュメントを参照してください
 - **アプリ内ヘルプ**: Trilium内で `F1` キーを押すと、アプリケーション内で同じドキュメントに直接アクセスできます
-- **GitHub**: このリポジトリの [ユーザーガイド](./docs/User%20Guide/User%20Guide/) を参照してください
+- **GitHub**: このリポジトリの [ユーザーガイド](./User%20Guide/User%20Guide/) を参照してください
 
 ### クイックリンク
 - [スタートガイド](https://docs.triliumnotes.org/)
-- [インストール手順](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [インストール手順](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
-  のセットアップ](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  のセットアップ](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [TriliumNext
-  のアップグレード](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [基本概念と機能](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  のアップグレード](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [基本概念と機能](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [個人ナレッジベースのパターン](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 機能
@@ -73,7 +72,7 @@ Trilium Notes
   [スクリプト](https://triliumnext.github.io/Docs/Wiki/scripts) に使用できます
 * UI は英語、ドイツ語、スペイン語、フランス語、ルーマニア語、中国語（簡体字および繁体字）でご利用いただけます
 * より安全なログインのための直接的な
-  [OpenIDとTOTPの統合](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  [OpenIDとTOTPの統合](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
 * セルフホスト同期サーバーとの [同期](https://triliumnext.github.io/Docs/Wiki/synchronization)
   * [同期サーバーをホストするためのサードパーティサービス](https://trilium.cc/paid-hosting) があります
 * インターネット上でノートの [共有](https://triliumnext.github.io/Docs/Wiki/sharing)（公開）
@@ -85,7 +84,7 @@ Trilium Notes
   [リンクマップ](https://triliumnext.github.io/Docs/Wiki/link-map)
 * [Mind Elixir](https://docs.mind-elixir.com/) をベースとしたマインドマップ
 * 位置ピンと GPX トラック付きの
-  [ジオマップ](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+  [ジオマップ](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
 * [スクリプト](https://triliumnext.github.io/Docs/Wiki/scripts) -
   [高度なショーケース](https://triliumnext.github.io/Docs/Wiki/advanced-showcases) を参照
 * 自動化のための [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)
@@ -98,9 +97,9 @@ Trilium Notes
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)
   でWebコンテンツを簡単に保存
 * カスタマイズ可能な UI (サイドバー ボタン、ユーザー定義のウィジェットなど)
-* [メトリクス(Metrics)](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)
-  と [Grafana
-  ダッシュボード](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [メトリクス(Metrics)](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md) と
+  [Grafana
+  ダッシュボード](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ TriliumNext 関連のその他の情報については、次のサードパーティのリソース/コミュニティをご覧ください:
 

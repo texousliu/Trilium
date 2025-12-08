@@ -20,10 +20,10 @@ release-urile)](https://img.shields.io/github/downloads/triliumnext/trilium/tota
 [![Starea
 traducerilor](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[Engleză](./README.md) | [Chineză (Simplificată)](./docs/README-ZH_CN.md) |
-[Chineză (Tradițională)](./docs/README-ZH_TW.md) | [Rusă](./docs/README-ru.md) |
-[Japoneză](./docs/README-ja.md) | [Italiană](./docs/README-it.md) |
-[Spaniolă](./docs/README-es.md)
+[Engleză](../README.md) | [Chineză (Simplificată)](./README-ZH_CN.md) | [Chineză
+(Tradițională)](./README-ZH_TW.md) | [Rusă](./README-ru.md) |
+[Japoneză](./README-ja.md) | [Italiană](./README-it.md) |
+[Spaniolă](./README-es.md)
 
 Trilium Notes este o aplicație gratuită și open-source pentru notițe structurate
 ierarhic cu scopul de a crea o bază de date de cunoștințe personală, de mari
@@ -32,7 +32,7 @@ dimensiuni.
 Prezentare generală prin [capturi de
 ecran](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Descarcă
 - [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -52,19 +52,19 @@ Documentația este disponibilă în mai multe formate:
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **Ghid în aplicație**: Apăsați `F1` în Trilium pentru a accesa aceeași
   documentație local, direct din aplicație
-- **GitHub**: Navigați [ghidul de utilizator](./docs/User%20Guide/User%20Guide/)
+- **GitHub**: Navigați [ghidul de utilizator](./User%20Guide/User%20Guide/)
   direct din acest repository
 
 ### Linkuri rapide
 - [Ghid rapid](https://docs.triliumnotes.org/)
 - [Instrucțiuni de
-  instalare](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  instalare](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Instalare prin
-  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Docker](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Procesul de
-  actualizare](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  actualizare](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Concepte de bază și
-  funcții](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  funcții](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Concepte pentru o bază de date de cunoștințe
   personală](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -92,7 +92,7 @@ Documentația este disponibilă în mai multe formate:
 * Interfața grafică este disponibilă în mai multe limbi, dintre care și limba
   română
 * [Integrare directă cu OpenID and
-  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   pentru o autentificare mai sigură
 * [Sincronizare](https://triliumnext.github.io/Docs/Wiki/synchronization) cu un
   server propriu
@@ -108,8 +108,8 @@ Documentația este disponibilă în mai multe formate:
   [hărți de legături](https://triliumnext.github.io/Docs/Wiki/link-map) pentru
   vizualizarea notițelor și a relațiilor acestora
 * Hărți mentale, bazate pe [Mind Elixir](https://docs.mind-elixir.com/)
-* [Hărți geografice](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
-  cu marcaje și trasee GPX
+* [Hărți geografice](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) cu
+  marcaje și trasee GPX
 * [Scriptare](https://triliumnext.github.io/Docs/Wiki/scripts) - vedeți
   [Prezentare
   avansată](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
@@ -128,9 +128,9 @@ Documentația este disponibilă în mai multe formate:
   salvarea rapidă a conținutului de pe Internet
 * Interfață grafică personalizabilă (butoane, widget-uri definite de utilizator,
   ...)
-* [Metrice](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md),
-  inclusiv un [dashboard
-  Grafana](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrice](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), inclusiv
+  un [dashboard
+  Grafana](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Consultați următoarele resurse din partea comunității Trilium:
 

@@ -20,10 +20,9 @@ kiadás)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Fordítás
 állapota](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[angol](./README.md) | [egyszerűsített kínai](./docs/README-ZH_CN.md) |
-[hagyományos kínai](./docs/README-ZH_TW.md) | [orosz](./docs/README-ru.md) |
-[japán](./docs/README-ja.md) | [olasz](./docs/README-it.md) |
-[spanyol](./docs/README-es.md)
+[angol](../README.md) | [egyszerűsített kínai](./README-ZH_CN.md) | [hagyományos
+kínai](./README-ZH_TW.md) | [orosz](./README-ru.md) | [japán](./README-ja.md) |
+[olasz](./README-it.md) | [spanyol](./README-es.md)
 
 A Trilium Notes egy ingyenes és nyílt forráskódú, platformfüggetlen hierarchikus
 jegyzetelő alkalmazás, amely nagy személyes tudásbázisok építésére összpontosít.
@@ -31,7 +30,7 @@ jegyzetelő alkalmazás, amely nagy személyes tudásbázisok építésére öss
 A gyors áttekintésért lásd a
 [képernyőképeket](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Letöltés
 - [Legújabb kiadás](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -51,18 +50,18 @@ Dokumentációink többféle formátumban is elérhetők:
 - **Alkalmazáson belüli súgó**: Nyomja meg az `F1` billentyűt a Triliumon belül,
   hogy ugyanazt a dokumentációt közvetlenül az alkalmazásban is elérje.
 - **GitHub**: Navigálj a [Felhasználói
-  útmutatóban](./docs/User%20Guide/User%20Guide/) ebben a repository-ban
+  útmutatóban](./User%20Guide/User%20Guide/) ebben a repository-ban
 
 ### Gyorslinkek
 - [Kezdő lépések útmutatója](https://docs.triliumnotes.org/)
 - [Telepítési
-  utasítások](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  utasítások](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
-  beállítás](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  beállítás](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [TriliumNext
-  Frissítése](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  Frissítése](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Alapfogalmak és
-  jellemzők](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  jellemzők](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [A személyes tudásbázis
   mintái](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -89,7 +88,7 @@ Dokumentációink többféle formátumban is elérhetők:
 * UI elérhető angol, német, spanyol, francia, román és kínai (egyszerűsített és
   hagyományos)
 * Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  integration](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   for more secure login
 * [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
   with self-hosted sync server
@@ -106,7 +105,7 @@ Dokumentációink többféle formátumban is elérhetők:
   [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
   notes and their relations
 * Elmetérképek, [Mind Elixir](https://docs.mind-elixir.com/) alapján
-* [Geo térképek](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+* [Geo térképek](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
   helymeghatározó tűkkel és GPX nyomokkal
 * [Szkriptelés](https://triliumnext.github.io/Docs/Wiki/scripts) - lásd:
   [Speciális
@@ -123,9 +122,9 @@ Dokumentációink többféle formátumban is elérhetők:
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
   saving of web content
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with
+  a [Grafana
+  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Check out the following third-party resources/communities for more TriliumNext
 related goodies:

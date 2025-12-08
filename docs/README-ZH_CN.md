@@ -19,16 +19,15 @@
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
 [![翻译状态](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[英文](./README.md) | [简体中文](./docs/README-ZH_CN.md) |
-[正体中文](./docs/README-ZH_TW.md) | [俄文](./docs/README-ru.md) |
-[日文](./docs/README-ja.md) | [意大利文](./docs/README-it.md) |
-[西班牙文](./docs/README-es.md)
+[英文](../README.md) | [简体中文](./README-ZH_CN.md) | [正体中文](./README-ZH_TW.md) |
+[俄文](./README-ru.md) | [日文](./README-ja.md) | [意大利文](./README-it.md) |
+[西班牙文](./README-es.md)
 
 Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序，专注于建立大型个人知识库。
 
 想快速了解，请查看[screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ 下载
 - [最新版本](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -43,16 +42,16 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 我们的文档有多种格式可供使用：
 - **在线文档**：请访问我们完整的文档：[docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **应用内帮助**：在 Trilium 中按下`F1`即可直接在应用程序内访问相同文档
-- **GitHub**：浏览此存储库中的[用户指南](./docs/User%20Guide/User%20Guide/)
+- **GitHub**：浏览此存储库中的[用户指南](./User%20Guide/User%20Guide/)
 
 ### 快速链接
 - [用户说明](https://docs.triliumnotes.org/)
-- [安装说明](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [安装说明](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
-  设置](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  设置](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [升级
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [基本概念与特性](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [基本概念与特性](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [个人知识库模式](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 功能
@@ -68,7 +67,7 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 * 笔记[属性](https://triliumnext.github.io/Docs/Wiki/attributes)可用于笔记的组织、查询与高级[脚本](https://triliumnext.github.io/Docs/Wiki/scripts)
 * 接口提供英文、德文、西班牙文、法文、罗马尼亚文与中文（简体与正体）
 * 直接整合[OpenID 与
-  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   以实现更安全的登录
 * 与自架的同步服务器进行[同步](https://triliumnext.github.io/Docs/Wiki/synchronization)
   * 另有[3rd party service for hosting synchronisation
@@ -78,7 +77,7 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 * 手绘/示意图：基于 [Excalidraw](https://excalidraw.com/) （笔记类型为「canvas」）
 * 用于可视化笔记及其关系的[关系图](https://triliumnext.github.io/Docs/Wiki/relation-map)与[链接图](https://triliumnext.github.io/Docs/Wiki/link-map)
 * 思维导图：基于[Mind Elixir](https://docs.mind-elixir.com/)
-* 具有定位钉与 GPX 轨迹的[地图](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+* 具有定位钉与 GPX 轨迹的[地图](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
 * [脚本](https://triliumnext.github.io/Docs/Wiki/scripts) - 参见
   [高级展示](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
 * 用于自动化的 [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)
@@ -89,9 +88,9 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
   [Markdown 导入与导出](https://triliumnext.github.io/Docs/Wiki/markdown)
 * 用于快速保存网页内容的 [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)
 * 可自定义的 UI（侧边栏按钮、用户自定义小组件等）
-* [度量指标（Metrics）](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，并附有
+* [度量指标（Metrics）](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，并附有
   [Grafana
-  仪表板](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+  仪表板](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ 想要更多 TriliumNext 的主题、脚本、外挂与资源，亦可参考以下第三方资源／社群：
 

@@ -20,10 +20,10 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[English](../README.md) | [Chinese (Simplified)](./README-ZH_CN.md) | [Chinese
+(Traditional)](./README-ZH_TW.md) | [Russian](./README-ru.md) |
+[Japanese](./README-ja.md) | [Italian](./README-it.md) |
+[Spanish](./README-es.md)
 
 Το Trilium Notes είναι μια δωρεάν και ανοιχτού κώδικα, ιεραρχική εφαρμογή
 σημειώσεων πολλαπλών πλατφορμών με έμφαση στη δημιουργία μεγάλων προσωπικών
@@ -32,7 +32,7 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 Δείτε [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) για
 γρήγορη επισκόπηση:
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⏬ Λήψη
 - [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) -
@@ -51,19 +51,19 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
   [docs.triliumnotes.org]
 - ** In-App Help **: Πατήστε `F1 ` εντός Trilium για την πρόσβαση στην ίδια
   τεκμηρίωση απευθείας στην εφαρμογή
-- **GitHub**: Περιηγηθείτε στον [Οδηγό
-  χρήσης](./docs/User%20Guide/User%20Guide/) σε αυτό το αποθετήριο
+- **GitHub**: Περιηγηθείτε στον [Οδηγό χρήσης](./User%20Guide/User%20Guide/) σε
+  αυτό το αποθετήριο
 
 ### Γρήγοροι Σύνδεσμοι
 - [Οδηγός για να ξεκινήσετε](https://docs.triliumnotes.org/)
 - [Οδηγίες
-  Εγκατάστασης](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  Εγκατάστασης](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Ρύθμιση
-  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Docker](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Αναβάθμιση
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Βασικές έννοιες και
-  Χαρακτηριστικά](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  Χαρακτηριστικά](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Μοτίβα Προσωπικής Βάσης
   Γνώσεων](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
@@ -91,7 +91,7 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 * Η UI είναι διαθέσιμη στα Αγγλικά, Γερμανικά, Ισπανικά, Γαλλικά, Ρουμανικά και
   Κινεζικά (απλοποιημένα και παραδοσιακά)
 * Άμεση [ενσωμάτωση OpenID και
-  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   για πιο ασφαλή σύνδεση
 * [Συγχρονισμός](https://triliumnext.github.io/Docs/Wiki/synchronization) με
   self-hosted διακομιστή συγχρονισμού
@@ -108,8 +108,7 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
   [χάρτες συνδέσμων](https://triliumnext.github.io/Docs/Wiki/link-map) για την
   οπτικοποίηση των σημειώσεων και των σχέσεών τους
 * Νοητικοί χάρτες, βασισμένοι στο [Mind Elixir](https://docs.mind-elixir.com/)
-* [Γεωγραφικοί
-  χάρτες](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) με
+* [Γεωγραφικοί χάρτες](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) με
   καρφίτσες τοποθεσίας και κομμάτια GPX
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - ανατρέξτε στην
   ενότητα [Προθήκες για
@@ -129,9 +128,9 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
   αποθήκευση περιεχομένου ιστού
 * Προσαρμόσιμο UI (κουμπιά πλαϊνής γραμμής, γραφικά στοιχεία που ορίζονται από
   το χρήστη,...)
-* [Μετρήσεις](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md),
-  μαζί με ένα [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Μετρήσεις](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), μαζί με
+  ένα [Grafana
+  Dashboard](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
 ✨ Ρίξτε μια ματιά στους ακόλουθους πόρους/κοινότητες τρίτων για περισσότερες
 δυνατότητες που σχετίζονται με το TriliumNext:
