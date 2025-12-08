@@ -34,5 +34,5 @@ function replaceTranslation(path: string, value: string) {
         cursor = cursor[current];
     }
 
-    cursor[lastSegment] = value;
+    if (lastSegment) cursor[lastSegment] = value;
 }

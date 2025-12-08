@@ -18,7 +18,7 @@ async function getLanguageStats() {
             return JSON.parse(await readFile(cacheFile, "utf-8"));
         }
     } catch (e) {
-        if (e.code !== "ENOENT") {
+        if (!(e && typeof e === "object" && "code" in e && e.code === "ENOENT")) {
             throw e;
         }
     }
