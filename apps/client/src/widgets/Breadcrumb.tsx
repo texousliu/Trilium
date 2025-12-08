@@ -1,14 +1,16 @@
-import { Fragment } from "preact/jsx-runtime";
 import "./Breadcrumb.css";
-import { useChildNotes, useNoteContext, useNoteLabel, useNoteProperty, useStaticTooltip } from "./react/hooks";
-import NoteLink from "./react/NoteLink";
-import Dropdown from "./react/Dropdown";
-import Icon from "./react/Icon";
-import { FormListItem } from "./react/FormList";
-import NoteContext from "../components/note_context";
-import ActionButton from "./react/ActionButton";
+
 import { useMemo } from "preact/hooks";
+import { Fragment } from "preact/jsx-runtime";
+
+import NoteContext from "../components/note_context";
 import froca from "../services/froca";
+import ActionButton from "./react/ActionButton";
+import Dropdown from "./react/Dropdown";
+import { FormListItem } from "./react/FormList";
+import { useChildNotes, useNoteContext, useNoteLabel, useNoteProperty } from "./react/hooks";
+import Icon from "./react/Icon";
+import NoteLink from "./react/NoteLink";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
@@ -21,38 +23,38 @@ export default function Breadcrumb() {
     return (
         <div className="breadcrumb">
             {notePath.length > COLLAPSE_THRESHOLD ? (
-            <>
-                {notePath.slice(0, INITIAL_ITEMS).map((item, index) => (
-                <Fragment key={item}>
-                    {index === 0 && notePath.length > 1
-                    ? <BreadcrumbRoot noteContext={noteContext} />
-                    : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
-                    }
-                    <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />
-                </Fragment>
-                ))}
-                <BreadcrumbCollapsed items={notePath.slice(INITIAL_ITEMS, -FINAL_ITEMS)} noteContext={noteContext} />
-                {notePath.slice(-FINAL_ITEMS).map((item, index) => (
-                <Fragment key={item}>
-                    <BreadcrumbSeparator notePath={notePath[notePath.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
-                    <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
-                </Fragment>
-                ))}
-            </>
+                <>
+                    {notePath.slice(0, INITIAL_ITEMS).map((item, index) => (
+                        <Fragment key={item}>
+                            {index === 0 && notePath.length > 1
+                                ? <BreadcrumbRoot noteContext={noteContext} />
+                                : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                            }
+                            <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />
+                        </Fragment>
+                    ))}
+                    <BreadcrumbCollapsed items={notePath.slice(INITIAL_ITEMS, -FINAL_ITEMS)} noteContext={noteContext} />
+                    {notePath.slice(-FINAL_ITEMS).map((item, index) => (
+                        <Fragment key={item}>
+                            <BreadcrumbSeparator notePath={notePath[notePath.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
+                            <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                        </Fragment>
+                    ))}
+                </>
             ) : (
-            notePath.map((item, index) => (
-                <Fragment key={item}>
-                {index === 0 && notePath.length > 1
-                    ? <BreadcrumbRoot noteContext={noteContext} />
-                    : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
-                }
-                {(index < notePath.length - 1 || note?.hasChildren()) &&
-                    <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />}
-                </Fragment>
-            ))
+                notePath.map((item, index) => (
+                    <Fragment key={item}>
+                        {index === 0 && notePath.length > 1
+                            ? <BreadcrumbRoot noteContext={noteContext} />
+                            : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                        }
+                        {(index < notePath.length - 1 || note?.hasChildren()) &&
+                            <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />}
+                    </Fragment>
+                ))
             )}
         </div>
-    )
+    );
 }
 
 function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined }) {
@@ -66,7 +68,7 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
             text={title ?? ""}
             onClick={() => noteContext?.setNote("root")}
         />
-    )
+    );
 }
 
 function BreadcrumbItem({ notePath, activeNotePath }: { notePath: string, activeNotePath: string }) {
@@ -78,7 +80,7 @@ function BreadcrumbItem({ notePath, activeNotePath }: { notePath: string, active
             title={isRootNote && activeNotePath !== "root" ? "" : undefined}
             showNoteIcon={isRootNote}
         />
-    )
+    );
 }
 
 function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
@@ -92,7 +94,7 @@ function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePa
         >
             <BreadcrumbSeparatorDropdownContent notePath={notePath} noteContext={noteContext} activeNotePath={activeNotePath} />
         </Dropdown>
-    )
+    );
 }
 
 function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
@@ -104,20 +106,20 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
     return (
         <ul class="breadcrumb-child-list">
             {childNotes.map((note) => {
-                const childNotePath = `${notePathPrefix}/${note.noteId}`
+                const childNotePath = `${notePathPrefix}/${note.noteId}`;
                 return <li key={note.noteId}>
                     <FormListItem
                         icon={note.getIcon()}
                         onClick={() => noteContext?.setNote(childNotePath)}
                     >
                         {childNotePath !== activeNotePath
-                        ? <span>{note.title}</span>
-                        : <strong>{note.title}</strong>}
+                            ? <span>{note.title}</span>
+                            : <strong>{note.title}</strong>}
                     </FormListItem>
-                </li>
-        })}
+                </li>;
+            })}
         </ul>
-    )
+    );
 }
 
 function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteContext: NoteContext | undefined }) {
@@ -143,11 +145,11 @@ function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteCont
                         >
                             <span>{note.title}</span>
                         </FormListItem>
-                    </li>
+                    </li>;
                 })}
             </ul>
         </Dropdown>
-    )
+    );
 }
 
 function buildNotePaths(notePathArray: string[] | undefined) {
