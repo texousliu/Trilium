@@ -15,7 +15,7 @@ export default function Breadcrumb() {
         <div className="breadcrumb">
             {notePath.map((item, index) => (
                 <Fragment key={item}>
-                    <BreadcrumbItem notePath={item} />
+                    <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
                     {(index < notePath.length - 1 || note?.hasChildren()) &&
                         <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />}
                 </Fragment>
@@ -24,13 +24,13 @@ export default function Breadcrumb() {
     )
 }
 
-function BreadcrumbItem({ notePath }: { notePath: string }) {
+function BreadcrumbItem({ notePath, activeNotePath }: { notePath: string, activeNotePath: string }) {
     const isRootNote = (notePath === "root");
     return (
         <NoteLink
             notePath={notePath}
             noPreview
-            title={isRootNote ? "" : undefined}
+            title={isRootNote && activeNotePath !== "root" ? "" : undefined}
             showNoteIcon={isRootNote}
         />
     )
