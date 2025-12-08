@@ -84,6 +84,11 @@ export default class MathInputView extends View {
 		textarea.value = this.value ?? '';
 		textarea.readOnly = this.isReadOnly;
 
+		if ( this.mathfield ) {
+			this.mathfield.remove();
+			this.mathfield = null;
+		}
+
 		textarea.addEventListener( 'input', () => {
 			const val = textarea.value;
 			if ( this.mathfield ) {
@@ -92,10 +97,29 @@ export default class MathInputView extends View {
 			this.value = val || null;
 		} );
 
+		this.on( 'change:value', ( _e, _n, val ) => {
+			const newVal = val ?? '';
+			textarea.value = newVal;
+			if ( this.mathfield && this.mathfield.value !== newVal ) {
+				this.mathfield.setValue( newVal, { silenceNotifications: true } );
+			}
+		} );
+
 		this.on( 'change:isReadOnly', ( _e, _n, val ) => {
 			textarea.readOnly = val;
-			if ( this.mathfield ) { this.mathfield.readOnly = val; }
+			if ( this.mathfield ) {
+				this.mathfield.readOnly = val;
+			}
 		} );
+
+		const vk = ( window as any ).mathVirtualKeyboard;
+		if ( vk ) {
+			vk.addEventListener( 'geometrychange', () => {
+				if ( vk.visible && document.activeElement === textarea && this.mathfield ) {
+					this.mathfield.focus();
+				}
+			} );
+		}
 
 		this._loadMathLive();
 	}
@@ -111,17 +135,23 @@ export default class MathInputView extends View {
 				MathfieldClass.plonkSound = null;
 			}
 
-			if ( this.element ) { this._createMathField(); }
+			if ( this.element ) {
+				this._createMathField();
+			}
 		} catch ( e ) {
 			console.error( 'MathLive load failed:', e );
 			const c = this.element?.querySelector( '.ck-mathlive-container' );
-			if ( c ) { c.textContent = 'Math editor unavailable'; }
+			if ( c ) {
+				c.textContent = 'Math editor unavailable';
+			}
 		}
 	}
 
 	private _createMathField(): void {
 		const container = this.element?.querySelector( '.ck-mathlive-container' );
-		if ( !container ) { return; }
+		if ( !container ) {
+			return;
+		}
 
 		const mf = document.createElement( 'math-field' ) as MathFieldElement;
 		mf.mathVirtualKeyboardPolicy = 'auto';
@@ -131,8 +161,6 @@ export default class MathInputView extends View {
 
 		mf.addEventListener( 'mount', () => {
 			mf.inlineShortcuts = { ...mf.inlineShortcuts, dx: 'dx', dy: 'dy', dt: 'dt' };
-			const btn = mf.shadowRoot?.querySelector( '[part="virtual-keyboard-toggle"]' ) as HTMLElement;
-			btn?.addEventListener( 'click', () => mf.focus() );
 		}, { once: true } );
 
 		mf.addEventListener( 'input', () => {
@@ -153,13 +181,18 @@ export default class MathInputView extends View {
 
 	public hideKeyboard(): void {
 		const vk = ( window as any ).mathVirtualKeyboard;
-		if ( vk?.visible ) { vk.hide(); }
+		if ( vk?.visible ) {
+			vk.hide();
+		}
 	}
 
 	public override destroy(): void {
 		this.hideKeyboard();
 		if ( this.mathfield ) {
-			try { this.mathfield.blur(); this.mathfield.remove(); } catch { /* ignore */ }
+			try {
+				this.mathfield.blur();
+				this.mathfield.remove();
+			} catch { /* ignore */ }
 			this.mathfield = null;
 		}
 		super.destroy();

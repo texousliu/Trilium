@@ -134,42 +134,42 @@ export default class MainFormView extends View {
 	public set equation( equation: string ) {
 		const norm = equation.trim();
 		this.mathInputView.value = norm.length ? norm : null;
-		if ( this.mathView ) this.mathView.value = norm;
+		if ( this.mathView ) {
+			this.mathView.value = norm;
+		}
 	}
 
 	public focus(): void {
 		this._focusCycler.focusFirst();
 	}
 
-	/** Handle delimiter stripping and preview updates. */
-	private _setupSync(previewEnabled: boolean): void {
-		this.mathInputView.on('change:value', () => {
-			let eq = (this.mathInputView.value ?? '').trim();
+	private _setupSync( previewEnabled: boolean ): void {
+		this.mathInputView.on( 'change:value', () => {
+			let eq = ( this.mathInputView.value ?? '' ).trim();
 
-			// Strip delimiters if present (e.g. pasted content)
-			if (hasDelimiters(eq)) {
-				const params = extractDelimiters(eq);
+			if ( hasDelimiters( eq ) ) {
+				const params = extractDelimiters( eq );
 				eq = params.equation;
 				this.displayButtonView.isOn = params.display;
 
-				// Update the input with stripped delimiters
-				if (this.mathInputView.value !== eq) {
+				if ( this.mathInputView.value !== eq ) {
 					this.mathInputView.value = eq.length ? eq : null;
 				}
 			}
 
-			// Update preview
-			if (previewEnabled && this.mathView && this.mathView.value !== eq) {
+			if ( previewEnabled && this.mathView && this.mathView.value !== eq ) {
 				this.mathView.value = eq;
 			}
-		});
+		} );
 	}
 
 	private _createButton( label: string, icon: string, className: string, type?: 'submit' | 'button' ): ButtonView {
 		const btn = new ButtonView( this.locale );
 		btn.set( { label, icon, tooltip: true } );
 		btn.extendTemplate( { attributes: { class: className } } );
-		if (type) btn.type = type;
+		if ( type ) {
+			btn.type = type;
+		}
 		return btn;
 	}
 
