@@ -100,20 +100,31 @@ export default class MainFormView extends View {
 
 		submitHandler( { view: this } );
 
-		// Register focusables
-		[
-			this.mathInputView,
+		const focusableViews = [
+			this.mathInputView.latexTextAreaView,
 			this.displayButtonView,
 			this.saveButtonView,
 			this.cancelButtonView
-		].forEach( v => {
+		];
+
+		focusableViews.forEach( v => {
+			this._focusables.add( v );
 			if ( v.element ) {
-				this._focusables.add( v );
 				this.focusTracker.add( v.element );
 			}
 		} );
 
-		if ( this.element ) this.keystrokes.listenTo( this.element );
+		this.mathInputView.on( 'mathfieldReady', () => {
+			const mathfieldView = this.mathInputView.mathFieldFocusableView;
+			if ( mathfieldView.element ) {
+				this._focusables.add( mathfieldView, 0 );
+				this.focusTracker.add( mathfieldView.element );
+			}
+		} );
+
+		if ( this.element ) {
+			this.keystrokes.listenTo( this.element );
+		}
 	}
 
 	public get equation(): string {

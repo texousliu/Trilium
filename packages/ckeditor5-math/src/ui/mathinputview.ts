@@ -1,4 +1,4 @@
-import { View, type Locale } from 'ckeditor5';
+import { View, type Locale, type FocusableView } from 'ckeditor5';
 
 interface MathFieldElement extends HTMLElement {
 	value: string;
@@ -8,57 +8,71 @@ interface MathFieldElement extends HTMLElement {
 	setValue( value: string, options?: { silenceNotifications?: boolean } ): void;
 }
 
-/**
- * Combined math input with MathLive visual editor and raw LaTeX textarea.
- */
+export class MathFieldFocusableView extends View implements FocusableView {
+	public declare element: HTMLElement | null;
+	private _mathInputView: MathInputView;
+
+	constructor( locale: Locale, mathInputView: MathInputView ) {
+		super( locale );
+		this._mathInputView = mathInputView;
+	}
+
+	public focus(): void {
+		this._mathInputView.mathfield?.focus();
+	}
+
+	public setElement( el: HTMLElement ): void {
+		( this as any ).element = el;
+	}
+}
+
+export class LatexTextAreaView extends View implements FocusableView {
+	declare public element: HTMLTextAreaElement;
+
+	constructor( locale: Locale ) {
+		super( locale );
+		this.setTemplate( {
+			tag: 'textarea',
+			attributes: {
+				class: [ 'ck', 'ck-textarea', 'ck-latex-textarea' ],
+				autocapitalize: 'off',
+				autocomplete: 'off',
+				autocorrect: 'off',
+				spellcheck: 'false',
+				tabindex: 0
+			}
+		} );
+	}
+
+	public focus(): void {
+		this.element?.focus();
+	}
+}
+
 export default class MathInputView extends View {
 	public declare value: string | null;
 	public declare isReadOnly: boolean;
-
 	public mathfield: MathFieldElement | null = null;
-	private _textarea: HTMLTextAreaElement | null = null;
+	public readonly latexTextAreaView: LatexTextAreaView;
+	public readonly mathFieldFocusableView: MathFieldFocusableView;
 
 	constructor( locale: Locale ) {
 		super( locale );
 		const t = locale.t;
+
+		this.latexTextAreaView = new LatexTextAreaView( locale );
+		this.mathFieldFocusableView = new MathFieldFocusableView( locale, this );
 
 		this.set( 'value', null );
 		this.set( 'isReadOnly', false );
 
 		this.setTemplate( {
 			tag: 'div',
-			attributes: {
-				class: [ 'ck', 'ck-math-input' ]
-			},
+			attributes: { class: [ 'ck', 'ck-math-input' ] },
 			children: [
-				// MathLive container
-				{
-					tag: 'div',
-					attributes: { class: [ 'ck-mathlive-container' ] }
-				},
-				// LaTeX label
-				{
-					tag: 'label',
-					attributes: { class: [ 'ck-latex-label' ] },
-					children: [ t( 'LaTeX' ) ]
-				},
-				// Raw LaTeX wrapper
-				{
-					tag: 'div',
-					attributes: { class: [ 'ck-latex-wrapper' ] },
-					children: [
-						{
-							tag: 'textarea',
-							attributes: {
-								class: [ 'ck', 'ck-textarea', 'ck-latex-textarea' ],
-								autocapitalize: 'off',
-								autocomplete: 'off',
-								autocorrect: 'off',
-								spellcheck: 'false'
-							}
-						}
-					]
-				}
+				{ tag: 'div', attributes: { class: [ 'ck-mathlive-container' ] } },
+				{ tag: 'label', attributes: { class: [ 'ck-latex-label' ] }, children: [ t( 'LaTeX' ) ] },
+				{ tag: 'div', attributes: { class: [ 'ck-latex-wrapper' ] }, children: [ this.latexTextAreaView ] }
 			]
 		} );
 	}
@@ -66,36 +80,24 @@ export default class MathInputView extends View {
 	public override render(): void {
 		super.render();
 
-		this._textarea = this.element!.querySelector( '.ck-latex-textarea' ) as HTMLTextAreaElement;
-		this._textarea.value = this.value ?? '';
-		this._textarea.readOnly = this.isReadOnly;
+		const textarea = this.latexTextAreaView.element;
+		textarea.value = this.value ?? '';
+		textarea.readOnly = this.isReadOnly;
 
-		this._loadMathLive();
-
-		// Textarea -> observable (and sync to mathfield)
-		this._textarea.addEventListener( 'input', () => {
-			const val = this._textarea!.value;
+		textarea.addEventListener( 'input', () => {
+			const val = textarea.value;
 			if ( this.mathfield ) {
 				this.mathfield.setValue( val, { silenceNotifications: true } );
 			}
-			this.value = val.length ? val : null;
+			this.value = val || null;
 		} );
 
-		// Observable -> textarea and mathfield
-		this.on( 'change:value', ( _evt, _name, newValue ) => {
-			const val = newValue ?? '';
-			if ( this._textarea && this._textarea.value !== val ) {
-				this._textarea.value = val;
-			}
-			if ( this.mathfield && this.mathfield.value !== val ) {
-				this.mathfield.setValue( val, { silenceNotifications: true } );
-			}
+		this.on( 'change:isReadOnly', ( _e, _n, val ) => {
+			textarea.readOnly = val;
+			if ( this.mathfield ) { this.mathfield.readOnly = val; }
 		} );
 
-		this.on( 'change:isReadOnly', ( _evt, _name, newValue ) => {
-			if ( this._textarea ) { this._textarea.readOnly = newValue; }
-			if ( this.mathfield ) { this.mathfield.readOnly = newValue; }
-		} );
+		this._loadMathLive();
 	}
 
 	private async _loadMathLive(): Promise<void> {
@@ -103,21 +105,17 @@ export default class MathInputView extends View {
 			await import( 'mathlive' );
 			await customElements.whenDefined( 'math-field' );
 
-			// Disable MathLive sounds
 			const MathfieldClass = customElements.get( 'math-field' ) as any;
 			if ( MathfieldClass ) {
 				MathfieldClass.soundsDirectory = null;
 				MathfieldClass.plonkSound = null;
 			}
 
-			if ( !this.element ) { return; }
-			this._createMathField();
-		} catch ( error ) {
-			console.error( 'MathLive load failed:', error );
-			const container = this.element?.querySelector( '.ck-mathlive-container' );
-			if ( container ) {
-				container.textContent = 'Math editor unavailable';
-			}
+			if ( this.element ) { this._createMathField(); }
+		} catch ( e ) {
+			console.error( 'MathLive load failed:', e );
+			const c = this.element?.querySelector( '.ck-mathlive-container' );
+			if ( c ) { c.textContent = 'Math editor unavailable'; }
 		}
 	}
 
@@ -125,60 +123,28 @@ export default class MathInputView extends View {
 		const container = this.element?.querySelector( '.ck-mathlive-container' );
 		if ( !container ) { return; }
 
-		const mathfield = document.createElement( 'math-field' ) as MathFieldElement;
-		mathfield.mathVirtualKeyboardPolicy = 'auto';
+		const mf = document.createElement( 'math-field' ) as MathFieldElement;
+		mf.mathVirtualKeyboardPolicy = 'auto';
+		mf.setAttribute( 'tabindex', '-1' );
+		mf.value = this.value ?? '';
+		mf.readOnly = this.isReadOnly;
 
-		// Add common shortcuts
-		mathfield.addEventListener( 'mount', () => {
-			mathfield.inlineShortcuts = {
-				...mathfield.inlineShortcuts,
-				dx: 'dx',
-				dy: 'dy',
-				dt: 'dt'
-			};
+		mf.addEventListener( 'mount', () => {
+			mf.inlineShortcuts = { ...mf.inlineShortcuts, dx: 'dx', dy: 'dy', dt: 'dt' };
+			const btn = mf.shadowRoot?.querySelector( '[part="virtual-keyboard-toggle"]' ) as HTMLElement;
+			btn?.addEventListener( 'click', () => mf.focus() );
 		}, { once: true } );
 
-		// Focus mathfield when virtual keyboard button is clicked
-		mathfield.addEventListener( 'mount', () => {
-			const toggleBtn = mathfield.shadowRoot?.querySelector( '[part="virtual-keyboard-toggle"]' ) as HTMLButtonElement;
-			if ( toggleBtn ) {
-				toggleBtn.addEventListener( 'click', () => {
-					mathfield.focus();
-				} );
-			}
-		}, { once: true } );
-
-		// Set initial value (may have been set before MathLive loaded)
-		try {
-			mathfield.value = this.value ?? '';
-		} catch { /* MathLive may not be ready */ }
-		mathfield.readOnly = this.isReadOnly;
-
-		if ( this._textarea && this.value ) {
-			this._textarea.value = this.value;
-		}
-
-		// MathLive -> textarea and observable
-		mathfield.addEventListener( 'input', () => {
-			try {
-				const val = mathfield.value;
-				if ( this._textarea ) { this._textarea.value = val; }
-				this.value = val.length ? val : null;
-			} catch { /* MathLive may not be ready */ }
+		mf.addEventListener( 'input', () => {
+			const val = mf.value;
+			this.latexTextAreaView.element.value = val;
+			this.value = val || null;
 		} );
 
-		// Observable -> MathLive
-		this.on( 'change:value', ( _evt, _name, newValue ) => {
-			try {
-				const val = newValue ?? '';
-				if ( mathfield.value !== val ) {
-					mathfield.setValue( val, { silenceNotifications: true } );
-				}
-			} catch { /* MathLive may not be ready */ }
-		} );
-
-		container.appendChild( mathfield );
-		this.mathfield = mathfield;
+		container.appendChild( mf );
+		this.mathfield = mf;
+		this.mathFieldFocusableView.setElement( mf );
+		this.fire( 'mathfieldReady' );
 	}
 
 	public focus(): void {
@@ -186,23 +152,16 @@ export default class MathInputView extends View {
 	}
 
 	public hideKeyboard(): void {
-		if ( typeof window !== 'undefined' && window.mathVirtualKeyboard?.visible ) {
-			window.mathVirtualKeyboard.hide();
-		}
+		const vk = ( window as any ).mathVirtualKeyboard;
+		if ( vk?.visible ) { vk.hide(); }
 	}
 
 	public override destroy(): void {
-		// Hide keyboard before destroying
 		this.hideKeyboard();
-
 		if ( this.mathfield ) {
-			try {
-				this.mathfield.blur();
-				this.mathfield.remove();
-			} catch { /* MathLive cleanup error */ }
+			try { this.mathfield.blur(); this.mathfield.remove(); } catch { /* ignore */ }
 			this.mathfield = null;
 		}
-		this._textarea = null;
 		super.destroy();
 	}
 }
