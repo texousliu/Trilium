@@ -1,7 +1,8 @@
-import { readFile, writeFile } from "fs/promises";
+import { readFile, stat, writeFile,  } from "fs/promises";
 import { join } from "path";
 
-const rootDir = join(__dirname, "../..");
+const scriptDir = __dirname;
+const rootDir = join(scriptDir, "../..");
 const docsDir = join(rootDir, "docs");
 
 /**
@@ -11,21 +12,69 @@ const docsDir = join(rootDir, "docs");
  * The README in the repo root remains the true base file, but it's a two-step process which requires the execution of this script.
  */
 async function handleBaseFile() {
+
+}
+
+async function getLanguageStats() {
+    const cacheFile = join(scriptDir, ".language-stats.json");
+
+    // Try to read from the cache.
+    try {
+        const cacheStats = await stat(cacheFile);
+        const now = new Date();
+        const oneDay = 24 * 60 * 60 * 1000; // milliseconds
+        if (cacheStats.mtimeMs < now.getTime() + oneDay) {
+            console.log("Reading language stats from cache.");
+            return JSON.parse(await readFile(cacheFile, "utf-8"));
+        }
+    } catch (e) {
+        if (e.code !== "ENOENT") {
+            throw e;
+        }
+    }
+
+    // Make the request
+    console.log("Reading language stats from Weblate API.");
+    const request = await fetch("https://hosted.weblate.org/api/components/trilium/readme/translations/");
+    const stats = JSON.parse(await request.text());
+
+    // Update the cache
+    await writeFile(cacheFile, JSON.stringify(stats, null, 4));
+
+    return stats;
+}
+
+async function rewriteLanguageBar(readme: string) {
+    // Filter languages by their availability.
+    const languageStats = await getLanguageStats();
+    const languagesWithCoverage = languageStats.results.filter(language => language.translated_percent > 75);
+    const languageLinks = languagesWithCoverage.map(language => `[${language.language.name}](./${language.filename})`)
+
+    readme = readme.replace(
+        /<!-- LANGUAGE SWITCHER -->\r?\n.*$/m,
+        `<!-- LANGUAGE SWITCHER -->\n${languageLinks.join(" | ")}`);
+    return readme;
+}
+
+function rewriteRelativeLinks(readme: string) {
+    readme = readme.replaceAll("./docs/", "./");
+    readme = readme.replaceAll("./README.md", "../README.md");
+    return readme;
+}
+
+async function main() {
     // Read the README at root level.
     const readmePath = join(rootDir, "README.md");
     let readme = await readFile(readmePath, "utf-8");
 
-    // Rewrite relative links.
-    readme = readme.replaceAll("./docs/", "./");
-    readme = readme.replaceAll("./README.md", "../README.md");
+    // Update the README at root level.
+    readme = await rewriteLanguageBar(readme);
+    await writeFile(readmePath, readme);
 
-    // Copy it into docs.
+    // Rewrite relative links for docs/README.md.
+    readme = rewriteRelativeLinks(readme);
     const outputPath = join(docsDir, "README.md");
     await writeFile(outputPath, readme);
-}
-
-async function main() {
-    await handleBaseFile();
 }
 
 main();
