@@ -1,3 +1,7 @@
+.breadcrumb-row {
+    position: relative;
+}
+
 .component.breadcrumb {
     contain: none;
     margin: 0 10px;
@@ -8,11 +12,18 @@
     flex-wrap: nowrap;
     overflow: hidden;
 
+    > span,
+    > span > span {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
     a {
         color: inherit;
         text-decoration: none;
-        width: 100%;
-        max-width: 200px;
+        min-width: 0;
+        max-width: 100px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
