@@ -130,7 +130,6 @@ export default class DesktopLayout {
                                                                 .child(<ClosePaneButton />)
                                                                 .child(<CreatePaneButton />)
                                                         )
-                                                        .child(<Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
@@ -150,6 +149,7 @@ export default class DesktopLayout {
                                                                     .child(<ReadOnlyNoteInfoBar />)
                                                                     .child(<SharedInfo />)
                                                                 )
+                                                                .child(<Ribbon />)
                                                                 .child(<PromotedAttributes />)
                                                                 .child(<SqlTableSchemas />)
                                                                 .child(<NoteDetail />)

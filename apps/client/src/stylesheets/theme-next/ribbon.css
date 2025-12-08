@@ -183,13 +183,10 @@ ul.editability-dropdown li.dropdown-item > div {
  * Styling as a floating toolbar
  */
 .ribbon-container {
-    background: var(--card-background-color);
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-    margin: 10px;
-    border-radius: 6px;
-    padding: 5px 0;
-
-    .ribbon-body {
-        border-bottom: 0;
-    }
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--main-background-color);
+    z-index: 997;
 }
