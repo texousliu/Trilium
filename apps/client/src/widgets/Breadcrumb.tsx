@@ -8,7 +8,7 @@ import { FormListItem } from "./react/FormList";
 import NoteContext from "../components/note_context";
 
 export default function Breadcrumb() {
-    const { noteContext } = useNoteContext();
+    const { note, noteContext } = useNoteContext();
     const notePath = buildNotePaths(noteContext?.notePathArray);
 
     return (
@@ -16,7 +16,8 @@ export default function Breadcrumb() {
             {notePath.map((item, index) => (
                 <Fragment key={item}>
                     <BreadcrumbItem notePath={item} />
-                    <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />
+                    {(index < notePath.length - 1 || note?.hasChildren()) &&
+                        <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />}
                 </Fragment>
             ))}
         </div>
