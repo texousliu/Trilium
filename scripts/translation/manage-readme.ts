@@ -13,7 +13,11 @@ const docsDir = join(rootDir, "docs");
 async function handleBaseFile() {
     // Read the README at root level.
     const readmePath = join(rootDir, "README.md");
-    const readme = await readFile(readmePath, "utf-8");
+    let readme = await readFile(readmePath, "utf-8");
+
+    // Rewrite relative links.
+    readme = readme.replaceAll("./docs/", "./");
+    readme = readme.replaceAll("./README.md", "../README.md");
 
     // Copy it into docs.
     const outputPath = join(docsDir, "README.md");
