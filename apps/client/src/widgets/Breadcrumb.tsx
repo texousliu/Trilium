@@ -1,11 +1,14 @@
 import { Fragment } from "preact/jsx-runtime";
 import "./Breadcrumb.css";
-import { useChildNotes, useNoteContext } from "./react/hooks";
+import { useChildNotes, useNoteContext, useNoteLabel, useNoteProperty, useStaticTooltip } from "./react/hooks";
 import NoteLink from "./react/NoteLink";
 import Dropdown from "./react/Dropdown";
 import Icon from "./react/Icon";
 import { FormListItem } from "./react/FormList";
 import NoteContext from "../components/note_context";
+import ActionButton from "./react/ActionButton";
+import { useMemo } from "preact/hooks";
+import froca from "../services/froca";
 
 export default function Breadcrumb() {
     const { note, noteContext } = useNoteContext();
@@ -15,12 +18,29 @@ export default function Breadcrumb() {
         <div className="breadcrumb">
             {notePath.map((item, index) => (
                 <Fragment key={item}>
-                    <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                    {index === 0 && notePath.length > 1
+                        ? <BreadcrumbRoot noteContext={noteContext} />
+                        : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                    }
                     {(index < notePath.length - 1 || note?.hasChildren()) &&
                         <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />}
                 </Fragment>
             ))}
         </div>
+    )
+}
+
+function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined }) {
+    const note = useMemo(() => froca.getNoteFromCache("root"), []);
+    useNoteLabel(note, "iconClass");
+    const title = useNoteProperty(note, "title");
+
+    return (note &&
+        <ActionButton
+            icon={note.getIcon()}
+            text={title ?? ""}
+            onClick={() => noteContext?.setNote("root")}
+        />
     )
 }
 
