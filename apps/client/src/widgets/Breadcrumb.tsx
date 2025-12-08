@@ -10,22 +10,47 @@ import ActionButton from "./react/ActionButton";
 import { useMemo } from "preact/hooks";
 import froca from "../services/froca";
 
+const COLLAPSE_THRESHOLD = 5;
+const INITIAL_ITEMS = 2;
+const FINAL_ITEMS = 2;
+
 export default function Breadcrumb() {
     const { note, noteContext } = useNoteContext();
     const notePath = buildNotePaths(noteContext?.notePathArray);
 
     return (
         <div className="breadcrumb">
-            {notePath.map((item, index) => (
+            {notePath.length > COLLAPSE_THRESHOLD ? (
+            <>
+                {notePath.slice(0, INITIAL_ITEMS).map((item, index) => (
                 <Fragment key={item}>
                     {index === 0 && notePath.length > 1
-                        ? <BreadcrumbRoot noteContext={noteContext} />
-                        : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                    ? <BreadcrumbRoot noteContext={noteContext} />
+                    : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
                     }
-                    {(index < notePath.length - 1 || note?.hasChildren()) &&
-                        <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />}
+                    <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />
                 </Fragment>
-            ))}
+                ))}
+                <BreadcrumbCollapsed items={notePath.slice(INITIAL_ITEMS, -FINAL_ITEMS)} noteContext={noteContext} />
+                {notePath.slice(-FINAL_ITEMS).map((item, index) => (
+                <Fragment key={item}>
+                    <BreadcrumbSeparator notePath={notePath[notePath.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
+                    <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                </Fragment>
+                ))}
+            </>
+            ) : (
+            notePath.map((item, index) => (
+                <Fragment key={item}>
+                {index === 0 && notePath.length > 1
+                    ? <BreadcrumbRoot noteContext={noteContext} />
+                    : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                }
+                {(index < notePath.length - 1 || note?.hasChildren()) &&
+                    <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index+1]} noteContext={noteContext} />}
+                </Fragment>
+            ))
+            )}
         </div>
     )
 }
@@ -92,6 +117,36 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
                 </li>
         })}
         </ul>
+    )
+}
+
+function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteContext: NoteContext | undefined }) {
+    return (
+        <Dropdown
+            text={<Icon icon="bx bx-dots-horizontal-rounded" />}
+            noSelectButtonStyle
+            buttonClassName="icon-action"
+            hideToggleArrow
+            dropdownOptions={{ popperConfig: { strategy: "fixed" } }}
+        >
+            <ul class="breadcrumb-child-list">
+                {items.map((notePath) => {
+                    const notePathComponents = notePath.split("/");
+                    const noteId = notePathComponents[notePathComponents.length - 1];
+                    const note = froca.getNoteFromCache(noteId);
+                    if (!note) return null;
+
+                    return <li key={note.noteId}>
+                        <FormListItem
+                            icon={note.getIcon()}
+                            onClick={() => noteContext?.setNote(notePath)}
+                        >
+                            <span>{note.title}</span>
+                        </FormListItem>
+                    </li>
+                })}
+            </ul>
+        </Dropdown>
     )
 }
 

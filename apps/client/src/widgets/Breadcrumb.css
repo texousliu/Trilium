@@ -50,5 +50,6 @@
         white-space: nowrap;
         overflow: hidden;
         display: block;
+        max-width: 300px;
     }
 }
