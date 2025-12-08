@@ -11,23 +11,30 @@
     gap: 0.25em;
     flex-wrap: nowrap;
     overflow: hidden;
+    max-width: 85%;
 
     > span,
     > span > span {
         display: flex;
         align-items: center;
         min-width: 0;
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            min-width: 0;
+            max-width: 150px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            display: block;
+            flex-shrink: 2;
+        }
     }
 
-    a {
-        color: inherit;
-        text-decoration: none;
-        min-width: 0;
-        max-width: 100px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        display: block;
+    > span:last-of-type a {
+        max-width: 300px;
+        flex-shrink: 1;
     }
 
     ul {
@@ -39,7 +46,6 @@
 
     .dropdown-item span,
     .dropdown-item strong {
-        max-width: 200px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
