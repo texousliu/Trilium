@@ -36,4 +36,13 @@
         margin: 0;
         padding: 0;
     }
+
+    .dropdown-item span,
+    .dropdown-item strong {
+        max-width: 200px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+    }
 }
