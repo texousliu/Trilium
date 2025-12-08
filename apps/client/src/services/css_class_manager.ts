@@ -32,6 +32,7 @@ function createClassForColor(colorString: string | null) {
 
         $("head").append(`<style>
             .${className}, span.fancytree-active.${className} {
+                --original-custom-color: ${color.hex()};
                 --light-theme-custom-color: ${adjustedColor.lightThemeColor};
                 --dark-theme-custom-color: ${adjustedColor.darkThemeColor};
                 --custom-color-hue: ${hue ?? 'unset'};
