@@ -42,10 +42,10 @@ Our documentation is available in multiple formats:
 
 ### Quick Links
 - [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Installation Instructions](https://docs.triliumnotes.org/user-guide/setup)
+- [Docker Setup](https://docs.triliumnotes.org/user-guide/setup/server/installation/docker)
+- [Upgrading TriliumNext](https://docs.triliumnotes.org/user-guide/setup/upgrading)
+- [Basic Concepts and Features](https://docs.triliumnotes.org/user-guide/concepts/notes)
 - [Patterns of Personal Knowledge Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 Features
@@ -57,7 +57,7 @@ Our documentation is available in multiple formats:
 * Seamless [note versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
 * Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be used for note organization, querying and advanced [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
 * UI available in English, German, Spanish, French, Romanian, and Chinese (simplified and traditional)
-* Direct [OpenID and TOTP integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md) for more secure login
+* Direct [OpenID and TOTP integration](https://docs.triliumnotes.org/user-guide/setup/server/mfa) for more secure login
 * [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization) with self-hosted sync server
   * there's a [3rd party service for hosting synchronisation server](https://trilium.cc/paid-hosting)
 * [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes to public internet
@@ -65,7 +65,7 @@ Our documentation is available in multiple formats:
 * Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type "canvas")
 * [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing notes and their relations
 * Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with location pins and GPX tracks
+* [Geo maps](https://docs.triliumnotes.org/user-guide/collections/geomap) with location pins and GPX tracks
 * [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
 * [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
 * Scales well in both usability and performance upwards of 100 000 notes
@@ -74,7 +74,7 @@ Our documentation is available in multiple formats:
 * [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) and [Markdown import & export](https://triliumnext.github.io/Docs/Wiki/markdown)
 * [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy saving of web content
 * Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along with a [Grafana Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics), along with a Grafana Dashboard.
 
 ✨ Check out the following third-party resources/communities for more TriliumNext related goodies:
 
