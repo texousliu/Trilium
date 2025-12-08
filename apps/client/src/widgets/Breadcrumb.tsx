@@ -6,7 +6,6 @@ import { joinElements } from "./react/react_utils";
 export default function Breadcrumb() {
     const { noteContext } = useNoteContext();
     const notePath = buildNotePaths(noteContext?.notePathArray);
-    console.log("Render with ", notePath);
 
     return (
         <div className="breadcrumb">
@@ -28,7 +27,7 @@ function buildNotePaths(notePathArray: string[] | undefined) {
 
     let prefix = "";
     const output: string[] = [];
-    for (const notePath of notePathArray) {
+    for (const notePath of notePathArray.slice(0, notePathArray.length - 1)) {
         output.push(`${prefix}${notePath}`);
         prefix += `${notePath}/`;
     }
