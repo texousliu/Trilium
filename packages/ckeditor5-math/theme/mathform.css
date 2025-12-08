@@ -2,6 +2,11 @@
  * Math equation editor dialog styles
  */
 
+/* Ensure MathLive virtual keyboard appears above CKEditor balloon */
+.ML__keyboard {
+    z-index: 10001 !important;
+}
+
 /* ============================================================================
    Main Dialog Container
    ========================================================================= */
@@ -92,6 +97,7 @@
     width: 100%;
     max-width: 100%;
     overflow-x: auto !important;
+    font-size: 1.5em;
 
     /* MathLive theme customization */
     --selection-background-color: rgba(33, 150, 243, 0.2);
