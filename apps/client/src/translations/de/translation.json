@@ -162,7 +162,8 @@
     "quickSearch": "Fokus auf schnelle Sucheingabe",
     "inPageSearch": "Auf-der-Seite-Suche",
     "newTabWithActivationNoteLink": "auf einen Notiz-Link öffnet und aktiviert die Notiz in einem neuen Tab",
-    "title": "Spickzettel"
+    "title": "Spickzettel",
+    "editShortcuts": "Tastenkürzel bearbeiten"
   },
   "import": {
     "importIntoNote": "In Notiz importieren",
@@ -2100,5 +2101,8 @@
     "clear-color": "Notizfarbe entfernen",
     "set-color": "Notizfarbe wählen",
     "set-custom-color": "Eigene Notizfarbe wählen"
+  },
+  "popup-editor": {
+    "maximize": "Wechsele zum vollständigen Editor"
   }
 }
