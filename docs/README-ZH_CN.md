@@ -21,11 +21,11 @@
 
 <!-- translate:off -->
 <!-- LANGUAGE SWITCHER -->
-[English](../README.md) | [Chinese (Simplified Han script)](./README-ZH_CN.md) |
-[Chinese (Traditional Han script)](./README-ZH_TW.md) |
-[Spanish](./README-es.md) | [Italian](./README-it.md) |
-[Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
-[German](./README-de.md) | [Greek](./README-el.md) | [French](./README-fr.md)
+[Chinese (Simplified Han script)](./README-ZH_CN.md) | [Chinese (Traditional Han
+script)](./README-ZH_TW.md) | [English](../README.md) | [French](./README-fr.md)
+| [German](./README-de.md) | [Greek](./README-el.md) | [Italian](./README-it.md)
+| [Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
+[Spanish](./README-es.md)
 <!-- translate:on -->
 
 Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序，专注于建立大型个人知识库。
