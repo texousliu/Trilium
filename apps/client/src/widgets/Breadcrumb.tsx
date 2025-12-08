@@ -64,8 +64,11 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
                     <FormListItem
                         icon={note.getIcon()}
                         onClick={() => noteContext?.setNote(childNotePath)}
-                        checked={childNotePath === activeNotePath}
-                    >{note.title}</FormListItem>
+                    >
+                        {childNotePath !== activeNotePath
+                        ? note.title
+                        : <strong>{note.title}</strong>}
+                    </FormListItem>
                 </li>
         })}
         </ul>
