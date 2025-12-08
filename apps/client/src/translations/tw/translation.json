@@ -1953,7 +1953,8 @@
     "button_title": "將圖表匯出為 PNG"
   },
   "svg": {
-    "export_to_png": "無法將圖表匯出為 PNG。"
+    "export_to_png": "無法將圖表匯出為 PNG。",
+    "export_to_svg": "此绘图无法导出为SVG格式。"
   },
   "code_theme": {
     "title": "外觀",
