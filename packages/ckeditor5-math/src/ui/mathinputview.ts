@@ -36,13 +36,13 @@ export default class MathInputView extends View {
                     tag: 'div',
                     attributes: { class: ['ck-mathlive-container'] }
                 },
-                // LaTeX label (outside wrapper)
+                // LaTeX label
                 {
                     tag: 'label',
                     attributes: { class: ['ck-latex-label'] },
                     children: [t('LaTeX')]
                 },
-                // Raw LaTeX wrapper (just textarea now)
+                // Raw LaTeX wrapper
                 {
                     tag: 'div',
                     attributes: { class: ['ck-latex-wrapper'] },
@@ -176,15 +176,15 @@ export default class MathInputView extends View {
     }
 
     public hideKeyboard(): void {
-        if (this.mathfield) {
-            try {
-                this.mathfield.blur();
-                (this.mathfield as any).executeCommand?.('hideVirtualKeyboard');
-            } catch { /* MathLive may already be disposed */ }
+        if (typeof window !== 'undefined' && window.mathVirtualKeyboard?.visible) {
+            window.mathVirtualKeyboard.hide();
         }
     }
 
     public override destroy(): void {
+        // Hide keyboard before destroying
+        this.hideKeyboard();
+
         if (this.mathfield) {
             try {
                 this.mathfield.blur();

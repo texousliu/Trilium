@@ -189,6 +189,9 @@ export default class MathUI extends Plugin {
 
 	private _removeFormView() {
 		if ( this._isFormInPanel && this.formView ) {
+			// Hide virtual keyboard before removing the form
+			this.formView.hideKeyboard();
+
 			this.formView.saveButtonView.focus();
 			this._balloon.remove( this.formView );
 

@@ -172,4 +172,8 @@ export default class MainFormView extends View {
 		} );
 		return btn;
 	}
+
+	public hideKeyboard(): void {
+		this.mathInputView.hideKeyboard();
+	}
 }
