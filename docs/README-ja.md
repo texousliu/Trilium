@@ -242,7 +242,7 @@ pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 Trilium は、その基盤となる技術なしには実現できませんでした:
 
 * [CKEditor 5](https://github.com/ckeditor/ckeditor5) -
-  テキストノートを補完するビジュアルエディタ。プレミアム機能を提供していただき、感謝いたします。
+  テキストノートを補完するビジュアルエディター。プレミアム機能を提供していただき、感謝いたします。
 * [CodeMirror](https://github.com/codemirror/CodeMirror) -
   膨大な数の言語をサポートするコードエディター。
 * [Excalidraw](https://github.com/excalidraw/excalidraw) - Canvas
