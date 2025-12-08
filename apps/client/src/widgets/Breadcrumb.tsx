@@ -3,6 +3,8 @@ import "./Breadcrumb.css";
 import ActionButton from "./react/ActionButton";
 import { useNoteContext } from "./react/hooks";
 import NoteLink from "./react/NoteLink";
+import Dropdown from "./react/Dropdown";
+import Icon from "./react/Icon";
 
 export default function Breadcrumb() {
     const { noteContext } = useNoteContext();
@@ -31,10 +33,14 @@ function BreadcrumbItem({ notePath }: { notePath: string }) {
 
 function BreadcrumbSeparator({ notePath }: { notePath: string}) {
     return (
-        <ActionButton
-            icon="bx bx-chevron-right"
-            text=""
-        />
+        <Dropdown
+            text={<Icon icon="bx bx-chevron-right" />}
+            noSelectButtonStyle
+            buttonClassName="icon-action"
+            hideToggleArrow
+        >
+            Content goes here.
+        </Dropdown>
     )
 }
 
