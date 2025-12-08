@@ -19,17 +19,19 @@
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
 [![翻訳状況](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[英語](../README.md) | [中国語（簡体）](./README-ZH_CN.md) | [中国語（繁体）](./README-ZH_TW.md)
-| [ロシア語](./README-ru.md) | [日本語](./README-ja.md) | [イタリア語](./README-it.md) |
-[スペイン語](./README-es.md)
+<!-- translate:off -->
+<!-- LANGUAGE SWITCHER -->
+[English](../README.md) | [Chinese (Simplified Han script)](./README-ZH_CN.md) |
+[Chinese (Traditional Han script)](./README-ZH_TW.md) |
+[Spanish](./README-es.md) | [Italian](./README-it.md) |
+[Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
+[German](./README-de.md) | [Greek](./README-el.md) | [French](./README-fr.md)
+<!-- translate:on -->
 
 Trilium Notes
 は、大規模な個人知識ベースの構築に重点を置いた、無料かつオープンソースのクロスプラットフォームの階層型ノート作成アプリケーションです。
 
-概要については [スクリーンショット](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
-を参照してください:
-
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
+<img src="./app.png" alt="Trilium Screenshot" width="1000">
 
 ## ⏬ ダウンロード
 - [最新リリース](https://github.com/TriliumNext/Trilium/releases/latest) –
@@ -49,57 +51,68 @@ Trilium Notes
 
 ### クイックリンク
 - [スタートガイド](https://docs.triliumnotes.org/)
-- [インストール手順](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [インストール手順](https://docs.triliumnotes.org/user-guide/setup)
 - [Docker
-  のセットアップ](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  のセットアップ](https://docs.triliumnotes.org/user-guide/setup/server/installation/docker)
 - [TriliumNext
-  のアップグレード](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [基本概念と機能](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [個人ナレッジベースのパターン](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+  のアップグレード](https://docs.triliumnotes.org/user-guide/setup/upgrading)
+- [基本概念と機能](https://docs.triliumnotes.org/user-guide/concepts/notes)
+- [個人ナレッジベースのパターン](https://docs.triliumnotes.org/user-guide/misc/patterns-of-personal-knowledge)
 
 ## 🎁 機能
 
-* ノートは任意の深さのツリーに配置できます。1つのノートをツリー内の複数の場所に配置できます（[クローン](https://triliumnext.github.io/Docs/Wiki/cloning-notes)を参照）
+* ノートは任意の深さのツリーに配置できます。1つのノートをツリー内の複数の場所に配置できます（[クローン](https://docs.triliumnotes.org/user-guide/concepts/notes/cloning)を参照）
 * 豊富な WYSIWYG ノートエディター 例:
-  表、画像、[数式](https://triliumnext.github.io/Docs/Wiki/text-notes) とマークダウン
-  [自動フォーマット](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat) など
-* 構文ハイライト表示を含む [ソースコード付きノート](https://triliumnext.github.io/Docs/Wiki/code-notes)
+  表、画像、[数式](https://docs.triliumnotes.org/user-guide/note-types/text) とマークダウン
+  [自動フォーマット](https://docs.triliumnotes.org/user-guide/note-types/text/markdown-formatting)
+  など
+* 構文ハイライト表示を含む
+  [ソースコード付きノート](https://docs.triliumnotes.org/user-guide/note-types/code)
   の編集をサポート
-* [ノート間のナビゲーション](https://triliumnext.github.io/Docs/Wiki/note-navigation)、全文検索、[ノートのホイスト](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+* [ノート間のナビゲーション](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-navigation)、全文検索、[ノートのホイスト](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-hoisting)
   が高速かつ簡単に行えます
-* シームレスな [ノートのバージョン管理](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* ノート[属性](https://triliumnext.github.io/Docs/Wiki/attributes) は、ノートの整理、クエリ、高度な
-  [スクリプト](https://triliumnext.github.io/Docs/Wiki/scripts) に使用できます
+* シームレスな
+  [ノートのバージョン管理](https://docs.triliumnotes.org/user-guide/concepts/notes/note-revisions)
+* ノート[属性](https://docs.triliumnotes.org/user-guide/advanced-usage/attributes)
+  は、ノートの整理、クエリ、高度な [スクリプト](https://docs.triliumnotes.org/user-guide/scripts)
+  に使用できます
 * UI は英語、ドイツ語、スペイン語、フランス語、ルーマニア語、中国語（簡体字および繁体字）でご利用いただけます
 * より安全なログインのための直接的な
-  [OpenIDとTOTPの統合](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-* セルフホスト同期サーバーとの [同期](https://triliumnext.github.io/Docs/Wiki/synchronization)
-  * [同期サーバーをホストするためのサードパーティサービス](https://trilium.cc/paid-hosting) があります
-* インターネット上でノートの [共有](https://triliumnext.github.io/Docs/Wiki/sharing)（公開）
+  [OpenIDとTOTPの統合](https://docs.triliumnotes.org/user-guide/setup/server/mfa)
+* セルフホスト同期サーバーとの
+  [同期](https://docs.triliumnotes.org/user-guide/setup/synchronization)
+  * there are [3rd party services for hosting synchronisation
+    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+* インターネット上でノートの
+  [共有](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)（公開）
 * ノートごとに調整可能で強力な
-  [ノート暗号化](https://triliumnext.github.io/Docs/Wiki/protected-notes)
+  [ノート暗号化](https://docs.triliumnotes.org/user-guide/concepts/notes/protected-notes)
 * [Excalidraw](https://excalidraw.com/) をベースにした図のスケッチ（ノートタイプ「キャンバス」）
-* ノートとそのリレーションを視覚化するための
-  [リレーションマップ](https://triliumnext.github.io/Docs/Wiki/relation-map) と
-  [リンクマップ](https://triliumnext.github.io/Docs/Wiki/link-map)
+* [Relation
+  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
+  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
+  for visualizing notes and their relations
 * [Mind Elixir](https://docs.mind-elixir.com/) をベースとしたマインドマップ
 * 位置ピンと GPX トラック付きの
-  [ジオマップ](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
-* [スクリプト](https://triliumnext.github.io/Docs/Wiki/scripts) -
-  [高度なショーケース](https://triliumnext.github.io/Docs/Wiki/advanced-showcases) を参照
-* 自動化のための [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)
+  [ジオマップ](https://docs.triliumnotes.org/user-guide/collections/geomap)
+* [スクリプト](https://docs.triliumnotes.org/user-guide/scripts) -
+  [高度なショーケース](https://docs.triliumnotes.org/user-guide/advanced-usage/advanced-showcases)
+  を参照
+* 自動化のための [REST
+  API](https://docs.triliumnotes.org/user-guide/advanced-usage/etapi)
 * 10万件以上のノートでも、使いやすさとパフォーマンスの両面に優れた拡張性を実現
 * スマートフォンとタブレット向けにタッチ操作に最適化された
-  [モバイルフロントエンド](https://triliumnext.github.io/Docs/Wiki/mobile-frontend)
-* 組み込みの [ダークテーマ](https://triliumnext.github.io/Docs/Wiki/themes)、ユーザーテーマのサポート
-* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) と
-  [Markdown のインポートとエクスポート](https://triliumnext.github.io/Docs/Wiki/markdown)
-* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)
+  [モバイルフロントエンド](https://docs.triliumnotes.org/user-guide/setup/mobile-frontend)
+* 組み込みの
+  [ダークテーマ](https://docs.triliumnotes.org/user-guide/concepts/themes)、ユーザーテーマのサポート
+* [Evernote](https://docs.triliumnotes.org/user-guide/concepts/import-export/evernote)
+  と [Markdown
+  のインポートとエクスポート](https://docs.triliumnotes.org/user-guide/concepts/import-export/markdown)
+* [Web Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper)
   でWebコンテンツを簡単に保存
 * カスタマイズ可能な UI (サイドバー ボタン、ユーザー定義のウィジェットなど)
-* [メトリクス(Metrics)](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md) と
-  [Grafana
-  ダッシュボード](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
+  along with a Grafana Dashboard.
 
 ✨ TriliumNext 関連のその他の情報については、次のサードパーティのリソース/コミュニティをご覧ください:
 
@@ -176,7 +189,7 @@ TriliumNext は Flatpak としても提供されていますが、FlatHub では
 独自のサーバーに TriliumNext をインストールするには
 ([Dockerhub](https://hub.docker.com/r/triliumnext/trilium) から Docker
 経由でも含む)、[サーバーのインストール
-ドキュメント](https://triliumnext.github.io/Docs/Wiki/server-installation) に従ってください。
+ドキュメント](https://docs.triliumnotes.org/user-guide/setup/server) に従ってください。
 
 
 ## 💻 貢献する
@@ -253,8 +266,9 @@ Trilium は、その基盤となる技術なしには実現できませんでし
   コレクションで使用されるインタラクティブなテーブル。
 * [FancyTree](https://github.com/mar10/fancytree) - 他に類を見ない機能豊富なツリーライブラリ。
 * [jsPlumb](https://github.com/jsplumb/jsplumb) -
-  視覚的な接続ライブラリ。[リレーションマップ](https://triliumnext.github.io/Docs/Wiki/relation-map.html)
-  と [リンクマップ](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+  視覚的な接続ライブラリ。[リレーションマップ](https://docs.triliumnotes.org/user-guide/note-types/relation-map)
+  と
+  [リンクマップ](https://docs.triliumnotes.org/user-guide/advanced-usage/note-map#link-map)
   で使用されます
 
 ## 🤝 サポート
