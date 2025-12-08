@@ -164,7 +164,7 @@ ul.editability-dropdown li.dropdown-item > div {
     background: var(--cmd-button-hover-background-color);
 }
 
-/* 
+/*
  * Note info
  */
 
@@ -177,4 +177,19 @@ ul.editability-dropdown li.dropdown-item > div {
 /* Narrow width layout */
 .note-info-widget {
     container: info-section / inline-size;
+}
+
+/*
+ * Styling as a floating toolbar
+ */
+.ribbon-container {
+    background: var(--card-background-color);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    .ribbon-body {
+        border-bottom: 0;
+    }
 }
