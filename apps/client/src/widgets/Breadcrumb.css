@@ -5,10 +5,18 @@
     align-items: center;
     font-size: 0.9em;
     gap: 0.25em;
+    flex-wrap: nowrap;
+    overflow: hidden;
 
     a {
         color: inherit;
         text-decoration: none;
+        width: 100%;
+        max-width: 200px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
     }
 
     ul {
