@@ -1,7 +1,8 @@
+import { Fragment } from "preact/jsx-runtime";
 import "./Breadcrumb.css";
+import ActionButton from "./react/ActionButton";
 import { useNoteContext } from "./react/hooks";
 import NoteLink from "./react/NoteLink";
-import { joinElements } from "./react/react_utils";
 
 export default function Breadcrumb() {
     const { noteContext } = useNoteContext();
@@ -9,9 +10,12 @@ export default function Breadcrumb() {
 
     return (
         <div className="breadcrumb">
-            {joinElements(notePath.map(item => (
-                <BreadcrumbItem key={item} notePath={item} />
-            )), <>&nbsp;›&nbsp;</>)}
+            {notePath.map(item => (
+                <Fragment key={item}>
+                    <BreadcrumbItem notePath={item} />
+                    <BreadcrumbSeparator notePath={item} />
+                </Fragment>
+            ))}
         </div>
     )
 }
@@ -21,6 +25,15 @@ function BreadcrumbItem({ notePath }: { notePath: string }) {
         <NoteLink
             notePath={notePath}
             noPreview
+        />
+    )
+}
+
+function BreadcrumbSeparator({ notePath }: { notePath: string}) {
+    return (
+        <ActionButton
+            icon="bx bx-chevron-right"
+            text=""
         />
     )
 }
