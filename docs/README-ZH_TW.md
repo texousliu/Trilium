@@ -21,11 +21,11 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 
 <!-- translate:off -->
 <!-- LANGUAGE SWITCHER -->
-[English](../README.md) | [Chinese (Simplified Han script)](./README-ZH_CN.md) |
-[Chinese (Traditional Han script)](./README-ZH_TW.md) |
-[Spanish](./README-es.md) | [Italian](./README-it.md) |
-[Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
-[German](./README-de.md) | [Greek](./README-el.md) | [French](./README-fr.md)
+[Chinese (Simplified Han script)](./README-ZH_CN.md) | [Chinese (Traditional Han
+script)](./README-ZH_TW.md) | [English](../README.md) | [French](./README-fr.md)
+| [German](./README-de.md) | [Greek](./README-el.md) | [Italian](./README-it.md)
+| [Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
+[Spanish](./README-es.md)
 <!-- translate:on -->
 
 Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式，專注於建立大型個人知識庫。

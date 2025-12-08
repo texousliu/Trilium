@@ -21,11 +21,11 @@
 
 <!-- translate:off -->
 <!-- LANGUAGE SWITCHER -->
-[English](../README.md) | [Chinese (Simplified Han script)](./README-ZH_CN.md) |
-[Chinese (Traditional Han script)](./README-ZH_TW.md) |
-[Spanish](./README-es.md) | [Italian](./README-it.md) |
-[Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
-[German](./README-de.md) | [Greek](./README-el.md) | [French](./README-fr.md)
+[Chinese (Simplified Han script)](./README-ZH_CN.md) | [Chinese (Traditional Han
+script)](./README-ZH_TW.md) | [English](../README.md) | [French](./README-fr.md)
+| [German](./README-de.md) | [Greek](./README-el.md) | [Italian](./README-it.md)
+| [Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
+[Spanish](./README-es.md)
 <!-- translate:on -->
 
 Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序，专注于建立大型个人知识库。
@@ -72,16 +72,12 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 * 直接整合[OpenID 与 TOTP](https://docs.triliumnotes.org/user-guide/setup/server/mfa)
   以实现更安全的登录
 * 与自架的同步服务器进行[同步](https://docs.triliumnotes.org/user-guide/setup/synchronization)
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * 有[第三方服务用于托管同步服务器](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * 将笔记[分享](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)（公开发布）到互联网
 * 以每则笔记为粒度的强大
   [笔记加密](https://docs.triliumnotes.org/user-guide/concepts/notes/protected-notes)
 * 手绘/示意图：基于 [Excalidraw](https://excalidraw.com/) （笔记类型为「canvas」）
-* [Relation
-  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
-  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
-  for visualizing notes and their relations
+* 用于可视化笔记及其关系的[关系图](https://docs.triliumnotes.org/user-guide/note-types/relation-map)和[笔记/链接图](https://docs.triliumnotes.org/user-guide/note-types/note-map)
 * 思维导图：基于[Mind Elixir](https://docs.mind-elixir.com/)
 * 具有定位钉与 GPX
   轨迹的[地图](https://docs.triliumnotes.org/user-guide/collections/geomap)
