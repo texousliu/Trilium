@@ -44,6 +44,7 @@ import NoteDetail from "../widgets/NoteDetail.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
+import Breadcrumb from "../widgets/Breadcrumb.jsx";
 
 export default class DesktopLayout {
 
@@ -122,6 +123,7 @@ export default class DesktopLayout {
                                                                 .css("min-height", "30px")
                                                                 .css("align-items", "center")
                                                                 .cssBlock(".breadcrumb-row > * { margin: 5px; }")
+                                                                .child(<Breadcrumb />)
                                                                 .child(<SpacerWidget baseSize={0} growthFactor={1} />)
                                                                 .child(<MovePaneButton direction="left" />)
                                                                 .child(<MovePaneButton direction="right" />)

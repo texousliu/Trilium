@@ -44,7 +44,7 @@ export function disposeReactWidget(container: Element) {
     render(null, container);
 }
 
-export function joinElements(components: ComponentChild[] | undefined, separator = ", ") {
+export function joinElements(components: ComponentChild[] | undefined, separator: ComponentChild = ", ") {
     if (!components) return <></>;
 
     const joinedComponents: ComponentChild[] = [];
