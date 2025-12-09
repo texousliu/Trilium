@@ -1,7 +1,6 @@
 .ribbon-container {
     margin-bottom: 5px;
     position: relative;
-    transition: top 0.2s ease;
     z-index: 8;
 }
 
