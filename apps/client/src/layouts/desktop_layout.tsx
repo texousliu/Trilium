@@ -122,6 +122,7 @@ export default class DesktopLayout {
                                                                 .css("height", "30px")
                                                                 .css("min-height", "30px")
                                                                 .css("align-items", "center")
+                                                                .css("padding", "10px")
                                                                 .cssBlock(".breadcrumb-row > * { margin: 5px; }")
                                                                 .child(<Breadcrumb />)
                                                                 .child(<SpacerWidget baseSize={0} growthFactor={1} />)

@@ -4,8 +4,8 @@
 
 .component.breadcrumb {
     contain: none;
-    margin: 0 10px;
     display: flex;
+    margin: 0;
     align-items: center;
     font-size: 0.9em;
     gap: 0.25em;
