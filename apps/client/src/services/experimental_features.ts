@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import options from "./options";
 
 interface ExperimentalFeature {
@@ -9,8 +10,8 @@ interface ExperimentalFeature {
 export const experimentalFeatures = [
     {
         id: "new-layout",
-        name: "New Layout",
-        description: "Try out the new layout for a more modern look and improved usability.",
+        name: t("experimental_features.new_layout_name"),
+        description: t("experimental_features.new_layout_description"),
     }
 ] as const satisfies ExperimentalFeature[];
 

@@ -182,8 +182,8 @@ function ExperimentalOptions() {
     const [ enabledExperimentalFeatures, setEnabledExperimentalFeatures ] = useTriliumOptionJson<string[]>("experimentalFeatures");
 
     return (
-        <OptionsSection title="Experimental Options">
-            <FormText>These options are experimental and may cause instability. Use with caution.</FormText>
+        <OptionsSection title={t("experimental_features.title")}>
+            <FormText>{t("experimental_features.disclaimer")}</FormText>
 
             <CheckboxList
                 values={experimentalFeatures}
@@ -192,5 +192,5 @@ function ExperimentalOptions() {
                 currentValue={enabledExperimentalFeatures} onChange={setEnabledExperimentalFeatures}
             />
         </OptionsSection>
-    )
+    );
 }
