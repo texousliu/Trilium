@@ -155,6 +155,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeOpenAiModel: string;
     aiSelectedProvider: string;
     seenCallToActions: string;
+    experimentalFeatures: string;
 }
 
 export type OptionNames = keyof OptionDefinitions;
