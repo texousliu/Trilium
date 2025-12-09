@@ -1,6 +1,6 @@
 .content-header-widget {
     position: relative;
-    z-index: 8;
+    z-index: 998;
     background-color: var(--main-background-color);
 }
 

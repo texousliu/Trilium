@@ -45,9 +45,12 @@ export default class ContentHeader extends Container<BasicWidget> {
     updateScrollState() {
         const currentScrollTop = this.parentElement!.scrollTop;
         const isScrollingUp = currentScrollTop < this.previousScrollTop;
+        const hasDropdownOpen = this.thisElement!.querySelector(".dropdown-menu.show") !== null;
         const hasMovedEnough = Math.abs(currentScrollTop - this.previousScrollTop) > this.scrollThreshold;
 
-        if (currentScrollTop === 0) {
+        if (hasDropdownOpen) {
+            this.setFloating(true);
+        } else if (currentScrollTop === 0) {
             this.setFloating(false);
         } else if (hasMovedEnough) {
             this.setFloating(isScrollingUp);
