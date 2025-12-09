@@ -16,7 +16,7 @@ interface ComputedTab extends Indexed<TabConfiguration> {
     shouldShow: boolean;
 }
 
-export default function Ribbon() {
+export default function Ribbon({ children }: { children?: preact.ComponentChildren }) {
     const { note, ntxId, hoistedNoteId, notePath, noteContext, componentId, isReadOnlyTemporarilyDisabled } = useNoteContext();
     const noteType = useNoteProperty(note, "type");
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
@@ -99,9 +99,7 @@ export default function Ribbon() {
                         />
                     ))}
                 </div>
-                <div className="ribbon-button-container">
-                    { note && <NoteActions note={note} noteContext={noteContext} /> }
-                </div>
+                {children}
             </div>
 
             <div className="ribbon-body-container">

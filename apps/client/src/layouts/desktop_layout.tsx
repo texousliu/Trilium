@@ -47,6 +47,7 @@ import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
 import Breadcrumb from "../widgets/Breadcrumb.jsx";
 import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
 import { experimentalFeatures, isExperimentalFeatureEnabled } from "../services/experimental_features.js";
+import NoteActions from "../widgets/ribbon/NoteActions.jsx";
 
 export default class DesktopLayout {
 
@@ -139,13 +140,14 @@ export default class DesktopLayout {
                                                                 .child(<MovePaneButton direction="right" />)
                                                                 .child(<ClosePaneButton />)
                                                                 .child(<CreatePaneButton />)
+                                                                .optChild(isNewLayout, <NoteActions />)
                                                         )
                                                         .child(new FlexContainer("row")
                                                             .class("title-row")
                                                             .child(<NoteIconWidget />)
                                                             .child(<NoteTitleWidget />)
                                                         )
-                                                        .optChild(!isNewLayout, <Ribbon />)
+                                                        .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
