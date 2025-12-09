@@ -3,11 +3,13 @@ import "./BreadcrumbBadges.css";
 import { ComponentChildren } from "preact";
 import { useIsNoteReadOnly, useNoteContext } from "./react/hooks";
 import Icon from "./react/Icon";
+import { useShareInfo } from "./shared_info";
 
 export default function NoteBadges() {
     return (
         <div className="breadcrumb-badges">
             <ReadOnlyBadge />
+            <ShareBadge />
         </div>
     );
 }
@@ -22,6 +24,19 @@ function ReadOnlyBadge() {
             icon="bx bx-lock"
             onClick={() => enableEditing()}>
             {isExplicitReadOnly ? "Read-only" : "Auto read-only"}
+        </Badge>
+    );
+}
+
+function ShareBadge() {
+    const { note } = useNoteContext();
+    const { isSharedExternally, link } = useShareInfo(note);
+
+    return (link &&
+        <Badge
+            icon={isSharedExternally ? "bx bx-world" : "bx bx-link"}
+        >
+            {isSharedExternally ? "Shared publicly" : "Shared locally"}
         </Badge>
     );
 }

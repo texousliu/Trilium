@@ -10,8 +10,23 @@ import RawHtml from "./react/RawHtml";
 
 export default function SharedInfo() {
     const { note } = useNoteContext();
-    const [ syncServerHost ] = useTriliumOption("syncServerHost");
+    const { isSharedExternally, link } = useShareInfo(note);
+
+    return (
+        <InfoBar className="shared-info-widget" type="subtle" style={{display: (!link) ? "none" : undefined}}>
+            {link && (
+                <RawHtml html={isSharedExternally
+                ? t("shared_info.shared_publicly", { link })
+                : t("shared_info.shared_locally", { link })} />
+            )}
+            <HelpButton helpPage="R9pX4DGra2Vt" style={{ width: "24px", height: "24px" }} />
+        </InfoBar>
+    );
+}
+
+export function useShareInfo(note: FNote | null | undefined) {
     const [ link, setLink ] = useState<string>();
+    const [ syncServerHost ] = useTriliumOption("syncServerHost");
 
     function refresh() {
         if (!note) return;
@@ -48,16 +63,7 @@ export default function SharedInfo() {
         }
     });
 
-    return (
-        <InfoBar className="shared-info-widget" type="subtle" style={{display: (!link) ? "none" : undefined}}>
-            {link && (
-                <RawHtml html={syncServerHost
-                ? t("shared_info.shared_publicly", { link })
-                : t("shared_info.shared_locally", { link })} />                
-            )}
-            <HelpButton helpPage="R9pX4DGra2Vt" style={{ width: "24px", height: "24px" }} />
-        </InfoBar>
-    )
+    return { link, isSharedExternally: !!syncServerHost };
 }
 
 function getShareId(note: FNote) {
