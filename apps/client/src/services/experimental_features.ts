@@ -19,10 +19,17 @@ type ExperimentalFeatureId = typeof experimentalFeatures[number]["id"];
 let enabledFeatures: Set<ExperimentalFeatureId> | null = null;
 
 export function isExperimentalFeatureEnabled(featureId: ExperimentalFeatureId): boolean {
+    return getEnabledFeatures().has(featureId);
+}
+
+export function getEnabledExperimentalFeatureIds() {
+    return getEnabledFeatures().values();
+}
+
+function getEnabledFeatures() {
     if (!enabledFeatures) {
         const features = JSON.parse(options.get("experimentalFeatures")) as string[];
         enabledFeatures = new Set(features);
     }
-
-    return enabledFeatures.has(featureId);
+    return enabledFeatures;
 }

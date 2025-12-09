@@ -415,3 +415,17 @@ body[dir=rtl] .attribute-list-editor {
     pointer-events: none; /* makes it unclickable */
 }
 /* #endregion */
+
+/* #region Experimental layout */
+body.experimental-feature-new-layout .ribbon-container {
+    display: flex;
+    flex-direction: column-reverse;
+    border-top: 1px solid var(--main-border-color);
+
+    .ribbon-tab-spacer,
+    .ribbon-button-container,
+    .ribbon-body {
+        border-bottom: 0 !important;
+    }
+}
+/* #endregion */
