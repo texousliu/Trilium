@@ -24,12 +24,12 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         icon: "bx bx-text",
         show: async ({ note, noteContext }) => note?.type === "text"
             && options.get("textNoteEditorType") === "ckeditor-classic"
-            && !isExperimentalFeatureEnabled("new-layout")
             && !(await noteContext?.isReadOnly()),
         toggleCommand: "toggleRibbonTabClassicEditor",
         content: FormattingToolbar,
         activate: ({ note }) => !options.is("editedNotesOpenInRibbon") || !note?.hasOwnedLabel("dateNote"),
-        stayInDom: true
+        stayInDom: !isExperimentalFeatureEnabled("new-layout"),
+        avoidInNewLayout: true
     },
     {
         title: ({ note }) => note?.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),

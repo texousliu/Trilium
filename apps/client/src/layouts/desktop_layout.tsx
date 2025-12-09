@@ -46,8 +46,10 @@ import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
 import Breadcrumb from "../widgets/Breadcrumb.jsx";
 import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
-import { experimentalFeatures, isExperimentalFeatureEnabled } from "../services/experimental_features.js";
+import { isExperimentalFeatureEnabled } from "../services/experimental_features.js";
 import NoteActions from "../widgets/ribbon/NoteActions.jsx";
+import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
+import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
 
 export default class DesktopLayout {
 
@@ -149,6 +151,7 @@ export default class DesktopLayout {
                                                         )
                                                         .optChild(!isNewLayout, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
+                                                        .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
