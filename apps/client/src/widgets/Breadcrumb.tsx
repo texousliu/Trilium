@@ -11,6 +11,7 @@ import { FormListItem } from "./react/FormList";
 import { useChildNotes, useNoteContext, useNoteLabel, useNoteProperty } from "./react/hooks";
 import Icon from "./react/Icon";
 import NoteLink from "./react/NoteLink";
+import link_context_menu from "../menus/link_context_menu";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
@@ -67,6 +68,10 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
             icon={note.getIcon()}
             text={title ?? ""}
             onClick={() => noteContext?.setNote("root")}
+            onContextMenu={(e) => {
+                e.preventDefault();
+                link_context_menu.openContextMenu(note.noteId, e);
+            }}
         />
     );
 }
