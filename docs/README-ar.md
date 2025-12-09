@@ -29,14 +29,14 @@ script)](./README-ZH_TW.md) | [English](../README.md) | [French](./README-fr.md)
 [Spanish](./README-es.md)
 <!-- translate:on -->
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+تريليوم هو برنامج مجاني مفتوح المصدر، يمكن استخدامه في أكثر من جهاز بنفس الوقت،
+مبني على كتابة الملاحظات بالتفرعات الشجرية مع التركيز على بناء قاعدة بيانات
+معرفية ضخمة.
 
 <img src="./app.png" alt="Trilium Screenshot" width="1000">
 
 ## ⬇️ تنزيل
-- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  stable version, recommended for most users.
+- النسخة الأخيرة - نسخة مستقرة، محبذة لأكثر المستخدمين.
 - [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
   unstable development version, updated daily with the latest features and
   fixes.
