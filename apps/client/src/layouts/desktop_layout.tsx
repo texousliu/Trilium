@@ -45,6 +45,7 @@ import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
 import Breadcrumb from "../widgets/Breadcrumb.jsx";
+import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
 
 export default class DesktopLayout {
 
@@ -102,7 +103,12 @@ export default class DesktopLayout {
                         new FlexContainer("column")
                             .id("rest-pane")
                             .css("flex-grow", "1")
-                            .optChild(!fullWidthTabBar, new FlexContainer("row").child(new TabRowWidget()).optChild(customTitleBarButtons, <TitleBarButtons />).css("height", "40px"))
+                            .optChild(!fullWidthTabBar,
+                                new FlexContainer("row")
+                                    .child(<TabHistoryNavigationButtons />)
+                                    .child(new TabRowWidget())
+                                    .optChild(customTitleBarButtons, <TitleBarButtons />)
+                                    .css("height", "40px"))
                             .child(
                                 new FlexContainer("row")
                                     .filling()
