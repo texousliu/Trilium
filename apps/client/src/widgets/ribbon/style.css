@@ -81,12 +81,9 @@
     display: flex;
     border-bottom: 1px solid var(--main-border-color);
     margin-inline-end: 5px;
-}
-
-.ribbon-button-container > * {
-    position: relative;
-    top: -3px;
-    margin-inline-start: 10px;
+    align-items: center;
+    height: 36px;
+    gap: 10px;
 }
 
 .ribbon-body {
@@ -396,6 +393,8 @@ body[dir=rtl] .attribute-list-editor {
 .note-actions {
     width: 35px;
     height: 35px;
+    display: flex;
+    align-items: center;
 }
 
 .note-actions .dropdown-menu {
