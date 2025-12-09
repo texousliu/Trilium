@@ -81,6 +81,7 @@ export default class DesktopLayout {
                     .class("tab-row-container")
                     .child(new FlexContainer("row").id("tab-row-left-spacer"))
                     .optChild(launcherPaneIsHorizontal, <LeftPaneToggle isHorizontalLayout={true} />)
+                    .child(<TabHistoryNavigationButtons />)
                     .child(new TabRowWidget().class("full-width"))
                     .optChild(customTitleBarButtons, <TitleBarButtons />)
                     .css("height", "40px")

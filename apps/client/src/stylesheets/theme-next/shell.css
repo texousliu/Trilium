@@ -502,7 +502,7 @@ div.bookmark-folder-widget .note-link .bx {
     font-size: 1.2em;
 }
 
-/* 
+/*
  * QUICK SEARCH BOX
  */
 
@@ -613,7 +613,7 @@ div.quick-search .dropdown-menu {
  * As a temporary workaround, the backdrop and transparency are disabled for the
  * vertical layout.
  */
-body.layout-vertical.background-effects div.quick-search .dropdown-menu {    
+body.layout-vertical.background-effects div.quick-search .dropdown-menu {
     --menu-background-color: var(--menu-background-color-no-backdrop) !important;
 }
 
@@ -945,10 +945,24 @@ body.electron.background-effects.layout-horizontal .tab-row-container .toggle-bu
     position: absolute;
     bottom: 0;
     inset-inline-start: -10px;
-    inset-inline-end: -10px;
+    inset-inline-end: -6px;
     top: 32px;
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-history-navigation-buttons {
+    position: relative;
+
+    &:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        inset-inline-start: 0;
+        inset-inline-end: -7px;
+        height: 1px;
+        border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+    }
 }
 
 body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-left,
@@ -1569,7 +1583,7 @@ div.floating-buttons .show-floating-buttons-button {
 div.floating-buttons .show-floating-buttons-button::before {
     animation: floating-buttons-show-hide-button-animation 400ms ease-out;
 }
- 
+
 div.floating-buttons .show-floating-buttons-button:hover,
 div.floating-buttons .show-floating-buttons-button:active {
     box-shadow: var(--floating-button-show-button-hover-shadow);
@@ -1831,7 +1845,7 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
 
 .excalidraw .dropdown-menu {
     border: unset !important;
-    box-shadow: unset !important;    
+    box-shadow: unset !important;
     background-color: transparent !important;
     --island-bg-color: var(--menu-background-color);
     --shadow-island: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
