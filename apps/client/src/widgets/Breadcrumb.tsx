@@ -26,7 +26,7 @@ export default function Breadcrumb() {
                 <>
                     {notePath.slice(0, INITIAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
-                            {index === 0 && notePath.length > 1
+                            {index === 0
                                 ? <BreadcrumbRoot noteContext={noteContext} />
                                 : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
                             }
@@ -44,7 +44,7 @@ export default function Breadcrumb() {
             ) : (
                 notePath.map((item, index) => (
                     <Fragment key={item}>
-                        {index === 0 && notePath.length > 1
+                        {index === 0
                             ? <BreadcrumbRoot noteContext={noteContext} />
                             : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
                         }
