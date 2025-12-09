@@ -901,3 +901,29 @@ export function useChildNotes(parentNoteId: string | undefined) {
 
     return childNotes;
 }
+
+export function useLauncherVisibility(launchNoteId: string) {
+    const note = froca.getNoteFromCache(launchNoteId);
+    const [ isVisible, setIsVisible ] = useState<boolean>(checkIfVisible(note));
+
+    // React to note not being available in the cache.
+    useEffect(() => {
+        if (!note) return;
+        froca.getNote(launchNoteId).then(fetchedNote => setIsVisible(checkIfVisible(fetchedNote)));
+    }, [ note, launchNoteId ]);
+
+    // React to changes.
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (!note) return;
+        if (loadResults.getBranchRows().some(branch => branch.noteId === launchNoteId)) {
+            setIsVisible(checkIfVisible(note));
+        }
+    });
+
+    function checkIfVisible(note: FNote | undefined | null) {
+        return note?.getParentBranches().some(branch =>
+            [ "_lbVisibleLaunchers", "_lbMobileVisibleLaunchers" ].includes(branch.parentNoteId)) ?? false;
+    }
+
+    return isVisible;
+}

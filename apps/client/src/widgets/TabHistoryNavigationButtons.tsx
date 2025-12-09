@@ -6,28 +6,31 @@ import { t } from "../services/i18n";
 import { dynamicRequire } from "../services/utils";
 import { handleHistoryContextMenu } from "./launch_bar/HistoryNavigation";
 import ActionButton from "./react/ActionButton";
+import { useLauncherVisibility } from "./react/hooks";
 
 export default function TabHistoryNavigationButtons() {
     const webContents = useMemo(() => dynamicRequire("@electron/remote").getCurrentWebContents(), []);
     const onContextMenu = handleHistoryContextMenu(webContents);
     const { canGoBack, canGoForward } = useBackForwardState(webContents);
+    const legacyBackVisible = useLauncherVisibility("_lbBackInHistory");
+    const legacyForwardVisible = useLauncherVisibility("_lbForwardInHistory");
 
     return (
         <div className="tab-history-navigation-buttons">
-            <ActionButton
+            {!legacyBackVisible && <ActionButton
                 icon="bx bx-left-arrow-alt"
                 text={t("tab_history_navigation_buttons.go-back")}
                 triggerCommand="backInNoteHistory"
                 onContextMenu={onContextMenu}
                 disabled={!canGoBack}
-            />
-            <ActionButton
+            />}
+            {!legacyForwardVisible && <ActionButton
                 icon="bx bx-right-arrow-alt"
                 text={t("tab_history_navigation_buttons.go-forward")}
                 triggerCommand="forwardInNoteHistory"
                 onContextMenu={onContextMenu}
                 disabled={!canGoForward}
-            />
+            />}
         </div>
     );
 }
