@@ -29,7 +29,7 @@ export default function Breadcrumb() {
                         <Fragment key={item}>
                             {index === 0
                                 ? <BreadcrumbRoot noteContext={noteContext} />
-                                : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                                : <BreadcrumbItem notePath={item} />
                             }
                             <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />
                         </Fragment>
