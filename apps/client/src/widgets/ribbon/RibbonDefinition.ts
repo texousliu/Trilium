@@ -16,6 +16,7 @@ import FormattingToolbar from "./FormattingToolbar";
 import options from "../../services/options";
 import { t } from "../../services/i18n";
 import { TabConfiguration } from "./ribbon-interface";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 
 export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
     {
@@ -23,6 +24,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         icon: "bx bx-text",
         show: async ({ note, noteContext }) => note?.type === "text"
             && options.get("textNoteEditorType") === "ckeditor-classic"
+            && !isExperimentalFeatureEnabled("new-layout")
             && !(await noteContext?.isReadOnly()),
         toggleCommand: "toggleRibbonTabClassicEditor",
         content: FormattingToolbar,

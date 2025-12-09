@@ -28,3 +28,12 @@ body.mobile .note-title-widget input.note-title {
 body.desktop .note-title-widget input.note-title {
     font-size: 180%;
 }
+
+body.experimental-feature-new-layout .title-row {
+    margin-top: 1em;
+    max-width: var(--max-content-width);
+}
+
+body.experimental-feature-new-layout.prefers-centered-content .title-row {
+    margin-inline: auto;
+}
