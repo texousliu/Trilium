@@ -3,11 +3,11 @@ import { useMemo } from "preact/hooks";
 
 import FNote from "../../entities/fnote";
 import contextMenu, { MenuCommandItem } from "../../menus/context_menu";
+import froca from "../../services/froca";
 import link from "../../services/link";
 import tree from "../../services/tree";
 import { dynamicRequire } from "../../services/utils";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
-import froca from "../../services/froca";
 
 interface HistoryNavigationProps {
     launcherNote: FNote;
