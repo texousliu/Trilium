@@ -16,12 +16,15 @@ import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormListHeader, FormListItem } from "../react/FormList";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+
+const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
 export default function NoteActions() {
     const { note, noteContext } = useNoteContext();
     return (
         <div className="ribbon-button-container" style={{ contain: "none" }}>
-            {note && <RevisionsButton note={note} />}
+            {note && !isNewLayout && <RevisionsButton note={note} />}
             {note && note.type !== "launcher" && <NoteContextMenu note={note as FNote} noteContext={noteContext} />}
         </div>
     );
@@ -95,6 +98,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             }
             <FormDropdownDivider />
 
+            <CommandItem command="showRevisions" icon="bx bx-history" text={t("revisions_button.note_revisions")} />
             <CommandItem command="forceSaveRevision" icon="bx bx-save" disabled={isInOptionsOrHelp} text={t("note_actions.save_revision")} />
             <CommandItem icon="bx bx-trash destructive-action-icon" text={t("note_actions.delete_note")} destructive
                 disabled={isInOptionsOrHelp}

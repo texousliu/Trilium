@@ -6,13 +6,13 @@ interface ExperimentalFeature {
     description: string;
 }
 
-export const experimentalFeatures: ExperimentalFeature[] = [
+export const experimentalFeatures = [
     {
         id: "new-layout",
         name: "New Layout",
         description: "Try out the new layout for a more modern look and improved usability.",
     }
-];
+] as const satisfies ExperimentalFeature[];
 
 type ExperimentalFeatureId = typeof experimentalFeatures[number]["id"];
 
@@ -28,7 +28,7 @@ export function getEnabledExperimentalFeatureIds() {
 
 function getEnabledFeatures() {
     if (!enabledFeatures) {
-        const features = JSON.parse(options.get("experimentalFeatures")) as string[];
+        const features = JSON.parse(options.get("experimentalFeatures")) as ExperimentalFeatureId[];
         enabledFeatures = new Set(features);
     }
     return enabledFeatures;
