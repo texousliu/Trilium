@@ -47,16 +47,16 @@ export function handleHistoryContextMenu(webContents: WebContents) {
             if (!notePath) continue;
 
             const title = await tree.getNotePathTitle(notePath);
+            const index = parseInt(idx, 10);
 
             items.push({
                 title,
                 command: idx,
-                uiIcon:
-                    parseInt(idx, 10) === activeIndex
-                        ? "bx bx-radio-circle-marked" // compare with type coercion!
-                        : parseInt(idx, 10) < activeIndex
-                            ? "bx bx-left-arrow-alt"
-                            : "bx bx-right-arrow-alt"
+                checked: index === activeIndex,
+                enabled: index !== activeIndex,
+                uiIcon: index !== activeIndex && index < activeIndex
+                    ? "bx bx-left-arrow-alt"
+                    : "bx bx-right-arrow-alt"
             });
         }
 
