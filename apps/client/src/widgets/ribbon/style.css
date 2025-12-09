@@ -33,12 +33,14 @@
     max-width: max-content;
     flex-grow: 10;
     user-select: none;
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
 }
 
 .ribbon-tab-title .bx {
-    font-size: 150%;
+    font-size: 125%;
     position: relative;
-    top: 3px;
 }
 
 .ribbon-tab-title.active {
