@@ -59,27 +59,20 @@ export default class ContentHeader extends Container<BasicWidget> {
         if (shouldFloat !== this.isFloating) {
             this.isFloating = shouldFloat;
 
-            const parentEl = this.parentElement?.closest<HTMLDivElement>(".note-split");
             if (shouldFloat) {
                 this.$widget.addClass("floating");
-                parentEl!.style.setProperty("--content-header-height", `${this.currentHeight}px`);
             } else {
                 this.$widget.removeClass("floating");
-                parentEl!.style.removeProperty("--content-header-height");
             }
         }
     }
 
     updateSafeMargin() {
-        const newSafeMargin = Math.max(this.currentHeight - this.parentElement!.scrollTop, 0);
-
-        if (newSafeMargin !== this.currentSafeMargin) {
-            this.currentSafeMargin = newSafeMargin;
-
-            this.triggerEvent("contentSafeMarginChanged", {
-                top: newSafeMargin,
-                noteContext: this.noteContext!
-            });
+        const parentEl = this.parentElement?.closest<HTMLDivElement>(".note-split");
+        if (this.isFloating) {
+            parentEl!.style.setProperty("--content-header-height", `${this.currentHeight}px`);
+        } else {
+            parentEl!.style.removeProperty("--content-header-height");
         }
     }
 
