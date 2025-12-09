@@ -897,7 +897,31 @@ export function useChildNotes(parentNoteId: string | undefined) {
             }
             setChildNotes(childNotes ?? []);
         })();
-     }, [ parentNoteId ]);
+    }, [ parentNoteId ]);
 
     return childNotes;
+}
+
+export function useLauncherVisibility(launchNoteId: string) {
+    const checkIfVisible = useCallback(() => {
+        const note = froca.getNoteFromCache(launchNoteId);
+        return note?.getParentBranches().some(branch =>
+            [ "_lbVisibleLaunchers", "_lbMobileVisibleLaunchers" ].includes(branch.parentNoteId)) ?? false;
+    }, [ launchNoteId ]);
+
+    const [ isVisible, setIsVisible ] = useState<boolean>(checkIfVisible());
+
+    // React to note not being available in the cache.
+    useEffect(() => {
+        froca.getNote(launchNoteId).then(() => setIsVisible(checkIfVisible()));
+    }, [ launchNoteId, checkIfVisible ]);
+
+    // React to changes.
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getBranchRows().some(branch => branch.noteId === launchNoteId)) {
+            setIsVisible(checkIfVisible());
+        }
+    });
+
+    return isVisible;
 }

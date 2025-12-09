@@ -64,6 +64,9 @@ function initOnElectron() {
     if (options.get("nativeTitleBarVisible") !== "true") {
         initTitleBarButtons(style, currentWindow);
     }
+
+    // Clear navigation history on frontend refresh.
+    currentWindow.webContents.navigationHistory.clear();
 }
 
 function initTitleBarButtons(style: CSSStyleDeclaration, currentWindow: Electron.BrowserWindow) {

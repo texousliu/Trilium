@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { NotePathRecord } from "../../entities/fnote";
 import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
+import { NOTE_PATH_TITLE_SEPARATOR } from "../../services/tree";
 
 export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabContext) {
     const [ sortedNotePaths, setSortedNotePaths ] = useState<NotePathRecord[]>();
@@ -33,7 +34,7 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
                 <div className="note-path-intro">
                     {sortedNotePaths?.length ? t("note_paths.intro_placed") : t("note_paths.intro_not_placed")}
                 </div>
-    
+
                 <ul className="note-path-list">
                     {sortedNotePaths?.length ? sortedNotePaths.map(sortedNotePath => (
                         <NotePath
@@ -42,7 +43,7 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
                         />
                     )) : undefined}
                 </ul>
-    
+
                 <Button
                     triggerCommand="cloneNoteIdsTo"
                     text={t("note_paths.clone_button")}
@@ -55,7 +56,7 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
 function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: string | null, notePathRecord?: NotePathRecord }) {
     const notePath = notePathRecord?.notePath ?? [];
     const notePathString = useMemo(() => notePath.join("/"), [ notePath ]);
-    
+
     const [ classes, icons ] = useMemo(() => {
         const classes: string[] = [];
         const icons: { icon: string, title: string }[] = [];
@@ -95,7 +96,7 @@ function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: strin
         <li class={classes}>
             {joinElements(fullNotePaths.map(notePath => (
                 <NoteLink notePath={notePath} noPreview />
-            )), " / ")}
+            )), NOTE_PATH_TITLE_SEPARATOR)}
 
             {icons.map(({ icon, title }) => (
                 <span class={icon} title={title} />
