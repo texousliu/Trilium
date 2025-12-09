@@ -2129,5 +2129,11 @@
   "tab_history_navigation_buttons": {
     "go-back": "Go back to previous note",
     "go-forward": "Go forward to next note"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "Read-only",
+    "read_only_auto": "Auto read-only",
+    "shared_publicly": "Shared publicly",
+    "shared_locally": "Shared locally"
   }
 }

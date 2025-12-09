@@ -5,6 +5,7 @@ import { useIsNoteReadOnly, useNoteContext } from "./react/hooks";
 import Icon from "./react/Icon";
 import { useShareInfo } from "./shared_info";
 import clsx from "clsx";
+import { t } from "../services/i18n";
 
 export default function BreadcrumbBadges() {
     return (
@@ -24,7 +25,7 @@ function ReadOnlyBadge() {
         <Badge
             icon="bx bx-lock"
             onClick={() => enableEditing()}>
-            {isExplicitReadOnly ? "Read-only" : "Auto read-only"}
+            {isExplicitReadOnly ? t("breadcrumb_badges.read_only_explicit") : t("breadcrumb_badges.read_only_auto")}
         </Badge>
     );
 }
@@ -37,7 +38,7 @@ function ShareBadge() {
         <Badge
             icon={isSharedExternally ? "bx bx-world" : "bx bx-link"}
         >
-            {isSharedExternally ? "Shared publicly" : "Shared locally"}
+            {isSharedExternally ? t("breadcrumb_badges.shared_publicly") : t("breadcrumb_badges.shared_locally")}
         </Badge>
     );
 }
