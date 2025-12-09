@@ -6,7 +6,7 @@ import contextMenu, { MenuCommandItem } from "../../menus/context_menu";
 import froca from "../../services/froca";
 import link from "../../services/link";
 import tree from "../../services/tree";
-import { dynamicRequire } from "../../services/utils";
+import { dynamicRequire, isElectron } from "../../services/utils";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
 
 interface HistoryNavigationProps {
@@ -18,14 +18,14 @@ const HISTORY_LIMIT = 20;
 
 export default function HistoryNavigationButton({ launcherNote, command }: HistoryNavigationProps) {
     const { icon, title } = useLauncherIconAndTitle(launcherNote);
-    const webContents = useMemo(() => dynamicRequire("@electron/remote").getCurrentWebContents(), []);
+    const webContents = useMemo(() => isElectron() ? dynamicRequire("@electron/remote").getCurrentWebContents() : undefined, []);
 
     return (
         <LaunchBarActionButton
             icon={icon}
             text={title}
             triggerCommand={command}
-            onContextMenu={handleHistoryContextMenu(webContents)}
+            onContextMenu={webContents ? handleHistoryContextMenu(webContents) : undefined}
         />
     );
 }

@@ -3,19 +3,19 @@ import "./TabHistoryNavigationButtons.css";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
 import { t } from "../services/i18n";
-import { dynamicRequire } from "../services/utils";
+import { dynamicRequire, isElectron } from "../services/utils";
 import { handleHistoryContextMenu } from "./launch_bar/HistoryNavigation";
 import ActionButton from "./react/ActionButton";
 import { useLauncherVisibility } from "./react/hooks";
 
 export default function TabHistoryNavigationButtons() {
-    const webContents = useMemo(() => dynamicRequire("@electron/remote").getCurrentWebContents(), []);
-    const onContextMenu = handleHistoryContextMenu(webContents);
+    const webContents = useMemo(() => isElectron() ? dynamicRequire("@electron/remote").getCurrentWebContents() : undefined, []);
+    const onContextMenu = webContents ? handleHistoryContextMenu(webContents) : undefined;
     const { canGoBack, canGoForward } = useBackForwardState(webContents);
     const legacyBackVisible = useLauncherVisibility("_lbBackInHistory");
     const legacyForwardVisible = useLauncherVisibility("_lbForwardInHistory");
 
-    return (
+    return (isElectron() &&
         <div className="tab-history-navigation-buttons">
             {!legacyBackVisible && <ActionButton
                 icon="bx bx-left-arrow-alt"
@@ -35,11 +35,13 @@ export default function TabHistoryNavigationButtons() {
     );
 }
 
-function useBackForwardState(webContents: Electron.WebContents) {
-    const [ canGoBack, setCanGoBack ] = useState(webContents.navigationHistory.canGoBack());
-    const [ canGoForward, setCanGoForward ] = useState(webContents.navigationHistory.canGoForward());
+function useBackForwardState(webContents: Electron.WebContents | undefined) {
+    const [ canGoBack, setCanGoBack ] = useState(webContents?.navigationHistory.canGoBack());
+    const [ canGoForward, setCanGoForward ] = useState(webContents?.navigationHistory.canGoForward());
 
     useEffect(() => {
+        if (!webContents) return;
+
         const updateNavigationState = () => {
             setCanGoBack(webContents.navigationHistory.canGoBack());
             setCanGoForward(webContents.navigationHistory.canGoForward());
@@ -53,6 +55,10 @@ function useBackForwardState(webContents: Electron.WebContents) {
             webContents.removeListener("did-navigate-in-page", updateNavigationState);
         };
     }, [ webContents ]);
+
+    if (!webContents) {
+        return { canGoBack: true, canGoForward: true };
+    }
 
     return { canGoBack, canGoForward };
 }
