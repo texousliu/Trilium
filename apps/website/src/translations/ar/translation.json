@@ -13,7 +13,9 @@
     "get-started": {
         "architecture": "المعمارية:",
         "older_releases": "انظر الى الاصدارات القديمة",
-        "title": "ابدأ الان"
+        "title": "ابدأ الان",
+        "desktop_title": "قم بتحميل تطبيق سطح المكتب (v{{version}})",
+        "server_title": "إعداد خادم للدخول من أكثر من جهاز"
     },
     "hero_section": {
         "github": "GitHub",
