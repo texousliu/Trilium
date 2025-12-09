@@ -16,6 +16,7 @@ import FormattingToolbar from "./FormattingToolbar";
 import options from "../../services/options";
 import { t } from "../../services/i18n";
 import { TabConfiguration } from "./ribbon-interface";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 
 export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
     {
@@ -27,7 +28,8 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         toggleCommand: "toggleRibbonTabClassicEditor",
         content: FormattingToolbar,
         activate: ({ note }) => !options.is("editedNotesOpenInRibbon") || !note?.hasOwnedLabel("dateNote"),
-        stayInDom: true
+        stayInDom: !isExperimentalFeatureEnabled("new-layout"),
+        avoidInNewLayout: true
     },
     {
         title: ({ note }) => note?.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),

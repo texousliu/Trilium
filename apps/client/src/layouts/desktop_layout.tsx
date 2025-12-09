@@ -46,6 +46,12 @@ import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
 import Breadcrumb from "../widgets/Breadcrumb.jsx";
 import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
+import { isExperimentalFeatureEnabled } from "../services/experimental_features.js";
+import NoteActions from "../widgets/ribbon/NoteActions.jsx";
+import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
+import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
+import BreadcrumbBadges from "../widgets/BreadcrumbBadges.jsx";
+import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
 
 export default class DesktopLayout {
 
@@ -71,6 +77,12 @@ export default class DesktopLayout {
          */
         const fullWidthTabBar = launcherPaneIsHorizontal || (isElectron && !hasNativeTitleBar && isMac);
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
+        const isNewLayout = isExperimentalFeatureEnabled("new-layout");
+
+        const titleRow = new FlexContainer("row")
+            .class("title-row")
+            .child(<NoteIconWidget />)
+            .child(<NoteTitleWidget />);
 
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
@@ -126,30 +138,27 @@ export default class DesktopLayout {
                                                         .child(
                                                             new FlexContainer("row")
                                                                 .class("breadcrumb-row")
-                                                                .css("height", "30px")
-                                                                .css("min-height", "30px")
-                                                                .css("align-items", "center")
-                                                                .css("padding", "10px")
                                                                 .cssBlock(".breadcrumb-row > * { margin: 5px; }")
                                                                 .child(<Breadcrumb />)
+                                                                .child(<BreadcrumbBadges />)
                                                                 .child(<SpacerWidget baseSize={0} growthFactor={1} />)
                                                                 .child(<MovePaneButton direction="left" />)
                                                                 .child(<MovePaneButton direction="right" />)
                                                                 .child(<ClosePaneButton />)
                                                                 .child(<CreatePaneButton />)
+                                                                .optChild(isNewLayout, <NoteActions />)
                                                         )
-                                                        .child(new FlexContainer("row")
-                                                            .class("title-row")
-                                                            .child(<NoteIconWidget />)
-                                                            .child(<NoteTitleWidget />)
-                                                        )
-                                                        .child(<Ribbon />)
+                                                        .optChild(!isNewLayout, titleRow)
+                                                        .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
+                                                        .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
-                                                                .child(new ContentHeader()
+                                                                .optChild(isNewLayout, titleRow)
+                                                                .optChild(isNewLayout, <NoteTitleDetails />)
+                                                                .optChild(!isNewLayout, new ContentHeader()
                                                                     .child(<ReadOnlyNoteInfoBar />)
                                                                     .child(<SharedInfo />)
                                                                 )
@@ -167,6 +176,7 @@ export default class DesktopLayout {
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
                                                             ...this.customWidgets.get("note-detail-pane")
                                                         )
+                                                        .optChild(isNewLayout, <Ribbon />)
                                                 )
                                             )
                                             .child(...this.customWidgets.get("center-pane"))

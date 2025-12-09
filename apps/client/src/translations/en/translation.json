@@ -1096,6 +1096,12 @@
     "vacuuming_database": "Vacuuming database...",
     "database_vacuumed": "Database has been vacuumed"
   },
+  "experimental_features": {
+    "title": "Experimental Options",
+    "disclaimer": "These options are experimental and may cause instability. Use with caution.",
+    "new_layout_name": "New Layout",
+    "new_layout_description": "Try out the new layout for a more modern look and improved usability. Subject to heavy change in the upcoming releases."
+  },
   "fonts": {
     "theme_defined": "Theme defined",
     "fonts": "Fonts",
@@ -1743,7 +1749,9 @@
     "printing_pdf": "Exporting to PDF in progress..."
   },
   "note_title": {
-    "placeholder": "type note's title here..."
+    "placeholder": "type note's title here...",
+    "created_on": "Created on {{date}}",
+    "last_modified": "Last modified on {{date}}"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",
@@ -2121,5 +2129,11 @@
   "tab_history_navigation_buttons": {
     "go-back": "Go back to previous note",
     "go-forward": "Go forward to next note"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "Read-only",
+    "read_only_auto": "Auto read-only",
+    "shared_publicly": "Shared publicly",
+    "shared_locally": "Shared locally"
   }
 }

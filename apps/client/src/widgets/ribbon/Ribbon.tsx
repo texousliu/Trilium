@@ -4,11 +4,11 @@ import "./style.css";
 
 import { Indexed, numberObjectsInPlace } from "../../services/utils";
 import { EventNames } from "../../components/app_context";
-import NoteActions from "./NoteActions";
 import { KeyboardActionNames } from "@triliumnext/commons";
 import { RIBBON_TAB_DEFINITIONS } from "./RibbonDefinition";
 import { TabConfiguration, TitleContext } from "./ribbon-interface";
 import clsx from "clsx";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 
 const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>(RIBBON_TAB_DEFINITIONS);
 
@@ -16,7 +16,9 @@ interface ComputedTab extends Indexed<TabConfiguration> {
     shouldShow: boolean;
 }
 
-export default function Ribbon() {
+const isNewLayout = isExperimentalFeatureEnabled("new-layout");
+
+export default function Ribbon({ children }: { children?: preact.ComponentChildren }) {
     const { note, ntxId, hoistedNoteId, notePath, noteContext, componentId, isReadOnlyTemporarilyDisabled } = useNoteContext();
     const noteType = useNoteProperty(note, "type");
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
@@ -29,7 +31,8 @@ export default function Ribbon() {
     async function refresh() {
         const computedTabs: ComputedTab[] = [];
         for (const tab of TAB_CONFIGURATION) {
-            const shouldShow = await shouldShowTab(tab.show, titleContext);
+            const shouldAvoid = (isNewLayout && tab.avoidInNewLayout);
+            const shouldShow = !shouldAvoid && await shouldShowTab(tab.show, titleContext);
             computedTabs.push({
                 ...tab,
                 shouldShow: !!shouldShow
@@ -99,9 +102,7 @@ export default function Ribbon() {
                         />
                     ))}
                 </div>
-                <div className="ribbon-button-container">
-                    { note && <NoteActions note={note} noteContext={noteContext} /> }
-                </div>
+                {children}
             </div>
 
             <div className="ribbon-body-container">

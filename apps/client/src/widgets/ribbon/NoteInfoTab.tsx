@@ -8,30 +8,13 @@ import { formatDateTime } from "../../utils/formatters";
 import { formatSize } from "../../services/utils";
 import LoadingSpinner from "../react/LoadingSpinner";
 import { useTriliumEvent } from "../react/hooks";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+import FNote from "../../entities/fnote";
+
+const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
 export default function NoteInfoTab({ note }: TabContext) {
-    const [ metadata, setMetadata ] = useState<MetadataResponse>();
-    const [ isLoading, setIsLoading ] = useState(false);
-    const [ noteSizeResponse, setNoteSizeResponse ] = useState<NoteSizeResponse>();
-    const [ subtreeSizeResponse, setSubtreeSizeResponse ] = useState<SubtreeSizeResponse>();
-
-    function refresh() {
-        if (note) {
-            server.get<MetadataResponse>(`notes/${note?.noteId}/metadata`).then(setMetadata);
-        }
-
-        setNoteSizeResponse(undefined);
-        setSubtreeSizeResponse(undefined);
-        setIsLoading(false);
-    }
-
-    useEffect(refresh, [ note?.noteId ]);
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        const noteId = note?.noteId;
-        if (noteId && (loadResults.isNoteReloaded(noteId) || loadResults.isNoteContentReloaded(noteId))) {
-            refresh();
-        }
-    });
+    const { isLoading, metadata, noteSizeResponse, subtreeSizeResponse, requestSizeInfo } = useNoteMetadata(note);
 
     return (
         <div className="note-info-widget">
@@ -41,14 +24,14 @@ export default function NoteInfoTab({ note }: TabContext) {
                         <span>{t("note_info_widget.note_id")}:</span>
                         <span className="note-info-id selectable-text">{note.noteId}</span>
                     </div>
-                    <div className="note-info-item">
+                    {!isNewLayout && <div className="note-info-item">
                         <span>{t("note_info_widget.created")}:</span>
                         <span className="selectable-text">{formatDateTime(metadata?.dateCreated)}</span>
-                    </div>
-                    <div className="note-info-item">
+                    </div>}
+                    {!isNewLayout && <div className="note-info-item">
                         <span>{t("note_info_widget.modified")}:</span>
                         <span className="selectable-text">{formatDateTime(metadata?.dateModified)}</span>
-                    </div>
+                    </div>}
                     <div className="note-info-item">
                         <span>{t("note_info_widget.type")}:</span>
                         <span>
@@ -64,16 +47,7 @@ export default function NoteInfoTab({ note }: TabContext) {
                                     className="calculate-button"
                                     icon="bx bx-calculator"
                                     text={t("note_info_widget.calculate")}
-                                    onClick={() => {
-                                        setIsLoading(true);
-                                        setTimeout(async () => {
-                                            await Promise.allSettled([
-                                                server.get<NoteSizeResponse>(`stats/note-size/${note.noteId}`).then(setNoteSizeResponse),
-                                                server.get<SubtreeSizeResponse>(`stats/subtree-size/${note.noteId}`).then(setSubtreeSizeResponse)
-                                            ]);
-                                            setIsLoading(false);
-                                        }, 0);
-                                    }}
+                                    onClick={requestSizeInfo}
                                 />
                             )}
 
@@ -90,5 +64,45 @@ export default function NoteInfoTab({ note }: TabContext) {
                 </>
             )}
         </div>
-    )
+    );
+}
+
+export function useNoteMetadata(note: FNote | null | undefined) {
+    const [ isLoading, setIsLoading ] = useState(false);
+    const [ noteSizeResponse, setNoteSizeResponse ] = useState<NoteSizeResponse>();
+    const [ subtreeSizeResponse, setSubtreeSizeResponse ] = useState<SubtreeSizeResponse>();
+    const [ metadata, setMetadata ] = useState<MetadataResponse>();
+
+    function refresh() {
+        if (note) {
+            server.get<MetadataResponse>(`notes/${note?.noteId}/metadata`).then(setMetadata);
+        }
+
+        setNoteSizeResponse(undefined);
+        setSubtreeSizeResponse(undefined);
+        setIsLoading(false);
+    }
+
+    function requestSizeInfo() {
+        if (!note) return;
+
+        setIsLoading(true);
+        setTimeout(async () => {
+            await Promise.allSettled([
+                server.get<NoteSizeResponse>(`stats/note-size/${note.noteId}`).then(setNoteSizeResponse),
+                server.get<SubtreeSizeResponse>(`stats/subtree-size/${note.noteId}`).then(setSubtreeSizeResponse)
+            ]);
+            setIsLoading(false);
+        }, 0);
+    }
+
+    useEffect(refresh, [ note ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        const noteId = note?.noteId;
+        if (noteId && (loadResults.isNoteReloaded(noteId) || loadResults.isNoteContentReloaded(noteId))) {
+            refresh();
+        }
+    });
+
+    return { isLoading, metadata, noteSizeResponse, subtreeSizeResponse, requestSizeInfo  };
 }

@@ -1,5 +1,13 @@
 .breadcrumb-row {
     position: relative;
+    height: 30px;
+    min-height: 30px;
+    align-items: center;
+    padding: 10px;
+}
+
+body.experimental-feature-new-layout .breadcrumb-row {
+    padding-inline-end: 0;
 }
 
 .component.breadcrumb {

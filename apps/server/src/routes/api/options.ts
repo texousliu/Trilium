@@ -99,6 +99,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "showLoginInShareTheme",
     "splitEditorOrientation",
     "seenCallToActions",
+    "experimentalFeatures",
 
     // AI/LLM integration options
     "aiEnabled",
