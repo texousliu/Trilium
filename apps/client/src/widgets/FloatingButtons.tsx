@@ -48,6 +48,12 @@ export default function FloatingButtons({ items }: FloatingButtonsProps) {
     const [ visible, setVisible ] = useState(true);
     useEffect(() => setVisible(true), [ note ]);
 
+    useTriliumEvent("contentSafeMarginChanged", (e) => {
+        if (e.noteContext === noteContext) {
+            setTop(e.top);
+        }
+    });
+
     return (
         <div className="floating-buttons no-print" style={{top}}>
             <div className={`floating-buttons-children ${!visible ? "temporarily-hidden" : ""}`}>
@@ -87,7 +93,7 @@ function CloseFloatingButton({ setVisible }: { setVisible(visible: boolean): voi
                 className="close-floating-buttons-button"
                 icon="bx bx-chevrons-right"
                 text={t("hide_floating_buttons_button.button_title")}
-                onClick={() => setVisible(false)}
+                onClick={() => setVisible(false)}                
                 noIconActionClass
             />
         </div>
