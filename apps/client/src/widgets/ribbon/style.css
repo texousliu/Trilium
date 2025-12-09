@@ -432,6 +432,7 @@ body.experimental-feature-new-layout {
 
     .ribbon-button-container {
         border-bottom: 0 !important;
+        margin: 0;
     }
 }
 /* #endregion */

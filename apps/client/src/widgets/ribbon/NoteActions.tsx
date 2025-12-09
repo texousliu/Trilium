@@ -60,7 +60,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
 
     return (
         <Dropdown
-            buttonClassName="bx bx-dots-vertical-rounded"
+            buttonClassName={ isNewLayout ? "bx bx-dots-horizontal-rounded" : "bx bx-dots-vertical-rounded" }
             className="note-actions"
             hideToggleArrow
             noSelectButtonStyle
