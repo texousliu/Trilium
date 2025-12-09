@@ -2,15 +2,19 @@ import { EventData } from "../../components/app_context";
 import BasicWidget from "../basic_widget";
 import Container from "./container";
 import NoteContext from "../../components/note_context";
+import "./content_header.css";
 
 export default class ContentHeader extends Container<BasicWidget> {
-    
+
     noteContext?: NoteContext;
     thisElement?: HTMLElement;
     parentElement?: HTMLElement;
     resizeObserver: ResizeObserver;
     currentHeight: number = 0;
     currentSafeMargin: number = NaN;
+    previousScrollTop: number = 0;
+    isFloating: boolean = false;
+    scrollThreshold: number = 10; // pixels before triggering float
 
     constructor() {
         super();
@@ -35,7 +39,36 @@ export default class ContentHeader extends Container<BasicWidget> {
         this.thisElement = this.$widget.get(0)!;
 
         this.resizeObserver.observe(this.thisElement);
-        this.parentElement.addEventListener("scroll", this.updateSafeMargin.bind(this));
+        this.parentElement.addEventListener("scroll", this.updateScrollState.bind(this), { passive: true });
+    }
+
+    updateScrollState() {
+        const currentScrollTop = this.parentElement!.scrollTop;
+        const isScrollingUp = currentScrollTop < this.previousScrollTop;
+        const hasMovedEnough = Math.abs(currentScrollTop - this.previousScrollTop) > this.scrollThreshold;
+
+        if (hasMovedEnough) {
+            this.setFloating(isScrollingUp);
+            this.previousScrollTop = currentScrollTop;
+        }
+
+        this.updateSafeMargin();
+    }
+
+    setFloating(shouldFloat: boolean) {
+        if (shouldFloat !== this.isFloating) {
+            this.isFloating = shouldFloat;
+
+            if (shouldFloat) {
+                this.$widget.addClass("floating");
+                // Set CSS variable so ribbon can position itself below the floating header
+                this.parentElement!.style.setProperty("--content-header-height", `${this.currentHeight}px`);
+            } else {
+                this.$widget.removeClass("floating");
+                // Reset CSS variable when header is not floating
+                this.parentElement!.style.removeProperty("--content-header-height");
+            }
+        }
     }
 
     updateSafeMargin() {

@@ -1,5 +1,15 @@
 .ribbon-container {
     margin-bottom: 5px;
+    position: relative;
+    transition: position 0.3s ease, z-index 0.3s ease, top 0.3s ease;
+    z-index: 8;
+}
+
+/* When content header is floating, ribbon sticks below it */
+.scrolling-container:has(.content-header-widget.floating) .ribbon-container {
+    position: sticky;
+    top: var(--content-header-height, 100px);
+    z-index: 10;
 }
 
 .ribbon-top-row {

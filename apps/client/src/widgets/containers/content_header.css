@@ -1,0 +1,18 @@
+.content-header-widget {
+    position: relative;
+    transition: position 0.3s ease, box-shadow 0.3s ease, z-index 0.3s ease;
+    z-index: 8;
+}
+
+.content-header-widget.floating {
+    position: sticky;
+    top: 0;
+    z-index: 11;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--main-background-color, #fff);
+}
+
+/* Ensure content inside doesn't get affected by the floating state */
+.content-header-widget > * {
+    transition: inherit;
+}
