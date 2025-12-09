@@ -4,6 +4,8 @@ import froca from "./froca.js";
 import hoistedNoteService from "./hoisted_note.js";
 import appContext from "../components/app_context.js";
 
+export const NOTE_PATH_TITLE_SEPARATOR = " › ";
+
 async function resolveNotePath(notePath: string, hoistedNoteId = "root") {
     const runPath = await resolveNotePathToSegments(notePath, hoistedNoteId);
 
@@ -254,7 +256,7 @@ async function getNotePathTitle(notePath: string) {
 
     const titlePath = await getNotePathTitleComponents(notePath);
 
-    return titlePath.join(" / ");
+    return titlePath.join(NOTE_PATH_TITLE_SEPARATOR);
 }
 
 async function getNoteTitleWithPathAsSuffix(notePath: string) {
