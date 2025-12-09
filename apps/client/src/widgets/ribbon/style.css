@@ -424,6 +424,7 @@ body.experimental-feature-new-layout {
         border-top: 1px solid var(--main-border-color);
 
         .ribbon-tab-spacer,
+        .ribbon-tab-title,
         .ribbon-body {
             border-bottom: 0 !important;
         }
