@@ -49,9 +49,8 @@ export default class ContentHeader extends Container<BasicWidget> {
 
         if (hasMovedEnough) {
             this.setFloating(isScrollingUp);
-            this.previousScrollTop = currentScrollTop;
         }
-
+        this.previousScrollTop = currentScrollTop;
         this.updateSafeMargin();
     }
 

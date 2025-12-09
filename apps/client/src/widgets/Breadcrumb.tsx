@@ -38,7 +38,7 @@ export default function Breadcrumb() {
                     {notePath.slice(-FINAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
                             <BreadcrumbSeparator notePath={notePath[notePath.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
-                            <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                            <BreadcrumbItem notePath={item} />
                         </Fragment>
                     ))}
                 </>
@@ -47,7 +47,7 @@ export default function Breadcrumb() {
                     <Fragment key={item}>
                         {index === 0
                             ? <BreadcrumbRoot noteContext={noteContext} />
-                            : <BreadcrumbItem notePath={item} activeNotePath={noteContext?.notePath ?? ""} />
+                            : <BreadcrumbItem notePath={item} />
                         }
                         {(index < notePath.length - 1 || note?.hasChildren()) &&
                             <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />}
@@ -76,14 +76,11 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
     );
 }
 
-function BreadcrumbItem({ notePath, activeNotePath }: { notePath: string, activeNotePath: string }) {
-    const isRootNote = (notePath === "root");
+function BreadcrumbItem({ notePath }: { notePath: string }) {
     return (
         <NoteLink
             notePath={notePath}
             noPreview
-            title={isRootNote && activeNotePath !== "root" ? "" : undefined}
-            showNoteIcon={isRootNote}
         />
     );
 }
@@ -104,14 +101,13 @@ function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePa
 
 function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
     const notePathComponents = notePath.split("/");
-    const notePathPrefix = notePathComponents.join("/");
     const parentNoteId = notePathComponents.at(-1);
     const childNotes = useChildNotes(parentNoteId);
 
     return (
-        <ul class="breadcrumb-child-list">
+        <ul className="breadcrumb-child-list">
             {childNotes.map((note) => {
-                const childNotePath = `${notePathPrefix}/${note.noteId}`;
+                const childNotePath = `${notePath}/${note.noteId}`;
                 return <li key={note.noteId}>
                     <FormListItem
                         icon={note.getIcon()}
@@ -136,7 +132,7 @@ function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteCont
             hideToggleArrow
             dropdownOptions={{ popperConfig: { strategy: "fixed" } }}
         >
-            <ul class="breadcrumb-child-list">
+            <ul className="breadcrumb-child-list">
                 {items.map((notePath) => {
                     const notePathComponents = notePath.split("/");
                     const noteId = notePathComponents[notePathComponents.length - 1];
