@@ -886,12 +886,15 @@ async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
     return true;
 }
 
-export function useChildNotes(parentNoteId: string) {
+export function useChildNotes(parentNoteId: string | undefined) {
     const [ childNotes, setChildNotes ] = useState<FNote[]>([]);
     useEffect(() => {
         (async function() {
-            const parentNote = await froca.getNote(parentNoteId);
-            const childNotes = await parentNote?.getChildNotes();
+            let childNotes: FNote[] | undefined;
+            if (parentNoteId) {
+                const parentNote = await froca.getNote(parentNoteId);
+                childNotes = await parentNote?.getChildNotes();
+            }
             setChildNotes(childNotes ?? []);
         })();
      }, [ parentNoteId ]);

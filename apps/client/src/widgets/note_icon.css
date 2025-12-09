@@ -1,5 +1,5 @@
 .note-icon-widget {
-    padding-inline-start: 7px;
+    padding-inline-start: 10px;
     margin-inline-end: 0;
     width: 50px;
     height: 50px;
@@ -13,7 +13,7 @@
     cursor: pointer;
     color: var(--muted-text-color);
 }
-    
+
 .note-icon-widget button.note-icon:disabled {
     cursor: default;
     opacity: .75;

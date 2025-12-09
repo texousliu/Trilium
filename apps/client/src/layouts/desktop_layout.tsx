@@ -44,6 +44,7 @@ import NoteDetail from "../widgets/NoteDetail.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
+import Breadcrumb from "../widgets/Breadcrumb.jsx";
 
 export default class DesktopLayout {
 
@@ -117,29 +118,37 @@ export default class DesktopLayout {
                                                     new NoteWrapperWidget()
                                                         .child(
                                                             new FlexContainer("row")
-                                                                .class("title-row")
-                                                                .css("height", "50px")
-                                                                .css("min-height", "50px")
+                                                                .class("breadcrumb-row")
+                                                                .css("height", "30px")
+                                                                .css("min-height", "30px")
                                                                 .css("align-items", "center")
-                                                                .cssBlock(".title-row > * { margin: 5px; }")
-                                                                .child(<NoteIconWidget />)
-                                                                .child(<NoteTitleWidget />)
+                                                                .css("padding", "10px")
+                                                                .cssBlock(".breadcrumb-row > * { margin: 5px; }")
+                                                                .child(<Breadcrumb />)
                                                                 .child(<SpacerWidget baseSize={0} growthFactor={1} />)
                                                                 .child(<MovePaneButton direction="left" />)
                                                                 .child(<MovePaneButton direction="right" />)
                                                                 .child(<ClosePaneButton />)
                                                                 .child(<CreatePaneButton />)
                                                         )
-                                                        .child(<Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
                                                                 .child(new ContentHeader()
+                                                                    .child(new FlexContainer("row")
+                                                                        .class("title-row")
+                                                                        .css("height", "50px")
+                                                                        .css("min-height", "50px")
+                                                                        .css("align-items", "center")
+                                                                        .child(<NoteIconWidget />)
+                                                                        .child(<NoteTitleWidget />)
+                                                                    )
                                                                     .child(<ReadOnlyNoteInfoBar />)
                                                                     .child(<SharedInfo />)
                                                                 )
+                                                                .child(<Ribbon />)
                                                                 .child(<PromotedAttributes />)
                                                                 .child(<SqlTableSchemas />)
                                                                 .child(<NoteDetail />)

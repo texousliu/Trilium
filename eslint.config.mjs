@@ -63,7 +63,7 @@ const mainConfig = [
     }
   },
   {
-    files: ["**/*.{js,ts,mjs,cjs}"],
+    files: ["**/*.{js,ts,mjs,cjs,tsx}"],
 
     languageOptions: {
       parser: tsParser

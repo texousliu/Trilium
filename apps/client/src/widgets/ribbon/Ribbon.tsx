@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
+import { useElementSize, useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 
 import { Indexed, numberObjectsInPlace } from "../../services/utils";
@@ -42,6 +42,16 @@ export default function Ribbon() {
         refresh();
     }, [ note, noteType, isReadOnlyTemporarilyDisabled ]);
 
+    // Manage height.
+    const containerRef = useRef<HTMLDivElement>(null);
+    const size = useElementSize(containerRef);
+    useEffect(() => {
+        if (!containerRef.current || !size) return;
+        const parentEl = containerRef.current.closest<HTMLDivElement>(".note-split");
+        if (!parentEl) return;
+        parentEl.style.setProperty("--ribbon-height", `${size.height}px`);
+    }, [ size ]);
+
     // Automatically activate the first ribbon tab that needs to be activated whenever a note changes.
     useEffect(() => {
         if (!computedTabs) return;
@@ -65,6 +75,7 @@ export default function Ribbon() {
 
     return (
         <div
+            ref={containerRef}
             className={clsx("ribbon-container", noteContext?.viewScope?.viewMode !== "default" && "hidden-ext")}
             style={{ contain: "none" }}
         >
