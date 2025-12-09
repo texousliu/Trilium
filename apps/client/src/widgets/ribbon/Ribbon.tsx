@@ -73,10 +73,11 @@ export default function Ribbon() {
         }
     }, [ computedTabs, activeTabIndex ]));
 
+    const shouldShowRibbon = (noteContext?.viewScope?.viewMode === "default" && !noteContext.noteId?.startsWith("_options"));
     return (
         <div
             ref={containerRef}
-            className={clsx("ribbon-container", noteContext?.viewScope?.viewMode !== "default" && "hidden-ext")}
+            className={clsx("ribbon-container", !shouldShowRibbon && "hidden-ext")}
             style={{ contain: "none" }}
         >
             <div className="ribbon-top-row">
