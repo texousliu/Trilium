@@ -28,7 +28,12 @@ export function getEnabledExperimentalFeatureIds() {
 
 function getEnabledFeatures() {
     if (!enabledFeatures) {
-        const features = JSON.parse(options.get("experimentalFeatures")) as ExperimentalFeatureId[];
+        let features: ExperimentalFeatureId[] = [];
+        try {
+            features = JSON.parse(options.get("experimentalFeatures")) as ExperimentalFeatureId[];
+        } catch (e) {
+            console.warn("Failed to parse experimental features from options:", e);
+        }
         enabledFeatures = new Set(features);
     }
     return enabledFeatures;
