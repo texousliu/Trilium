@@ -6,7 +6,7 @@ import Icon from "./react/Icon";
 import { useShareInfo } from "./shared_info";
 import clsx from "clsx";
 
-export default function NoteBadges() {
+export default function BreadcrumbBadges() {
     return (
         <div className="breadcrumb-badges">
             <ReadOnlyBadge />
