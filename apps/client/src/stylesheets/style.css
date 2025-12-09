@@ -1367,6 +1367,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     background-color: var(--scrollbar-background-color);
 }
 
+::-webkit-scrollbar-button {
+    display: none;
+}
+
 ::-webkit-scrollbar-corner {
     background-color: inherit;
 }

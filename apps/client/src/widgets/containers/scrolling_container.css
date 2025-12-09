@@ -6,4 +6,5 @@
 
 .note-split.type-code:not(.mime-text-x-sqlite) > .scrolling-container {
     background-color: var(--code-background-color);
+    --scrollbar-background-color: var(--main-background-color);
 }
