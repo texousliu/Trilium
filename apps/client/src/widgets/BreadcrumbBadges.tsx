@@ -4,6 +4,7 @@ import { ComponentChildren } from "preact";
 import { useIsNoteReadOnly, useNoteContext } from "./react/hooks";
 import Icon from "./react/Icon";
 import { useShareInfo } from "./shared_info";
+import clsx from "clsx";
 
 export default function NoteBadges() {
     return (
@@ -43,7 +44,10 @@ function ShareBadge() {
 
 function Badge({ icon, children, onClick }: { icon: string, children: ComponentChildren, onClick?: () => void }) {
     return (
-        <div className="breadcrumb-badge" onClick={onClick}>
+        <div
+            className={clsx("breadcrumb-badge", { "clickable": !!onClick })}
+            onClick={onClick}
+        >
             <Icon icon={icon} />&nbsp;
             {children}
         </div>

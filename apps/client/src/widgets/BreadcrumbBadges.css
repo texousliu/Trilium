@@ -11,5 +11,13 @@
         font-size: 0.75em;
         background-color: var(--badge-background-color);
         color: var(--badge-text-color);
+
+        &.clickable {
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--badge-background-hover-color);
+            }
+        }
     }
 }
