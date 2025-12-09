@@ -189,6 +189,7 @@ function ExperimentalOptions() {
                 values={experimentalFeatures}
                 keyProperty="id"
                 titleProperty="name"
+                descriptionProperty="description"
                 currentValue={enabledExperimentalFeatures} onChange={setEnabledExperimentalFeatures}
             />
         </OptionsSection>
