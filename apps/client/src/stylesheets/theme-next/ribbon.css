@@ -178,15 +178,3 @@ ul.editability-dropdown li.dropdown-item > div {
 .note-info-widget {
     container: info-section / inline-size;
 }
-
-/*
- * Styling as a floating toolbar
- */
-.ribbon-container {
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--main-background-color);
-    z-index: 997;
-}
