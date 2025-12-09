@@ -1,5 +1,5 @@
 import type { WebContents } from "electron";
-import { useCallback, useMemo } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 
 import FNote from "../../entities/fnote";
 import contextMenu, { MenuCommandItem } from "../../menus/context_menu";
@@ -7,6 +7,7 @@ import link from "../../services/link";
 import tree from "../../services/tree";
 import { dynamicRequire } from "../../services/utils";
 import { LaunchBarActionButton, useLauncherIconAndTitle } from "./launch_bar_widgets";
+import froca from "../../services/froca";
 
 interface HistoryNavigationProps {
     launcherNote: FNote;
@@ -43,20 +44,19 @@ export function handleHistoryContextMenu(webContents: WebContents) {
         const activeIndex = webContents.navigationHistory.getActiveIndex();
 
         for (const idx in history) {
-            const { notePath } = link.parseNavigationStateFromUrl(history[idx].url);
-            if (!notePath) continue;
+            const { noteId, notePath } = link.parseNavigationStateFromUrl(history[idx].url);
+            if (!noteId || !notePath) continue;
 
             const title = await tree.getNotePathTitle(notePath);
             const index = parseInt(idx, 10);
+            const note = froca.getNoteFromCache(noteId);
 
             items.push({
                 title,
                 command: idx,
                 checked: index === activeIndex,
                 enabled: index !== activeIndex,
-                uiIcon: index !== activeIndex && index < activeIndex
-                    ? "bx bx-left-arrow-alt"
-                    : "bx bx-right-arrow-alt"
+                uiIcon: note?.getIcon()
             });
         }
 
