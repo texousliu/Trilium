@@ -1,0 +1,15 @@
+.component.breadcrumb-badges {
+    display: flex;
+    gap: 5px;
+    contain: none;
+
+    .breadcrumb-badge {
+        display: flex;
+        align-items: center;
+        padding: 2px 6px;
+        border-radius: 12px;
+        font-size: 0.75em;
+        background-color: var(--badge-background-color);
+        color: var(--badge-text-color);
+    }
+}
