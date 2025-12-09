@@ -75,6 +75,11 @@ export default class DesktopLayout {
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
         const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
+        const titleRow = new FlexContainer("row")
+            .class("title-row")
+            .child(<NoteIconWidget />)
+            .child(<NoteTitleWidget />);
+
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
             .class((launcherPaneIsHorizontal ? "horizontal" : "vertical") + "-layout")
@@ -142,17 +147,14 @@ export default class DesktopLayout {
                                                                 .child(<CreatePaneButton />)
                                                                 .optChild(isNewLayout, <NoteActions />)
                                                         )
-                                                        .child(new FlexContainer("row")
-                                                            .class("title-row")
-                                                            .child(<NoteIconWidget />)
-                                                            .child(<NoteTitleWidget />)
-                                                        )
+                                                        .optChild(!isNewLayout, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
+                                                                .optChild(isNewLayout, titleRow)
                                                                 .child(new ContentHeader()
                                                                     .child(<ReadOnlyNoteInfoBar />)
                                                                     .child(<SharedInfo />)
