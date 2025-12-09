@@ -24,8 +24,8 @@
     --bs-body-font-family: var(--main-font-family) !important;
     --bs-body-font-weight: var(--main-font-weight) !important;
     --bs-body-color: var(--main-text-color) !important;
-    --bs-body-bg: var(--main-background-color) !important;    
-    --ck-mention-list-max-height: 500px;    
+    --bs-body-bg: var(--main-background-color) !important;
+    --ck-mention-list-max-height: 500px;
     --tn-modal-max-height: 90vh;
 
     --tree-item-light-theme-max-color-lightness: 50;
@@ -471,7 +471,7 @@ body.mobile .dropdown .dropdown-submenu > span {
     padding-inline-start: 12px;
 }
 
-.dropdown-menu kbd {    
+.dropdown-menu kbd {
     color: var(--muted-text-color);
     border: none;
     background-color: transparent;
@@ -487,7 +487,7 @@ body.mobile .dropdown .dropdown-submenu > span {
     border: 1px solid transparent !important;
 }
 
-/*  This is a workaround for Firefox not supporting break-before / break-after: avoid on columns. 
+/*  This is a workaround for Firefox not supporting break-before / break-after: avoid on columns.
  *  It usually wraps a menu item followed by a separator / header and another menu item. */
 .dropdown-no-break {
     break-inside: avoid;
@@ -1591,7 +1591,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         inset-inline-start: 0;
         inset-inline-end: 0;
         margin: 0 !important;
-        max-height: 85vh;        
+        max-height: 85vh;
         display: flex;
     }
 
@@ -2093,7 +2093,7 @@ body.zen .note-split.type-text .scrolling-container {
 
 body.zen:not(.backdrop-effects-disabled) .note-split.type-text .scrolling-container {
     --padding-top: 50px; /* Should be enough to cover the title row */
-    
+
     padding-top: var(--padding-top);
     scroll-padding-top: var(--padding-top);
 }
@@ -2365,7 +2365,7 @@ footer.webview-footer button {
     margin-bottom: 0;
 }
 
-.admonition::before {  
+.admonition::before {
     color: var(--accent-color);
     font-family: boxicons !important;
     position: absolute;
@@ -2391,7 +2391,7 @@ footer.webview-footer button {
 
 .ck-content ul.todo-list li:has(> span.todo-list__label input[type="checkbox"]:checked) > span.todo-list__label span.todo-list__label__description {
     text-decoration: line-through;
-    opacity: 0.6;    
+    opacity: 0.6;
 }
 
 .chat-options-container {
@@ -2524,6 +2524,7 @@ iframe.print-iframe {
     position: relative;
     flex-grow: 1;
     width: 100%;
+    overflow: hidden;
 }
 
 /* Calendar collection */
@@ -2538,7 +2539,7 @@ iframe.print-iframe {
     body.mobile {
         .split-note-container-widget {
             flex-direction: column !important;
-            
+
             .note-split {
                 width: 100%;
             }
