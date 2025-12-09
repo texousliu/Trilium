@@ -2,6 +2,7 @@ import "./BreadcrumbBadges.css";
 
 import { ComponentChildren } from "preact";
 import { useIsNoteReadOnly, useNoteContext } from "./react/hooks";
+import Icon from "./react/Icon";
 
 export default function NoteBadges() {
     return (
@@ -17,15 +18,18 @@ function ReadOnlyBadge() {
     const isExplicitReadOnly = note?.isLabelTruthy("readOnly");
 
     return (isReadOnly &&
-        <Badge onClick={() => enableEditing()}>
+        <Badge
+            icon="bx bx-lock"
+            onClick={() => enableEditing()}>
             {isExplicitReadOnly ? "Read-only" : "Auto read-only"}
         </Badge>
     );
 }
 
-function Badge({ children, onClick }: { children: ComponentChildren, onClick?: () => void }) {
+function Badge({ icon, children, onClick }: { icon: string, children: ComponentChildren, onClick?: () => void }) {
     return (
         <div className="breadcrumb-badge" onClick={onClick}>
+            <Icon icon={icon} />&nbsp;
             {children}
         </div>
     );
