@@ -897,33 +897,31 @@ export function useChildNotes(parentNoteId: string | undefined) {
             }
             setChildNotes(childNotes ?? []);
         })();
-     }, [ parentNoteId ]);
+    }, [ parentNoteId ]);
 
     return childNotes;
 }
 
 export function useLauncherVisibility(launchNoteId: string) {
-    const note = froca.getNoteFromCache(launchNoteId);
-    const [ isVisible, setIsVisible ] = useState<boolean>(checkIfVisible(note));
+    const checkIfVisible = useCallback(() => {
+        const note = froca.getNoteFromCache(launchNoteId);
+        return note?.getParentBranches().some(branch =>
+            [ "_lbVisibleLaunchers", "_lbMobileVisibleLaunchers" ].includes(branch.parentNoteId)) ?? false;
+    }, [ launchNoteId ]);
+
+    const [ isVisible, setIsVisible ] = useState<boolean>(checkIfVisible());
 
     // React to note not being available in the cache.
     useEffect(() => {
-        if (!note) return;
-        froca.getNote(launchNoteId).then(fetchedNote => setIsVisible(checkIfVisible(fetchedNote)));
-    }, [ note, launchNoteId ]);
+        froca.getNote(launchNoteId).then(() => setIsVisible(checkIfVisible()));
+    }, [ launchNoteId, checkIfVisible ]);
 
     // React to changes.
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        if (!note) return;
         if (loadResults.getBranchRows().some(branch => branch.noteId === launchNoteId)) {
-            setIsVisible(checkIfVisible(note));
+            setIsVisible(checkIfVisible());
         }
     });
-
-    function checkIfVisible(note: FNote | undefined | null) {
-        return note?.getParentBranches().some(branch =>
-            [ "_lbVisibleLaunchers", "_lbMobileVisibleLaunchers" ].includes(branch.parentNoteId)) ?? false;
-    }
 
     return isVisible;
 }
