@@ -69,7 +69,7 @@ export default class ContentHeader extends Container<BasicWidget> {
 
     updateSafeMargin() {
         const parentEl = this.parentElement?.closest<HTMLDivElement>(".note-split");
-        if (this.isFloating) {
+        if (this.isFloating || this.parentElement!.scrollTop === 0) {
             parentEl!.style.setProperty("--content-header-height", `${this.currentHeight}px`);
         } else {
             parentEl!.style.removeProperty("--content-header-height");
