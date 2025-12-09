@@ -59,14 +59,13 @@ export default class ContentHeader extends Container<BasicWidget> {
         if (shouldFloat !== this.isFloating) {
             this.isFloating = shouldFloat;
 
+            const parentEl = this.parentElement?.closest<HTMLDivElement>(".note-split");
             if (shouldFloat) {
                 this.$widget.addClass("floating");
-                // Set CSS variable so ribbon can position itself below the floating header
-                this.parentElement!.style.setProperty("--content-header-height", `${this.currentHeight}px`);
+                parentEl!.style.setProperty("--content-header-height", `${this.currentHeight}px`);
             } else {
                 this.$widget.removeClass("floating");
-                // Reset CSS variable when header is not floating
-                this.parentElement!.style.removeProperty("--content-header-height");
+                parentEl!.style.removeProperty("--content-header-height");
             }
         }
     }
