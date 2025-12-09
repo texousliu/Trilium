@@ -46,6 +46,7 @@ import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
 import Breadcrumb from "../widgets/Breadcrumb.jsx";
 import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
+import { experimentalFeatures, isExperimentalFeatureEnabled } from "../services/experimental_features.js";
 
 export default class DesktopLayout {
 
@@ -71,6 +72,7 @@ export default class DesktopLayout {
          */
         const fullWidthTabBar = launcherPaneIsHorizontal || (isElectron && !hasNativeTitleBar && isMac);
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
+        const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
@@ -143,7 +145,7 @@ export default class DesktopLayout {
                                                             .child(<NoteIconWidget />)
                                                             .child(<NoteTitleWidget />)
                                                         )
-                                                        .child(<Ribbon />)
+                                                        .optChild(!isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
@@ -167,6 +169,7 @@ export default class DesktopLayout {
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
                                                             ...this.customWidgets.get("note-detail-pane")
                                                         )
+                                                        .optChild(isNewLayout, <Ribbon />)
                                                 )
                                             )
                                             .child(...this.customWidgets.get("center-pane"))
