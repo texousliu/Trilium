@@ -47,7 +47,9 @@ export default class ContentHeader extends Container<BasicWidget> {
         const isScrollingUp = currentScrollTop < this.previousScrollTop;
         const hasMovedEnough = Math.abs(currentScrollTop - this.previousScrollTop) > this.scrollThreshold;
 
-        if (hasMovedEnough) {
+        if (currentScrollTop === 0) {
+            this.setFloating(false);
+        } else if (hasMovedEnough) {
             this.setFloating(isScrollingUp);
         }
         this.previousScrollTop = currentScrollTop;

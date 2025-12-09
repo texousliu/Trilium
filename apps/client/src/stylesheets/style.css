@@ -2564,5 +2564,4 @@ body.desktop .title-row {
     height: 50px;
     min-height: 50px;
     align-items: center;
-    background: var(--note-split-background-color, var(--main-background-color));
 }
