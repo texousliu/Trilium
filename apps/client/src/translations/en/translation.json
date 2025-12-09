@@ -1749,7 +1749,9 @@
     "printing_pdf": "Exporting to PDF in progress..."
   },
   "note_title": {
-    "placeholder": "type note's title here..."
+    "placeholder": "type note's title here...",
+    "created_on": "Created on {{date}}",
+    "last_modified": "Last modified on {{date}}"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",
