@@ -27,6 +27,18 @@ export function getEnabledExperimentalFeatureIds() {
     return getEnabledFeatures().values();
 }
 
+export async function toggleExperimentalFeature(featureId: ExperimentalFeatureId, enable: boolean) {
+    let features = Array.from(getEnabledFeatures());
+    if (enable) {
+        if (!features.includes(featureId)) {
+            features.push(featureId);
+        }
+    } else {
+        features = features.filter(f => f !== featureId);
+    }
+    await options.save("experimentalFeatures", JSON.stringify(features));
+}
+
 function getEnabledFeatures() {
     if (!enabledFeatures) {
         let features: ExperimentalFeatureId[] = [];
