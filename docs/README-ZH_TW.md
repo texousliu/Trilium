@@ -70,15 +70,13 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 * 直接[整合 OpenID 與
   TOTP](https://docs.triliumnotes.org/user-guide/setup/server/mfa) 以實現更安全的登入
 * 與自架的同步伺服器進行[同步](https://docs.triliumnotes.org/user-guide/setup/synchronization)
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * 有[第三方服務可託管同步伺服器](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * 將筆記[分享](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)（公開發布）到網際網路
 * 以每則筆記為粒度的強大[筆記加密](https://docs.triliumnotes.org/user-guide/concepts/notes/protected-notes)
 * 手繪/示意圖：基於 [Excalidraw](https://excalidraw.com/)（筆記類型為「canvas」）
-* [Relation
-  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
-  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
-  for visualizing notes and their relations
+* [關係圖](https://docs.triliumnotes.org/user-guide/note-types/relation-map) 與
+  [筆記/連結圖](https://docs.triliumnotes.org/user-guide/note-types/note-map)
+  用於視覺化呈現筆記及其關聯性
 * 心智圖：基於 [Mind Elixir](https://docs.mind-elixir.com/)
 * 具有定位釘與 GPX
   軌跡的[地圖](https://docs.triliumnotes.org/user-guide/collections/geomap)
@@ -95,8 +93,8 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 * 用於快速保存網頁內容的 [Web
   Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper)
 * 可自訂的 UI（側邊欄按鈕、使用者自訂小工具等）
-* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
-  along with a Grafana Dashboard.
+* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics)，以及
+  Grafana 儀表板。
 
 ✨ 想要更多 Trilium Notes 的主題、腳本、外掛與資源，亦可參考以下第三方資源 / 社群：
 
