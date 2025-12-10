@@ -122,9 +122,24 @@ function NoteBasicProperties({ note }: { note: FNote }) {
     const [ isTemplate, setIsTemplate ] = useNoteLabelBoolean(note, "template");
 
     return <>
-        <FormListToggleableItem icon="bx bx-bookmark" title={t("bookmark_switch.bookmark")} currentValue={isBookmarked} onChange={setIsBookmarked} />
-        <FormListToggleableItem icon="bx bx-share-alt" title={t("shared_switch.shared")} currentValue={isShared} onChange={switchShareState} />
-        <FormListToggleableItem icon="bx bx-copy-alt" title={t("template_switch.template")} currentValue={isTemplate} onChange={setIsTemplate} />
+        <FormListToggleableItem
+            icon="bx bx-bookmark"
+            title={t("bookmark_switch.bookmark")}
+            currentValue={isBookmarked} onChange={setIsBookmarked}
+            disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
+        />
+        <FormListToggleableItem
+            icon="bx bx-copy-alt"
+            title={t("template_switch.template")}
+            currentValue={isTemplate} onChange={setIsTemplate}
+            disabled={note?.noteId.startsWith("_options")}
+        />
+        <FormListToggleableItem
+            icon="bx bx-share-alt"
+            title={t("shared_switch.shared")}
+            currentValue={isShared} onChange={switchShareState}
+            disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
+        />
         <EditabilityDropdown note={note} />
     </>;
 }

@@ -141,7 +141,9 @@ export function FormListToggleableItem({ title, currentValue, onChange, ...props
     return (
         <FormListItem {...props} onClick={(e) => {
             e.stopPropagation();
-            onChange(!currentValue);
+            if (!props.disabled) {
+                onChange(!currentValue);
+            }
         }}>
             <FormToggle
                 switchOnName={title} switchOffName={title}
