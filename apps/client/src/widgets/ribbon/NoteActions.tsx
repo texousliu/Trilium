@@ -1,5 +1,5 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
-import { useContext } from "preact/hooks";
+import { useContext, useState } from "preact/hooks";
 
 import appContext, { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
@@ -17,7 +17,7 @@ import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListTogglea
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
-import { useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
+import { NoteTypeDropdownContent, useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
 import protected_session from "../../services/protected_session";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
@@ -148,6 +148,8 @@ function NoteBasicProperties({ note }: { note: FNote }) {
             title={t("protect_note.toggle-on")}
             currentValue={!!isProtected} onChange={shouldProtect => protected_session.protectNote(note.noteId, shouldProtect, false)}
         />
+        <FormDropdownDivider />
+        <NoteTypeDropdown note={note} />
     </>;
 }
 
@@ -165,6 +167,18 @@ function EditabilityDropdown({ note }: { note: FNote }) {
             <FormListItem checked={!readOnly && !autoReadOnlyDisabled} onClick={() => setState(false, false)} description={t("editability_select.note_is_editable")}>{t("editability_select.auto")}</FormListItem>
             <FormListItem checked={readOnly && !autoReadOnlyDisabled} onClick={() => setState(true, false)} description={t("editability_select.note_is_read_only")}>{t("editability_select.read_only")}</FormListItem>
             <FormListItem checked={!readOnly && autoReadOnlyDisabled} onClick={() => setState(false, true)} description={t("editability_select.note_is_always_editable")}>{t("editability_select.always_editable")}</FormListItem>
+        </FormDropdownSubmenu>
+    );
+}
+
+function NoteTypeDropdown({ note }: { note: FNote }) {
+    const currentNoteType = useNoteProperty(note, "type") ?? undefined;
+    const currentNoteMime = useNoteProperty(note, "mime");
+    const [ modalShown, setModalShown ] = useState(false);
+
+    return (
+        <FormDropdownSubmenu title={t("basic_properties.note_type")} icon="bx bx-file" dropStart>
+            <NoteTypeDropdownContent currentNoteType={currentNoteType} currentNoteMime={currentNoteMime} note={note} setModalShown={setModalShown} />
         </FormDropdownSubmenu>
     );
 }

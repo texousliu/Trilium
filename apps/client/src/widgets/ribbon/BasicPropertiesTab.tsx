@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import Dropdown from "../react/Dropdown";
 import { NOTE_TYPES } from "../../services/note_types";
 import { FormDropdownDivider, FormListBadge, FormListItem } from "../react/FormList";
@@ -28,7 +28,7 @@ const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 export default function BasicPropertiesTab({ note }: TabContext) {
     return (
         <div className="basic-properties-widget">
-            <NoteTypeWidget note={note} />
+            {!isNewLayout && <NoteTypeWidget note={note} />}
             {!isNewLayout && <ProtectedNoteSwitch note={note} />}
             {!isNewLayout && <EditabilitySelect note={note} />}
             {!isNewLayout && <BookmarkSwitch note={note} />}
@@ -40,18 +40,42 @@ export default function BasicPropertiesTab({ note }: TabContext) {
 }
 
 function NoteTypeWidget({ note }: { note?: FNote | null }) {
-    const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
-    const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
-    const mimeTypes = useMemo(() => {
-        mime_types.loadMimeTypes();
-        return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled)
-    }, [ codeNotesMimeTypes ]);
     const notSelectableNoteTypes = useMemo(() => NOTE_TYPES.filter((nt) => nt.reserved || nt.static).map((nt) => nt.type), []);
 
     const currentNoteType = useNoteProperty(note, "type") ?? undefined;
     const currentNoteMime = useNoteProperty(note, "mime");
     const [ modalShown, setModalShown ] = useState(false);
 
+    return (
+        <div className="note-type-container">
+            <span>{t("basic_properties.note_type")}:</span> &nbsp;
+            <Dropdown
+                dropdownContainerClassName="note-type-dropdown"
+                text={<span className="note-type-desc">{findTypeTitle(currentNoteType, currentNoteMime)}</span>}
+                disabled={notSelectableNoteTypes.includes(currentNoteType ?? "text")}
+            >
+                <NoteTypeDropdownContent currentNoteType={currentNoteType} currentNoteMime={currentNoteMime} note={note} setModalShown={setModalShown} />
+            </Dropdown>
+
+            <Modal
+                className="code-mime-types-modal"
+                title={t("code_mime_types.title")}
+                show={modalShown} onHidden={() => setModalShown(false)}
+                size="xl" scrollable
+            >
+                <CodeMimeTypesList />
+            </Modal>
+        </div>
+    );
+}
+
+export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note, setModalShown }: { currentNoteType?: NoteType, currentNoteMime?: string | null, note?: FNote | null, setModalShown: Dispatch<StateUpdater<boolean>> }) {
+    const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
+    const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
+    const mimeTypes = useMemo(() => {
+        mime_types.loadMimeTypes();
+        return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled);
+    }, [ codeNotesMimeTypes ]);
     const changeNoteType = useCallback(async (type: NoteType, mime?: string) => {
         if (!note || (type === currentNoteType && mime === currentNoteMime)) {
             return;
@@ -71,70 +95,54 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
     }, [ note, currentNoteType, currentNoteMime ]);
 
     return (
-        <div className="note-type-container">
-            <span>{t("basic_properties.note_type")}:</span> &nbsp;
-            <Dropdown
-                dropdownContainerClassName="note-type-dropdown"
-                text={<span className="note-type-desc">{findTypeTitle(currentNoteType, currentNoteMime)}</span>}
-                disabled={notSelectableNoteTypes.includes(currentNoteType ?? "text")}
-            >
-                {noteTypes.map(({ isNew, isBeta, type, mime, title }) => {
-                    const badges: FormListBadge[] = [];
-                    if (isNew) {
-                        badges.push({
-                            className: "new-note-type-badge",
-                            text: t("note_types.new-feature")
-                        });
-                    }
-                    if (isBeta) {
-                        badges.push({
-                            text: t("note_types.beta-feature")
-                        });
-                    }
+        <>
+            {noteTypes.map(({ isNew, isBeta, type, mime, title }) => {
+                const badges: FormListBadge[] = [];
+                if (isNew) {
+                    badges.push({
+                        className: "new-note-type-badge",
+                        text: t("note_types.new-feature")
+                    });
+                }
+                if (isBeta) {
+                    badges.push({
+                        text: t("note_types.beta-feature")
+                    });
+                }
 
-                    const checked = (type === currentNoteType);
-                    if (type !== "code") {
-                        return (
+                const checked = (type === currentNoteType);
+                if (type !== "code") {
+                    return (
+                        <FormListItem
+                            checked={checked}
+                            badges={badges}
+                            onClick={() => changeNoteType(type, mime)}
+                        >{title}</FormListItem>
+                    );
+                } else {
+                    return (
+                        <>
+                            <FormDropdownDivider />
                             <FormListItem
                                 checked={checked}
-                                badges={badges}
-                                onClick={() => changeNoteType(type, mime)}
-                            >{title}</FormListItem>
-                        );
-                    } else {
-                        return (
-                            <>
-                                <FormDropdownDivider />
-                                <FormListItem
-                                    checked={checked}
-                                    disabled
-                                >
-                                    <strong>{title}</strong>
-                                </FormListItem>
-                            </>
-                        )
-                    }
-                })}
+                                disabled
+                            >
+                                <strong>{title}</strong>
+                            </FormListItem>
+                        </>
+                    );
+                }
+            })}
 
-                {mimeTypes.map(({ title, mime }) => (
-                    <FormListItem onClick={() => changeNoteType("code", mime)}>
-                        {title}
-                    </FormListItem>
-                ))}
+            {mimeTypes.map(({ title, mime }) => (
+                <FormListItem onClick={() => changeNoteType("code", mime)}>
+                    {title}
+                </FormListItem>
+            ))}
 
-                <FormDropdownDivider />
-                <FormListItem icon="bx bx-cog" onClick={() => setModalShown(true)}>{t("basic_properties.configure_code_notes")}</FormListItem>
-            </Dropdown>
-
-            <Modal
-                className="code-mime-types-modal"
-                title={t("code_mime_types.title")}
-                show={modalShown} onHidden={() => setModalShown(false)}
-                size="xl" scrollable
-            >
-                <CodeMimeTypesList />
-            </Modal>
-        </div>
+            <FormDropdownDivider />
+            <FormListItem icon="bx bx-cog" onClick={() => setModalShown(true)}>{t("basic_properties.configure_code_notes")}</FormListItem>
+        </>
     )
 }
 
