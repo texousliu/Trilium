@@ -1963,7 +1963,8 @@
   },
   "note_language": {
     "not_set": "No language set",
-    "configure-languages": "Configure languages..."
+    "configure-languages": "Configure languages...",
+    "help-on-languages": "Help on content languages..."
   },
   "content_language": {
     "title": "Content languages",

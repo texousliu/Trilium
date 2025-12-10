@@ -23,6 +23,7 @@ import { ContentLanguagesList } from "../type_widgets/options/i18n";
 import { LocaleSelector } from "../type_widgets/options/components/LocaleSelector";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { createPortal } from "preact/compat";
+import { ComponentChildren } from "preact";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -326,12 +327,12 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
             &nbsp;
 
             <NoteLanguageSelector note={note} />
-            <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginInlineStart: "4px" }} />
+            <HelpButton helpPage="veGu4faJErEM" style={{ marginInlineStart: "4px" }} />
         </div>
     );
 }
 
-export function NoteLanguageSelector({ note }: { note?: FNote | null }) {
+export function NoteLanguageSelector({ note, extraChildren }: { note?: FNote | null, extraChildren?: ComponentChildren }) {
     const [ modalShown, setModalShown ] = useState(false);
     const [ languages ] = useTriliumOption("languages");
     const DEFAULT_LOCALE = {
@@ -351,12 +352,13 @@ export function NoteLanguageSelector({ note }: { note?: FNote | null }) {
                 locales={locales}
                 defaultLocale={DEFAULT_LOCALE}
                 currentValue={currentNoteLanguage ?? ""} onChange={setCurrentNoteLanguage}
-                extraChildren={(
+                extraChildren={<>
+                    {extraChildren}
                     <FormListItem
                         onClick={() => setModalShown(true)}
                         icon="bx bx-cog"
                     >{t("note_language.configure-languages")}</FormListItem>
-                )}
+                </>}
             />
             {createPortal(
                 <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
