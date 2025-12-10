@@ -51,6 +51,10 @@ body.experimental-feature-new-layout {
         margin: 0;
         list-style-type: none;
         margin-bottom: 2em;
+
+        span.value {
+            font-weight: 500;
+        }
     }
 
     .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)) {

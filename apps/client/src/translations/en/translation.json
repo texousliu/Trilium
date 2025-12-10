@@ -1750,8 +1750,8 @@
   },
   "note_title": {
     "placeholder": "type note's title here...",
-    "created_on": "Created on {{date}}",
-    "last_modified": "Last modified on {{date}}"
+    "created_on": "Created on <Value />",
+    "last_modified": "Last modified on <Value />"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",
