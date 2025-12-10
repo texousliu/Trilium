@@ -57,6 +57,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     const isMac = getIsMac();
     const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(noteType);
     const isSearchOrBook = ["search", "book"].includes(noteType);
+    const isHelpPage = note.noteId.startsWith("_help");
     const [syncServerHost] = useTriliumOption("syncServerHost");
     const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
 
@@ -81,8 +82,10 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
             <FormDropdownDivider />
 
-            {isNewLayout && <NoteBasicProperties note={note} />}
-            <FormDropdownDivider />
+            {isNewLayout && !isHelpPage && <>
+                <NoteBasicProperties note={note} />
+                <FormDropdownDivider />
+            </>}
 
             <CommandItem icon="bx bx-import" text={t("note_actions.import_files")}
                 disabled={isInOptionsOrHelp || note.type === "search"}
@@ -112,7 +115,10 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             <FormDropdownDivider />
 
             <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
-            {glob.isDev && <DevelopmentActions note={note} noteContext={noteContext} />}
+            {glob.isDev && <>
+                <FormDropdownDivider />
+                <DevelopmentActions note={note} noteContext={noteContext} />
+            </>}
         </Dropdown>
     );
 }
