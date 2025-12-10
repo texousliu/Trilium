@@ -32,7 +32,7 @@ export default function BasicPropertiesTab({ note }: TabContext) {
             <ProtectedNoteSwitch note={note} />
             <EditabilitySelect note={note} />
             {!isNewLayout && <BookmarkSwitch note={note} />}
-            <SharedSwitch note={note} />
+            {!isNewLayout && <SharedSwitch note={note} />}
             <TemplateSwitch note={note} />
             <NoteLanguageSwitch note={note} />
         </div>
@@ -251,12 +251,29 @@ function TemplateSwitch({ note }: { note?: FNote | null }) {
 }
 
 function SharedSwitch({ note }: { note?: FNote | null }) {
+    const [ isShared, switchShareState ] = useShareState(note);
+
+    return (
+        <div className="shared-switch-container">
+            <FormToggle
+                currentValue={isShared}
+                onChange={switchShareState}
+                switchOnName={t("shared_switch.shared")} switchOnTooltip={t("shared_switch.toggle-on-title")}
+                switchOffName={t("shared_switch.shared")} switchOffTooltip={t("shared_switch.toggle-off-title")}
+                helpPage="R9pX4DGra2Vt"
+                disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
+            />
+        </div>
+    );
+}
+
+export function useShareState(note: FNote | null | undefined) {
     const [ isShared, setIsShared ] = useState(false);
     const refreshState = useCallback(() => {
         setIsShared(!!note?.hasAncestor("_share"));
     }, [ note ]);
 
-    useEffect(() => refreshState(), [ note ]);
+    useEffect(() => refreshState(), [ refreshState ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (note && loadResults.getBranchRows().find((b) => b.noteId === note.noteId)) {
             refreshState();
@@ -281,18 +298,7 @@ function SharedSwitch({ note }: { note?: FNote | null }) {
         sync.syncNow(true);
     }, [ note ]);
 
-    return (
-        <div className="shared-switch-container">
-            <FormToggle
-                currentValue={isShared}
-                onChange={switchShareState}
-                switchOnName={t("shared_switch.shared")} switchOnTooltip={t("shared_switch.toggle-on-title")}
-                switchOffName={t("shared_switch.shared")} switchOffTooltip={t("shared_switch.toggle-off-title")}
-                helpPage="R9pX4DGra2Vt"
-                disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
-            />
-        </div>
-    )
+    return [ isShared, switchShareState ] as const;
 }
 
 function NoteLanguageSwitch({ note }: { note?: FNote | null }) {

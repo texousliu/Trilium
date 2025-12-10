@@ -17,7 +17,7 @@ import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListTogglea
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
-import { useNoteBookmarkState } from "./BasicPropertiesTab";
+import { useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -118,9 +118,11 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
 
 function NoteBasicProperties({ note }: { note: FNote }) {
     const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
+    const [ isShared, switchShareState ] = useShareState(note);
 
     return <>
         <FormListToggleableItem icon="bx bx-bookmark" title={t("bookmark_switch.bookmark")} currentValue={isBookmarked} onChange={setIsBookmarked} />
+        <FormListToggleableItem icon="bx bx-share-alt" title={t("shared_switch.shared")} currentValue={isShared} onChange={switchShareState} />
     </>;
 }
 
