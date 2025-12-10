@@ -17,7 +17,33 @@ export default function BreadcrumbBadges() {
             <ReadOnlyBadge />
             <ShareBadge />
             <BacklinksBadge />
+            <NoteInfoBadge />
         </div>
+    );
+}
+
+function NoteInfoBadge() {
+    const { note } = useNoteContext();
+
+    return (note &&
+        <BadgeWithDropdown
+            icon="bx bx-info-circle"
+            className="note-info-badge"
+        >
+            <ul>
+                <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
+                <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
+            </ul>
+        </BadgeWithDropdown>
+    );
+}
+
+function NoteInfoValue({ text, value }: { text: string; value: ComponentChildren }) {
+    return (
+        <li>
+            <strong>{text}</strong>{": "}
+            <span>{value}</span>
+        </li>
     );
 }
 
@@ -83,7 +109,7 @@ function BacklinksBadge() {
 }
 
 interface BadgeProps {
-    text: string;
+    text?: string;
     icon?: string;
     className: string;
     tooltip?: string;

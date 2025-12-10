@@ -13,7 +13,7 @@ import FNote from "../../entities/fnote";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
-export default function NoteInfoTab({ note }: TabContext) {
+export default function NoteInfoTab({ note }: { note: FNote | null | undefined }) {
     const { isLoading, metadata, noteSizeResponse, subtreeSizeResponse, requestSizeInfo } = useNoteMetadata(note);
 
     return (

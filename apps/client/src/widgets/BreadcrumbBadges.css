@@ -68,4 +68,12 @@
             padding: 0;
         }
     }
+
+    .dropdown-note-info-badge {
+        ul {
+            list-style-type: none;
+            padding: 0.5em;
+            margin: 0;
+        }
+    }
 }
