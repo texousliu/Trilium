@@ -2132,9 +2132,14 @@
   },
   "breadcrumb_badges": {
     "read_only_explicit": "Read-only",
+    "read_only_explicit_description": "This note has been manually set to read-only.\nClick to edit it temporarily.",
     "read_only_auto": "Auto read-only",
+    "read_only_auto_description": "This note was set automatically to read-only mode for performance reasons. This automatic limit is adjustable from settings.\n\nClick to edit it temporarily.",
     "read_only_temporarily_disabled": "Temporarily editable",
+    "read_only_temporarily_disabled_description": "This note is currently editable, but it is normally read-only. The note will go back to being read-only as soon as you navigate to another note.\n\nClick to re-enable read-only mode.",
     "shared_publicly": "Shared publicly",
-    "shared_locally": "Shared locally"
+    "shared_publicly_description": "This note has been published online at {{- link}}, and is publicly accessible.\n\nClick to navigate to the shared note.",
+    "shared_locally": "Shared locally",
+    "shared_locally_description": "This note is shared on the local network only at {{- link}}.\n\nClick to navigate to the shared note."
   }
 }
