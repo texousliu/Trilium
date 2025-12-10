@@ -37,4 +37,16 @@
             text-decoration: none;
         }
     }
+
+    .dropdown {
+        &.dropdown-backlinks-badge .dropdown-menu {
+            min-width: 500px;
+        }
+
+        .btn {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+    }
 }

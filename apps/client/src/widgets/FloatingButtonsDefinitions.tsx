@@ -355,7 +355,7 @@ function Backlinks({ note, isDefaultViewMode }: FloatingButtonContext) {
     );
 }
 
-function BacklinksList({ note }: { note: FNote }) {
+export function BacklinksList({ note }: { note: FNote }) {
     const [ backlinks, setBacklinks ] = useState<BacklinksResponse>([]);
 
     function refresh() {
