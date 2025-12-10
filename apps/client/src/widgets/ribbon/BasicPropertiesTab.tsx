@@ -1,41 +1,39 @@
+import { NoteType, ToggleInParentResponse } from "@triliumnext/commons";
+import { ComponentChildren } from "preact";
+import { createPortal } from "preact/compat";
 import { Dispatch, StateUpdater, useCallback, useEffect, useMemo, useState } from "preact/hooks";
-import Dropdown from "../react/Dropdown";
-import { NOTE_TYPES } from "../../services/note_types";
-import { FormDropdownDivider, FormListBadge, FormListItem } from "../react/FormList";
-import { getAvailableLocales, t } from "../../services/i18n";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
-import mime_types from "../../services/mime_types";
-import { Locale, LOCALES, NoteType, ToggleInParentResponse } from "@triliumnext/commons";
-import server from "../../services/server";
-import dialog from "../../services/dialog";
-import FormToggle from "../react/FormToggle";
+
 import FNote from "../../entities/fnote";
-import protected_session from "../../services/protected_session";
-import FormDropdownList from "../react/FormDropdownList";
-import toast from "../../services/toast";
 import branches from "../../services/branches";
+import dialog from "../../services/dialog";
+import { getAvailableLocales, t } from "../../services/i18n";
+import mime_types from "../../services/mime_types";
+import { NOTE_TYPES } from "../../services/note_types";
+import protected_session from "../../services/protected_session";
+import server from "../../services/server";
 import sync from "../../services/sync";
+import toast from "../../services/toast";
+import Dropdown from "../react/Dropdown";
+import FormDropdownList from "../react/FormDropdownList";
+import { FormDropdownDivider, FormListBadge, FormListItem } from "../react/FormList";
+import FormToggle from "../react/FormToggle";
 import HelpButton from "../react/HelpButton";
-import { TabContext } from "./ribbon-interface";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
 import Modal from "../react/Modal";
 import { CodeMimeTypesList } from "../type_widgets/options/code_notes";
-import { ContentLanguagesList } from "../type_widgets/options/i18n";
 import { LocaleSelector } from "../type_widgets/options/components/LocaleSelector";
-import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
-import { createPortal } from "preact/compat";
-import { ComponentChildren } from "preact";
-
-const isNewLayout = isExperimentalFeatureEnabled("new-layout");
+import { ContentLanguagesList } from "../type_widgets/options/i18n";
+import { TabContext } from "./ribbon-interface";
 
 export default function BasicPropertiesTab({ note }: TabContext) {
     return (
         <div className="basic-properties-widget">
-            {!isNewLayout && <NoteTypeWidget note={note} />}
-            {!isNewLayout && <ProtectedNoteSwitch note={note} />}
-            {!isNewLayout && <EditabilitySelect note={note} />}
-            {!isNewLayout && <BookmarkSwitch note={note} />}
-            {!isNewLayout && <SharedSwitch note={note} />}
-            {!isNewLayout && <TemplateSwitch note={note} />}
+            <NoteTypeWidget note={note} />
+            <ProtectedNoteSwitch note={note} />
+            <EditabilitySelect note={note} />
+            <BookmarkSwitch note={note} />
+            <SharedSwitch note={note} />
+            <TemplateSwitch note={note} />
             <NoteLanguageSwitch note={note} />
         </div>
     );

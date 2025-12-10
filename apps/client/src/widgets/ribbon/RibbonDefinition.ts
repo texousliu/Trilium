@@ -1,22 +1,24 @@
-import ScriptTab from "./ScriptTab";
-import EditedNotesTab from "./EditedNotesTab";
-import NotePropertiesTab from "./NotePropertiesTab";
-import NoteInfoTab from "./NoteInfoTab";
-import SimilarNotesTab from "./SimilarNotesTab";
-import FilePropertiesTab from "./FilePropertiesTab";
-import ImagePropertiesTab from "./ImagePropertiesTab";
-import NotePathsTab from "./NotePathsTab";
-import NoteMapTab from "./NoteMapTab";
-import OwnedAttributesTab from "./OwnedAttributesTab";
-import InheritedAttributesTab from "./InheritedAttributesTab";
-import CollectionPropertiesTab from "./CollectionPropertiesTab";
-import SearchDefinitionTab from "./SearchDefinitionTab";
-import BasicPropertiesTab from "./BasicPropertiesTab";
-import FormattingToolbar from "./FormattingToolbar";
-import options from "../../services/options";
-import { t } from "../../services/i18n";
-import { TabConfiguration } from "./ribbon-interface";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+import { t } from "../../services/i18n";
+import options from "../../services/options";
+import BasicPropertiesTab from "./BasicPropertiesTab";
+import CollectionPropertiesTab from "./CollectionPropertiesTab";
+import EditedNotesTab from "./EditedNotesTab";
+import FilePropertiesTab from "./FilePropertiesTab";
+import FormattingToolbar from "./FormattingToolbar";
+import ImagePropertiesTab from "./ImagePropertiesTab";
+import InheritedAttributesTab from "./InheritedAttributesTab";
+import NoteInfoTab from "./NoteInfoTab";
+import NoteMapTab from "./NoteMapTab";
+import NotePathsTab from "./NotePathsTab";
+import NotePropertiesTab from "./NotePropertiesTab";
+import OwnedAttributesTab from "./OwnedAttributesTab";
+import { TabConfiguration } from "./ribbon-interface";
+import ScriptTab from "./ScriptTab";
+import SearchDefinitionTab from "./SearchDefinitionTab";
+import SimilarNotesTab from "./SimilarNotesTab";
+
+const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
 export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
     {
@@ -28,7 +30,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         toggleCommand: "toggleRibbonTabClassicEditor",
         content: FormattingToolbar,
         activate: ({ note }) => !options.is("editedNotesOpenInRibbon") || !note?.hasOwnedLabel("dateNote"),
-        stayInDom: !isExperimentalFeatureEnabled("new-layout"),
+        stayInDom: !isNewLayout,
         avoidInNewLayout: true
     },
     {
@@ -85,11 +87,10 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         activate: true,
     },
     {
-        // BasicProperties
         title: t("basic_properties.basic_properties"),
         icon: "bx bx-slider",
         content: BasicPropertiesTab,
-        show: ({note}) => !note?.isLaunchBarConfig(),
+        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabBasicProperties"
     },
     {
