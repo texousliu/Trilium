@@ -52,7 +52,7 @@ function ShareBadge() {
 
     return (link &&
         <Badge
-            icon={isSharedExternally ? "bx bx-world" : "bx bx-link"}
+            icon={isSharedExternally ? "bx bx-world" : "bx bx-share-alt"}
             text={isSharedExternally ? t("breadcrumb_badges.shared_publicly") : t("breadcrumb_badges.shared_locally")}
             tooltip={isSharedExternally ?
                 t("breadcrumb_badges.shared_publicly_description", { link }) :
