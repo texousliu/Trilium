@@ -7,6 +7,7 @@ import { CommandNames } from "../../components/app_context";
 import { useStaticTooltip } from "./hooks";
 import { handleRightToLeftPlacement, isMobile } from "../../services/utils";
 import clsx from "clsx";
+import FormToggle from "./FormToggle";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -129,6 +130,18 @@ export function FormListItem({ className, icon, value, title, active, disabled, 
                 <FormListContent description={description} disabled={disabled} {...contentProps} />
             )}
         </li>
+    );
+}
+
+export function FormListToggleableItem({ title, currentValue, onChange, ...props }: Omit<FormListItemOpts, "onClick" | "children"> & {
+    title: string;
+    currentValue: boolean;
+    onChange(newValue: boolean): void;
+}) {
+    return (
+        <FormListItem {...props}>
+            <FormToggle switchOnName={title} switchOffName={title} currentValue={currentValue} onChange={onChange} />
+        </FormListItem>
     );
 }
 

@@ -5,9 +5,9 @@ interface FormToggleProps {
     currentValue: boolean | null;
     onChange(newValue: boolean): void;
     switchOnName: string;
-    switchOnTooltip: string;
+    switchOnTooltip?: string;
     switchOffName: string;
-    switchOffTooltip: string;
+    switchOffTooltip?: string;
     helpPage?: string;
     disabled?: boolean;
 }
@@ -37,5 +37,5 @@ export default function FormToggle({ currentValue, helpPage, switchOnName, switc
 
             { helpPage && <HelpButton className="switch-help-button" helpPage={helpPage} />}
         </div>
-    )
+    );
 }
