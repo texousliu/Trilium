@@ -6,13 +6,7 @@
     padding: 10px;
     container-type: inline-size;
 
-    @container (max-width: 500px) {
-        .breadcrumb {
-            .btn.icon-action {
-                width: 16px;
-            }
-        }
-
+    @container (max-width: 700px) {
         .breadcrumb-badges {
             flex-shrink: 0;
 
@@ -38,6 +32,14 @@
                 .text {
                     display: none;
                 }
+            }
+        }
+    }
+
+    @container (max-width: 500px) {
+        .breadcrumb {
+            .btn.icon-action {
+                width: 16px;
             }
         }
 
