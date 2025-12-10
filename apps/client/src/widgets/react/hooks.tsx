@@ -201,7 +201,7 @@ export function useTriliumOptionBool(name: OptionNames, needsRefresh?: boolean):
     return [
         (value === "true"),
         (newValue) => setValue(newValue ? "true" : "false")
-    ]
+    ];
 }
 
 /**
@@ -217,17 +217,18 @@ export function useTriliumOptionInt(name: OptionNames): [number, (newValue: numb
     return [
         (parseInt(value, 10)),
         (newValue) => setValue(newValue)
-    ]
+    ];
 }
 
 /**
  * Similar to {@link useTriliumOption}, but the object value is parsed to and from a JSON instead of a string.
  *
  * @param name the name of the option to listen for.
+ * @param needsRefresh whether to reload the frontend whenever the value is changed.
  * @returns an array where the first value is the current option value and the second value is the setter.
  */
-export function useTriliumOptionJson<T>(name: OptionNames): [ T, (newValue: T) => Promise<void> ] {
-    const [ value, setValue ] = useTriliumOption(name);
+export function useTriliumOptionJson<T>(name: OptionNames, needsRefresh?: boolean): [ T, (newValue: T) => Promise<void> ] {
+    const [ value, setValue ] = useTriliumOption(name, needsRefresh);
     useDebugValue(name);
     return [
         (JSON.parse(value) as T),
