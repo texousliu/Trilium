@@ -28,15 +28,13 @@ export function getEnabledExperimentalFeatureIds() {
 }
 
 export async function toggleExperimentalFeature(featureId: ExperimentalFeatureId, enable: boolean) {
-    let features = Array.from(getEnabledFeatures());
+    const features = new Set(getEnabledFeatures());
     if (enable) {
-        if (!features.includes(featureId)) {
-            features.push(featureId);
-        }
+        features.add(featureId);
     } else {
-        features = features.filter(f => f !== featureId);
+        features.delete(featureId);
     }
-    await options.save("experimentalFeatures", JSON.stringify(features));
+    await options.save("experimentalFeatures", JSON.stringify(Array.from(features)));
 }
 
 function getEnabledFeatures() {
