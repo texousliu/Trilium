@@ -356,7 +356,7 @@ export function useBacklinkCount(note: FNote | null | undefined, isDefaultViewMo
         });
     }, [ isDefaultViewMode, note ]);
 
-    useEffect(() => refresh(), [ note, isDefaultViewMode, refresh ]);
+    useEffect(() => refresh(), [ refresh ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (note && needsRefresh(note, loadResults)) refresh();
     });

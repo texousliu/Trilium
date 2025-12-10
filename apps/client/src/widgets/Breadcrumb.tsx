@@ -96,7 +96,10 @@ function BreadcrumbLastItem({ notePath }: { notePath: string }) {
             <a
                 href="#"
                 className="breadcrumb-last-item tn-link"
-                onClick={() => setIsEditing(true)}
+                onClick={(e) => {
+                    e.preventDefault();
+                    setIsEditing(true);
+                }}
             >{title}</a>
         );
     }
