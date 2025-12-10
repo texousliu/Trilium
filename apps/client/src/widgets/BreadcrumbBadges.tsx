@@ -1,18 +1,20 @@
 import "./BreadcrumbBadges.css";
 
+import clsx from "clsx";
 import { ComponentChildren, MouseEventHandler } from "preact";
+import { useRef } from "preact/hooks";
+
+import { t } from "../services/i18n";
 import { useIsNoteReadOnly, useNoteContext, useStaticTooltip } from "./react/hooks";
 import Icon from "./react/Icon";
 import { useShareInfo } from "./shared_info";
-import clsx from "clsx";
-import { t } from "../services/i18n";
-import { useRef } from "preact/hooks";
 
 export default function BreadcrumbBadges() {
     return (
         <div className="breadcrumb-badges">
             <ReadOnlyBadge />
             <ShareBadge />
+            <BacklinksBadge />
         </div>
     );
 }
@@ -63,7 +65,16 @@ function ShareBadge() {
     );
 }
 
-function Badge({ icon, className, children, tooltip, onClick, href }: { icon: string, className: string, tooltip: string, children: ComponentChildren, onClick?: MouseEventHandler<HTMLDivElement>, href?: string }) {
+function BacklinksBadge() {
+    const count = 1;
+    return (
+        <Badge className="backlinks-badge" icon="bx bx-revision" tooltip={t("breadcrumb_badges.backlinks_description", { count })}>
+            {t("breadcrumb_badges.backlinks", { count })}
+        </Badge>
+    );
+}
+
+function Badge({ icon, className, children, tooltip, onClick, href }: { icon?: string, className: string, tooltip: string, children: ComponentChildren, onClick?: MouseEventHandler<HTMLDivElement>, href?: string }) {
     const containerRef = useRef<HTMLDivElement>(null);
     useStaticTooltip(containerRef, {
         placement: "bottom",
@@ -74,7 +85,7 @@ function Badge({ icon, className, children, tooltip, onClick, href }: { icon: st
     });
 
     const content = <>
-        <Icon icon={icon} />&nbsp;
+        {icon && <><Icon icon={icon} />&nbsp;</>}
         {children}
     </>;
 
