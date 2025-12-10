@@ -2,6 +2,7 @@ import clsx from "clsx";
 import "./FormToggle.css";
 import HelpButton from "./HelpButton";
 import { useEffect, useState } from "preact/hooks";
+import { ComponentChildren } from "preact";
 
 interface FormToggleProps {
     currentValue: boolean | null;
@@ -12,9 +13,10 @@ interface FormToggleProps {
     switchOffTooltip?: string;
     helpPage?: string;
     disabled?: boolean;
+    afterName?: ComponentChildren;
 }
 
-export default function FormToggle({ currentValue, helpPage, switchOnName, switchOnTooltip, switchOffName, switchOffTooltip, onChange, disabled }: FormToggleProps) {
+export default function FormToggle({ currentValue, helpPage, switchOnName, switchOnTooltip, switchOffName, switchOffTooltip, onChange, disabled, afterName }: FormToggleProps) {
     const [ disableTransition, setDisableTransition ] = useState(true);
 
     useEffect(() => {
@@ -27,6 +29,7 @@ export default function FormToggle({ currentValue, helpPage, switchOnName, switc
     return (
         <div className="switch-widget">
             <span className="switch-name">{ currentValue ? switchOffName : switchOnName }</span>
+            { afterName }
 
             <label>
                 <div

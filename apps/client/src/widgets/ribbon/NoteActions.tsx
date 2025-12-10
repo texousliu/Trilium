@@ -134,12 +134,14 @@ function NoteBasicProperties({ note }: { note: FNote }) {
             icon="bx bx-copy-alt"
             title={t("template_switch.template")}
             currentValue={isTemplate} onChange={setIsTemplate}
+            helpPage="KC1HB96bqqHX"
             disabled={note?.noteId.startsWith("_options")}
         />
         <FormListToggleableItem
             icon="bx bx-share-alt"
             title={t("shared_switch.shared")}
             currentValue={isShared} onChange={switchShareState}
+            helpPage="R9pX4DGra2Vt"
             disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
         />
         <EditabilityDropdown note={note} />

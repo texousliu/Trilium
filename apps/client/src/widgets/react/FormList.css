@@ -17,7 +17,12 @@
         --switch-thumb-width: 12px;
         --switch-thumb-height: var(--switch-thumb-width);
 
-        .switch-name {
+        .contextual-help {
+            margin-inline-start: 0.25em;
+            cursor: pointer;
+        }
+
+        .switch-spacer {
             flex-grow: 1;
         }
     }

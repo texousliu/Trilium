@@ -423,16 +423,16 @@ body.desktop .tabulator-popup-container,
     pointer-events: none;
 }
 
-.dropdown-menu .disabled .disabled-tooltip {
+.dropdown-menu .disabled .contextual-help {
     pointer-events: all;
     margin-inline-start: 8px;
     font-size: 0.75rem;
-    color: var(--disabled-tooltip-icon-color);
+    color: var(--contextual-help-icon-color);
     cursor: help;
     opacity: 0.75;
 }
 
-.dropdown-menu .disabled .disabled-tooltip:hover {
+.dropdown-menu .disabled .contextual-help:hover {
     opacity: 1;
 }
 

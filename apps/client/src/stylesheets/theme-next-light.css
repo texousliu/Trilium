@@ -6,7 +6,7 @@
  */
 :root {
 
-    /* 
+    /*
      * ⚠️ NOTICE: This theme is currently in the beta stage of development.
      * The names and purposes of these CSS variables are subject to frequent changes.
      */
@@ -22,7 +22,7 @@
     --dropdown-border-color: #ccc;
     --dropdown-shadow-opacity: 0.2;
     --dropdown-item-icon-destructive-color: #ec5138;
-    --disabled-tooltip-icon-color: #004382;
+    --contextual-help-icon-color: #004382;
 
     --accented-background-color: #f5f5f5;
 
@@ -138,7 +138,7 @@
     /* Deprecated: now local variables in #launcher, with the values dependent on the current layout. */
     --launcher-pane-background-color: unset;
     --launcher-pane-text-color: unset;
-    
+
     --launcher-pane-vert-background-color: #e8e8e8;
     --launcher-pane-vert-text-color: #000000bd;
     --launcher-pane-vert-button-hover-color: black;
@@ -174,7 +174,7 @@
 
     --tab-close-button-hover-background: #c95a5a;
     --tab-close-button-hover-color: white;
-    
+
     --active-tab-background-color: white;
     --active-tab-hover-background-color: var(--active-tab-background-color);
     --active-tab-icon-color: gray;

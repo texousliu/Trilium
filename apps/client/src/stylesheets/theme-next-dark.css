@@ -6,7 +6,7 @@
  */
 :root {
 
-    /* 
+    /*
      * ⚠️ NOTICE: This theme is currently in the beta stage of development.
      * The names and purposes of these CSS variables are subject to frequent changes.
      */
@@ -22,7 +22,7 @@
     --dropdown-border-color: #404040;
     --dropdown-shadow-opacity: 0.6;
     --dropdown-item-icon-destructive-color: #de6e5b;
-    --disabled-tooltip-icon-color: #7fd2ef;
+    --contextual-help-icon-color: #7fd2ef;
 
     --accented-background-color: #555;
 
@@ -182,7 +182,7 @@
 
     --tab-close-button-hover-background: #a45353;
     --tab-close-button-hover-color: white;
-    
+
     --active-tab-background-color: #ffffff1c;
     --active-tab-hover-background-color: var(--active-tab-background-color);
     --active-tab-icon-color: #a9a9a9;
@@ -201,7 +201,7 @@
 
     --promoted-attribute-card-background-color: #ffffff21;
     --promoted-attribute-card-shadow: none;
-    
+
     --floating-button-shadow-color: #00000080;
     --floating-button-background-color: #494949d2;
     --floating-button-color: var(--button-text-color);
@@ -226,7 +226,7 @@
     --scrollbar-border-color: unset; /* Deprecated */
 
     --selection-background-color: #3399FF70;
-    
+
     --link-color: lightskyblue;
 
     --mermaid-theme: dark;
