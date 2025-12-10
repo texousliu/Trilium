@@ -98,7 +98,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             }
             <FormDropdownDivider />
 
-            <CommandItem command="showRevisions" icon="bx bx-history" text={t("revisions_button.note_revisions")} />
+            <CommandItem command="showRevisions" icon="bx bx-history" text={t("note_actions.view_revisions")} />
             <CommandItem command="forceSaveRevision" icon="bx bx-save" disabled={isInOptionsOrHelp} text={t("note_actions.save_revision")} />
             <CommandItem icon="bx bx-trash destructive-action-icon" text={t("note_actions.delete_note")} destructive
                 disabled={isInOptionsOrHelp}
