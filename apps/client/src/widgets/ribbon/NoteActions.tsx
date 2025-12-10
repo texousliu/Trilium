@@ -18,6 +18,7 @@ import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, u
 import { ParentComponent } from "../react/react_utils";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
+import protected_session from "../../services/protected_session";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -120,6 +121,7 @@ function NoteBasicProperties({ note }: { note: FNote }) {
     const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
     const [ isShared, switchShareState ] = useShareState(note);
     const [ isTemplate, setIsTemplate ] = useNoteLabelBoolean(note, "template");
+    const isProtected = useNoteProperty(note, "isProtected");
 
     return <>
         <FormListToggleableItem
@@ -141,6 +143,11 @@ function NoteBasicProperties({ note }: { note: FNote }) {
             disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
         />
         <EditabilityDropdown note={note} />
+        <FormListToggleableItem
+            icon="bx bx-lock-alt"
+            title={t("protect_note.toggle-on")}
+            currentValue={!!isProtected} onChange={shouldProtect => protected_session.protectNote(note.noteId, shouldProtect, false)}
+        />
     </>;
 }
 
@@ -154,7 +161,7 @@ function EditabilityDropdown({ note }: { note: FNote }) {
     }
 
     return (
-        <FormDropdownSubmenu title={t("basic_properties.editable")} icon="bx bx-lock-alt" dropStart>
+        <FormDropdownSubmenu title={t("basic_properties.editable")} icon="bx bx-edit-alt" dropStart>
             <FormListItem checked={!readOnly && !autoReadOnlyDisabled} onClick={() => setState(false, false)} description={t("editability_select.note_is_editable")}>{t("editability_select.auto")}</FormListItem>
             <FormListItem checked={readOnly && !autoReadOnlyDisabled} onClick={() => setState(true, false)} description={t("editability_select.note_is_read_only")}>{t("editability_select.read_only")}</FormListItem>
             <FormListItem checked={!readOnly && autoReadOnlyDisabled} onClick={() => setState(false, true)} description={t("editability_select.note_is_always_editable")}>{t("editability_select.always_editable")}</FormListItem>

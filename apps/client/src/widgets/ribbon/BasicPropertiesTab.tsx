@@ -29,7 +29,7 @@ export default function BasicPropertiesTab({ note }: TabContext) {
     return (
         <div className="basic-properties-widget">
             <NoteTypeWidget note={note} />
-            <ProtectedNoteSwitch note={note} />
+            {!isNewLayout && <ProtectedNoteSwitch note={note} />}
             {!isNewLayout && <EditabilitySelect note={note} />}
             {!isNewLayout && <BookmarkSwitch note={note} />}
             {!isNewLayout && <SharedSwitch note={note} />}
