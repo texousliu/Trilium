@@ -52,6 +52,7 @@ import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
 import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
 import BreadcrumbBadges from "../widgets/BreadcrumbBadges.jsx";
 import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
+import NoteStatusBar from "../widgets/NoteStatusBar.jsx";
 
 export default class DesktopLayout {
 
@@ -176,7 +177,11 @@ export default class DesktopLayout {
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
                                                             ...this.customWidgets.get("note-detail-pane")
                                                         )
-                                                        .optChild(isNewLayout, <Ribbon />)
+                                                        .optChild(isNewLayout, (
+                                                            <Ribbon>
+                                                                <NoteStatusBar />
+                                                            </Ribbon>
+                                                        ))
                                                 )
                                             )
                                             .child(...this.customWidgets.get("center-pane"))

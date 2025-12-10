@@ -310,13 +310,25 @@ export function useShareState(note: FNote | null | undefined) {
 }
 
 function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
+    return (
+        <div className="note-language-container">
+            <span>{t("basic_properties.language")}:</span>
+            &nbsp;
+
+            <NoteLanguageSelector note={note} />
+            <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginInlineStart: "4px" }} />
+        </div>
+    );
+}
+
+export function NoteLanguageSelector({ note }: { note?: FNote | null }) {
+    const [ modalShown, setModalShown ] = useState(false);
     const [ languages ] = useTriliumOption("languages");
     const DEFAULT_LOCALE = {
         id: "",
         name: t("note_language.not_set")
     };
     const [ currentNoteLanguage, setCurrentNoteLanguage ] = useNoteLabel(note, "language");
-    const [ modalShown, setModalShown ] = useState(false);
     const locales = useMemo(() => {
         const enabledLanguages = JSON.parse(languages ?? "[]") as string[];
         const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
@@ -324,9 +336,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
     }, [ languages ]);
 
     return (
-        <div className="note-language-container">
-            <span>{t("basic_properties.language")}:</span>
-            &nbsp;
+        <>
             <LocaleSelector
                 locales={locales}
                 defaultLocale={DEFAULT_LOCALE}
@@ -337,12 +347,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
                         icon="bx bx-cog"
                     >{t("note_language.configure-languages")}</FormListItem>
                 )}
-            >
-
-            </LocaleSelector>
-
-            <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginInlineStart: "4px" }} />
-
+            />
             <Modal
                 className="content-languages-modal"
                 title={t("content_language.title")}
@@ -351,7 +356,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
             >
                 <ContentLanguagesList />
             </Modal>
-        </div>
+        </>
     );
 }
 
