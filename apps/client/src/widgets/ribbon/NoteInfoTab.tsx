@@ -1,6 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { TabContext } from "./ribbon-interface";
 import { MetadataResponse, NoteSizeResponse, SubtreeSizeResponse } from "@triliumnext/commons";
 import server from "../../services/server";
 import Button from "../react/Button";

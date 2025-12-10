@@ -5,10 +5,12 @@ import { ComponentChildren, MouseEventHandler } from "preact";
 import { useRef } from "preact/hooks";
 
 import { t } from "../services/i18n";
+import { formatDateTime } from "../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "./FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "./react/Dropdown";
 import { useIsNoteReadOnly, useNoteContext, useStaticTooltip } from "./react/hooks";
 import Icon from "./react/Icon";
+import { useNoteMetadata } from "./ribbon/NoteInfoTab";
 import { useShareInfo } from "./shared_info";
 
 export default function BreadcrumbBadges() {
@@ -24,6 +26,7 @@ export default function BreadcrumbBadges() {
 
 function NoteInfoBadge() {
     const { note } = useNoteContext();
+    const { isLoading, metadata, noteSizeResponse, subtreeSizeResponse, requestSizeInfo } = useNoteMetadata(note);
 
     return (note &&
         <BadgeWithDropdown
@@ -31,6 +34,8 @@ function NoteInfoBadge() {
             className="note-info-badge"
         >
             <ul>
+                <NoteInfoValue text={t("note_info_widget.created")} value={metadata?.dateCreated ? formatDateTime(metadata.dateCreated) : ""} />
+                <NoteInfoValue text={t("note_info_widget.modified")} value={metadata?.dateModified ? formatDateTime(metadata.dateModified) : ""} />
                 <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
                 <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
             </ul>

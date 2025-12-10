@@ -9,26 +9,12 @@ import { useRef } from "preact/hooks";
 
 export default function NoteTitleDetails() {
     const { note, noteContext } = useNoteContext();
-    const { metadata } = useNoteMetadata(note);
     const isHiddenNote = note?.noteId.startsWith("_");
     const isDefaultView = noteContext?.viewScope?.viewMode === "default";
 
-    const items: ComponentChild[] = [
-        (isDefaultView && !isHiddenNote && metadata?.dateCreated &&
-            <TextWithValue
-                i18nKey="note_title.created_on"
-                value={formatDateTime(metadata.dateCreated, "medium", "none")}
-                valueTooltip={formatDateTime(metadata.dateCreated, "full", "long")}
-            />),
-        (isDefaultView && !isHiddenNote && metadata?.dateModified &&
-            <TextWithValue
-                i18nKey="note_title.last_modified"
-                value={formatDateTime(metadata.dateModified, "medium", "none")}
-                valueTooltip={formatDateTime(metadata.dateModified, "full", "long")}
-            />)
-    ].filter(item => !!item);
+    const items: ComponentChild[] = [].filter(item => !!item);
 
-    return (
+    return items.length && (
         <div className="title-details">
             {joinElements(items, " • ")}
         </div>
