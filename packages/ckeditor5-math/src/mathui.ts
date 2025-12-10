@@ -33,8 +33,10 @@ export default class MathUI extends Plugin {
 
 	public override destroy(): void {
 		super.destroy();
+
 		this.formView?.destroy();
 
+		// Destroy preview element
 		const previewEl = document.getElementById( this._previewUid );
 		if ( previewEl ) {
 			previewEl.parentNode?.removeChild( previewEl );
@@ -102,21 +104,24 @@ export default class MathUI extends Plugin {
 		);
 		formView.displayButtonView.bind( 'isEnabled' ).to( mathCommand, 'isEnabled' );
 
+		// Listen to submit button click
 		this.listenTo( formView, 'submit', () => {
 			editor.execute( 'math', formView.equation, formView.displayButtonView.isOn, mathConfig.outputType, mathConfig.forceOutputType );
 			this._closeFormView();
 		} );
 
+		// Listen to cancel button click
 		this.listenTo( formView, 'cancel', () => {
 			this._closeFormView();
 		} );
 
+		// Close plugin ui, if esc is pressed (while ui is focused)
 		formView.keystrokes.set( 'esc', ( _data, cancel ) => {
 			this._closeFormView();
 			cancel();
 		} );
 
-		// Enter to submit, Shift+Enter for newline
+		// Allow pressing Enter to submit changes, and use Shift+Enter to insert a new line
 		formView.keystrokes.set('enter', (data, cancel) => {
 			if (!data.shiftKey) {
 				formView.fire('submit');
@@ -164,6 +169,9 @@ export default class MathUI extends Plugin {
 		this.formView.displayButtonView.isOn = mathCommand.display || false;
 	}
 
+	/**
+	 * @private
+	 */
 	public _hideUI(): void {
 		if ( !this._isFormInPanel ) {
 			return;
@@ -175,6 +183,8 @@ export default class MathUI extends Plugin {
 		this.stopListening( this._balloon, 'change:visibleView' );
 
 		editor.editing.view.focus();
+
+		// Remove form first because it's on top of the stack.
 		this._removeFormView();
 	}
 
@@ -195,6 +205,7 @@ export default class MathUI extends Plugin {
 			this.formView.saveButtonView.focus();
 			this._balloon.remove( this.formView );
 
+			// Hide preview element
 			const previewEl = document.getElementById( this._previewUid );
 			if ( previewEl ) {
 				previewEl.style.visibility = 'hidden';
