@@ -28,6 +28,7 @@ function ReadOnlyBadge() {
         return <Badge
             icon="bx bx-lock-open-alt"
             tooltip={t("breadcrumb_badges.read_only_temporarily_disabled_description")}
+            className="temporarily-editable-badge"
             onClick={() => enableEditing(false)}
         >
             {t("breadcrumb_badges.read_only_temporarily_disabled")}
@@ -36,6 +37,7 @@ function ReadOnlyBadge() {
         return <Badge
             icon="bx bx-lock-alt"
             tooltip={isExplicitReadOnly ? t("breadcrumb_badges.read_only_explicit_description") : t("breadcrumb_badges.read_only_auto_description")}
+            className="read-only-badge"
             onClick={() => enableEditing()}
         >
             {isExplicitReadOnly ? t("breadcrumb_badges.read_only_explicit") : t("breadcrumb_badges.read_only_auto")}
@@ -54,6 +56,7 @@ function ShareBadge() {
                 t("breadcrumb_badges.shared_publicly_description", { link }) :
                 t("breadcrumb_badges.shared_locally_description", { link })
             }
+            className="share-badge"
             onClick={(e) => linkHref && goToLinkExt(e, linkHref)}
         >
             {isSharedExternally ? t("breadcrumb_badges.shared_publicly") : t("breadcrumb_badges.shared_locally")}
@@ -61,7 +64,7 @@ function ShareBadge() {
     );
 }
 
-function Badge({ icon, children, tooltip, onClick }: { icon: string, tooltip: string, children: ComponentChildren, onClick?: MouseEventHandler<HTMLDivElement> }) {
+function Badge({ icon, className, children, tooltip, onClick }: { icon: string, className: string, tooltip: string, children: ComponentChildren, onClick?: MouseEventHandler<HTMLDivElement> }) {
     const containerRef = useRef<HTMLDivElement>(null);
     useStaticTooltip(containerRef, {
         placement: "bottom",
@@ -74,7 +77,7 @@ function Badge({ icon, children, tooltip, onClick }: { icon: string, tooltip: st
     return (
         <div
             ref={containerRef}
-            className={clsx("breadcrumb-badge", { "clickable": !!onClick })}
+            className={clsx("breadcrumb-badge", className, { "clickable": !!onClick })}
             onClick={onClick}
         >
             <Icon icon={icon} />&nbsp;

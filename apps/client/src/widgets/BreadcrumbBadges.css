@@ -9,15 +9,19 @@
         padding: 2px 6px;
         border-radius: 12px;
         font-size: 0.75em;
-        background-color: var(--badge-background-color);
-        color: var(--badge-text-color);
+        background-color: var(--color, --badge-background-color);
+        color: white;
 
         &.clickable {
             cursor: pointer;
 
             &:hover {
-                background-color: var(--badge-background-hover-color);
+                background-color: color-mix(in srgb, var(--color, --badge-background-color) 80%, black);
             }
         }
+
+        &.temporarily-editable-badge { --color: #4fa52b; }
+        &.read-only-badge { --color: #e33f3b; }
+        &.share-badge { --color: #3b82f6; }
     }
 }
