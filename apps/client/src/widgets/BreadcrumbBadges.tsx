@@ -112,7 +112,7 @@ function Badge({ icon, className, text, tooltip, onClick, href }: BadgeProps) {
             className={clsx("breadcrumb-badge", className, { "clickable": !!onClick })}
             onClick={onClick}
         >
-            {href ? <a href={href}>{content}</a> : content}
+            {href ? <a href={href}>{content}</a> : <span>{content}</span>}
         </div>
     );
 }
@@ -130,7 +130,7 @@ function BadgeWithDropdown({ children, tooltip, className, dropdownOptions, ...p
             hideToggleArrow
             title={tooltip}
             titlePosition="bottom"
-            dropdownOptions={{ popperConfig: { placement: "bottom" } }}
+            dropdownOptions={{ popperConfig: { placement: "bottom", strategy: "fixed" } }}
             {...dropdownOptions}
         >{children}</Dropdown>
     );
