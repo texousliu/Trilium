@@ -20,14 +20,22 @@ function ReadOnlyBadge() {
     const { note, noteContext } = useNoteContext();
     const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
     const isExplicitReadOnly = note?.isLabelTruthy("readOnly");
+    const isTemporarilyEditable = noteContext?.viewScope?.readOnlyTemporarilyDisabled;
 
-    return (isReadOnly &&
-        <Badge
-            icon="bx bx-lock"
+    if (isTemporarilyEditable) {
+        return <Badge
+            icon="bx bx-lock-open-alt"
+            onClick={() => enableEditing(false)}
+        >
+            {t("breadcrumb_badges.read_only_temporarily_disabled")}
+        </Badge>;
+    } else if (isReadOnly) {
+        return <Badge
+            icon="bx bx-lock-alt"
             onClick={() => enableEditing()}>
             {isExplicitReadOnly ? t("breadcrumb_badges.read_only_explicit") : t("breadcrumb_badges.read_only_auto")}
-        </Badge>
-    );
+        </Badge>;
+    }
 }
 
 function ShareBadge() {

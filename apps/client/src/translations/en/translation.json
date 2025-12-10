@@ -2133,6 +2133,7 @@
   "breadcrumb_badges": {
     "read_only_explicit": "Read-only",
     "read_only_auto": "Auto read-only",
+    "read_only_temporarily_disabled": "Temporarily editable",
     "shared_publicly": "Shared publicly",
     "shared_locally": "Shared locally"
   }

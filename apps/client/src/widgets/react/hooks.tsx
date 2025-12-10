@@ -845,9 +845,9 @@ export function useGlobalShortcut(keyboardShortcut: string | null | undefined, h
 export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: NoteContext | undefined) {
     const [ isReadOnly, setIsReadOnly ] = useState<boolean | undefined>(undefined);
 
-    const enableEditing = useCallback(() => {
+    const enableEditing = useCallback((enabled = true) => {
         if (noteContext?.viewScope) {
-            noteContext.viewScope.readOnlyTemporarilyDisabled = true;
+            noteContext.viewScope.readOnlyTemporarilyDisabled = enabled;
             appContext.triggerEvent("readOnlyTemporarilyDisabled", {noteContext});
         }
     }, [noteContext]);
@@ -862,7 +862,7 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
 
     useTriliumEvent("readOnlyTemporarilyDisabled", ({noteContext: eventNoteContext}) => {
         if (noteContext?.ntxId === eventNoteContext.ntxId) {
-            setIsReadOnly(false);
+            setIsReadOnly(!noteContext.viewScope?.readOnlyTemporarilyDisabled);
         }
     });
 
