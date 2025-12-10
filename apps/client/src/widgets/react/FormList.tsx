@@ -146,9 +146,10 @@ export function FormListToggleableItem({ title, currentValue, onChange, ...props
             }
         }}>
             <FormToggle
-                switchOnName={title} switchOffName={title}
+                switchOnName={title}
+                switchOffName={title}
                 currentValue={currentValue}
-                onChange={onChange}
+                onChange={() => {}}
             />
         </FormListItem>
     );
