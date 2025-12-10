@@ -38,7 +38,6 @@ body.experimental-feature-new-layout {
     }
 
     .title-row {
-        margin-top: 2em;
         margin-left: 12px;
 
         .note-icon-widget {
@@ -55,10 +54,19 @@ body.experimental-feature-new-layout {
         gap: 0.25em;
         margin: 0;
         list-style-type: none;
-        margin-bottom: 2em;
 
         span.value {
             font-weight: 500;
+        }
+    }
+
+    .note-split.view-mode-default {
+        .title-row {
+            margin-top: 2em;
+        }
+
+        .title-details {
+            margin-bottom: 2em;
         }
     }
 
