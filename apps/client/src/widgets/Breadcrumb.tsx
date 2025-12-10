@@ -79,7 +79,6 @@ function BreadcrumbLink({ notePath }: { notePath: string }) {
     return (
         <NoteLink
             notePath={notePath}
-            noPreview
         />
     );
 }
