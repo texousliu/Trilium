@@ -11,6 +11,10 @@
         font-size: 0.75em;
         background-color: var(--color, --badge-background-color);
         color: white;
+        min-width: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
 
         &.clickable {
             cursor: pointer;
