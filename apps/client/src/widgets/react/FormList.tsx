@@ -133,18 +133,25 @@ export function FormListItem({ className, icon, value, title, active, disabled, 
     );
 }
 
-export function FormListToggleableItem({ title, currentValue, onChange, ...props }: Omit<FormListItemOpts, "onClick" | "children"> & {
+export function FormListToggleableItem({ title, currentValue, onChange, disabled, ...props }: Omit<FormListItemOpts, "onClick" | "children"> & {
     title: string;
     currentValue: boolean;
-    onChange(newValue: boolean): void;
+    onChange(newValue: boolean): void | Promise<void>;
 }) {
+    const isWaiting = useRef(false);
+
     return (
-        <FormListItem {...props} onClick={(e) => {
-            e.stopPropagation();
-            if (!props.disabled) {
-                onChange(!currentValue);
-            }
-        }}>
+        <FormListItem
+            {...props}
+            disabled={disabled}
+            onClick={async (e) => {
+                e.stopPropagation();
+                if (!disabled && !isWaiting.current) {
+                    isWaiting.current = true;
+                    await onChange(!currentValue);
+                    isWaiting.current = false;
+                }
+            }}>
             <FormToggle
                 switchOnName={title}
                 switchOffName={title}
