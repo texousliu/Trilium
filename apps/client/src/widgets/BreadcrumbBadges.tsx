@@ -7,7 +7,6 @@ import { useShareInfo } from "./shared_info";
 import clsx from "clsx";
 import { t } from "../services/i18n";
 import { useRef } from "preact/hooks";
-import { goToLinkExt } from "../services/link";
 
 export default function BreadcrumbBadges() {
     return (
@@ -57,14 +56,14 @@ function ShareBadge() {
                 t("breadcrumb_badges.shared_locally_description", { link })
             }
             className="share-badge"
-            onClick={(e) => linkHref && goToLinkExt(e, linkHref)}
+            href={linkHref}
         >
             {isSharedExternally ? t("breadcrumb_badges.shared_publicly") : t("breadcrumb_badges.shared_locally")}
         </Badge>
     );
 }
 
-function Badge({ icon, className, children, tooltip, onClick }: { icon: string, className: string, tooltip: string, children: ComponentChildren, onClick?: MouseEventHandler<HTMLDivElement> }) {
+function Badge({ icon, className, children, tooltip, onClick, href }: { icon: string, className: string, tooltip: string, children: ComponentChildren, onClick?: MouseEventHandler<HTMLDivElement>, href?: string }) {
     const containerRef = useRef<HTMLDivElement>(null);
     useStaticTooltip(containerRef, {
         placement: "bottom",
@@ -74,14 +73,18 @@ function Badge({ icon, className, children, tooltip, onClick }: { icon: string, 
         title: tooltip
     });
 
+    const content = <>
+        <Icon icon={icon} />&nbsp;
+        {children}
+    </>;
+
     return (
         <div
             ref={containerRef}
             className={clsx("breadcrumb-badge", className, { "clickable": !!onClick })}
             onClick={onClick}
         >
-            <Icon icon={icon} />&nbsp;
-            {children}
+            {href ? <a href={href}>{content}</a> : content}
         </div>
     );
 }

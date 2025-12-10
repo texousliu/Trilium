@@ -23,5 +23,10 @@
         &.temporarily-editable-badge { --color: #4fa52b; }
         &.read-only-badge { --color: #e33f3b; }
         &.share-badge { --color: #3b82f6; }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
     }
 }

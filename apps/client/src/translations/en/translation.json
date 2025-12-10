@@ -2138,8 +2138,8 @@
     "read_only_temporarily_disabled": "Temporarily editable",
     "read_only_temporarily_disabled_description": "This note is currently editable, but it is normally read-only. The note will go back to being read-only as soon as you navigate to another note.\n\nClick to re-enable read-only mode.",
     "shared_publicly": "Shared publicly",
-    "shared_publicly_description": "This note has been published online at {{- link}}, and is publicly accessible.\n\nClick to navigate to the shared note.",
+    "shared_publicly_description": "This note has been published online at {{- link}}, and is publicly accessible.\n\nClick to navigate to the shared note or right click for more options.",
     "shared_locally": "Shared locally",
-    "shared_locally_description": "This note is shared on the local network only at {{- link}}.\n\nClick to navigate to the shared note."
+    "shared_locally_description": "This note is shared on the local network only at {{- link}}.\n\nClick to navigate to the shared note or right click for more options."
   }
 }
