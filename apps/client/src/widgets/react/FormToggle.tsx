@@ -1,5 +1,7 @@
+import clsx from "clsx";
 import "./FormToggle.css";
 import HelpButton from "./HelpButton";
+import { useEffect, useState } from "preact/hooks";
 
 interface FormToggleProps {
     currentValue: boolean | null;
@@ -13,13 +15,22 @@ interface FormToggleProps {
 }
 
 export default function FormToggle({ currentValue, helpPage, switchOnName, switchOnTooltip, switchOffName, switchOffTooltip, onChange, disabled }: FormToggleProps) {
+    const [ disableTransition, setDisableTransition ] = useState(true);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setDisableTransition(false);
+        }, 100);
+        return () => clearTimeout(timeout);
+    }, []);
+
     return (
         <div className="switch-widget">
             <span className="switch-name">{ currentValue ? switchOffName : switchOnName }</span>
 
             <label>
                 <div
-                    className={`switch-button ${currentValue ? "on" : ""} ${disabled ? "disabled" : ""}`}
+                    className={clsx("switch-button", { "on": currentValue, disabled, "disable-transitions": disableTransition })}
                     title={currentValue ? switchOffTooltip : switchOnTooltip }
                 >
                     <input
