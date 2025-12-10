@@ -13,10 +13,11 @@ import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/u
 import ws from "../../services/ws";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
-import { FormDropdownDivider, FormDropdownSubmenu, FormListItem } from "../react/FormList";
+import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+import { useNoteBookmarkState } from "./BasicPropertiesTab";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -79,6 +80,9 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
             <FormDropdownDivider />
 
+            {isNewLayout && <NoteBasicProperties note={note} />}
+            <FormDropdownDivider />
+
             <CommandItem icon="bx bx-import" text={t("note_actions.import_files")}
                 disabled={isInOptionsOrHelp || note.type === "search"}
                 command={() => parentComponent?.triggerCommand("showImportDialog", { noteId: note.noteId })} />
@@ -110,6 +114,14 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             {glob.isDev && <DevelopmentActions note={note} noteContext={noteContext} />}
         </Dropdown>
     );
+}
+
+function NoteBasicProperties({ note }: { note: FNote }) {
+    const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
+
+    return <>
+        <FormListToggleableItem icon="bx bx-bookmark" title={t("bookmark_switch.bookmark")} currentValue={isBookmarked} onChange={setIsBookmarked} />
+    </>;
 }
 
 function DevelopmentActions({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {

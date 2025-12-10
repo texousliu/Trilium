@@ -21,6 +21,9 @@ import Modal from "../react/Modal";
 import { CodeMimeTypesList } from "../type_widgets/options/code_notes";
 import { ContentLanguagesList } from "../type_widgets/options/i18n";
 import { LocaleSelector } from "../type_widgets/options/components/LocaleSelector";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+
+const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
 export default function BasicPropertiesTab({ note }: TabContext) {
     return (
@@ -28,7 +31,7 @@ export default function BasicPropertiesTab({ note }: TabContext) {
             <NoteTypeWidget note={note} />
             <ProtectedNoteSwitch note={note} />
             <EditabilitySelect note={note} />
-            <BookmarkSwitch note={note} />
+            {!isNewLayout && <BookmarkSwitch note={note} />}
             <SharedSwitch note={note} />
             <TemplateSwitch note={note} />
             <NoteLanguageSwitch note={note} />
@@ -191,18 +194,7 @@ function EditabilitySelect({ note }: { note?: FNote | null }) {
 }
 
 function BookmarkSwitch({ note }: { note?: FNote | null }) {
-    const [ isBookmarked, setIsBookmarked ] = useState<boolean>(false);
-    const refreshState = useCallback(() => {
-        const isBookmarked = note && !!note.getParentBranches().find((b) => b.parentNoteId === "_lbBookmarks");
-        setIsBookmarked(!!isBookmarked);
-    }, [ note ]);
-
-    useEffect(() => refreshState(), [ note ]);
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        if (note && loadResults.getBranchRows().find((b) => b.noteId === note.noteId)) {
-            refreshState();
-        }
-    });
+    const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
 
     return (
         <div className="bookmark-switch-container">
@@ -210,18 +202,36 @@ function BookmarkSwitch({ note }: { note?: FNote | null }) {
                 switchOnName={t("bookmark_switch.bookmark")} switchOnTooltip={t("bookmark_switch.bookmark_this_note")}
                 switchOffName={t("bookmark_switch.bookmark")} switchOffTooltip={t("bookmark_switch.remove_bookmark")}
                 currentValue={isBookmarked}
-                onChange={async (shouldBookmark) => {
-                    if (!note) return;
-                    const resp = await server.put<ToggleInParentResponse>(`notes/${note.noteId}/toggle-in-parent/_lbBookmarks/${shouldBookmark}`);
-
-                    if (!resp.success && "message" in resp) {
-                        toast.showError(resp.message);
-                    }
-                }}
+                onChange={setIsBookmarked}
                 disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
             />
         </div>
-    )
+    );
+}
+
+export function useNoteBookmarkState(note: FNote | null | undefined) {
+    const [ isBookmarked, setIsBookmarked ] = useState<boolean>(false);
+    const refreshState = useCallback(() => {
+        const isBookmarked = note && !!note.getParentBranches().find((b) => b.parentNoteId === "_lbBookmarks");
+        setIsBookmarked(!!isBookmarked);
+    }, [ note ]);
+
+    const changeHandler = useCallback(async (shouldBookmark: boolean) => {
+        if (!note) return;
+        const resp = await server.put<ToggleInParentResponse>(`notes/${note.noteId}/toggle-in-parent/_lbBookmarks/${shouldBookmark}`);
+
+        if (!resp.success && "message" in resp) {
+            toast.showError(resp.message);
+        }
+    }, [ note ]);
+
+    useEffect(() => refreshState(), [ refreshState ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (note && loadResults.getBranchRows().find((b) => b.noteId === note.noteId)) {
+            refreshState();
+        }
+    });
+    return [ isBookmarked, changeHandler ] as const;
 }
 
 function TemplateSwitch({ note }: { note?: FNote | null }) {
