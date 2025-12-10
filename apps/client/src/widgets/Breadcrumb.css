@@ -96,11 +96,23 @@ body.experimental-feature-new-layout .breadcrumb-row {
     }
 
     .dropdown-item span,
-    .dropdown-item strong {
+    .dropdown-item strong,
+    .breadcrumb-last-item {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
         display: block;
         max-width: 300px;
+    }
+
+    .breadcrumb-last-item {
+        text-decoration: none;
+        color: unset;
+        cursor: text;
+    }
+
+    input {
+        padding: 0 10px;
+        width: 200px;
     }
 }
