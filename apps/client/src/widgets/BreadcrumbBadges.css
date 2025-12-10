@@ -1,7 +1,10 @@
 .component.breadcrumb-badges {
+    contain: none;
+}
+
+.breadcrumb-badges {
     display: flex;
     gap: 5px;
-    contain: none;
 
     .breadcrumb-badge {
         display: flex;
