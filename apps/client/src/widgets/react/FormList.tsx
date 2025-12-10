@@ -139,8 +139,12 @@ export function FormListToggleableItem({ title, currentValue, onChange, ...props
     onChange(newValue: boolean): void;
 }) {
     return (
-        <FormListItem {...props}>
-            <FormToggle switchOnName={title} switchOffName={title} currentValue={currentValue} onChange={onChange} />
+        <FormListItem {...props} onClick={(e) => e.stopPropagation()}>
+            <FormToggle
+                switchOnName={title} switchOffName={title}
+                currentValue={currentValue}
+                onChange={onChange}
+            />
         </FormListItem>
     );
 }
