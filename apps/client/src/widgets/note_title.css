@@ -29,30 +29,39 @@ body.desktop .note-title-widget input.note-title {
     font-size: 180%;
 }
 
-body.experimental-feature-new-layout .title-row,
-body.experimental-feature-new-layout .title-details {
-    max-width: var(--max-content-width);
-}
+body.experimental-feature-new-layout {
+    .title-row,
+    .title-details {
+        max-width: var(--max-content-width);
+    }
 
-body.experimental-feature-new-layout .title-row {
-    margin-top: 2em;
-    margin-left: 12px;
-}
+    .title-row {
+        margin-top: 2em;
+        margin-left: 12px;
+    }
 
-body.experimental-feature-new-layout .title-details {
-    margin-top: 0;
-    contain: none;
-    padding: 0;
-    padding-inline-start: 24px;
-    opacity: 0.85;
-    display: flex;
-    gap: 0.25em;
-    margin: 0;
-    list-style-type: none;
-    margin-bottom: 2em;
-}
+    .title-details {
+        margin-top: 0;
+        contain: none;
+        padding: 0;
+        padding-inline-start: 24px;
+        opacity: 0.85;
+        display: flex;
+        gap: 0.25em;
+        margin: 0;
+        list-style-type: none;
+        margin-bottom: 2em;
+    }
 
-body.experimental-feature-new-layout.prefers-centered-content .title-row,
-body.experimental-feature-new-layout.prefers-centered-content .title-details {
-    margin-inline: auto;
+    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)) {
+        .title-row,
+        .title-details {
+            width: 100%;
+        }
+    }
+
+    &.prefers-centered-content .title-row,
+    &.prefers-centered-content .title-details {
+        margin-inline: auto;
+    }
 }
