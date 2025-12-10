@@ -22,6 +22,7 @@ import { CodeMimeTypesList } from "../type_widgets/options/code_notes";
 import { ContentLanguagesList } from "../type_widgets/options/i18n";
 import { LocaleSelector } from "../type_widgets/options/components/LocaleSelector";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+import { createPortal } from "preact/compat";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -348,15 +349,24 @@ export function NoteLanguageSelector({ note }: { note?: FNote | null }) {
                     >{t("note_language.configure-languages")}</FormListItem>
                 )}
             />
-            <Modal
-                className="content-languages-modal"
-                title={t("content_language.title")}
-                show={modalShown} onHidden={() => setModalShown(false)}
-                size="lg" scrollable
-            >
-                <ContentLanguagesList />
-            </Modal>
+            {createPortal(
+                <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
+                document.body
+            )}
         </>
+    );
+}
+
+function ContentLanguagesModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
+    return (
+        <Modal
+            className="content-languages-modal"
+            title={t("content_language.title")}
+            show={modalShown} onHidden={() => setModalShown(false)}
+            size="lg" scrollable
+        >
+            <ContentLanguagesList />
+        </Modal>
     );
 }
 
