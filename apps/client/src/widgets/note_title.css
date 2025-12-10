@@ -33,18 +33,23 @@ body.experimental-feature-new-layout {
     .title-row,
     .title-details {
         max-width: var(--max-content-width);
+        padding: 0;
+        padding-inline-start: 24px;
     }
 
     .title-row {
         margin-top: 2em;
         margin-left: 12px;
+
+        .note-icon-widget {
+            padding: 0;
+            width: 41px;
+        }
     }
 
     .title-details {
         margin-top: 0;
         contain: none;
-        padding: 0;
-        padding-inline-start: 24px;
         opacity: 0.85;
         display: flex;
         gap: 0.25em;
@@ -62,6 +67,7 @@ body.experimental-feature-new-layout {
         .title-details {
             width: 100%;
             max-width: unset;
+            padding-inline-start: 15px;
         }
 
         .title-row {
@@ -70,7 +76,6 @@ body.experimental-feature-new-layout {
 
         .title-details {
             margin-bottom: 0.25em;
-            padding-inline-start: 15px;
             opacity: 0.65;
         }
     }
