@@ -94,8 +94,8 @@ Naše dokumenatce je dostupná ve vícero formátech:
   bezpečnější přihlášení
 * [Synchronizace](https://docs.triliumnotes.org/user-guide/setup/synchronization)
   s vlastním synchronizačním serverem
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * existují [služby třetích stran pro hostování synchronizačních
+    serverů](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * [Sdílení](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
   (zveřejňování) poznámek na veřejném internetu
 * Silné [šifrování
@@ -103,10 +103,10 @@ Naše dokumenatce je dostupná ve vícero formátech:
   s granularitou na úrovni jednotlivých poznámek
 * Náčrt diagramů na základě [Excalidraw](https://excalidraw.com/) (poznámka typu
   „plátno“)
-* [Relation
-  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
-  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
-  for visualizing notes and their relations
+* [Mapy vazeb](https://docs.triliumnotes.org/user-guide/note-types/relation-map)
+  a [Poznámka/mapa
+  odkazů](https://docs.triliumnotes.org/user-guide/note-types/note-map) pro
+  vizualizaci poznámek a jejich vazeb
 * Myšlenkové mapy založené na [Mind Elixir](https://docs.mind-elixir.com/)
 * [Geo mapy](https://docs.triliumnotes.org/user-guide/collections/geomap) s
   lokalizačními značkami a trasami GPX
