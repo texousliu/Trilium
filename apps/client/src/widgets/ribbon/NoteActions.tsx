@@ -60,6 +60,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     const isHelpPage = note.noteId.startsWith("_help");
     const [syncServerHost] = useTriliumOption("syncServerHost");
     const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
+    const isNormalViewMode = noteContext?.viewScope?.viewMode === "default";
 
     return (
         <Dropdown
@@ -82,7 +83,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
             <FormDropdownDivider />
 
-            {isNewLayout && !isHelpPage && <>
+            {isNewLayout && isNormalViewMode && !isHelpPage && <>
                 <NoteBasicProperties note={note} />
                 <FormDropdownDivider />
             </>}
