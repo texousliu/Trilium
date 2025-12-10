@@ -1,8 +1,9 @@
 import { Locale } from "@triliumnext/commons";
+import { ComponentChildren } from "preact";
+import { useMemo } from "preact/hooks";
+
 import Dropdown from "../../../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../../../react/FormList";
-import { ComponentChildren } from "preact";
-import { useMemo, useState } from "preact/hooks";
 
 export function LocaleSelector({ id, locales, currentValue, onChange, defaultLocale, extraChildren }: {
     id?: string;
@@ -12,7 +13,7 @@ export function LocaleSelector({ id, locales, currentValue, onChange, defaultLoc
     defaultLocale?: Locale,
     extraChildren?: ComponentChildren
 }) {
-    const [ activeLocale, setActiveLocale ] = useState(defaultLocale?.id === currentValue ? defaultLocale : locales.find(l => l.id === currentValue));
+    const activeLocale = defaultLocale?.id === currentValue ? defaultLocale : locales.find(l => l.id === currentValue);
 
     const processedLocales = useMemo(() => {
         const leftToRightLanguages = locales.filter((l) => !l.rtl);
@@ -48,7 +49,6 @@ export function LocaleSelector({ id, locales, currentValue, onChange, defaultLoc
                         rtl={locale.rtl}
                         checked={locale.id === currentValue}
                         onClick={() => {
-                            setActiveLocale(locale);
                             onChange(locale.id);
                         }}
                     >{locale.name}</FormListItem>

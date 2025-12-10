@@ -330,7 +330,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
     );
 }
 
-export function NoteLanguageSelector({ note, extraChildren }: { note?: FNote | null, extraChildren?: ComponentChildren }) {
+export function NoteLanguageSelector({ note, extraChildren }: { note: FNote | null | undefined, extraChildren?: ComponentChildren }) {
     const [ modalShown, setModalShown ] = useState(false);
     const [ languages ] = useTriliumOption("languages");
     const DEFAULT_LOCALE = {
