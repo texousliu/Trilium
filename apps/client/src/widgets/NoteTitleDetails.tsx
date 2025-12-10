@@ -1,6 +1,5 @@
 import { type ComponentChild } from "preact";
 
-import { t } from "../services/i18n";
 import { formatDateTime } from "../utils/formatters";
 import { useNoteContext, useStaticTooltip } from "./react/hooks";
 import { joinElements } from "./react/react_utils";
@@ -9,18 +8,19 @@ import { Trans } from "react-i18next";
 import { useRef } from "preact/hooks";
 
 export default function NoteTitleDetails() {
-    const { note } = useNoteContext();
+    const { note, noteContext } = useNoteContext();
     const { metadata } = useNoteMetadata(note);
     const isHiddenNote = note?.noteId.startsWith("_");
+    const isDefaultView = noteContext?.viewScope?.viewMode === "default";
 
     const items: ComponentChild[] = [
-        (!isHiddenNote && metadata?.dateCreated &&
+        (isDefaultView && !isHiddenNote && metadata?.dateCreated &&
             <TextWithValue
                 i18nKey="note_title.created_on"
                 value={formatDateTime(metadata.dateCreated, "medium", "none")}
                 valueTooltip={formatDateTime(metadata.dateCreated, "full", "long")}
             />),
-        (!isHiddenNote && metadata?.dateModified &&
+        (isDefaultView && !isHiddenNote && metadata?.dateModified &&
             <TextWithValue
                 i18nKey="note_title.last_modified"
                 value={formatDateTime(metadata.dateModified, "medium", "none")}
