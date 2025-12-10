@@ -58,14 +58,10 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
                 <NoteTypeDropdownContent currentNoteType={currentNoteType} currentNoteMime={currentNoteMime} note={note} setModalShown={setModalShown} />
             </Dropdown>
 
-            <Modal
-                className="code-mime-types-modal"
-                title={t("code_mime_types.title")}
-                show={modalShown} onHidden={() => setModalShown(false)}
-                size="xl" scrollable
-            >
-                <CodeMimeTypesList />
-            </Modal>
+            {createPortal(
+                <NoteTypeOptionsModal modalShown={modalShown} setModalShown={setModalShown} />,
+                document.body
+            )}
         </div>
     );
 }
@@ -144,7 +140,20 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
             <FormDropdownDivider />
             <FormListItem icon="bx bx-cog" onClick={() => setModalShown(true)}>{t("basic_properties.configure_code_notes")}</FormListItem>
         </>
-    )
+    );
+}
+
+function NoteTypeOptionsModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
+    return (
+        <Modal
+            className="code-mime-types-modal"
+            title={t("code_mime_types.title")}
+            show={modalShown} onHidden={() => setModalShown(false)}
+            size="xl" scrollable
+        >
+            <CodeMimeTypesList />
+        </Modal>
+    );
 }
 
 function ProtectedNoteSwitch({ note }: { note?: FNote | null }) {
