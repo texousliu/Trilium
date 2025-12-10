@@ -125,7 +125,26 @@ function NoteBasicProperties({ note }: { note: FNote }) {
         <FormListToggleableItem icon="bx bx-bookmark" title={t("bookmark_switch.bookmark")} currentValue={isBookmarked} onChange={setIsBookmarked} />
         <FormListToggleableItem icon="bx bx-share-alt" title={t("shared_switch.shared")} currentValue={isShared} onChange={switchShareState} />
         <FormListToggleableItem icon="bx bx-copy-alt" title={t("template_switch.template")} currentValue={isTemplate} onChange={setIsTemplate} />
+        <EditabilityDropdown note={note} />
     </>;
+}
+
+function EditabilityDropdown({ note }: { note: FNote }) {
+    const [ readOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
+    const [ autoReadOnlyDisabled, setAutoReadOnlyDisabled ] = useNoteLabelBoolean(note, "autoReadOnlyDisabled");
+
+    function setState(readOnly: boolean, autoReadOnlyDisabled: boolean) {
+        setReadOnly(readOnly);
+        setAutoReadOnlyDisabled(autoReadOnlyDisabled);
+    }
+
+    return (
+        <FormDropdownSubmenu title={t("basic_properties.editable")} icon="bx bx-lock-alt" dropStart>
+            <FormListItem checked={!readOnly && !autoReadOnlyDisabled} onClick={() => setState(false, false)} description={t("editability_select.note_is_editable")}>{t("editability_select.auto")}</FormListItem>
+            <FormListItem checked={readOnly && !autoReadOnlyDisabled} onClick={() => setState(true, false)} description={t("editability_select.note_is_read_only")}>{t("editability_select.read_only")}</FormListItem>
+            <FormListItem checked={!readOnly && autoReadOnlyDisabled} onClick={() => setState(false, true)} description={t("editability_select.note_is_always_editable")}>{t("editability_select.always_editable")}</FormListItem>
+        </FormDropdownSubmenu>
+    );
 }
 
 function DevelopmentActions({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {

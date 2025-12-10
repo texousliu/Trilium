@@ -30,7 +30,7 @@ export default function BasicPropertiesTab({ note }: TabContext) {
         <div className="basic-properties-widget">
             <NoteTypeWidget note={note} />
             <ProtectedNoteSwitch note={note} />
-            <EditabilitySelect note={note} />
+            {!isNewLayout && <EditabilitySelect note={note} />}
             {!isNewLayout && <BookmarkSwitch note={note} />}
             {!isNewLayout && <SharedSwitch note={note} />}
             {!isNewLayout && <TemplateSwitch note={note} />}
@@ -190,7 +190,7 @@ function EditabilitySelect({ note }: { note?: FNote | null }) {
                 }}
             />
         </div>
-    )
+    );
 }
 
 function BookmarkSwitch({ note }: { note?: FNote | null }) {
