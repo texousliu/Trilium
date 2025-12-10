@@ -160,7 +160,7 @@ export default class MathInputView extends View {
 		mf.readOnly = this.isReadOnly;
 
 		mf.addEventListener( 'mount', () => {
-			mf.inlineShortcuts = { ...mf.inlineShortcuts, dx: 'dx', dy: 'dy', dt: 'dt' };
+			mf.inlineShortcuts = { ...mf.inlineShortcuts, dx: '', dy: '', dt: '' };
 		}, { once: true } );
 
 		mf.addEventListener( 'input', () => {

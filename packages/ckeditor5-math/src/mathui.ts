@@ -71,7 +71,6 @@ export default class MathUI extends Plugin {
 			throw new CKEditorError( 'math-command' );
 		}
 
-
 		const mathConfig = editor.config.get( 'math' )!;
 
 		const formView = new MainFormView(

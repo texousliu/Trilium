@@ -7,7 +7,7 @@ import {
 	View,
 	ViewCollection,
 	type FocusableView,
-	Locale,
+	type Locale,
 	FocusTracker,
 	KeystrokeHandler
 } from 'ckeditor5';
