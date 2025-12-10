@@ -5,7 +5,7 @@ import { ComponentChildren, MouseEventHandler } from "preact";
 import { useRef } from "preact/hooks";
 
 import { t } from "../services/i18n";
-import { BacklinksList } from "./FloatingButtonsDefinitions";
+import { BacklinksList, useBacklinkCount } from "./FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "./react/Dropdown";
 import { useIsNoteReadOnly, useNoteContext, useStaticTooltip } from "./react/hooks";
 import Icon from "./react/Icon";
@@ -65,8 +65,8 @@ function ShareBadge() {
 }
 
 function BacklinksBadge() {
-    const { note } = useNoteContext();
-    const count = 1;
+    const { note, viewScope } = useNoteContext();
+    const count = useBacklinkCount(note, viewScope?.viewMode === "default");
     return (note && count > 0 &&
         <BadgeWithDropdown
             className="backlinks-badge backlinks-widget"
