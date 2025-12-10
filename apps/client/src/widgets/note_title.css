@@ -57,6 +57,17 @@ body.experimental-feature-new-layout {
         .title-row,
         .title-details {
             width: 100%;
+            max-width: unset;
+        }
+
+        .title-row {
+            margin-top: 0;
+        }
+
+        .title-details {
+            margin-bottom: 0.25em;
+            padding-inline-start: 15px;
+            opacity: 0.65;
         }
     }
 
