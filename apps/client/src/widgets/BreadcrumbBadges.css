@@ -16,7 +16,7 @@
         padding: 2px 6px;
         border-radius: var(--badge-radius);
         font-size: 0.75em;
-        background-color: var(--color, var(--badge-background-color));
+        background-color: var(--color, transparent);
         color: white;
         min-width: 0;
         flex-shrink: 1;

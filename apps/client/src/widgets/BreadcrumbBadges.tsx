@@ -103,7 +103,7 @@ function Badge({ icon, className, text, tooltip, onClick, href }: BadgeProps) {
 
     const content = <>
         {icon && <><Icon icon={icon} />&nbsp;</>}
-        {text}
+        <span class="text">{text}</span>
     </>;
 
     return (
