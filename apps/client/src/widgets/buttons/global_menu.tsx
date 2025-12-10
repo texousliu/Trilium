@@ -108,8 +108,8 @@ function DevelopmentOptions() {
         <FormDropdownDivider />
         <FormListItem
             icon={newLayoutEnabled ? "bx bx-layout" : "bx bxs-layout"}
-            onClick={() => {
-                toggleExperimentalFeature("new-layout", !newLayoutEnabled);
+            onClick={async () => {
+                await toggleExperimentalFeature("new-layout", !newLayoutEnabled);
                 reloadFrontendApp();
             }}
         >{!newLayoutEnabled ? "Switch to new layout" : "Switch to old layout"}</FormListItem>
