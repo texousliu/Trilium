@@ -14,7 +14,7 @@ import ws from "../../services/ws";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
-import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteProperty, useTriliumOption } from "../react/hooks";
+import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
@@ -119,10 +119,12 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
 function NoteBasicProperties({ note }: { note: FNote }) {
     const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
     const [ isShared, switchShareState ] = useShareState(note);
+    const [ isTemplate, setIsTemplate ] = useNoteLabelBoolean(note, "template");
 
     return <>
         <FormListToggleableItem icon="bx bx-bookmark" title={t("bookmark_switch.bookmark")} currentValue={isBookmarked} onChange={setIsBookmarked} />
         <FormListToggleableItem icon="bx bx-share-alt" title={t("shared_switch.shared")} currentValue={isShared} onChange={switchShareState} />
+        <FormListToggleableItem icon="bx bx-copy-alt" title={t("template_switch.template")} currentValue={isTemplate} onChange={setIsTemplate} />
     </>;
 }
 

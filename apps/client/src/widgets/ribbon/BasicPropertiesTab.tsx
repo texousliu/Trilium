@@ -33,7 +33,7 @@ export default function BasicPropertiesTab({ note }: TabContext) {
             <EditabilitySelect note={note} />
             {!isNewLayout && <BookmarkSwitch note={note} />}
             {!isNewLayout && <SharedSwitch note={note} />}
-            <TemplateSwitch note={note} />
+            {!isNewLayout && <TemplateSwitch note={note} />}
             <NoteLanguageSwitch note={note} />
         </div>
     );
@@ -247,7 +247,7 @@ function TemplateSwitch({ note }: { note?: FNote | null }) {
                 currentValue={isTemplate} onChange={setIsTemplate}
             />
         </div>
-    )
+    );
 }
 
 function SharedSwitch({ note }: { note?: FNote | null }) {
