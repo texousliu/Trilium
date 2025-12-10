@@ -7,6 +7,12 @@
     container-type: inline-size;
 
     @container (max-width: 500px) {
+        .breadcrumb {
+            .btn.icon-action {
+                width: 16px;
+            }
+        }
+
         .breadcrumb-badges {
             flex-shrink: 0;
 
@@ -33,6 +39,10 @@
                     display: none;
                 }
             }
+        }
+
+        .icon-action {
+            margin: 0;
         }
     }
 }
