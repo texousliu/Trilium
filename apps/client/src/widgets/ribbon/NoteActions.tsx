@@ -1,5 +1,5 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
-import { useContext } from "preact/hooks";
+import { useContext, useState } from "preact/hooks";
 
 import appContext, { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
@@ -13,10 +13,12 @@ import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/u
 import ws from "../../services/ws";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
-import { FormDropdownDivider, FormDropdownSubmenu, FormListItem } from "../react/FormList";
-import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteProperty, useTriliumOption } from "../react/hooks";
+import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
+import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+import { NoteTypeDropdownContent, useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
+import protected_session from "../../services/protected_session";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -55,8 +57,10 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     const isMac = getIsMac();
     const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(noteType);
     const isSearchOrBook = ["search", "book"].includes(noteType);
+    const isHelpPage = note.noteId.startsWith("_help");
     const [syncServerHost] = useTriliumOption("syncServerHost");
     const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
+    const isNormalViewMode = noteContext?.viewScope?.viewMode === "default";
 
     return (
         <Dropdown
@@ -78,6 +82,11 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             <CommandItem command="printActiveNote" icon="bx bx-printer" disabled={!isPrintable} text={t("note_actions.print_note")} />
             {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
             <FormDropdownDivider />
+
+            {isNewLayout && isNormalViewMode && !isHelpPage && <>
+                <NoteBasicProperties note={note} />
+                <FormDropdownDivider />
+            </>}
 
             <CommandItem icon="bx bx-import" text={t("note_actions.import_files")}
                 disabled={isInOptionsOrHelp || note.type === "search"}
@@ -107,8 +116,79 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             <FormDropdownDivider />
 
             <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
-            {glob.isDev && <DevelopmentActions note={note} noteContext={noteContext} />}
+            {glob.isDev && <>
+                <FormDropdownDivider />
+                <DevelopmentActions note={note} noteContext={noteContext} />
+            </>}
         </Dropdown>
+    );
+}
+
+function NoteBasicProperties({ note }: { note: FNote }) {
+    const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
+    const [ isShared, switchShareState ] = useShareState(note);
+    const [ isTemplate, setIsTemplate ] = useNoteLabelBoolean(note, "template");
+    const isProtected = useNoteProperty(note, "isProtected");
+
+    return <>
+        <FormListToggleableItem
+            icon="bx bx-bookmark"
+            title={t("bookmark_switch.bookmark")}
+            currentValue={isBookmarked} onChange={setIsBookmarked}
+            disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
+        />
+        <FormListToggleableItem
+            icon="bx bx-copy-alt"
+            title={t("template_switch.template")}
+            currentValue={isTemplate} onChange={setIsTemplate}
+            helpPage="KC1HB96bqqHX"
+            disabled={note?.noteId.startsWith("_options")}
+        />
+        <FormListToggleableItem
+            icon="bx bx-share-alt"
+            title={t("shared_switch.shared")}
+            currentValue={isShared} onChange={switchShareState}
+            helpPage="R9pX4DGra2Vt"
+            disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
+        />
+        <EditabilityDropdown note={note} />
+        <FormListToggleableItem
+            icon="bx bx-lock-alt"
+            title={t("protect_note.toggle-on")}
+            currentValue={!!isProtected} onChange={shouldProtect => protected_session.protectNote(note.noteId, shouldProtect, false)}
+        />
+        <FormDropdownDivider />
+        <NoteTypeDropdown note={note} />
+    </>;
+}
+
+function EditabilityDropdown({ note }: { note: FNote }) {
+    const [ readOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
+    const [ autoReadOnlyDisabled, setAutoReadOnlyDisabled ] = useNoteLabelBoolean(note, "autoReadOnlyDisabled");
+
+    function setState(readOnly: boolean, autoReadOnlyDisabled: boolean) {
+        setReadOnly(readOnly);
+        setAutoReadOnlyDisabled(autoReadOnlyDisabled);
+    }
+
+    return (
+        <FormDropdownSubmenu title={t("basic_properties.editable")} icon="bx bx-edit-alt" dropStart>
+            <FormListItem checked={!readOnly && !autoReadOnlyDisabled} onClick={() => setState(false, false)} description={t("editability_select.note_is_editable")}>{t("editability_select.auto")}</FormListItem>
+            <FormListItem checked={readOnly && !autoReadOnlyDisabled} onClick={() => setState(true, false)} description={t("editability_select.note_is_read_only")}>{t("editability_select.read_only")}</FormListItem>
+            <FormListItem checked={!readOnly && autoReadOnlyDisabled} onClick={() => setState(false, true)} description={t("editability_select.note_is_always_editable")}>{t("editability_select.always_editable")}</FormListItem>
+        </FormDropdownSubmenu>
+    );
+}
+
+function NoteTypeDropdown({ note }: { note: FNote }) {
+    const currentNoteType = useNoteProperty(note, "type") ?? undefined;
+    const currentNoteMime = useNoteProperty(note, "mime");
+    const [ modalShown, setModalShown ] = useState(false);
+
+    return (
+        <FormDropdownSubmenu title={t("basic_properties.note_type")} icon="bx bx-file" dropStart>
+            <NoteTypeDropdownContent currentNoteType={currentNoteType} currentNoteMime={currentNoteMime} note={note} setModalShown={setModalShown} />
+        </FormDropdownSubmenu>
     );
 }
 

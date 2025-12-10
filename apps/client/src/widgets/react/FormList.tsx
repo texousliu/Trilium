@@ -5,8 +5,9 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "preact
 import "./FormList.css";
 import { CommandNames } from "../../components/app_context";
 import { useStaticTooltip } from "./hooks";
-import { handleRightToLeftPlacement, isMobile } from "../../services/utils";
+import { handleRightToLeftPlacement, isMobile, openInAppHelpFromUrl } from "../../services/utils";
 import clsx from "clsx";
+import FormToggle from "./FormToggle";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -94,12 +95,13 @@ interface FormListItemOpts {
     description?: string;
     className?: string;
     rtl?: boolean;
+    postContent?: ComponentChildren;
 }
 
 const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
     placement: handleRightToLeftPlacement("right"),
     fallbackPlacements: [ handleRightToLeftPlacement("right") ]
-}
+};
 
 export function FormListItem({ className, icon, value, title, active, disabled, checked, container, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
     const itemRef = useRef<HTMLLIElement>(null);
@@ -132,6 +134,49 @@ export function FormListItem({ className, icon, value, title, active, disabled, 
     );
 }
 
+export function FormListToggleableItem({ title, currentValue, onChange, disabled, helpPage, ...props }: Omit<FormListItemOpts, "onClick" | "children"> & {
+    title: string;
+    currentValue: boolean;
+    helpPage?: string;
+    onChange(newValue: boolean): void | Promise<void>;
+}) {
+    const isWaiting = useRef(false);
+
+    return (
+        <FormListItem
+            {...props}
+            disabled={disabled}
+            onClick={async (e) => {
+                if ((e.target as HTMLElement | null)?.classList.contains("contextual-help")) {
+                    return;
+                }
+
+                e.stopPropagation();
+                if (!disabled && !isWaiting.current) {
+                    isWaiting.current = true;
+                    await onChange(!currentValue);
+                    isWaiting.current = false;
+                }
+            }}>
+            <FormToggle
+                switchOnName={title}
+                switchOffName={title}
+                currentValue={currentValue}
+                onChange={() => {}}
+                afterName={<>
+                    {helpPage && (
+                        <span
+                            class="bx bx-help-circle contextual-help"
+                            onClick={() => openInAppHelpFromUrl(helpPage)}
+                        />
+                    )}
+                    <span class="switch-spacer" />
+                </>}
+            />
+        </FormListItem>
+    );
+}
+
 function FormListContent({ children, badges, description, disabled, disabledTooltip }: Pick<FormListItemOpts, "children" | "badges" | "description" | "disabled" | "disabledTooltip">) {
     return <>
         {children}
@@ -139,7 +184,7 @@ function FormListContent({ children, badges, description, disabled, disabledTool
             <span className={`badge ${className ?? ""}`}>{text}</span>
         ))}
         {disabled && disabledTooltip && (
-            <span class="bx bx-info-circle disabled-tooltip" title={disabledTooltip} />
+            <span class="bx bx-info-circle contextual-help" title={disabledTooltip} />
         )}
         {description && <div className="description">{description}</div>}
     </>;

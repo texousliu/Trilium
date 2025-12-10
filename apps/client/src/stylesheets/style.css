@@ -423,16 +423,16 @@ body.desktop .tabulator-popup-container,
     pointer-events: none;
 }
 
-.dropdown-menu .disabled .disabled-tooltip {
+.dropdown-menu .disabled .contextual-help {
     pointer-events: all;
     margin-inline-start: 8px;
     font-size: 0.75rem;
-    color: var(--disabled-tooltip-icon-color);
+    color: var(--contextual-help-icon-color);
     cursor: help;
     opacity: 0.75;
 }
 
-.dropdown-menu .disabled .disabled-tooltip:hover {
+.dropdown-menu .disabled .contextual-help:hover {
     opacity: 1;
 }
 
@@ -1315,7 +1315,8 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
     top: 0;
     inset-inline-start: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
     margin-top: -10px;
-    min-width: 15rem;
+    min-width: max-content;
+    max-width: 300px;
     /* to make submenu scrollable https://github.com/zadam/trilium/issues/3136 */
     max-height: 600px;
     overflow: auto;

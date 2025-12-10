@@ -1962,8 +1962,9 @@
     "unknown_widget": "Unknown widget for \"{{id}}\"."
   },
   "note_language": {
-    "not_set": "Not set",
-    "configure-languages": "Configure languages..."
+    "not_set": "No language set",
+    "configure-languages": "Configure languages...",
+    "help-on-languages": "Help on content languages..."
   },
   "content_language": {
     "title": "Content languages",

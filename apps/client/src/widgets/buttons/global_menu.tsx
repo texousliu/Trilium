@@ -10,7 +10,8 @@ import { KeyboardActionNames } from "@triliumnext/commons";
 import { ComponentChildren } from "preact";
 import Component from "../../components/component";
 import { ParentComponent } from "../react/react_utils";
-import utils, { dynamicRequire, isElectron, isMobile } from "../../services/utils";
+import utils, { dynamicRequire, isElectron, isMobile, reloadFrontendApp } from "../../services/utils";
+import { isExperimentalFeatureEnabled, toggleExperimentalFeature } from "../../services/experimental_features";
 
 interface MenuItemProps<T> {
     icon: string,
@@ -70,6 +71,7 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             </>}
 
             {!isElectron() && <BrowserOnlyOptions />}
+            {glob.isDev && <DevelopmentOptions />}
         </Dropdown>
     )
 }
@@ -96,6 +98,21 @@ function BrowserOnlyOptions() {
     return <>
         <FormDropdownDivider />
         <MenuItem command="logout" icon="bx bx-log-out" text={t("global_menu.logout")} />
+    </>;
+}
+
+function DevelopmentOptions() {
+    const newLayoutEnabled = isExperimentalFeatureEnabled("new-layout");
+
+    return <>
+        <FormDropdownDivider />
+        <FormListItem
+            icon={newLayoutEnabled ? "bx bx-layout" : "bx bxs-layout"}
+            onClick={async () => {
+                await toggleExperimentalFeature("new-layout", !newLayoutEnabled);
+                reloadFrontendApp();
+            }}
+        >{!newLayoutEnabled ? "Switch to new layout" : "Switch to old layout"}</FormListItem>
     </>;
 }
 
