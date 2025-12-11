@@ -1,7 +1,7 @@
 import { t } from "./i18n";
 import options from "./options";
 
-interface ExperimentalFeature {
+export interface ExperimentalFeature {
     id: string;
     name: string;
     description: string;
@@ -20,7 +20,7 @@ export const experimentalFeatures = [
     }
 ] as const satisfies ExperimentalFeature[];
 
-type ExperimentalFeatureId = typeof experimentalFeatures[number]["id"];
+export type ExperimentalFeatureId = typeof experimentalFeatures[number]["id"];
 
 let enabledFeatures: Set<ExperimentalFeatureId> | null = null;
 

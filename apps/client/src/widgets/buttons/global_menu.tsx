@@ -1,17 +1,19 @@
-import Dropdown from "../react/Dropdown";
 import "./global_menu.css";
-import { useStaticTooltip, useStaticTooltipWithKeyboardShortcut, useTriliumOption, useTriliumOptionBool, useTriliumOptionInt } from "../react/hooks";
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { t } from "../../services/i18n";
-import { FormDropdownDivider, FormDropdownSubmenu, FormListHeader, FormListItem } from "../react/FormList";
-import { CommandNames } from "../../components/app_context";
-import KeyboardShortcut from "../react/KeyboardShortcut";
+
 import { KeyboardActionNames } from "@triliumnext/commons";
 import { ComponentChildren } from "preact";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
+
+import { CommandNames } from "../../components/app_context";
 import Component from "../../components/component";
-import { ParentComponent } from "../react/react_utils";
+import { ExperimentalFeature, ExperimentalFeatureId, experimentalFeatures, isExperimentalFeatureEnabled, toggleExperimentalFeature } from "../../services/experimental_features";
+import { t } from "../../services/i18n";
 import utils, { dynamicRequire, isElectron, isMobile, reloadFrontendApp } from "../../services/utils";
-import { isExperimentalFeatureEnabled, toggleExperimentalFeature } from "../../services/experimental_features";
+import Dropdown from "../react/Dropdown";
+import { FormDropdownDivider, FormDropdownSubmenu, FormListHeader, FormListItem } from "../react/FormList";
+import { useStaticTooltip, useStaticTooltipWithKeyboardShortcut, useTriliumOption, useTriliumOptionBool, useTriliumOptionInt } from "../react/hooks";
+import KeyboardShortcut from "../react/KeyboardShortcut";
+import { ParentComponent } from "../react/react_utils";
 
 interface MenuItemProps<T> {
     icon: string,
@@ -73,7 +75,7 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             {!isElectron() && <BrowserOnlyOptions />}
             {glob.isDev && <DevelopmentOptions />}
         </Dropdown>
-    )
+    );
 }
 
 function AdvancedMenu() {
@@ -91,7 +93,7 @@ function AdvancedMenu() {
             {isElectron() && <MenuItem command="openDevTools" icon="bx bx-bug-alt" text={t("global_menu.open_dev_tools")} />}
             <KeyboardActionMenuItem command="reloadFrontendApp" icon="bx bx-refresh" text={t("global_menu.reload_frontend")} title={t("global_menu.reload_hint")} />
         </FormDropdownSubmenu>
-    )
+    );
 }
 
 function BrowserOnlyOptions() {
@@ -102,18 +104,30 @@ function BrowserOnlyOptions() {
 }
 
 function DevelopmentOptions() {
-    const newLayoutEnabled = isExperimentalFeatureEnabled("new-layout");
-
     return <>
         <FormDropdownDivider />
+        <FormListItem disabled>Development Options</FormListItem>
+        <FormDropdownSubmenu icon="bx bx-test-tube" title="Experimental features">
+            {experimentalFeatures.map((feature) => (
+                <ExperimentalFeatureToggle key={feature.id} experimentalFeature={feature as ExperimentalFeature} />
+            ))}
+        </FormDropdownSubmenu>
+    </>;
+}
+
+function ExperimentalFeatureToggle({ experimentalFeature }: { experimentalFeature: ExperimentalFeature }) {
+    const featureEnabled = isExperimentalFeatureEnabled(experimentalFeature.id as ExperimentalFeatureId);
+
+    return (
         <FormListItem
-            icon={newLayoutEnabled ? "bx bx-layout" : "bx bxs-layout"}
+            checked={featureEnabled}
+            title={experimentalFeature.description}
             onClick={async () => {
-                await toggleExperimentalFeature("new-layout", !newLayoutEnabled);
+                await toggleExperimentalFeature(experimentalFeature.id as ExperimentalFeatureId, !featureEnabled);
                 reloadFrontendApp();
             }}
-        >{!newLayoutEnabled ? "Switch to new layout" : "Switch to old layout"}</FormListItem>
-    </>;
+        >{experimentalFeature.name}</FormListItem>
+    );
 }
 
 function SwitchToOptions() {
