@@ -1,5 +1,20 @@
 .component.status-bar {
     contain: none;
     border-top: 1px solid var(--main-border-color);
-    background-color: var(--left-pane-background-color)
+    background-color: var(--left-pane-background-color);
+    display: flex;
+    align-items: center;
+    padding-inline: 0.25em;
+
+    > .breadcrumb-row {
+        flex-grow: 1;
+    }
+
+    .dropdown {
+        font-size: 0.85em;
+
+        .dropdown-toggle {
+            padding: 0.1em 0.25em;
+        }
+    }
 }

@@ -44,7 +44,6 @@ import NoteDetail from "../widgets/NoteDetail.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
-import Breadcrumb from "../widgets/layout/Breadcrumb.jsx";
 import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
 import { isExperimentalFeatureEnabled } from "../services/experimental_features.js";
 import NoteActions from "../widgets/ribbon/NoteActions.jsx";
@@ -52,7 +51,6 @@ import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
 import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
 import BreadcrumbBadges from "../widgets/BreadcrumbBadges.jsx";
 import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
-import NoteStatusBar from "../widgets/NoteStatusBar.jsx";
 import StatusBar from "../widgets/layout/StatusBar.jsx";
 
 export default class DesktopLayout {
@@ -153,11 +151,7 @@ export default class DesktopLayout {
                                                         )
                                                         .optChild(!isFloatingTitlebar, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
-                                                        .optChild(isNewLayout, (
-                                                            <Ribbon>
-                                                                <NoteStatusBar />
-                                                            </Ribbon>
-                                                        ))
+                                                        .optChild(isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
