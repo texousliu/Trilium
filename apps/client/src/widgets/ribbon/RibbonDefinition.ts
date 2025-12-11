@@ -60,7 +60,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("book_properties.book_properties"),
         icon: "bx bx-book",
         content: CollectionPropertiesTab,
-        show: ({ note }) => note?.type === "book" || note?.type === "search",
+        show: ({ note }) => !isNewLayout && note?.type === "book" || note?.type === "search",
         toggleCommand: "toggleRibbonTabBookProperties"
     },
     {

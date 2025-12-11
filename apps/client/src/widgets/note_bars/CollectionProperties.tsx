@@ -1,16 +1,17 @@
 import { t } from "i18next";
+import { useContext } from "preact/hooks";
+import { Fragment } from "preact/jsx-runtime";
+
 import FNote from "../../entities/fnote";
 import { ViewTypeOptions } from "../collections/interface";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
-import Icon from "../react/Icon";
-import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxItem, ComboBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
-import { useNoteLabel, useNoteLabelBoolean, useNoteLabelWithDefault } from "../react/hooks";
-import { useContext } from "preact/hooks";
-import { ParentComponent } from "../react/react_utils";
 import FormTextBox from "../react/FormTextBox";
-import { Fragment } from "preact/jsx-runtime";
+import { useNoteLabel, useNoteLabelBoolean, useNoteLabelWithDefault } from "../react/hooks";
+import Icon from "../react/Icon";
+import { ParentComponent } from "../react/react_utils";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxItem, ComboBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
+import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
 
 const ICON_MAPPINGS: Record<ViewTypeOptions, string> = {
     grid: "bx bxs-grid",
