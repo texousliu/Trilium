@@ -154,6 +154,11 @@ export default class DesktopLayout {
                                                         )
                                                         .optChild(!isFloatingTitlebar, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
+                                                        .optChild(isNewLayout, (
+                                                            <Ribbon>
+                                                                <NoteStatusBar />
+                                                            </Ribbon>
+                                                        ))
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
@@ -179,11 +184,6 @@ export default class DesktopLayout {
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
                                                             ...this.customWidgets.get("note-detail-pane")
                                                         )
-                                                        .optChild(isNewLayout, (
-                                                            <Ribbon>
-                                                                <NoteStatusBar />
-                                                            </Ribbon>
-                                                        ))
                                                         .optChild(isNewLayout, <StatusBar />)
                                                 )
                                             )
