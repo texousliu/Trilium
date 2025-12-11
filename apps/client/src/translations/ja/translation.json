@@ -458,7 +458,8 @@
     "convert_into_attachment_successful": "ノート '{{title}}' は添付ファイルに変換されました。",
     "convert_into_attachment_prompt": "本当にノート '{{title}}' を親ノートの添付ファイルに変換しますか？",
     "note_attachments": "ノートの添付ファイル",
-    "open_note_on_server": "サーバー上のノートを開く"
+    "open_note_on_server": "サーバー上のノートを開く",
+    "view_revisions": "ノートの変更履歴..."
   },
   "command_palette": {
     "export_note_title": "ノートをエクスポート",
@@ -1234,8 +1235,8 @@
   },
   "note_title": {
     "placeholder": "ここにノートのタイトルを入力...",
-    "created_on": "{{date}} に作成",
-    "last_modified": "{{date}} に最終更新"
+    "created_on": "作成日 <Value />",
+    "last_modified": "最終更新日 <Value />"
   },
   "search_result": {
     "no_notes_found": "指定された検索パラメータに該当するノートは見つかりませんでした。",
@@ -1332,8 +1333,9 @@
     "minimum_input": "入力された時間値は {{minimumSeconds}} 秒以上である必要があります。"
   },
   "note_language": {
-    "not_set": "未設定",
-    "configure-languages": "言語を設定..."
+    "not_set": "言語が設定されていません",
+    "configure-languages": "言語を設定...",
+    "help-on-languages": "コンテンツの言語に関するヘルプ..."
   },
   "content_language": {
     "title": "コンテンツの言語",
@@ -2133,6 +2135,14 @@
     "read_only_explicit": "読み取り専用",
     "read_only_auto": "自動的に読み取り専用",
     "shared_publicly": "公開で共有",
-    "shared_locally": "ローカルで共有"
+    "shared_locally": "ローカルで共有",
+    "read_only_explicit_description": "このノートは手動で読み取り専用に設定されています。\nクリックすると一時的に編集できます。",
+    "read_only_temporarily_disabled": "一時的に編集可能",
+    "read_only_auto_description": "このノートはパフォーマンス上の理由により、自動的に読み取り専用モードに設定されました。この自動制限は設定から調整できます。\n\n一時的に編集するにはクリックしてください。",
+    "read_only_temporarily_disabled_description": "このノートは現在編集可能ですが、通常は読み取り専用です。別のノートに移動すると読み取り専用に戻ります。\n\nクリックすると読み取り専用モードが再度有効になります。",
+    "shared_publicly_description": "このノートは {{- link}} でオンライン公開されており、誰でも閲覧可能です。\n\n共有ノートに移動するにはクリックするか、右クリックしてその他のオプションを選択してください。",
+    "shared_locally_description": "このノートは、{{- link}} でローカルネットワークのみで共有されています。\n\nクリックして共有ノートに移動するか、右クリックしてその他のオプションを選択してください。",
+    "backlinks_other": "{{count}} バックリンク",
+    "backlinks_description_other": "このノートは {{count}} 件の他のノートからリンクされています。\n\nクリックするとバックリンクのリストが表示されます。"
   }
 }
