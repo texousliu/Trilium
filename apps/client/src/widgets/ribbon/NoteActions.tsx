@@ -116,6 +116,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             <FormDropdownDivider />
 
             <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
+            {isNewLayout && <CommandItem command="toggleRibbonTabNoteMap" icon="bx bxs-network-chart" disabled={isInOptionsOrHelp} text={t("note_actions.note_map")} />}
             {glob.isDev && <>
                 <FormDropdownDivider />
                 <DevelopmentActions note={note} noteContext={noteContext} />

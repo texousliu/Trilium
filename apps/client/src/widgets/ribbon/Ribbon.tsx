@@ -67,7 +67,7 @@ export default function Ribbon({ children }: { children?: preact.ComponentChildr
     useTriliumEvents(eventsToListenTo, useCallback((e, toggleCommand) => {
         if (!computedTabs) return;
         const correspondingTab = computedTabs.find(tab => tab.toggleCommand === toggleCommand);
-        if (correspondingTab) {
+        if (correspondingTab?.shouldShow) {
             if (activeTabIndex !== correspondingTab.index) {
                 setActiveTabIndex(correspondingTab.index);
             } else {

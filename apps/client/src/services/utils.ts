@@ -460,7 +460,7 @@ export async function openInAppHelpFromUrl(inAppHelpPage: string) {
             notePath: targetNote,
             hoistedNoteId: "_help",
             viewScope
-        })
+        });
     } else {
         // There is already a help window open, make sure it opens on the right note.
         helpSubcontext.setNote(targetNote, { viewScope });

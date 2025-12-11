@@ -119,7 +119,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("note_map.title"),
         icon: "bx bxs-network-chart",
         content: NoteMapTab,
-        show: true,
+        show: !isNewLayout,
         toggleCommand: "toggleRibbonTabNoteMap"
     },
     {

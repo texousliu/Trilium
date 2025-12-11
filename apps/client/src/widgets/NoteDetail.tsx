@@ -299,8 +299,10 @@ async function getWidgetType(note: FNote | null | undefined, noteContext: NoteCo
 
     if (noteContext?.viewScope?.viewMode === "source") {
         resultingType = "readOnlyCode";
-    } else if (noteContext?.viewScope && noteContext.viewScope.viewMode === "attachments") {
+    } else if (noteContext.viewScope?.viewMode === "attachments") {
         resultingType = noteContext.viewScope.attachmentId ? "attachmentDetail" : "attachmentList";
+    } else if (noteContext.viewScope?.viewMode === "note-map") {
+        resultingType = "noteMap";
     } else if (type === "text" && (await noteContext?.isReadOnly())) {
         resultingType = "readOnlyText";
     } else if ((type === "code" || type === "mermaid") && (await noteContext?.isReadOnly())) {

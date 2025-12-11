@@ -193,6 +193,22 @@ export default class RootCommandExecutor extends Component {
         appContext.triggerEvent("zenModeChanged", { isEnabled });
     }
 
+    async toggleRibbonTabNoteMapCommand() {
+        const { isExperimentalFeatureEnabled } = await import("../services/experimental_features.js");
+        const isNewLayout = isExperimentalFeatureEnabled("new-layout");
+        if (!isNewLayout) return;
+
+        const activeContext = appContext.tabManager.getActiveContext();
+        if (!activeContext) return;
+
+        const subContexts = activeContext.getSubContexts();
+        appContext.triggerCommand("openNewNoteSplit", {
+            ntxId: subContexts[subContexts.length - 1].ntxId,
+            notePath: activeContext.notePath,
+            viewScope: { viewMode: "note-map" }
+        });
+    }
+
     firstTabCommand() {
         this.#goToTab(1);
     }
