@@ -132,7 +132,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
     {
         title: t("note_info_widget.title"),
         icon: "bx bx-info-circle",
-        show: ({ note }) => !!note,
+        show: ({ note }) => !isNewLayout && !!note,
         content: NoteInfoTab,
         toggleCommand: "toggleRibbonTabNoteInfo"
     }
