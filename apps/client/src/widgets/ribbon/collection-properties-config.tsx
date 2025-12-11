@@ -45,7 +45,7 @@ export interface NumberProperty {
     disabled?: (note: FNote) => boolean;
 }
 
-interface ComboBoxItem {
+export interface ComboBoxItem {
     value: string;
     label: string;
 }
@@ -58,6 +58,7 @@ interface ComboBoxGroup {
 export interface ComboBoxProperty {
     type: "combobox",
     label: string;
+    icon?: string;
     bindToLabel: FilterLabelsByType<string>;
     /**
      * The default value is used when the label is not set.
@@ -125,6 +126,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: [
             {
                 label: t("book_properties_config.map-style"),
+                icon: "bx bx-palette",
                 type: "combobox",
                 bindToLabel: "map:style",
                 defaultValue: DEFAULT_MAP_LAYER_NAME,
@@ -177,6 +179,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
             {
                 label: "Theme",
                 type: "combobox",
+                icon: "bx bx-palette",
                 bindToLabel: "presentation:theme",
                 defaultValue: DEFAULT_THEME,
                 options: getPresentationThemes().map(theme => ({

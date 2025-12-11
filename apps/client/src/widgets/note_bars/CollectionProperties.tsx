@@ -5,11 +5,12 @@ import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
 import Icon from "../react/Icon";
 import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
-import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxItem, ComboBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
+import { useNoteLabel, useNoteLabelBoolean, useNoteLabelWithDefault } from "../react/hooks";
 import { useContext } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
 import FormTextBox from "../react/FormTextBox";
+import { Fragment } from "preact/jsx-runtime";
 
 const ICON_MAPPINGS: Record<ViewTypeOptions, string> = {
     grid: "bx bxs-grid",
@@ -86,6 +87,8 @@ function ViewProperty({ note, property }: { note: FNote, property: BookProperty 
             return <CheckBoxPropertyView note={note} property={property} />;
         case "number":
             return <NumberPropertyView note={note} property={property} />;
+        case "combobox":
+            return <ComboBoxPropertyView note={note} property={property} />;
     }
 }
 
@@ -147,6 +150,43 @@ function NumberPropertyView({ note, property }: { note: FNote, property: NumberP
             />
         </FormListItem>
     );
+}
+
+function ComboBoxPropertyView({ note, property }: { note: FNote, property: ComboBoxProperty }) {
+    const [ value, setValue ] = useNoteLabelWithDefault(note, property.bindToLabel, property.defaultValue ?? "");
+
+    function renderItem(option: ComboBoxItem) {
+        return (
+            <FormListItem
+                key={option.value}
+                checked={value === option.value}
+                onClick={() => setValue(option.value)}
+            >
+                {option.label}
+            </FormListItem>
+        );
+    }
+
+    return (
+        <FormDropdownSubmenu
+            title={property.label}
+            icon={property.icon ?? "bx bx-empty"}
+        >
+            {(property.options).map((option, index) => {
+                if ("items" in option) {
+                    return (
+                        <Fragment key={option.title}>
+                            <FormListItem key={option.title} disabled>{option.title}</FormListItem>
+                            {option.items.map(renderItem)}
+                            {index < property.options.length - 1 && <FormDropdownDivider />}
+                        </Fragment>
+                    );
+                } else {
+                    return renderItem(option);
+                }
+            })}
+        </FormDropdownSubmenu>
+    )
 }
 
 function CheckBoxPropertyView({ note, property }: { note: FNote, property: CheckBoxProperty }) {
