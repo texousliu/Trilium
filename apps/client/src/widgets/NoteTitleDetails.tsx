@@ -1,46 +1,13 @@
-import { type ComponentChild } from "preact";
-
-import { formatDateTime } from "../utils/formatters";
-import { useNoteContext, useStaticTooltip } from "./react/hooks";
-import { joinElements } from "./react/react_utils";
-import { useNoteMetadata } from "./ribbon/NoteInfoTab";
-import { Trans } from "react-i18next";
-import { useRef } from "preact/hooks";
+import CollectionProperties from "./note_bars/CollectionProperties";
+import { useNoteContext, useNoteProperty } from "./react/hooks";
 
 export default function NoteTitleDetails() {
-    const { note, noteContext } = useNoteContext();
-    const isHiddenNote = note?.noteId.startsWith("_");
-    const isDefaultView = noteContext?.viewScope?.viewMode === "default";
-
-    const items: ComponentChild[] = [].filter(item => !!item);
-
-    return items.length && (
-        <div className="title-details">
-            {joinElements(items, " • ")}
-        </div>
-    );
-}
-
-function TextWithValue({ i18nKey, value, valueTooltip }: {
-    i18nKey: string;
-    value: string;
-    valueTooltip: string;
-}) {
-    const listItemRef = useRef<HTMLLIElement>(null);
-    useStaticTooltip(listItemRef, {
-        selector: "span.value",
-        title: valueTooltip,
-        popperConfig: { placement: "bottom" }
-    });
+    const { note } = useNoteContext();
+    const noteType = useNoteProperty(note, "type");
 
     return (
-        <li ref={listItemRef}>
-            <Trans
-                i18nKey={i18nKey}
-                components={{
-                    Value: <span className="value">{value}</span> as React.ReactElement
-                }}
-            />
-        </li>
+        <div className="title-details">
+            {note && noteType === "book" && <CollectionProperties note={note} />}
+        </div>
     );
 }
