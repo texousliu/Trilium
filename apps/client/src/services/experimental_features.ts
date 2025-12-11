@@ -12,6 +12,11 @@ export const experimentalFeatures = [
         id: "new-layout",
         name: t("experimental_features.new_layout_name"),
         description: t("experimental_features.new_layout_description"),
+    },
+    {
+        id: "floating-titlebar",
+        name: t("experimental_features.floating_titlebar"),
+        description: t("experimental_features.floating_titlebar_description"),
     }
 ] as const satisfies ExperimentalFeature[];
 

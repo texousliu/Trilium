@@ -30,7 +30,6 @@ body.desktop .note-title-widget input.note-title {
 }
 
 body.experimental-feature-new-layout {
-    .title-row,
     .title-details {
         max-width: var(--max-content-width);
         padding: 0;
@@ -52,14 +51,6 @@ body.experimental-feature-new-layout {
         }
     }
 
-    .title-row {
-        .note-icon-widget {
-            padding: 0;
-            width: 41px;
-        }
-    }
-
-    .note-split.type-code:not(.mime-text-x-sqlite) .title-row,
     .note-split.type-code:not(.mime-text-x-sqlite) .title-details {
         background-color: var(--main-background-color);
     }
@@ -79,21 +70,48 @@ body.experimental-feature-new-layout {
 
     .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
     .note-split.type-book {
-        .title-row,
         .title-details {
             width: 100%;
             max-width: unset;
             padding-inline-start: 15px;
-        }
-
-        .title-details {
             padding-bottom: 0.2em;
             font-size: 0.8em;
         }
     }
 
-    &.prefers-centered-content .title-row,
     &.prefers-centered-content .title-details {
+        margin-inline: auto;
+    }
+}
+
+body.experimental-feature-floating-titlebar {
+    .title-row {
+        max-width: var(--max-content-width);
+        padding: 0;
+        padding-inline-start: 24px;
+    }
+
+    .note-icon-widget {
+        padding: 0;
+        width: 41px;
+    }
+
+    .note-split.type-code:not(.mime-text-x-sqlite) .title-row {
+        background-color: var(--main-background-color);
+    }
+
+    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
+    .note-split.type-book {
+        .title-row {
+            width: 100%;
+            max-width: unset;
+            padding-inline-start: 15px;
+            padding-bottom: 0.2em;
+            font-size: 0.8em;
+        }
+    }
+
+    &.prefers-centered-content .title-row {
         margin-inline: auto;
     }
 }

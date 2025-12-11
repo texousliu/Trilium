@@ -79,6 +79,7 @@ export default class DesktopLayout {
         const fullWidthTabBar = launcherPaneIsHorizontal || (isElectron && !hasNativeTitleBar && isMac);
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
         const isNewLayout = isExperimentalFeatureEnabled("new-layout");
+        const isFloatingTitlebar = isExperimentalFeatureEnabled("floating-titlebar");
 
         const titleRow = new FlexContainer("row")
             .class("title-row")
@@ -149,7 +150,7 @@ export default class DesktopLayout {
                                                                 .child(<CreatePaneButton />)
                                                                 .optChild(isNewLayout, <NoteActions />)
                                                         )
-                                                        .optChild(!isNewLayout, titleRow)
+                                                        .optChild(!isFloatingTitlebar, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
                                                         .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
                                                         .child(new WatchedFileUpdateStatusWidget())
@@ -157,7 +158,7 @@ export default class DesktopLayout {
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
-                                                                .optChild(isNewLayout, titleRow)
+                                                                .optChild(isFloatingTitlebar, titleRow)
                                                                 .optChild(isNewLayout, <NoteTitleDetails />)
                                                                 .optChild(!isNewLayout, new ContentHeader()
                                                                     .child(<ReadOnlyNoteInfoBar />)
