@@ -67,7 +67,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("note_properties.info"),
         icon: "bx bx-info-square",
         content: NotePropertiesTab,
-        show: ({ note }) => !!note?.getLabelValue("pageUrl"),
+        show: ({ note }) => !isNewLayout && !!note?.getLabelValue("pageUrl"),
         activate: true
     },
     {

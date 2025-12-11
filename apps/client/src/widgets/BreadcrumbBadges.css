@@ -33,6 +33,7 @@
     &.temporarily-editable-badge { --color: #4fa52b; }
     &.read-only-badge { --color: #e33f3b; }
     &.share-badge { --color: #3b82f6; }
+    &.clipped-note-badge { --color: #57a2a5; }
     &.backlinks-badge { color: var(--badge-text-color); }
 
     a {
