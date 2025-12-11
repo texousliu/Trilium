@@ -12,6 +12,9 @@ import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxItem, ComboBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
 import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
+import ActionButton from "../react/ActionButton";
+import { getHelpUrlForNote } from "../../services/in_app_help";
+import { openInAppHelpFromUrl } from "../../services/utils";
 
 const ICON_MAPPINGS: Record<ViewTypeOptions, string> = {
     grid: "bx bxs-grid",
@@ -28,13 +31,15 @@ export default function CollectionProperties({ note }: { note: FNote }) {
 
     return (
         <>
-            <ViewTypeSwitcher note={note} viewType={viewType} setViewType={setViewType} />
+            <ViewTypeSwitcher viewType={viewType} setViewType={setViewType} />
             <ViewOptions note={note} viewType={viewType} />
+            <div className="spacer" />
+            <HelpButton note={note} />
         </>
     );
 }
 
-function ViewTypeSwitcher({ note, viewType, setViewType }: { note: FNote, viewType: ViewTypeOptions, setViewType: (newValue: ViewTypeOptions) => void }) {
+function ViewTypeSwitcher({ viewType, setViewType }: { viewType: ViewTypeOptions, setViewType: (newValue: ViewTypeOptions) => void }) {
     return (
         <Dropdown
             text={<>
@@ -187,7 +192,7 @@ function ComboBoxPropertyView({ note, property }: { note: FNote, property: Combo
                 }
             })}
         </FormDropdownSubmenu>
-    )
+    );
 }
 
 function CheckBoxPropertyView({ note, property }: { note: FNote, property: CheckBoxProperty }) {
@@ -202,3 +207,14 @@ function CheckBoxPropertyView({ note, property }: { note: FNote, property: Check
     );
 }
 
+function HelpButton({ note }: { note: FNote }) {
+    const helpUrl = getHelpUrlForNote(note);
+
+    return (helpUrl && (
+        <ActionButton
+            icon="bx bx-help-circle"
+            onClick={(() => openInAppHelpFromUrl(helpUrl))}
+            text={t("help-button.title")}
+        />
+    ));
+}

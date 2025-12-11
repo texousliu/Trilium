@@ -300,8 +300,9 @@ function ExportImageButtons({ note, triggerEvent, isDefaultViewMode }: FloatingB
 
 function InAppHelpButton({ note }: FloatingButtonContext) {
     const helpUrl = getHelpUrlForNote(note);
+    const isEnabled = !!helpUrl && (!isNewLayout || (note?.type !== "book"));
 
-    return !!helpUrl && (
+    return isEnabled && (
         <FloatingButton
             icon="bx bx-help-circle"
             text={t("help-button.title")}

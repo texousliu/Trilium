@@ -38,11 +38,17 @@ body.experimental-feature-new-layout {
     }
 
     .title-details {
+        padding-inline-end: 16px;
+
         .dropdown-menu {
             input.form-control {
                 padding: 2px 8px;
                 margin-left: 1em;
             }
+        }
+
+        .spacer {
+            flex-grow: 1;
         }
     }
 
