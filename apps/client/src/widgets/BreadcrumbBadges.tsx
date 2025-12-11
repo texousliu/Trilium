@@ -48,7 +48,7 @@ function NoteInfoBadge() {
 function NoteInfoValue({ text, value }: { text: string; value: ComponentChildren }) {
     return (
         <li>
-            <strong>{text}</strong>{": "}
+            <strong>{text}{": "}</strong>
             <span>{value}</span>
         </li>
     );
