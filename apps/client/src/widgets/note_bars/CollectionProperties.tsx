@@ -2,10 +2,10 @@ import { t } from "i18next";
 import FNote from "../../entities/fnote";
 import { ViewTypeOptions } from "../collections/interface";
 import Dropdown from "../react/Dropdown";
-import { FormDropdownDivider, FormListItem, FormListToggleableItem } from "../react/FormList";
+import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
 import Icon from "../react/Icon";
 import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty } from "../ribbon/collection-properties-config";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
 import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
 import { useContext } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
@@ -78,6 +78,8 @@ function ViewProperty({ note, property }: { note: FNote, property: BookProperty 
     switch (property.type) {
         case "button":
             return <ButtonPropertyView note={note} property={property} />;
+        case "split-button":
+            return <SplitButtonPropertyView note={note} property={property} />;
         case "checkbox":
             return <CheckBoxPropertyView note={note} property={property} />;
     }
@@ -98,6 +100,17 @@ function ButtonPropertyView({ note, property }: { note: FNote, property: ButtonP
                 });
             }}
         >{property.label}</FormListItem>
+    );
+}
+
+function SplitButtonPropertyView({ note, property }: { note: FNote, property: SplitButtonProperty }) {
+    const parentComponent = useContext(ParentComponent);
+    const ItemsComponent = property.items;
+
+    return (parentComponent &&
+        <FormDropdownSubmenu icon={property.icon ?? "bx bx-empty"} title={property.label}>
+            <ItemsComponent note={note} parentComponent={parentComponent} />
+        </FormDropdownSubmenu>
     );
 }
 
