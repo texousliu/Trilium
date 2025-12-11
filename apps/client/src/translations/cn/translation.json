@@ -1577,7 +1577,9 @@
     "printing_pdf": "正在导出为PDF…"
   },
   "note_title": {
-    "placeholder": "请输入笔记标题..."
+    "placeholder": "请输入笔记标题...",
+    "created_on": "建立于 {{date}}",
+    "last_modified": "最后修改于 {{date}}"
   },
   "search_result": {
     "no_notes_found": "没有找到符合搜索条件的笔记。",
@@ -2116,5 +2118,21 @@
     "unknown_http_error_title": "与服务器通讯错误",
     "unknown_http_error_content": "状态码: {{statusCode}}\n地址: {{method}} {{url}}\n信息: {{message}}",
     "traefik_blocks_requests": "如果您使用 Traefik 反向代理，它引入了一项影响与服务器的通信重大更改。"
+  },
+  "experimental_features": {
+    "title": "实验选项",
+    "disclaimer": "这些选项处于实验阶段，可能导致系统不稳定。请谨慎使用。",
+    "new_layout_name": "新布局",
+    "new_layout_description": "尝试全新布局，呈现更现代的外观并提升易用性。后续版本将进行重大调整。"
+  },
+  "tab_history_navigation_buttons": {
+    "go-back": "返回前一笔记",
+    "go-forward": "前往下一笔记"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "只读",
+    "read_only_auto": "自动只读",
+    "shared_publicly": "公开共享",
+    "shared_locally": "本地共享"
   }
 }

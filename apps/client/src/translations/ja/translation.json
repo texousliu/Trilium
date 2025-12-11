@@ -1233,7 +1233,9 @@
     "none_yet": "アクションを上のリストからクリックして追加。"
   },
   "note_title": {
-    "placeholder": "ここにノートのタイトルを入力..."
+    "placeholder": "ここにノートのタイトルを入力...",
+    "created_on": "{{date}} に作成",
+    "last_modified": "{{date}} に最終更新"
   },
   "search_result": {
     "no_notes_found": "指定された検索パラメータに該当するノートは見つかりませんでした。",
@@ -1779,7 +1781,7 @@
     "placeholder": "ここにノートの内容を入力...",
     "auto-detect-language": "自動検出",
     "keeps-crashing": "編集コンポーネントがクラッシュし続けます。Trilium を再起動してください。問題が解決しない場合は、バグレポートの作成をご検討ください。",
-    "editor_crashed_title": "テキストエディタがクラッシュしました",
+    "editor_crashed_title": "テキストエディターがクラッシュしました",
     "editor_crashed_content": "コンテンツは正常に復元されましたが、最近の変更の一部が保存されていない可能性があります。",
     "editor_crashed_details_button": "詳細を見る...",
     "editor_crashed_details_intro": "このエラーが何度も発生する場合は、以下の情報を貼り付けて GitHub に報告することを検討してください。",
@@ -2116,5 +2118,21 @@
     "unknown_http_error_title": "サーバーとの通信エラー",
     "unknown_http_error_content": "ステータスコード: {{statusCode}}\nURL: {{method}} {{url}}\nメッセージ: {{message}}",
     "traefik_blocks_requests": "Traefik リバース プロキシを使用している場合、サーバーとの通信に影響する重大な変更が導入されました。"
+  },
+  "tab_history_navigation_buttons": {
+    "go-back": "前のノートに戻る",
+    "go-forward": "次のノートに進む"
+  },
+  "experimental_features": {
+    "title": "実験オプション",
+    "disclaimer": "これらのオプションは試験的なもので、動作が不安定になる可能性があります。注意してご使用ください。",
+    "new_layout_name": "新しいレイアウト",
+    "new_layout_description": "よりモダンな外観と使いやすさが向上した新しいレイアウトをお試しください。今後のリリースで大幅な変更が加えられる可能性があります。"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "読み取り専用",
+    "read_only_auto": "自動的に読み取り専用",
+    "shared_publicly": "公開で共有",
+    "shared_locally": "ローカルで共有"
   }
 }

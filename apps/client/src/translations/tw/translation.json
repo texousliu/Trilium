@@ -205,7 +205,8 @@
   "info": {
     "modalTitle": "資訊消息",
     "closeButton": "關閉",
-    "okButton": "確定"
+    "okButton": "確定",
+    "copy_to_clipboard": "複製到剪貼簿"
   },
   "jump_to_note": {
     "search_button": "全文搜尋",
@@ -986,7 +987,12 @@
   "editable_text": {
     "placeholder": "在這裡輸入您的筆記內容…",
     "auto-detect-language": "自動檢測",
-    "keeps-crashing": "編輯元件持續發生崩潰。請嘗試重新啟動 Trilium。若問題仍存在，請考慮提交錯誤報告。"
+    "keeps-crashing": "編輯元件持續發生崩潰。請嘗試重新啟動 Trilium。若問題仍存在，請考慮提交錯誤報告。",
+    "editor_crashed_title": "文字編輯器崩潰",
+    "editor_crashed_content": "您的內容已成功恢復，但最近的幾項變更可能未被儲存。",
+    "editor_crashed_details_button": "檢視更多資訊⋯",
+    "editor_crashed_details_intro": "若您多次遇到此錯誤，請考慮在 GitHub 回報以下資訊。",
+    "editor_crashed_details_title": "技術資訊"
   },
   "empty": {
     "open_note_instruction": "透過在下面的輸入框中輸入筆記標題或在樹中選擇筆記來打開筆記。",
@@ -1531,7 +1537,9 @@
     "printing_pdf": "正在匯出為 PDF…"
   },
   "note_title": {
-    "placeholder": "請輸入筆記標題..."
+    "placeholder": "請輸入筆記標題...",
+    "created_on": "建立於 {{date}}",
+    "last_modified": "最後修改於 {{date}}"
   },
   "search_result": {
     "no_notes_found": "沒有找到符合搜尋條件的筆記。",
@@ -2106,5 +2114,26 @@
   },
   "popup-editor": {
     "maximize": "切換至完整編輯器"
+  },
+  "experimental_features": {
+    "title": "實驗性選項",
+    "disclaimer": "這些選項屬實驗性質，可能導致系統不穩定。請謹慎使用。",
+    "new_layout_name": "新版面配置",
+    "new_layout_description": "體驗全新版面配置，呈現更現代的外觀與更佳的使用體驗。在未來版本將進行大幅調整。"
+  },
+  "server": {
+    "unknown_http_error_title": "與伺服器通訊錯誤",
+    "unknown_http_error_content": "狀態碼：{{statusCode}}\n網址：{{method}} {{url}}\n訊息：{{message}}",
+    "traefik_blocks_requests": "若您正在使用 Traefik 反向代理，該代理已引入一項重大變更影響與伺服器的通訊。"
+  },
+  "tab_history_navigation_buttons": {
+    "go-back": "返回前一筆記",
+    "go-forward": "前往下一筆記"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "唯讀",
+    "read_only_auto": "自動唯讀",
+    "shared_publicly": "公開分享",
+    "shared_locally": "本地分享"
   }
 }

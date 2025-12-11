@@ -108,6 +108,11 @@
     "cloned_note_prefix_title": "Klonovaná poznámka se zobrazí ve stromu poznámek s danou předponou",
     "clone_to_selected_note": "Klonovat vybranou poznámku",
     "no_path_to_clone_to": "Žádná cest pro klonování.",
-    "note_cloned": "Poznámka: „{{clonedTitle}}“ bylo naklonováno do „{{targetTitle}}“"
+    "note_cloned": "Poznámka „{{clonedTitle}}“ bylo naklonována do „{{targetTitle}}“"
+  },
+  "zpetne_odkazy": {
+    "backlink_one": "{{count}} zpětný odkaz",
+    "backlink_few": "{{count}} zpětné odkazy",
+    "backlink_other": "{{count}} zpětných odkazů"
   }
 }

@@ -95,8 +95,8 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 * 用于快速保存网页内容的 [Web
   Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper)
 * 可自定义的 UI（侧边栏按钮、用户自定义小组件等）
-* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
-  along with a Grafana Dashboard.
+* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics)，以及
+  Grafana 仪表板。
 
 ✨ 想要更多 TriliumNext 的主题、脚本、外挂与资源，亦可参考以下第三方资源／社群：
 
