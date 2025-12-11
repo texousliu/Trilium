@@ -91,13 +91,24 @@ export default class MathInputView extends View {
 
 		textarea.addEventListener( 'input', () => {
 			const val = textarea.value;
-			if ( this.mathfield ) {
-				this.mathfield.setValue( val, { silenceNotifications: true } );
-			}
 			this.value = val || null;
+			if ( this.mathfield ) {
+				if ( val === '' ) {
+					this.mathfield.remove();
+					this.mathfield = null;
+					this._createMathField();
+				} else {
+					this.mathfield.setValue( val, { silenceNotifications: true } );
+				}
+			}
+			this._isSyncing = false;
 		} );
 
 		this.on( 'change:value', ( _e, _n, val ) => {
+			if ( this._isSyncing ) {
+				return;
+			}
+			this._isSyncing = true;
 			const newVal = val ?? '';
 			textarea.value = newVal;
 			if ( this.mathfield && this.mathfield.value !== newVal ) {
@@ -167,6 +178,7 @@ export default class MathInputView extends View {
 			const val = mf.value;
 			this.latexTextAreaView.element.value = val;
 			this.value = val || null;
+			this._isSyncing = false;
 		} );
 
 		container.appendChild( mf );

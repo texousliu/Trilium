@@ -116,7 +116,7 @@ export default class MainFormView extends View {
 
 		this.mathInputView.on( 'mathfieldReady', () => {
 			const mathfieldView = this.mathInputView.mathFieldFocusableView;
-			if ( mathfieldView.element ) {
+			if ( mathfieldView.element && !this._focusables.has( mathfieldView ) ) {
 				this._focusables.add( mathfieldView, 0 );
 				this.focusTracker.add( mathfieldView.element );
 			}
