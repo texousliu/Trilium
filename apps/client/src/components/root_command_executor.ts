@@ -6,7 +6,7 @@ import openService from "../services/open.js";
 import protectedSessionService from "../services/protected_session.js";
 import options from "../services/options.js";
 import froca from "../services/froca.js";
-import utils from "../services/utils.js";
+import utils, { openInReusableSplit } from "../services/utils.js";
 import toastService from "../services/toast.js";
 import noteCreateService from "../services/note_create.js";
 
@@ -199,14 +199,8 @@ export default class RootCommandExecutor extends Component {
         if (!isNewLayout) return;
 
         const activeContext = appContext.tabManager.getActiveContext();
-        if (!activeContext) return;
-
-        const subContexts = activeContext.getSubContexts();
-        appContext.triggerCommand("openNewNoteSplit", {
-            ntxId: subContexts[subContexts.length - 1].ntxId,
-            notePath: activeContext.notePath,
-            viewScope: { viewMode: "note-map" }
-        });
+        if (!activeContext?.notePath) return;
+        openInReusableSplit(activeContext.notePath, "note-map");
     }
 
     firstTabCommand() {
