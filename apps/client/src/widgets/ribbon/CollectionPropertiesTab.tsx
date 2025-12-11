@@ -12,34 +12,41 @@ import FormCheckbox from "../react/FormCheckbox";
 import FormTextBox from "../react/FormTextBox";
 import { ComponentChildren } from "preact";
 import { ViewTypeOptions } from "../collections/interface";
-import { FormDropdownDivider, FormListItem } from "../react/FormList";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 
-const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
-  grid: t("book_properties.grid"),
-  list: t("book_properties.list"),
-  calendar: t("book_properties.calendar"),
-  table: t("book_properties.table"),
-  geoMap: t("book_properties.geo-map"),
-  board: t("book_properties.board"),
-  presentation: t("book_properties.presentation")
+export const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
+    grid: t("book_properties.grid"),
+    list: t("book_properties.list"),
+    calendar: t("book_properties.calendar"),
+    table: t("book_properties.table"),
+    geoMap: t("book_properties.geo-map"),
+    board: t("book_properties.board"),
+    presentation: t("book_properties.presentation")
 };
 
-export default function CollectionPropertiesTab({ note }: TabContext) {
-  const [ viewType, setViewType ] = useNoteLabel(note, "viewType");
-  const defaultViewType = (note?.type === "search" ? "list" : "grid");
-  const viewTypeWithDefault = (viewType ?? defaultViewType) as ViewTypeOptions;
-  const properties = bookPropertiesConfig[viewTypeWithDefault].properties;
+const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
-  return (
-    <div className="book-properties-widget">
-      {note && (
-        <>
-          <CollectionTypeSwitcher viewType={viewTypeWithDefault} setViewType={setViewType} />
-          <BookProperties viewType={viewTypeWithDefault} note={note} properties={properties} />
-        </>
-      )}
-    </div>
-  );
+export default function CollectionPropertiesTab({ note }: TabContext) {
+    const [viewType, setViewType] = useViewType(note);
+    const properties = bookPropertiesConfig[viewType].properties;
+
+    return (
+        <div className="book-properties-widget">
+            {note && (
+                <>
+                    {!isNewLayout && <CollectionTypeSwitcher viewType={viewType} setViewType={setViewType} />}
+                    <BookProperties viewType={viewType} note={note} properties={properties} />
+                </>
+            )}
+        </div>
+    );
+}
+
+export function useViewType(note: FNote | null | undefined) {
+    const [ viewType, setViewType ] = useNoteLabel(note, "viewType");
+    const defaultViewType = (note?.type === "search" ? "list" : "grid");
+    const viewTypeWithDefault = (viewType ?? defaultViewType) as ViewTypeOptions;
+    return [ viewTypeWithDefault, setViewType ] as const;
 }
 
 function CollectionTypeSwitcher({ viewType, setViewType }: { viewType: string, setViewType: (newValue: string) => void }) {
@@ -148,7 +155,7 @@ function NumberPropertyView({ note, property }: { note: FNote, property: NumberP
             <FormTextBox
                 type="number"
                 currentValue={value ?? ""} onChange={setValue}
-                style={{ width: (property.width ?? 100) + "px" }}
+                style={{ width: (property.width ?? 100) }}
                 min={property.min ?? 0}
                 disabled={disabled}
             />

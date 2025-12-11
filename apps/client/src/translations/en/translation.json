@@ -2031,7 +2031,7 @@
   "book_properties_config": {
     "hide-weekends": "Hide weekends",
     "display-week-numbers": "Display week numbers",
-    "map-style": "Map style:",
+    "map-style": "Map style",
     "max-nesting-depth": "Max nesting depth:",
     "raster": "Raster",
     "vector_light": "Vector (Light)",
@@ -2146,6 +2146,12 @@
     "backlinks_one": "{{count}} backlink",
     "backlinks_other": "{{count}} backlinks",
     "backlinks_description_one": "This note is linked from {{count}} other note.\n\nClick to view the list of backlinks.",
-    "backlinks_description_other": "This note is linked from {{count}} other notes.\n\nClick to view the list of backlinks."
+    "backlinks_description_other": "This note is linked from {{count}} other notes.\n\nClick to view the list of backlinks.",
+    "clipped_note": "Web clip",
+    "clipped_note_description": "This note was originally taken from {{url}}.\n\nClick to navigate to the source webpage.",
+    "execute_script": "Run script",
+    "execute_script_description": "This note is a script note. Click to execute the script.",
+    "execute_sql": "Run SQL",
+    "execute_sql_description": "This note is a SQL note. Click to execute the SQL query."
   }
 }

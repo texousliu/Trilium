@@ -206,10 +206,11 @@ export function FormDropdownDivider() {
     return <div className="dropdown-divider" />;
 }
 
-export function FormDropdownSubmenu({ icon, title, children, dropStart }: {
+export function FormDropdownSubmenu({ icon, title, children, dropStart, onDropdownToggleClicked }: {
     icon: string,
     title: ComponentChildren,
     children: ComponentChildren,
+    onDropdownToggleClicked?: () => void,
     dropStart?: boolean
 }) {
     const [ openOnMobile, setOpenOnMobile ] = useState(false);
@@ -223,6 +224,10 @@ export function FormDropdownSubmenu({ icon, title, children, dropStart }: {
 
                     if (isMobile()) {
                         setOpenOnMobile(!openOnMobile);
+                    }
+
+                    if (onDropdownToggleClicked) {
+                        onDropdownToggleClicked();
                     }
                 }}
             >

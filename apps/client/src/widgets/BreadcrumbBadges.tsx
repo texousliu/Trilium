@@ -8,7 +8,7 @@ import { t } from "../services/i18n";
 import { formatDateTime } from "../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "./FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "./react/Dropdown";
-import { useIsNoteReadOnly, useNoteContext, useStaticTooltip } from "./react/hooks";
+import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useStaticTooltip } from "./react/hooks";
 import Icon from "./react/Icon";
 import { NoteSizeWidget, useNoteMetadata } from "./ribbon/NoteInfoTab";
 import { useShareInfo } from "./shared_info";
@@ -20,6 +20,8 @@ export default function BreadcrumbBadges() {
             <ReadOnlyBadge />
             <ShareBadge />
             <BacklinksBadge />
+            <ClippedNoteBadge />
+            <ExecuteBadge />
         </div>
     );
 }
@@ -111,6 +113,40 @@ function BacklinksBadge() {
         >
             <BacklinksList note={note} />
         </BadgeWithDropdown>
+    );
+}
+
+function ClippedNoteBadge() {
+    const { note } = useNoteContext();
+    const [ pageUrl ] = useNoteLabel(note, "pageUrl");
+
+    return (pageUrl &&
+        <Badge
+            className="clipped-note-badge"
+            icon="bx bx-globe"
+            text={t("breadcrumb_badges.clipped_note")}
+            tooltip={t("breadcrumb_badges.clipped_note_description", { url: pageUrl })}
+            href={pageUrl}
+        />
+    );
+}
+
+function ExecuteBadge() {
+    const { note, parentComponent } = useNoteContext();
+    const isScript = note?.isTriliumScript();
+    const isSql = note?.isTriliumSqlite();
+    const isExecutable = isScript || isSql;
+    const [ executeDescription ] = useNoteLabel(note, "executeDescription");
+    const [ executeButton ] = useNoteLabelBoolean(note, "executeButton");
+
+    return (note && isExecutable && (executeDescription || executeButton) &&
+        <Badge
+            className="execute-badge"
+            icon="bx bx-play"
+            text={isScript ? t("breadcrumb_badges.execute_script") : t("breadcrumb_badges.execute_sql")}
+            tooltip={executeDescription || (isScript ? t("breadcrumb_badges.execute_script_description") : t("breadcrumb_badges.execute_sql_description"))}
+            onClick={() => parentComponent.triggerCommand("runActiveNote")}
+        />
     );
 }
 

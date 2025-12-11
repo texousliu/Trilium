@@ -37,6 +37,21 @@ body.experimental-feature-new-layout {
         padding-inline-start: 24px;
     }
 
+    .title-details {
+        padding-inline-end: 16px;
+
+        .dropdown-menu {
+            input.form-control {
+                padding: 2px 8px;
+                margin-left: 1em;
+            }
+        }
+
+        .spacer {
+            flex-grow: 1;
+        }
+    }
+
     .title-row {
         margin-left: 12px;
 
@@ -75,7 +90,8 @@ body.experimental-feature-new-layout {
         }
     }
 
-    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)) {
+    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
+    .note-split.type-book {
         .title-row,
         .title-details {
             width: 100%;
@@ -84,12 +100,11 @@ body.experimental-feature-new-layout {
         }
 
         .title-row {
-            margin-top: 0;
+            padding: 0;
         }
 
         .title-details {
-            margin-bottom: 0.2em;
-            opacity: 0.65;
+            padding-bottom: 0.2em;
             font-size: 0.8em;
         }
     }

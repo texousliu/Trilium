@@ -38,7 +38,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         icon: "bx bx-play",
         content: ScriptTab,
         activate: true,
-        show: ({ note }) => note &&
+        show: ({ note }) => note && !isNewLayout &&
             (note.isTriliumScript() || note.isTriliumSqlite()) &&
             (note.hasLabel("executeDescription") || note.hasLabel("executeButton"))
     },
@@ -60,14 +60,14 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("book_properties.book_properties"),
         icon: "bx bx-book",
         content: CollectionPropertiesTab,
-        show: ({ note }) => note?.type === "book" || note?.type === "search",
+        show: ({ note }) => !isNewLayout && note?.type === "book" || note?.type === "search",
         toggleCommand: "toggleRibbonTabBookProperties"
     },
     {
         title: t("note_properties.info"),
         icon: "bx bx-info-square",
         content: NotePropertiesTab,
-        show: ({ note }) => !!note?.getLabelValue("pageUrl"),
+        show: ({ note }) => !isNewLayout && !!note?.getLabelValue("pageUrl"),
         activate: true
     },
     {
