@@ -18,7 +18,8 @@ interface BookConfig {
 export interface CheckBoxProperty {
     type: "checkbox",
     label: string;
-    bindToLabel: FilterLabelsByType<boolean>
+    bindToLabel: FilterLabelsByType<boolean>;
+    icon?: string;
 }
 
 export interface ButtonProperty {
@@ -107,11 +108,13 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: [
             {
                 label: t("book_properties_config.hide-weekends"),
+                icon: "bx bx-calendar-week",
                 type: "checkbox",
                 bindToLabel: "calendar:hideWeekends"
             },
             {
                 label: t("book_properties_config.display-week-numbers"),
+                icon: "bx bx-hash",
                 type: "checkbox",
                 bindToLabel: "calendar:weekNumbers"
             }
@@ -147,6 +150,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
             },
             {
                 label: t("book_properties_config.show-scale"),
+                icon: "bx bx-ruler",
                 type: "checkbox",
                 bindToLabel: "map:scale"
             }

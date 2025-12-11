@@ -67,6 +67,7 @@ function ViewOptions({ note, viewType }: { note: FNote, viewType: ViewTypeOption
 
             <ViewProperty note={note} property={{
                 type: "checkbox",
+                icon: "bx bx-archive",
                 label: t("book_properties.include_archived_notes"),
                 bindToLabel: "includeArchived"
             } as CheckBoxProperty} />
@@ -126,6 +127,7 @@ function CheckBoxPropertyView({ note, property }: { note: FNote, property: Check
     const [ value, setValue ] = useNoteLabelBoolean(note, property.bindToLabel);
     return (
         <FormListToggleableItem
+            icon={property.icon}
             title={property.label}
             currentValue={value}
             onChange={setValue}
