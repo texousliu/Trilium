@@ -14,6 +14,7 @@ import NoteLink from "./react/NoteLink";
 import link_context_menu from "../menus/link_context_menu";
 import { TitleEditor } from "./collections/board";
 import server from "../services/server";
+import { NoteInfoBadge } from "./BreadcrumbBadges";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
@@ -119,7 +120,10 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
     }
 
     if (index === notePathLength - 1) {
-        return <BreadcrumbLastItem notePath={notePath} />;
+        return <>
+            <BreadcrumbLastItem notePath={notePath} />
+            <NoteInfoBadge note={noteContext?.note} />
+        </>;
     }
 
     return <BreadcrumbLink notePath={notePath} />;

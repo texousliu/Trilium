@@ -9,67 +9,57 @@
     flex-shrink: 1;
     overflow: hidden;
     --badge-radius: 12px;
+}
 
-    .breadcrumb-badge {
-        display: flex;
-        align-items: center;
-        padding: 2px 6px;
-        border-radius: var(--badge-radius);
-        font-size: 0.75em;
-        background-color: var(--color, transparent);
-        color: white;
-        min-width: 0;
-        flex-shrink: 1;
+.breadcrumb-badge {
+    display: flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: var(--badge-radius);
+    font-size: 0.75em;
+    background-color: var(--color, transparent);
+    color: white;
+    min-width: 0;
+    flex-shrink: 1;
 
-        &.clickable {
-            cursor: pointer;
+    &.clickable {
+        cursor: pointer;
 
-            &:hover {
-                background-color: color-mix(in srgb, var(--color, --badge-background-color) 80%, black);
-            }
-        }
-
-        &.temporarily-editable-badge { --color: #4fa52b; }
-        &.read-only-badge { --color: #e33f3b; }
-        &.share-badge { --color: #3b82f6; }
-        &.backlinks-badge { color: var(--badge-text-color); }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        > * {
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        &:hover {
+            background-color: color-mix(in srgb, var(--color, --badge-background-color) 80%, black);
         }
     }
 
-    .dropdown {
+    &.temporarily-editable-badge { --color: #4fa52b; }
+    &.read-only-badge { --color: #e33f3b; }
+    &.share-badge { --color: #3b82f6; }
+    &.backlinks-badge { color: var(--badge-text-color); }
+
+    a {
+        color: inherit !important;
+        text-decoration: none;
+    }
+
+    > * {
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        border-radius: var(--badge-radius);
+    }
+}
 
-        &.dropdown-backlinks-badge .dropdown-menu {
-            min-width: 500px;
-        }
+.breadcrumb-dropdown-badge {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: var(--badge-radius);
 
-        .breadcrumb-badge {
-            border-radius: 0;
-        }
-
-        .btn {
-            border: 0;
-            margin: 0;
-            padding: 0;
-        }
+    &.dropdown-backlinks-badge .dropdown-menu {
+        min-width: 500px;
     }
 
-    .dropdown-note-info-badge {
+    &.dropdown-note-info-badge {
         .dropdown-menu.show ul {
             list-style-type: none;
             padding: 0.5em;
@@ -93,4 +83,13 @@
         }
     }
 
+    .breadcrumb-badge {
+        border-radius: 0;
+    }
+
+    .btn {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
 }

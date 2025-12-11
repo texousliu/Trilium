@@ -12,6 +12,7 @@ import { useIsNoteReadOnly, useNoteContext, useStaticTooltip } from "./react/hoo
 import Icon from "./react/Icon";
 import { NoteSizeWidget, useNoteMetadata } from "./ribbon/NoteInfoTab";
 import { useShareInfo } from "./shared_info";
+import FNote from "../entities/fnote";
 
 export default function BreadcrumbBadges() {
     return (
@@ -19,13 +20,11 @@ export default function BreadcrumbBadges() {
             <ReadOnlyBadge />
             <ShareBadge />
             <BacklinksBadge />
-            <NoteInfoBadge />
         </div>
     );
 }
 
-function NoteInfoBadge() {
-    const { note } = useNoteContext();
+export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
     const { metadata, ...sizeProps } = useNoteMetadata(note);
 
     return (note &&
@@ -156,7 +155,7 @@ function BadgeWithDropdown({ children, tooltip, className, dropdownOptions, ...p
 }) {
     return (
         <Dropdown
-            className={`dropdown-${className}`}
+            className={`breadcrumb-dropdown-badge dropdown-${className}`}
             text={<Badge className={className} {...props} />}
             noDropdownListStyle
             noSelectButtonStyle
