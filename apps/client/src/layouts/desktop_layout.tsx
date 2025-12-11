@@ -53,6 +53,7 @@ import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibb
 import BreadcrumbBadges from "../widgets/BreadcrumbBadges.jsx";
 import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
 import NoteStatusBar from "../widgets/NoteStatusBar.jsx";
+import StatusBar from "../widgets/layout/StatusBar.jsx";
 
 export default class DesktopLayout {
 
@@ -134,6 +135,7 @@ export default class DesktopLayout {
                                             .filling()
                                             .collapsible()
                                             .id("center-pane")
+                                            .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
@@ -152,7 +154,6 @@ export default class DesktopLayout {
                                                         )
                                                         .optChild(!isFloatingTitlebar, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
-                                                        .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
@@ -183,6 +184,7 @@ export default class DesktopLayout {
                                                                 <NoteStatusBar />
                                                             </Ribbon>
                                                         ))
+                                                        .optChild(isNewLayout, <StatusBar />)
                                                 )
                                             )
                                             .child(...this.customWidgets.get("center-pane"))
