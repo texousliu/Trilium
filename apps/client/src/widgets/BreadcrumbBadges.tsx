@@ -39,16 +39,16 @@ function NoteInfoBadge() {
                 <NoteInfoValue text={t("note_info_widget.modified")} value={metadata?.dateModified ? formatDateTime(metadata.dateModified) : ""} />
                 <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
                 <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
-                <NoteInfoValue text={t("note_info_widget.note_size")} value={<NoteSizeWidget {...sizeProps} />} />
+                <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
             </ul>
         </BadgeWithDropdown>
     );
 }
 
-function NoteInfoValue({ text, value }: { text: string; value: ComponentChildren }) {
+function NoteInfoValue({ text, title, value }: { text: string; title?: string, value: ComponentChildren }) {
     return (
         <li>
-            <strong>{text}{": "}</strong>
+            <strong title={title}>{text}{": "}</strong>
             <span>{value}</span>
         </li>
     );
