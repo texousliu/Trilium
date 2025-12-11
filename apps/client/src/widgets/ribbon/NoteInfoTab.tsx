@@ -1,6 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { TabContext } from "./ribbon-interface";
 import { MetadataResponse, NoteSizeResponse, SubtreeSizeResponse } from "@triliumnext/commons";
 import server from "../../services/server";
 import Button from "../react/Button";
@@ -13,8 +12,8 @@ import FNote from "../../entities/fnote";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
-export default function NoteInfoTab({ note }: TabContext) {
-    const { isLoading, metadata, noteSizeResponse, subtreeSizeResponse, requestSizeInfo } = useNoteMetadata(note);
+export default function NoteInfoTab({ note }: { note: FNote | null | undefined }) {
+    const { metadata, ...sizeProps } = useNoteMetadata(note);
 
     return (
         <div className="note-info-widget">
@@ -42,29 +41,35 @@ export default function NoteInfoTab({ note }: TabContext) {
                     <div className="note-info-item">
                         <span title={t("note_info_widget.note_size_info")}>{t("note_info_widget.note_size")}:</span>
                         <span className="note-info-size-col-span">
-                            {!isLoading && !noteSizeResponse && !subtreeSizeResponse && (
-                                <Button
-                                    className="calculate-button"
-                                    icon="bx bx-calculator"
-                                    text={t("note_info_widget.calculate")}
-                                    onClick={requestSizeInfo}
-                                />
-                            )}
-
-                            <span className="note-sizes-wrapper selectable-text">
-                                <span className="note-size">{formatSize(noteSizeResponse?.noteSize)}</span>
-                                {" "}
-                                {subtreeSizeResponse && subtreeSizeResponse.subTreeNoteCount > 1 &&
-                                    <span className="subtree-size">{t("note_info_widget.subtree_size", { size: formatSize(subtreeSizeResponse.subTreeSize), count: subtreeSizeResponse.subTreeNoteCount })}</span>
-                                }
-                                {isLoading && <LoadingSpinner />}
-                            </span>
+                            <NoteSizeWidget {...sizeProps} />
                         </span>
                     </div>
                 </>
             )}
         </div>
     );
+}
+
+export function NoteSizeWidget({ isLoading, noteSizeResponse, subtreeSizeResponse, requestSizeInfo }: Omit<ReturnType<typeof useNoteMetadata>, "metadata">) {
+    return <>
+        {!isLoading && !noteSizeResponse && !subtreeSizeResponse && (
+            <Button
+                className="calculate-button"
+                icon="bx bx-calculator"
+                text={t("note_info_widget.calculate")}
+                onClick={requestSizeInfo}
+            />
+        )}
+
+        <span className="note-sizes-wrapper selectable-text">
+            <span className="note-size">{formatSize(noteSizeResponse?.noteSize)}</span>
+            {" "}
+            {subtreeSizeResponse && subtreeSizeResponse.subTreeNoteCount > 1 &&
+                <span className="subtree-size">{t("note_info_widget.subtree_size", { size: formatSize(subtreeSizeResponse.subTreeSize), count: subtreeSizeResponse.subTreeNoteCount })}</span>
+            }
+            {isLoading && <LoadingSpinner />}
+        </span>
+    </>;
 }
 
 export function useNoteMetadata(note: FNote | null | undefined) {
