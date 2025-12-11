@@ -53,8 +53,6 @@ body.experimental-feature-new-layout {
     }
 
     .title-row {
-        margin-left: 12px;
-
         .note-icon-widget {
             padding: 0;
             width: 41px;
@@ -79,17 +77,6 @@ body.experimental-feature-new-layout {
         }
     }
 
-    .note-split.view-mode-default {
-        .title-row {
-            padding-top: 2em;
-            box-sizing: content-box;
-        }
-
-        .title-details {
-            padding-bottom: 2em;
-        }
-    }
-
     .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
     .note-split.type-book {
         .title-row,
@@ -97,10 +84,6 @@ body.experimental-feature-new-layout {
             width: 100%;
             max-width: unset;
             padding-inline-start: 15px;
-        }
-
-        .title-row {
-            padding: 0;
         }
 
         .title-details {
