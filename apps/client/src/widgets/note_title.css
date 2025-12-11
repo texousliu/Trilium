@@ -75,7 +75,8 @@ body.experimental-feature-new-layout {
         }
     }
 
-    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)) {
+    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
+    .note-split.type-book {
         .title-row,
         .title-details {
             width: 100%;
@@ -84,7 +85,7 @@ body.experimental-feature-new-layout {
         }
 
         .title-row {
-            margin-top: 0;
+            padding: 0;
         }
 
         .title-details {
