@@ -106,9 +106,17 @@ function ButtonPropertyView({ note, property }: { note: FNote, property: ButtonP
 function SplitButtonPropertyView({ note, property }: { note: FNote, property: SplitButtonProperty }) {
     const parentComponent = useContext(ParentComponent);
     const ItemsComponent = property.items;
+    const clickContext = parentComponent && {
+        note,
+        triggerCommand: parentComponent.triggerCommand.bind(parentComponent)
+    };
 
     return (parentComponent &&
-        <FormDropdownSubmenu icon={property.icon ?? "bx bx-empty"} title={property.label}>
+        <FormDropdownSubmenu
+            icon={property.icon ?? "bx bx-empty"}
+            title={property.label}
+            onDropdownToggleClicked={() => clickContext && property.onClick(clickContext)}
+        >
             <ItemsComponent note={note} parentComponent={parentComponent} />
         </FormDropdownSubmenu>
     );
