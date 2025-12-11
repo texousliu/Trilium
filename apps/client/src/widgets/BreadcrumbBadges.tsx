@@ -57,7 +57,7 @@ function ReadOnlyBadge() {
     const { note, noteContext } = useNoteContext();
     const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
     const isExplicitReadOnly = note?.isLabelTruthy("readOnly");
-    const isTemporarilyEditable = noteContext?.viewScope?.readOnlyTemporarilyDisabled;
+    const isTemporarilyEditable = noteContext?.ntxId !== "_popup-editor" && noteContext?.viewScope?.readOnlyTemporarilyDisabled;
 
     if (isTemporarilyEditable) {
         return <Badge
