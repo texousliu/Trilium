@@ -34,8 +34,8 @@ export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
             dropdownOptions={{ dropdownOptions: { autoClose: "outside" } }}
         >
             <ul>
-                <NoteInfoValue text={t("note_info_widget.created")} value={metadata?.dateCreated ? formatDateTime(metadata.dateCreated) : ""} />
-                <NoteInfoValue text={t("note_info_widget.modified")} value={metadata?.dateModified ? formatDateTime(metadata.dateModified) : ""} />
+                <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
+                <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
                 <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
                 <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
                 <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
