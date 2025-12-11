@@ -1,4 +1,4 @@
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb from "./Breadcrumb";
 import "./StatusBar.css";
 
 export default function StatusBar() {

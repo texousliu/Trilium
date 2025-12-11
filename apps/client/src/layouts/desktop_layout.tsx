@@ -44,7 +44,7 @@ import NoteDetail from "../widgets/NoteDetail.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
-import Breadcrumb from "../widgets/Breadcrumb.jsx";
+import Breadcrumb from "../widgets/layout/Breadcrumb.jsx";
 import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
 import { isExperimentalFeatureEnabled } from "../services/experimental_features.js";
 import NoteActions from "../widgets/ribbon/NoteActions.jsx";
