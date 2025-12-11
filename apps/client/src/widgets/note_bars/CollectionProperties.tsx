@@ -69,7 +69,7 @@ function ViewOptions({ note, viewType }: { note: FNote, viewType: ViewTypeOption
             hideToggleArrow
         >
             {properties.map(property => (
-                <ViewProperty key={property} note={note} property={property} />
+                <ViewProperty key={property.label} note={note} property={property} />
             ))}
             {properties.length > 0 && <FormDropdownDivider />}
 
