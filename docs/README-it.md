@@ -95,8 +95,8 @@ La nostra documentazione è disponibile in diversi formati:
   accesso più sicuro
 * [Sincronizzazione](https://docs.triliumnotes.org/user-guide/setup/synchronization)
   con server di sincronizzazione self-hosted
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * esistono [servizi di terze parti per l'hosting del server di
+    sincronizzazione](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * [Condivisione](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
   (pubblicazione) di note su Internet pubblicamente
 * Crittografia forte
@@ -104,10 +104,11 @@ La nostra documentazione è disponibile in diversi formati:
   con granularità per singola nota
 * Disegnare diagrammi, basati su [Excalidraw](https://excalidraw.com/) (tipo di
   nota “canvas”)
-* [Relation
-  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
-  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
-  for visualizing notes and their relations
+* [Mappe
+  relazionali](https://docs.triliumnotes.org/user-guide/note-types/relation-map)
+  e [mappe
+  note/link](https://docs.triliumnotes.org/user-guide/note-types/note-map) per
+  visualizzare le note e le loro relazioni
 * Mappe mentali, basate su [Mind Elixir](https://docs.mind-elixir.com/)
 * [Mappe
   geografiche](https://docs.triliumnotes.org/user-guide/collections/geomap) con
@@ -131,8 +132,8 @@ La nostra documentazione è disponibile in diversi formati:
   salvare facilmente i contenuti web
 * Interfaccia utente personalizzabile (pulsanti della barra laterale, widget
   definiti dall'utente, ...)
-* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
-  along with a Grafana Dashboard.
+* [Metriche](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
+  insieme a una dashboard Grafana.
 
 ✨ Dai un'occhiata alle seguenti risorse/comunità di terze parti per ulteriori
 informazioni su TriliumNext:

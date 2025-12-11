@@ -36,7 +36,8 @@ script)](./README-ZH_TW.md) | [English](../README.md) | [French](./README-fr.md)
 <img src="./app.png" alt="Trilium Screenshot" width="1000">
 
 ## ⬇️ تنزيل
-- النسخة الأخيرة - نسخة مستقرة، محبذة لأكثر المستخدمين.
+- [النسخة الأخيرة](https://github.com/TriliumNext/Trilium/releases/latest) –
+  نسخة مستقرة، محبذة لأكثر المستخدمين.
 - [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
   unstable development version, updated daily with the latest features and
   fixes.
