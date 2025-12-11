@@ -6,7 +6,7 @@ import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListTogglea
 import Icon from "../react/Icon";
 import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
 import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
-import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
+import { useNoteLabelBoolean } from "../react/hooks";
 import { useContext } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
 
@@ -60,16 +60,16 @@ function ViewOptions({ note, viewType }: { note: FNote, viewType: ViewTypeOption
             buttonClassName="bx bx-cog icon-action"
             hideToggleArrow
         >
+            {properties.map(property => (
+                <ViewProperty key={property} note={note} property={property} />
+            ))}
+            {properties.length > 0 && <FormDropdownDivider />}
+
             <ViewProperty note={note} property={{
                 type: "checkbox",
                 label: t("book_properties.include_archived_notes"),
                 bindToLabel: "includeArchived"
             } as CheckBoxProperty} />
-
-            {properties.length > 0 && <FormDropdownDivider />}
-            {properties.map(property => (
-                <ViewProperty key={property} note={note} property={property} />
-            ))}
         </Dropdown>
     );
 }
