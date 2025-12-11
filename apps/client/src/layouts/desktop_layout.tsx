@@ -143,7 +143,6 @@ export default class DesktopLayout {
                                                             new FlexContainer("row")
                                                                 .class("breadcrumb-row")
                                                                 .cssBlock(".breadcrumb-row > * { margin: 5px; }")
-                                                                .child(<Breadcrumb />)
                                                                 .optChild(isNewLayout, <BreadcrumbBadges />)
                                                                 .child(<SpacerWidget baseSize={0} growthFactor={1} />)
                                                                 .child(<MovePaneButton direction="left" />)
