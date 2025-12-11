@@ -5,6 +5,7 @@ type Labels = {
     color: string;
     iconClass: string;
     workspaceIconClass: string;
+    executeButton: boolean;
     executeDescription: string;
     executeTitle: string;
     limit: string; // should be probably be number

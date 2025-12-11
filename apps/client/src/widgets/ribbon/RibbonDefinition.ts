@@ -38,7 +38,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         icon: "bx bx-play",
         content: ScriptTab,
         activate: true,
-        show: ({ note }) => note &&
+        show: ({ note }) => note && !isNewLayout &&
             (note.isTriliumScript() || note.isTriliumSqlite()) &&
             (note.hasLabel("executeDescription") || note.hasLabel("executeButton"))
     },

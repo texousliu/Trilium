@@ -35,6 +35,7 @@
     &.share-badge { --color: #3b82f6; }
     &.clipped-note-badge { --color: #57a2a5; }
     &.backlinks-badge { color: var(--badge-text-color); }
+    &.execute-badge { --color: #f59e0b; }
 
     a {
         color: inherit !important;
