@@ -155,7 +155,7 @@ function NumberPropertyView({ note, property }: { note: FNote, property: NumberP
             <FormTextBox
                 type="number"
                 currentValue={value ?? ""} onChange={setValue}
-                style={{ width: (property.width ?? 100) + "px" }}
+                style={{ width: (property.width ?? 100) }}
                 min={property.min ?? 0}
                 disabled={disabled}
             />

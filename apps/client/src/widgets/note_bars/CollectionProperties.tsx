@@ -5,10 +5,11 @@ import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
 import Icon from "../react/Icon";
 import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
-import { useNoteLabelBoolean } from "../react/hooks";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
+import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
 import { useContext } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
+import FormTextBox from "../react/FormTextBox";
 
 const ICON_MAPPINGS: Record<ViewTypeOptions, string> = {
     grid: "bx bxs-grid",
@@ -83,6 +84,8 @@ function ViewProperty({ note, property }: { note: FNote, property: BookProperty 
             return <SplitButtonPropertyView note={note} property={property} />;
         case "checkbox":
             return <CheckBoxPropertyView note={note} property={property} />;
+        case "number":
+            return <NumberPropertyView note={note} property={property} />;
     }
 }
 
@@ -120,6 +123,29 @@ function SplitButtonPropertyView({ note, property }: { note: FNote, property: Sp
         >
             <ItemsComponent note={note} parentComponent={parentComponent} />
         </FormDropdownSubmenu>
+    );
+}
+
+function NumberPropertyView({ note, property }: { note: FNote, property: NumberProperty }) {
+    //@ts-expect-error Interop with text box which takes in string values even for numbers.
+    const [ value, setValue ] = useNoteLabel(note, property.bindToLabel);
+    const disabled = property.disabled?.(note);
+
+    return (
+        <FormListItem
+            icon={property.icon}
+            disabled={disabled}
+            onClick={(e) => e.stopPropagation()}
+        >
+            {property.label}
+            <FormTextBox
+                type="number"
+                currentValue={value ?? ""} onChange={setValue}
+                style={{ width: (property.width ?? 100) }}
+                min={property.min ?? 0}
+                disabled={disabled}
+            />
+        </FormListItem>
     );
 }
 

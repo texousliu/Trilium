@@ -37,6 +37,15 @@ body.experimental-feature-new-layout {
         padding-inline-start: 24px;
     }
 
+    .title-details {
+        .dropdown-menu {
+            input.form-control {
+                padding: 2px 8px;
+                margin-left: 1em;
+            }
+        }
+    }
+
     .title-row {
         margin-left: 12px;
 

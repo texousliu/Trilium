@@ -41,6 +41,7 @@ export interface NumberProperty {
     bindToLabel: FilterLabelsByType<number>;
     width?: number;
     min?: number;
+    icon?: string;
     disabled?: (note: FNote) => boolean;
 }
 
@@ -160,6 +161,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: [
             {
                 label: t("book_properties_config.max-nesting-depth"),
+                icon: "bx bx-subdirectory-right",
                 type: "number",
                 bindToLabel: "maxNestingDepth",
                 width: 65,
