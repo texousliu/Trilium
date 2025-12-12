@@ -62,7 +62,7 @@ function LanguageSwitcher({ note }: StatusBarContext) {
 
     return (
         <>
-            <StatusBarDropdown icon="bx bx-globe" text={getLocaleName(activeLocale)}>
+            <StatusBarDropdown icon="bx bx-globe" text={<span dir={activeLocale?.rtl ? "rtl" : "ltr"}>{getLocaleName(activeLocale)}</span>}>
                 {processedLocales.map(locale => {
                     if (typeof locale === "object") {
                         return <FormListItem
@@ -95,6 +95,8 @@ function LanguageSwitcher({ note }: StatusBarContext) {
 export function getLocaleName(locale: Locale | null | undefined) {
     if (!locale) return "";
     if (!locale.id) return "-";
-    if (locale.name.length <= 4) return locale.name;    // Some locales like Japanese and Chinese look better than their ID.
-    return locale.id.toLocaleUpperCase();
+    if (locale.name.length <= 4 || locale.rtl) return locale.name;    // Some locales like Japanese and Chinese look better than their ID.
+    return locale.id
+        .replace("_", "-")
+        .toLocaleUpperCase();
 }
