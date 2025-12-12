@@ -97,15 +97,15 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("owned_attribute_list.owned_attributes"),
         icon: "bx bx-list-check",
         content: OwnedAttributesTab,
-        show: ({note}) => !note?.isLaunchBarConfig(),
+        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabOwnedAttributes",
-        stayInDom: true
+        stayInDom: !isNewLayout
     },
     {
         title: t("inherited_attribute_list.title"),
         icon: "bx bx-list-plus",
         content: InheritedAttributesTab,
-        show: ({note}) => !note?.isLaunchBarConfig(),
+        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabInheritedAttributes"
     },
     {
