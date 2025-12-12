@@ -17,7 +17,7 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useLegacyImperativeHandlers, useStaticTooltip, useTriliumEvent } from "../react/hooks";
+import { useActiveNoteContext, useLegacyImperativeHandlers, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
@@ -37,18 +37,19 @@ interface StatusBarContext {
 export default function StatusBar() {
     const { note, noteContext, viewScope } = useActiveNoteContext();
     const [ attributesShown, setAttributesShown ] = useState(false);
-    const context = note && noteContext && { note, noteContext, viewScope } satisfies StatusBarContext;
+    const context: StatusBarContext | undefined | null = note && noteContext && { note, noteContext, viewScope };
+    const attributesContext: AttributesProps | undefined | null = context && { ...context, attributesShown, setAttributesShown };
 
     return (
         <div className="status-bar">
-            {context && <AttributesPane shown={attributesShown} {...context} />}
+            {attributesContext && <AttributesPane {...attributesContext} />}
 
             <div className="status-bar-main-row">
-                {context && <>
+                {context && attributesContext && <>
                     <Breadcrumb {...context} />
 
                     <div className="actions-row">
-                        <AttributesButton attributesShown={attributesShown} setAttributesShown={setAttributesShown} {...context} />
+                        <AttributesButton {...attributesContext} />
                         <AttachmentCount {...context} />
                         <BacklinksBadge {...context} />
                         <LanguageSwitcher {...context} />
@@ -246,10 +247,12 @@ function AttachmentCount({ note }: StatusBarContext) {
 //#endregion
 
 //#region Attributes
-function AttributesButton({ note, attributesShown, setAttributesShown }: StatusBarContext & {
+interface AttributesProps extends StatusBarContext {
     attributesShown: boolean;
     setAttributesShown: (shown: boolean) => void;
-}) {
+}
+
+function AttributesButton({ note, attributesShown, setAttributesShown }: AttributesProps) {
     const [ count, setCount ] = useState(note.attributes.length);
 
     // React to changes in count.
@@ -271,9 +274,7 @@ function AttributesButton({ note, attributesShown, setAttributesShown }: StatusB
     );
 }
 
-function AttributesPane({ note, noteContext, shown }: StatusBarContext & {
-    shown: boolean;
-}) {
+function AttributesPane({ note, noteContext, attributesShown, setAttributesShown }: AttributesProps) {
     const parentComponent = useContext(ParentComponent);
     const api = useRef<AttributeEditorImperativeHandlers>(null);
 
@@ -283,6 +284,9 @@ function AttributesPane({ note, noteContext, shown }: StatusBarContext & {
         hidden: !note
     };
 
+    // Show on keyboard shortcuts.
+    useTriliumEvents([ "addNewLabel", "addNewRelation" ], () => setAttributesShown(true));
+
     // Interaction with the attribute editor.
     useLegacyImperativeHandlers(useMemo(() => ({
         saveAttributesCommand: () => api.current?.save(),
@@ -291,7 +295,7 @@ function AttributesPane({ note, noteContext, shown }: StatusBarContext & {
     }), [ api ]));
 
     return (context &&
-        <div className={clsx("attribute-list", !shown && "hidden-ext")}>
+        <div className={clsx("attribute-list", !attributesShown && "hidden-ext")}>
             <InheritedAttributesTab {...context} />
 
             <AttributeEditor
