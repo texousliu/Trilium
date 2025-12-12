@@ -61,30 +61,6 @@
         min-width: 500px;
     }
 
-    &.dropdown-note-info-badge {
-        .dropdown-menu.show ul {
-            list-style-type: none;
-            padding: 0.5em;
-            margin: 0;
-            display: table;
-
-            li {
-                display: table-row;
-
-                > strong {
-                    display: table-cell;
-                    padding: 0.2em 0;
-                }
-
-                > span {
-                    display: table-cell;
-                    user-select: text;
-                    padding-left: 2em;
-                }
-            }
-        }
-    }
-
     .breadcrumb-badge {
         border-radius: 0;
     }

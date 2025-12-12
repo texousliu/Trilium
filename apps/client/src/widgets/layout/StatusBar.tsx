@@ -1,19 +1,23 @@
 import "./StatusBar.css";
 
+import { Locale } from "@triliumnext/commons";
+import clsx from "clsx";
+import { createPortal } from "preact/compat";
+import { useState } from "preact/hooks";
+
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { openInAppHelpFromUrl } from "../../services/utils";
+import { formatDateTime } from "../../utils/formatters";
+import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useNoteContext } from "../react/hooks";
-import { ContentLanguagesModal, NoteLanguageSelector, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
-import Breadcrumb from "./Breadcrumb";
-import { useState } from "preact/hooks";
-import { createPortal } from "preact/compat";
-import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
-import Dropdown, { DropdownProps } from "../react/Dropdown";
-import { Locale } from "@triliumnext/commons";
-import clsx from "clsx";
 import Icon from "../react/Icon";
+import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
+import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
+import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
+import Breadcrumb from "./Breadcrumb";
+
 
 interface StatusBarContext {
     note: FNote;
@@ -31,6 +35,7 @@ export default function StatusBar() {
                 </div>
 
                 <div className="actions-row">
+                    <NoteInfoBadge {...context} />
                     <LanguageSwitcher {...context} />
                 </div>
             </>}
@@ -64,6 +69,7 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
     );
 }
 
+//#region Language Switcher
 function LanguageSwitcher({ note }: StatusBarContext) {
     const [ modalShown, setModalShown ] = useState(false);
     const { locales, DEFAULT_LOCALE, currentNoteLanguage, setCurrentNoteLanguage } = useLanguageSwitcher(note);
@@ -113,3 +119,36 @@ export function getLocaleName(locale: Locale | null | undefined) {
         .replace("_", "-")
         .toLocaleUpperCase();
 }
+//#endregion
+
+//#region Note info
+export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
+    const { metadata, ...sizeProps } = useNoteMetadata(note);
+
+    return (note &&
+        <StatusBarDropdown
+            icon="bx bx-info-circle"
+            title={t("status_bar.note_info_title")}
+            dropdownContainerClassName="dropdown-note-info"
+            dropdownOptions={{ autoClose: "outside" }}
+        >
+            <ul>
+                <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
+                <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
+                <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
+                <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
+                <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
+            </ul>
+        </StatusBarDropdown>
+    );
+}
+
+function NoteInfoValue({ text, title, value }: { text: string; title?: string, value: ComponentChildren }) {
+    return (
+        <li>
+            <strong title={title}>{text}{": "}</strong>
+            <span>{value}</span>
+        </li>
+    );
+}
+//#endregion

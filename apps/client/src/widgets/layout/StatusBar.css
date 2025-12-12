@@ -12,6 +12,8 @@
 
     > .actions-row {
         padding: 0.1em;
+        display: flex;
+        gap: 0.1em;
 
         .status-bar-dropdown-button {
             background: transparent;
@@ -35,6 +37,32 @@
 
         .dropdown-toggle {
             padding: 0.1em 0.25em;
+        }
+    }
+
+    .dropdown-note-info {
+        width: max-content;
+
+        ul {
+            list-style-type: none;
+            padding: 0.5em;
+            margin: 0;
+            display: table;
+
+            li {
+                display: table-row;
+
+                > strong {
+                    display: table-cell;
+                    padding: 0.2em 0;
+                }
+
+                > span {
+                    display: table-cell;
+                    user-select: text;
+                    padding-left: 2em;
+                }
+            }
         }
     }
 }

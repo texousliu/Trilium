@@ -2158,6 +2158,7 @@
     "execute_sql_description": "This note is a SQL note. Click to execute the SQL query."
   },
   "status_bar": {
-    "language_title": "Change the language of the entire content"
+    "language_title": "Change the language of the entire content",
+    "note_info_title": "View information about this note such as the creation/modification date or the note size."
   }
 }
