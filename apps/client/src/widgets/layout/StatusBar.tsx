@@ -4,7 +4,7 @@ import { Locale } from "@triliumnext/commons";
 import clsx from "clsx";
 import { type ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
-import { useState } from "preact/hooks";
+import { useContext, useRef, useState } from "preact/hooks";
 
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
@@ -15,12 +15,17 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext } from "../react/hooks";
+import { useActiveNoteContext, useStaticTooltip, useTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
+import { useAttachments } from "../type_widgets/Attachment";
+import ActionButton from "../react/ActionButton";
+import Button from "../react/Button";
+import { CommandNames } from "../../components/app_context";
+import { ParentComponent } from "../react/react_utils";
 
 interface StatusBarContext {
     note: FNote;
@@ -40,6 +45,7 @@ export default function StatusBar() {
                 </div>
 
                 <div className="actions-row">
+                    <AttachmentCount {...context} />
                     <BacklinksBadge {...context} />
                     <LanguageSwitcher {...context} />
                     <NoteInfoBadge {...context} />
@@ -72,6 +78,35 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
         >
             {children}
         </Dropdown>
+    );
+}
+
+function StatusBarButton({ className, icon, text, title, triggerCommand }: {
+    className?: string;
+    icon: string;
+    title: string;
+    text?: string | number;
+    disabled?: boolean;
+    triggerCommand: CommandNames;
+}) {
+    const parentComponent = useContext(ParentComponent);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    useStaticTooltip(buttonRef, {
+        placement: "top",
+        fallbackPlacements: [ "top" ],
+        popperConfig: { strategy: "fixed" },
+        title
+    });
+
+    return (
+        <button
+            ref={buttonRef}
+            className={clsx("btn select-button", className)}
+            type="button"
+            onClick={() => parentComponent?.triggerCommand(triggerCommand)}
+        >
+            <Icon icon={icon} />&nbsp;{text}
+        </button>
     );
 }
 
@@ -166,12 +201,29 @@ function BacklinksBadge({ note, viewScope }: StatusBarContext) {
         <StatusBarDropdown
             className="backlinks-badge backlinks-widget"
             icon="bx bx-revision"
-            text={t("status_bar.backlinks", { count })}
+            text={count}
             title={t("status_bar.backlinks_title", { count })}
             dropdownContainerClassName="backlinks-items"
         >
             <BacklinksList note={note} />
         </StatusBarDropdown>
+    );
+}
+//#endregion
+
+//#region Attachment count
+function AttachmentCount({ note }: StatusBarContext) {
+    const attachments = useAttachments(note);
+    const count = attachments.length;
+
+    return (note && count > 0 &&
+        <StatusBarButton
+            className="attachment-count"
+            icon="bx bx-paperclip"
+            text={count}
+            title={t("status_bar.attachments_title", { count })}
+            triggerCommand="showAttachments"
+        />
     );
 }
 //#endregion

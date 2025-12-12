@@ -15,27 +15,29 @@
         padding: 0.1em;
         display: flex;
         gap: 0.1em;
+        font-size: 0.85em;
 
-        .status-bar-dropdown-button {
-            background: transparent;
+        .btn {
             padding: 0 0.5em !important;
+            background: transparent;
             display: flex;
             align-items: center;
-
-            &:after {
-                content: unset;
-            }
+            border: 0;
 
             &:focus,
             &:hover {
                 background: var(--input-background-color);
             }
         }
+
+        .status-bar-dropdown-button {
+            &:after {
+                content: unset;
+            }
+        }
     }
 
     .dropdown {
-        font-size: 0.85em;
-
         .dropdown-toggle {
             padding: 0.1em 0.25em;
         }

@@ -26,24 +26,13 @@ import ws from "../../services/ws";
 import appContext from "../../components/app_context";
 import { ConvertAttachmentToNoteResponse } from "@triliumnext/commons";
 import options from "../../services/options";
+import FNote from "../../entities/fnote";
 
 /**
  * Displays the full list of attachments of a note and allows the user to interact with them.
  */
 export function AttachmentList({ note }: TypeWidgetProps) {
-    const [ attachments, setAttachments ] = useState<FAttachment[]>([]);
-
-    function refresh() {
-        note.getAttachments().then(attachments => setAttachments(Array.from(attachments)));
-    }
-
-    useEffect(refresh, [ note ]);
-
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        if (loadResults.getAttachmentRows().some((att) => att.attachmentId && att.ownerId === note.noteId)) {
-            refresh();
-        }
-    });
+    const attachments = useAttachments(note);
 
     return (
         <>
@@ -59,7 +48,25 @@ export function AttachmentList({ note }: TypeWidgetProps) {
                 )}
             </div>
         </>
-    )
+    );
+}
+
+export function useAttachments(note: FNote) {
+    const [ attachments, setAttachments ] = useState<FAttachment[]>([]);
+
+    function refresh() {
+        note.getAttachments().then(attachments => setAttachments(Array.from(attachments)));
+    }
+
+    useEffect(refresh, [ note ]);
+
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttachmentRows().some((att) => att.attachmentId && att.ownerId === note.noteId)) {
+            refresh();
+        }
+    });
+
+    return attachments;
 }
 
 function AttachmentListHeader({ noteId }: { noteId: string }) {
