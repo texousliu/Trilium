@@ -3,7 +3,7 @@
     border-top: 1px solid var(--main-border-color);
     background-color: var(--left-pane-background-color);
 
-    .status-bar-main-row {
+    > .status-bar-main-row {
         min-height: 32px;
         display: flex;
         align-items: center;
@@ -70,6 +70,10 @@
                 }
             }
         }
+    }
+
+    > .attribute-list {
+        font-size: 0.9em;
     }
 
 }

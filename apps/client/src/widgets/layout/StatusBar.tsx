@@ -26,6 +26,7 @@ import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
+import InheritedAttributesTab from "../ribbon/InheritedAttributesTab";
 
 interface StatusBarContext {
     note: FNote;
@@ -272,15 +273,21 @@ function AttributesPane({ note, noteContext }: StatusBarContext) {
     const parentComponent = useContext(ParentComponent);
     const api = useRef<AttributeEditorImperativeHandlers>(null);
 
-    return (
+    const context = parentComponent && {
+        componentId: parentComponent.componentId,
+        note,
+        hidden: !note
+    };
+
+    return (context &&
         <div className="attribute-list">
-            {parentComponent && <AttributeEditor
-                componentId={parentComponent.componentId}
+            <InheritedAttributesTab {...context} />
+
+            <AttributeEditor
+                {...context}
                 api={api}
                 ntxId={noteContext.ntxId}
-                note={note}
-                hidden={!note}
-            />}
+            />
         </div>
     );
 }
