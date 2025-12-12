@@ -3,18 +3,17 @@ import "./Breadcrumb.css";
 import { useMemo, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
+import appContext from "../../components/app_context";
 import NoteContext from "../../components/note_context";
+import FNote from "../../entities/fnote";
+import link_context_menu from "../../menus/link_context_menu";
 import froca from "../../services/froca";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNoteContext, useNoteLabel, useNoteProperty } from "../react/hooks";
+import { useChildNotes, useNoteLabel, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
-import link_context_menu from "../../menus/link_context_menu";
-import { TitleEditor } from "../collections/board";
-import server from "../../services/server";
-import FNote from "../../entities/fnote";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
@@ -87,30 +86,20 @@ function BreadcrumbLink({ notePath }: { notePath: string }) {
 function BreadcrumbLastItem({ notePath }: { notePath: string }) {
     const noteId = notePath.split("/").at(-1);
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
-    const [ isEditing, setIsEditing ] = useState(false);
     const title = useNoteProperty(note, "title");
 
     if (!note) return null;
 
-    if (!isEditing) {
-        return (
-            <a
-                href="#"
-                className="breadcrumb-last-item tn-link"
-                onClick={(e) => {
-                    e.preventDefault();
-                    setIsEditing(true);
-                }}
-            >{title}</a>
-        );
-    }
-
     return (
-        <TitleEditor
-            currentValue={title}
-            save={(newTitle) => { return server.put(`notes/${noteId}/title`, { title: newTitle.trim() }); }}
-            dismiss={() => setIsEditing(false)}
-        />
+        <a
+            href="#"
+            className="breadcrumb-last-item tn-link"
+            onClick={() => {
+                const activeNtxId = appContext.tabManager.activeNtxId;
+                const scrollingContainer = document.querySelector(`[data-ntx-id="${activeNtxId}"] .scrolling-container`);
+                scrollingContainer?.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+        >{title}</a>
     );
 }
 

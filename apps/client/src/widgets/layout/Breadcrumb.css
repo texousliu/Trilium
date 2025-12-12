@@ -53,7 +53,6 @@
     .breadcrumb-last-item {
         text-decoration: none;
         color: unset;
-        cursor: text;
     }
 
     input {

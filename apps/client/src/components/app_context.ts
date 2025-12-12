@@ -265,7 +265,7 @@ export type CommandMappings = {
 
     reEvaluateRightPaneVisibility: CommandData;
     runActiveNote: CommandData;
-    scrollContainerToCommand: CommandData & {
+    scrollContainerTo: CommandData & {
         position: number;
     };
     scrollToEnd: CommandData;
