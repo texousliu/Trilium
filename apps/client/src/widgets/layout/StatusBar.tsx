@@ -95,5 +95,6 @@ function LanguageSwitcher({ note }: StatusBarContext) {
 export function getLocaleName(locale: Locale | null | undefined) {
     if (!locale) return "";
     if (!locale.id) return "-";
+    if (locale.name.length <= 4) return locale.name;    // Some locales like Japanese and Chinese look better than their ID.
     return locale.id.toLocaleUpperCase();
 }
