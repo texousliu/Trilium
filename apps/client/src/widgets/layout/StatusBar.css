@@ -5,6 +5,7 @@
     display: flex;
     align-items: center;
     padding-inline: 0.25em;
+    min-height: 32px;
 
     > .breadcrumb-row {
         flex-grow: 1;

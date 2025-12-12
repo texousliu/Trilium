@@ -177,10 +177,10 @@ export default class DesktopLayout {
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
                                                             ...this.customWidgets.get("note-detail-pane")
                                                         )
-                                                        .optChild(isNewLayout, <StatusBar />)
                                                 )
                                             )
                                             .child(...this.customWidgets.get("center-pane"))
+
                                     )
                                     .child(
                                         new RightPaneContainer()
@@ -189,8 +189,10 @@ export default class DesktopLayout {
                                             .child(...this.customWidgets.get("right-pane"))
                                     )
                             )
+                            .optChild(!launcherPaneIsHorizontal && isNewLayout, <StatusBar />)
                     )
             )
+            .optChild(launcherPaneIsHorizontal && isNewLayout, <StatusBar />)
             .child(<CloseZenModeButton />)
 
             // Desktop-specific dialogs.
