@@ -2159,6 +2159,9 @@
     "backlinks_title_one": "This note is linked from {{count}} other note.\n\nClick to view the list of backlinks.",
     "backlinks_title_other": "This note is linked from {{count}} other notes.\n\nClick to view the list of backlinks.",
     "attachments_title_one": "This note has {{count}} attachment. Click to open the list of attachments in a new tab.",
-    "attachments_title_other": "This note has {{count}} attachments. Click to open the list of attachments in a new tab."
+    "attachments_title_other": "This note has {{count}} attachments. Click to open the list of attachments in a new tab.",
+    "attributes_one": "{{count}} attribute",
+    "attributes_other": "{{count}} attributes",
+    "attributes_title": "Click to open a dedicated pane to edit this note's owned attributes, as well as to see the list of inherited attributes."
   }
 }

@@ -16,7 +16,7 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useStaticTooltip } from "../react/hooks";
+import { useActiveNoteContext, useStaticTooltip, useTriliumEvent } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
@@ -24,6 +24,7 @@ import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
+import attributes from "../../services/attributes";
 
 interface StatusBarContext {
     note: FNote;
@@ -43,6 +44,7 @@ export default function StatusBar() {
                 </div>
 
                 <div className="actions-row">
+                    <AttributesButton {...context} />
                     <AttachmentCount {...context} />
                     <BacklinksBadge {...context} />
                     <LanguageSwitcher {...context} />
@@ -217,11 +219,33 @@ function AttachmentCount({ note }: StatusBarContext) {
 
     return (note && count > 0 &&
         <StatusBarButton
-            className="attachment-count"
+            className="attachment-count-button"
             icon="bx bx-paperclip"
             text={count}
             title={t("status_bar.attachments_title", { count })}
             triggerCommand="showAttachments"
+        />
+    );
+}
+//#endregion
+
+//#region Attributes
+function AttributesButton({ note }: StatusBarContext) {
+    const [ count, setCount ] = useState(note.attributes.length);
+
+    // React to changes in count.
+    useTriliumEvent("entitiesReloaded", (({loadResults}) => {
+        if (loadResults.getAttributeRows().some(attr => attributes.isAffecting(attr, note))) {
+            setCount(note.attributes.length);
+        }
+    }));
+
+    return (
+        <StatusBarButton
+            className="attributes-button"
+            icon="bx bx-list-check"
+            title={t("status_bar.attributes_title")}
+            text={t("status_bar.attributes", { count })}
         />
     );
 }
