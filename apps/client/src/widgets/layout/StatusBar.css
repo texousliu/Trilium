@@ -4,20 +4,21 @@
     background-color: var(--left-pane-background-color);
 
     > .status-bar-main-row {
-        min-height: 32px;
+        min-height: 28px;
         display: flex;
         align-items: center;
         padding-inline: 0.25em;
+        font-size: 0.85em;
 
         > .breadcrumb {
             flex-grow: 1;
+            --icon-button-size: 23px;
         }
 
         > .actions-row {
             padding: 0.1em;
             display: flex;
             gap: 0.1em;
-            font-size: 0.85em;
 
             .btn {
                 padding: 0 0.5em !important;
@@ -25,6 +26,10 @@
                 display: flex;
                 align-items: center;
                 border: 0;
+
+                span {
+                    font-size: 1rem;
+                }
 
                 &.active,
                 &:focus,

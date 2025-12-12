@@ -64,6 +64,7 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
 
     return (note &&
         <ActionButton
+            className="root-note"
             icon={note.getIcon()}
             text={title ?? ""}
             onClick={() => noteContext?.setNote("root")}
