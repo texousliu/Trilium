@@ -4,7 +4,7 @@ import { Locale } from "@triliumnext/commons";
 import clsx from "clsx";
 import { type ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
-import { useContext, useMemo, useRef, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
@@ -262,6 +262,11 @@ interface AttributesProps extends StatusBarContext {
 
 function AttributesButton({ note, attributesShown, setAttributesShown }: AttributesProps) {
     const [ count, setCount ] = useState(note.attributes.length);
+
+    // React to note changes.
+    useEffect(() => {
+        setCount(note.attributes.length);
+    }, [ note ]);
 
     // React to changes in count.
     useTriliumEvent("entitiesReloaded", (({loadResults}) => {

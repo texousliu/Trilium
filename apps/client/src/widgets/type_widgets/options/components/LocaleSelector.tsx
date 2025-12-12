@@ -17,19 +17,20 @@ export function LocaleSelector({ id, locales, currentValue, onChange, defaultLoc
     const { activeLocale, processedLocales } = useProcessedLocales(locales, defaultLocale, currentValueWithDefault);
     return (
         <Dropdown id={id} text={activeLocale?.name}>
-            {processedLocales.map(locale => {
-                if (typeof locale === "object") {
-                    return <FormListItem
+            {processedLocales.map((locale, index) => (
+                (typeof locale === "object") ? (
+                    <FormListItem
+                        key={locale.id}
                         rtl={locale.rtl}
                         checked={locale.id === currentValue}
                         onClick={() => {
                             onChange(locale.id);
                         }}
                     >{locale.name}</FormListItem>
-                } else {
-                    return <FormDropdownDivider />
-                }
-            })}
+                ) : (
+                    <FormDropdownDivider key={`divider-${index}`} />
+                )
+            ))}
             {extraChildren && (
                 <>
                     <FormDropdownDivider />
