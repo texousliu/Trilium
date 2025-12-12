@@ -258,7 +258,7 @@
     "export_in_progress": "エクスポート処理中: {{progressCount}}",
     "export_finished_successfully": "エクスポートが正常に完了しました。",
     "format_pdf": "PDF - 印刷または共有目的に。",
-    "share-format": "Web 公開用の HTML - 共有ノートで使用されるのと同じテーマを使用しますが、静的 Web サイトとして公開できます。"
+    "share-format": "web 公開用の HTML - 共有ノートで使用されるのと同じテーマを使用しますが、静的 web サイトとして公開できます。"
   },
   "help": {
     "title": "チートシート",
@@ -459,7 +459,8 @@
     "convert_into_attachment_prompt": "本当にノート '{{title}}' を親ノートの添付ファイルに変換しますか？",
     "note_attachments": "ノートの添付ファイル",
     "open_note_on_server": "サーバー上のノートを開く",
-    "view_revisions": "ノートの変更履歴..."
+    "view_revisions": "ノートの変更履歴...",
+    "note_map": "ノートマップ"
   },
   "command_palette": {
     "export_note_title": "ノートをエクスポート",
@@ -800,7 +801,7 @@
   },
   "web_view": {
     "web_view": "Web ビュー",
-    "embed_websites": "Web ビュータイプでは、ウェブサイトをTriliumに埋め込むことができます。",
+    "embed_websites": "Web ビュータイプでは、web サイトを Trilium に埋め込むことができます。",
     "create_label": "まず始めに、埋め込みたいURLアドレスのラベルを作成してください。例: #webViewSrc=\"https://www.google.com\""
   },
   "backend_log": {
@@ -962,7 +963,7 @@
   "password": {
     "wiki": "wiki",
     "heading": "パスワード",
-    "alert_message": "新しいパスワードは大切に保管してください。パスワードはウェブインターフェースへのログインや、保護されたノートの暗号化に使用されます。パスワードを忘れると、保護されたノートはすべて永久に失われます。",
+    "alert_message": "新しいパスワードは大切に保管してください。パスワードは web インターフェースへのログインや、保護されたノートの暗号化に使用されます。パスワードを忘れると、保護されたノートはすべて永久に失われます。",
     "reset_link": "リセットするにはここをクリック。",
     "old_password": "旧パスワード",
     "new_password": "新パスワード",
@@ -1108,7 +1109,7 @@
     "sql_console_home": "SQLコンソールノートのデフォルトの場所",
     "bookmark_folder": "このラベルの付いたノートは、ブックマークにフォルダとして表示されます（子フォルダへのアクセスを許可します）",
     "share_hidden_from_tree": "このノートは左側のナビゲーションツリーには表示されていませんが、URL からアクセスできます",
-    "share_external_link": "ノートは共有ツリー内で外部ウェブサイトへのリンクとして機能します",
+    "share_external_link": "ノートは共有ツリー内で外部 web サイトへのリンクとして機能します",
     "share_alias": "https://your_trilium_host/share/[your_alias] でノートを利用できるようにエイリアスを定義します",
     "share_omit_default_css": "デフォルトの共有ページのCSSは省略されます。スタイルを大幅に変更する場合に使用してください。",
     "share_root": "/share root で提供されるノートをマークする。",
@@ -1624,7 +1625,7 @@
     "remove_this_attribute": "この属性を削除",
     "remove_color": "このカラーラベルを削除",
     "promoted_attributes": "プロモート属性",
-    "url_placeholder": "http://ウェブサイト..."
+    "url_placeholder": "http://web サイト..."
   },
   "relation_map": {
     "open_in_new_tab": "新しいタブで開く",
@@ -1978,7 +1979,7 @@
   "book_properties_config": {
     "hide-weekends": "週末を非表示",
     "display-week-numbers": "週番号を表示",
-    "map-style": "マップスタイル:",
+    "map-style": "マップスタイル",
     "max-nesting-depth": "最大階層の深さ:",
     "show-scale": "スケールを表示",
     "raster": "Raster",
@@ -2073,7 +2074,7 @@
     "recovery_keys_used": "使用日: {{date}}",
     "recovery_keys_unused": "回復コード {{index}} は未使用です",
     "oauth_title": "OAuth/OpenID",
-    "oauth_description": "OpenIDは、Googleなどの他のサービスのアカウントを使用してウェブサイトにログインし、本人確認を行うための標準化された方法です。デフォルトの発行者はGoogleですが、他のOpenIDプロバイダに変更できます。詳しくは<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">こちら</a>をご覧ください。Google経由でOpenIDサービスを設定するには、<a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">こちらの手順</a>に従ってください。",
+    "oauth_description": "OpenIDは、Googleなどの他のサービスのアカウントを使用して web サイトにログインし、本人確認を行うための標準化された方法です。デフォルトの発行者はGoogleですが、他のOpenIDプロバイダに変更できます。詳しくは<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">こちら</a>をご覧ください。Google経由でOpenIDサービスを設定するには、<a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">こちらの手順</a>に従ってください。",
     "oauth_description_warning": "OAuth/OpenIDを有効にするには、config.iniファイルにOAuth/OpenIDのベースURL、クライアントID、クライアントシークレットを設定し、アプリケーションを再起動する必要があります。環境変数から設定する場合は、TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID and TRILIUM_OAUTH_CLIENT_SECRET を設定してください。",
     "oauth_missing_vars": "設定がありません: {{-variables}}",
     "oauth_user_account": "ユーザーアカウント: ",
@@ -2129,7 +2130,9 @@
     "title": "実験オプション",
     "disclaimer": "これらのオプションは試験的なもので、動作が不安定になる可能性があります。注意してご使用ください。",
     "new_layout_name": "新しいレイアウト",
-    "new_layout_description": "よりモダンな外観と使いやすさが向上した新しいレイアウトをお試しください。今後のリリースで大幅な変更が加えられる可能性があります。"
+    "new_layout_description": "よりモダンな外観と使いやすさが向上した新しいレイアウトをお試しください。今後のリリースで大幅な変更が加えられる可能性があります。",
+    "floating_titlebar": "フローティングタイトルバー",
+    "floating_titlebar_description": "タイトルバーはコンテンツの一部であり、ノートのコンテンツに合わせてスクロールします。"
   },
   "breadcrumb_badges": {
     "read_only_explicit": "読み取り専用",
@@ -2143,6 +2146,12 @@
     "shared_publicly_description": "このノートは {{- link}} でオンライン公開されており、誰でも閲覧可能です。\n\n共有ノートに移動するにはクリックするか、右クリックしてその他のオプションを選択してください。",
     "shared_locally_description": "このノートは、{{- link}} でローカルネットワークのみで共有されています。\n\nクリックして共有ノートに移動するか、右クリックしてその他のオプションを選択してください。",
     "backlinks_other": "{{count}} バックリンク",
-    "backlinks_description_other": "このノートは {{count}} 件の他のノートからリンクされています。\n\nクリックするとバックリンクのリストが表示されます。"
+    "backlinks_description_other": "このノートは {{count}} 件の他のノートからリンクされています。\n\nクリックするとバックリンクのリストが表示されます。",
+    "clipped_note": "Web クリップ",
+    "clipped_note_description": "このノートは {{url}} から取得されました。\n\nクリックすると元の web ページに移動します。",
+    "execute_script": "スクリプトを実行",
+    "execute_script_description": "このノートはスクリプトノートです。クリックするとスクリプトが実行されます。",
+    "execute_sql": "SQL を実行",
+    "execute_sql_description": "このノートは SQL ノートです。クリックすると SQL クエリが実行されます。"
   }
 }
