@@ -42,6 +42,7 @@ export default function StatusBar() {
     const [ attributesShown, setAttributesShown ] = useState(false);
     const context: StatusBarContext | undefined | null = note && noteContext && { note, notePath, noteContext, viewScope, hoistedNoteId };
     const attributesContext: AttributesProps | undefined | null = context && { ...context, attributesShown, setAttributesShown };
+    const isHiddenNote = note?.isInHiddenSubtree();
 
     return (
         <div className="status-bar">
@@ -53,7 +54,7 @@ export default function StatusBar() {
 
                     <div className="actions-row">
                         <LanguageSwitcher {...context} />
-                        <NotePaths {...context} />
+                        {!isHiddenNote && <NotePaths {...context} />}
                         <AttributesButton {...attributesContext} />
                         <AttachmentCount {...context} />
                         <BacklinksBadge {...context} />
