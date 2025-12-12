@@ -55,20 +55,20 @@ export default class MathView extends View {
 	}
 
 	public updateMath(): void {
-		if (!this.element) {
+		if ( !this.element ) {
 			return;
 		}
 
 		// Handle empty equations
-		if (!this.value || !this.value.trim()) {
+		if ( !this.value || !this.value.trim() ) {
 			this.element.textContent = '';
-			this.element.classList.remove('ck-math-render-error');
+			this.element.classList.remove( 'ck-math-render-error' );
 			return;
 		}
 
 		// Clear previous render
 		this.element.textContent = '';
-		this.element.classList.remove('ck-math-render-error');
+		this.element.classList.remove( 'ck-math-render-error' );
 
 		renderEquation(
 			this.value,
@@ -80,14 +80,14 @@ export default class MathView extends View {
 			this.options.previewUid,
 			this.options.previewClassName,
 			this.options.katexRenderOptions
-		).catch(error => {
-			console.error('Math rendering failed:', error);
+		).catch( error => {
+			console.error( 'Math rendering failed:', error );
 
-			if (this.element) {
+			if ( this.element ) {
 				this.element.textContent = 'Error rendering equation';
-				this.element.classList.add('ck-math-render-error');
+				this.element.classList.add( 'ck-math-render-error' );
 			}
-		});
+		} );
 	}
 
 	public override render(): void {

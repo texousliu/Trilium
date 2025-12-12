@@ -11,8 +11,8 @@ import {
 	FocusTracker,
 	KeystrokeHandler
 } from 'ckeditor5';
-import IconCheck from '@ckeditor/ckeditor5-icons/theme/icons/check.svg?raw';
-import IconCancel from '@ckeditor/ckeditor5-icons/theme/icons/cancel.svg?raw';
+import { IconCheck } from 'ckeditor5';
+import { IconCancel } from 'ckeditor5';
 import { extractDelimiters, hasDelimiters } from '../utils.js';
 import MathView, { type MathViewOptions } from './mathview.js';
 import MathInputView from './mathinputview.js';
@@ -35,7 +35,7 @@ export default class MainFormView extends View {
 		locale: Locale,
 		mathViewOptions: MathViewOptions,
 		previewEnabled = false,
-		popupClassName: string[] = []
+		popupClassName: Array<string> = []
 	) {
 		super( locale );
 		const t = locale.t;
@@ -49,7 +49,7 @@ export default class MainFormView extends View {
 
 		// Build children
 
-		const children: View[] = [
+		const children: Array<View> = [
 			this.mathInputView,
 			this.displayButtonView
 		];
@@ -116,7 +116,10 @@ export default class MainFormView extends View {
 
 		this.mathInputView.on( 'mathfieldReady', () => {
 			const mathfieldView = this.mathInputView.mathFieldFocusableView;
-			if ( mathfieldView.element && !this._focusables.has( mathfieldView ) ) {
+			if ( mathfieldView.element ) {
+				if ( this._focusables.has( mathfieldView ) ) {
+					this._focusables.remove( mathfieldView );
+				}
 				this._focusables.add( mathfieldView, 0 );
 				this.focusTracker.add( mathfieldView.element );
 			}

@@ -55,6 +55,7 @@ export default class MathInputView extends View {
 	public mathfield: MathFieldElement | null = null;
 	public readonly latexTextAreaView: LatexTextAreaView;
 	public readonly mathFieldFocusableView: MathFieldFocusableView;
+	private _isSyncing = false;
 
 	constructor( locale: Locale ) {
 		super( locale );
@@ -185,6 +186,11 @@ export default class MathInputView extends View {
 		this.mathfield = mf;
 		this.mathFieldFocusableView.setElement( mf );
 		this.fire( 'mathfieldReady' );
+
+		// Auto-focus the mathfield when it's ready
+		setTimeout( () => {
+			mf.focus();
+		}, 0 );
 	}
 
 	public focus(): void {
