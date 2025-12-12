@@ -2162,6 +2162,7 @@
     "attachments_title_other": "This note has {{count}} attachments. Click to open the list of attachments in a new tab.",
     "attributes_one": "{{count}} attribute",
     "attributes_other": "{{count}} attributes",
-    "attributes_title": "Click to open a dedicated pane to edit this note's owned attributes, as well as to see the list of inherited attributes."
+    "attributes_title": "Click to open a dedicated pane to edit this note's owned attributes, as well as to see the list of inherited attributes.",
+    "note_paths_title": "Click to see the paths where this note is placed into the tree."
   }
 }

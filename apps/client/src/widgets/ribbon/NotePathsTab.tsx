@@ -3,30 +3,13 @@ import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import { useTriliumEvent } from "../react/hooks";
 import { useEffect, useMemo, useState } from "preact/hooks";
-import { NotePathRecord } from "../../entities/fnote";
+import FNote, { NotePathRecord } from "../../entities/fnote";
 import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
 import { NOTE_PATH_TITLE_SEPARATOR } from "../../services/tree";
 
 export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabContext) {
-    const [ sortedNotePaths, setSortedNotePaths ] = useState<NotePathRecord[]>();
-
-    function refresh() {
-        if (!note) return;
-        setSortedNotePaths(note
-            .getSortedNotePathRecords(hoistedNoteId)
-            .filter((notePath) => !notePath.isHidden));
-    }
-
-    useEffect(refresh, [ note?.noteId ]);
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        const noteId = note?.noteId;
-        if (!noteId) return;
-        if (loadResults.getBranchRows().find((branch) => branch.noteId === noteId)
-            || loadResults.isNoteReloaded(noteId)) {
-            refresh();
-        }
-    });
+    const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
 
     return (
         <div class="note-paths-widget">
@@ -51,6 +34,29 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
             </>
         </div>
     )
+}
+
+export function useSortedNotePaths(note: FNote | null | undefined, hoistedNoteId?: string) {
+    const [ sortedNotePaths, setSortedNotePaths ] = useState<NotePathRecord[]>();
+
+    function refresh() {
+        if (!note) return;
+        setSortedNotePaths(note
+            .getSortedNotePathRecords(hoistedNoteId)
+            .filter((notePath) => !notePath.isHidden));
+    }
+
+    useEffect(refresh, [ note?.noteId ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        const noteId = note?.noteId;
+        if (!noteId) return;
+        if (loadResults.getBranchRows().find((branch) => branch.noteId === noteId)
+            || loadResults.isNoteReloaded(noteId)) {
+            refresh();
+        }
+    });
+
+    return sortedNotePaths;
 }
 
 function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: string | null, notePathRecord?: NotePathRecord }) {

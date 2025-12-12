@@ -27,17 +27,19 @@ import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
+import NotePathsTab, { useSortedNotePaths } from "../ribbon/NotePathsTab";
 
 interface StatusBarContext {
     note: FNote;
     noteContext: NoteContext;
     viewScope?: ViewScope;
+    hoistedNoteId?: string;
 }
 
 export default function StatusBar() {
-    const { note, noteContext, viewScope } = useActiveNoteContext();
+    const { note, noteContext, viewScope, hoistedNoteId } = useActiveNoteContext();
     const [ attributesShown, setAttributesShown ] = useState(false);
-    const context: StatusBarContext | undefined | null = note && noteContext && { note, noteContext, viewScope };
+    const context: StatusBarContext | undefined | null = note && noteContext && { note, noteContext, viewScope, hoistedNoteId };
     const attributesContext: AttributesProps | undefined | null = context && { ...context, attributesShown, setAttributesShown };
 
     return (
@@ -49,6 +51,7 @@ export default function StatusBar() {
                     <Breadcrumb {...context} />
 
                     <div className="actions-row">
+                        <NotePaths {...context} />
                         <AttributesButton {...attributesContext} />
                         <AttachmentCount {...context} />
                         <BacklinksBadge {...context} />
@@ -305,5 +308,21 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
             />
         </div>
     );
+}
+//#endregion
+
+//#region Note paths
+function NotePaths({ note, hoistedNoteId }: StatusBarContext) {
+    const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
+
+    return (
+        <StatusBarDropdown
+            title={t("status_bar.note_paths_title")}
+            icon="bx bx-link-alt"
+            text={sortedNotePaths?.length}
+        >
+
+        </StatusBarDropdown>
+    )
 }
 //#endregion
