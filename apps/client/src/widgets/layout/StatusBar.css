@@ -74,6 +74,16 @@
 
     > .attribute-list {
         font-size: 0.9em;
+        padding: 0.5em 0.75em;
+
+        .inherited-attributes-widget > div {
+            padding: 0;
+            font-size: 0.9em;
+        }
+
+        .attribute-list-editor {
+            padding: 0 !important;
+        }
     }
 
 }
