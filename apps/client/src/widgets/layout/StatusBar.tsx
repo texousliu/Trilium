@@ -148,18 +148,18 @@ function LanguageSwitcher({ note }: StatusBarContext) {
                 title={t("status_bar.language_title")}
                 text={<span dir={activeLocale?.rtl ? "rtl" : "ltr"}>{getLocaleName(activeLocale)}</span>}
             >
-                {processedLocales.map((locale, index) => {
-                    if (typeof locale === "object") {
-                        return <FormListItem
+                {processedLocales.map((locale, index) =>
+                    (typeof locale === "object") ? (
+                        <FormListItem
                             key={locale.id}
                             rtl={locale.rtl}
                             checked={locale.id === currentNoteLanguage}
                             onClick={() => setCurrentNoteLanguage(locale.id)}
-                        >{locale.name}</FormListItem>;
-                    } else {
-                        return <FormDropdownDivider key={`divider-${index}`} />;
-                    }
-                })}
+                        >{locale.name}</FormListItem>
+                    ) : (
+                        <FormDropdownDivider key={`divider-${index}`} />
+                    )
+                )}
                 <FormDropdownDivider />
                 <FormListItem
                     onClick={() => openInAppHelpFromUrl("veGu4faJErEM")}
