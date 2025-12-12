@@ -41,6 +41,7 @@ function LanguageSwitcher({ note }: StatusBarContext) {
                     icon="bx bx-help-circle"
                 >{t("note_language.help-on-languages")}</FormListItem>
             )}
+            compact
         />
     );
 }

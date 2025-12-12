@@ -5,13 +5,14 @@ import { useMemo } from "preact/hooks";
 import Dropdown from "../../../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../../../react/FormList";
 
-export function LocaleSelector({ id, locales, currentValue, onChange, defaultLocale, extraChildren }: {
+export function LocaleSelector({ id, locales, currentValue, onChange, defaultLocale, extraChildren, compact }: {
     id?: string;
     locales: Locale[],
     currentValue: string,
     onChange: (newLocale: string) => void,
     defaultLocale?: Locale,
-    extraChildren?: ComponentChildren
+    extraChildren?: ComponentChildren,
+    compact?: boolean;
 }) {
     const activeLocale = defaultLocale?.id === currentValue ? defaultLocale : locales.find(l => l.id === currentValue);
 
@@ -42,7 +43,7 @@ export function LocaleSelector({ id, locales, currentValue, onChange, defaultLoc
     }, [ locales ]);
 
     return (
-        <Dropdown id={id} text={activeLocale?.name}>
+        <Dropdown id={id} text={getLocaleName(activeLocale, compact)}>
             {processedLocales.map(locale => {
                 if (typeof locale === "object") {
                     return <FormListItem
@@ -58,5 +59,12 @@ export function LocaleSelector({ id, locales, currentValue, onChange, defaultLoc
             })}
             {extraChildren}
         </Dropdown>
-    )
+    );
+}
+
+function getLocaleName(locale: Locale | null | undefined, compact: boolean | undefined) {
+    if (!locale) return "";
+    if (!compact) return locale.name;
+    if (!locale.id) return "-";
+    return locale.id.toLocaleUpperCase();
 }

@@ -330,7 +330,11 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
     );
 }
 
-export function NoteLanguageSelector({ note, extraChildren }: { note: FNote | null | undefined, extraChildren?: ComponentChildren }) {
+export function NoteLanguageSelector({ note, extraChildren, ...restProps }: {
+    note: FNote | null | undefined,
+    extraChildren?: ComponentChildren,
+    compact?: boolean;
+}) {
     const [ modalShown, setModalShown ] = useState(false);
     const [ languages ] = useTriliumOption("languages");
     const DEFAULT_LOCALE = {
@@ -357,6 +361,7 @@ export function NoteLanguageSelector({ note, extraChildren }: { note: FNote | nu
                         icon="bx bx-cog"
                     >{t("note_language.configure-languages")}</FormListItem>
                 </>}
+                {...restProps}
             />
             {createPortal(
                 <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
