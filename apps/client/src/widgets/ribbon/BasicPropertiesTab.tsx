@@ -131,7 +131,8 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
     );
 }
 
-export function NoteTypeCodeNoteList({ mimeTypes, changeNoteType, setModalShown }: {
+export function NoteTypeCodeNoteList({ currentMimeType, mimeTypes, changeNoteType, setModalShown }: {
+    currentMimeType?: string;
     mimeTypes: MimeType[];
     changeNoteType(type: NoteType, mime: string): void;
     setModalShown(shown: boolean): void;
@@ -141,6 +142,7 @@ export function NoteTypeCodeNoteList({ mimeTypes, changeNoteType, setModalShown 
             {mimeTypes.map(({ title, mime }) => (
                 <FormListItem
                     key={mime}
+                    checked={mime === currentMimeType}
                     onClick={() => changeNoteType("code", mime)}
                 >
                     {title}

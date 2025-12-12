@@ -364,6 +364,7 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
             dropdownOptions={{ autoClose: true }}
         >
             <NoteTypeCodeNoteList
+                currentMimeType={currentNoteMime}
                 mimeTypes={mimeTypes}
                 changeNoteType={(type, mime) => server.put(`notes/${note.noteId}/type`, { type, mime })}
                 setModalShown={() => {}}
