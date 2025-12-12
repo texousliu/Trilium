@@ -132,7 +132,7 @@
     "activatePreviousTab": "aktywuj poprzednią kartę",
     "creatingNotes": "Tworzenie notatek",
     "createNoteAfter": "utwórz nową notatkę po aktywnej notatce",
-    "createNoteInto": "utwórz nową pod-notatkę wewnątrz aktywnej notatki",
+    "createNoteInto": "Utwórz nową podnotatkę w aktywnej notatce",
     "editBranchPrefix": "edytuj <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/tree-concepts.html#prefix\">prefiks</a> klona aktywnej notatki",
     "movingCloningNotes": "Przenoszenie / klonowanie notatek",
     "moveNoteUpDown": "przesuń notatkę w górę/dół na liście",
@@ -1252,8 +1252,8 @@
   "zpetne_odkazy": {
     "relation": "relacja",
     "backlink_one": "{{count}} Link zwrotny",
-    "backlink_few": "",
-    "backlink_many": ""
+    "backlink_few": "{{count}} Linki zwrotne",
+    "backlink_many": "{{count}} Linki zwrotne"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Wstaw notatkę podrzędną",
@@ -2148,11 +2148,11 @@
     "shared_locally": "Udostępniona lokalnie",
     "shared_locally_description": "Ta notatka jest udostępniona tylko w sieci lokalnej pod adresem {{- link}}.\n\nKliknij, aby przejść do udostępnionej notatki lub kliknij prawym przyciskiem myszy, aby uzyskać więcej opcji.",
     "backlinks_one": "{{count}} link zwrotny",
-    "backlinks_few": "",
-    "backlinks_many": "",
+    "backlinks_few": "{{count}} linki zwrotne",
+    "backlinks_many": "{{count}} linki zwrotne",
     "backlinks_description_one": "Ta notatka jest linkowana z {{count}} innej notatki.\n\nKliknij, aby zobaczyć listę linków zwrotnych.",
-    "backlinks_description_few": "",
-    "backlinks_description_many": "",
+    "backlinks_description_few": "Ta notatka jest linkowana z {{count}} innych notatek.\n\nKliknij, aby zobaczyć listę linków zwrotnych.",
+    "backlinks_description_many": "Ta notatka jest linkowana z {{count}} innych notatek.\n\nKliknij, aby zobaczyć listę linków zwrotnych.",
     "clipped_note": "Wycinek WWW",
     "clipped_note_description": "Ta notatka została pierwotnie pobrana z {{url}}.\n\nKliknij, aby przejść do źródłowej strony internetowej.",
     "execute_script": "Uruchom skrypt",
