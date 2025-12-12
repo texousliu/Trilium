@@ -694,7 +694,8 @@
     "convert_into_attachment_prompt": "确定要将笔记 '{{title}}' 转换为父笔记的附件吗？",
     "print_pdf": "导出为 PDF...",
     "open_note_on_server": "在服务器上打开笔记",
-    "view_revisions": "笔记修订..."
+    "view_revisions": "笔记修订...",
+    "note_map": "笔记地图"
   },
   "onclick_button": {
     "no_click_handler": "按钮组件'{{componentId}}'没有定义点击处理程序"
@@ -2011,7 +2012,7 @@
   "book_properties_config": {
     "hide-weekends": "隐藏周末",
     "display-week-numbers": "显示周数",
-    "map-style": "地图样式：",
+    "map-style": "地图样式",
     "max-nesting-depth": "最大嵌套深度：",
     "raster": "栅格",
     "vector_light": "矢量（浅色）",
@@ -2125,7 +2126,9 @@
     "title": "实验选项",
     "disclaimer": "这些选项处于实验阶段，可能导致系统不稳定。请谨慎使用。",
     "new_layout_name": "新布局",
-    "new_layout_description": "尝试全新布局，呈现更现代的外观并提升易用性。后续版本将进行重大调整。"
+    "new_layout_description": "尝试全新布局，呈现更现代的外观并提升易用性。后续版本将进行重大调整。",
+    "floating_titlebar": "浮动标题栏",
+    "floating_titlebar_description": "标题栏是内容的一部分，会随着笔记内容一起滚动。"
   },
   "tab_history_navigation_buttons": {
     "go-back": "返回前一笔记",
@@ -2143,6 +2146,12 @@
     "shared_publicly_description": "此笔记已在网上发布，链接为 {{- link}}，并且可公开访问。\n\n点击以导航到共享笔记，或右键点击查看更多选项。",
     "shared_locally_description": "此笔记仅在本地网络共享，链接为 {{- link}}。\n\n点击以导航到共享笔记，或右键点击查看更多选项。",
     "backlinks_other": "{{count}} 个反向链接",
-    "backlinks_description_other": "此笔记与 {{count}} 个其他笔记相关联。\n\n点击查看反向链接列表。"
+    "backlinks_description_other": "此笔记与 {{count}} 个其他笔记相关联。\n\n点击查看反向链接列表。",
+    "clipped_note": "网页剪辑",
+    "clipped_note_description": "此笔记最初来自 {{url}}。\n\n点击即可跳转至源网页。",
+    "execute_script": "运行脚本",
+    "execute_script_description": "这是一篇脚本笔记。点击即可执行脚本。",
+    "execute_sql": "运行SQL",
+    "execute_sql_description": "这是一篇 SQL 笔记。点击即可执行 SQL 查询。"
   }
 }
