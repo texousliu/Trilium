@@ -37,8 +37,8 @@ export default function StatusBar() {
                 </div>
 
                 <div className="actions-row">
-                    <NoteInfoBadge {...context} />
                     <LanguageSwitcher {...context} />
+                    <NoteInfoBadge {...context} />
                 </div>
             </>}
         </div>
