@@ -32,6 +32,7 @@
                 }
 
                 &.active,
+                &.dropdown-toggle.show,
                 &:focus,
                 &:hover {
                     background: var(--input-background-color);
