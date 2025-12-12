@@ -14,13 +14,13 @@ import NoteLink from "../react/NoteLink";
 import link_context_menu from "../../menus/link_context_menu";
 import { TitleEditor } from "../collections/board";
 import server from "../../services/server";
+import FNote from "../../entities/fnote";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
 const FINAL_ITEMS = 2;
 
-export default function Breadcrumb() {
-    const { note, noteContext } = useNoteContext();
+export default function Breadcrumb({ note, noteContext }: { note: FNote, noteContext: NoteContext }) {
     const notePath = buildNotePaths(noteContext?.notePathArray);
 
     return (

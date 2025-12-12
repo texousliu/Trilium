@@ -2,6 +2,7 @@ import "./StatusBar.css";
 
 import { Locale } from "@triliumnext/commons";
 import clsx from "clsx";
+import { type ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
 import { useState } from "preact/hooks";
 
@@ -11,27 +12,28 @@ import { openInAppHelpFromUrl } from "../../services/utils";
 import { formatDateTime } from "../../utils/formatters";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useNoteContext } from "../react/hooks";
+import { useActiveNoteContext } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
-
+import NoteContext from "../../components/note_context";
 
 interface StatusBarContext {
     note: FNote;
+    noteContext: NoteContext;
 }
 
 export default function StatusBar() {
-    const { note } = useNoteContext();
-    const context = note && { note } satisfies StatusBarContext;
+    const { note, noteContext } = useActiveNoteContext();
+    const context = note && noteContext && { note, noteContext } satisfies StatusBarContext;
 
     return (
         <div className="status-bar">
             {context && <>
                 <div className="breadcrumb-row">
-                    <Breadcrumb />
+                    <Breadcrumb {...context} />
                 </div>
 
                 <div className="actions-row">
