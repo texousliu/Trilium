@@ -330,12 +330,32 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
     );
 }
 
-export function NoteLanguageSelector({ note, extraChildren, ...restProps }: {
-    note: FNote | null | undefined,
-    extraChildren?: ComponentChildren,
-    compact?: boolean;
-}) {
+export function NoteLanguageSelector({ note }: { note: FNote | null | undefined }) {
     const [ modalShown, setModalShown ] = useState(false);
+    const { locales, DEFAULT_LOCALE, currentNoteLanguage, setCurrentNoteLanguage } = useLanguageSwitcher(note);
+
+    return (
+        <>
+            <LocaleSelector
+                locales={locales}
+                defaultLocale={DEFAULT_LOCALE}
+                currentValue={currentNoteLanguage} onChange={setCurrentNoteLanguage}
+                extraChildren={<>
+                    <FormListItem
+                        onClick={() => setModalShown(true)}
+                        icon="bx bx-cog"
+                    >{t("note_language.configure-languages")}</FormListItem>
+                </>}
+            />
+            {createPortal(
+                <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
+                document.body
+            )}
+        </>
+    );
+}
+
+export function useLanguageSwitcher(note: FNote | null | undefined) {
     const [ languages ] = useTriliumOption("languages");
     const DEFAULT_LOCALE = {
         id: "",
@@ -347,31 +367,10 @@ export function NoteLanguageSelector({ note, extraChildren, ...restProps }: {
         const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
         return filteredLanguages;
     }, [ languages ]);
-
-    return (
-        <>
-            <LocaleSelector
-                locales={locales}
-                defaultLocale={DEFAULT_LOCALE}
-                currentValue={currentNoteLanguage ?? ""} onChange={setCurrentNoteLanguage}
-                extraChildren={<>
-                    {extraChildren}
-                    <FormListItem
-                        onClick={() => setModalShown(true)}
-                        icon="bx bx-cog"
-                    >{t("note_language.configure-languages")}</FormListItem>
-                </>}
-                {...restProps}
-            />
-            {createPortal(
-                <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
-                document.body
-            )}
-        </>
-    );
+    return { locales, DEFAULT_LOCALE, currentNoteLanguage, setCurrentNoteLanguage };
 }
 
-function ContentLanguagesModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
+export function ContentLanguagesModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
     return (
         <Modal
             className="content-languages-modal"

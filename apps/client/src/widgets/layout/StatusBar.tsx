@@ -3,10 +3,15 @@ import "./StatusBar.css";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { openInAppHelpFromUrl } from "../../services/utils";
-import { FormListItem } from "../react/FormList";
+import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useNoteContext } from "../react/hooks";
-import { NoteLanguageSelector } from "../ribbon/BasicPropertiesTab";
+import { ContentLanguagesModal, NoteLanguageSelector, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
 import Breadcrumb from "./Breadcrumb";
+import { useState } from "preact/hooks";
+import { createPortal } from "preact/compat";
+import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
+import Dropdown from "../react/Dropdown";
+import { Locale } from "@triliumnext/commons";
 
 interface StatusBarContext {
     note: FNote;
@@ -32,16 +37,44 @@ export default function StatusBar() {
 }
 
 function LanguageSwitcher({ note }: StatusBarContext) {
+    const [ modalShown, setModalShown ] = useState(false);
+    const { locales, DEFAULT_LOCALE, currentNoteLanguage, setCurrentNoteLanguage } = useLanguageSwitcher(note);
+    const { activeLocale, processedLocales } = useProcessedLocales(locales, DEFAULT_LOCALE, currentNoteLanguage ?? DEFAULT_LOCALE.id);
+
     return (
-        <NoteLanguageSelector
-            note={note}
-            extraChildren={(
+        <>
+            <Dropdown text={getLocaleName(activeLocale)}>
+                {processedLocales.map(locale => {
+                    if (typeof locale === "object") {
+                        return <FormListItem
+                            rtl={locale.rtl}
+                            checked={locale.id === currentNoteLanguage}
+                            onClick={() => setCurrentNoteLanguage(locale.id)}
+                        >{locale.name}</FormListItem>
+                    } else {
+                        return <FormDropdownDivider />
+                    }
+                })}
+                <FormDropdownDivider />
                 <FormListItem
                     onClick={() => openInAppHelpFromUrl("veGu4faJErEM")}
                     icon="bx bx-help-circle"
                 >{t("note_language.help-on-languages")}</FormListItem>
+                <FormListItem
+                    onClick={() => setModalShown(true)}
+                    icon="bx bx-cog"
+                >{t("note_language.configure-languages")}</FormListItem>
+            </Dropdown>
+            {createPortal(
+                <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
+                document.body
             )}
-            compact
-        />
+        </>
     );
+}
+
+export function getLocaleName(locale: Locale | null | undefined) {
+    if (!locale) return "";
+    if (!locale.id) return "-";
+    return locale.id.toLocaleUpperCase();
 }

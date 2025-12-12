@@ -5,15 +5,42 @@ import { useMemo } from "preact/hooks";
 import Dropdown from "../../../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../../../react/FormList";
 
-export function LocaleSelector({ id, locales, currentValue, onChange, defaultLocale, extraChildren, compact }: {
+export function LocaleSelector({ id, locales, currentValue, onChange, defaultLocale, extraChildren }: {
     id?: string;
     locales: Locale[],
-    currentValue: string,
+    currentValue: string | null | undefined,
     onChange: (newLocale: string) => void,
     defaultLocale?: Locale,
     extraChildren?: ComponentChildren,
-    compact?: boolean;
 }) {
+    const currentValueWithDefault = currentValue ?? defaultLocale?.id ?? "";
+    const { activeLocale, processedLocales } = useProcessedLocales(locales, defaultLocale, currentValueWithDefault);
+    return (
+        <Dropdown id={id} text={activeLocale?.name}>
+            {processedLocales.map(locale => {
+                if (typeof locale === "object") {
+                    return <FormListItem
+                        rtl={locale.rtl}
+                        checked={locale.id === currentValue}
+                        onClick={() => {
+                            onChange(locale.id);
+                        }}
+                    >{locale.name}</FormListItem>
+                } else {
+                    return <FormDropdownDivider />
+                }
+            })}
+            {extraChildren && (
+                <>
+                    <FormDropdownDivider />
+                    {extraChildren}
+                </>
+            )}
+        </Dropdown>
+    );
+}
+
+export function useProcessedLocales(locales: Locale[], defaultLocale: Locale | undefined, currentValue: string) {
     const activeLocale = defaultLocale?.id === currentValue ? defaultLocale : locales.find(l => l.id === currentValue);
 
     const processedLocales = useMemo(() => {
@@ -36,35 +63,8 @@ export function LocaleSelector({ id, locales, currentValue, onChange, defaultLoc
             ];
         }
 
-        if (extraChildren) {
-            items.push("---");
-        }
         return items;
-    }, [ locales ]);
+    }, [ locales, defaultLocale ]);
 
-    return (
-        <Dropdown id={id} text={getLocaleName(activeLocale, compact)}>
-            {processedLocales.map(locale => {
-                if (typeof locale === "object") {
-                    return <FormListItem
-                        rtl={locale.rtl}
-                        checked={locale.id === currentValue}
-                        onClick={() => {
-                            onChange(locale.id);
-                        }}
-                    >{locale.name}</FormListItem>
-                } else {
-                    return <FormDropdownDivider />
-                }
-            })}
-            {extraChildren}
-        </Dropdown>
-    );
-}
-
-function getLocaleName(locale: Locale | null | undefined, compact: boolean | undefined) {
-    if (!locale) return "";
-    if (!compact) return locale.name;
-    if (!locale.id) return "-";
-    return locale.id.toLocaleUpperCase();
+    return { activeLocale, processedLocales };
 }
