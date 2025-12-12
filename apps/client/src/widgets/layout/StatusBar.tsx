@@ -9,6 +9,7 @@ import { useContext, useRef, useState } from "preact/hooks";
 import { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
+import attributes from "../../services/attributes";
 import { t } from "../../services/i18n";
 import { ViewScope } from "../../services/link";
 import { openInAppHelpFromUrl } from "../../services/utils";
@@ -20,11 +21,11 @@ import { useActiveNoteContext, useStaticTooltip, useTriliumEvent } from "../reac
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
+import AttributeEditor, { AttributeEditorImperativeHandlers } from "../ribbon/components/AttributeEditor";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
-import attributes from "../../services/attributes";
 
 interface StatusBarContext {
     note: FNote;
@@ -38,19 +39,23 @@ export default function StatusBar() {
 
     return (
         <div className="status-bar">
-            {context && <>
-                <div className="breadcrumb-row">
-                    <Breadcrumb {...context} />
-                </div>
+            {context && <AttributesPane {...context} />}
 
-                <div className="actions-row">
-                    <AttributesButton {...context} />
-                    <AttachmentCount {...context} />
-                    <BacklinksBadge {...context} />
-                    <LanguageSwitcher {...context} />
-                    <NoteInfoBadge {...context} />
-                </div>
-            </>}
+            <div className="status-bar-main-row">
+                {context && <>
+                    <div className="breadcrumb-row">
+                        <Breadcrumb {...context} />
+                    </div>
+
+                    <div className="actions-row">
+                        <AttributesButton {...context} />
+                        <AttachmentCount {...context} />
+                        <BacklinksBadge {...context} />
+                        <LanguageSwitcher {...context} />
+                        <NoteInfoBadge {...context} />
+                    </div>
+                </>}
+            </div>
         </div>
     );
 }
@@ -81,14 +86,18 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
     );
 }
 
-function StatusBarButton({ className, icon, text, title, triggerCommand }: {
+interface StatusBarButtonBaseProps {
     className?: string;
     icon: string;
     title: string;
     text?: string | number;
     disabled?: boolean;
-    triggerCommand: CommandNames;
-}) {
+}
+
+type StatusBarButtonWithCommand = StatusBarButtonBaseProps & { triggerCommand: CommandNames; };
+type StatusBarButtonWithClick = StatusBarButtonBaseProps & { onClick: () => void; };
+
+function StatusBarButton({ className, icon, text, title, ...restProps }: StatusBarButtonWithCommand | StatusBarButtonWithClick) {
     const parentComponent = useContext(ParentComponent);
     const buttonRef = useRef<HTMLButtonElement>(null);
     useStaticTooltip(buttonRef, {
@@ -103,7 +112,13 @@ function StatusBarButton({ className, icon, text, title, triggerCommand }: {
             ref={buttonRef}
             className={clsx("btn select-button", className)}
             type="button"
-            onClick={() => parentComponent?.triggerCommand(triggerCommand)}
+            onClick={() => {
+                if ("triggerCommand" in restProps) {
+                    parentComponent?.triggerCommand(restProps.triggerCommand);
+                } else {
+                    restProps.onClick();
+                }
+            }}
         >
             <Icon icon={icon} />&nbsp;{text}
         </button>
@@ -246,7 +261,27 @@ function AttributesButton({ note }: StatusBarContext) {
             icon="bx bx-list-check"
             title={t("status_bar.attributes_title")}
             text={t("status_bar.attributes", { count })}
+            onClick={() => {
+                alert("Hi");
+            }}
         />
+    );
+}
+
+function AttributesPane({ note, noteContext }: StatusBarContext) {
+    const parentComponent = useContext(ParentComponent);
+    const api = useRef<AttributeEditorImperativeHandlers>(null);
+
+    return (
+        <div className="attribute-list">
+            {parentComponent && <AttributeEditor
+                componentId={parentComponent.componentId}
+                api={api}
+                ntxId={noteContext.ntxId}
+                note={note}
+                hidden={!note}
+            />}
+        </div>
     );
 }
 //#endregion

@@ -2,70 +2,74 @@
     contain: none;
     border-top: 1px solid var(--main-border-color);
     background-color: var(--left-pane-background-color);
-    display: flex;
-    align-items: center;
-    padding-inline: 0.25em;
-    min-height: 32px;
 
-    > .breadcrumb-row {
-        flex-grow: 1;
-    }
-
-    > .actions-row {
-        padding: 0.1em;
+    .status-bar-main-row {
+        min-height: 32px;
         display: flex;
-        gap: 0.1em;
-        font-size: 0.85em;
+        align-items: center;
+        padding-inline: 0.25em;
 
-        .btn {
-            padding: 0 0.5em !important;
-            background: transparent;
+        > .breadcrumb-row {
+            flex-grow: 1;
+        }
+
+        > .actions-row {
+            padding: 0.1em;
             display: flex;
-            align-items: center;
-            border: 0;
+            gap: 0.1em;
+            font-size: 0.85em;
 
-            &:focus,
-            &:hover {
-                background: var(--input-background-color);
-            }
-        }
+            .btn {
+                padding: 0 0.5em !important;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                border: 0;
 
-        .status-bar-dropdown-button {
-            &:after {
-                content: unset;
-            }
-        }
-    }
-
-    .dropdown {
-        .dropdown-toggle {
-            padding: 0.1em 0.25em;
-        }
-    }
-
-    .dropdown-note-info {
-        width: max-content;
-
-        ul {
-            list-style-type: none;
-            padding: 0.5em;
-            margin: 0;
-            display: table;
-
-            li {
-                display: table-row;
-
-                > strong {
-                    display: table-cell;
-                    padding: 0.2em 0;
+                &:focus,
+                &:hover {
+                    background: var(--input-background-color);
                 }
+            }
 
-                > span {
-                    display: table-cell;
-                    user-select: text;
-                    padding-left: 2em;
+            .status-bar-dropdown-button {
+                &:after {
+                    content: unset;
                 }
             }
         }
+
+        .dropdown {
+            .dropdown-toggle {
+                padding: 0.1em 0.25em;
+            }
+        }
+
+        .dropdown-note-info {
+            width: max-content;
+
+            ul {
+                list-style-type: none;
+                padding: 0.5em;
+                margin: 0;
+                display: table;
+
+                li {
+                    display: table-row;
+
+                    > strong {
+                        display: table-cell;
+                        padding: 0.2em 0;
+                    }
+
+                    > span {
+                        display: table-cell;
+                        user-select: text;
+                        padding-left: 2em;
+                    }
+                }
+            }
+        }
     }
+
 }
