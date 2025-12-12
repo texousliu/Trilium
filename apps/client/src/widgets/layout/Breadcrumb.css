@@ -2,49 +2,6 @@
     position: relative;
     min-height: 30px;
     align-items: center;
-    container-type: inline-size;
-
-    @container (max-width: 700px) {
-        .breadcrumb-badges {
-            flex-shrink: 0;
-
-            >* {
-                flex-shrink: 0;
-                width: 18px;
-            }
-
-            .dropdown {
-                button {
-                    flex-shrink: 0;
-                }
-            }
-
-            .breadcrumb-badge {
-                flex-shrink: 0;
-                padding: 0 2px;
-
-                >* {
-                    text-overflow: clip;
-                }
-
-                .text {
-                    display: none;
-                }
-            }
-        }
-    }
-
-    @container (max-width: 500px) {
-        .breadcrumb {
-            .btn.icon-action {
-                width: 16px;
-            }
-        }
-
-        .icon-action {
-            margin: 0;
-        }
-    }
 
     .breadcrumb {
         display: flex;
@@ -54,7 +11,6 @@
         gap: 0.25em;
         flex-wrap: nowrap;
         overflow: hidden;
-        max-width: 85%;
 
         > span,
         > span > span {
