@@ -90,6 +90,11 @@
                 padding: 0;
             }
         }
+
+        .dropdown-code-note-switcher {
+            max-height: 90vh;
+            overflow: scroll;
+        }
     }
 
     > .attribute-list {

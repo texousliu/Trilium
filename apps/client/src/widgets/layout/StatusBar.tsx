@@ -360,6 +360,7 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
             icon="bx bx-code-curly"
             text={correspondingMimeType?.title}
             title={t("status_bar.code_note_switcher")}
+            dropdownContainerClassName="dropdown-code-note-switcher"
             dropdownOptions={{ autoClose: true }}
         >
             <NoteTypeCodeNoteList
