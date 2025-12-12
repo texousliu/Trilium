@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { useElementSize, useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 
-import { Indexed, numberObjectsInPlace } from "../../services/utils";
-import { EventNames } from "../../components/app_context";
 import { KeyboardActionNames } from "@triliumnext/commons";
-import { RIBBON_TAB_DEFINITIONS } from "./RibbonDefinition";
-import { TabConfiguration, TitleContext } from "./ribbon-interface";
 import clsx from "clsx";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+
+import { EventNames } from "../../components/app_context";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
+import { Indexed, numberObjectsInPlace } from "../../services/utils";
+import { useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
+import { TabConfiguration, TitleContext } from "./ribbon-interface";
+import { RIBBON_TAB_DEFINITIONS } from "./RibbonDefinition";
 
 const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>(RIBBON_TAB_DEFINITIONS);
 
@@ -45,16 +46,6 @@ export default function Ribbon({ children }: { children?: preact.ComponentChildr
         refresh();
     }, [ note, noteType, isReadOnlyTemporarilyDisabled ]);
 
-    // Manage height.
-    const containerRef = useRef<HTMLDivElement>(null);
-    const size = useElementSize(containerRef);
-    useEffect(() => {
-        if (!containerRef.current || !size) return;
-        const parentEl = containerRef.current.closest<HTMLDivElement>(".note-split");
-        if (!parentEl) return;
-        parentEl.style.setProperty("--ribbon-height", `${size.height}px`);
-    }, [ size ]);
-
     // Automatically activate the first ribbon tab that needs to be activated whenever a note changes.
     useEffect(() => {
         if (!computedTabs) return;
@@ -79,7 +70,6 @@ export default function Ribbon({ children }: { children?: preact.ComponentChildr
     const shouldShowRibbon = (noteContext?.viewScope?.viewMode === "default" && !noteContext.noteId?.startsWith("_options"));
     return (
         <div
-            ref={containerRef}
             className={clsx("ribbon-container", !shouldShowRibbon && "hidden-ext")}
             style={{ contain: "none" }}
         >
@@ -133,7 +123,7 @@ export default function Ribbon({ children }: { children?: preact.ComponentChildr
                 })}
             </div>
         </div>
-    )
+    );
 }
 
 function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: string; title: string; active: boolean, onClick: () => void, toggleCommand?: KeyboardActionNames }) {
@@ -156,7 +146,7 @@ function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: stri
 
             <div class="ribbon-tab-spacer" />
         </>
-    )
+    );
 }
 
 export async function shouldShowTab(showConfig: boolean | ((context: TitleContext) => Promise<boolean | null | undefined> | boolean | null | undefined), context: TitleContext) {
