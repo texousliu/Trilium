@@ -13,7 +13,7 @@
 #mathlive-suggestion-popover,
 /* Potential class name variant for suggestions popover */
 .mathlive-suggestions-popover {
-    z-index: 100001 !important;
+    z-index: calc(var(--ck-z-panel) + 1000) !important;
 }
 
 /* ============================================================================

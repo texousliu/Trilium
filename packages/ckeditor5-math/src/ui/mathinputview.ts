@@ -1,6 +1,19 @@
 // Math input widget: wraps a MathLive <math-field> and a LaTeX textarea
 // and keeps them in sync for the CKEditor 5 math dialog.
 import { View, type Locale, type FocusableView } from 'ckeditor5';
+
+// Type-safe interface for MathLive's global virtual keyboard.
+declare global {
+	interface Window {
+		mathVirtualKeyboard?: {
+			visible: boolean;
+			show: () => void;
+			hide: () => void;
+			addEventListener: ( event: string, cb: () => void ) => void;
+			removeEventListener: ( event: string, cb: () => void ) => void;
+		};
+	}
+}
 // Narrow interface for the MathLive element we care about.
 interface MathFieldElement extends HTMLElement {
 	value: string;
@@ -75,7 +88,7 @@ export default class MathInputView extends View {
 					this.mathfield.remove();
 					this.mathfield = null;
 					this._initMathField( false );
-				} else if ( this.mathfield.value !== val ) {
+				} else if ( this.mathfield.value.trim() !== val.trim() ) {
 					this._setMathfieldValue( val );
 				}
 			}
@@ -87,7 +100,7 @@ export default class MathInputView extends View {
 				textarea.value = newVal;
 			}
 			if ( this.mathfield ) {
-				if ( this.mathfield.value !== newVal ) {
+				if ( this.mathfield.value.trim() !== newVal.trim() ) {
 					this._setMathfieldValue( newVal );
 				}
 			} else if ( newVal !== '' ) {
@@ -101,18 +114,15 @@ export default class MathInputView extends View {
 				this.mathfield.readOnly = val;
 			}
 		} );
-		const vk = ( window as any ).mathVirtualKeyboard;
+		const vk = window.mathVirtualKeyboard;
 		if ( vk && !this._vkGeometryHandler ) {
-			// When the on-screen keyboard appears, push focus back into mathfield
-			// so typing continues there instead of the textarea/body.
+			// When the on-screen keyboard appears, ensure mathfield has focus
+			// so MathLive captures the keyboard input correctly.
 			this._vkGeometryHandler = () => {
 				if ( !vk.visible || !this.mathfield ) {
 					return;
 				}
-				const active = document.activeElement;
-				if ( active === document.body || active === textarea ) {
-					this.mathfield.focus();
-				}
+				this.mathfield.focus();
 			};
 			vk.addEventListener( 'geometrychange', this._vkGeometryHandler );
 		}
@@ -162,6 +172,8 @@ export default class MathInputView extends View {
 		mf.value = this.value ?? '';
 		mf.readOnly = this.isReadOnly;
 		container.appendChild( mf );
+		// Ensure mathfield is ready immediately for virtual keyboard input
+		mf.focus();
 		try {
 			const anyMf = mf as any;
 			// Override only dt/dx/dy, keep other built‑in shortcuts (e.g. frac).
@@ -178,7 +190,7 @@ export default class MathInputView extends View {
 		}, { capture: true } );
 
 		mf.addEventListener( 'input', () => {
-			if ( this.latexTextAreaView.element.value !== mf.value ) {
+			if ( this.latexTextAreaView.element.value.trim() !== mf.value.trim() ) {
 				this.latexTextAreaView.element.value = mf.value;
 			}
 			this.value = mf.value || null;
@@ -188,7 +200,7 @@ export default class MathInputView extends View {
 		this.mathFieldFocusableView.setElement( mf );
 		this.fire( 'mathfieldReady' );
 		if ( shouldFocus ) {
-			setTimeout( () => mf.focus(), 0 );
+			requestAnimationFrame( () => mf.focus() );
 		}
 	}
 
@@ -204,14 +216,14 @@ export default class MathInputView extends View {
 		}
 	}
 	public hideKeyboard(): void {
-		( window as any ).mathVirtualKeyboard?.hide();
+		window.mathVirtualKeyboard?.hide();
 	}
 	public focus(): void {
 		this.mathfield?.focus();
 	}
 	public override destroy(): void {
 		this._destroyed = true;
-		const vk = ( window as any ).mathVirtualKeyboard;
+		const vk = window.mathVirtualKeyboard;
 		if ( vk && this._vkGeometryHandler ) {
 			vk.removeEventListener( 'geometrychange', this._vkGeometryHandler );
 			this._vkGeometryHandler = undefined;
