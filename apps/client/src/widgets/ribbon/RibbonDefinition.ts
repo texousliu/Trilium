@@ -112,7 +112,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("note_paths.title"),
         icon: "bx bx-collection",
         content: NotePathsTab,
-        show: true,
+        show: !isNewLayout,
         toggleCommand: "toggleRibbonTabNotePaths"
     },
     {

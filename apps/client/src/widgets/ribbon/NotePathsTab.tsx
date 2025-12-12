@@ -11,7 +11,13 @@ import { TabContext } from "./ribbon-interface";
 
 export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabContext) {
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
+    return <NotePathsWidget sortedNotePaths={sortedNotePaths} currentNotePath={notePath} />;
+}
 
+export function NotePathsWidget({ sortedNotePaths, currentNotePath }: {
+    sortedNotePaths: NotePathRecord[] | undefined;
+    currentNotePath?: string | null | undefined;
+}) {
     return (
         <div class="note-paths-widget">
             <>
@@ -23,7 +29,7 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
                     {sortedNotePaths?.length ? sortedNotePaths.map(sortedNotePath => (
                         <NotePath
                             key={sortedNotePath.notePath}
-                            currentNotePath={notePath}
+                            currentNotePath={currentNotePath}
                             notePathRecord={sortedNotePath}
                         />
                     )) : undefined}

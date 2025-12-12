@@ -24,22 +24,23 @@ import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPrope
 import AttributeEditor, { AttributeEditorImperativeHandlers } from "../ribbon/components/AttributeEditor";
 import InheritedAttributesTab from "../ribbon/InheritedAttributesTab";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
+import { NotePathsWidget, useSortedNotePaths } from "../ribbon/NotePathsTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
-import NotePathsTab, { useSortedNotePaths } from "../ribbon/NotePathsTab";
 
 interface StatusBarContext {
     note: FNote;
+    notePath: string | null | undefined;
     noteContext: NoteContext;
     viewScope?: ViewScope;
     hoistedNoteId?: string;
 }
 
 export default function StatusBar() {
-    const { note, noteContext, viewScope, hoistedNoteId } = useActiveNoteContext();
+    const { note, notePath, noteContext, viewScope, hoistedNoteId } = useActiveNoteContext();
     const [ attributesShown, setAttributesShown ] = useState(false);
-    const context: StatusBarContext | undefined | null = note && noteContext && { note, noteContext, viewScope, hoistedNoteId };
+    const context: StatusBarContext | undefined | null = note && noteContext && { note, notePath, noteContext, viewScope, hoistedNoteId };
     const attributesContext: AttributesProps | undefined | null = context && { ...context, attributesShown, setAttributesShown };
 
     return (
@@ -64,7 +65,7 @@ export default function StatusBar() {
     );
 }
 
-function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions, ...dropdownProps }: Omit<DropdownProps, "hideToggleArrow" | "title" | "titlePosition"> & {
+function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions, dropdownOptions, ...dropdownProps }: Omit<DropdownProps, "hideToggleArrow" | "title" | "titlePosition"> & {
     title: string;
     icon?: string;
 }) {
@@ -78,6 +79,10 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
                     ...titleOptions?.popperConfig,
                     strategy: "fixed"
                 }
+            }}
+            dropdownOptions={{
+                ...dropdownOptions,
+                autoClose: "outside"
             }}
             text={<>
                 {icon && (<><Icon icon={icon} />&nbsp;</>)}
@@ -192,7 +197,6 @@ export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
             icon="bx bx-info-circle"
             title={t("status_bar.note_info_title")}
             dropdownContainerClassName="dropdown-note-info"
-            dropdownOptions={{ autoClose: "outside" }}
         >
             <ul>
                 <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
@@ -312,17 +316,21 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 //#endregion
 
 //#region Note paths
-function NotePaths({ note, hoistedNoteId }: StatusBarContext) {
+function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
 
     return (
         <StatusBarDropdown
             title={t("status_bar.note_paths_title")}
+            dropdownContainerClassName="dropdown-note-paths"
             icon="bx bx-link-alt"
             text={sortedNotePaths?.length}
         >
-
+            <NotePathsWidget
+                sortedNotePaths={sortedNotePaths}
+                currentNotePath={notePath}
+            />
         </StatusBarDropdown>
-    )
+    );
 }
 //#endregion

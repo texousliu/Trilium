@@ -49,11 +49,13 @@
             .dropdown-toggle {
                 padding: 0.1em 0.25em;
             }
+
+            .dropdown-menu {
+                width: max-content;
+            }
         }
 
         .dropdown-note-info {
-            width: max-content;
-
             ul {
                 list-style-type: none;
                 padding: 0.5em;
@@ -74,6 +76,17 @@
                         padding-left: 2em;
                     }
                 }
+            }
+        }
+
+        .dropdown-note-paths {
+            .note-paths-widget {
+                padding: 0.5em;
+            }
+
+            .note-path-list {
+                margin: 1em;
+                padding: 0;
             }
         }
     }
