@@ -9,7 +9,7 @@
         align-items: center;
         padding-inline: 0.25em;
 
-        > .breadcrumb-row {
+        > .breadcrumb {
             flex-grow: 1;
         }
 

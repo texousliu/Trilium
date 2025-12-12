@@ -1,72 +1,63 @@
-.breadcrumb-row {
+.breadcrumb {
     position: relative;
-    min-height: 30px;
     align-items: center;
+    display: flex;
+    margin: 0;
+    align-items: center;
+    font-size: 0.9em;
+    gap: 0.25em;
+    flex-wrap: nowrap;
+    overflow: hidden;
 
-    .breadcrumb {
+    > span,
+    > span > span {
         display: flex;
-        margin: 0;
         align-items: center;
-        font-size: 0.9em;
-        gap: 0.25em;
-        flex-wrap: nowrap;
-        overflow: hidden;
+        min-width: 0;
 
-        > span,
-        > span > span {
-            display: flex;
-            align-items: center;
+        a {
+            color: inherit;
+            text-decoration: none;
             min-width: 0;
-
-            a {
-                color: inherit;
-                text-decoration: none;
-                min-width: 0;
-                max-width: 150px;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                display: block;
-                flex-shrink: 2;
-            }
-        }
-
-        > span:last-of-type a {
-            max-width: 300px;
-            flex-shrink: 1;
-        }
-
-        ul {
-            flex-direction: column;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .dropdown-item span,
-        .dropdown-item strong,
-        .breadcrumb-last-item {
+            max-width: 150px;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
             display: block;
-            max-width: 300px;
-        }
-
-        .breadcrumb-last-item {
-            text-decoration: none;
-            color: unset;
-            cursor: text;
-        }
-
-        input {
-            padding: 0 10px;
-            width: 200px;
+            flex-shrink: 2;
         }
     }
-}
 
-body.experimental-feature-new-layout .breadcrumb-row {
-    padding-inline-end: 0;
-}
+    > span:last-of-type a {
+        max-width: 300px;
+        flex-shrink: 1;
+    }
 
+    ul {
+        flex-direction: column;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dropdown-item span,
+    .dropdown-item strong,
+    .breadcrumb-last-item {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        max-width: 300px;
+    }
+
+    .breadcrumb-last-item {
+        text-decoration: none;
+        color: unset;
+        cursor: text;
+    }
+
+    input {
+        padding: 0 10px;
+        width: 200px;
+    }
+}

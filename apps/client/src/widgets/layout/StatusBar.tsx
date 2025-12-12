@@ -45,9 +45,7 @@ export default function StatusBar() {
 
             <div className="status-bar-main-row">
                 {context && <>
-                    <div className="breadcrumb-row">
-                        <Breadcrumb {...context} />
-                    </div>
+                    <Breadcrumb {...context} />
 
                     <div className="actions-row">
                         <AttributesButton attributesShown={attributesShown} setAttributesShown={setAttributesShown} {...context} />
