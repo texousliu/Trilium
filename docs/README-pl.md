@@ -29,15 +29,15 @@ script)](./README-ZH_TW.md) | [English](../README.md) | [French](./README-fr.md)
 [Spanish](./README-es.md)
 <!-- translate:on -->
 
-Trilium Notes to darmowa, otwarto-źródłowa i wieloplatformowa aplikacja do
-tworzenia hierarchicznych notatek, skoncentrowana na budowaniu dużych osobistych
-baz wiedzy.
+Trilium Notes to darmowa i otwartoźródłowa, wieloplatformowa aplikacja do
+tworzenia notatek hierarchicznych, skupiona na budowaniu dużych osobistych baz
+wiedzy.
 
 <img src="./app.png" alt="Trilium Screenshot" width="1000">
 
-## ⏬ Download
+## ⏬Ściągnij
 - [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  stable version, recommended for most users.
+  wersja stabilna, zalecana dla większości użytkowników.
 - [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) -
   niestabilna wersja deweloperska, aktualizowana codziennie o najnowsze funkcje
   i poprawki.
@@ -55,7 +55,7 @@ Nasza dokumentacja jest dostępna w wielu formatach:
 - **GitHub**: Navigate through the [User Guide](./User%20Guide/User%20Guide/) in
   this repository
 
-### Quick Links
+### Szybkie linki
 - [Getting Started Guide](https://docs.triliumnotes.org/)
 - [Installation Instructions](https://docs.triliumnotes.org/user-guide/setup)
 - [Docker
@@ -67,11 +67,11 @@ Nasza dokumentacja jest dostępna w wielu formatach:
 - [Patterns of Personal Knowledge
   Base](https://docs.triliumnotes.org/user-guide/misc/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Funkcje
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
-  [cloning](https://docs.triliumnotes.org/user-guide/concepts/notes/cloning))
+* Notatki można porządkować w drzewie o dowolnej głębokości. Jedna notatka może
+  występować w wielu miejscach drzewa (zob.
+  [klonowanie](https://docs.triliumnotes.org/user-guide/concepts/notes/cloning))
 * Bogaty edytor notatek WYSIWYG, zawierający np. tabele, obrazy i
   [math](https://docs.triliumnotes.org/user-guide/note-types/text) z
   [autoformat](https://docs.triliumnotes.org/user-guide/note-types/text/markdown-formatting)
