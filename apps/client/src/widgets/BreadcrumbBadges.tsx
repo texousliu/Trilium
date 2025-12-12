@@ -5,7 +5,6 @@ import { ComponentChildren, MouseEventHandler } from "preact";
 import { useRef } from "preact/hooks";
 
 import { t } from "../services/i18n";
-import { BacklinksList, useBacklinkCount } from "./FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "./react/Dropdown";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useStaticTooltip } from "./react/hooks";
 import Icon from "./react/Icon";
@@ -16,7 +15,6 @@ export default function BreadcrumbBadges() {
         <div className="breadcrumb-badges">
             <ReadOnlyBadge />
             <ShareBadge />
-            <BacklinksBadge />
             <ClippedNoteBadge />
             <ExecuteBadge />
         </div>
@@ -63,24 +61,6 @@ function ShareBadge() {
             className="share-badge"
             href={linkHref}
         />
-    );
-}
-
-function BacklinksBadge() {
-    const { note, viewScope } = useNoteContext();
-    const count = useBacklinkCount(note, viewScope?.viewMode === "default");
-    return (note && count > 0 &&
-        <BadgeWithDropdown
-            className="backlinks-badge backlinks-widget"
-            icon="bx bx-revision"
-            text={t("breadcrumb_badges.backlinks", { count })}
-            tooltip={t("breadcrumb_badges.backlinks_description", { count })}
-            dropdownOptions={{
-                dropdownContainerClassName: "backlinks-items"
-            }}
-        >
-            <BacklinksList note={note} />
-        </BadgeWithDropdown>
     );
 }
 

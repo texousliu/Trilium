@@ -6,10 +6,13 @@ import { type ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
 import { useState } from "preact/hooks";
 
+import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
+import { ViewScope } from "../../services/link";
 import { openInAppHelpFromUrl } from "../../services/utils";
 import { formatDateTime } from "../../utils/formatters";
+import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useActiveNoteContext } from "../react/hooks";
@@ -18,16 +21,16 @@ import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPrope
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
-import NoteContext from "../../components/note_context";
 
 interface StatusBarContext {
     note: FNote;
     noteContext: NoteContext;
+    viewScope: ViewScope;
 }
 
 export default function StatusBar() {
-    const { note, noteContext } = useActiveNoteContext();
-    const context = note && noteContext && { note, noteContext } satisfies StatusBarContext;
+    const { note, noteContext, viewScope } = useActiveNoteContext();
+    const context = note && noteContext && { note, noteContext, viewScope } satisfies StatusBarContext;
 
     return (
         <div className="status-bar">
@@ -37,6 +40,7 @@ export default function StatusBar() {
                 </div>
 
                 <div className="actions-row">
+                    <BacklinksBadge {...context} />
                     <LanguageSwitcher {...context} />
                     <NoteInfoBadge {...context} />
                 </div>
@@ -151,6 +155,23 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
             <strong title={title}>{text}{": "}</strong>
             <span>{value}</span>
         </li>
+    );
+}
+//#endregion
+
+//#region Backlinks
+function BacklinksBadge({ note, viewScope }: StatusBarContext) {
+    const count = useBacklinkCount(note, viewScope?.viewMode === "default");
+    return (note && count > 0 &&
+        <StatusBarDropdown
+            className="backlinks-badge backlinks-widget"
+            icon="bx bx-revision"
+            text={t("status_bar.backlinks", { count })}
+            title={t("status_bar.backlinks_title", { count })}
+            dropdownContainerClassName="backlinks-items"
+        >
+            <BacklinksList note={note} />
+        </StatusBarDropdown>
     );
 }
 //#endregion
