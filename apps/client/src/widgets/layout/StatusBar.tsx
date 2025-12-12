@@ -52,11 +52,11 @@ export default function StatusBar() {
                     <Breadcrumb {...context} />
 
                     <div className="actions-row">
+                        <LanguageSwitcher {...context} />
                         <NotePaths {...context} />
                         <AttributesButton {...attributesContext} />
                         <AttachmentCount {...context} />
                         <BacklinksBadge {...context} />
-                        <LanguageSwitcher {...context} />
                         <NoteInfoBadge {...context} />
                     </div>
                 </>}
