@@ -154,7 +154,7 @@ button.btn.btn-success kbd {
     color: var(--button-group-active-button-text-color);
 }
 
-/* 
+/*
  * Input boxes
  */
 
@@ -399,7 +399,8 @@ button.select-button.dropdown-toggle.btn:active {
 select:focus,
 select.form-select:focus,
 select.form-control:focus,
-.select-button.dropdown-toggle.btn:focus {
+.select-button.dropdown-toggle.btn:focus,
+.select-button.focus-outline:focus {
     box-shadow: unset;
     outline: 3px solid var(--input-focus-outline-color);
     outline-offset: 0;
@@ -422,7 +423,7 @@ optgroup {
     line-height: 40px;
 }
 
-/* 
+/*
  * File input
  *
  * <label class="tn-file-input tn-input-field">

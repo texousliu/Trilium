@@ -26,6 +26,7 @@
                 align-items: center;
                 border: 0;
 
+                &.active,
                 &:focus,
                 &:hover {
                     background: var(--input-background-color);

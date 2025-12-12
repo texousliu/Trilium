@@ -36,11 +36,12 @@ interface StatusBarContext {
 
 export default function StatusBar() {
     const { note, noteContext, viewScope } = useActiveNoteContext();
+    const [ attributesShown, setAttributesShown ] = useState(false);
     const context = note && noteContext && { note, noteContext, viewScope } satisfies StatusBarContext;
 
     return (
         <div className="status-bar">
-            {context && <AttributesPane {...context} />}
+            {context && <AttributesPane shown={attributesShown} {...context} />}
 
             <div className="status-bar-main-row">
                 {context && <>
@@ -49,7 +50,7 @@ export default function StatusBar() {
                     </div>
 
                     <div className="actions-row">
-                        <AttributesButton {...context} />
+                        <AttributesButton attributesShown={attributesShown} setAttributesShown={setAttributesShown} {...context} />
                         <AttachmentCount {...context} />
                         <BacklinksBadge {...context} />
                         <LanguageSwitcher {...context} />
@@ -93,12 +94,13 @@ interface StatusBarButtonBaseProps {
     title: string;
     text?: string | number;
     disabled?: boolean;
+    active?: boolean;
 }
 
 type StatusBarButtonWithCommand = StatusBarButtonBaseProps & { triggerCommand: CommandNames; };
 type StatusBarButtonWithClick = StatusBarButtonBaseProps & { onClick: () => void; };
 
-function StatusBarButton({ className, icon, text, title, ...restProps }: StatusBarButtonWithCommand | StatusBarButtonWithClick) {
+function StatusBarButton({ className, icon, text, title, active, ...restProps }: StatusBarButtonWithCommand | StatusBarButtonWithClick) {
     const parentComponent = useContext(ParentComponent);
     const buttonRef = useRef<HTMLButtonElement>(null);
     useStaticTooltip(buttonRef, {
@@ -111,7 +113,7 @@ function StatusBarButton({ className, icon, text, title, ...restProps }: StatusB
     return (
         <button
             ref={buttonRef}
-            className={clsx("btn select-button", className)}
+            className={clsx("btn select-button focus-outline", className, active && "active")}
             type="button"
             onClick={() => {
                 if ("triggerCommand" in restProps) {
@@ -246,7 +248,10 @@ function AttachmentCount({ note }: StatusBarContext) {
 //#endregion
 
 //#region Attributes
-function AttributesButton({ note }: StatusBarContext) {
+function AttributesButton({ note, attributesShown, setAttributesShown }: StatusBarContext & {
+    attributesShown: boolean;
+    setAttributesShown: (shown: boolean) => void;
+}) {
     const [ count, setCount ] = useState(note.attributes.length);
 
     // React to changes in count.
@@ -262,14 +267,15 @@ function AttributesButton({ note }: StatusBarContext) {
             icon="bx bx-list-check"
             title={t("status_bar.attributes_title")}
             text={t("status_bar.attributes", { count })}
-            onClick={() => {
-                alert("Hi");
-            }}
+            active={attributesShown}
+            onClick={() => setAttributesShown(!attributesShown)}
         />
     );
 }
 
-function AttributesPane({ note, noteContext }: StatusBarContext) {
+function AttributesPane({ note, noteContext, shown }: StatusBarContext & {
+    shown: boolean;
+}) {
     const parentComponent = useContext(ParentComponent);
     const api = useRef<AttributeEditorImperativeHandlers>(null);
 
@@ -280,7 +286,7 @@ function AttributesPane({ note, noteContext }: StatusBarContext) {
     };
 
     return (context &&
-        <div className="attribute-list">
+        <div className={clsx("attribute-list", !shown && "hidden-ext")}>
             <InheritedAttributesTab {...context} />
 
             <AttributeEditor
