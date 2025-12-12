@@ -1,218 +1,224 @@
+// Math input widget: wraps a MathLive <math-field> and a LaTeX textarea
+// and keeps them in sync for the CKEditor 5 math dialog.
 import { View, type Locale, type FocusableView } from 'ckeditor5';
-
+// Narrow interface for the MathLive element we care about.
 interface MathFieldElement extends HTMLElement {
 	value: string;
 	readOnly: boolean;
 	mathVirtualKeyboardPolicy: string;
 	inlineShortcuts?: Record<string, string>;
-	setValue( value: string, options?: { silenceNotifications?: boolean } ): void;
+	setValue?: ( value: string, options?: { silenceNotifications?: boolean } ) => void;
 }
-
+// Small wrapper so the math-field can participate in CKEditor focus cycling.
 export class MathFieldFocusableView extends View implements FocusableView {
 	public declare element: HTMLElement | null;
-	private _mathInputView: MathInputView;
-
-	constructor( locale: Locale, mathInputView: MathInputView ) {
+	private _view: MathInputView;
+	constructor( locale: Locale, view: MathInputView ) {
 		super( locale );
-		this._mathInputView = mathInputView;
+		this._view = view;
 	}
-
 	public focus(): void {
-		this._mathInputView.mathfield?.focus();
+		this._view.mathfield?.focus();
 	}
-
 	public setElement( el: HTMLElement ): void {
 		( this as any ).element = el;
 	}
 }
-
+// Simple textarea used to edit the raw LaTeX source.
 export class LatexTextAreaView extends View implements FocusableView {
 	declare public element: HTMLTextAreaElement;
-
 	constructor( locale: Locale ) {
 		super( locale );
-		this.setTemplate( {
-			tag: 'textarea',
-			attributes: {
-				class: [ 'ck', 'ck-textarea', 'ck-latex-textarea' ],
-				autocapitalize: 'off',
-				autocomplete: 'off',
-				autocorrect: 'off',
-				spellcheck: 'false',
-				tabindex: 0
-			}
-		} );
+		this.setTemplate( { tag: 'textarea', attributes: {
+			class: [ 'ck', 'ck-textarea', 'ck-latex-textarea' ], spellcheck: 'false', tabindex: 0
+		} } );
 	}
-
 	public focus(): void {
 		this.element?.focus();
 	}
 }
-
+// Main view used by the math dialog.
 export default class MathInputView extends View {
 	public declare value: string | null;
 	public declare isReadOnly: boolean;
 	public mathfield: MathFieldElement | null = null;
 	public readonly latexTextAreaView: LatexTextAreaView;
 	public readonly mathFieldFocusableView: MathFieldFocusableView;
-	private _isSyncing = false;
+	private _destroyed = false;
+	private _vkGeometryHandler?: () => void;
 
 	constructor( locale: Locale ) {
 		super( locale );
-		const t = locale.t;
-
 		this.latexTextAreaView = new LatexTextAreaView( locale );
 		this.mathFieldFocusableView = new MathFieldFocusableView( locale, this );
-
 		this.set( 'value', null );
 		this.set( 'isReadOnly', false );
-
 		this.setTemplate( {
-			tag: 'div',
-			attributes: { class: [ 'ck', 'ck-math-input' ] },
+			tag: 'div', attributes: { class: [ 'ck', 'ck-math-input' ] },
 			children: [
 				{ tag: 'div', attributes: { class: [ 'ck-mathlive-container' ] } },
-				{ tag: 'label', attributes: { class: [ 'ck-latex-label' ] }, children: [ t( 'LaTeX' ) ] },
+				{ tag: 'label', attributes: { class: [ 'ck-latex-label' ] }, children: [ locale.t( 'LaTeX' ) ] },
 				{ tag: 'div', attributes: { class: [ 'ck-latex-wrapper' ] }, children: [ this.latexTextAreaView ] }
 			]
 		} );
 	}
-
 	public override render(): void {
 		super.render();
-
 		const textarea = this.latexTextAreaView.element;
-		textarea.value = this.value ?? '';
-		textarea.readOnly = this.isReadOnly;
-
-		if ( this.mathfield ) {
-			this.mathfield.remove();
-			this.mathfield = null;
-		}
-
+		// Keep value -> textarea -> mathfield in sync when user types LaTeX.
 		textarea.addEventListener( 'input', () => {
 			const val = textarea.value;
 			this.value = val || null;
 			if ( this.mathfield ) {
+				// When cleared, recreate mathfield to avoid "ghost braces" artifacts.
 				if ( val === '' ) {
 					this.mathfield.remove();
 					this.mathfield = null;
-					this._createMathField();
-				} else {
-					this.mathfield.setValue( val, { silenceNotifications: true } );
+					this._initMathField( false );
+				} else if ( this.mathfield.value !== val ) {
+					this._setMathfieldValue( val );
 				}
 			}
-			this._isSyncing = false;
 		} );
-
+		// External changes to value (e.g. dialog model) update both views.
 		this.on( 'change:value', ( _e, _n, val ) => {
-			if ( this._isSyncing ) {
-				return;
-			}
-			this._isSyncing = true;
 			const newVal = val ?? '';
-			textarea.value = newVal;
-			if ( this.mathfield && this.mathfield.value !== newVal ) {
-				this.mathfield.setValue( newVal, { silenceNotifications: true } );
+			if ( textarea.value !== newVal ) {
+				textarea.value = newVal;
+			}
+			if ( this.mathfield ) {
+				if ( this.mathfield.value !== newVal ) {
+					this._setMathfieldValue( newVal );
+				}
+			} else if ( newVal !== '' ) {
+				this._initMathField( false );
 			}
 		} );
-
+		// Keep read-only state of both widgets in sync.
 		this.on( 'change:isReadOnly', ( _e, _n, val ) => {
 			textarea.readOnly = val;
 			if ( this.mathfield ) {
 				this.mathfield.readOnly = val;
 			}
 		} );
-
 		const vk = ( window as any ).mathVirtualKeyboard;
-		if ( vk ) {
-			vk.addEventListener( 'geometrychange', () => {
-				if ( vk.visible && document.activeElement === textarea && this.mathfield ) {
+		if ( vk && !this._vkGeometryHandler ) {
+			// When the on-screen keyboard appears, push focus back into mathfield
+			// so typing continues there instead of the textarea/body.
+			this._vkGeometryHandler = () => {
+				if ( !vk.visible || !this.mathfield ) {
+					return;
+				}
+				const active = document.activeElement;
+				if ( active === document.body || active === textarea ) {
 					this.mathfield.focus();
 				}
-			} );
+			};
+			vk.addEventListener( 'geometrychange', this._vkGeometryHandler );
 		}
-
+		// On first render, reflect initial value into the LaTeX textarea.
+		const initial = this.value ?? '';
+		if ( textarea.value !== initial ) {
+			textarea.value = initial;
+		}
 		this._loadMathLive();
 	}
-
 	private async _loadMathLive(): Promise<void> {
 		try {
 			await import( 'mathlive' );
 			await customElements.whenDefined( 'math-field' );
-
+			if ( this._destroyed ) {
+				return;
+			}
 			const MathfieldClass = customElements.get( 'math-field' ) as any;
 			if ( MathfieldClass ) {
+				// Disable MathLive sounds globally for a quieter UI.
 				MathfieldClass.soundsDirectory = null;
 				MathfieldClass.plonkSound = null;
 			}
-
-			if ( this.element ) {
-				this._createMathField();
+			if ( this.element && !this._destroyed ) {
+				this._initMathField( true );
 			}
 		} catch ( e ) {
-			console.error( 'MathLive load failed:', e );
+			console.error( 'MathLive load error', e );
 			const c = this.element?.querySelector( '.ck-mathlive-container' );
 			if ( c ) {
 				c.textContent = 'Math editor unavailable';
 			}
 		}
 	}
-
-	private _createMathField(): void {
+	private _initMathField( shouldFocus: boolean ): void {
 		const container = this.element?.querySelector( '.ck-mathlive-container' );
 		if ( !container ) {
 			return;
 		}
-
+		if ( this.mathfield ) {
+			this._setMathfieldValue( this.value ?? '' );
+			return;
+		}
 		const mf = document.createElement( 'math-field' ) as MathFieldElement;
 		mf.mathVirtualKeyboardPolicy = 'auto';
-		mf.setAttribute( 'tabindex', '-1' );
+		mf.setAttribute( 'tabindex', '0' );
 		mf.value = this.value ?? '';
 		mf.readOnly = this.isReadOnly;
-
-		mf.addEventListener( 'mount', () => {
-			mf.inlineShortcuts = { ...mf.inlineShortcuts, dx: '', dy: '', dt: '' };
-		}, { once: true } );
+		container.appendChild( mf );
+		try {
+			const anyMf = mf as any;
+			// Override only dt/dx/dy, keep other built‑in shortcuts (e.g. frac).
+			anyMf.inlineShortcuts = { ...( anyMf.inlineShortcuts || {} ), dx: 'dx', dy: 'dy', dt: 'dt' };
+		} catch { /* */ }
+		mf.addEventListener( 'keydown', ev => {
+			// Let Tab move focus from mathfield into the LaTeX textarea
+			// instead of being consumed by MathLive.
+			if ( ev.key === 'Tab' && !ev.shiftKey ) {
+				ev.preventDefault();
+				ev.stopImmediatePropagation();
+				this.latexTextAreaView.focus();
+			}
+		}, { capture: true } );
 
 		mf.addEventListener( 'input', () => {
-			const val = mf.value;
-			this.latexTextAreaView.element.value = val;
-			this.value = val || null;
-			this._isSyncing = false;
+			if ( this.latexTextAreaView.element.value !== mf.value ) {
+				this.latexTextAreaView.element.value = mf.value;
+			}
+			this.value = mf.value || null;
 		} );
 
-		container.appendChild( mf );
 		this.mathfield = mf;
 		this.mathFieldFocusableView.setElement( mf );
 		this.fire( 'mathfieldReady' );
-
-		// Auto-focus the mathfield when it's ready
-		setTimeout( () => {
-			mf.focus();
-		}, 0 );
+		if ( shouldFocus ) {
+			setTimeout( () => mf.focus(), 0 );
+		}
 	}
 
+	private _setMathfieldValue( value: string ): void {
+		const mf = this.mathfield;
+		if ( !mf ) {
+			return;
+		}
+		if ( mf.setValue ) {
+			mf.setValue( value, { silenceNotifications: true } );
+		} else {
+			mf.value = value;
+		}
+	}
+	public hideKeyboard(): void {
+		( window as any ).mathVirtualKeyboard?.hide();
+	}
 	public focus(): void {
 		this.mathfield?.focus();
 	}
-
-	public hideKeyboard(): void {
-		const vk = ( window as any ).mathVirtualKeyboard;
-		if ( vk?.visible ) {
-			vk.hide();
-		}
-	}
-
 	public override destroy(): void {
-		this.hideKeyboard();
-		if ( this.mathfield ) {
-			try {
-				this.mathfield.blur();
-				this.mathfield.remove();
-			} catch { /* ignore */ }
-			this.mathfield = null;
+		this._destroyed = true;
+		const vk = ( window as any ).mathVirtualKeyboard;
+		if ( vk && this._vkGeometryHandler ) {
+			vk.removeEventListener( 'geometrychange', this._vkGeometryHandler );
+			this._vkGeometryHandler = undefined;
 		}
+		this.hideKeyboard();
+		this.mathfield?.remove();
+		this.mathfield = null;
 		super.destroy();
 	}
 }
