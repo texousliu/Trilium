@@ -79,7 +79,7 @@ function LanguageSwitcher({ note }: StatusBarContext) {
 
     return (
         <>
-            <StatusBarDropdown
+            {note.type === "text" && <StatusBarDropdown
                 icon="bx bx-globe"
                 title={t("status_bar.language_title")}
                 text={<span dir={activeLocale?.rtl ? "rtl" : "ltr"}>{getLocaleName(activeLocale)}</span>}
@@ -104,7 +104,7 @@ function LanguageSwitcher({ note }: StatusBarContext) {
                     onClick={() => setModalShown(true)}
                     icon="bx bx-cog"
                 >{t("note_language.configure-languages")}</FormListItem>
-            </StatusBarDropdown>
+            </StatusBarDropdown>}
             {createPortal(
                 <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
                 document.body
