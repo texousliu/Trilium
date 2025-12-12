@@ -4,7 +4,7 @@ import { Locale } from "@triliumnext/commons";
 import clsx from "clsx";
 import { type ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
-import { useContext, useRef, useState } from "preact/hooks";
+import { useContext, useMemo, useRef, useState } from "preact/hooks";
 
 import { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
@@ -17,7 +17,7 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useStaticTooltip, useTriliumEvent } from "../react/hooks";
+import { useActiveNoteContext, useLegacyImperativeHandlers, useStaticTooltip, useTriliumEvent } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
@@ -282,6 +282,13 @@ function AttributesPane({ note, noteContext, shown }: StatusBarContext & {
         note,
         hidden: !note
     };
+
+    // Interaction with the attribute editor.
+    useLegacyImperativeHandlers(useMemo(() => ({
+        saveAttributesCommand: () => api.current?.save(),
+        reloadAttributesCommand: () => api.current?.refresh(),
+        updateAttributeListCommand: ({ attributes }) => api.current?.renderOwnedAttributes(attributes)
+    }), [ api ]));
 
     return (context &&
         <div className={clsx("attribute-list", !shown && "hidden-ext")}>
