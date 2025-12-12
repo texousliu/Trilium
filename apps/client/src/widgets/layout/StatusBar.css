@@ -10,6 +10,26 @@
         flex-grow: 1;
     }
 
+    > .actions-row {
+        padding: 0.1em;
+
+        .status-bar-dropdown-button {
+            background: transparent;
+            padding: 0 0.5em !important;
+            display: flex;
+            align-items: center;
+
+            &:after {
+                content: unset;
+            }
+
+            &:focus,
+            &:hover {
+                background: var(--input-background-color);
+            }
+        }
+    }
+
     .dropdown {
         font-size: 0.85em;
 

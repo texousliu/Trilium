@@ -10,8 +10,10 @@ import Breadcrumb from "./Breadcrumb";
 import { useState } from "preact/hooks";
 import { createPortal } from "preact/compat";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
-import Dropdown from "../react/Dropdown";
+import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { Locale } from "@triliumnext/commons";
+import clsx from "clsx";
+import Icon from "../react/Icon";
 
 interface StatusBarContext {
     note: FNote;
@@ -36,6 +38,23 @@ export default function StatusBar() {
     );
 }
 
+function StatusBarDropdown({ children, icon, text, buttonClassName, ...dropdownProps }: Omit<DropdownProps, "hideToggleArrow"> & {
+    icon?: string;
+}) {
+    return (
+        <Dropdown
+            buttonClassName={clsx("status-bar-dropdown-button", buttonClassName)}
+            text={<>
+                {icon && (<><Icon icon={icon} />&nbsp;</>)}
+                {text}
+            </>}
+            {...dropdownProps}
+        >
+            {children}
+        </Dropdown>
+    );
+}
+
 function LanguageSwitcher({ note }: StatusBarContext) {
     const [ modalShown, setModalShown ] = useState(false);
     const { locales, DEFAULT_LOCALE, currentNoteLanguage, setCurrentNoteLanguage } = useLanguageSwitcher(note);
@@ -43,7 +62,7 @@ function LanguageSwitcher({ note }: StatusBarContext) {
 
     return (
         <>
-            <Dropdown text={getLocaleName(activeLocale)}>
+            <StatusBarDropdown icon="bx bx-globe" text={getLocaleName(activeLocale)}>
                 {processedLocales.map(locale => {
                     if (typeof locale === "object") {
                         return <FormListItem
@@ -64,7 +83,7 @@ function LanguageSwitcher({ note }: StatusBarContext) {
                     onClick={() => setModalShown(true)}
                     icon="bx bx-cog"
                 >{t("note_language.configure-languages")}</FormListItem>
-            </Dropdown>
+            </StatusBarDropdown>
             {createPortal(
                 <ContentLanguagesModal modalShown={modalShown} setModalShown={setModalShown} />,
                 document.body
