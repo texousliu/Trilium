@@ -136,7 +136,7 @@ function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePa
             noSelectButtonStyle
             buttonClassName="icon-action"
             hideToggleArrow
-            dropdownOptions={{ popperConfig: { strategy: "fixed" } }}
+            dropdownOptions={{  popperConfig: { strategy: "fixed", placement: "top" } }}
         >
             <BreadcrumbSeparatorDropdownContent notePath={notePath} noteContext={noteContext} activeNotePath={activeNotePath} />
         </Dropdown>
