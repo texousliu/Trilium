@@ -6,6 +6,7 @@ import { type ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
 import { useContext, useRef, useState } from "preact/hooks";
 
+import { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
@@ -15,22 +16,19 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useStaticTooltip, useTooltip } from "../react/hooks";
+import { useActiveNoteContext, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
+import { ParentComponent } from "../react/react_utils";
 import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
+import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
-import { useAttachments } from "../type_widgets/Attachment";
-import ActionButton from "../react/ActionButton";
-import Button from "../react/Button";
-import { CommandNames } from "../../components/app_context";
-import { ParentComponent } from "../react/react_utils";
 
 interface StatusBarContext {
     note: FNote;
     noteContext: NoteContext;
-    viewScope: ViewScope;
+    viewScope?: ViewScope;
 }
 
 export default function StatusBar() {
@@ -123,15 +121,16 @@ function LanguageSwitcher({ note }: StatusBarContext) {
                 title={t("status_bar.language_title")}
                 text={<span dir={activeLocale?.rtl ? "rtl" : "ltr"}>{getLocaleName(activeLocale)}</span>}
             >
-                {processedLocales.map(locale => {
+                {processedLocales.map((locale, index) => {
                     if (typeof locale === "object") {
                         return <FormListItem
+                            key={locale.id}
                             rtl={locale.rtl}
                             checked={locale.id === currentNoteLanguage}
                             onClick={() => setCurrentNoteLanguage(locale.id)}
-                        >{locale.name}</FormListItem>
+                        >{locale.name}</FormListItem>;
                     } else {
-                        return <FormDropdownDivider />
+                        return <FormDropdownDivider key={`divider-${index}`} />;
                     }
                 })}
                 <FormDropdownDivider />
