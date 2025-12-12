@@ -20,7 +20,7 @@ import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useActiveNoteContext, useLegacyImperativeHandlers, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
-import { ContentLanguagesModal, NoteTypeCodeNoteList, useLanguageSwitcher, useMimeTypes } from "../ribbon/BasicPropertiesTab";
+import { ContentLanguagesModal, NoteTypeCodeNoteList, NoteTypeOptionsModal, useLanguageSwitcher, useMimeTypes } from "../ribbon/BasicPropertiesTab";
 import AttributeEditor, { AttributeEditorImperativeHandlers } from "../ribbon/components/AttributeEditor";
 import InheritedAttributesTab from "../ribbon/InheritedAttributesTab";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
@@ -349,6 +349,7 @@ function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
 
 //#region Code note switcher
 function CodeNoteSwitcher({ note }: StatusBarContext) {
+    const [ modalShown, setModalShown ] = useState(false);
     const currentNoteMime = useNoteProperty(note, "mime");
     const mimeTypes = useMimeTypes();
     const correspondingMimeType = useMemo(() => (
@@ -356,20 +357,26 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
     ), [ mimeTypes, currentNoteMime ]);
 
     return (
-        <StatusBarDropdown
-            icon="bx bx-code-curly"
-            text={correspondingMimeType?.title}
-            title={t("status_bar.code_note_switcher")}
-            dropdownContainerClassName="dropdown-code-note-switcher"
-            dropdownOptions={{ autoClose: true }}
-        >
-            <NoteTypeCodeNoteList
-                currentMimeType={currentNoteMime}
-                mimeTypes={mimeTypes}
-                changeNoteType={(type, mime) => server.put(`notes/${note.noteId}/type`, { type, mime })}
-                setModalShown={() => {}}
-            />
-        </StatusBarDropdown>
+        <>
+            <StatusBarDropdown
+                icon="bx bx-code-curly"
+                text={correspondingMimeType?.title}
+                title={t("status_bar.code_note_switcher")}
+                dropdownContainerClassName="dropdown-code-note-switcher"
+                dropdownOptions={{ autoClose: true }}
+            >
+                <NoteTypeCodeNoteList
+                    currentMimeType={currentNoteMime}
+                    mimeTypes={mimeTypes}
+                    changeNoteType={(type, mime) => server.put(`notes/${note.noteId}/type`, { type, mime })}
+                    setModalShown={() => setModalShown(true)}
+                />
+            </StatusBarDropdown>
+            {createPortal(
+                <NoteTypeOptionsModal modalShown={modalShown} setModalShown={setModalShown} />,
+                document.body
+            )}
+        </>
     );
 }
 //#endregion

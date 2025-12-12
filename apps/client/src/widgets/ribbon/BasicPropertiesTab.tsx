@@ -164,7 +164,7 @@ export function useMimeTypes() {
     return mimeTypes;
 }
 
-function NoteTypeOptionsModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
+export function NoteTypeOptionsModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
     return (
         <Modal
             className="code-mime-types-modal"
