@@ -422,6 +422,10 @@ body[dir=rtl] .attribute-list-editor {
 
 /* #region Experimental layout */
 body.experimental-feature-new-layout {
+    .ribbon-top-row {
+        min-height: 0;
+    }
+
     .ribbon-container {
         display: flex;
         flex-direction: column-reverse;

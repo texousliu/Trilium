@@ -125,7 +125,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
     {
         title: t("similar_notes.title"),
         icon: "bx bx-bar-chart",
-        show: ({ note }) => note?.type !== "search" && !note?.isLabelTruthy("similarNotesWidgetDisabled"),
+        show: ({ note }) => !isNewLayout && note?.type !== "search" && !note?.isLabelTruthy("similarNotesWidgetDisabled"),
         content: SimilarNotesTab,
         toggleCommand: "toggleRibbonTabSimilarNotes"
     },
