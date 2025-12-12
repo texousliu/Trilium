@@ -38,12 +38,21 @@ export default function StatusBar() {
     );
 }
 
-function StatusBarDropdown({ children, icon, text, buttonClassName, ...dropdownProps }: Omit<DropdownProps, "hideToggleArrow"> & {
+function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions, ...dropdownProps }: Omit<DropdownProps, "hideToggleArrow" | "title" | "titlePosition"> & {
+    title: string;
     icon?: string;
 }) {
     return (
         <Dropdown
             buttonClassName={clsx("status-bar-dropdown-button", buttonClassName)}
+            titlePosition="top"
+            titleOptions={{
+                ...titleOptions,
+                popperConfig: {
+                    ...titleOptions?.popperConfig,
+                    strategy: "fixed"
+                }
+            }}
             text={<>
                 {icon && (<><Icon icon={icon} />&nbsp;</>)}
                 {text}
@@ -62,7 +71,11 @@ function LanguageSwitcher({ note }: StatusBarContext) {
 
     return (
         <>
-            <StatusBarDropdown icon="bx bx-globe" text={<span dir={activeLocale?.rtl ? "rtl" : "ltr"}>{getLocaleName(activeLocale)}</span>}>
+            <StatusBarDropdown
+                icon="bx bx-globe"
+                title={t("status_bar.language_title")}
+                text={<span dir={activeLocale?.rtl ? "rtl" : "ltr"}>{getLocaleName(activeLocale)}</span>}
+            >
                 {processedLocales.map(locale => {
                     if (typeof locale === "object") {
                         return <FormListItem
