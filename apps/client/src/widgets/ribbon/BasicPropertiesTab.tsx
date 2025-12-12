@@ -1,4 +1,4 @@
-import { NoteType, ToggleInParentResponse } from "@triliumnext/commons";
+import { MimeType, NoteType, ToggleInParentResponse } from "@triliumnext/commons";
 import { ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
 import { Dispatch, StateUpdater, useCallback, useEffect, useMemo, useState } from "preact/hooks";
@@ -66,12 +66,8 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
 }
 
 export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note, setModalShown }: { currentNoteType?: NoteType, currentNoteMime?: string | null, note?: FNote | null, setModalShown: Dispatch<StateUpdater<boolean>> }) {
-    const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
+    const mimeTypes = useMimeTypes();
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
-    const mimeTypes = useMemo(() => {
-        mime_types.loadMimeTypes();
-        return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled);
-    }, [ codeNotesMimeTypes ]);
     const changeNoteType = useCallback(async (type: NoteType, mime?: string) => {
         if (!note || (type === currentNoteType && mime === currentNoteMime)) {
             return;
@@ -130,8 +126,23 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
                 }
             })}
 
+            <NoteTypeCodeNoteList mimeTypes={mimeTypes} changeNoteType={changeNoteType} setModalShown={setModalShown} />
+        </>
+    );
+}
+
+export function NoteTypeCodeNoteList({ mimeTypes, changeNoteType, setModalShown }: {
+    mimeTypes: MimeType[];
+    changeNoteType(type: NoteType, mime: string): void;
+    setModalShown(shown: boolean): void;
+}) {
+    return (
+        <>
             {mimeTypes.map(({ title, mime }) => (
-                <FormListItem onClick={() => changeNoteType("code", mime)}>
+                <FormListItem
+                    key={mime}
+                    onClick={() => changeNoteType("code", mime)}
+                >
                     {title}
                 </FormListItem>
             ))}
@@ -140,6 +151,15 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
             <FormListItem icon="bx bx-cog" onClick={() => setModalShown(true)}>{t("basic_properties.configure_code_notes")}</FormListItem>
         </>
     );
+}
+
+export function useMimeTypes() {
+    const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
+    const mimeTypes = useMemo(() => {
+        mime_types.loadMimeTypes();
+        return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled);
+    }, [ codeNotesMimeTypes ]); // eslint-disable-line react-hooks/exhaustive-deps
+    return mimeTypes;
 }
 
 function NoteTypeOptionsModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {

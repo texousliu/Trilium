@@ -17,10 +17,10 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useLegacyImperativeHandlers, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useActiveNoteContext, useLegacyImperativeHandlers, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
-import { ContentLanguagesModal, useLanguageSwitcher } from "../ribbon/BasicPropertiesTab";
+import { ContentLanguagesModal, NoteTypeCodeNoteList, useLanguageSwitcher, useMimeTypes } from "../ribbon/BasicPropertiesTab";
 import AttributeEditor, { AttributeEditorImperativeHandlers } from "../ribbon/components/AttributeEditor";
 import InheritedAttributesTab from "../ribbon/InheritedAttributesTab";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
@@ -28,6 +28,7 @@ import { NotePathsWidget, useSortedNotePaths } from "../ribbon/NotePathsTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
+import server from "../../services/server";
 
 interface StatusBarContext {
     note: FNote;
@@ -53,6 +54,7 @@ export default function StatusBar() {
                     <Breadcrumb {...context} />
 
                     <div className="actions-row">
+                        <CodeNoteSwitcher {...context} />
                         <LanguageSwitcher {...context} />
                         {!isHiddenNote && <NotePaths {...context} />}
                         <AttributesButton {...attributesContext} />
@@ -75,15 +77,19 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
             buttonClassName={clsx("status-bar-dropdown-button", buttonClassName)}
             titlePosition="top"
             titleOptions={{
-                ...titleOptions,
                 popperConfig: {
                     ...titleOptions?.popperConfig,
                     strategy: "fixed"
-                }
+                },
+                ...titleOptions
             }}
             dropdownOptions={{
-                ...dropdownOptions,
-                autoClose: "outside"
+                autoClose: "outside",
+                popperConfig: {
+                    strategy: "fixed",
+                    placement: "top"
+                },
+                ...dropdownOptions
             }}
             text={<>
                 {icon && (<><Icon icon={icon} />&nbsp;</>)}
@@ -335,6 +341,31 @@ function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
             <NotePathsWidget
                 sortedNotePaths={sortedNotePaths}
                 currentNotePath={notePath}
+            />
+        </StatusBarDropdown>
+    );
+}
+//#endregion
+
+//#region Code note switcher
+function CodeNoteSwitcher({ note }: StatusBarContext) {
+    const currentNoteMime = useNoteProperty(note, "mime");
+    const mimeTypes = useMimeTypes();
+    const correspondingMimeType = useMemo(() => (
+        mimeTypes.find(m => m.mime === currentNoteMime)
+    ), [ mimeTypes, currentNoteMime ]);
+
+    return (
+        <StatusBarDropdown
+            icon="bx bx-code-curly"
+            text={correspondingMimeType?.title}
+            title={t("status_bar.code_note_switcher")}
+            dropdownOptions={{ autoClose: true }}
+        >
+            <NoteTypeCodeNoteList
+                mimeTypes={mimeTypes}
+                changeNoteType={(type, mime) => server.put(`notes/${note.noteId}/type`, { type, mime })}
+                setModalShown={() => {}}
             />
         </StatusBarDropdown>
     );
