@@ -65,7 +65,13 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
     );
 }
 
-export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note, setModalShown }: { currentNoteType?: NoteType, currentNoteMime?: string | null, note?: FNote | null, setModalShown: Dispatch<StateUpdater<boolean>> }) {
+export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note, setModalShown, noCodeNotes }: {
+    currentNoteType?: NoteType;
+    currentNoteMime?: string | null;
+    note?: FNote | null;
+    setModalShown: Dispatch<StateUpdater<boolean>>;
+    noCodeNotes?: boolean;
+}) {
     const mimeTypes = useMimeTypes();
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
     const changeNoteType = useCallback(async (type: NoteType, mime?: string) => {
@@ -103,7 +109,7 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
                 }
 
                 const checked = (type === currentNoteType);
-                if (type !== "code") {
+                if (noCodeNotes || type !== "code") {
                     return (
                         <FormListItem
                             checked={checked}
@@ -126,7 +132,7 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
                 }
             })}
 
-            <NoteTypeCodeNoteList mimeTypes={mimeTypes} changeNoteType={changeNoteType} setModalShown={setModalShown} />
+            {!noCodeNotes && <NoteTypeCodeNoteList mimeTypes={mimeTypes} changeNoteType={changeNoteType} setModalShown={setModalShown} />}
         </>
     );
 }
