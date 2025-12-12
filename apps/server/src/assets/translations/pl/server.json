@@ -101,8 +101,8 @@
     "toggle-similar-notes": "Przełącz podobne notatki",
     "toggle-right-pane": "Przełącz prawy panel (spis treści i wyróżnienia)",
     "run-active-note": "Uruchom aktywny kod JavaScript (frontend/backend)",
-    "toggle-note-hoisting": "Przełącz windowanie (hoisting) aktywnej notatki",
-    "unhoist": "Cofnij windowanie",
+    "toggle-note-hoisting": "Włącz/wyłącz skupienie na bieżącej notatce",
+    "unhoist": "Wyłącz skupienie z dowolnego miejsca",
     "toggle-zen-mode": "Włącz/wyłącz tryb Zen (minimalistyczny interfejs)"
   },
   "keyboard_action_names": {
