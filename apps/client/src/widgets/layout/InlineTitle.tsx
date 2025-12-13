@@ -41,7 +41,7 @@ export default function InlineTitle() {
     useLayoutEffect(() => {
         if (!shown) return;
 
-        const titleRow = parentComponent.$widget[0].closest(".note-split")?.querySelector("&> .title-row");
+        const titleRow = parentComponent.$widget[0].closest(".note-split")?.querySelector(":scope > .title-row");
         if (!titleRow) return;
 
         titleRow.classList.toggle("hide-title", true);
@@ -175,9 +175,9 @@ function NoteTypeSwitcher() {
                             onClick={() => switchNoteType(note.noteId, noteType)}
                         />
                     ))}
-                    <CollectionNoteTypes noteId={note.noteId} collectionTemplates={collectionTemplates} />
-                    <TemplateNoteTypes noteId={note.noteId} builtinTemplates={builtinTemplates} />
-                    <MoreNoteTypes noteId={note.noteId} restNoteTypes={restNoteTypes} />
+                    {collectionTemplates.length > 0 && <CollectionNoteTypes noteId={note.noteId} collectionTemplates={collectionTemplates} />}
+                    {builtinTemplates.length > 0 && <TemplateNoteTypes noteId={note.noteId} builtinTemplates={builtinTemplates} />}
+                    {restNoteTypes.length > 0 && <MoreNoteTypes noteId={note.noteId} restNoteTypes={restNoteTypes} />}
                 </>
             )}
         </div>

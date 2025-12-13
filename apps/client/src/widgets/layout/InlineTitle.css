@@ -22,7 +22,7 @@
     }
 
     &.hidden {
-        display: none !important;
+        display: none;
     }
 
     .note-icon-widget {
