@@ -64,6 +64,13 @@ export function FixedFormattingToolbar() {
         }
     });
 
+    // Clean the cache when tabs are closed.
+    useTriliumEvent("noteContextRemoved", ({ ntxIds: eventNtxIds }) => {
+        for (const eventNtxId of eventNtxIds) {
+            toolbarCache.delete(eventNtxId);
+        }
+    });
+
     // Switch between the cached toolbar when user navigates to a different note context.
     useEffect(() => {
         if (!ntxId) return;
