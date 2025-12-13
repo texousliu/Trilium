@@ -1,17 +1,22 @@
 import "./InlineTitle.css";
 
+import { NoteType } from "@triliumnext/commons";
 import clsx from "clsx";
+import { ComponentChild } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
+import { Trans } from "react-i18next";
 
 import FNote from "../../entities/fnote";
+import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
 import { useNoteContext, useStaticTooltip } from "../react/hooks";
-import { ComponentChild } from "preact";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
-import { formatDateTime } from "../../utils/formatters";
-import { Trans } from "react-i18next";
+
+const supportedNoteTypes = new Set<NoteType>([
+    "text", "code"
+]);
 
 export default function InlineTitle() {
     const { note, parentComponent } = useNoteContext();
@@ -60,7 +65,7 @@ export default function InlineTitle() {
 
 function shouldShow(note: FNote | null | undefined) {
     if (!note) return false;
-    return note.type === "text";
+    return supportedNoteTypes.has(note.type);
 }
 
 export function NoteTitleDetails() {

@@ -59,11 +59,6 @@ body.experimental-feature-new-layout {
             }
         }
     }
-
-    .note-split.type-code:not(.mime-text-x-sqlite) .title-details {
-        background-color: var(--main-background-color);
-    }
-
 }
 
 body.experimental-feature-floating-titlebar {
