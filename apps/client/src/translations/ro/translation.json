@@ -2143,12 +2143,6 @@
     "shared_publicly": "Partajată public",
     "shared_publicly_description": "Această notiță este publicată online la {{- link}} și este acesibilă public.\n\nClic pentru a naviga la pagina partajată sau click dreapta pentru mai multe opțiuni.",
     "shared_locally": "Partajată local",
-    "shared_locally_description": "Această notiță este partajată doar pe rețeaua locală la {{- link}}.\n\nClic pentru a naviga la pagina partajată sau click dreapta pentru mai multe opțiuni.",
-    "backlinks_one": "{{count}} legătură de retur",
-    "backlinks_few": "{{count}} legături de retur",
-    "backlinks_other": "{{count}} de legături de retur",
-    "backlinks_description_one": "Această notiță este referențiată de către {{count}} altă notiță.\n\nClic pentru a vedea lista de legături de retur.",
-    "backlinks_description_few": "Această notiță este referențiată de către alte {{count}} notițe.\n\nClic pentru a vedea lista de legături de retur.",
-    "backlinks_description_other": "Această notiță este referențiată de către alte {{count}} de notițe.\n\nClic pentru a vedea lista de legături de retur."
+    "shared_locally_description": "Această notiță este partajată doar pe rețeaua locală la {{- link}}.\n\nClic pentru a naviga la pagina partajată sau click dreapta pentru mai multe opțiuni."
   }
 }

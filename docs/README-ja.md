@@ -104,8 +104,8 @@ Trilium Notes
 * [Evernote](https://docs.triliumnotes.org/user-guide/concepts/import-export/evernote)
   と [Markdown
   のインポートとエクスポート](https://docs.triliumnotes.org/user-guide/concepts/import-export/markdown)
-* [Web Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper)
-  でWebコンテンツを簡単に保存
+* [Web Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper) で
+  web コンテンツを簡単に保存
 * カスタマイズ可能な UI (サイドバー ボタン、ユーザー定義のウィジェットなど)
 * [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics) と
   Grafana ダッシュボード。
@@ -164,13 +164,13 @@ TriliumNext は Flatpak としても提供されていますが、FlatHub では
 
 ### ブラウザ（どのOSでも）
 
-サーバーインストール (下記参照) を使用する場合は、Web インターフェイス (デスクトップアプリとほぼ同じ) に直接アクセスできます。
+サーバーインストール (下記参照) を使用する場合は、web インターフェイス (デスクトップアプリとほぼ同じ) に直接アクセスできます。
 
 現在、Chrome と Firefox の最新バージョンのみがサポート (およびテスト) されています。
 
 ### モバイル
 
-モバイルデバイスで TriliumNext を使用するには、モバイル Web
+モバイルデバイスで TriliumNext を使用するには、モバイル web
 ブラウザーを使用して、サーバーインストールのモバイルインターフェイスにアクセスできます (以下を参照)。
 
 モバイルアプリのサポートの詳細については、issue https://github.com/TriliumNext/Trilium/issues/4962
