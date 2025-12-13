@@ -49,9 +49,10 @@ import { isExperimentalFeatureEnabled } from "../services/experimental_features.
 import NoteActions from "../widgets/ribbon/NoteActions.jsx";
 import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
 import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
-import BreadcrumbBadges from "../widgets/BreadcrumbBadges.jsx";
-import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
+import NoteBadges from "../widgets/layout/NoteBadges.jsx";
+import NoteTitleActions from "../widgets/layout/NoteTitleActions.jsx";
 import StatusBar from "../widgets/layout/StatusBar.jsx";
+import InlineTitle from "../widgets/layout/InlineTitle.jsx";
 
 export default class DesktopLayout {
 
@@ -78,12 +79,19 @@ export default class DesktopLayout {
         const fullWidthTabBar = launcherPaneIsHorizontal || (isElectron && !hasNativeTitleBar && isMac);
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
         const isNewLayout = isExperimentalFeatureEnabled("new-layout");
-        const isFloatingTitlebar = isExperimentalFeatureEnabled("floating-titlebar");
 
         const titleRow = new FlexContainer("row")
             .class("title-row")
+            .cssBlock(".title-row > * { margin: 5px; }")
             .child(<NoteIconWidget />)
-            .child(<NoteTitleWidget />);
+            .child(<NoteTitleWidget />)
+            .optChild(isNewLayout, <NoteBadges />)
+            .optChild(!isNewLayout, <SpacerWidget baseSize={0} growthFactor={1} />)
+            .child(<MovePaneButton direction="left" />)
+            .child(<MovePaneButton direction="right" />)
+            .child(<ClosePaneButton />)
+            .child(<CreatePaneButton />)
+            .optChild(isNewLayout, <NoteActions />);
 
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
@@ -137,19 +145,7 @@ export default class DesktopLayout {
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
-                                                        .child(
-                                                            new FlexContainer("row")
-                                                                .class("breadcrumb-row")
-                                                                .cssBlock(".breadcrumb-row > * { margin: 5px; }")
-                                                                .optChild(isNewLayout, <BreadcrumbBadges />)
-                                                                .child(<SpacerWidget baseSize={0} growthFactor={1} />)
-                                                                .child(<MovePaneButton direction="left" />)
-                                                                .child(<MovePaneButton direction="right" />)
-                                                                .child(<ClosePaneButton />)
-                                                                .child(<CreatePaneButton />)
-                                                                .optChild(isNewLayout, <NoteActions />)
-                                                        )
-                                                        .optChild(!isFloatingTitlebar, titleRow)
+                                                        .child(titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
                                                         .optChild(isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
@@ -157,8 +153,8 @@ export default class DesktopLayout {
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
-                                                                .optChild(isFloatingTitlebar, titleRow)
-                                                                .optChild(isNewLayout, <NoteTitleDetails />)
+                                                                .optChild(isNewLayout, <InlineTitle />)
+                                                                .optChild(isNewLayout, <NoteTitleActions />)
                                                                 .optChild(!isNewLayout, new ContentHeader()
                                                                     .child(<ReadOnlyNoteInfoBar />)
                                                                     .child(<SharedInfo />)

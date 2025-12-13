@@ -30,88 +30,26 @@ body.desktop .note-title-widget input.note-title {
 }
 
 body.experimental-feature-new-layout {
-    .title-details {
-        max-width: var(--max-content-width);
-        padding: 0;
-        padding-inline-start: 24px;
-    }
+    .title-row {
+        container-type: size;
 
-    .title-details {
-        padding-inline-end: 16px;
+        @container (max-width: 700px) {
+            .note-icon-widget .note-icon {
+                font-size: 1.3em;
+            }
 
-        .dropdown-menu {
-            input.form-control {
-                padding: 2px 8px;
-                margin-left: 1em;
+            .note-title-widget {
+                display: flex;
+                align-items: center;
+                .note-title {
+                    font-size: 1em;
+                }
+            }
+
+            .note-title-widget:focus-within + .note-badges,
+            .ext-badge .text {
+                display: none;
             }
         }
-
-        .spacer {
-            flex-grow: 1;
-        }
-    }
-
-    .note-split.type-code:not(.mime-text-x-sqlite) .title-details {
-        background-color: var(--main-background-color);
-    }
-
-    .title-details {
-        margin-top: 0;
-        contain: none;
-        display: flex;
-        gap: 0.25em;
-        margin: 0;
-        list-style-type: none;
-
-        span.value {
-            font-weight: 500;
-        }
-    }
-
-    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
-    .note-split.type-book {
-        .title-details {
-            width: 100%;
-            max-width: unset;
-            padding-inline-start: 15px;
-            padding-bottom: 0.2em;
-            font-size: 0.8em;
-        }
-    }
-
-    &.prefers-centered-content .title-details {
-        margin-inline: auto;
-    }
-}
-
-body.experimental-feature-floating-titlebar {
-    .title-row {
-        max-width: var(--max-content-width);
-        padding: 0;
-        padding-inline-start: 24px;
-    }
-
-    .note-icon-widget {
-        padding: 0;
-        width: 41px;
-    }
-
-    .note-split.type-code:not(.mime-text-x-sqlite) .title-row {
-        background-color: var(--main-background-color);
-    }
-
-    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
-    .note-split.type-book {
-        .title-row {
-            width: 100%;
-            max-width: unset;
-            padding-inline-start: 15px;
-            padding-bottom: 0.2em;
-            font-size: 0.8em;
-        }
-    }
-
-    &.prefers-centered-content .title-row {
-        margin-inline: auto;
     }
 }

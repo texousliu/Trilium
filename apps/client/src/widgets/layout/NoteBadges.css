@@ -1,0 +1,27 @@
+.component.note-badges {
+    contain: none;
+}
+
+.note-badges {
+    display: flex;
+    gap: 5px;
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+    --badge-radius: 12px;
+
+    .ext-badge {
+        &.temporarily-editable-badge { --color: #4fa52b; }
+        &.read-only-badge { --color: #e33f3b; }
+        &.share-badge { --color: #3b82f6; }
+        &.clipped-note-badge { --color: #57a2a5; }
+        &.execute-badge { --color: #f59e0b; }
+    }
+
+    .dropdown-badge {
+        &.dropdown-backlinks-badge .dropdown-menu {
+            min-width: 500px;
+        }
+    }
+}
+
