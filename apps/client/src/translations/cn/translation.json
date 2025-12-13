@@ -1581,7 +1581,11 @@
   "note_title": {
     "placeholder": "请输入笔记标题...",
     "created_on": "建立于 <Value />",
-    "last_modified": "最后修改于 <Value />"
+    "last_modified": "最后修改于 <Value />",
+    "note_type_switcher_label": "从 {{type}} 切换到:",
+    "note_type_switcher_others": "更多笔记类型",
+    "note_type_switcher_templates": "模板",
+    "note_type_switcher_collection": "集合"
   },
   "search_result": {
     "no_notes_found": "没有找到符合搜索条件的笔记。",

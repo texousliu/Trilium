@@ -159,12 +159,12 @@ function NoteTypeSwitcher() {
     const currentNoteTypeData = useMemo(() => NOTE_TYPES.find(t => t.type === currentNoteType), [ currentNoteType ]);
     const { builtinTemplates, collectionTemplates } = useBuiltinTemplates();
 
-    return (
+    return (currentNoteType && supportedNoteTypes.has(currentNoteType) &&
         <div
             className="note-type-switcher"
             onWheel={onWheelHorizontalScroll}
         >
-            {blob?.contentLength === 0 && (
+            {note && blob?.contentLength === 0 && (
                 <>
                     <div className="intro">{t("note_title.note_type_switcher_label", { type: currentNoteTypeData?.title.toLocaleLowerCase() })}</div>
                     {pinnedNoteTypes.map(noteType => noteType.type !== currentNoteType && (
