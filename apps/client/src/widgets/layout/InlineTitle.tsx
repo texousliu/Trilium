@@ -67,6 +67,7 @@ export default function InlineTitle() {
 function shouldShow(note: FNote | null | undefined, viewScope: ViewScope | undefined) {
     if (!note) return false;
     if (viewScope?.viewMode !== "default") return false;
+    if (note.noteId.startsWith("_options")) return true;
     return supportedNoteTypes.has(note.type);
 }
 
