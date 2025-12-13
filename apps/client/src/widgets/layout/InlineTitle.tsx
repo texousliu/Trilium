@@ -17,7 +17,7 @@ import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
 import { Badge, BadgeWithDropdown } from "../react/Badge";
-import { FormListItem } from "../react/FormList";
+import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useNoteBlob, useNoteContext, useNoteProperty, useStaticTooltip, useTriliumEvent } from "../react/hooks";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
@@ -197,16 +197,32 @@ function MoreNoteTypes({ noteId, restNoteTypes }: { noteId: string, restNoteType
 }
 
 function TemplateNoteTypes({ noteId }: { noteId: string }) {
-    const [ templates, setTemplates ] = useState<FNote[]>([]);
+    const [ userTemplates, setUserTemplates ] = useState<FNote[]>([]);
+    const [ builtinTemplates, setBuiltinTemplates ] = useState<FNote[]>([]);
 
     async function refreshTemplates() {
         const templateNoteIds = await server.get<string[]>("search-templates");
         const templateNotes = await froca.getNotes(templateNoteIds);
-        setTemplates(templateNotes);
+        setUserTemplates(templateNotes);
+    }
+
+    async function loadBuiltinTemplates() {
+        const templatesRoot = await froca.getNote("_templates");
+        if (!templatesRoot) return;
+        const childNotes = await templatesRoot.getChildNotes();
+        const builtinTemplates: FNote[] = [];
+        for (const childNote of childNotes) {
+            if (childNote.hasLabel("collection") || !childNote.hasLabel("template")) continue;
+            builtinTemplates.push(childNote);
+        }
+        setBuiltinTemplates(builtinTemplates);
     }
 
     // First load.
-    useEffect(() => { refreshTemplates(); }, []);
+    useEffect(() => {
+        refreshTemplates();
+        loadBuiltinTemplates();
+    }, []);
 
     // React to external changes.
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
@@ -220,14 +236,19 @@ function TemplateNoteTypes({ noteId }: { noteId: string }) {
             text={t("note_title.note_type_switcher_templates")}
             icon="bx bx-copy-alt"
         >
-            {templates.map(template => (
-                <FormListItem
-                    key={template.noteId}
-                    icon={template.getIcon()}
-                    onClick={() => attributes.setRelation(noteId, "template", template.noteId)}
-                >{template.title}</FormListItem>
-            ))}
+            {userTemplates.map(template => <TemplateItem key={template.noteId} noteId={noteId} template={template} />)}
+            {userTemplates.length > 0 && <FormDropdownDivider />}
+            {builtinTemplates.map(template => <TemplateItem key={template.noteId} noteId={noteId} template={template} />)}
         </BadgeWithDropdown>
+    );
+}
+
+function TemplateItem({ noteId, template }: { noteId: string, template: FNote }) {
+    return (
+        <FormListItem
+            icon={template.getIcon()}
+            onClick={() => attributes.setRelation(noteId, "template", template.noteId)}
+        >{template.title}</FormListItem>
     );
 }
 
