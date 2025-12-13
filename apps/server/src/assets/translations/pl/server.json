@@ -7,7 +7,7 @@
     "scroll-to-active-note": "Przewiń drzewo do aktywnej notatki",
     "quick-search": "Aktywuj szybki pasek wyszukiwania",
     "search-in-subtree": "Szukaj notatek w poddrzewie aktywnej notatki",
-    "expand-subtree": "Rozwiń poddrzewo aktualnej notatki",
+    "expand-subtree": "Rozwiń sub-drzewo obecnej notatki",
     "collapse-tree": "Zwiń całe drzewo notatek",
     "collapse-subtree": "Zwiń poddrzewo aktualnej notatki",
     "sort-child-notes": "Sortuj notatki podrzędne",
