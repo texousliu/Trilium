@@ -55,7 +55,7 @@
     "cross-env": "10.1.0",
     "dpdm": "3.14.0",
     "esbuild": "0.27.1",
-    "eslint": "9.39.1",
+    "eslint": "9.39.2",
     "eslint-config-preact": "2.0.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-playwright": "2.4.0",
