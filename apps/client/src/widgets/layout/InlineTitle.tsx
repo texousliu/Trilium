@@ -11,7 +11,7 @@ import { ViewScope } from "../../services/link";
 import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
-import { useNoteContext, useStaticTooltip } from "../react/hooks";
+import { useNoteContext, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { NOTE_TYPES } from "../../services/note_types";
@@ -131,11 +131,12 @@ function TextWithValue({ i18nKey, value, valueTooltip }: {
 //#region Note type switcher
 function NoteTypeSwitcher() {
     const { note } = useNoteContext();
+    const currentNoteType = useNoteProperty(note, "type");
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
 
     return (note &&
         <div className="note-type-switcher">
-            {noteTypes.map(noteType => (
+            {noteTypes.map(noteType => noteType.type !== currentNoteType && (
                 <Badge
                     key={noteType.type}
                     text={noteType.title}
