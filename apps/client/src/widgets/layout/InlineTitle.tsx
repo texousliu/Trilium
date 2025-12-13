@@ -8,15 +8,16 @@ import { Trans } from "react-i18next";
 
 import FNote from "../../entities/fnote";
 import { ViewScope } from "../../services/link";
+import { NOTE_TYPES } from "../../services/note_types";
+import server from "../../services/server";
 import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
+import { Badge } from "../react/Badge";
 import { useNoteContext, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
-import { NOTE_TYPES } from "../../services/note_types";
-import { Badge } from "../react/Badge";
-import server from "../../services/server";
+import { onWheelHorizontalScroll } from "../widget_utils";
 
 const supportedNoteTypes = new Set<NoteType>([
     "text", "code"
@@ -135,7 +136,10 @@ function NoteTypeSwitcher() {
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
 
     return (note &&
-        <div className="note-type-switcher">
+        <div
+            className="note-type-switcher"
+            onWheel={onWheelHorizontalScroll}
+        >
             {noteTypes.map(noteType => noteType.type !== currentNoteType && (
                 <Badge
                     key={noteType.type}
