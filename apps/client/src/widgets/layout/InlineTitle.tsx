@@ -1,6 +1,6 @@
 import "./InlineTitle.css";
 
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 import FNote from "../../entities/fnote";
 import { useNoteContext } from "../react/hooks";
@@ -8,6 +8,7 @@ import { useNoteContext } from "../react/hooks";
 export default function InlineTitle() {
     const { note, parentComponent } = useNoteContext();
     const [ shown, setShown ] = useState(shouldShow(note));
+    const containerRef=  useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setShown(shouldShow(note));
@@ -21,13 +22,24 @@ export default function InlineTitle() {
             ?.querySelector("&> .title-row");
         if (!titleRow) return;
 
-        titleRow.classList.add("collapse");
+        const observer = new IntersectionObserver((entries) => {
+            titleRow.classList.toggle("collapse", entries[0].isIntersecting);
+        });
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
 
-        return () => titleRow.classList.remove("collapse");
+        return () => {
+            titleRow.classList.remove("collapse");
+            observer.disconnect();
+        };
     }, [ shown, parentComponent ]);
 
     return (
-        <div className="inline-title-row">
+        <div
+            ref={containerRef}
+            className="inline-title-row"
+        >
             Title goes here.
         </div>
     );

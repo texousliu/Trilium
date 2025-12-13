@@ -53,7 +53,7 @@ body.experimental-feature-new-layout {
         }
 
         &.collapse {
-            display: none !important;
+            visibility: hidden;
         }
     }
 
