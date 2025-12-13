@@ -2151,5 +2151,15 @@
     "execute_script_description": "このノートはスクリプトノートです。クリックするとスクリプトが実行されます。",
     "execute_sql": "SQL を実行",
     "execute_sql_description": "このノートは SQL ノートです。クリックすると SQL クエリが実行されます。"
+  },
+  "status_bar": {
+    "language_title": "コンテンツ全体の言語を変更",
+    "note_info_title": "作成日/変更日やノートのサイズなど、このノートに関する情報を表示する。",
+    "backlinks_title_other": "このノートは {{count}} 件の他のノートからリンクされています。\n\nクリックするとバックリンクのリストが表示されます。",
+    "attachments_title_other": "このノートには {{count}} 件の添付ファイルがあります。クリックすると、添付ファイルのリストが新しいタブで開きます。",
+    "attributes_other": "{{count}} 個の属性",
+    "attributes_title": "クリックすると専用のペインが開き、このノートの所有属性を編集したり、継承された属性のリストを表示できます。",
+    "note_paths_title": "クリックすると、このノートがツリー内に配置されているパスが表示されます。",
+    "code_note_switcher": "言語モードを変更"
   }
 }
