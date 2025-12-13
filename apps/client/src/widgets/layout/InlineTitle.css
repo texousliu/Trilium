@@ -34,6 +34,7 @@ body.prefers-centered-content .inline-title {
     gap: 0.25em;
     margin: 0;
     list-style-type: none;
+    color: var(--muted-text-color);
 
     span.value {
         font-weight: 500;
