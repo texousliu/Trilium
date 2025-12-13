@@ -60,35 +60,3 @@ body.experimental-feature-new-layout {
         }
     }
 }
-
-body.experimental-feature-floating-titlebar {
-    .title-row {
-        max-width: var(--max-content-width);
-        padding: 0;
-        padding-inline-start: 24px;
-    }
-
-    .note-icon-widget {
-        padding: 0;
-        width: 41px;
-    }
-
-    .note-split.type-code:not(.mime-text-x-sqlite) .title-row {
-        background-color: var(--main-background-color);
-    }
-
-    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
-    .note-split.type-book {
-        .title-row {
-            width: 100%;
-            max-width: unset;
-            padding-inline-start: 15px;
-            padding-bottom: 0.2em;
-            font-size: 0.8em;
-        }
-    }
-
-    &.prefers-centered-content .title-row {
-        margin-inline: auto;
-    }
-}

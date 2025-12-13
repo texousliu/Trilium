@@ -79,7 +79,6 @@ export default class DesktopLayout {
         const fullWidthTabBar = launcherPaneIsHorizontal || (isElectron && !hasNativeTitleBar && isMac);
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
         const isNewLayout = isExperimentalFeatureEnabled("new-layout");
-        const isFloatingTitlebar = isExperimentalFeatureEnabled("floating-titlebar");
 
         const titleRow = new FlexContainer("row")
             .class("title-row")
