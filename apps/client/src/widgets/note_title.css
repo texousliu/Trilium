@@ -51,6 +51,10 @@ body.experimental-feature-new-layout {
                 display: none;
             }
         }
+
+        &.collapse {
+            display: none !important;
+        }
     }
 
     .title-details {
