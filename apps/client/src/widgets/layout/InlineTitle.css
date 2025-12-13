@@ -4,4 +4,8 @@
     padding-inline-start: 24px;
     display: flex;
     align-items: center;
+
+    .note-icon-widget {
+        padding: 0;
+    }
 }

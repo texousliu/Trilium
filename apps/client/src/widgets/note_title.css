@@ -53,7 +53,10 @@ body.experimental-feature-new-layout {
         }
 
         &.collapse {
-            visibility: hidden;
+            .note-icon-widget,
+            .note-title-widget {
+                visibility: hidden;
+            }
         }
     }
 
