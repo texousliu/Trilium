@@ -2126,9 +2126,7 @@
     "title": "实验选项",
     "disclaimer": "这些选项处于实验阶段，可能导致系统不稳定。请谨慎使用。",
     "new_layout_name": "新布局",
-    "new_layout_description": "尝试全新布局，呈现更现代的外观并提升易用性。后续版本将进行重大调整。",
-    "floating_titlebar": "浮动标题栏",
-    "floating_titlebar_description": "标题栏是内容的一部分，会随着笔记内容一起滚动。"
+    "new_layout_description": "尝试全新布局，呈现更现代的外观并提升易用性。后续版本将进行重大调整。"
   },
   "tab_history_navigation_buttons": {
     "go-back": "返回前一笔记",

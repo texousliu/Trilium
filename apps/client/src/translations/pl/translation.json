@@ -2107,9 +2107,7 @@
     "title": "Opcje eksperymentalne",
     "disclaimer": "Te opcje są eksperymentalne i mogą powodować niestabilność. Używaj z ostrożnością.",
     "new_layout_name": "Nowy układ",
-    "new_layout_description": "Wypróbuj nowy układ dla nowocześniejszego wyglądu i lepszej użyteczności. Podlega znacznym zmianom w nadchodzących wydaniach.",
-    "floating_titlebar": "Pływający pasek narzędzi",
-    "floating_titlebar_description": "Pasek tytułu jest częścią treści i przewija się razem z zawartością notatki."
+    "new_layout_description": "Wypróbuj nowy układ dla nowocześniejszego wyglądu i lepszej użyteczności. Podlega znacznym zmianom w nadchodzących wydaniach."
   },
   "read-only-info": {
     "read-only-note": "Obecnie przeglądasz notatkę tylko do odczytu.",
