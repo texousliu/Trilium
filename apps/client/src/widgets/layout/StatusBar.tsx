@@ -232,7 +232,7 @@ function BacklinksBadge({ note, viewScope }: StatusBarContext) {
     return (note && count > 0 &&
         <StatusBarDropdown
             className="backlinks-badge backlinks-widget"
-            icon="bx bx-revision"
+            icon="bx bx-link"
             text={count}
             title={t("status_bar.backlinks_title", { count })}
             dropdownContainerClassName="backlinks-items"
@@ -335,7 +335,7 @@ function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
         <StatusBarDropdown
             title={t("status_bar.note_paths_title")}
             dropdownContainerClassName="dropdown-note-paths"
-            icon="bx bx-link-alt"
+            icon="bx bx-directions"
             text={sortedNotePaths?.length}
         >
             <NotePathsWidget
