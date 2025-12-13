@@ -13,7 +13,7 @@ import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/u
 import ws from "../../services/ws";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
-import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
+import { FormDropdownDivider, FormDropdownSubmenu, FormListHeader, FormListItem, FormListToggleableItem } from "../react/FormList";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
@@ -76,18 +76,17 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
                 <FormDropdownDivider />
             </>}
 
-            {canBeConvertedToAttachment && <ConvertToAttachment note={note} />}
-            {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} />}
             <CommandItem command="findInText" icon="bx bx-search" disabled={!isSearchable} text={t("note_actions.search_in_note")} />
-            <CommandItem command="printActiveNote" icon="bx bx-printer" disabled={!isPrintable} text={t("note_actions.print_note")} />
-            {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
+            <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
+            {isNewLayout && <CommandItem command="toggleRibbonTabNoteMap" icon="bx bxs-network-chart" disabled={isInOptionsOrHelp} text={t("note_actions.note_map")} />}
+            
             <FormDropdownDivider />
 
             {isNewLayout && isNormalViewMode && !isHelpPage && <>
                 <NoteBasicProperties note={note} />
                 <FormDropdownDivider />
             </>}
-
+            
             <CommandItem icon="bx bx-import" text={t("note_actions.import_files")}
                 disabled={isInOptionsOrHelp || note.type === "search"}
                 command={() => parentComponent?.triggerCommand("showImportDialog", { noteId: note.noteId })} />
@@ -97,30 +96,37 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
                     notePath: noteContext.notePath,
                     defaultType: "single"
                 })} />
-            <FormDropdownDivider />
-
-            <CommandItem command="openNoteExternally" icon="bx bx-file-find" disabled={isSearchOrBook || !isElectron} text={t("note_actions.open_note_externally")} title={t("note_actions.open_note_externally_title")} />
-            <CommandItem command="openNoteCustom" icon="bx bx-customize" disabled={isSearchOrBook || isMac || !isElectron} text={t("note_actions.open_note_custom")} />
-            <CommandItem command="showNoteSource" icon="bx bx-code" disabled={!hasSource} text={t("note_actions.note_source")} />
-            {(syncServerHost && isElectron) &&
-                <CommandItem command="openNoteOnServer" icon="bx bx-world" disabled={!syncServerHost} text={t("note_actions.open_note_on_server")} />
-            }
+            {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
+            <CommandItem command="printActiveNote" icon="bx bx-printer" disabled={!isPrintable} text={t("note_actions.print_note")} />
+            
             <FormDropdownDivider />
 
             <CommandItem command="showRevisions" icon="bx bx-history" text={t("note_actions.view_revisions")} />
             <CommandItem command="forceSaveRevision" icon="bx bx-save" disabled={isInOptionsOrHelp} text={t("note_actions.save_revision")} />
+
+            <FormDropdownDivider />
+
+            {canBeConvertedToAttachment && <ConvertToAttachment note={note} />}
+            {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} 
+            />}
+
+            <FormDropdownSubmenu icon="bx bx-wrench" title="Advanced" dropStart>
+                <CommandItem command="openNoteExternally" icon="bx bx-file-find" disabled={isSearchOrBook || !isElectron} text={t("note_actions.open_note_externally")} title={t("note_actions.open_note_externally_title")} />
+                <CommandItem command="openNoteCustom" icon="bx bx-customize" disabled={isSearchOrBook || isMac || !isElectron} text={t("note_actions.open_note_custom")} />
+                <CommandItem command="showNoteSource" icon="bx bx-code" disabled={!hasSource} text={t("note_actions.note_source")} />
+                {(syncServerHost && isElectron) &&
+                    <CommandItem command="openNoteOnServer" icon="bx bx-world" disabled={!syncServerHost} text={t("note_actions.open_note_on_server")} />
+                }
+
+                {glob.isDev && <DevelopmentActions note={note} noteContext={noteContext} />}
+            </FormDropdownSubmenu>
+
+            <FormDropdownDivider />
+            
             <CommandItem icon="bx bx-trash destructive-action-icon" text={t("note_actions.delete_note")} destructive
                 disabled={isInOptionsOrHelp}
                 command={() => branches.deleteNotes([note.getParentBranches()[0].branchId])}
             />
-            <FormDropdownDivider />
-
-            <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
-            {isNewLayout && <CommandItem command="toggleRibbonTabNoteMap" icon="bx bxs-network-chart" disabled={isInOptionsOrHelp} text={t("note_actions.note_map")} />}
-            {glob.isDev && <>
-                <FormDropdownDivider />
-                <DevelopmentActions note={note} noteContext={noteContext} />
-            </>}
         </Dropdown>
     );
 }
@@ -133,33 +139,36 @@ function NoteBasicProperties({ note }: { note: FNote }) {
 
     return <>
         <FormListToggleableItem
-            icon="bx bx-bookmark"
-            title={t("bookmark_switch.bookmark")}
-            currentValue={isBookmarked} onChange={setIsBookmarked}
-            disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
-        />
-        <FormListToggleableItem
-            icon="bx bx-copy-alt"
-            title={t("template_switch.template")}
-            currentValue={isTemplate} onChange={setIsTemplate}
-            helpPage="KC1HB96bqqHX"
-            disabled={note?.noteId.startsWith("_options")}
-        />
-        <FormListToggleableItem
             icon="bx bx-share-alt"
             title={t("shared_switch.shared")}
             currentValue={isShared} onChange={switchShareState}
             helpPage="R9pX4DGra2Vt"
             disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
         />
-        <EditabilityDropdown note={note} />
         <FormListToggleableItem
             icon="bx bx-lock-alt"
             title={t("protect_note.toggle-on")}
             currentValue={!!isProtected} onChange={shouldProtect => protected_session.protectNote(note.noteId, shouldProtect, false)}
         />
+        <FormListToggleableItem
+            icon="bx bx-bookmark"
+            title={t("bookmark_switch.bookmark")}
+            currentValue={isBookmarked} onChange={setIsBookmarked}
+            disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
+        />
+
         <FormDropdownDivider />
+
         <NoteTypeDropdown note={note} />
+        <EditabilityDropdown note={note} />
+
+        <FormListToggleableItem
+            icon="bx bx-copy-alt"
+            title={t("template_switch.template")}
+            currentValue={isTemplate} onChange={setIsTemplate}
+            helpPage="KC1HB96bqqHX"
+            disabled={note?.noteId.startsWith("_options")}
+            />
     </>;
 }
 
@@ -200,7 +209,8 @@ function NoteTypeDropdown({ note }: { note: FNote }) {
 
 function DevelopmentActions({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
     return (
-        <FormDropdownSubmenu title="Development Actions" icon="bx bx-wrench" dropStart>
+        <>
+            <FormListHeader text="Development Actions" />
             <FormListItem
                 icon="bx bx-printer"
                 onClick={() => window.open(`/?print=#root/${note.noteId}`, "_blank")}
@@ -215,7 +225,7 @@ function DevelopmentActions({ note, noteContext }: { note: FNote, noteContext?: 
                         });
                     });
                 }}>Crash editor</FormListItem>
-        </FormDropdownSubmenu>
+        </>
     );
 }
 
