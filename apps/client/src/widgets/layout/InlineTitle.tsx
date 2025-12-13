@@ -18,7 +18,7 @@ import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
 import { Badge, BadgeWithDropdown } from "../react/Badge";
 import { FormListItem } from "../react/FormList";
-import { useNoteBlob, useNoteContext, useNoteProperty, useStaticTooltip } from "../react/hooks";
+import { useNoteBlob, useNoteContext, useNoteProperty, useStaticTooltip, useTriliumEvent } from "../react/hooks";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { onWheelHorizontalScroll } from "../widget_utils";
@@ -205,9 +205,15 @@ function TemplateNoteTypes({ noteId }: { noteId: string }) {
         setTemplates(templateNotes);
     }
 
-    useEffect(() => {
-        refreshTemplates();
-    }, []);
+    // First load.
+    useEffect(() => { refreshTemplates(); }, []);
+
+    // React to external changes.
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttributeRows().some(attr => attr.type === "label" && attr.name === "template")) {
+            refreshTemplates();
+        }
+    });
 
     return (
         <BadgeWithDropdown
