@@ -1,8 +1,8 @@
-.component.breadcrumb-badges {
+.component.note-badges {
     contain: none;
 }
 
-.breadcrumb-badges {
+.note-badges {
     display: flex;
     gap: 5px;
     min-width: 0;

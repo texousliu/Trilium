@@ -1,4 +1,4 @@
-import "./BreadcrumbBadges.css";
+import "./NoteBadges.css";
 
 import clsx from "clsx";
 import { ComponentChildren, MouseEventHandler } from "preact";
@@ -10,9 +10,9 @@ import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, u
 import Icon from "../react/Icon";
 import { useShareInfo } from "../shared_info";
 
-export default function BreadcrumbBadges() {
+export default function NoteBadges() {
     return (
-        <div className="breadcrumb-badges">
+        <div className="note-badges">
             <ReadOnlyBadge />
             <ShareBadge />
             <ClippedNoteBadge />

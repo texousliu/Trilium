@@ -49,7 +49,7 @@ import { isExperimentalFeatureEnabled } from "../services/experimental_features.
 import NoteActions from "../widgets/ribbon/NoteActions.jsx";
 import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
 import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
-import BreadcrumbBadges from "../widgets/layout/BreadcrumbBadges.jsx";
+import NoteBadges from "../widgets/layout/NoteBadges.jsx";
 import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
 import StatusBar from "../widgets/layout/StatusBar.jsx";
 
@@ -85,7 +85,7 @@ export default class DesktopLayout {
             .cssBlock(".title-row > * { margin: 5px; }")
             .child(<NoteIconWidget />)
             .child(<NoteTitleWidget />)
-            .optChild(isNewLayout, <BreadcrumbBadges />)
+            .optChild(isNewLayout, <NoteBadges />)
             .optChild(!isNewLayout, <SpacerWidget baseSize={0} growthFactor={1} />)
             .child(<MovePaneButton direction="left" />)
             .child(<MovePaneButton direction="right" />)
