@@ -32,7 +32,7 @@
     "link_title": "Tytuł linku",
     "button_add_link": "Dodaj link",
     "help_on_links": "Pomoc dotycząca linków",
-    "link_title_mirrors": "tytuł linku odzwierciedla aktualny tytuł notatki"
+    "link_title_mirrors": "Tytuł linku odzwierciedla obecną nazwę notatki"
   },
   "branch_prefix": {
     "save": "Zapisz",
