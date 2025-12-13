@@ -1,3 +1,7 @@
+:root {
+    --title-transition: opacity 200ms ease-in;
+}
+
 .component.inline-title {
     contain: none;
 }
@@ -9,6 +13,12 @@
     & > .inline-title-row {
         display: flex;
         align-items: center;
+        transition: var(--title-transition);
+
+        &.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
     }
 
     &.hidden {
@@ -20,28 +30,16 @@
     }
 }
 
-.note-split > .title-row .note-icon-widget,
-.note-split > .title-row .note-title-widget,
-.inline-title > .inline-title-row {
-    transition: opacity 200ms ease-in;
-}
-
-.note-split {
-    &.inline-title-visible {
-        &> .title-row {
-            .note-icon-widget,
-            .note-title-widget {
-                opacity: 0;
-                pointer-events: none;
-            }
-        }
+.title-row {
+    &.note-icon-widget,
+    &.note-title-widget {
+        transition: var(--title-transition);
     }
 
-    &:not(.inline-title-visible) {
-        .inline-title .inline-title-row {
-            opacity: 0;
-            pointer-events: none;
-        }
+    &.hide-title .note-icon-widget,
+    &.hide-title .note-title-widget {
+        opacity: 0;
+        pointer-events: none;
     }
 }
 

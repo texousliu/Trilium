@@ -3,7 +3,7 @@ import "./InlineTitle.css";
 import { NoteType } from "@triliumnext/commons";
 import clsx from "clsx";
 import { ComponentChild } from "preact";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { Trans } from "react-i18next";
 
 import FNote from "../../entities/fnote";
@@ -31,21 +31,23 @@ export default function InlineTitle() {
     const { note, parentComponent, viewScope } = useNoteContext();
     const type = useNoteProperty(note, "type");
     const [ shown, setShown ] = useState(shouldShow(note?.noteId, type, viewScope));
-    const containerRef=  useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [ titleHidden, setTitleHidden ] = useState(false);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setShown(shouldShow(note?.noteId, type, viewScope));
     }, [ note, type, viewScope ]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!shown) return;
 
-        const noteSplit = parentComponent.$widget[0].closest(".note-split");
-        const titleRow = noteSplit?.querySelector("&> .title-row");
-        if (!noteSplit || !titleRow) return;
+        const titleRow = parentComponent.$widget[0].closest(".note-split")?.querySelector("&> .title-row");
+        if (!titleRow) return;
 
+        titleRow.classList.toggle("hide-title", true);
         const observer = new IntersectionObserver((entries) => {
-            noteSplit.classList.toggle("inline-title-visible", entries[0].isIntersecting);
+            titleRow.classList.toggle("hide-title", entries[0].isIntersecting);
+            setTitleHidden(!entries[0].isIntersecting);
         }, {
             threshold: 0.85
         });
@@ -54,7 +56,7 @@ export default function InlineTitle() {
         }
 
         return () => {
-            noteSplit.classList.remove("inline-title-visible");
+            titleRow.classList.remove("hide-title");
             observer.disconnect();
         };
     }, [ shown, parentComponent ]);
@@ -64,7 +66,7 @@ export default function InlineTitle() {
             ref={containerRef}
             className={clsx("inline-title", !shown && "hidden")}
         >
-            <div class="inline-title-row">
+            <div class={clsx("inline-title-row", titleHidden && "hidden")}>
                 <NoteIcon />
                 <NoteTitleWidget />
             </div>
