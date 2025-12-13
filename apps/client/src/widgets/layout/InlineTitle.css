@@ -1,12 +1,15 @@
-.component.inline-title-row {
+.component.inline-title {
     contain: none;
 }
 
-.inline-title-row {
+.inline-title {
     padding-bottom: 2em;
     padding-inline-start: 24px;
-    display: flex;
-    align-items: center;
+
+    & > .inline-title-row {
+        display: flex;
+        align-items: center;
+    }
 
     &.hidden {
         display: none !important;
