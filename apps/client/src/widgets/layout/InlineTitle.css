@@ -32,6 +32,7 @@
             .note-icon-widget,
             .note-title-widget {
                 opacity: 0;
+                pointer-events: none;
             }
         }
     }
@@ -39,6 +40,7 @@
     &:not(.inline-title-visible) {
         .inline-title .inline-title-row {
             opacity: 0;
+            pointer-events: none;
         }
     }
 }
