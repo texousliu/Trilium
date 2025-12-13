@@ -30,6 +30,28 @@ body.desktop .note-title-widget input.note-title {
 }
 
 body.experimental-feature-new-layout {
+    .title-row {
+        container-type: size;
+
+        @container (max-width: 700px) {
+            .note-icon-widget .note-icon {
+                font-size: 1.3em;
+            }
+
+            .note-title-widget {
+                display: flex;
+                align-items: center;
+                .note-title {
+                    font-size: 1em;
+                }
+            }
+
+            .breadcrumb-badge .text {
+                display: none;
+            }
+        }
+    }
+
     .title-details {
         max-width: var(--max-content-width);
         padding: 0;
