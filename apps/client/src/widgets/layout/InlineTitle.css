@@ -1,9 +1,16 @@
 .component.inline-title-row {
     contain: none;
+}
+
+.inline-title-row {
     padding-bottom: 2em;
     padding-inline-start: 24px;
     display: flex;
     align-items: center;
+
+    &.hidden {
+        display: none !important;
+    }
 
     .note-icon-widget {
         padding: 0;

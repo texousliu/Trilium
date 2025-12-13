@@ -1,5 +1,6 @@
 import "./InlineTitle.css";
 
+import clsx from "clsx";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import FNote from "../../entities/fnote";
@@ -40,7 +41,7 @@ export default function InlineTitle() {
     return (
         <div
             ref={containerRef}
-            className="inline-title-row"
+            className={clsx("inline-title-row", !shown && "hidden")}
         >
             <NoteIcon />
             <NoteTitleWidget />
