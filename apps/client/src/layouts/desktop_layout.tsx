@@ -52,6 +52,7 @@ import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibb
 import NoteBadges from "../widgets/layout/NoteBadges.jsx";
 import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
 import StatusBar from "../widgets/layout/StatusBar.jsx";
+import InlineTitle from "../widgets/layout/InlineTitle.jsx";
 
 export default class DesktopLayout {
 
@@ -145,7 +146,7 @@ export default class DesktopLayout {
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
-                                                        .optChild(!isFloatingTitlebar, titleRow)
+                                                        .child(titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
                                                         .optChild(isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
@@ -153,7 +154,7 @@ export default class DesktopLayout {
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
-                                                                .optChild(isFloatingTitlebar, titleRow)
+                                                                .optChild(isNewLayout, <InlineTitle />)
                                                                 .optChild(isNewLayout, <NoteTitleDetails />)
                                                                 .optChild(!isNewLayout, new ContentHeader()
                                                                     .child(<ReadOnlyNoteInfoBar />)
