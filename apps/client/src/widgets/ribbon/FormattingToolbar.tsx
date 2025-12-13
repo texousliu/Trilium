@@ -1,5 +1,6 @@
 import { useRef } from "preact/hooks";
-import { useTriliumEvent, useTriliumOption } from "../react/hooks";
+
+import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
 import { TabContext } from "./ribbon-interface";
 
 /**
@@ -33,5 +34,25 @@ export default function FormattingToolbar({ hidden, ntxId }: TabContext) {
             ref={containerRef}
             className={`classic-toolbar-widget ${hidden ? "hidden-ext" : ""}`}
         />
-    )
+    );
 };
+
+export function FixedFormattingToolbar() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
+    const { note, noteContext } = useActiveNoteContext();
+    const noteType = useNoteProperty(note, "type");
+    const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
+    const shown = (
+        textNoteEditorType === "ckeditor-classic" &&
+        noteType === "text" &&
+        !isReadOnly
+    );
+
+    return (
+        <div
+            ref={containerRef}
+            className={`classic-toolbar-widget ${!shown ? "hidden-ext" : ""}`}
+        >Hi</div>
+    );
+}

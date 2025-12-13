@@ -1,58 +1,57 @@
-import { applyModals } from "./layout_commons.js";
-import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
+import type { AppContext } from "../components/app_context.js";
+import type { WidgetsByParent } from "../services/bundle.js";
+import { isExperimentalFeatureEnabled } from "../services/experimental_features.js";
+import options from "../services/options.js";
+import utils from "../services/utils.js";
 import ApiLog from "../widgets/api_log.jsx";
 import ClosePaneButton from "../widgets/buttons/close_pane_button.js";
-import CloseZenModeButton from "../widgets/close_zen_button.jsx";
-import ContentHeader from "../widgets/containers/content_header.js";
 import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
-import FindWidget from "../widgets/find.js";
-import FlexContainer from "../widgets/containers/flex_container.js";
-import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import GlobalMenu from "../widgets/buttons/global_menu.jsx";
-import HighlightsListWidget from "../widgets/highlights_list.js";
-import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
-import NoteIconWidget from "../widgets/note_icon.jsx";
+import CloseZenModeButton from "../widgets/close_zen_button.jsx";
 import NoteList from "../widgets/collections/NoteList.jsx";
-import NoteTitleWidget from "../widgets/note_title.jsx";
-import NoteTreeWidget from "../widgets/note_tree.js";
-import NoteWrapperWidget from "../widgets/note_wrapper.js";
-import options from "../services/options.js";
-import PasswordNoteSetDialog from "../widgets/dialogs/password_not_set.js";
-import QuickSearchWidget from "../widgets/quick_search.js";
-import ReadOnlyNoteInfoBar from "../widgets/ReadOnlyNoteInfoBar.jsx";
-import Ribbon from "../widgets/ribbon/Ribbon.jsx";
+import ContentHeader from "../widgets/containers/content_header.js";
+import FlexContainer from "../widgets/containers/flex_container.js";
+import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
-import ScrollPadding from "../widgets/scroll_padding.js";
-import SearchResult from "../widgets/search_result.jsx";
-import SharedInfo from "../widgets/shared_info.jsx";
 import SplitNoteContainer from "../widgets/containers/split_note_container.js";
-import SqlResults from "../widgets/sql_result.js";
-import SqlTableSchemas from "../widgets/sql_table_schemas.js";
-import TabRowWidget from "../widgets/tab_row.js";
-import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
-import TocWidget from "../widgets/toc.js";
-import type { AppContext } from "../components/app_context.js";
-import type { WidgetsByParent } from "../services/bundle.js";
+import PasswordNoteSetDialog from "../widgets/dialogs/password_not_set.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
-import utils from "../services/utils.js";
-import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
-import NoteDetail from "../widgets/NoteDetail.jsx";
-import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
-import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
+import FindWidget from "../widgets/find.js";
+import FloatingButtons from "../widgets/FloatingButtons.jsx";
+import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
+import HighlightsListWidget from "../widgets/highlights_list.js";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
-import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
-import { isExperimentalFeatureEnabled } from "../services/experimental_features.js";
-import NoteActions from "../widgets/ribbon/NoteActions.jsx";
-import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
-import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
+import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
+import InlineTitle from "../widgets/layout/InlineTitle.jsx";
 import NoteBadges from "../widgets/layout/NoteBadges.jsx";
 import NoteTitleActions from "../widgets/layout/NoteTitleActions.jsx";
 import StatusBar from "../widgets/layout/StatusBar.jsx";
-import InlineTitle from "../widgets/layout/InlineTitle.jsx";
+import NoteIconWidget from "../widgets/note_icon.jsx";
+import NoteTitleWidget from "../widgets/note_title.jsx";
+import NoteTreeWidget from "../widgets/note_tree.js";
+import NoteWrapperWidget from "../widgets/note_wrapper.js";
+import NoteDetail from "../widgets/NoteDetail.jsx";
+import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
+import QuickSearchWidget from "../widgets/quick_search.js";
+import ReadOnlyNoteInfoBar from "../widgets/ReadOnlyNoteInfoBar.jsx";
+import { FixedFormattingToolbar } from "../widgets/ribbon/FormattingToolbar.jsx";
+import NoteActions from "../widgets/ribbon/NoteActions.jsx";
+import Ribbon from "../widgets/ribbon/Ribbon.jsx";
+import ScrollPadding from "../widgets/scroll_padding.js";
+import SearchResult from "../widgets/search_result.jsx";
+import SharedInfo from "../widgets/shared_info.jsx";
+import SqlResults from "../widgets/sql_result.js";
+import SqlTableSchemas from "../widgets/sql_table_schemas.js";
+import TabRowWidget from "../widgets/tab_row.js";
+import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
+import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
+import TocWidget from "../widgets/toc.js";
+import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
+import { applyModals } from "./layout_commons.js";
 
 export default class DesktopLayout {
 
@@ -95,7 +94,7 @@ export default class DesktopLayout {
 
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
-            .class((launcherPaneIsHorizontal ? "horizontal" : "vertical") + "-layout")
+            .class(`${launcherPaneIsHorizontal ? "horizontal" : "vertical"  }-layout`)
             .optChild(
                 fullWidthTabBar,
                 new FlexContainer("row")
@@ -141,7 +140,7 @@ export default class DesktopLayout {
                                             .filling()
                                             .collapsible()
                                             .id("center-pane")
-                                            .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
+                                            .optChild(isNewLayout, <FixedFormattingToolbar />)
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
