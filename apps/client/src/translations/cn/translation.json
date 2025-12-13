@@ -2151,5 +2151,15 @@
     "execute_script_description": "这是一篇脚本笔记。点击即可执行脚本。",
     "execute_sql": "运行SQL",
     "execute_sql_description": "这是一篇 SQL 笔记。点击即可执行 SQL 查询。"
+  },
+  "status_bar": {
+    "language_title": "更改所有内容的语言",
+    "note_info_title": "查看有关此笔记的信息，例如创建/修改日期或笔记大小。",
+    "backlinks_title_other": "此笔记由 {{count}} 个其他笔记链接而来。\n\n点击查看反向链接列表。",
+    "attachments_title_other": "此笔记包含 {{count}} 个附件。点击即可在新标签页中打开附件列表。",
+    "attributes_other": "{{count}} 个属性",
+    "attributes_title": "单击以打开专用窗格，编辑此笔记拥有的属性，以及查看继承属性列表。",
+    "note_paths_title": "点击查看此笔记在树状图中的位置路径。",
+    "code_note_switcher": "更改语言模式"
   }
 }
