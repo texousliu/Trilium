@@ -12,6 +12,7 @@ import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { t } from "../../services/i18n";
 import { ViewScope } from "../../services/link";
+import server from "../../services/server";
 import { openInAppHelpFromUrl } from "../../services/utils";
 import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
@@ -28,7 +29,6 @@ import { NotePathsWidget, useSortedNotePaths } from "../ribbon/NotePathsTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
-import server from "../../services/server";
 
 interface StatusBarContext {
     note: FNote;
@@ -84,7 +84,6 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
                 ...titleOptions
             }}
             dropdownOptions={{
-                autoClose: "outside",
                 popperConfig: {
                     strategy: "fixed",
                     placement: "top"
@@ -204,6 +203,7 @@ export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
             icon="bx bx-info-circle"
             title={t("status_bar.note_info_title")}
             dropdownContainerClassName="dropdown-note-info"
+            dropdownOptions={{ autoClose: "outside" }}
         >
             <ul>
                 <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
@@ -363,7 +363,6 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
                 text={correspondingMimeType?.title}
                 title={t("status_bar.code_note_switcher")}
                 dropdownContainerClassName="dropdown-code-note-switcher"
-                dropdownOptions={{ autoClose: true }}
             >
                 <NoteTypeCodeNoteList
                     currentMimeType={currentNoteMime}
