@@ -136,7 +136,7 @@ function NoteTypeSwitcher() {
     const currentNoteType = useNoteProperty(note, "type");
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
 
-    return (note &&
+    return (note?.type === "text" &&
         <div
             className="note-type-switcher"
             onWheel={onWheelHorizontalScroll}
