@@ -49,7 +49,7 @@ import { isExperimentalFeatureEnabled } from "../services/experimental_features.
 import NoteActions from "../widgets/ribbon/NoteActions.jsx";
 import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
 import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
-import BreadcrumbBadges from "../widgets/BreadcrumbBadges.jsx";
+import BreadcrumbBadges from "../widgets/layout/BreadcrumbBadges.jsx";
 import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
 import StatusBar from "../widgets/layout/StatusBar.jsx";
 

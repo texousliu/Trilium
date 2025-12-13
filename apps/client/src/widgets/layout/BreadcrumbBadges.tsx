@@ -4,11 +4,11 @@ import clsx from "clsx";
 import { ComponentChildren, MouseEventHandler } from "preact";
 import { useRef } from "preact/hooks";
 
-import { t } from "../services/i18n";
-import Dropdown, { DropdownProps } from "./react/Dropdown";
-import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useStaticTooltip } from "./react/hooks";
-import Icon from "./react/Icon";
-import { useShareInfo } from "./shared_info";
+import { t } from "../../services/i18n";
+import Dropdown, { DropdownProps } from "../react/Dropdown";
+import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useStaticTooltip } from "../react/hooks";
+import Icon from "../react/Icon";
+import { useShareInfo } from "../shared_info";
 
 export default function BreadcrumbBadges() {
     return (

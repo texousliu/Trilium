@@ -23,7 +23,7 @@ import ReadOnlyNoteInfoBar from "../ReadOnlyNoteInfoBar";
 import StandaloneRibbonAdapter from "../ribbon/components/StandaloneRibbonAdapter";
 import FormattingToolbar from "../ribbon/FormattingToolbar";
 import MobileEditorToolbar from "../type_widgets/text/mobile_editor_toolbar";
-import BreadcrumbBadges from "../BreadcrumbBadges";
+import BreadcrumbBadges from "../layout/BreadcrumbBadges";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
