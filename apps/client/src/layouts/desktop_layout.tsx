@@ -86,7 +86,7 @@ export default class DesktopLayout {
             .child(<NoteIconWidget />)
             .child(<NoteTitleWidget />)
             .optChild(isNewLayout, <BreadcrumbBadges />)
-            .child(<SpacerWidget baseSize={0} growthFactor={1} />)
+            .optChild(!isNewLayout, <SpacerWidget baseSize={0} growthFactor={1} />)
             .child(<MovePaneButton direction="left" />)
             .child(<MovePaneButton direction="right" />)
             .child(<ClosePaneButton />)
