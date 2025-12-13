@@ -144,6 +144,7 @@ function NoteTypeSwitcher() {
                 <Badge
                     key={noteType.type}
                     text={noteType.title}
+                    icon={`bx ${noteType.icon}`}
                     onClick={() => server.put(`notes/${note.noteId}/type`, { type: noteType.type, mime: noteType.mime })}
                 />
             ))}
