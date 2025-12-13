@@ -1,9 +1,9 @@
 import clsx from "clsx";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
-import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption } from "../react/hooks";
+import { useActiveNoteContext, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption } from "../react/hooks";
 import { TabContext } from "./ribbon-interface";
 
 /**
@@ -143,12 +143,10 @@ export async function getFormattingToolbarState(activeNoteContext: NoteContext |
     if (activeNote?.type !== "text") return "disabled";
 
     // If the current subcontext is a text note, it must not be read-only.
-    if (activeNote.type === "text") {
-        const subContextIndex = textNoteContexts.indexOf(activeNoteContext);
-        if (subContextIndex !== -1) {
-            if (textNoteContextsReadOnly[subContextIndex]) return "disabled";
-        }
-        if (activeNoteContext.viewScope?.viewMode !== "default") return "disabled";
+    const subContextIndex = textNoteContexts.indexOf(activeNoteContext);
+    if (subContextIndex !== -1) {
+        if (textNoteContextsReadOnly[subContextIndex]) return "disabled";
     }
+    if (activeNoteContext.viewScope?.viewMode !== "default") return "disabled";
     return "visible";
 }
