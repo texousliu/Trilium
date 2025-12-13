@@ -50,7 +50,7 @@ import NoteActions from "../widgets/ribbon/NoteActions.jsx";
 import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
 import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
 import NoteBadges from "../widgets/layout/NoteBadges.jsx";
-import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
+import NoteTitleActions from "../widgets/layout/NoteTitleActions.jsx";
 import StatusBar from "../widgets/layout/StatusBar.jsx";
 import InlineTitle from "../widgets/layout/InlineTitle.jsx";
 
@@ -155,7 +155,7 @@ export default class DesktopLayout {
                                                             new ScrollingContainer()
                                                                 .filling()
                                                                 .optChild(isNewLayout, <InlineTitle />)
-                                                                .optChild(isNewLayout, <NoteTitleDetails />)
+                                                                .optChild(isNewLayout, <NoteTitleActions />)
                                                                 .optChild(!isNewLayout, new ContentHeader()
                                                                     .child(<ReadOnlyNoteInfoBar />)
                                                                     .child(<SharedInfo />)

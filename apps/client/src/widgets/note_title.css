@@ -60,34 +60,12 @@ body.experimental-feature-new-layout {
         }
     }
 
-    .title-details {
-        max-width: var(--max-content-width);
-        padding: 0;
-        padding-inline-start: 24px;
-    }
-
-    .title-details {
-        padding-inline-end: 16px;
-
-        .dropdown-menu {
-            input.form-control {
-                padding: 2px 8px;
-                margin-left: 1em;
-            }
-        }
-
-        .spacer {
-            flex-grow: 1;
-        }
-    }
-
     .note-split.type-code:not(.mime-text-x-sqlite) .title-details {
         background-color: var(--main-background-color);
     }
 
     .title-details {
         margin-top: 0;
-        contain: none;
         display: flex;
         gap: 0.25em;
         margin: 0;
