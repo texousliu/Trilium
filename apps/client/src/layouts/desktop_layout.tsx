@@ -130,6 +130,7 @@ export default class DesktopLayout {
                                     .child(new TabRowWidget())
                                     .optChild(customTitleBarButtons, <TitleBarButtons />)
                                     .css("height", "40px"))
+                            .optChild(isNewLayout, <FixedFormattingToolbar />)
                             .child(
                                 new FlexContainer("row")
                                     .filling()
@@ -140,7 +141,6 @@ export default class DesktopLayout {
                                             .filling()
                                             .collapsible()
                                             .id("center-pane")
-                                            .optChild(isNewLayout, <FixedFormattingToolbar />)
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
