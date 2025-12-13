@@ -2145,8 +2145,6 @@
     "read_only_temporarily_disabled_description": "このノートは現在編集可能ですが、通常は読み取り専用です。別のノートに移動すると読み取り専用に戻ります。\n\nクリックすると読み取り専用モードが再度有効になります。",
     "shared_publicly_description": "このノートは {{- link}} でオンライン公開されており、誰でも閲覧可能です。\n\n共有ノートに移動するにはクリックするか、右クリックしてその他のオプションを選択してください。",
     "shared_locally_description": "このノートは、{{- link}} でローカルネットワークのみで共有されています。\n\nクリックして共有ノートに移動するか、右クリックしてその他のオプションを選択してください。",
-    "backlinks_other": "{{count}} バックリンク",
-    "backlinks_description_other": "このノートは {{count}} 件の他のノートからリンクされています。\n\nクリックするとバックリンクのリストが表示されます。",
     "clipped_note": "Web クリップ",
     "clipped_note_description": "このノートは {{url}} から取得されました。\n\nクリックすると元の web ページに移動します。",
     "execute_script": "スクリプトを実行",

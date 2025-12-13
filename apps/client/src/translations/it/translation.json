@@ -2143,12 +2143,6 @@
     "shared_publicly": "Condiviso pubblicamente",
     "shared_publicly_description": "Questa nota è stata pubblicata online all'indirizzo {{- link}} ed è accessibile al pubblico.\n\nClicca per visualizzare la nota condivisa o clicca con il tasto destro del mouse per ulteriori opzioni.",
     "shared_locally": "Condiviso localmente",
-    "shared_locally_description": "Questa nota è condivisa sulla rete locale solo all'indirizzo {{- link}}.\n\nClicca per accedere alla nota condivisa o clicca con il tasto destro del mouse per ulteriori opzioni.",
-    "backlinks_one": "{{count}} backlink",
-    "backlinks_many": "{{count}} backlinks",
-    "backlinks_other": "{{count}} backlinks",
-    "backlinks_description_one": "Questa nota è collegata da {{count}} altre note.\n\nClicca per visualizzare l'elenco dei backlink.",
-    "backlinks_description_many": "Questa nota è collegata da {{count}} altre note.\n\nClicca per visualizzare l'elenco dei backlinks.",
-    "backlinks_description_other": "Questa nota è collegata da {{count}} altre note.\n\nClicca per visualizzare l'elenco dei backlinks."
+    "shared_locally_description": "Questa nota è condivisa sulla rete locale solo all'indirizzo {{- link}}.\n\nClicca per accedere alla nota condivisa o clicca con il tasto destro del mouse per ulteriori opzioni."
   }
 }

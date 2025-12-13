@@ -2145,8 +2145,6 @@
     "read_only_temporarily_disabled_description": "此笔记当前可编辑，但通常是只读的。一旦你切换到其他笔记，该笔记将恢复为只读模式。\n\n点击以重新启用只读模式。",
     "shared_publicly_description": "此笔记已在网上发布，链接为 {{- link}}，并且可公开访问。\n\n点击以导航到共享笔记，或右键点击查看更多选项。",
     "shared_locally_description": "此笔记仅在本地网络共享，链接为 {{- link}}。\n\n点击以导航到共享笔记，或右键点击查看更多选项。",
-    "backlinks_other": "{{count}} 个反向链接",
-    "backlinks_description_other": "此笔记与 {{count}} 个其他笔记相关联。\n\n点击查看反向链接列表。",
     "clipped_note": "网页剪辑",
     "clipped_note_description": "此笔记最初来自 {{url}}。\n\n点击即可跳转至源网页。",
     "execute_script": "运行脚本",
