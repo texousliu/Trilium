@@ -1,4 +1,4 @@
-import { NoteType, ToggleInParentResponse } from "@triliumnext/commons";
+import { MimeType, NoteType, ToggleInParentResponse } from "@triliumnext/commons";
 import { ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
 import { Dispatch, StateUpdater, useCallback, useEffect, useMemo, useState } from "preact/hooks";
@@ -65,13 +65,15 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
     );
 }
 
-export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note, setModalShown }: { currentNoteType?: NoteType, currentNoteMime?: string | null, note?: FNote | null, setModalShown: Dispatch<StateUpdater<boolean>> }) {
-    const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
+export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note, setModalShown, noCodeNotes }: {
+    currentNoteType?: NoteType;
+    currentNoteMime?: string | null;
+    note?: FNote | null;
+    setModalShown: Dispatch<StateUpdater<boolean>>;
+    noCodeNotes?: boolean;
+}) {
+    const mimeTypes = useMimeTypes();
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
-    const mimeTypes = useMemo(() => {
-        mime_types.loadMimeTypes();
-        return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled);
-    }, [ codeNotesMimeTypes ]);
     const changeNoteType = useCallback(async (type: NoteType, mime?: string) => {
         if (!note || (type === currentNoteType && mime === currentNoteMime)) {
             return;
@@ -107,7 +109,7 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
                 }
 
                 const checked = (type === currentNoteType);
-                if (type !== "code") {
+                if (noCodeNotes || type !== "code") {
                     return (
                         <FormListItem
                             checked={checked}
@@ -130,8 +132,25 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
                 }
             })}
 
+            {!noCodeNotes && <NoteTypeCodeNoteList mimeTypes={mimeTypes} changeNoteType={changeNoteType} setModalShown={setModalShown} />}
+        </>
+    );
+}
+
+export function NoteTypeCodeNoteList({ currentMimeType, mimeTypes, changeNoteType, setModalShown }: {
+    currentMimeType?: string;
+    mimeTypes: MimeType[];
+    changeNoteType(type: NoteType, mime: string): void;
+    setModalShown(shown: boolean): void;
+}) {
+    return (
+        <>
             {mimeTypes.map(({ title, mime }) => (
-                <FormListItem onClick={() => changeNoteType("code", mime)}>
+                <FormListItem
+                    key={mime}
+                    checked={mime === currentMimeType}
+                    onClick={() => changeNoteType("code", mime)}
+                >
                     {title}
                 </FormListItem>
             ))}
@@ -142,7 +161,16 @@ export function NoteTypeDropdownContent({ currentNoteType, currentNoteMime, note
     );
 }
 
-function NoteTypeOptionsModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
+export function useMimeTypes() {
+    const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
+    const mimeTypes = useMemo(() => {
+        mime_types.loadMimeTypes();
+        return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled);
+    }, [ codeNotesMimeTypes ]); // eslint-disable-line react-hooks/exhaustive-deps
+    return mimeTypes;
+}
+
+export function NoteTypeOptionsModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
     return (
         <Modal
             className="code-mime-types-modal"
@@ -330,28 +358,17 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
     );
 }
 
-export function NoteLanguageSelector({ note, extraChildren }: { note: FNote | null | undefined, extraChildren?: ComponentChildren }) {
+export function NoteLanguageSelector({ note }: { note: FNote | null | undefined }) {
     const [ modalShown, setModalShown ] = useState(false);
-    const [ languages ] = useTriliumOption("languages");
-    const DEFAULT_LOCALE = {
-        id: "",
-        name: t("note_language.not_set")
-    };
-    const [ currentNoteLanguage, setCurrentNoteLanguage ] = useNoteLabel(note, "language");
-    const locales = useMemo(() => {
-        const enabledLanguages = JSON.parse(languages ?? "[]") as string[];
-        const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
-        return filteredLanguages;
-    }, [ languages ]);
+    const { locales, DEFAULT_LOCALE, currentNoteLanguage, setCurrentNoteLanguage } = useLanguageSwitcher(note);
 
     return (
         <>
             <LocaleSelector
                 locales={locales}
                 defaultLocale={DEFAULT_LOCALE}
-                currentValue={currentNoteLanguage ?? ""} onChange={setCurrentNoteLanguage}
+                currentValue={currentNoteLanguage} onChange={setCurrentNoteLanguage}
                 extraChildren={<>
-                    {extraChildren}
                     <FormListItem
                         onClick={() => setModalShown(true)}
                         icon="bx bx-cog"
@@ -366,7 +383,22 @@ export function NoteLanguageSelector({ note, extraChildren }: { note: FNote | nu
     );
 }
 
-function ContentLanguagesModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
+export function useLanguageSwitcher(note: FNote | null | undefined) {
+    const [ languages ] = useTriliumOption("languages");
+    const DEFAULT_LOCALE = {
+        id: "",
+        name: t("note_language.not_set")
+    };
+    const [ currentNoteLanguage, setCurrentNoteLanguage ] = useNoteLabel(note, "language");
+    const locales = useMemo(() => {
+        const enabledLanguages = JSON.parse(languages ?? "[]") as string[];
+        const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
+        return filteredLanguages;
+    }, [ languages ]);
+    return { locales, DEFAULT_LOCALE, currentNoteLanguage, setCurrentNoteLanguage };
+}
+
+export function ContentLanguagesModal({ modalShown, setModalShown }: { modalShown: boolean, setModalShown: (shown: boolean) => void }) {
     return (
         <Modal
             className="content-languages-modal"

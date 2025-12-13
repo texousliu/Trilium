@@ -316,7 +316,7 @@ export function useNoteContext() {
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
 
     return {
-        note: note,
+        note,
         noteId: noteContext?.note?.noteId,
         notePath: noteContext?.notePath,
         hoistedNoteId: noteContext?.hoistedNoteId,
@@ -327,7 +327,65 @@ export function useNoteContext() {
         parentComponent,
         isReadOnlyTemporarilyDisabled
     };
+}
 
+/**
+ * Similar to {@link useNoteContext}, but instead of using the note context from the split container that the component is part of, it uses the active note context instead
+ * (the note currently focused by the user).
+ */
+export function useActiveNoteContext() {
+    const [ noteContext, setNoteContext ] = useState<NoteContext | undefined>(appContext.tabManager.getActiveContext() ?? undefined);
+    const [ notePath, setNotePath ] = useState<string | null | undefined>();
+    const [ note, setNote ] = useState<FNote | null | undefined>();
+    const [ , setViewScope ] = useState<ViewScope>();
+    const [ isReadOnlyTemporarilyDisabled, setIsReadOnlyTemporarilyDisabled ] = useState<boolean | null | undefined>(noteContext?.viewScope?.isReadOnly);
+    const [ refreshCounter, setRefreshCounter ] = useState(0);
+
+    useEffect(() => {
+        if (!noteContext) {
+            setNoteContext(appContext.tabManager.getActiveContext() ?? undefined);
+        }
+    }, [ noteContext ]);
+
+    useEffect(() => {
+        setNote(noteContext?.note);
+    }, [ notePath ]);
+
+    useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], () => {
+        const noteContext = appContext.tabManager.getActiveContext() ?? undefined;
+        setNoteContext(noteContext);
+        setNotePath(noteContext?.notePath);
+        setViewScope(noteContext?.viewScope);
+    });
+    useTriliumEvent("frocaReloaded", () => {
+        setNote(noteContext?.note);
+    });
+    useTriliumEvent("noteTypeMimeChanged", ({ noteId }) => {
+        if (noteId === note?.noteId) {
+            setRefreshCounter(refreshCounter + 1);
+        }
+    });
+    useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
+        if (eventNoteContext.ntxId === noteContext?.ntxId) {
+            setIsReadOnlyTemporarilyDisabled(eventNoteContext?.viewScope?.readOnlyTemporarilyDisabled);
+        }
+    });
+
+    const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
+    useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
+
+    return {
+        note,
+        noteId: noteContext?.note?.noteId,
+        notePath: noteContext?.notePath,
+        hoistedNoteId: noteContext?.hoistedNoteId,
+        ntxId: noteContext?.ntxId,
+        viewScope: noteContext?.viewScope,
+        componentId: parentComponent.componentId,
+        noteContext,
+        parentComponent,
+        isReadOnlyTemporarilyDisabled
+    };
 }
 
 /**

@@ -9,7 +9,7 @@ import RawHtml from "../react/RawHtml";
 import { joinElements } from "../react/react_utils";
 import AttributeDetailWidget from "../attribute_widgets/attribute_detail";
 
-export default function InheritedAttributesTab({ note, componentId }: TabContext) {
+export default function InheritedAttributesTab({ note, componentId }: Pick<TabContext, "note" | "componentId">) {
     const [ inheritedAttributes, setInheritedAttributes ] = useState<FAttribute[]>();
     const [ attributeDetailWidgetEl, attributeDetailWidget ] = useLegacyWidget(() => new AttributeDetailWidget());
 
@@ -34,7 +34,7 @@ export default function InheritedAttributesTab({ note, componentId }: TabContext
             refresh();
         }
     });
-    
+
     return (
         <div className="inherited-attributes-widget">
             <div className="inherited-attributes-container selectable-text">

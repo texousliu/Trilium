@@ -184,11 +184,16 @@ function EditabilityDropdown({ note }: { note: FNote }) {
 function NoteTypeDropdown({ note }: { note: FNote }) {
     const currentNoteType = useNoteProperty(note, "type") ?? undefined;
     const currentNoteMime = useNoteProperty(note, "mime");
-    const [ modalShown, setModalShown ] = useState(false);
 
     return (
         <FormDropdownSubmenu title={t("basic_properties.note_type")} icon="bx bx-file" dropStart>
-            <NoteTypeDropdownContent currentNoteType={currentNoteType} currentNoteMime={currentNoteMime} note={note} setModalShown={setModalShown} />
+            <NoteTypeDropdownContent
+                currentNoteType={currentNoteType}
+                currentNoteMime={currentNoteMime}
+                note={note}
+                setModalShown={() => { /* no-op since no code notes are displayed here */ }}
+                noCodeNotes
+            />
         </FormDropdownSubmenu>
     );
 }

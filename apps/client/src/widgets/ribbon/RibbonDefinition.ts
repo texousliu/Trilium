@@ -97,22 +97,22 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("owned_attribute_list.owned_attributes"),
         icon: "bx bx-list-check",
         content: OwnedAttributesTab,
-        show: ({note}) => !note?.isLaunchBarConfig(),
+        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabOwnedAttributes",
-        stayInDom: true
+        stayInDom: !isNewLayout
     },
     {
         title: t("inherited_attribute_list.title"),
         icon: "bx bx-list-plus",
         content: InheritedAttributesTab,
-        show: ({note}) => !note?.isLaunchBarConfig(),
+        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabInheritedAttributes"
     },
     {
         title: t("note_paths.title"),
         icon: "bx bx-collection",
         content: NotePathsTab,
-        show: true,
+        show: !isNewLayout,
         toggleCommand: "toggleRibbonTabNotePaths"
     },
     {
@@ -125,7 +125,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
     {
         title: t("similar_notes.title"),
         icon: "bx bx-bar-chart",
-        show: ({ note }) => note?.type !== "search" && !note?.isLabelTruthy("similarNotesWidgetDisabled"),
+        show: ({ note }) => !isNewLayout && note?.type !== "search" && !note?.isLabelTruthy("similarNotesWidgetDisabled"),
         content: SimilarNotesTab,
         toggleCommand: "toggleRibbonTabSimilarNotes"
     },

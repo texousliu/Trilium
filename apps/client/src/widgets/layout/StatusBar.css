@@ -1,0 +1,114 @@
+.component.status-bar {
+    contain: none;
+    border-top: 1px solid var(--main-border-color);
+    background-color: var(--left-pane-background-color);
+
+    > .status-bar-main-row {
+        min-height: 28px;
+        display: flex;
+        align-items: center;
+        padding-inline: 0.25em;
+        font-size: 0.85em;
+
+        > .breadcrumb {
+            flex-grow: 1;
+            --icon-button-size: 23px;
+        }
+
+        > .actions-row {
+            padding: 0.1em;
+            display: flex;
+            gap: 0.1em;
+
+            .btn {
+                padding: 0 0.5em !important;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                border: 0;
+
+                span:first-of-type {
+                    font-size: 1rem;
+                }
+
+                &.active,
+                &.dropdown-toggle.show,
+                &:focus,
+                &:hover {
+                    background: var(--input-background-color);
+                }
+            }
+
+            .status-bar-dropdown-button {
+                &:after {
+                    content: unset;
+                }
+            }
+        }
+
+        .dropdown {
+            .dropdown-toggle {
+                padding: 0.1em 0.25em;
+            }
+
+            .dropdown-menu {
+                width: max-content;
+            }
+        }
+
+        .dropdown-note-info {
+            ul {
+                list-style-type: none;
+                padding: 0.5em;
+                margin: 0;
+                display: table;
+
+                li {
+                    display: table-row;
+
+                    > strong {
+                        display: table-cell;
+                        padding: 0.2em 0;
+                    }
+
+                    > span {
+                        display: table-cell;
+                        user-select: text;
+                        padding-left: 2em;
+                    }
+                }
+            }
+        }
+
+        .dropdown-note-paths {
+            .note-paths-widget {
+                padding: 0.5em;
+            }
+
+            .note-path-list {
+                margin: 1em;
+                padding: 0;
+            }
+        }
+
+        .dropdown-code-note-switcher {
+            max-height: 90vh;
+            overflow: scroll;
+        }
+    }
+
+    > .attribute-list {
+        font-size: 0.9em;
+        padding: 0.5em 0.75em;
+
+        .inherited-attributes-widget > div {
+            padding: 0;
+            font-size: 0.9em;
+        }
+
+        .attribute-list-editor {
+            padding: 0 !important;
+        }
+    }
+
+}

@@ -5,53 +5,19 @@ import { ComponentChildren, MouseEventHandler } from "preact";
 import { useRef } from "preact/hooks";
 
 import { t } from "../services/i18n";
-import { formatDateTime } from "../utils/formatters";
-import { BacklinksList, useBacklinkCount } from "./FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "./react/Dropdown";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useStaticTooltip } from "./react/hooks";
 import Icon from "./react/Icon";
-import { NoteSizeWidget, useNoteMetadata } from "./ribbon/NoteInfoTab";
 import { useShareInfo } from "./shared_info";
-import FNote from "../entities/fnote";
 
 export default function BreadcrumbBadges() {
     return (
         <div className="breadcrumb-badges">
             <ReadOnlyBadge />
             <ShareBadge />
-            <BacklinksBadge />
             <ClippedNoteBadge />
             <ExecuteBadge />
         </div>
-    );
-}
-
-export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
-    const { metadata, ...sizeProps } = useNoteMetadata(note);
-
-    return (note &&
-        <BadgeWithDropdown
-            icon="bx bx-info-circle"
-            className="note-info-badge"
-            dropdownOptions={{ dropdownOptions: { autoClose: "outside" } }}
-        >
-            <ul>
-                <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
-                <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
-                <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
-                <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
-                <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
-            </ul>
-        </BadgeWithDropdown>
-    );
-}
-
-function NoteInfoValue({ text, title, value }: { text: string; title?: string, value: ComponentChildren }) {
-    return (
-        <li>
-            <strong title={title}>{text}{": "}</strong>
-            <span>{value}</span>
-        </li>
     );
 }
 
@@ -95,24 +61,6 @@ function ShareBadge() {
             className="share-badge"
             href={linkHref}
         />
-    );
-}
-
-function BacklinksBadge() {
-    const { note, viewScope } = useNoteContext();
-    const count = useBacklinkCount(note, viewScope?.viewMode === "default");
-    return (note && count > 0 &&
-        <BadgeWithDropdown
-            className="backlinks-badge backlinks-widget"
-            icon="bx bx-revision"
-            text={t("breadcrumb_badges.backlinks", { count })}
-            tooltip={t("breadcrumb_badges.backlinks_description", { count })}
-            dropdownOptions={{
-                dropdownContainerClassName: "backlinks-items"
-            }}
-        >
-            <BacklinksList note={note} />
-        </BadgeWithDropdown>
     );
 }
 

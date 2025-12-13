@@ -1,33 +1,23 @@
-import { TabContext } from "./ribbon-interface";
+import { useEffect, useMemo, useState } from "preact/hooks";
+
+import FNote, { NotePathRecord } from "../../entities/fnote";
 import { t } from "../../services/i18n";
+import { NOTE_PATH_TITLE_SEPARATOR } from "../../services/tree";
 import Button from "../react/Button";
 import { useTriliumEvent } from "../react/hooks";
-import { useEffect, useMemo, useState } from "preact/hooks";
-import { NotePathRecord } from "../../entities/fnote";
 import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
-import { NOTE_PATH_TITLE_SEPARATOR } from "../../services/tree";
+import { TabContext } from "./ribbon-interface";
 
 export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabContext) {
-    const [ sortedNotePaths, setSortedNotePaths ] = useState<NotePathRecord[]>();
+    const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
+    return <NotePathsWidget sortedNotePaths={sortedNotePaths} currentNotePath={notePath} />;
+}
 
-    function refresh() {
-        if (!note) return;
-        setSortedNotePaths(note
-            .getSortedNotePathRecords(hoistedNoteId)
-            .filter((notePath) => !notePath.isHidden));
-    }
-
-    useEffect(refresh, [ note?.noteId ]);
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        const noteId = note?.noteId;
-        if (!noteId) return;
-        if (loadResults.getBranchRows().find((branch) => branch.noteId === noteId)
-            || loadResults.isNoteReloaded(noteId)) {
-            refresh();
-        }
-    });
-
+export function NotePathsWidget({ sortedNotePaths, currentNotePath }: {
+    sortedNotePaths: NotePathRecord[] | undefined;
+    currentNotePath?: string | null | undefined;
+}) {
     return (
         <div class="note-paths-widget">
             <>
@@ -38,7 +28,8 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
                 <ul className="note-path-list">
                     {sortedNotePaths?.length ? sortedNotePaths.map(sortedNotePath => (
                         <NotePath
-                            currentNotePath={notePath}
+                            key={sortedNotePath.notePath}
+                            currentNotePath={currentNotePath}
                             notePathRecord={sortedNotePath}
                         />
                     )) : undefined}
@@ -50,12 +41,35 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
                 />
             </>
         </div>
-    )
+    );
+}
+
+export function useSortedNotePaths(note: FNote | null | undefined, hoistedNoteId?: string) {
+    const [ sortedNotePaths, setSortedNotePaths ] = useState<NotePathRecord[]>();
+
+    function refresh() {
+        if (!note) return;
+        setSortedNotePaths(note
+            .getSortedNotePathRecords(hoistedNoteId)
+            .filter((notePath) => !notePath.isHidden));
+    }
+
+    useEffect(refresh, [ note, hoistedNoteId ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        const noteId = note?.noteId;
+        if (!noteId) return;
+        if (loadResults.getBranchRows().find((branch) => branch.noteId === noteId)
+            || loadResults.isNoteReloaded(noteId)) {
+            refresh();
+        }
+    });
+
+    return sortedNotePaths;
 }
 
 function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: string | null, notePathRecord?: NotePathRecord }) {
-    const notePath = notePathRecord?.notePath ?? [];
-    const notePathString = useMemo(() => notePath.join("/"), [ notePath ]);
+    const notePath = notePathRecord?.notePath;
+    const notePathString = useMemo(() => (notePath ?? []).join("/"), [ notePath ]);
 
     const [ classes, icons ] = useMemo(() => {
         const classes: string[] = [];
@@ -68,17 +82,17 @@ function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: strin
         if (!notePathRecord || notePathRecord.isInHoistedSubTree) {
             classes.push("path-in-hoisted-subtree");
         } else {
-            icons.push({ icon: "bx bx-trending-up", title: t("note_paths.outside_hoisted") })
+            icons.push({ icon: "bx bx-trending-up", title: t("note_paths.outside_hoisted") });
         }
 
         if (notePathRecord?.isArchived) {
             classes.push("path-archived");
-            icons.push({ icon: "bx bx-archive", title: t("note_paths.archived") })
+            icons.push({ icon: "bx bx-archive", title: t("note_paths.archived") });
         }
 
         if (notePathRecord?.isSearch) {
             classes.push("path-search");
-            icons.push({ icon: "bx bx-search", title: t("note_paths.search") })
+            icons.push({ icon: "bx bx-search", title: t("note_paths.search") });
         }
 
         return [ classes.join(" "), icons ];
@@ -87,7 +101,7 @@ function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: strin
     // Determine the full note path (for the links) of every component of the current note path.
     const pathSegments: string[] = [];
     const fullNotePaths: string[] = [];
-    for (const noteId of notePath) {
+    for (const noteId of notePath ?? []) {
         pathSegments.push(noteId);
         fullNotePaths.push(pathSegments.join("/"));
     }
@@ -95,12 +109,12 @@ function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: strin
     return (
         <li class={classes}>
             {joinElements(fullNotePaths.map(notePath => (
-                <NoteLink notePath={notePath} noPreview />
+                <NoteLink key={notePath} notePath={notePath} noPreview />
             )), NOTE_PATH_TITLE_SEPARATOR)}
 
             {icons.map(({ icon, title }) => (
-                <span class={icon} title={title} />
+                <span key={title} class={icon} title={title} />
             ))}
         </li>
-    )
+    );
 }

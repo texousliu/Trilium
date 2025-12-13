@@ -44,7 +44,6 @@ import NoteDetail from "../widgets/NoteDetail.jsx";
 import PromotedAttributes from "../widgets/PromotedAttributes.jsx";
 import SpacerWidget from "../widgets/launch_bar/SpacerWidget.jsx";
 import LauncherContainer from "../widgets/launch_bar/LauncherContainer.jsx";
-import Breadcrumb from "../widgets/Breadcrumb.jsx";
 import TabHistoryNavigationButtons from "../widgets/TabHistoryNavigationButtons.jsx";
 import { isExperimentalFeatureEnabled } from "../services/experimental_features.js";
 import NoteActions from "../widgets/ribbon/NoteActions.jsx";
@@ -52,7 +51,7 @@ import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.jsx";
 import StandaloneRibbonAdapter from "../widgets/ribbon/components/StandaloneRibbonAdapter.jsx";
 import BreadcrumbBadges from "../widgets/BreadcrumbBadges.jsx";
 import NoteTitleDetails from "../widgets/NoteTitleDetails.jsx";
-import NoteStatusBar from "../widgets/NoteStatusBar.jsx";
+import StatusBar from "../widgets/layout/StatusBar.jsx";
 
 export default class DesktopLayout {
 
@@ -134,6 +133,7 @@ export default class DesktopLayout {
                                             .filling()
                                             .collapsible()
                                             .id("center-pane")
+                                            .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
@@ -141,7 +141,6 @@ export default class DesktopLayout {
                                                             new FlexContainer("row")
                                                                 .class("breadcrumb-row")
                                                                 .cssBlock(".breadcrumb-row > * { margin: 5px; }")
-                                                                .child(<Breadcrumb />)
                                                                 .optChild(isNewLayout, <BreadcrumbBadges />)
                                                                 .child(<SpacerWidget baseSize={0} growthFactor={1} />)
                                                                 .child(<MovePaneButton direction="left" />)
@@ -152,7 +151,7 @@ export default class DesktopLayout {
                                                         )
                                                         .optChild(!isFloatingTitlebar, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
-                                                        .optChild(isNewLayout, <StandaloneRibbonAdapter component={FormattingToolbar} />)
+                                                        .optChild(isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
@@ -178,14 +177,10 @@ export default class DesktopLayout {
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
                                                             ...this.customWidgets.get("note-detail-pane")
                                                         )
-                                                        .optChild(isNewLayout, (
-                                                            <Ribbon>
-                                                                <NoteStatusBar />
-                                                            </Ribbon>
-                                                        ))
                                                 )
                                             )
                                             .child(...this.customWidgets.get("center-pane"))
+
                                     )
                                     .child(
                                         new RightPaneContainer()
@@ -194,8 +189,10 @@ export default class DesktopLayout {
                                             .child(...this.customWidgets.get("right-pane"))
                                     )
                             )
+                            .optChild(!launcherPaneIsHorizontal && isNewLayout, <StatusBar />)
                     )
             )
+            .optChild(launcherPaneIsHorizontal && isNewLayout, <StatusBar />)
             .child(<CloseZenModeButton />)
 
             // Desktop-specific dialogs.

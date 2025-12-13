@@ -1,60 +1,6 @@
-.breadcrumb-row {
+.breadcrumb {
     position: relative;
-    height: 30px;
-    min-height: 30px;
     align-items: center;
-    padding: 10px;
-    container-type: inline-size;
-
-    @container (max-width: 700px) {
-        .breadcrumb-badges {
-            flex-shrink: 0;
-
-            >* {
-                flex-shrink: 0;
-                width: 18px;
-            }
-
-            .dropdown {
-                button {
-                    flex-shrink: 0;
-                }
-            }
-
-            .breadcrumb-badge {
-                flex-shrink: 0;
-                padding: 0 2px;
-
-                >* {
-                    text-overflow: clip;
-                }
-
-                .text {
-                    display: none;
-                }
-            }
-        }
-    }
-
-    @container (max-width: 500px) {
-        .breadcrumb {
-            .btn.icon-action {
-                width: 16px;
-            }
-        }
-
-        .icon-action {
-            margin: 0;
-        }
-    }
-}
-
-body.experimental-feature-new-layout .breadcrumb-row {
-    padding-inline-end: 0;
-}
-
-.component.breadcrumb {
-    contain: none;
     display: flex;
     margin: 0;
     align-items: center;
@@ -62,7 +8,6 @@ body.experimental-feature-new-layout .breadcrumb-row {
     gap: 0.25em;
     flex-wrap: nowrap;
     overflow: hidden;
-    max-width: 85%;
 
     > span,
     > span > span {
@@ -108,7 +53,6 @@ body.experimental-feature-new-layout .breadcrumb-row {
     .breadcrumb-last-item {
         text-decoration: none;
         color: unset;
-        cursor: text;
     }
 
     input {

@@ -104,10 +104,12 @@ function BrowserOnlyOptions() {
 }
 
 function DevelopmentOptions() {
+    const [ layoutOrientation ] = useTriliumOption("layoutOrientation");
+
     return <>
         <FormDropdownDivider />
         <FormListItem disabled>Development Options</FormListItem>
-        <FormDropdownSubmenu icon="bx bx-test-tube" title="Experimental features">
+        <FormDropdownSubmenu icon="bx bx-test-tube" title="Experimental features" dropStart={layoutOrientation === "horizontal"}>
             {experimentalFeatures.map((feature) => (
                 <ExperimentalFeatureToggle key={feature.id} experimentalFeature={feature as ExperimentalFeature} />
             ))}
