@@ -809,10 +809,10 @@ importers:
         version: 10.28.0
       preact-iso:
         specifier: 2.11.0
-        version: 2.11.0(preact-render-to-string@6.6.3(preact@10.28.0))(preact@10.28.0)
+        version: 2.11.0(preact-render-to-string@6.6.4(preact@10.28.0))(preact@10.28.0)
       preact-render-to-string:
-        specifier: 6.6.3
-        version: 6.6.3(preact@10.28.0)
+        specifier: 6.6.4
+        version: 6.6.4(preact@10.28.0)
       react-i18next:
         specifier: 16.5.0
         version: 16.5.0(i18next@25.7.1(typescript@5.9.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.9.3)
@@ -11812,8 +11812,8 @@ packages:
       preact: 10.28.0
       preact-render-to-string: '>=6.4.0'
 
-  preact-render-to-string@6.6.3:
-    resolution: {integrity: sha512-7oHG7jzjriqsFPkSPiPnzrQ0GcxFm6wOkYWNdStK5Ks9YlWSQQXKGBRAX4nKDdqX7HAQuRvI4pZNZMycK4WwDw==}
+  preact-render-to-string@6.6.4:
+    resolution: {integrity: sha512-Bn6eQZ5SQ5loVEcC/mZmKT7HzO5Z/+vYzxfE/W2N468oSoNMJVdFGApF0GyXq0lDthuyXKTmtZ8k20NpYjr6Rw==}
     peerDependencies:
       preact: 10.28.0
 
@@ -15515,6 +15515,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.3.0':
     dependencies:
@@ -15537,6 +15539,8 @@ snapshots:
       '@ckeditor/ckeditor5-table': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-emoji@47.3.0':
     dependencies:
@@ -15866,6 +15870,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       '@ckeditor/ckeditor5-widget': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-mention@47.3.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)':
     dependencies:
@@ -28080,12 +28086,12 @@ snapshots:
 
   potpack@2.1.0: {}
 
-  preact-iso@2.11.0(preact-render-to-string@6.6.3(preact@10.28.0))(preact@10.28.0):
+  preact-iso@2.11.0(preact-render-to-string@6.6.4(preact@10.28.0))(preact@10.28.0):
     dependencies:
       preact: 10.28.0
-      preact-render-to-string: 6.6.3(preact@10.28.0)
+      preact-render-to-string: 6.6.4(preact@10.28.0)
 
-  preact-render-to-string@6.6.3(preact@10.28.0):
+  preact-render-to-string@6.6.4(preact@10.28.0):
     dependencies:
       preact: 10.28.0
 
