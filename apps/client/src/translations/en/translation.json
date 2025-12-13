@@ -1756,7 +1756,8 @@
     "last_modified": "Last modified on <Value />",
     "note_type_switcher_label": "Switch from {{type}} to:",
     "note_type_switcher_others": "More note types",
-    "note_type_switcher_templates": "Templates"
+    "note_type_switcher_templates": "Templates",
+    "note_type_switcher_collection": "Collections"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",

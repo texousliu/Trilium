@@ -144,7 +144,7 @@ function NoteTypeSwitcher() {
         const pinnedNoteTypes: NoteTypeMapping[] = [];
         const restNoteTypes: NoteTypeMapping[] = [];
         for (const noteType of NOTE_TYPES) {
-            if (noteType.reserved || noteType.static) continue;
+            if (noteType.reserved || noteType.static || noteType.type === "book") continue;
             if (SWITCHER_PINNED_NOTE_TYPES.has(noteType.type)) {
                 pinnedNoteTypes.push(noteType);
             } else {
@@ -154,6 +154,7 @@ function NoteTypeSwitcher() {
         return { pinnedNoteTypes, restNoteTypes };
     }, []);
     const currentNoteTypeData = useMemo(() => NOTE_TYPES.find(t => t.type === currentNoteType), [ currentNoteType ]);
+    const { builtinTemplates, collectionTemplates } = useBuiltinTemplates();
 
     return (note?.type === "text" &&
         <div
@@ -171,8 +172,9 @@ function NoteTypeSwitcher() {
                             onClick={() => switchNoteType(note.noteId, noteType)}
                         />
                     ))}
+                    <CollectionNoteTypes noteId={note.noteId} collectionTemplates={collectionTemplates} />
+                    <TemplateNoteTypes noteId={note.noteId} builtinTemplates={builtinTemplates} />
                     <MoreNoteTypes noteId={note.noteId} restNoteTypes={restNoteTypes} />
-                    <TemplateNoteTypes noteId={note.noteId} />
                 </>
             )}
         </div>
@@ -196,9 +198,25 @@ function MoreNoteTypes({ noteId, restNoteTypes }: { noteId: string, restNoteType
     );
 }
 
-function TemplateNoteTypes({ noteId }: { noteId: string }) {
+function CollectionNoteTypes({ noteId, collectionTemplates }: { noteId: string, collectionTemplates: FNote[] }) {
+    return (
+        <BadgeWithDropdown
+            text={t("note_title.note_type_switcher_collection")}
+            icon="bx bx-book"
+        >
+            {collectionTemplates.map(collectionTemplate => (
+                <FormListItem
+                    key={collectionTemplate.noteId}
+                    icon={collectionTemplate.getIcon()}
+                    onClick={() => setTemplate(noteId, collectionTemplate.noteId)}
+                >{collectionTemplate.title}</FormListItem>
+            ))}
+        </BadgeWithDropdown>
+    );
+}
+
+function TemplateNoteTypes({ noteId, builtinTemplates }: { noteId: string, builtinTemplates: FNote[] }) {
     const [ userTemplates, setUserTemplates ] = useState<FNote[]>([]);
-    const [ builtinTemplates, setBuiltinTemplates ] = useState<FNote[]>([]);
 
     async function refreshTemplates() {
         const templateNoteIds = await server.get<string[]>("search-templates");
@@ -206,22 +224,9 @@ function TemplateNoteTypes({ noteId }: { noteId: string }) {
         setUserTemplates(templateNotes);
     }
 
-    async function loadBuiltinTemplates() {
-        const templatesRoot = await froca.getNote("_templates");
-        if (!templatesRoot) return;
-        const childNotes = await templatesRoot.getChildNotes();
-        const builtinTemplates: FNote[] = [];
-        for (const childNote of childNotes) {
-            if (childNote.hasLabel("collection") || !childNote.hasLabel("template")) continue;
-            builtinTemplates.push(childNote);
-        }
-        setBuiltinTemplates(builtinTemplates);
-    }
-
     // First load.
     useEffect(() => {
         refreshTemplates();
-        loadBuiltinTemplates();
     }, []);
 
     // React to external changes.
@@ -247,12 +252,49 @@ function TemplateItem({ noteId, template }: { noteId: string, template: FNote })
     return (
         <FormListItem
             icon={template.getIcon()}
-            onClick={() => attributes.setRelation(noteId, "template", template.noteId)}
+            onClick={() => setTemplate(noteId, template.noteId)}
         >{template.title}</FormListItem>
     );
 }
 
 function switchNoteType(noteId: string, { type, mime }: NoteTypeMapping) {
     return server.put(`notes/${noteId}/type`, { type, mime });
+}
+
+function setTemplate(noteId: string, templateId: string) {
+    return attributes.setRelation(noteId, "template", templateId);
+}
+
+function useBuiltinTemplates() {
+    const [ templates, setTemplates ] = useState<{
+        builtinTemplates: FNote[];
+        collectionTemplates: FNote[];
+    }>({
+        builtinTemplates: [],
+        collectionTemplates: []
+    });
+
+    async function loadBuiltinTemplates() {
+        const templatesRoot = await froca.getNote("_templates");
+        if (!templatesRoot) return;
+        const childNotes = await templatesRoot.getChildNotes();
+        const builtinTemplates: FNote[] = [];
+        const collectionTemplates: FNote[] = [];
+        for (const childNote of childNotes) {
+            if (!childNote.hasLabel("template")) continue;
+            if (childNote.hasLabel("collection")) {
+                collectionTemplates.push(childNote);
+            } else {
+                builtinTemplates.push(childNote);
+            }
+        }
+        setTemplates({ builtinTemplates, collectionTemplates });
+    }
+
+    useEffect(() => {
+        loadBuiltinTemplates();
+    }, []);
+
+    return templates;
 }
 //#endregion
