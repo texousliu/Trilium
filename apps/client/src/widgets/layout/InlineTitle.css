@@ -7,7 +7,7 @@
 }
 
 .inline-title {
-    padding-bottom: 2em;
+    max-width: var(--max-content-width);
     padding-inline-start: 24px;
 
     & > .inline-title-row {
@@ -27,6 +27,10 @@
 
     .note-icon-widget {
         padding: 0;
+    }
+
+    .inline-title-row {
+        border-bottom: 2px solid gray;
     }
 }
 
@@ -52,12 +56,12 @@ body.prefers-centered-content .inline-title {
 }
 
 .title-details {
-    margin-top: 0;
     display: flex;
     gap: 0.25em;
     margin: 0;
+    margin-top: 4px;
     list-style-type: none;
-    color: var(--muted-text-color);
+    opacity: .5;
 
     span.value {
         font-weight: 500;
@@ -65,12 +69,13 @@ body.prefers-centered-content .inline-title {
 }
 
 .note-type-switcher {
-    padding: 1em 0;
+    padding: .25em 0;
     display: flex;
+    align-items: center;
     overflow-x: auto;
     min-width: 0;
     gap: 5px;
-    min-height: 60px;
+    min-height: 40px;
     --badge-radius: 12px;
 
     >* {
