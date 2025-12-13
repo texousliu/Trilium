@@ -46,6 +46,7 @@ body.experimental-feature-new-layout {
                 }
             }
 
+            .note-title-widget:focus-within + .note-badges,
             .breadcrumb-badge .text {
                 display: none;
             }
