@@ -65,25 +65,21 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     }
 
     async setNote(inputNotePath: string | undefined, opts: SetNoteOpts = {}) {
-        console.log("Set note to ", inputNotePath);
         opts.triggerSwitchEvent = opts.triggerSwitchEvent !== undefined ? opts.triggerSwitchEvent : true;
         opts.viewScope = opts.viewScope || {};
         opts.viewScope.viewMode = opts.viewScope.viewMode || "default";
 
         if (!inputNotePath) {
-            console.log("EXIT A");
             return;
         }
 
         const resolvedNotePath = await this.getResolvedNotePath(inputNotePath);
 
         if (!resolvedNotePath) {
-            console.log("EXIT B");
             return;
         }
 
         if (this.notePath === resolvedNotePath && utils.areObjectsEqual(this.viewScope, opts.viewScope)) {
-            console.log("EXIT C");
             return;
         }
 
@@ -94,7 +90,6 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         this.notePath = resolvedNotePath;
         this.viewScope = opts.viewScope;
         ({ noteId: this.noteId, parentNoteId: this.parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(resolvedNotePath));
-        console.log("Note ID set to ", this.noteId);
 
         this.saveToRecentNotes(resolvedNotePath);
 
