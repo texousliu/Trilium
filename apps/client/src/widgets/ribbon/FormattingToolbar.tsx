@@ -1,4 +1,4 @@
-import { useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
 import { TabContext } from "./ribbon-interface";
@@ -37,22 +37,52 @@ export default function FormattingToolbar({ hidden, ntxId }: TabContext) {
     );
 };
 
+const toolbarCache = new Map<string, HTMLElement | null | undefined>();
+
 export function FixedFormattingToolbar() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
-    const { note, noteContext } = useActiveNoteContext();
+    const { note, noteContext, ntxId, viewScope } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
     const shown = (
+        viewScope?.viewMode === "default" &&
         textNoteEditorType === "ckeditor-classic" &&
         noteType === "text" &&
         !isReadOnly
     );
+    const [ toolbarToRender, setToolbarToRender ] = useState<HTMLElement | null | undefined>();
+
+    // Populate the cache with the toolbar of every note context.
+    useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
+        if (!eventNtxId) return;
+        const toolbar = editor.ui.view.toolbar?.element;
+        toolbarCache.set(eventNtxId, toolbar);
+        // Replace on the spot if the editor crashed.
+        if (eventNtxId === ntxId) {
+            setToolbarToRender(toolbar);
+        }
+    });
+
+    // Switch between the cached toolbar when user navigates to a different note context.
+    useEffect(() => {
+        if (!ntxId) return;
+        setToolbarToRender(toolbarCache.get(ntxId));
+    }, [ ntxId, noteContext ]);
+
+    // Render the toolbar.
+    useEffect(() => {
+        if (toolbarToRender) {
+            containerRef.current?.replaceChildren(toolbarToRender);
+        } else {
+            containerRef.current?.replaceChildren();
+        }
+    }, [ toolbarToRender ]);
 
     return (
         <div
             ref={containerRef}
             className={`classic-toolbar-widget ${!shown ? "hidden-ext" : ""}`}
-        >Hi</div>
+        />
     );
 }
