@@ -159,7 +159,7 @@ function NoteTypeSwitcher() {
     const currentNoteTypeData = useMemo(() => NOTE_TYPES.find(t => t.type === currentNoteType), [ currentNoteType ]);
     const { builtinTemplates, collectionTemplates } = useBuiltinTemplates();
 
-    return (note?.type === "text" &&
+    return (
         <div
             className="note-type-switcher"
             onWheel={onWheelHorizontalScroll}
