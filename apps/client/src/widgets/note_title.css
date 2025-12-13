@@ -51,12 +51,5 @@ body.experimental-feature-new-layout {
                 display: none;
             }
         }
-
-        &.collapse {
-            .note-icon-widget,
-            .note-title-widget {
-                visibility: hidden;
-            }
-        }
     }
 }

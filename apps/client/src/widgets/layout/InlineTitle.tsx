@@ -40,20 +40,21 @@ export default function InlineTitle() {
     useEffect(() => {
         if (!shown) return;
 
-        const titleRow = parentComponent.$widget[0]
-            .closest(".note-split")
-            ?.querySelector("&> .title-row");
-        if (!titleRow) return;
+        const noteSplit = parentComponent.$widget[0].closest(".note-split");
+        const titleRow = noteSplit?.querySelector("&> .title-row");
+        if (!noteSplit || !titleRow) return;
 
         const observer = new IntersectionObserver((entries) => {
-            titleRow.classList.toggle("collapse", entries[0].isIntersecting);
+            noteSplit.classList.toggle("inline-title-visible", entries[0].isIntersecting);
+        }, {
+            threshold: 0.85
         });
         if (containerRef.current) {
             observer.observe(containerRef.current);
         }
 
         return () => {
-            titleRow.classList.remove("collapse");
+            noteSplit.classList.remove("inline-title-visible");
             observer.disconnect();
         };
     }, [ shown, parentComponent ]);

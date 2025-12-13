@@ -20,6 +20,29 @@
     }
 }
 
+.note-split > .title-row .note-icon-widget,
+.note-split > .title-row .note-title-widget,
+.inline-title > .inline-title-row {
+    transition: opacity 200ms ease-in;
+}
+
+.note-split {
+    &.inline-title-visible {
+        &> .title-row {
+            .note-icon-widget,
+            .note-title-widget {
+                opacity: 0;
+            }
+        }
+    }
+
+    &:not(.inline-title-visible) {
+        .inline-title .inline-title-row {
+            opacity: 0;
+        }
+    }
+}
+
 .note-split.type-code:not(.mime-text-x-sqlite) .inline-title {
     background-color: var(--main-background-color);
 }
