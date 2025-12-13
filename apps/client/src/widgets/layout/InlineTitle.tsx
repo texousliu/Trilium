@@ -25,12 +25,13 @@ const supportedNoteTypes = new Set<NoteType>([
 
 export default function InlineTitle() {
     const { note, parentComponent, viewScope } = useNoteContext();
-    const [ shown, setShown ] = useState(shouldShow(note, viewScope));
+    const type = useNoteProperty(note, "type");
+    const [ shown, setShown ] = useState(shouldShow(note?.noteId, type, viewScope));
     const containerRef=  useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setShown(shouldShow(note, viewScope));
-    }, [ note, viewScope ]);
+        setShown(shouldShow(note?.noteId, type, viewScope));
+    }, [ note, type, viewScope ]);
 
     useEffect(() => {
         if (!shown) return;
@@ -69,11 +70,10 @@ export default function InlineTitle() {
     );
 }
 
-function shouldShow(note: FNote | null | undefined, viewScope: ViewScope | undefined) {
-    if (!note) return false;
+function shouldShow(noteId: string | undefined, type: NoteType | undefined, viewScope: ViewScope | undefined) {
     if (viewScope?.viewMode !== "default") return false;
-    if (note.noteId.startsWith("_options")) return true;
-    return supportedNoteTypes.has(note.type);
+    if (noteId?.startsWith("_options")) return true;
+    return type && supportedNoteTypes.has(type);
 }
 
 //#region Title details
