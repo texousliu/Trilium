@@ -32,6 +32,13 @@ body.desktop .note-title-widget input.note-title {
 body.experimental-feature-new-layout {
     .title-row {
         container-type: size;
+        border-bottom: 1px solid var(--main-border-color);
+        transition: border 400ms ease-out;
+
+        &.hide-title {
+            border-bottom-color: transparent;
+            transition: none;
+        }
 
         @container (max-width: 700px) {
             .note-icon-widget .note-icon {
@@ -50,6 +57,16 @@ body.experimental-feature-new-layout {
             .ext-badge .text {
                 display: none;
             }
+        }
+    }
+
+    .note-title-widget {
+        input.note-title {
+            --input-focus-background: transparent;
+            --input-focus-outline-color: transparent;
+            --input-hover-background: transparent;
+            --input-hover-color: initial;
+            --input-focus-color: initial;
         }
     }
 }
