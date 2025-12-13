@@ -161,9 +161,9 @@ function NoteTypeSwitcher() {
             className="note-type-switcher"
             onWheel={onWheelHorizontalScroll}
         >
-            <div className="intro">{t("note_title.note_type_switcher_label", { type: currentNoteTypeData?.title.toLocaleLowerCase() })}</div>
             {blob?.contentLength === 0 && (
                 <>
+                    <div className="intro">{t("note_title.note_type_switcher_label", { type: currentNoteTypeData?.title.toLocaleLowerCase() })}</div>
                     {pinnedNoteTypes.map(noteType => noteType.type !== currentNoteType && (
                         <Badge
                             key={noteType.type}
