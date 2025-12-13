@@ -81,5 +81,6 @@ body.prefers-centered-content .inline-title {
         --color: var(--input-background-color);
         color: var(--main-text-color);
         font-size: 0.9rem;
+        flex-shrink: 0;
     }
 }

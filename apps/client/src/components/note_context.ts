@@ -1,18 +1,19 @@
-import protectedSessionHolder from "../services/protected_session_holder.js";
-import server from "../services/server.js";
-import utils from "../services/utils.js";
-import appContext, { type EventData, type EventListener } from "./app_context.js";
-import treeService from "../services/tree.js";
-import Component from "./component.js";
-import froca from "../services/froca.js";
-import hoistedNoteService from "../services/hoisted_note.js";
-import options from "../services/options.js";
-import type { ViewScope } from "../services/link.js";
-import type FNote from "../entities/fnote.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
+
+import type FNote from "../entities/fnote.js";
 import { closeActiveDialog } from "../services/dialog.js";
+import froca from "../services/froca.js";
+import hoistedNoteService from "../services/hoisted_note.js";
+import type { ViewScope } from "../services/link.js";
+import options from "../services/options.js";
+import protectedSessionHolder from "../services/protected_session_holder.js";
+import server from "../services/server.js";
+import treeService from "../services/tree.js";
+import utils from "../services/utils.js";
 import { ReactWrappedWidget } from "../widgets/basic_widget.js";
+import appContext, { type EventData, type EventListener } from "./app_context.js";
+import Component from "./component.js";
 
 export interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
