@@ -19,3 +19,19 @@
         padding: 0;
     }
 }
+
+body.prefers-centered-content .inline-title {
+    margin-inline: auto;
+}
+
+.title-details {
+    margin-top: 0;
+    display: flex;
+    gap: 0.25em;
+    margin: 0;
+    list-style-type: none;
+
+    span.value {
+        font-weight: 500;
+    }
+}

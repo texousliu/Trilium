@@ -64,32 +64,6 @@ body.experimental-feature-new-layout {
         background-color: var(--main-background-color);
     }
 
-    .title-details {
-        margin-top: 0;
-        display: flex;
-        gap: 0.25em;
-        margin: 0;
-        list-style-type: none;
-
-        span.value {
-            font-weight: 500;
-        }
-    }
-
-    .scrolling-container:has(> :is(.note-detail.full-height, .note-list-widget.full-height)),
-    .note-split.type-book {
-        .title-details {
-            width: 100%;
-            max-width: unset;
-            padding-inline-start: 15px;
-            padding-bottom: 0.2em;
-            font-size: 0.8em;
-        }
-    }
-
-    &.prefers-centered-content .title-details {
-        margin-inline: auto;
-    }
 }
 
 body.experimental-feature-floating-titlebar {
