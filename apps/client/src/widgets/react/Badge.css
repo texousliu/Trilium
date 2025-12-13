@@ -1,0 +1,49 @@
+.ext-badge {
+    display: flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: var(--badge-radius);
+    font-size: 0.75em;
+    background-color: var(--color, transparent);
+    color: white;
+    min-width: 0;
+    flex-shrink: 1;
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--color, --badge-background-color) 80%, black);
+        }
+    }
+
+    a {
+        color: inherit !important;
+        text-decoration: none;
+    }
+
+    > * {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.dropdown-badge {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: var(--badge-radius);
+
+    .ext-badge {
+        border-radius: 0;
+    }
+
+    .btn {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+}

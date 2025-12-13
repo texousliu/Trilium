@@ -9,6 +9,7 @@ import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import { useShareInfo } from "../shared_info";
+import { Badge } from "../react/Badge";
 
 export default function NoteBadges() {
     return (
@@ -95,65 +96,5 @@ function ExecuteBadge() {
             tooltip={executeDescription || (isScript ? t("breadcrumb_badges.execute_script_description") : t("breadcrumb_badges.execute_sql_description"))}
             onClick={() => parentComponent.triggerCommand("runActiveNote")}
         />
-    );
-}
-
-interface BadgeProps {
-    text?: string;
-    icon?: string;
-    className: string;
-    tooltip?: string;
-    onClick?: MouseEventHandler<HTMLDivElement>;
-    href?: string;
-}
-
-function Badge({ icon, className, text, tooltip, onClick, href }: BadgeProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    useStaticTooltip(containerRef, {
-        placement: "bottom",
-        fallbackPlacements: [ "bottom" ],
-        animation: false,
-        html: true,
-        title: tooltip
-    });
-
-    const content = <>
-        {icon && <><Icon icon={icon} />&nbsp;</>}
-        <span class="text">{text}</span>
-    </>;
-
-    return (
-        <div
-            ref={containerRef}
-            className={clsx("breadcrumb-badge", className, { "clickable": !!onClick })}
-            onClick={onClick}
-        >
-            {href ? <a href={href}>{content}</a> : <span>{content}</span>}
-        </div>
-    );
-}
-
-function BadgeWithDropdown({ children, tooltip, className, dropdownOptions, ...props }: BadgeProps & {
-    children: ComponentChildren,
-    dropdownOptions?: Partial<DropdownProps>
-}) {
-    return (
-        <Dropdown
-            className={`breadcrumb-dropdown-badge dropdown-${className}`}
-            text={<Badge className={className} {...props} />}
-            noDropdownListStyle
-            noSelectButtonStyle
-            hideToggleArrow
-            title={tooltip}
-            titlePosition="bottom"
-            {...dropdownOptions}
-            dropdownOptions={{
-                ...dropdownOptions?.dropdownOptions,
-                popperConfig: {
-                    ...dropdownOptions?.dropdownOptions?.popperConfig,
-                    placement: "bottom", strategy: "fixed"
-                }
-            }}
-        >{children}</Dropdown>
     );
 }

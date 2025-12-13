@@ -40,3 +40,19 @@ body.prefers-centered-content .inline-title {
         font-weight: 500;
     }
 }
+
+.note-type-switcher {
+    padding: 1em 0;
+    display: flex;
+    overflow-x: auto;
+    min-width: 0;
+    gap: 5px;
+    --badge-radius: 12px;
+
+    .ext-badge {
+        --color: var(--input-background-color);
+        color: var(--main-text-color);
+        flex-shrink: 0;
+        font-size: 0.9rem;
+    }
+}

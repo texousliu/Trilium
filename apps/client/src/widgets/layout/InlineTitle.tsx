@@ -3,7 +3,7 @@ import "./InlineTitle.css";
 import { NoteType } from "@triliumnext/commons";
 import clsx from "clsx";
 import { ComponentChild } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { Trans } from "react-i18next";
 
 import FNote from "../../entities/fnote";
@@ -14,6 +14,9 @@ import NoteTitleWidget from "../note_title";
 import { useNoteContext, useStaticTooltip } from "../react/hooks";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
+import { NOTE_TYPES } from "../../services/note_types";
+import { Badge } from "../react/Badge";
+import server from "../../services/server";
 
 const supportedNoteTypes = new Set<NoteType>([
     "text", "code"
@@ -60,6 +63,7 @@ export default function InlineTitle() {
             </div>
 
             <NoteTitleDetails />
+            <NoteTypeSwitcher />
         </div>
     );
 }
@@ -71,6 +75,7 @@ function shouldShow(note: FNote | null | undefined, viewScope: ViewScope | undef
     return supportedNoteTypes.has(note.type);
 }
 
+//#region Title details
 export function NoteTitleDetails() {
     const { note } = useNoteContext();
     const { metadata } = useNoteMetadata(note);
@@ -121,3 +126,23 @@ function TextWithValue({ i18nKey, value, valueTooltip }: {
         </li>
     );
 }
+//#endregion
+
+//#region Note type switcher
+function NoteTypeSwitcher() {
+    const { note } = useNoteContext();
+    const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
+
+    return (note &&
+        <div className="note-type-switcher">
+            {noteTypes.map(noteType => (
+                <Badge
+                    key={noteType.type}
+                    text={noteType.title}
+                    onClick={() => server.put(`notes/${note.noteId}/type`, { type: noteType.type, mime: noteType.mime })}
+                />
+            ))}
+        </div>
+    );
+}
+//#endregion
