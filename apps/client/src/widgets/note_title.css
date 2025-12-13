@@ -47,7 +47,7 @@ body.experimental-feature-new-layout {
             }
 
             .note-title-widget:focus-within + .note-badges,
-            .breadcrumb-badge .text {
+            .ext-badge .text {
                 display: none;
             }
         }
