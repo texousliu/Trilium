@@ -8,12 +8,13 @@ import { Trans } from "react-i18next";
 
 import { t } from "../../services/i18n";
 import { ViewScope } from "../../services/link";
-import { NOTE_TYPES } from "../../services/note_types";
+import { NOTE_TYPES, NoteTypeMapping } from "../../services/note_types";
 import server from "../../services/server";
 import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
-import { Badge } from "../react/Badge";
+import { Badge, BadgeWithDropdown } from "../react/Badge";
+import { FormListItem } from "../react/FormList";
 import { useNoteBlob, useNoteContext, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
@@ -130,12 +131,26 @@ function TextWithValue({ i18nKey, value, valueTooltip }: {
 //#endregion
 
 //#region Note type switcher
+const SWITCHER_PINNED_NOTE_TYPES = new Set<NoteType>([ "text", "code", "book", "canvas" ]);
+
 function NoteTypeSwitcher() {
     const { note } = useNoteContext();
     const blob = useNoteBlob(note);
     const currentNoteType = useNoteProperty(note, "type");
-    const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
-    const currentNoteTypeData = useMemo(() => noteTypes.find(t => t.type === currentNoteType), [ noteTypes, currentNoteType ]);
+    const { pinnedNoteTypes, restNoteTypes } = useMemo(() => {
+        const pinnedNoteTypes: NoteTypeMapping[] = [];
+        const restNoteTypes: NoteTypeMapping[] = [];
+        for (const noteType of NOTE_TYPES) {
+            if (noteType.reserved || noteType.static) continue;
+            if (SWITCHER_PINNED_NOTE_TYPES.has(noteType.type)) {
+                pinnedNoteTypes.push(noteType);
+            } else {
+                restNoteTypes.push(noteType);
+            }
+        }
+        return { pinnedNoteTypes, restNoteTypes };
+    }, []);
+    const currentNoteTypeData = useMemo(() => NOTE_TYPES.find(t => t.type === currentNoteType), [ currentNoteType ]);
 
     return (note?.type === "text" &&
         <div
@@ -143,15 +158,35 @@ function NoteTypeSwitcher() {
             onWheel={onWheelHorizontalScroll}
         >
             <div className="intro">{t("note_title.note_type_switcher_label", { type: currentNoteTypeData?.title.toLocaleLowerCase() })}</div>
-            {blob?.contentLength === 0 && noteTypes.map(noteType => noteType.type !== currentNoteType && (
-                <Badge
-                    key={noteType.type}
-                    text={noteType.title}
-                    icon={`bx ${noteType.icon}`}
-                    onClick={() => server.put(`notes/${note.noteId}/type`, { type: noteType.type, mime: noteType.mime })}
-                />
-            ))}
+            {blob?.contentLength === 0 && (
+                <>
+                    {pinnedNoteTypes.map(noteType => noteType.type !== currentNoteType && (
+                        <Badge
+                            key={noteType.type}
+                            text={noteType.title}
+                            icon={`bx ${noteType.icon}`}
+                            onClick={() => switchNoteType(note.noteId, noteType)}
+                        />
+                    ))}
+                    <BadgeWithDropdown
+                        text={t("note_title.note_type_switcher_others")}
+                        icon="bx bx-dots-vertical-rounded"
+                    >
+                        {restNoteTypes.map(noteType => (
+                            <FormListItem
+                                key={noteType.type}
+                                icon={`bx ${noteType.icon}`}
+                                onClick={() => switchNoteType(note.noteId, noteType)}
+                            >{noteType.title}</FormListItem>
+                        ))}
+                    </BadgeWithDropdown>
+                </>
+            )}
         </div>
     );
+}
+
+function switchNoteType(noteId: string, { type, mime }: NoteTypeMapping) {
+    return server.put(`notes/${noteId}/type`, { type, mime });
 }
 //#endregion
