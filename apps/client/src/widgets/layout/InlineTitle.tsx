@@ -6,6 +6,9 @@ import { ComponentChild } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { Trans } from "react-i18next";
 
+import FNote from "../../entities/fnote";
+import attributes from "../../services/attributes";
+import froca from "../../services/froca";
 import { t } from "../../services/i18n";
 import { ViewScope } from "../../services/link";
 import { NOTE_TYPES, NoteTypeMapping } from "../../services/note_types";
@@ -168,21 +171,57 @@ function NoteTypeSwitcher() {
                             onClick={() => switchNoteType(note.noteId, noteType)}
                         />
                     ))}
-                    <BadgeWithDropdown
-                        text={t("note_title.note_type_switcher_others")}
-                        icon="bx bx-dots-vertical-rounded"
-                    >
-                        {restNoteTypes.map(noteType => (
-                            <FormListItem
-                                key={noteType.type}
-                                icon={`bx ${noteType.icon}`}
-                                onClick={() => switchNoteType(note.noteId, noteType)}
-                            >{noteType.title}</FormListItem>
-                        ))}
-                    </BadgeWithDropdown>
+                    <MoreNoteTypes noteId={note.noteId} restNoteTypes={restNoteTypes} />
+                    <TemplateNoteTypes noteId={note.noteId} />
                 </>
             )}
         </div>
+    );
+}
+
+function MoreNoteTypes({ noteId, restNoteTypes }: { noteId: string, restNoteTypes: NoteTypeMapping[] }) {
+    return (
+        <BadgeWithDropdown
+            text={t("note_title.note_type_switcher_others")}
+            icon="bx bx-dots-vertical-rounded"
+        >
+            {restNoteTypes.map(noteType => (
+                <FormListItem
+                    key={noteType.type}
+                    icon={`bx ${noteType.icon}`}
+                    onClick={() => switchNoteType(noteId, noteType)}
+                >{noteType.title}</FormListItem>
+            ))}
+        </BadgeWithDropdown>
+    );
+}
+
+function TemplateNoteTypes({ noteId }: { noteId: string }) {
+    const [ templates, setTemplates ] = useState<FNote[]>([]);
+
+    async function refreshTemplates() {
+        const templateNoteIds = await server.get<string[]>("search-templates");
+        const templateNotes = await froca.getNotes(templateNoteIds);
+        setTemplates(templateNotes);
+    }
+
+    useEffect(() => {
+        refreshTemplates();
+    }, []);
+
+    return (
+        <BadgeWithDropdown
+            text={t("note_title.note_type_switcher_templates")}
+            icon="bx bx-copy-alt"
+        >
+            {templates.map(template => (
+                <FormListItem
+                    key={template.noteId}
+                    icon={template.getIcon()}
+                    onClick={() => attributes.setRelation(noteId, "template", template.noteId)}
+                >{template.title}</FormListItem>
+            ))}
+        </BadgeWithDropdown>
     );
 }
 
