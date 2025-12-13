@@ -6,7 +6,7 @@ import { ComponentChild } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { Trans } from "react-i18next";
 
-import FNote from "../../entities/fnote";
+import { t } from "../../services/i18n";
 import { ViewScope } from "../../services/link";
 import { NOTE_TYPES } from "../../services/note_types";
 import server from "../../services/server";
@@ -135,12 +135,14 @@ function NoteTypeSwitcher() {
     const blob = useNoteBlob(note);
     const currentNoteType = useNoteProperty(note, "type");
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
+    const currentNoteTypeData = useMemo(() => noteTypes.find(t => t.type === currentNoteType), [ noteTypes, currentNoteType ]);
 
     return (note?.type === "text" &&
         <div
             className="note-type-switcher"
             onWheel={onWheelHorizontalScroll}
         >
+            <div className="intro">{t("note_title.note_type_switcher_label", { type: currentNoteTypeData?.title.toLocaleLowerCase() })}</div>
             {blob?.contentLength === 0 && noteTypes.map(noteType => noteType.type !== currentNoteType && (
                 <Badge
                     key={noteType.type}
