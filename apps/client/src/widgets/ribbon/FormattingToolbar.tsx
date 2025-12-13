@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
@@ -48,7 +49,7 @@ export function FixedFormattingToolbar() {
     const shown = (
         viewScope?.viewMode === "default" &&
         textNoteEditorType === "ckeditor-classic" &&
-        noteType === "text" &&
+        (noteContext?.getMainContext().getSubContexts() ?? []).some(sub => sub.note?.type === "text") &&
         !isReadOnly
     );
     const [ toolbarToRender, setToolbarToRender ] = useState<HTMLElement | null | undefined>();
@@ -74,8 +75,11 @@ export function FixedFormattingToolbar() {
     // Switch between the cached toolbar when user navigates to a different note context.
     useEffect(() => {
         if (!ntxId) return;
-        setToolbarToRender(toolbarCache.get(ntxId));
-    }, [ ntxId, noteContext ]);
+        const toolbar = toolbarCache.get(ntxId);
+        if (toolbar) {
+            setToolbarToRender(toolbar);
+        }
+    }, [ ntxId, noteType, noteContext ]);
 
     // Render the toolbar.
     useEffect(() => {
@@ -89,7 +93,10 @@ export function FixedFormattingToolbar() {
     return (
         <div
             ref={containerRef}
-            className={`classic-toolbar-widget ${!shown ? "hidden-ext" : ""}`}
+            className={clsx("classic-toolbar-widget", {
+                "hidden-ext": !shown,
+                "disabled": noteType !== "text"
+            })}
         />
     );
 }

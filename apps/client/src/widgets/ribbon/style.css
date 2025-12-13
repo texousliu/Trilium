@@ -152,6 +152,15 @@
     opacity: 0.3;
 }
 
+body.experimental-feature-new-layout .classic-toolbar-widget {
+    transition: opacity 250ms ease-in;
+
+    &.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+}
+
 /* #endregion */
 
 /* #region Script Tab */
