@@ -3,6 +3,8 @@ import "./InlineTitle.css";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import FNote from "../../entities/fnote";
+import NoteIcon from "../note_icon";
+import NoteTitleWidget from "../note_title";
 import { useNoteContext } from "../react/hooks";
 
 export default function InlineTitle() {
@@ -40,7 +42,8 @@ export default function InlineTitle() {
             ref={containerRef}
             className="inline-title-row"
         >
-            Title goes here.
+            <NoteIcon />
+            <NoteTitleWidget />
         </div>
     );
 }
