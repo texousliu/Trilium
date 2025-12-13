@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { Trans } from "react-i18next";
 
 import FNote from "../../entities/fnote";
+import { ViewScope } from "../../services/link";
 import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
@@ -19,13 +20,13 @@ const supportedNoteTypes = new Set<NoteType>([
 ]);
 
 export default function InlineTitle() {
-    const { note, parentComponent } = useNoteContext();
-    const [ shown, setShown ] = useState(shouldShow(note));
+    const { note, parentComponent, viewScope } = useNoteContext();
+    const [ shown, setShown ] = useState(shouldShow(note, viewScope));
     const containerRef=  useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setShown(shouldShow(note));
-    }, [ note ]);
+        setShown(shouldShow(note, viewScope));
+    }, [ note, viewScope ]);
 
     useEffect(() => {
         if (!shown) return;
@@ -63,25 +64,25 @@ export default function InlineTitle() {
     );
 }
 
-function shouldShow(note: FNote | null | undefined) {
+function shouldShow(note: FNote | null | undefined, viewScope: ViewScope | undefined) {
     if (!note) return false;
+    if (viewScope?.viewMode !== "default") return false;
     return supportedNoteTypes.has(note.type);
 }
 
 export function NoteTitleDetails() {
-    const { note, noteContext } = useNoteContext();
+    const { note } = useNoteContext();
     const { metadata } = useNoteMetadata(note);
     const isHiddenNote = note?.noteId.startsWith("_");
-    const isDefaultView = noteContext?.viewScope?.viewMode === "default";
 
     const items: ComponentChild[] = [
-        (isDefaultView && !isHiddenNote && metadata?.dateCreated &&
+        (!isHiddenNote && metadata?.dateCreated &&
             <TextWithValue
                 i18nKey="note_title.created_on"
                 value={formatDateTime(metadata.dateCreated, "medium", "none")}
                 valueTooltip={formatDateTime(metadata.dateCreated, "full", "long")}
             />),
-        (isDefaultView && !isHiddenNote && metadata?.dateModified &&
+        (!isHiddenNote && metadata?.dateModified &&
             <TextWithValue
                 i18nKey="note_title.last_modified"
                 value={formatDateTime(metadata.dateModified, "medium", "none")}
@@ -89,7 +90,7 @@ export function NoteTitleDetails() {
             />)
     ].filter(item => !!item);
 
-    return items.length && (
+    return items.length > 0 && (
         <div className="title-details">
             {joinElements(items, " • ")}
         </div>
