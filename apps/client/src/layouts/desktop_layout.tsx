@@ -82,8 +82,16 @@ export default class DesktopLayout {
 
         const titleRow = new FlexContainer("row")
             .class("title-row")
+            .cssBlock(".title-row > * { margin: 5px; }")
             .child(<NoteIconWidget />)
-            .child(<NoteTitleWidget />);
+            .child(<NoteTitleWidget />)
+            .optChild(isNewLayout, <BreadcrumbBadges />)
+            .child(<SpacerWidget baseSize={0} growthFactor={1} />)
+            .child(<MovePaneButton direction="left" />)
+            .child(<MovePaneButton direction="right" />)
+            .child(<ClosePaneButton />)
+            .child(<CreatePaneButton />)
+            .optChild(isNewLayout, <NoteActions />);
 
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
@@ -137,18 +145,6 @@ export default class DesktopLayout {
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
-                                                        .child(
-                                                            new FlexContainer("row")
-                                                                .class("breadcrumb-row")
-                                                                .cssBlock(".breadcrumb-row > * { margin: 5px; }")
-                                                                .optChild(isNewLayout, <BreadcrumbBadges />)
-                                                                .child(<SpacerWidget baseSize={0} growthFactor={1} />)
-                                                                .child(<MovePaneButton direction="left" />)
-                                                                .child(<MovePaneButton direction="right" />)
-                                                                .child(<ClosePaneButton />)
-                                                                .child(<CreatePaneButton />)
-                                                                .optChild(isNewLayout, <NoteActions />)
-                                                        )
                                                         .optChild(!isFloatingTitlebar, titleRow)
                                                         .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
                                                         .optChild(isNewLayout, <Ribbon />)
