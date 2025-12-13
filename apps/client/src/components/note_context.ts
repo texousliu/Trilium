@@ -1,18 +1,19 @@
-import protectedSessionHolder from "../services/protected_session_holder.js";
-import server from "../services/server.js";
-import utils from "../services/utils.js";
-import appContext, { type EventData, type EventListener } from "./app_context.js";
-import treeService from "../services/tree.js";
-import Component from "./component.js";
-import froca from "../services/froca.js";
-import hoistedNoteService from "../services/hoisted_note.js";
-import options from "../services/options.js";
-import type { ViewScope } from "../services/link.js";
-import type FNote from "../entities/fnote.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
+
+import type FNote from "../entities/fnote.js";
 import { closeActiveDialog } from "../services/dialog.js";
+import froca from "../services/froca.js";
+import hoistedNoteService from "../services/hoisted_note.js";
+import type { ViewScope } from "../services/link.js";
+import options from "../services/options.js";
+import protectedSessionHolder from "../services/protected_session_holder.js";
+import server from "../services/server.js";
+import treeService from "../services/tree.js";
+import utils from "../services/utils.js";
 import { ReactWrappedWidget } from "../widgets/basic_widget.js";
+import appContext, { type EventData, type EventListener } from "./app_context.js";
+import Component from "./component.js";
 
 export interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
@@ -64,21 +65,25 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     }
 
     async setNote(inputNotePath: string | undefined, opts: SetNoteOpts = {}) {
+        console.log("Set note to ", inputNotePath);
         opts.triggerSwitchEvent = opts.triggerSwitchEvent !== undefined ? opts.triggerSwitchEvent : true;
         opts.viewScope = opts.viewScope || {};
         opts.viewScope.viewMode = opts.viewScope.viewMode || "default";
 
         if (!inputNotePath) {
+            console.log("EXIT A");
             return;
         }
 
         const resolvedNotePath = await this.getResolvedNotePath(inputNotePath);
 
         if (!resolvedNotePath) {
+            console.log("EXIT B");
             return;
         }
 
         if (this.notePath === resolvedNotePath && utils.areObjectsEqual(this.viewScope, opts.viewScope)) {
+            console.log("EXIT C");
             return;
         }
 
@@ -89,6 +94,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         this.notePath = resolvedNotePath;
         this.viewScope = opts.viewScope;
         ({ noteId: this.noteId, parentNoteId: this.parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(resolvedNotePath));
+        console.log("Note ID set to ", this.noteId);
 
         this.saveToRecentNotes(resolvedNotePath);
 
