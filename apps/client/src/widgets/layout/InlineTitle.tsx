@@ -14,7 +14,7 @@ import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
 import { Badge } from "../react/Badge";
-import { useNoteContext, useNoteProperty, useStaticTooltip } from "../react/hooks";
+import { useNoteBlob, useNoteContext, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import { joinElements } from "../react/react_utils";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { onWheelHorizontalScroll } from "../widget_utils";
@@ -132,6 +132,7 @@ function TextWithValue({ i18nKey, value, valueTooltip }: {
 //#region Note type switcher
 function NoteTypeSwitcher() {
     const { note } = useNoteContext();
+    const blob = useNoteBlob(note);
     const currentNoteType = useNoteProperty(note, "type");
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
 
@@ -140,7 +141,7 @@ function NoteTypeSwitcher() {
             className="note-type-switcher"
             onWheel={onWheelHorizontalScroll}
         >
-            {noteTypes.map(noteType => noteType.type !== currentNoteType && (
+            {blob?.contentLength === 0 && noteTypes.map(noteType => noteType.type !== currentNoteType && (
                 <Badge
                     key={noteType.type}
                     text={noteType.title}

@@ -47,6 +47,7 @@ body.prefers-centered-content .inline-title {
     overflow-x: auto;
     min-width: 0;
     gap: 5px;
+    min-height: 60px;
     --badge-radius: 12px;
 
     .ext-badge {
