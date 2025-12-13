@@ -110,7 +110,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} 
             />}
 
-            <FormDropdownSubmenu icon="bx bx-wrench" title="Advanced" dropStart>
+            <FormDropdownSubmenu icon="bx bx-wrench" title={t("note_actions.advanced")} dropStart>
                 <CommandItem command="openNoteExternally" icon="bx bx-file-find" disabled={isSearchOrBook || !isElectron} text={t("note_actions.open_note_externally")} title={t("note_actions.open_note_externally_title")} />
                 <CommandItem command="openNoteCustom" icon="bx bx-customize" disabled={isSearchOrBook || isMac || !isElectron} text={t("note_actions.open_note_custom")} />
                 <CommandItem command="showNoteSource" icon="bx bx-code" disabled={!hasSource} text={t("note_actions.note_source")} />

@@ -691,6 +691,7 @@
     "print_note": "Print note",
     "view_revisions": "Note revisions...",
     "save_revision": "Save revision",
+    "advanced": "Advanced",
     "convert_into_attachment_failed": "Converting note '{{title}}' failed.",
     "convert_into_attachment_successful": "Note '{{title}}' has been converted to attachment.",
     "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?",
