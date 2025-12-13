@@ -356,7 +356,7 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
         mimeTypes.find(m => m.mime === currentNoteMime)
     ), [ mimeTypes, currentNoteMime ]);
 
-    return (
+    return (note.type === "code" &&
         <>
             <StatusBarDropdown
                 icon="bx bx-code-curly"
