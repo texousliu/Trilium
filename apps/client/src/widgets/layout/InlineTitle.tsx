@@ -17,6 +17,7 @@ import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
 import SimpleBadge, { Badge, BadgeWithDropdown } from "../react/Badge";
+import Collapsible from "../react/Collapsible";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useNoteBlob, useNoteContext, useNoteLabel, useNoteProperty, useStaticTooltip, useTriliumEvent } from "../react/hooks";
 import NoteLink from "../react/NoteLink";
@@ -312,9 +313,9 @@ function EditedNotes() {
 
 
     return (note && dateNote &&
-        <div className="edited-notes">
+        <Collapsible className="edited-notes" title={t("note_title.edited_notes")}>
             <EditedNotesContent note={note} />
-        </div>
+        </Collapsible>
     );
 }
 
@@ -323,7 +324,6 @@ function EditedNotesContent({ note }: { note: FNote }) {
 
     return (
         <>
-            <strong>{t("note_title.edited_notes")}</strong><br />
             {editedNotes?.map(editedNote => (
                 <SimpleBadge
                     key={editedNote.noteId}
