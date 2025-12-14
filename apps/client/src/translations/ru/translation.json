@@ -2055,5 +2055,21 @@
   "pagination": {
     "total_notes": "{{count}} заметок",
     "page_title": "Страница {{startIndex}} - {{endIndex}}"
+  },
+  "status_bar": {
+    "attributes_one": "{{count}} атрибут",
+    "attributes_few": "{{count}} атрибута",
+    "attributes_many": "{{count}} атрибутов",
+    "note_info_title": "Просмотр информации об этой заметке, например, даты создания/изменения или размер.",
+    "language_title": "Изменить язык всего содержимого"
+  },
+  "breadcrumb_badges": {
+    "execute_sql_description": "Эта заметка - SQL-запрос. Нажмите, чтобы выполнить его.",
+    "execute_sql": "Выполнить SQL",
+    "execute_script_description": "Это заметка содержит скрипт. Нажмите, чтобы выполнить его.",
+    "execute_script": "Выполнить скрипт",
+    "clipped_note_description": "Эта заметка первоначально взята с сайта {{url}}.\n\nНажмите, чтобы перейти на исходную веб-страницу.",
+    "shared_publicly": "Доступно публично",
+    "shared_locally": "Доступно локально"
   }
 }
