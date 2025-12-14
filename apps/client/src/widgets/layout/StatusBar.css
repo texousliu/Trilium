@@ -130,10 +130,6 @@
                         font-size: .85em;
                         color: var(--menu-item-icon-color);
                     }
-
-                    span:last-of-type > span > a {
-                        color: var(--muted-text-color);
-                    }
                 }
 
                 a {
@@ -142,6 +138,10 @@
                     color: currentColor;
                     font-weight: normal;
                     text-decoration: none;
+
+                    &.basename {
+                        color: var(--muted-text-color);
+                    }
                 }
 
             }

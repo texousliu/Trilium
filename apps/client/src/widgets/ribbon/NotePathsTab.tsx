@@ -8,6 +8,7 @@ import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
 import { TabContext } from "./ribbon-interface";
 import LinkButton from "../react/LinkButton";
+import clsx from "clsx";
 
 
 export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabContext) {
@@ -109,8 +110,11 @@ function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: strin
 
     return (
         <li class={classes}>
-            {joinElements(fullNotePaths.map(notePath => (
-                <NoteLink key={notePath} notePath={notePath} noPreview />
+            {joinElements(fullNotePaths.map((notePath, index, arr) => (
+                <NoteLink key={notePath}
+                          className={clsx({"basename": (index === arr.length - 1)})}
+                          notePath={notePath}
+                          noPreview />
             )), NOTE_PATH_TITLE_SEPARATOR)}
 
             {icons.map(({ icon, title }) => (
