@@ -795,7 +795,7 @@
     "file_type": "File type",
     "file_size": "File size",
     "download": "Download",
-    "open": "Open",
+    "open": "Open externally",
     "upload_new_revision": "Upload new revision",
     "upload_success": "New file revision has been uploaded.",
     "upload_failed": "Upload of a new file revision failed.",

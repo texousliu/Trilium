@@ -8,7 +8,9 @@ import branches from "../../services/branches";
 import dialog from "../../services/dialog";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { t } from "../../services/i18n";
+import { downloadFileNote, openNoteExternally } from "../../services/open";
 import protected_session from "../../services/protected_session";
+import protected_session_holder from "../../services/protected_session_holder";
 import server from "../../services/server";
 import toast from "../../services/toast";
 import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/utils";
@@ -29,6 +31,7 @@ export default function NoteActions() {
     const { note, noteContext } = useNoteContext();
     return (
         <div className="ribbon-button-container" style={{ contain: "none" }}>
+            {note && <FileActions note={note} />}
             <MovePaneButton direction="left" />
             <MovePaneButton direction="right" />
             <ClosePaneButton />
@@ -272,5 +275,27 @@ function ConvertToAttachment({ note }: { note: FNote }) {
                 });
             }}
         >{t("note_actions.convert_into_attachment")}</FormListItem>
+    );
+}
+
+function FileActions({ note }: { note: FNote }) {
+    const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
+
+    return (note.type === "file" &&
+        <>
+            <ActionButton
+                icon="bx bx-download"
+                text={t("file_properties.download")}
+                disabled={!canAccessProtectedNote}
+                onClick={() => downloadFileNote(note.noteId)}
+            />
+
+            <ActionButton
+                icon="bx bx-link-external"
+                text={t("file_properties.open")}
+                disabled={note.isProtected}
+                onClick={() => openNoteExternally(note.noteId, note.mime)}
+            />
+        </>
     );
 }
