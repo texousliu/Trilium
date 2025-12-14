@@ -9,11 +9,11 @@ interface LinkButtonProps {
 
 export default function LinkButton({ onClick, text, triggerCommand }: LinkButtonProps) {
     return (
-        <a class="tn-link" href="javascript:"
+        <a class="tn-link" href="#"
            data-trigger-command={triggerCommand}
            onClick={(e) => {
                 e.preventDefault();
-                if (onClick) onClick();
+                onClick?.();
            }}>
             {text}
         </a>

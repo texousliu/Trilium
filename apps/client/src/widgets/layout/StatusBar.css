@@ -118,9 +118,8 @@
                     &.path-current::before {
                         position: absolute;
                         display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: flex-end;
+                        justify-content: flex-end;
+                        align-items: center;
                         content: "\ee8f";
                         top: 0;
                         left: 0;
