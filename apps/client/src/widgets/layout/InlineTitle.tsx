@@ -16,10 +16,12 @@ import server from "../../services/server";
 import { formatDateTime } from "../../utils/formatters";
 import NoteIcon from "../note_icon";
 import NoteTitleWidget from "../note_title";
-import { Badge, BadgeWithDropdown } from "../react/Badge";
+import SimpleBadge, { Badge, BadgeWithDropdown } from "../react/Badge";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useNoteBlob, useNoteContext, useNoteProperty, useStaticTooltip, useTriliumEvent } from "../react/hooks";
+import { useNoteBlob, useNoteContext, useNoteLabel, useNoteProperty, useStaticTooltip, useTriliumEvent } from "../react/hooks";
+import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
+import { useEditedNotes } from "../ribbon/EditedNotesTab";
 import { useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { onWheelHorizontalScroll } from "../widget_utils";
 
@@ -72,6 +74,7 @@ export default function InlineTitle() {
             </div>
 
             <NoteTitleDetails />
+            <EditedNotes />
             <NoteTypeSwitcher />
         </div>
     );
@@ -299,5 +302,40 @@ function useBuiltinTemplates() {
     }, []);
 
     return templates;
+}
+//#endregion
+
+//#region Edited Notes
+function EditedNotes() {
+    const { note } = useNoteContext();
+    const [ dateNote ] = useNoteLabel(note, "dateNote");
+
+
+    return (note && dateNote &&
+        <div className="edited-notes">
+            <EditedNotesContent note={note} />
+        </div>
+    );
+}
+
+function EditedNotesContent({ note }: { note: FNote }) {
+    const editedNotes = useEditedNotes(note);
+
+    return (
+        <>
+            <strong>{t("note_title.edited_notes")}</strong><br />
+            {editedNotes?.map(editedNote => (
+                <SimpleBadge
+                    key={editedNote.noteId}
+                    title={(
+                        <NoteLink
+                            notePath={editedNote.noteId}
+                            showNoteIcon
+                        />
+                    )}
+                />
+            ))}
+        </>
+    );
 }
 //#endregion

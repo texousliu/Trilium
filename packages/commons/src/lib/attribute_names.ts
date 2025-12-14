@@ -18,6 +18,7 @@ type Labels = {
     language: string;
     originalFileName: string;
     pageUrl: string;
+    dateNote: string;
 
     // Search
     searchString: string;

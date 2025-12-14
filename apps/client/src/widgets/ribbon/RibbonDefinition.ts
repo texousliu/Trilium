@@ -53,7 +53,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("edited_notes.title"),
         icon: "bx bx-calendar-edit",
         content: EditedNotesTab,
-        show: ({ note }) => note?.hasOwnedLabel("dateNote"),
+        show: ({ note }) => !isNewLayout && note?.hasOwnedLabel("dateNote"),
         activate: () => options.is("editedNotesOpenInRibbon")
     },
     {

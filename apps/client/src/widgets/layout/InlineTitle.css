@@ -89,3 +89,21 @@ body.prefers-centered-content .inline-title {
         flex-shrink: 0;
     }
 }
+
+.edited-notes {
+    padding-top: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+
+    .badge {
+        margin: 0;
+        a.tn-link {
+            color: inherit;
+            text-transform: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+    }
+
+}
