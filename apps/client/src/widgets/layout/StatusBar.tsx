@@ -332,13 +332,14 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 //#region Note paths
 function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
+    const count = sortedNotePaths?.length ?? 0;
 
-    return (
+    return (count > 1 &&
         <StatusBarDropdown
             title={t("status_bar.note_paths_title")}
             dropdownContainerClassName="dropdown-note-paths"
             icon="bx bx-directions"
-            text={t("status_bar.note_paths", { count: sortedNotePaths?.length })}
+            text={t("status_bar.note_paths", { count })}
         >
             <NotePathsWidget
                 sortedNotePaths={sortedNotePaths}
