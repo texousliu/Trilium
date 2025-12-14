@@ -21,9 +21,10 @@ export default function NoteTitleActions() {
 }
 
 function SearchProperties({ note, ntxId }: { note: FNote, ntxId: string | null | undefined }) {
-    return (
+    return (note &&
         <Collapsible
             title={t("search_definition.search_parameters")}
+            initiallyExpanded={note.isInHiddenSubtree()} // not saved searches
         >
             <SearchDefinitionTab note={note} ntxId={ntxId} hidden={false} />
         </Collapsible>
