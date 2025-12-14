@@ -3,11 +3,12 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import FNote, { NotePathRecord } from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { NOTE_PATH_TITLE_SEPARATOR } from "../../services/tree";
-import Button from "../react/Button";
 import { useTriliumEvent } from "../react/hooks";
 import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
 import { TabContext } from "./ribbon-interface";
+import LinkButton from "../react/LinkButton";
+
 
 export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabContext) {
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
@@ -35,9 +36,9 @@ export function NotePathsWidget({ sortedNotePaths, currentNotePath }: {
                     )) : undefined}
                 </ul>
 
-                <Button
-                    triggerCommand="cloneNoteIdsTo"
+                <LinkButton
                     text={t("note_paths.clone_button")}
+                    triggerCommand="cloneNoteIdsTo"
                 />
             </>
         </div>
