@@ -6,20 +6,33 @@ import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
 import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
 
+interface NoteActionsCustomProps {
+    note: FNote;
+}
+
 /**
  * Part of {@link NoteActions} on the new layout, but are rendered with a slight spacing
  * from the rest of the note items and the buttons differ based on the note type.
  */
-export default function NoteActionsCustom({ note }: { note: FNote }) {
+export default function NoteActionsCustom({ note }: NoteActionsCustomProps) {
     return (
-        <FileActions note={note} />
+        <div className="note-actions-custom">
+            <NoteActionsCustomInner note={note} />
+        </div>
     );
 }
 
-function FileActions({ note }: { note: FNote }) {
+function NoteActionsCustomInner(props: NoteActionsCustomProps) {
+    switch (props.note.type) {
+        case "file":
+            return <FileActions {...props} />;
+    }
+}
+
+function FileActions({ note }: NoteActionsCustomProps) {
     const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
 
-    return (note.type === "file" &&
+    return (
         <>
             <FormFileUploadActionButton
                 icon="bx bx-folder-open"
