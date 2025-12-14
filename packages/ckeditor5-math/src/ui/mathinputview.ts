@@ -2,7 +2,6 @@
 // and keeps them in sync for the CKEditor 5 math dialog.
 import { View, type Locale, type FocusableView } from 'ckeditor5';
 
-// Type-safe interface for MathLive's global virtual keyboard.
 declare global {
 	interface Window {
 		mathVirtualKeyboard?: {
@@ -14,7 +13,7 @@ declare global {
 		};
 	}
 }
-// Narrow interface for the MathLive element we care about.
+
 interface MathFieldElement extends HTMLElement {
 	value: string;
 	readOnly: boolean;
@@ -22,7 +21,8 @@ interface MathFieldElement extends HTMLElement {
 	inlineShortcuts?: Record<string, string>;
 	setValue?: ( value: string, options?: { silenceNotifications?: boolean } ) => void;
 }
-// Small wrapper so the math-field can participate in CKEditor focus cycling.
+
+// Wrapper for the MathLive element to make it focusable in CKEditor's UI system
 export class MathFieldFocusableView extends View implements FocusableView {
 	public declare element: HTMLElement | null;
 	private _view: MathInputView;
@@ -34,10 +34,11 @@ export class MathFieldFocusableView extends View implements FocusableView {
 		this._view.mathfield?.focus();
 	}
 	public setElement( el: HTMLElement ): void {
-		( this as any ).element = el;
+		this.element = el;
 	}
 }
-// Simple textarea used to edit the raw LaTeX source.
+
+// Wrapper for the LaTeX textarea to make it focusable in CKEditor's UI system
 export class LatexTextAreaView extends View implements FocusableView {
 	declare public element: HTMLTextAreaElement;
 	constructor( locale: Locale ) {
@@ -50,7 +51,8 @@ export class LatexTextAreaView extends View implements FocusableView {
 		this.element?.focus();
 	}
 }
-// Main view used by the math dialog.
+
+// Main view class for the math input
 export default class MathInputView extends View {
 	public declare value: string | null;
 	public declare isReadOnly: boolean;
@@ -59,6 +61,8 @@ export default class MathInputView extends View {
 	public readonly mathFieldFocusableView: MathFieldFocusableView;
 	private _destroyed = false;
 	private _vkGeometryHandler?: () => void;
+	private _updating = false;
+	private static _configured = false;
 
 	constructor( locale: Locale ) {
 		super( locale );
@@ -75,15 +79,20 @@ export default class MathInputView extends View {
 			]
 		} );
 	}
+
 	public override render(): void {
 		super.render();
 		const textarea = this.latexTextAreaView.element;
-		// Keep value -> textarea -> mathfield in sync when user types LaTeX.
-		textarea.addEventListener( 'input', () => {
+
+		// Sync changes from the LaTeX textarea to the mathfield and model
+		this.listenTo( textarea, 'input', () => {
+			if ( this._updating ) {
+				return;
+			}
+			this._updating = true;
 			const val = textarea.value;
 			this.value = val || null;
 			if ( this.mathfield ) {
-				// When cleared, recreate mathfield to avoid "ghost braces" artifacts.
 				if ( val === '' ) {
 					this.mathfield.remove();
 					this.mathfield = null;
@@ -92,9 +101,15 @@ export default class MathInputView extends View {
 					this._setMathfieldValue( val );
 				}
 			}
+			this._updating = false;
 		} );
-		// External changes to value (e.g. dialog model) update both views.
+
+		// Sync changes from the model (this.value) to the UI elements
 		this.on( 'change:value', ( _e, _n, val ) => {
+			if ( this._updating ) {
+				return;
+			}
+			this._updating = true;
 			const newVal = val ?? '';
 			if ( textarea.value !== newVal ) {
 				textarea.value = newVal;
@@ -106,33 +121,36 @@ export default class MathInputView extends View {
 			} else if ( newVal !== '' ) {
 				this._initMathField( false );
 			}
+			this._updating = false;
 		} );
-		// Keep read-only state of both widgets in sync.
+
+		// Handle read-only state changes
 		this.on( 'change:isReadOnly', ( _e, _n, val ) => {
 			textarea.readOnly = val;
 			if ( this.mathfield ) {
 				this.mathfield.readOnly = val;
 			}
 		} );
+
+		// Handle virtual keyboard geometry changes
 		const vk = window.mathVirtualKeyboard;
 		if ( vk && !this._vkGeometryHandler ) {
-			// When the on-screen keyboard appears, ensure mathfield has focus
-			// so MathLive captures the keyboard input correctly.
 			this._vkGeometryHandler = () => {
-				if ( !vk.visible || !this.mathfield ) {
-					return;
+				if ( vk.visible && this.mathfield ) {
+					this.mathfield.focus();
 				}
-				this.mathfield.focus();
 			};
 			vk.addEventListener( 'geometrychange', this._vkGeometryHandler );
 		}
-		// On first render, reflect initial value into the LaTeX textarea.
+
 		const initial = this.value ?? '';
 		if ( textarea.value !== initial ) {
 			textarea.value = initial;
 		}
 		this._loadMathLive();
 	}
+
+	// Loads the MathLive library dynamically
 	private async _loadMathLive(): Promise<void> {
 		try {
 			await import( 'mathlive' );
@@ -140,23 +158,26 @@ export default class MathInputView extends View {
 			if ( this._destroyed ) {
 				return;
 			}
-			const MathfieldClass = customElements.get( 'math-field' ) as any;
-			if ( MathfieldClass ) {
-				// Disable MathLive sounds globally for a quieter UI.
-				MathfieldClass.soundsDirectory = null;
-				MathfieldClass.plonkSound = null;
+			if ( !MathInputView._configured ) {
+				const MathfieldClass = customElements.get( 'math-field' ) as any;
+				if ( MathfieldClass ) {
+					MathfieldClass.soundsDirectory = null;
+					MathfieldClass.plonkSound = null;
+					MathInputView._configured = true;
+				}
 			}
 			if ( this.element && !this._destroyed ) {
 				this._initMathField( true );
 			}
-		} catch ( e ) {
-			console.error( 'MathLive load error', e );
+		} catch {
 			const c = this.element?.querySelector( '.ck-mathlive-container' );
 			if ( c ) {
 				c.textContent = 'Math editor unavailable';
 			}
 		}
 	}
+
+	// Initializes the <math-field> element
 	private _initMathField( shouldFocus: boolean ): void {
 		const container = this.element?.querySelector( '.ck-mathlive-container' );
 		if ( !container ) {
@@ -172,30 +193,33 @@ export default class MathInputView extends View {
 		mf.value = this.value ?? '';
 		mf.readOnly = this.isReadOnly;
 		container.appendChild( mf );
-		// Ensure mathfield is ready immediately for virtual keyboard input
-		mf.focus();
+		// Set shortcuts after mounting (accessing inlineShortcuts requires mounted element)
 		try {
-			const anyMf = mf as any;
-			// Override only dt/dx/dy, keep other built‑in shortcuts (e.g. frac).
-			anyMf.inlineShortcuts = { ...( anyMf.inlineShortcuts || {} ), dx: 'dx', dy: 'dy', dt: 'dt' };
-		} catch { /* */ }
+			if ( mf.inlineShortcuts ) {
+				mf.inlineShortcuts = { ...mf.inlineShortcuts, dx: 'dx', dy: 'dy', dt: 'dt' };
+			}
+		} catch {
+			// Inline shortcut configuration is optional; ignore failures to avoid breaking the math field.
+		}
 		mf.addEventListener( 'keydown', ev => {
-			// Let Tab move focus from mathfield into the LaTeX textarea
-			// instead of being consumed by MathLive.
 			if ( ev.key === 'Tab' && !ev.shiftKey ) {
 				ev.preventDefault();
 				ev.stopImmediatePropagation();
 				this.latexTextAreaView.focus();
 			}
 		}, { capture: true } );
-
 		mf.addEventListener( 'input', () => {
-			if ( this.latexTextAreaView.element.value.trim() !== mf.value.trim() ) {
-				this.latexTextAreaView.element.value = mf.value;
+			if ( this._updating ) {
+				return;
+			}
+			this._updating = true;
+			const textarea = this.latexTextAreaView.element;
+			if ( textarea.value.trim() !== mf.value.trim() ) {
+				textarea.value = mf.value;
 			}
 			this.value = mf.value || null;
+			this._updating = false;
 		} );
-
 		this.mathfield = mf;
 		this.mathFieldFocusableView.setElement( mf );
 		this.fire( 'mathfieldReady' );
@@ -204,23 +228,26 @@ export default class MathInputView extends View {
 		}
 	}
 
+	// Updates the mathfield value without triggering loops
 	private _setMathfieldValue( value: string ): void {
-		const mf = this.mathfield;
-		if ( !mf ) {
+		if ( !this.mathfield ) {
 			return;
 		}
-		if ( mf.setValue ) {
-			mf.setValue( value, { silenceNotifications: true } );
+		if ( this.mathfield.setValue ) {
+			this.mathfield.setValue( value, { silenceNotifications: true } );
 		} else {
-			mf.value = value;
+			this.mathfield.value = value;
 		}
 	}
+
 	public hideKeyboard(): void {
 		window.mathVirtualKeyboard?.hide();
 	}
+
 	public focus(): void {
 		this.mathfield?.focus();
 	}
+
 	public override destroy(): void {
 		this._destroyed = true;
 		const vk = window.mathVirtualKeyboard;

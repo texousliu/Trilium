@@ -55,9 +55,9 @@ export default class MathUI extends Plugin {
 
 		this._balloon.showStack( 'main' );
 
-		requestAnimationFrame(() => {
+		requestAnimationFrame( () => {
 			this.formView?.mathInputView.focus();
-		});
+		} );
 	}
 
 	private _createFormView() {
@@ -90,7 +90,7 @@ export default class MathUI extends Plugin {
 		formView.displayButtonView.bind( 'isOn' ).to( mathCommand, 'display' );
 
 		// Form elements should be read-only when corresponding commands are disabled.
-		formView.mathInputView.bind( 'isReadOnly' ).to( mathCommand, 'isEnabled', (value: boolean) => !value );
+		formView.mathInputView.bind( 'isReadOnly' ).to( mathCommand, 'isEnabled', ( value: boolean ) => !value );
 		formView.saveButtonView.bind( 'isEnabled' ).to(
 			mathCommand,
 			'isEnabled',
@@ -121,12 +121,12 @@ export default class MathUI extends Plugin {
 		} );
 
 		// Allow pressing Enter to submit changes, and use Shift+Enter to insert a new line
-		formView.keystrokes.set('enter', (data, cancel) => {
-			if (!data.shiftKey) {
-				formView.fire('submit');
+		formView.keystrokes.set( 'enter', ( data, cancel ) => {
+			if ( !data.shiftKey ) {
+				formView.fire( 'submit' );
 				cancel();
 			}
-		});
+		} );
 
 		return formView;
 	}
