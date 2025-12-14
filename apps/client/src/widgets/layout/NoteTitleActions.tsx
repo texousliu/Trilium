@@ -1,5 +1,7 @@
 import "./NoteTitleActions.css";
 
+import clsx from "clsx";
+
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import CollectionProperties from "../note_bars/CollectionProperties";
@@ -12,10 +14,14 @@ export default function NoteTitleActions() {
     const isHiddenNote = note && note.noteId !== "_search" && note.noteId.startsWith("_");
     const noteType = useNoteProperty(note, "type");
 
+    const items = [
+        note && noteType === "search" && <SearchProperties note={note} ntxId={ntxId} />,
+        note && !isHiddenNote && noteType === "book" && <CollectionProperties note={note} />
+    ].filter(Boolean);
+
     return (
-        <div className="title-actions">
-            {note && noteType === "search" && <SearchProperties note={note} ntxId={ntxId} />}
-            {note && !isHiddenNote && noteType === "book" && <CollectionProperties note={note} />}
+        <div className={clsx("title-actions", items.length > 0 && "visible")}>
+            {items}
         </div>
     );
 }

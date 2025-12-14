@@ -4,6 +4,8 @@ body.experimental-feature-new-layout {
     }
 
     .title-actions {
-        padding: 0.75em 15px;
+        &.visible {
+            padding: 0.75em 15px;
+        }
     }
 }
