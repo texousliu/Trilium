@@ -131,7 +131,7 @@
                         color: var(--menu-item-icon-color);
                     }
 
-                    span:last-child > span > a {
+                    span:last-of-type > span > a {
                         color: var(--muted-text-color);
                     }
                 }

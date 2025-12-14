@@ -114,7 +114,7 @@ function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: strin
             )), NOTE_PATH_TITLE_SEPARATOR)}
 
             {icons.map(({ icon, title }) => (
-                <span key={title} class={icon} title={title} />
+                <i key={title} class={icon} title={title} />
             ))}
         </li>
     );
