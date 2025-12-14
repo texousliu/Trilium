@@ -1,4 +1,3 @@
-import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { t } from "../../services/i18n";
 import options from "../../services/options";
 import BasicPropertiesTab from "./BasicPropertiesTab";
@@ -18,8 +17,6 @@ import ScriptTab from "./ScriptTab";
 import SearchDefinitionTab from "./SearchDefinitionTab";
 import SimilarNotesTab from "./SimilarNotesTab";
 
-const isNewLayout = isExperimentalFeatureEnabled("new-layout");
-
 export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
     {
         title: t("classic_editor_toolbar.title"),
@@ -30,15 +27,14 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         toggleCommand: "toggleRibbonTabClassicEditor",
         content: FormattingToolbar,
         activate: ({ note }) => !options.is("editedNotesOpenInRibbon") || !note?.hasOwnedLabel("dateNote"),
-        stayInDom: !isNewLayout,
-        avoidInNewLayout: true
+        stayInDom: true
     },
     {
         title: ({ note }) => note?.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),
         icon: "bx bx-play",
         content: ScriptTab,
         activate: true,
-        show: ({ note }) => note && !isNewLayout &&
+        show: ({ note }) => note &&
             (note.isTriliumScript() || note.isTriliumSqlite()) &&
             (note.hasLabel("executeDescription") || note.hasLabel("executeButton"))
     },
@@ -47,34 +43,34 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         icon: "bx bx-search",
         content: SearchDefinitionTab,
         activate: true,
-        show: ({ note }) => !isNewLayout && note?.type === "search"
+        show: ({ note }) => note?.type === "search"
     },
     {
         title: t("edited_notes.title"),
         icon: "bx bx-calendar-edit",
         content: EditedNotesTab,
-        show: ({ note }) => !isNewLayout && note?.hasOwnedLabel("dateNote"),
+        show: ({ note }) => note?.hasOwnedLabel("dateNote"),
         activate: () => options.is("editedNotesOpenInRibbon")
     },
     {
         title: t("book_properties.book_properties"),
         icon: "bx bx-book",
         content: CollectionPropertiesTab,
-        show: ({ note }) => !isNewLayout && (note?.type === "book" || note?.type === "search"),
+        show: ({ note }) => (note?.type === "book" || note?.type === "search"),
         toggleCommand: "toggleRibbonTabBookProperties"
     },
     {
         title: t("note_properties.info"),
         icon: "bx bx-info-square",
         content: NotePropertiesTab,
-        show: ({ note }) => !isNewLayout && !!note?.getLabelValue("pageUrl"),
+        show: ({ note }) => !!note?.getLabelValue("pageUrl"),
         activate: true
     },
     {
         title: t("file_properties.title"),
         icon: "bx bx-file",
         content: FilePropertiesTab,
-        show: ({ note }) => !isNewLayout && note?.type === "file",
+        show: ({ note }) => note?.type === "file",
         toggleCommand: "toggleRibbonTabFileProperties",
         activate: ({ note }) => note?.mime !== "application/pdf"
     },
@@ -82,7 +78,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("image_properties.title"),
         icon: "bx bx-image",
         content: ImagePropertiesTab,
-        show: ({ note }) => !isNewLayout && note?.type === "image",
+        show: ({ note }) => note?.type === "image",
         toggleCommand: "toggleRibbonTabImageProperties",
         activate: true,
     },
@@ -90,49 +86,49 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("basic_properties.basic_properties"),
         icon: "bx bx-slider",
         content: BasicPropertiesTab,
-        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
+        show: ({note}) => !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabBasicProperties"
     },
     {
         title: t("owned_attribute_list.owned_attributes"),
         icon: "bx bx-list-check",
         content: OwnedAttributesTab,
-        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
+        show: ({note}) => !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabOwnedAttributes",
-        stayInDom: !isNewLayout
+        stayInDom: true
     },
     {
         title: t("inherited_attribute_list.title"),
         icon: "bx bx-list-plus",
         content: InheritedAttributesTab,
-        show: ({note}) => !isNewLayout && !note?.isLaunchBarConfig(),
+        show: ({note}) => !note?.isLaunchBarConfig(),
         toggleCommand: "toggleRibbonTabInheritedAttributes"
     },
     {
         title: t("note_paths.title"),
         icon: "bx bx-collection",
         content: NotePathsTab,
-        show: !isNewLayout,
+        show: true,
         toggleCommand: "toggleRibbonTabNotePaths"
     },
     {
         title: t("note_map.title"),
         icon: "bx bxs-network-chart",
         content: NoteMapTab,
-        show: !isNewLayout,
+        show: true,
         toggleCommand: "toggleRibbonTabNoteMap"
     },
     {
         title: t("similar_notes.title"),
         icon: "bx bx-bar-chart",
-        show: ({ note }) => !isNewLayout && note?.type !== "search" && !note?.isLabelTruthy("similarNotesWidgetDisabled"),
+        show: ({ note }) => note?.type !== "search" && !note?.isLabelTruthy("similarNotesWidgetDisabled"),
         content: SimilarNotesTab,
         toggleCommand: "toggleRibbonTabSimilarNotes"
     },
     {
         title: t("note_info_widget.title"),
         icon: "bx bx-info-circle",
-        show: ({ note }) => !isNewLayout && !!note,
+        show: ({ note }) => !!note,
         content: NoteInfoTab,
         toggleCommand: "toggleRibbonTabNoteInfo"
     }

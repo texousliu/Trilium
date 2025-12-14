@@ -143,8 +143,7 @@ export default class DesktopLayout {
                                                             .optChild(!isNewLayout, <ClosePaneButton />)
                                                             .optChild(!isNewLayout, <CreatePaneButton />)
                                                             .optChild(isNewLayout, <NoteActions />))
-                                                        .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
-                                                        .optChild(isNewLayout, <Ribbon />)
+                                                        .optChild(!isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(

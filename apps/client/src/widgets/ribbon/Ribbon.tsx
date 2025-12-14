@@ -5,9 +5,9 @@ import clsx from "clsx";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import { EventNames } from "../../components/app_context";
-import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { Indexed, numberObjectsInPlace } from "../../services/utils";
 import { useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
+import NoteActions from "./NoteActions";
 import { TabConfiguration, TitleContext } from "./ribbon-interface";
 import { RIBBON_TAB_DEFINITIONS } from "./RibbonDefinition";
 
@@ -17,9 +17,7 @@ interface ComputedTab extends Indexed<TabConfiguration> {
     shouldShow: boolean;
 }
 
-const isNewLayout = isExperimentalFeatureEnabled("new-layout");
-
-export default function Ribbon({ children }: { children?: preact.ComponentChildren }) {
+export default function Ribbon() {
     const { note, ntxId, hoistedNoteId, notePath, noteContext, componentId, isReadOnlyTemporarilyDisabled } = useNoteContext();
     const noteType = useNoteProperty(note, "type");
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
@@ -32,8 +30,7 @@ export default function Ribbon({ children }: { children?: preact.ComponentChildr
     async function refresh() {
         const computedTabs: ComputedTab[] = [];
         for (const tab of TAB_CONFIGURATION) {
-            const shouldAvoid = (isNewLayout && tab.avoidInNewLayout);
-            const shouldShow = !shouldAvoid && await shouldShowTab(tab.show, titleContext);
+            const shouldShow = await shouldShowTab(tab.show, titleContext);
             computedTabs.push({
                 ...tab,
                 shouldShow: !!shouldShow
@@ -92,7 +89,7 @@ export default function Ribbon({ children }: { children?: preact.ComponentChildr
                         />
                     ))}
                 </div>
-                {children}
+                <NoteActions />
             </div>
 
             <div className="ribbon-body-container">
@@ -115,7 +112,7 @@ export default function Ribbon({ children }: { children?: preact.ComponentChildr
                                 noteContext={noteContext}
                                 componentId={componentId}
                                 activate={useCallback(() => {
-                                    setActiveTabIndex(tab.index)
+                                    setActiveTabIndex(tab.index);
                                 }, [setActiveTabIndex])}
                             />
                         </div>
