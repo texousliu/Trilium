@@ -102,21 +102,21 @@
                     background: var(--card-background-color);
                     padding: 8px 20px;
 
+                    &:first-child {
+                        border-radius: var(--border-radius) var(--border-radius) 0 0;
+                    }
+
+                    &:last-child {
+                        border-radius: 0 0 var(--border-radius) var(--border-radius);
+                    }
+
+                    & + li {
+                        margin-top: 2px;
+                    }
+
                     span:last-child > span > a {
                         color: var(--muted-text-color);
                     }
-                }
-
-                li + li {
-                    margin-top: 2px;
-                }
-
-                li:first-child {
-                    border-radius: var(--border-radius) var(--border-radius) 0 0;
-                }
-
-                li:last-child {
-                    border-radius: 0 0 var(--border-radius) var(--border-radius);
                 }
 
                 a {
