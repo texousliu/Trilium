@@ -460,7 +460,8 @@
     "note_attachments": "ノートの添付ファイル",
     "open_note_on_server": "サーバー上のノートを開く",
     "view_revisions": "ノートの変更履歴...",
-    "note_map": "ノートマップ"
+    "note_map": "ノートマップ",
+    "advanced": "高度"
   },
   "command_palette": {
     "export_note_title": "ノートをエクスポート",
@@ -1237,7 +1238,11 @@
   "note_title": {
     "placeholder": "ここにノートのタイトルを入力...",
     "created_on": "作成日 <Value />",
-    "last_modified": "最終更新日 <Value />"
+    "last_modified": "最終更新日 <Value />",
+    "note_type_switcher_label": "{{type}} から切り替え:",
+    "note_type_switcher_others": "その他のノートタイプ",
+    "note_type_switcher_templates": "テンプレート",
+    "note_type_switcher_collection": "コレクション"
   },
   "search_result": {
     "no_notes_found": "指定された検索パラメータに該当するノートは見つかりませんでした。",
