@@ -4,16 +4,20 @@ import clsx from "clsx";
 import { ComponentChildren, HTMLAttributes } from "preact";
 import { useRef, useState } from "preact/hooks";
 
+import { useElementSize } from "./hooks";
 import Icon from "./Icon";
 
 interface CollapsibleProps extends Pick<HTMLAttributes<HTMLDivElement>, "className"> {
     title: string;
     children: ComponentChildren;
+    initiallyExpanded?: boolean;
 }
 
-export default function Collapsible({ title, children, className }: CollapsibleProps) {
+export default function Collapsible({ title, children, className, initiallyExpanded }: CollapsibleProps) {
     const bodyRef = useRef<HTMLDivElement>(null);
-    const [ expanded, setExpanded ] = useState(false);
+    const innerRef = useRef<HTMLDivElement>(null);
+    const [ expanded, setExpanded ] = useState(initiallyExpanded);
+    const { height } = useElementSize(innerRef) ?? {};
 
     return (
         <div className={clsx("collapsible", className, expanded && "expanded")}>
@@ -28,11 +32,12 @@ export default function Collapsible({ title, children, className }: CollapsibleP
             <div
                 ref={bodyRef}
                 className="collapsible-body"
-                style={{
-                    height: expanded ? bodyRef.current?.scrollHeight : "0",
-                }}
+                style={{ height: expanded ? height : "0" }}
             >
-                <div className="collapsible-inner-body">
+                <div
+                    ref={innerRef}
+                    className="collapsible-inner-body"
+                >
                     {children}
                 </div>
             </div>

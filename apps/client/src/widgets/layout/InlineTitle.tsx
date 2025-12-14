@@ -19,7 +19,7 @@ import NoteTitleWidget from "../note_title";
 import SimpleBadge, { Badge, BadgeWithDropdown } from "../react/Badge";
 import Collapsible from "../react/Collapsible";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useNoteBlob, useNoteContext, useNoteLabel, useNoteProperty, useStaticTooltip, useTriliumEvent } from "../react/hooks";
+import { useNoteBlob, useNoteContext, useNoteLabel, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumOptionBool } from "../react/hooks";
 import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
 import { useEditedNotes } from "../ribbon/EditedNotesTab";
@@ -310,10 +310,14 @@ function useBuiltinTemplates() {
 function EditedNotes() {
     const { note } = useNoteContext();
     const [ dateNote ] = useNoteLabel(note, "dateNote");
-
+    const [ editedNotesOpenInRibbon ] = useTriliumOptionBool("editedNotesOpenInRibbon");
 
     return (note && dateNote &&
-        <Collapsible className="edited-notes" title={t("note_title.edited_notes")}>
+        <Collapsible
+            className="edited-notes"
+            title={t("note_title.edited_notes")}
+            initiallyExpanded={editedNotesOpenInRibbon}
+        >
             <EditedNotesContent note={note} />
         </Collapsible>
     );
