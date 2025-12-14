@@ -826,7 +826,8 @@
     "note_size_info": "Note size provides rough estimate of storage requirements for this note. It takes into account note's content and content of its note revisions.",
     "calculate": "calculate",
     "subtree_size": "(subtree size: {{size}} in {{count}} notes)",
-    "title": "Note Info"
+    "title": "Note Info",
+    "show_similar_notes": "Show similar notes"
   },
   "note_map": {
     "open_full": "Expand to full",
