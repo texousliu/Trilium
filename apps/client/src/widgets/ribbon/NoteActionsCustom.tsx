@@ -3,7 +3,6 @@ import { useContext } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
-import protected_session_holder from "../../services/protected_session_holder";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
 import { ParentComponent } from "../react/react_utils";
@@ -63,13 +62,11 @@ function ImageActions(props: NoteActionsCustomProps) {
 function UploadNewRevisionButton({ note, onChange }: NoteActionsCustomProps & {
     onChange: (files: FileList | null) => void;
 }) {
-    const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
-
     return (
         <FormFileUploadActionButton
             icon="bx bx-folder-open"
             text={t("image_properties.upload_new_revision")}
-            disabled={!canAccessProtectedNote}
+            disabled={!note.isContentAvailable()}
             onChange={onChange}
         />
     );
@@ -87,13 +84,11 @@ function OpenExternallyButton({ note }: NoteActionsCustomProps) {
 }
 
 function DownloadFileButton({ note }: NoteActionsCustomProps) {
-    const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
-
     return (
         <ActionButton
             icon="bx bx-download"
             text={t("file_properties.download")}
-            disabled={!canAccessProtectedNote}
+            disabled={!note.isContentAvailable()}
             onClick={() => downloadFileNote(note.noteId)}
         />
     );
