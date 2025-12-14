@@ -74,7 +74,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         title: t("file_properties.title"),
         icon: "bx bx-file",
         content: FilePropertiesTab,
-        show: ({ note }) => note?.type === "file",
+        show: ({ note }) => !isNewLayout && note?.type === "file",
         toggleCommand: "toggleRibbonTabFileProperties",
         activate: ({ note }) => note?.mime !== "application/pdf"
     },
