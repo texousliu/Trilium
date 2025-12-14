@@ -91,7 +91,7 @@ body.prefers-centered-content .inline-title {
 }
 
 .edited-notes {
-    padding-top: 1em;
+    padding: 1.5em 0;
 
     .collapsible-inner-body {
         display: flex;
