@@ -1,18 +1,6 @@
-import {
-	ButtonView,
-	FocusCycler,
-	LabelView,
-	submitHandler,
-	SwitchButtonView,
-	View,
-	ViewCollection,
-	type FocusableView,
-	type Locale,
-	FocusTracker,
-	KeystrokeHandler
-} from 'ckeditor5';
-import { IconCheck } from 'ckeditor5';
-import { IconCancel } from 'ckeditor5';
+import { ButtonView, FocusCycler, FocusTracker, KeystrokeHandler, LabelView, submitHandler, SwitchButtonView, View, ViewCollection, type FocusableView, type Locale } from 'ckeditor5';
+import IconCheck from "@ckeditor/ckeditor5-icons/theme/icons/check.svg?raw";
+import IconCancel from "@ckeditor/ckeditor5-icons/theme/icons/cancel.svg?raw";
 import { extractDelimiters, hasDelimiters } from '../utils.js';
 import MathView, { type MathViewOptions } from './mathview.js';
 import MathInputView from './mathinputview.js';
@@ -69,20 +57,45 @@ export default class MainFormView extends View {
 		this.setTemplate( {
 			tag: 'form',
 			attributes: {
-				class: [ 'ck', 'ck-math-form', ...popupClassName ],
+				class: [
+					'ck',
+					'ck-math-form',
+					...popupClassName
+				],
 				tabindex: '-1',
 				spellcheck: 'false'
 			},
 			children: [
 				{
 					tag: 'div',
-					attributes: { class: [ 'ck-math-scroll' ] },
-					children: [ { tag: 'div', attributes: { class: [ 'ck-math-view' ] }, children } ]
+					attributes: {
+						class: [
+							'ck-math-scroll'
+						]
+					},
+					children: [
+						{
+							tag: 'div',
+							attributes: {
+								class: [
+									'ck-math-view'
+								]
+							},
+							children
+						}
+					]
 				},
 				{
 					tag: 'div',
-					attributes: { class: [ 'ck-math-button-row' ] },
-					children: [ this.saveButtonView, this.cancelButtonView ]
+					attributes: {
+						class: [
+							'ck-math-button-row'
+						]
+					},
+					children: [
+						this.saveButtonView,
+						this.cancelButtonView
+					]
 				}
 			]
 		} );
@@ -91,14 +104,20 @@ export default class MainFormView extends View {
 			focusables: this._focusables,
 			focusTracker: this.focusTracker,
 			keystrokeHandler: this.keystrokes,
-			actions: { focusPrevious: 'shift + tab', focusNext: 'tab' }
+			actions: {
+				focusPrevious: 'shift + tab',
+				focusNext: 'tab'
+			}
 		} );
 	}
 
 	public override render(): void {
 		super.render();
 
-		submitHandler( { view: this } );
+		// Prevent default form submit event & trigger custom 'submit'
+		submitHandler( {
+			view: this
+		} );
 
 		const focusableViews = [
 			this.mathInputView.latexTextAreaView,
@@ -167,24 +186,46 @@ export default class MainFormView extends View {
 	}
 
 	private _createButton( label: string, icon: string, className: string, type?: 'submit' | 'button' ): ButtonView {
-		const btn = new ButtonView( this.locale );
-		btn.set( { label, icon, tooltip: true } );
-		btn.extendTemplate( { attributes: { class: className } } );
+		const button = new ButtonView( this.locale );
+
+		button.set( {
+			label,
+			icon,
+			tooltip: true
+		} );
+
+		button.extendTemplate( {
+			attributes: {
+				class: className
+			}
+		} );
+
 		if ( type ) {
-			btn.type = type;
+			button.type = type;
 		}
-		return btn;
+
+		return button;
 	}
 
 	private _createDisplayButton( t: ( str: string ) => string ): SwitchButtonView {
-		const btn = new SwitchButtonView( this.locale );
-		btn.set( { label: t( 'Display mode' ), withText: true } );
-		btn.extendTemplate( { attributes: { class: 'ck-button-display-toggle' } } );
+		const switchButton = new SwitchButtonView( this.locale );
 
-		btn.on( 'execute', () => {
-			btn.isOn = !btn.isOn;
+		switchButton.set( {
+			label: t( 'Display mode' ),
+			withText: true
 		} );
-		return btn;
+
+		switchButton.extendTemplate( {
+			attributes: {
+				class: 'ck-button-display-toggle'
+			}
+		} );
+
+		switchButton.on( 'execute', () => {
+			switchButton.isOn = !switchButton.isOn;
+		} );
+
+		return switchButton;
 	}
 
 	public hideKeyboard(): void {
