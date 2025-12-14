@@ -1,9 +1,14 @@
+import "./CollectionProperties.css";
+
 import { t } from "i18next";
 import { useContext } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
 import FNote from "../../entities/fnote";
+import { getHelpUrlForNote } from "../../services/in_app_help";
+import { openInAppHelpFromUrl } from "../../services/utils";
 import { ViewTypeOptions } from "../collections/interface";
+import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
 import FormTextBox from "../react/FormTextBox";
@@ -12,9 +17,6 @@ import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxItem, ComboBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
 import { useViewType, VIEW_TYPE_MAPPINGS } from "../ribbon/CollectionPropertiesTab";
-import ActionButton from "../react/ActionButton";
-import { getHelpUrlForNote } from "../../services/in_app_help";
-import { openInAppHelpFromUrl } from "../../services/utils";
 
 const ICON_MAPPINGS: Record<ViewTypeOptions, string> = {
     grid: "bx bxs-grid",
@@ -30,12 +32,12 @@ export default function CollectionProperties({ note }: { note: FNote }) {
     const [ viewType, setViewType ] = useViewType(note);
 
     return (
-        <>
+        <div className="collection-properties">
             <ViewTypeSwitcher viewType={viewType} setViewType={setViewType} />
             <ViewOptions note={note} viewType={viewType} />
             <div className="spacer" />
             <HelpButton note={note} />
-        </>
+        </div>
     );
 }
 
@@ -187,9 +189,9 @@ function ComboBoxPropertyView({ note, property }: { note: FNote, property: Combo
                             {index < property.options.length - 1 && <FormDropdownDivider />}
                         </Fragment>
                     );
-                } else {
-                    return renderItem(option);
                 }
+                return renderItem(option);
+
             })}
         </FormDropdownSubmenu>
     );

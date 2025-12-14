@@ -889,7 +889,8 @@
     "search_parameters": "Search Parameters",
     "unknown_search_option": "Unknown search option {{searchOptionName}}",
     "search_note_saved": "Search note has been saved into {{- notePathTitle}}",
-    "actions_executed": "Actions have been executed."
+    "actions_executed": "Actions have been executed.",
+    "view_options": "View options:"
   },
   "similar_notes": {
     "title": "Similar Notes",
