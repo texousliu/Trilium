@@ -32,7 +32,7 @@ export default function NoteActions() {
     const { note, ntxId, noteContext } = useNoteContext();
     return (
         <div className="ribbon-button-container" style={{ contain: "none" }}>
-            {note && <NoteActionsCustom note={note} ntxId={ntxId} />}
+            {note && ntxId && <NoteActionsCustom note={note} ntxId={ntxId} />}
             <MovePaneButton direction="left" />
             <MovePaneButton direction="right" />
             <ClosePaneButton />

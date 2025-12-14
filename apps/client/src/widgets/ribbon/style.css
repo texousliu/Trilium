@@ -459,7 +459,10 @@ body.experimental-feature-new-layout {
             align-items: center;
             height: 36px;
             gap: var(--button-gap);
-            margin-right: 1em;
+
+            &> button:last-of-type {
+                margin-right: 1em;
+            }
         }
     }
 }
