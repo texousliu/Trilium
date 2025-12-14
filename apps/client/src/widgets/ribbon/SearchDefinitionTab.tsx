@@ -24,7 +24,7 @@ import { ParentComponent } from "../react/react_utils";
 import { TabContext } from "./ribbon-interface";
 import { SEARCH_OPTIONS, SearchOption } from "./SearchDefinitionOptions";
 
-export default function SearchDefinitionTab({ note, ntxId, hidden }: TabContext) {
+export default function SearchDefinitionTab({ note, ntxId, hidden }: Pick<TabContext, "note" | "ntxId" | "hidden">) {
     const parentComponent = useContext(ParentComponent);
     const [ searchOptions, setSearchOptions ] = useState<{ availableOptions: SearchOption[], activeOptions: SearchOption[] }>();
     const [ error, setError ] = useState<{ message: string }>();

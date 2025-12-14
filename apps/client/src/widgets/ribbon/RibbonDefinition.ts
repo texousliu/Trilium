@@ -47,7 +47,7 @@ export const RIBBON_TAB_DEFINITIONS: TabConfiguration[] = [
         icon: "bx bx-search",
         content: SearchDefinitionTab,
         activate: true,
-        show: ({ note }) => note?.type === "search"
+        show: ({ note }) => !isNewLayout && note?.type === "search"
     },
     {
         title: t("edited_notes.title"),

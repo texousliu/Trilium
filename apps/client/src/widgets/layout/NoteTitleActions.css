@@ -14,6 +14,10 @@ body.experimental-feature-new-layout {
         padding-bottom: 0.2em;
         font-size: 0.8em;
 
+        .collapsible-title {
+            font-size: 1rem;
+        }
+
         .dropdown-menu {
             input.form-control {
                 padding: 2px 8px;
