@@ -105,7 +105,7 @@ interface StatusBarButtonBaseProps {
     className?: string;
     icon: string;
     title: string;
-    text?: string | number;
+    text: string | number;
     disabled?: boolean;
     active?: boolean;
 }
@@ -233,7 +233,7 @@ function BacklinksBadge({ note, viewScope }: StatusBarContext) {
         <StatusBarDropdown
             className="backlinks-badge backlinks-widget"
             icon="bx bx-link"
-            text={count}
+            text={t("status_bar.backlinks", { count })}
             title={t("status_bar.backlinks_title", { count })}
             dropdownContainerClassName="backlinks-items"
         >
@@ -252,7 +252,7 @@ function AttachmentCount({ note }: StatusBarContext) {
         <StatusBarButton
             className="attachment-count-button"
             icon="bx bx-paperclip"
-            text={count}
+            text={t("status_bar.attachments", { count })}
             title={t("status_bar.attachments_title", { count })}
             triggerCommand="showAttachments"
         />
@@ -336,7 +336,7 @@ function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
             title={t("status_bar.note_paths_title")}
             dropdownContainerClassName="dropdown-note-paths"
             icon="bx bx-directions"
-            text={sortedNotePaths?.length}
+            text={t("status_bar.note_paths", { count: sortedNotePaths?.length })}
         >
             <NotePathsWidget
                 sortedNotePaths={sortedNotePaths}

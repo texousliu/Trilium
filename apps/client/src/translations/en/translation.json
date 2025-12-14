@@ -2159,13 +2159,19 @@
   "status_bar": {
     "language_title": "Change the language of the entire content",
     "note_info_title": "View information about this note such as the creation/modification date or the note size.",
+    "backlinks_one": "{{count}} backlink",
+    "backlinks_other": "{{count}} backlinks",
     "backlinks_title_one": "This note is linked from {{count}} other note.\n\nClick to view the list of backlinks.",
     "backlinks_title_other": "This note is linked from {{count}} other notes.\n\nClick to view the list of backlinks.",
+    "attachments_one": "{{count}} attachment",
+    "attachments_other": "{{count}} attachments",
     "attachments_title_one": "This note has {{count}} attachment. Click to open the list of attachments in a new tab.",
     "attachments_title_other": "This note has {{count}} attachments. Click to open the list of attachments in a new tab.",
     "attributes_one": "{{count}} attribute",
     "attributes_other": "{{count}} attributes",
     "attributes_title": "Click to open a dedicated pane to edit this note's owned attributes, as well as to see the list of inherited attributes.",
+    "note_paths_one": "{{count}} path",
+    "note_paths_other": "{{count}} paths",
     "note_paths_title": "Click to see the paths where this note is placed into the tree.",
     "code_note_switcher": "Change language mode"
   }
