@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { ComponentChildren, HTMLAttributes } from "preact";
 import { useRef, useState } from "preact/hooks";
 
-import { useElementSize } from "./hooks";
+import { useElementSize, useUniqueName } from "./hooks";
 import Icon from "./Icon";
 
 interface CollapsibleProps extends Pick<HTMLAttributes<HTMLDivElement>, "className"> {
@@ -18,21 +18,26 @@ export default function Collapsible({ title, children, className, initiallyExpan
     const innerRef = useRef<HTMLDivElement>(null);
     const [ expanded, setExpanded ] = useState(initiallyExpanded);
     const { height } = useElementSize(innerRef) ?? {};
+    const contentId = useUniqueName();
 
     return (
         <div className={clsx("collapsible", className, expanded && "expanded")}>
-            <div
+            <button
                 className="collapsible-title"
                 onClick={() => setExpanded(!expanded)}
+                aria-expanded={expanded}
+                aria-controls={contentId}
             >
                 <Icon className="arrow" icon="bx bx-chevron-right" />&nbsp;
                 {title}
-            </div>
+            </button>
 
             <div
+                id={contentId}
                 ref={bodyRef}
                 className="collapsible-body"
                 style={{ height: expanded ? height : "0" }}
+                aria-hidden={!expanded}
             >
                 <div
                     ref={innerRef}

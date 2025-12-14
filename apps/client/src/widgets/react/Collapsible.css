@@ -3,6 +3,10 @@
         line-height: 1em;
         display: flex;
         align-items: center;
+        appearance: none;
+        background: transparent;
+        border: 0;
+        color: inherit;
 
         .arrow {
             font-size: 1.3em;
