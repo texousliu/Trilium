@@ -199,8 +199,7 @@ export function getLocaleName(locale: Locale | null | undefined) {
 //#region Note info
 export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
     const { metadata, ...sizeProps } = useNoteMetadata(note);
-    const [ originalFileName ] = useNoteLabel(note?.type === "file" ? note : null, "originalFileName");
-
+    const [ originalFileName ] = useNoteLabel(note, "originalFileName");
 
     return (note &&
         <StatusBarDropdown
