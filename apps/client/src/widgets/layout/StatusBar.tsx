@@ -18,7 +18,7 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useLegacyImperativeHandlers, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useActiveNoteContext, useLegacyImperativeHandlers, useNoteLabel, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { ContentLanguagesModal, NoteTypeCodeNoteList, NoteTypeOptionsModal, useLanguageSwitcher, useMimeTypes } from "../ribbon/BasicPropertiesTab";
@@ -199,6 +199,8 @@ export function getLocaleName(locale: Locale | null | undefined) {
 //#region Note info
 export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
     const { metadata, ...sizeProps } = useNoteMetadata(note);
+    const [ originalFileName ] = useNoteLabel(note?.type === "file" ? note : null, "originalFileName");
+
 
     return (note &&
         <StatusBarDropdown
@@ -208,6 +210,7 @@ export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
             dropdownOptions={{ autoClose: "outside" }}
         >
             <ul>
+                {originalFileName && <NoteInfoValue text={t("file_properties.original_file_name")} value={originalFileName} />}
                 <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
                 <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
                 <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
