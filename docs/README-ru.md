@@ -97,8 +97,8 @@ Trilium Notes – это приложение для заметок с иера�
   более безопасного входа
 * [Синхронизация](https://docs.triliumnotes.org/user-guide/setup/synchronization)
   заметок со своим сервером
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * существуют [сторонние сервисы для хостинга сервера
+    синхронизации](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * [Sharing](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
   (publishing) notes to public internet
 * Надёжное
