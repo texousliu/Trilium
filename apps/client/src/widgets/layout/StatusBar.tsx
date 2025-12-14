@@ -93,7 +93,7 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
             }}
             text={<>
                 {icon && (<><Icon icon={icon} />&nbsp;</>)}
-                {text}
+                <span className="text">{text}</span>
             </>}
             {...dropdownProps}
         >
@@ -138,7 +138,7 @@ function StatusBarButton({ className, icon, text, title, active, ...restProps }:
                 }
             }}
         >
-            <Icon icon={icon} />&nbsp;{text}
+            <Icon icon={icon} />&nbsp;<span className="text">{text}</span>
         </button>
     );
 }
