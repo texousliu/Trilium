@@ -81,6 +81,7 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
                     ...titleOptions?.popperConfig,
                     strategy: "fixed"
                 },
+                animation: false,
                 ...titleOptions
             }}
             dropdownOptions={{
@@ -120,6 +121,7 @@ function StatusBarButton({ className, icon, text, title, active, ...restProps }:
         placement: "top",
         fallbackPlacements: [ "top" ],
         popperConfig: { strategy: "fixed" },
+        animation: false,
         title
     });
 
