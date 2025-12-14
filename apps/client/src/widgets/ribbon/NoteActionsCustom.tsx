@@ -1,3 +1,4 @@
+import { NoteType } from "@triliumnext/commons";
 import { useContext } from "preact/hooks";
 
 import FNote from "../../entities/fnote";
@@ -5,6 +6,7 @@ import { t } from "../../services/i18n";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
+import { useNoteProperty } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
 import { buildUploadNewImageRevisionListener } from "./ImagePropertiesTab";
@@ -14,20 +16,31 @@ interface NoteActionsCustomProps {
     ntxId: string;
 }
 
+interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
+    noteType: NoteType;
+}
+
 /**
  * Part of {@link NoteActions} on the new layout, but are rendered with a slight spacing
  * from the rest of the note items and the buttons differ based on the note type.
  */
 export default function NoteActionsCustom(props: NoteActionsCustomProps) {
-    return (
+    const noteType = useNoteProperty(props.note, "type");
+    const innerProps: NoteActionsCustomInnerProps | undefined = noteType && {
+        ...props,
+        noteType
+    };
+
+    return (innerProps &&
         <div className="note-actions-custom">
-            <NoteActionsCustomInner {...props} />
+            <CopyReferenceToClipboardButton {...innerProps} />
+            <NoteActionsCustomInner {...innerProps} />
         </div>
     );
 }
 
 //#region Note type mappings
-function NoteActionsCustomInner(props: NoteActionsCustomProps) {
+function NoteActionsCustomInner(props: NoteActionsCustomInnerProps) {
     switch (props.note.type) {
         case "file":
             return <FileActions {...props} />;
@@ -36,7 +49,7 @@ function NoteActionsCustomInner(props: NoteActionsCustomProps) {
     }
 }
 
-function FileActions(props: NoteActionsCustomProps) {
+function FileActions(props: NoteActionsCustomInnerProps) {
     return (
         <>
             <UploadNewRevisionButton {...props} onChange={buildUploadNewFileRevisionListener(props.note)} />
@@ -46,10 +59,9 @@ function FileActions(props: NoteActionsCustomProps) {
     );
 }
 
-function ImageActions(props: NoteActionsCustomProps) {
+function ImageActions(props: NoteActionsCustomInnerProps) {
     return (
         <>
-            <CopyReferenceToClipboardButton {...props} />
             <UploadNewRevisionButton {...props} onChange={buildUploadNewImageRevisionListener(props.note)} />
             <OpenExternallyButton {...props} />
             <DownloadFileButton {...props} />
@@ -59,7 +71,7 @@ function ImageActions(props: NoteActionsCustomProps) {
 //#endregion
 
 //#region Shared buttons
-function UploadNewRevisionButton({ note, onChange }: NoteActionsCustomProps & {
+function UploadNewRevisionButton({ note, onChange }: NoteActionsCustomInnerProps & {
     onChange: (files: FileList | null) => void;
 }) {
     return (
@@ -72,7 +84,7 @@ function UploadNewRevisionButton({ note, onChange }: NoteActionsCustomProps & {
     );
 }
 
-function OpenExternallyButton({ note }: NoteActionsCustomProps) {
+function OpenExternallyButton({ note }: NoteActionsCustomInnerProps) {
     return (
         <ActionButton
             icon="bx bx-link-external"
@@ -83,7 +95,7 @@ function OpenExternallyButton({ note }: NoteActionsCustomProps) {
     );
 }
 
-function DownloadFileButton({ note }: NoteActionsCustomProps) {
+function DownloadFileButton({ note }: NoteActionsCustomInnerProps) {
     return (
         <ActionButton
             icon="bx bx-download"
@@ -94,10 +106,10 @@ function DownloadFileButton({ note }: NoteActionsCustomProps) {
     );
 }
 
-function CopyReferenceToClipboardButton({ ntxId }: NoteActionsCustomProps) {
+function CopyReferenceToClipboardButton({ ntxId, noteType }: NoteActionsCustomInnerProps) {
     const parentComponent = useContext(ParentComponent);
 
-    return (
+    return (["mermaid", "canvas", "mindMap", "image"].includes(noteType) &&
         <ActionButton
             text={t("image_properties.copy_reference_to_clipboard")}
             icon="bx bx-copy"
