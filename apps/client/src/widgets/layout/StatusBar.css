@@ -87,9 +87,46 @@
                 padding: 0.5em;
             }
 
+            .note-path-intro {
+                color: var(--muted-text-color);
+            }
+
             .note-path-list {
-                margin: 1em;
+                margin: 12px 0;
                 padding: 0;
+                list-style: none;
+
+                li {
+                    --border-radius: 6px;
+
+                    background: var(--card-background-color);
+                    padding: 8px 20px;
+
+                    span:last-child > span > a {
+                        color: var(--muted-text-color);
+                    }
+                }
+
+                li + li {
+                    margin-top: 2px;
+                }
+
+                li:first-child {
+                    border-radius: var(--border-radius) var(--border-radius) 0 0;
+                }
+
+                li:last-child {
+                    border-radius: 0 0 var(--border-radius) var(--border-radius);
+                }
+
+                a {
+                    margin-inline: 2px;
+                    padding-inline: 2px;
+                    color: currentColor;
+                    font-weight: normal;
+                    text-decoration: none;
+                }
+
             }
         }
 
