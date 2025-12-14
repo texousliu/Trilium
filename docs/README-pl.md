@@ -35,9 +35,9 @@ wiedzy.
 
 <img src="./app.png" alt="Trilium Screenshot" width="1000">
 
-## ⏬Ściągnij
-- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  wersja stabilna, zalecana dla większości użytkowników.
+## ⏬ Pobierz
+- [Ostatnie wydanie](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stabilna wersja, polecane dla większości użytkowników.
 - [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) -
   niestabilna wersja deweloperska, aktualizowana codziennie o najnowsze funkcje
   i poprawki.
@@ -62,18 +62,18 @@ Nasza dokumentacja jest dostępna w wielu formatach:
   Dockera](https://docs.triliumnotes.org/user-guide/setup/server/installation/docker)
 - [Aktualizacja
   TriliumNext](https://docs.triliumnotes.org/user-guide/setup/upgrading)
-- [Podstawowe pojęcia i
-  funkcje](https://docs.triliumnotes.org/user-guide/concepts/notes)
+- [Podstawowe koncepcje i
+  funkcjonalność](https://docs.triliumnotes.org/user-guide/concepts/notes)
 - [Wzorce Bazy Wiedzy
   Osobistej](https://docs.triliumnotes.org/user-guide/misc/patterns-of-personal-knowledge)
 
-## 🎁 Funkcje
+## 🎁 Funkcjonalność
 
-* Notatki można porządkować w drzewie o dowolnej głębokości. Jedna notatka może
-  występować w wielu miejscach drzewa (zob.
+* Notatki mogą być zorganizowane w drzewa dowolnej głębokości. Pojedyncza
+  notatka może być umieszczona w wielu miejscach w drzewie (patrz
   [klonowanie](https://docs.triliumnotes.org/user-guide/concepts/notes/cloning))
 * Bogaty edytor notatek WYSIWYG, zawierający np. tabele, obrazy i
-  [math](https://docs.triliumnotes.org/user-guide/note-types/text) z
+  [matematykę](https://docs.triliumnotes.org/user-guide/note-types/text) z
   [autoformat](https://docs.triliumnotes.org/user-guide/note-types/text/markdown-formatting)
   Markdown
 * Wsparcie dla edycji [notatki z kodem

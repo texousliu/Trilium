@@ -695,7 +695,8 @@
     "print_pdf": "导出为 PDF...",
     "open_note_on_server": "在服务器上打开笔记",
     "view_revisions": "笔记修订...",
-    "note_map": "笔记地图"
+    "note_map": "笔记地图",
+    "advanced": "高级"
   },
   "onclick_button": {
     "no_click_handler": "按钮组件'{{componentId}}'没有定义点击处理程序"
