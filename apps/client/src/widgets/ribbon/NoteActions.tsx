@@ -20,12 +20,11 @@ import CreatePaneButton from "../buttons/create_pane_button";
 import MovePaneButton from "../buttons/move_pane_button";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
-import { FormFileUploadActionButton } from "../react/FormFileUpload";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListHeader, FormListItem, FormListToggleableItem } from "../react/FormList";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { NoteTypeDropdownContent, useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
-import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
+import NoteActionsCustom from "./NoteActionsCustom";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -33,7 +32,7 @@ export default function NoteActions() {
     const { note, noteContext } = useNoteContext();
     return (
         <div className="ribbon-button-container" style={{ contain: "none" }}>
-            {note && <FileActions note={note} />}
+            {note && <NoteActionsCustom note={note} />}
             <MovePaneButton direction="left" />
             <MovePaneButton direction="right" />
             <ClosePaneButton />
@@ -277,34 +276,5 @@ function ConvertToAttachment({ note }: { note: FNote }) {
                 });
             }}
         >{t("note_actions.convert_into_attachment")}</FormListItem>
-    );
-}
-
-function FileActions({ note }: { note: FNote }) {
-    const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
-
-    return (note.type === "file" &&
-        <>
-            <FormFileUploadActionButton
-                icon="bx bx-folder-open"
-                text={t("file_properties.upload_new_revision")}
-                disabled={!canAccessProtectedNote}
-                onChange={buildUploadNewFileRevisionListener(note)}
-            />
-
-            <ActionButton
-                icon="bx bx-link-external"
-                text={t("file_properties.open")}
-                disabled={note.isProtected}
-                onClick={() => openNoteExternally(note.noteId, note.mime)}
-            />
-
-            <ActionButton
-                icon="bx bx-download"
-                text={t("file_properties.download")}
-                disabled={!canAccessProtectedNote}
-                onClick={() => downloadFileNote(note.noteId)}
-            />
-        </>
     );
 }
