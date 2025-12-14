@@ -98,9 +98,10 @@
 
                 li {
                     --border-radius: 6px;
-
+                    
+                    position: relative;
                     background: var(--card-background-color);
-                    padding: 8px 20px;
+                    padding: 8px 20px 8px 25px;
 
                     &:first-child {
                         border-radius: var(--border-radius) var(--border-radius) 0 0;
@@ -112,6 +113,22 @@
 
                     & + li {
                         margin-top: 2px;
+                    }
+
+                    &.path-current::before {
+                        position: absolute;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: flex-end;
+                        content: "\ee8f";
+                        top: 0;
+                        left: 0;
+                        width: 20px;
+                        bottom: 0;
+                        font-family: "boxicons";
+                        font-size: .85em;
+                        color: var(--menu-item-icon-color);
                     }
 
                     span:last-child > span > a {
