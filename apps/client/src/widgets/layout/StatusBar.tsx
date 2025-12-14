@@ -17,7 +17,6 @@ import server from "../../services/server";
 import { openInAppHelpFromUrl } from "../../services/utils";
 import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
-import Collapsible from "../react/Collapsible";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useActiveNoteContext, useLegacyImperativeHandlers, useNoteLabel, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
@@ -44,19 +43,27 @@ interface StatusBarContext {
 
 export default function StatusBar() {
     const { note, notePath, noteContext, viewScope, hoistedNoteId } = useActiveNoteContext();
-    const [ attributesShown, setAttributesShown ] = useState(false);
-    const [ similarNotesShown, setSimilarNotesShown ] = useState(false);
+    const [ activePane, setActivePane ] = useState<"attributes" | "similar-notes" | null>(null);
     const context: StatusBarContext | undefined | null = note && noteContext && { note, notePath, noteContext, viewScope, hoistedNoteId };
-    const attributesContext: AttributesProps | undefined | null = context && { ...context, attributesShown, setAttributesShown };
+    const attributesContext: AttributesProps | undefined | null = context && {
+        ...context,
+        attributesShown: activePane === "attributes",
+        setAttributesShown: () => setActivePane("attributes")
+    };
+    const noteInfoContext: NoteInfoContext | undefined | null = context && {
+        ...context,
+        similarNotesShown: activePane === "similar-notes",
+        setSimilarNotesShown: () => setActivePane("similar-notes")
+    };
     const isHiddenNote = note?.isInHiddenSubtree();
 
     return (
         <div className="status-bar">
             {attributesContext && <AttributesPane {...attributesContext} />}
-            {context && <SimilarNotesPane {...context} shown={similarNotesShown} setShown={setSimilarNotesShown}/>}
+            {noteInfoContext && <SimilarNotesPane {...noteInfoContext} />}
 
             <div className="status-bar-main-row">
-                {context && attributesContext && <>
+                {context && attributesContext && noteInfoContext && <>
                     <Breadcrumb {...context} />
 
                     <div className="actions-row">
@@ -66,7 +73,7 @@ export default function StatusBar() {
                         <AttributesButton {...attributesContext} />
                         <AttachmentCount {...context} />
                         <BacklinksBadge {...context} />
-                        <NoteInfoBadge {...context} showSimilarNotes={() => setSimilarNotesShown(true)} />
+                        <NoteInfoBadge {...noteInfoContext} />
                     </div>
                 </>}
             </div>
@@ -202,10 +209,13 @@ export function getLocaleName(locale: Locale | null | undefined) {
 }
 //#endregion
 
-//#region Note info
-export function NoteInfoBadge({ note, showSimilarNotes }: StatusBarContext & {
-    showSimilarNotes: () => void
-}) {
+//#region Note info & Similar
+interface NoteInfoContext extends StatusBarContext {
+    similarNotesShown: boolean;
+    setSimilarNotesShown: (value: boolean) => void;
+}
+
+export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
     const dropdownRef = useRef<BootstrapDropdown>(null);
     const { metadata, ...sizeProps } = useNoteMetadata(note);
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
@@ -231,7 +241,7 @@ export function NoteInfoBadge({ note, showSimilarNotes }: StatusBarContext & {
                 text={t("note_info_widget.show_similar_notes")}
                 onClick={() => {
                     dropdownRef.current?.hide();
-                    showSimilarNotes();
+                    setSimilarNotesShown(true);
                 }}
             />
         </StatusBarDropdown>
@@ -247,11 +257,8 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
     );
 }
 
-function SimilarNotesPane({ note, shown }: StatusBarContext & {
-    shown: boolean;
-    setShown: (value: boolean) => void;
-}) {
-    return (shown &&
+function SimilarNotesPane({ note, similarNotesShown }: NoteInfoContext) {
+    return (similarNotesShown &&
         <div className="similar-notes-pane">
             <SimilarNotesTab note={note} />
         </div>
