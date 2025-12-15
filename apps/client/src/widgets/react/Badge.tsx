@@ -14,7 +14,7 @@ interface SimpleBadgeProps {
 }
 
 interface BadgeProps extends Pick<HTMLAttributes<HTMLDivElement>, "onClick" | "style"> {
-    text?: string;
+    text?: ComponentChildren;
     icon?: string;
     className?: string;
     tooltip?: string;
@@ -51,14 +51,18 @@ export function Badge({ icon, className, text, tooltip, href, ...containerProps 
     );
 }
 
-export function BadgeWithDropdown({ children, tooltip, className, dropdownOptions, ...props }: BadgeProps & {
+export function BadgeWithDropdown({ text, children, tooltip, className, dropdownOptions, ...props }: BadgeProps & {
     children: ComponentChildren,
     dropdownOptions?: Partial<DropdownProps>
 }) {
     return (
         <Dropdown
             className={`dropdown-badge dropdown-${className}`}
-            text={<Badge className={className} {...props} />}
+            text={<Badge
+                text={<>{text} <Icon icon="bx bx-chevron-down" /></>}
+                className={className}
+                {...props}
+            />}
             noDropdownListStyle
             noSelectButtonStyle
             hideToggleArrow
