@@ -173,7 +173,7 @@ function ShowHighlightsListWidgetButton({ note, noteContext, isDefaultViewMode }
 }
 
 function RunActiveNoteButton({ note }: FloatingButtonContext) {
-    const isEnabled = note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium";
+    const isEnabled = !isNewLayout && (note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium");
     return isEnabled && <FloatingButton
         icon="bx bx-play"
         text={t("code_buttons.execute_button_title")}

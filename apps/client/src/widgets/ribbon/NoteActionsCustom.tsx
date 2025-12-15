@@ -49,6 +49,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
 
     return (innerProps &&
         <div className="note-actions-custom">
+            <RunActiveNoteButton {...innerProps } />
             <SwitchSplitOrientationButton {...innerProps} />
             <ToggleReadOnlyButton {...innerProps} />
             <RefreshButton {...innerProps} />
@@ -172,5 +173,14 @@ function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: NoteActions
         text={isReadOnly ? t("toggle_read_only_button.unlock-editing") : t("toggle_read_only_button.lock-editing")}
         icon={isReadOnly ? "bx bx-lock-open-alt" : "bx bx-lock-alt"}
         onClick={() => setReadOnly(!isReadOnly)}
+    />;
+}
+
+function RunActiveNoteButton({ note }: NoteActionsCustomInnerProps) {
+    const isEnabled = note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium";
+    return isEnabled && <ActionButton
+        icon="bx bx-play"
+        text={t("code_buttons.execute_button_title")}
+        triggerCommand="runActiveNote"
     />;
 }
