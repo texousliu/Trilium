@@ -155,7 +155,7 @@ export default class DesktopLayout {
                                                                     .child(<ReadOnlyNoteInfoBar />)
                                                                     .child(<SharedInfo />)
                                                                 )
-                                                                .child(<PromotedAttributes />)
+                                                                .optChild(!isNewLayout, <PromotedAttributes />)
                                                                 .child(<SqlTableSchemas />)
                                                                 .child(<NoteDetail />)
                                                                 .child(<NoteList media="screen" />)
