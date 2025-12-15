@@ -7626,7 +7626,7 @@
                                             "name": "internalLink",
                                             "value": "BCkXAVs63Ttv",
                                             "isInheritable": false,
-                                            "position": 40
+                                            "position": 30
                                         },
                                         {
                                             "type": "label",
@@ -7741,6 +7741,13 @@
                                                     "position": 10
                                                 },
                                                 {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "oPVyFC7WL2Lp",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
                                                     "type": "label",
                                                     "name": "iconClass",
                                                     "value": "bx bx-link",
@@ -7753,13 +7760,6 @@
                                                     "value": "reference-links",
                                                     "isInheritable": false,
                                                     "position": 30
-                                                },
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "oPVyFC7WL2Lp",
-                                                    "isInheritable": false,
-                                                    "position": 40
                                                 }
                                             ],
                                             "format": "markdown",

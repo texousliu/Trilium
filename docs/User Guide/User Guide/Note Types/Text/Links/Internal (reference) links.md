@@ -14,7 +14,7 @@ There are two link types which you can select when creating the link to the note
 
 1.  _Link title mirrors the note's current title_
     1.  This is sometimes also called "reference link".
-    2.  The title of these links cannot be changed. Instead, it will always show the current title of linked note.
+    2.  The title of this link cannot be changed. Instead, it will always show the current title of the linked note.
     3.  The icon of the linked note will also be displayed.
 2.  _Link title can be changed arbitrarily_
     1.  This will create a traditional hyperlink, where the text of the link can be different from the note title.
