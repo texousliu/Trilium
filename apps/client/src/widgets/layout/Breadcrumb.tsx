@@ -1,17 +1,21 @@
 import "./Breadcrumb.css";
 
-import { useMemo, useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
 import appContext from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
+import { getReadableTextColor } from "../../services/css_class_manager";
 import froca from "../../services/froca";
+import hoisted_note from "../../services/hoisted_note";
+import { t } from "../../services/i18n";
 import ActionButton from "../react/ActionButton";
+import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNoteLabel, useNoteProperty } from "../react/hooks";
+import { useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 
@@ -20,7 +24,7 @@ const INITIAL_ITEMS = 2;
 const FINAL_ITEMS = 2;
 
 export default function Breadcrumb({ note, noteContext }: { note: FNote, noteContext: NoteContext }) {
-    const notePath = buildNotePaths(noteContext?.notePathArray);
+    const notePath = buildNotePaths(noteContext);
 
     return (
         <div className="breadcrumb">
@@ -57,41 +61,73 @@ export default function Breadcrumb({ note, noteContext }: { note: FNote, noteCon
 }
 
 function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined }) {
-    const note = useMemo(() => froca.getNoteFromCache("root"), []);
-    useNoteLabel(note, "iconClass");
-    const title = useNoteProperty(note, "title");
+    const noteId = noteContext?.hoistedNoteId ?? "root";
+    if (noteId !== "root") {
+        return <BreadcrumbHoistedNoteRoot noteId={noteId} />;
+    }
 
+    // Root note is icon only.
+    const note = froca.getNoteFromCache("root");
     return (note &&
         <ActionButton
             className="root-note"
             icon={note.getIcon()}
-            text={title ?? ""}
-            onClick={() => noteContext?.setNote("root")}
+            text={""}
+            onClick={() => noteContext?.setNote(note.noteId)}
             onContextMenu={(e) => {
                 e.preventDefault();
                 link_context_menu.openContextMenu(note.noteId, e);
             }}
         />
     );
+
 }
 
-function BreadcrumbLink({ notePath }: { notePath: string }) {
-    return (
-        <NoteLink
-            notePath={notePath}
-        />
+function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
+    const note = useNote(noteId);
+    const noteIcon = useNoteIcon(note);
+    const [ workspace ] = useNoteLabelBoolean(note, "workspace");
+    const [ workspaceIconClass ] = useNoteLabel(note, "workspaceIconClass");
+    const [ workspaceColor ] = useNoteLabel(note, "workspaceTabBackgroundColor");
+
+    // Hoisted workspace shows both text and icon and a way to exit easily out of the hoisting.
+    return (note &&
+        <>
+            <Badge
+                className="badge-hoisted"
+                icon={workspace ? (workspaceIconClass || noteIcon) : "bx bxs-chevrons-up"}
+                text={workspace ? t("breadcrumb.workspace_badge") : t("breadcrumb.hoisted_badge")}
+                tooltip={t("breadcrumb.hoisted_badge_title")}
+                onClick={() => hoisted_note.unhoist()}
+                style={workspaceColor ? {
+                    "--color": workspaceColor,
+                    "color": getReadableTextColor(workspaceColor)
+                } : undefined}
+            />
+            <NoteLink
+                notePath={noteId}
+                showNoteIcon
+                noPreview
+            />
+        </>
     );
 }
 
 function BreadcrumbLastItem({ notePath }: { notePath: string }) {
+    const linkRef = useRef<HTMLAnchorElement>(null);
     const noteId = notePath.split("/").at(-1);
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
     const title = useNoteProperty(note, "title");
+    useStaticTooltip(linkRef, {
+        placement: "top",
+        title: t("breadcrumb.scroll_to_top_title")
+    });
 
     if (!note) return null;
 
     return (
         <a
+            ref={linkRef}
             href="#"
             className="breadcrumb-last-item tn-link"
             onClick={() => {
@@ -114,7 +150,7 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
         </>;
     }
 
-    return <BreadcrumbLink notePath={notePath} />;
+    return <NoteLink notePath={notePath} />;
 }
 
 function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
@@ -187,14 +223,27 @@ function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteCont
     );
 }
 
-function buildNotePaths(notePathArray: string[] | undefined) {
+function buildNotePaths(noteContext: NoteContext) {
+    const notePathArray = noteContext.notePathArray;
     if (!notePathArray) return [];
 
     let prefix = "";
-    const output: string[] = [];
+    let output: string[] = [];
+    let pos = 0;
+    let hoistedNotePos = -1;
     for (const notePath of notePathArray) {
+        if (noteContext.hoistedNoteId !== "root" && notePath === noteContext.hoistedNoteId) {
+            hoistedNotePos = pos;
+        }
         output.push(`${prefix}${notePath}`);
         prefix += `${notePath}/`;
+        pos++;
     }
+
+    // When hoisted, display only the path starting with the hoisted note.
+    if (noteContext.hoistedNoteId !== "root" && hoistedNotePos > -1) {
+        output = output.slice(hoistedNotePos);
+    }
+
     return output;
 }

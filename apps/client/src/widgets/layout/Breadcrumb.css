@@ -8,12 +8,22 @@
     gap: 0.25em;
     flex-wrap: nowrap;
     overflow: hidden;
+    --badge-radius: 6px;
+
+    .badge-hoisted {
+        --color: var(--input-background-color);
+        color: var(--main-text-color);
+    }
 
     > span,
     > span > span {
         display: flex;
         align-items: center;
         min-width: 0;
+
+        .bx {
+            margin-inline: 6px;
+        }
 
         a {
             color: inherit;

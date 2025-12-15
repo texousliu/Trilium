@@ -4,6 +4,8 @@
 type Labels = {
     color: string;
     iconClass: string;
+    workspace: boolean;
+    workspaceTabBackgroundColor: string;
     workspaceIconClass: string;
     executeButton: boolean;
     executeDescription: string;

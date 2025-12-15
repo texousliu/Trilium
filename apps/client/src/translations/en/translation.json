@@ -1759,11 +1759,11 @@
   "note_title": {
     "placeholder": "type note's title here...",
     "created_on": "Created on <Value />",
-    "last_modified": "Last modified on <Value />",
+    "last_modified": "Modified on <Value />",
     "note_type_switcher_label": "Switch from {{type}} to:",
-    "note_type_switcher_others": "More note types",
-    "note_type_switcher_templates": "Templates",
-    "note_type_switcher_collection": "Collections",
+    "note_type_switcher_others": "Other note type",
+    "note_type_switcher_templates": "Template",
+    "note_type_switcher_collection": "Collection",
     "edited_notes": "Edited notes"
   },
   "search_result": {
@@ -2143,6 +2143,12 @@
   "tab_history_navigation_buttons": {
     "go-back": "Go back to previous note",
     "go-forward": "Go forward to next note"
+  },
+  "breadcrumb": {
+    "hoisted_badge": "Hoisted",
+    "hoisted_badge_title": "Unhoist",
+    "workspace_badge": "Workspace",
+    "scroll_to_top_title": "Jump to the beginning of the note"
   },
   "breadcrumb_badges": {
     "read_only_explicit": "Read-only",

@@ -39,6 +39,16 @@
 
     .ext-badge {
         border-radius: 0;
+
+        .text {
+            display: inline-flex;
+            align-items: center;
+
+            .arrow {
+                font-size: 1.3em;
+                margin-left: 0.25em;
+            }
+        }
     }
 
     .btn {
