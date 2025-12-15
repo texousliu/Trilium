@@ -5,6 +5,7 @@ import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
+import { getHelpUrlForNote } from "../../services/in_app_help";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
 import { openInAppHelpFromUrl } from "../../services/utils";
 import { ViewTypeOptions } from "../collections/interface";
@@ -62,6 +63,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
             <SaveToNoteButton {...innerProps} />
             <RefreshButton {...innerProps} />
             <CopyReferenceToClipboardButton {...innerProps} />
+            <InAppHelpButton {...innerProps} />
             <NoteActionsCustomInner {...innerProps} />
         </div>
     );
@@ -221,6 +223,19 @@ function OpenTriliumApiDocsButton({ noteMime }: NoteActionsCustomInnerProps) {
         text={t("code_buttons.trilium_api_docs_button_title")}
         onClick={() => openInAppHelpFromUrl(noteMime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
     />;
+}
+
+function InAppHelpButton({ note, noteType }: NoteActionsCustomInnerProps) {
+    const helpUrl = getHelpUrlForNote(note);
+    const isEnabled = !!helpUrl && (noteType !== "book");
+
+    return isEnabled && (
+        <ActionButton
+            icon="bx bx-help-circle"
+            text={t("help-button.title")}
+            onClick={() => helpUrl && openInAppHelpFromUrl(helpUrl)}
+        />
+    );
 }
 
 function AddChildButton({ parentComponent, noteType, viewType, ntxId, isReadOnly }: NoteActionsCustomInnerProps) {

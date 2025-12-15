@@ -308,7 +308,7 @@ function ExportImageButtons({ note, triggerEvent, isDefaultViewMode }: FloatingB
 
 function InAppHelpButton({ note }: FloatingButtonContext) {
     const helpUrl = getHelpUrlForNote(note);
-    const isEnabled = !!helpUrl && (!isNewLayout || (note?.type !== "book"));
+    const isEnabled = !!helpUrl && !isNewLayout;
 
     return isEnabled && (
         <FloatingButton
