@@ -7624,13 +7624,6 @@
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "oPVyFC7WL2Lp",
-                                            "isInheritable": false,
-                                            "position": 30
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
                                             "value": "BCkXAVs63Ttv",
                                             "isInheritable": false,
                                             "position": 40
@@ -7760,6 +7753,13 @@
                                                     "value": "reference-links",
                                                     "isInheritable": false,
                                                     "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "oPVyFC7WL2Lp",
+                                                    "isInheritable": false,
+                                                    "position": 40
                                                 }
                                             ],
                                             "format": "markdown",
@@ -7772,6 +7772,14 @@
                                                     "mime": "image/png",
                                                     "position": 10,
                                                     "dataFileName": "Internal (reference) links.png"
+                                                },
+                                                {
+                                                    "attachmentId": "VWmqBZtLxTJH",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "1_Internal (reference) links.png"
                                                 }
                                             ]
                                         }
