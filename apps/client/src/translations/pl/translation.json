@@ -439,7 +439,8 @@
     "note_size_info": "Rozmiar notatki zapewnia przybliżone oszacowanie wymagań pamięciowych dla tej notatki. Bierze pod uwagę treść notatki i zawartość jej wersji.",
     "calculate": "oblicz",
     "subtree_size": "(rozmiar poddrzewa: {{size}} w {{count}} notatkach)",
-    "title": "Info o notatce"
+    "title": "Info o notatce",
+    "show_similar_notes": "Pokaż podobne notatki"
   },
   "note_map": {
     "open_full": "Rozwiń do pełnego",
@@ -502,7 +503,8 @@
     "debug_description": "Debugowanie wypisze dodatkowe informacje debugowania w konsoli, aby pomóc w debugowaniu złożonych zapytań",
     "action": "akcja",
     "search_button": "Szukaj",
-    "search_execute": "Szukaj i wykonaj akcje"
+    "search_execute": "Szukaj i wykonaj akcje",
+    "view_options": "Ustawienia widoku:"
   },
   "similar_notes": {
     "title": "Podobne notatki",
@@ -533,7 +535,7 @@
   },
   "file_properties": {
     "download": "Pobierz",
-    "open": "Otwórz",
+    "open": "Otwórz zewnętrznie",
     "upload_new_revision": "Prześlij nową wersję",
     "upload_success": "Nowa wersja pliku została przesłana.",
     "upload_failed": "Przesłanie nowej wersji pliku nie powiodło się.",
@@ -1207,7 +1209,10 @@
     "open_note_on_server": "Otwórz notatkę na serwerze",
     "view_revisions": "Wersje notatki...",
     "note_map": "Mapa notatek",
-    "advanced": "Zaawansowane"
+    "advanced": "Zaawansowane",
+    "export_as_image": "Eksportuj jako obraz",
+    "export_as_image_png": "PNG (grafika rastrowa)",
+    "export_as_image_svg": "SVG (wektorowy)"
   },
   "onclick_button": {
     "no_click_handler": "Widżet przycisku '{{componentId}}' nie ma zdefiniowanej obsługi kliknięcia"
@@ -1961,9 +1966,10 @@
     "created_on": "Utworzono <Value />",
     "last_modified": "Ostatnio zmodyfikowano <Value />",
     "note_type_switcher_label": "Zmień z {{type}} na:",
-    "note_type_switcher_others": "Więcej typów notatek",
-    "note_type_switcher_templates": "Szablony",
-    "note_type_switcher_collection": "Kolekcje"
+    "note_type_switcher_others": "Inny typ notatki",
+    "note_type_switcher_templates": "Szablon",
+    "note_type_switcher_collection": "Kolekcja",
+    "edited_notes": "Edytowane notatki"
   },
   "search_result": {
     "no_notes_found": "Nie znaleziono notatek dla podanych parametrów wyszukiwania.",
@@ -2158,19 +2164,34 @@
     "execute_sql_description": "Ta notatka jest notatką SQL. Kliknij, aby wykonać zapytanie SQL."
   },
   "status_bar": {
-    "language_title": "Zmień język całej zawartości",
-    "note_info_title": "Wyświetl informacje o notatce, takie jak data utworzenia/modyfikacji lub rozmiar.",
-    "backlinks_title_one": "Ta notatka jest połączona z {{count}} inną notatką.\nKliknij, aby zobaczyć listę linków zwrotnych.",
-    "backlinks_title_few": "Ta notatka jest połączona z {{count}} innymi notatkami.\nKliknij, aby zobaczyć listę linków zwrotnych.",
-    "backlinks_title_many": "Ta notatka jest połączona z {{count}} innych notatek.\nKliknij, aby zobaczyć listę linków zwrotnych.",
-    "attachments_title_one": "Ta notatka ma {{count}} załącznik. Kliknij, aby otworzyć listę załączników w nowej karcie.",
-    "attachments_title_few": "Ta notatka ma {{count}} załączniki. Kliknij, aby otworzyć listę załączników w nowej karcie.",
-    "attachments_title_many": "Ta notatka ma {{count}} załączników. Kliknij, aby otworzyć listę załączników w nowej karcie.",
+    "language_title": "Zmień język treści",
+    "note_info_title": "Informacje o notatce (np. daty, rozmiar notatki)",
+    "backlinks_title_one": "Wyświetl link zwrotny",
+    "backlinks_title_few": "Wyświetl linki zwrotne",
+    "backlinks_title_many": "Wyświetl linki zwrotne",
+    "attachments_title_one": "Otwórz załącznik w nowej karcie",
+    "attachments_title_few": "Otwórz załączniki w nowej karcie",
+    "attachments_title_many": "Otwórz załączniki w nowej karcie",
     "attributes_one": "{{count}} atrybut",
     "attributes_few": "{{count}} atrybuty",
     "attributes_many": "{{count}} atrybutów",
-    "attributes_title": "Kliknij, aby otworzyć dedykowany panel edycji atrybutów własnych tej notatki oraz wyświetlić listę atrybutów dziedziczonych.",
-    "note_paths_title": "Kliknij, aby zobaczyć ścieżki, w których ta notatka znajduje się w drzewie.",
-    "code_note_switcher": "Zmień tryb języka"
+    "attributes_title": "Atrybuty własne i atrybuty dziedziczone",
+    "note_paths_title": "Ścieżki notatek",
+    "code_note_switcher": "Zmień tryb języka",
+    "backlinks_one": "{{count}} link zwrotny",
+    "backlinks_few": "{{count}} linki zwrotne",
+    "backlinks_many": "{{count}} linków zwrotnych",
+    "attachments_one": "{{count}} załącznik",
+    "attachments_few": "{{count}} załączniki",
+    "attachments_many": "{{count}} załączników",
+    "note_paths_one": "{{count}} ścieżka",
+    "note_paths_few": "{{count}} ścieżki",
+    "note_paths_many": "{{count}} ścieżek"
+  },
+  "breadcrumb": {
+    "hoisted_badge": "Wyróżniony",
+    "hoisted_badge_title": "Usuń wyróżnienie",
+    "workspace_badge": "Obszar roboczy",
+    "scroll_to_top_title": "Przejdź na początek notatki"
   }
 }
