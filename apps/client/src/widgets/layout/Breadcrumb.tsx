@@ -14,7 +14,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNoteProperty } from "../react/hooks";
+import { useChildNotes, useNote, useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 
@@ -61,31 +61,38 @@ export default function Breadcrumb({ note, noteContext }: { note: FNote, noteCon
 
 function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined }) {
     const noteId = noteContext?.hoistedNoteId ?? "root";
-
-    // Root note is icon only.
-    if (noteId === "root") {
-        const note = froca.getNoteFromCache("root");
-        return (note &&
-            <ActionButton
-                className="root-note"
-                icon={note.getIcon()}
-                text={""}
-                onClick={() => noteContext?.setNote(note.noteId)}
-                onContextMenu={(e) => {
-                    e.preventDefault();
-                    link_context_menu.openContextMenu(note.noteId, e);
-                }}
-            />
-        );
+    if (noteId !== "root") {
+        return <BreadcrumbHoistedNoteRoot noteId={noteId} />;
     }
 
+    // Root note is icon only.
+    const note = froca.getNoteFromCache("root");
+    return (note &&
+        <ActionButton
+            className="root-note"
+            icon={note.getIcon()}
+            text={""}
+            onClick={() => noteContext?.setNote(note.noteId)}
+            onContextMenu={(e) => {
+                e.preventDefault();
+                link_context_menu.openContextMenu(note.noteId, e);
+            }}
+        />
+    );
+
+}
+
+function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
+    const note = useNote(noteId);
+    const [ workspace ] = useNoteLabelBoolean(note, "workspace");
+
     // Hoisted workspace shows both text and icon and a way to exit easily out of the hoisting.
-    return (
+    return (note &&
         <>
             <Badge
                 className="badge-hoisted"
-                icon="bx bxs-chevrons-up"
-                text={t("breadcrumb.hoisted_badge")}
+                icon={workspace ? "bx bx-folder-open" : "bx bxs-chevrons-up"}
+                text={workspace ? t("breadcrumb.workspace_badge") : t("breadcrumb.hoisted_badge")}
                 tooltip={t("breadcrumb.hoisted_badge_title")}
                 onClick={() => hoisted_note.unhoist()}
             />
@@ -97,7 +104,6 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
         </>
     );
 }
-
 
 function BreadcrumbLastItem({ notePath }: { notePath: string }) {
     const noteId = notePath.split("/").at(-1);

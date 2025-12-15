@@ -2146,7 +2146,8 @@
   },
   "breadcrumb": {
     "hoisted_badge": "Hoisted",
-    "hoisted_badge_title": "Unhoist"
+    "hoisted_badge_title": "Unhoist",
+    "workspace_badge": "Workspace"
   },
   "breadcrumb_badges": {
     "read_only_explicit": "Read-only",
