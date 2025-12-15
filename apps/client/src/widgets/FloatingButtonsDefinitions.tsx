@@ -287,7 +287,7 @@ function CopyImageReferenceButton({ note, isDefaultViewMode }: FloatingButtonCon
 }
 
 function ExportImageButtons({ note, triggerEvent, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = ["mermaid", "mindMap"].includes(note?.type ?? "")
+    const isEnabled = !isNewLayout && ["mermaid", "mindMap"].includes(note?.type ?? "")
             && note?.isContentAvailable() && isDefaultViewMode;
     return isEnabled && (
         <>
