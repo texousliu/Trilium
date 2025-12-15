@@ -521,9 +521,7 @@ body.mobile .dropdown .dropdown-submenu > span {
 .cm-editor {
     height: 100%;
     outline: none !important;
-    border-radius: 6px;
     overflow: hidden;
-    margin: 4px;
     font-size: var(--monospace-font-size);
 }
 
@@ -627,6 +625,10 @@ pre:not(.hljs) {
 
     position: relative;
     padding: var(--padding-size);
+}
+
+pre:has(> .cm-editor) {
+    padding: 0;
 }
 
 pre > button.copy-button {
