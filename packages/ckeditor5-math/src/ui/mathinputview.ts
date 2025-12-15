@@ -1,6 +1,7 @@
 // Math input widget: wraps a MathLive <math-field> and a LaTeX textarea
 // and keeps them in sync for the CKEditor 5 math dialog.
 import { View, type Locale, type FocusableView } from 'ckeditor5';
+import 'mathlive/fonts.css'; // Auto-bundles offline fonts
 
 declare global {
 	interface Window {
