@@ -1,6 +1,8 @@
 import { NoteType } from "@triliumnext/commons";
 import { useContext } from "preact/hooks";
 
+import Component from "../../components/component";
+import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
@@ -14,10 +16,13 @@ import { buildUploadNewImageRevisionListener } from "./ImagePropertiesTab";
 interface NoteActionsCustomProps {
     note: FNote;
     ntxId: string;
+    noteContext: NoteContext;
 }
 
 interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
     noteType: NoteType;
+    isDefaultViewMode: boolean;
+    parentComponent: Component;
 }
 
 /**
@@ -26,13 +31,17 @@ interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
  */
 export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     const noteType = useNoteProperty(props.note, "type");
-    const innerProps: NoteActionsCustomInnerProps | undefined = noteType && {
+    const parentComponent = useContext(ParentComponent);
+    const innerProps: NoteActionsCustomInnerProps | null | undefined = noteType && parentComponent && {
         ...props,
-        noteType
+        noteType,
+        isDefaultViewMode: props.noteContext.viewScope?.viewMode === "default",
+        parentComponent
     };
 
     return (innerProps &&
         <div className="note-actions-custom">
+            <RefreshButton {...innerProps} />
             <CopyReferenceToClipboardButton {...innerProps} />
             <NoteActionsCustomInner {...innerProps} />
         </div>
@@ -108,9 +117,7 @@ function DownloadFileButton({ note }: NoteActionsCustomInnerProps) {
     );
 }
 
-function CopyReferenceToClipboardButton({ ntxId, noteType }: NoteActionsCustomInnerProps) {
-    const parentComponent = useContext(ParentComponent);
-
+function CopyReferenceToClipboardButton({ ntxId, noteType, parentComponent }: NoteActionsCustomInnerProps) {
     return (["mermaid", "canvas", "mindMap", "image"].includes(noteType) &&
         <ActionButton
             text={t("image_properties.copy_reference_to_clipboard")}
@@ -120,3 +127,15 @@ function CopyReferenceToClipboardButton({ ntxId, noteType }: NoteActionsCustomIn
     );
 }
 //#endregion
+
+function RefreshButton({ note, noteType, isDefaultViewMode, parentComponent, noteContext }: NoteActionsCustomInnerProps) {
+    const isEnabled = (note.noteId === "_backendLog" || noteType === "render") && isDefaultViewMode;
+
+    return (isEnabled &&
+        <ActionButton
+            text={t("backend_log.refresh")}
+            icon="bx bx-refresh"
+            onClick={() => parentComponent.triggerEvent("refreshData", { ntxId: noteContext.ntxId })}
+        />
+    );
+}

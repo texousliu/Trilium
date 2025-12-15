@@ -32,7 +32,7 @@ export default function NoteActions() {
         <div className="ribbon-button-container" style={{ contain: "none" }}>
             {isNewLayout && (
                 <>
-                    {note && ntxId && <NoteActionsCustom note={note} ntxId={ntxId} />}
+                    {note && ntxId && noteContext && <NoteActionsCustom note={note} ntxId={ntxId} noteContext={noteContext} />}
                     <MovePaneButton direction="left" />
                     <MovePaneButton direction="right" />
                     <ClosePaneButton />

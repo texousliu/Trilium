@@ -81,7 +81,7 @@ export const POPUP_HIDDEN_FLOATING_BUTTONS: FloatingButtonsList = [
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
 function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
+    const isEnabled = !isNewLayout && (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
     return isEnabled && <FloatingButton
         text={t("backend_log.refresh")}
         icon="bx bx-refresh"
