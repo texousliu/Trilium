@@ -2,7 +2,7 @@ import "./Collapsible.css";
 
 import clsx from "clsx";
 import { ComponentChildren, HTMLAttributes } from "preact";
-import { useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 import { useElementSize, useUniqueName } from "./hooks";
 import Icon from "./Icon";
@@ -26,9 +26,20 @@ export function ExternallyControlledCollapsible({ title, children, className, ex
     const innerRef = useRef<HTMLDivElement>(null);
     const { height } = useElementSize(innerRef) ?? {};
     const contentId = useUniqueName();
+    const [ transitionEnabled, setTransitionEnabled ] = useState(false);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setTransitionEnabled(true);
+        }, 200);
+        return () => clearTimeout(timeout);
+    }, []);
 
     return (
-        <div className={clsx("collapsible", className, expanded && "expanded")}>
+        <div className={clsx("collapsible", className, {
+            expanded,
+            "with-transition": transitionEnabled
+        })}>
             <button
                 className="collapsible-title"
                 onClick={() => setExpanded(!expanded)}
