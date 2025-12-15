@@ -8,7 +8,7 @@ import { t } from "../../services/i18n";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
-import { useNoteProperty } from "../react/hooks";
+import { useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
 import { buildUploadNewImageRevisionListener } from "./ImagePropertiesTab";
@@ -21,6 +21,7 @@ interface NoteActionsCustomProps {
 
 interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
     noteType: NoteType;
+    isReadOnly: boolean;
     isDefaultViewMode: boolean;
     parentComponent: Component;
 }
@@ -30,17 +31,21 @@ interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
  * from the rest of the note items and the buttons differ based on the note type.
  */
 export default function NoteActionsCustom(props: NoteActionsCustomProps) {
-    const noteType = useNoteProperty(props.note, "type");
+    const { note } = props;
+    const noteType = useNoteProperty(note, "type");
     const parentComponent = useContext(ParentComponent);
+    const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const innerProps: NoteActionsCustomInnerProps | null | undefined = noteType && parentComponent && {
         ...props,
         noteType,
         isDefaultViewMode: props.noteContext.viewScope?.viewMode === "default",
-        parentComponent
+        parentComponent,
+        isReadOnly
     };
 
     return (innerProps &&
         <div className="note-actions-custom">
+            <SwitchSplitOrientationButton {...innerProps} />
             <RefreshButton {...innerProps} />
             <CopyReferenceToClipboardButton {...innerProps} />
             <NoteActionsCustomInner {...innerProps} />
@@ -138,4 +143,16 @@ function RefreshButton({ note, noteType, isDefaultViewMode, parentComponent, not
             onClick={() => parentComponent.triggerEvent("refreshData", { ntxId: noteContext.ntxId })}
         />
     );
+}
+
+function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: NoteActionsCustomInnerProps) {
+    const isEnabled = note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
+    const [ splitEditorOrientation, setSplitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
+    const upcomingOrientation = splitEditorOrientation === "horizontal" ? "vertical" : "horizontal";
+
+    return isEnabled && <ActionButton
+        text={upcomingOrientation === "vertical" ? t("switch_layout_button.title_vertical") : t("switch_layout_button.title_horizontal")}
+        icon={upcomingOrientation === "vertical" ? "bx bxs-dock-bottom" : "bx bxs-dock-left"}
+        onClick={() => setSplitEditorOrientation(upcomingOrientation)}
+    />;
 }

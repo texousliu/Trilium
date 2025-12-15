@@ -90,7 +90,7 @@ function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefault
 }
 
 function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
+    const isEnabled = !isNewLayout && note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
     const [ splitEditorOrientation, setSplitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
     const upcomingOrientation = splitEditorOrientation === "horizontal" ? "vertical" : "horizontal";
 
