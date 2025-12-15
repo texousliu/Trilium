@@ -1,15 +1,13 @@
-import "./FormList.css";
-
 import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
-import clsx from "clsx";
 import { ComponentChildren } from "preact";
-import { type CSSProperties,useEffect, useMemo, useRef, useState } from "preact/compat";
-
-import { CommandNames } from "../../components/app_context";
-import { handleRightToLeftPlacement, isMobile, openInAppHelpFromUrl } from "../../services/utils";
-import FormToggle from "./FormToggle";
-import { useStaticTooltip } from "./hooks";
 import Icon from "./Icon";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "preact/compat";
+import "./FormList.css";
+import { CommandNames } from "../../components/app_context";
+import { useStaticTooltip } from "./hooks";
+import { handleRightToLeftPlacement, isMobile, openInAppHelpFromUrl } from "../../services/utils";
+import clsx from "clsx";
+import FormToggle from "./FormToggle";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -35,7 +33,7 @@ export default function FormList({ children, onSelect, style, fullHeight, wrappe
         return () => {
             $wrapperRef.off("hide.bs.dropdown");
             dropdown.dispose();
-        };
+        }
     }, [ triggerRef, wrapperRef ]);
 
     const builtinStyles = useMemo(() => {
@@ -53,7 +51,8 @@ export default function FormList({ children, onSelect, style, fullHeight, wrappe
                 <button
                     ref={triggerRef}
                     type="button" style="display: none;"
-                    data-bs-toggle="dropdown" data-bs-display="static" />
+                    data-bs-toggle="dropdown" data-bs-display="static">
+                </button>
 
                 <div class="dropdown-menu static show" style={{
                     ...style ?? {},
@@ -200,7 +199,7 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
         <li>
             <h6 className="dropdown-header">{text}</h6>
         </li>
-    );
+    )
 }
 
 export function FormDropdownDivider() {
@@ -217,22 +216,21 @@ export function FormDropdownSubmenu({ icon, title, children, dropStart, onDropdo
     const [ openOnMobile, setOpenOnMobile ] = useState(false);
 
     return (
-        <li
-            className={clsx("dropdown-item dropdown-submenu", { "submenu-open": openOnMobile, "dropstart": dropStart })}
-            onClick={(e) => {
-                e.stopPropagation();
-
-                if (!isMobile() && onDropdownToggleClicked) {
-                    onDropdownToggleClicked();
-                }
-            }}
-        >
-            <span className="dropdown-toggle" onClick={(e) => {
-                if (isMobile()) {
+        <li className={clsx("dropdown-item dropdown-submenu", { "submenu-open": openOnMobile, "dropstart": dropStart })}>
+            <span
+                className="dropdown-toggle"
+                onClick={(e) => {
                     e.stopPropagation();
-                    setOpenOnMobile(!openOnMobile);
-                }
-            }}>
+
+                    if (isMobile()) {
+                        setOpenOnMobile(!openOnMobile);
+                    }
+
+                    if (onDropdownToggleClicked) {
+                        onDropdownToggleClicked();
+                    }
+                }}
+            >
                 <Icon icon={icon} />{" "}
                 {title}
             </span>
