@@ -6,9 +6,10 @@ import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
+import { ViewTypeOptions } from "../collections/interface";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
-import { useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
 import { buildUploadNewImageRevisionListener } from "./ImagePropertiesTab";
@@ -24,6 +25,7 @@ interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
     isReadOnly: boolean;
     isDefaultViewMode: boolean;
     parentComponent: Component;
+    viewType: ViewTypeOptions | null | undefined;
 }
 
 /**
@@ -33,11 +35,13 @@ interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
 export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     const { note } = props;
     const noteType = useNoteProperty(note, "type");
+    const [ viewType ] = useNoteLabel(note, "viewType");
     const parentComponent = useContext(ParentComponent);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const innerProps: NoteActionsCustomInnerProps | null | undefined = noteType && parentComponent && {
         ...props,
         noteType,
+        viewType: viewType as ViewTypeOptions | null | undefined,
         isDefaultViewMode: props.noteContext.viewScope?.viewMode === "default",
         parentComponent,
         isReadOnly
@@ -46,6 +50,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     return (innerProps &&
         <div className="note-actions-custom">
             <SwitchSplitOrientationButton {...innerProps} />
+            <ToggleReadOnlyButton {...innerProps} />
             <RefreshButton {...innerProps} />
             <CopyReferenceToClipboardButton {...innerProps} />
             <NoteActionsCustomInner {...innerProps} />
@@ -154,5 +159,17 @@ function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: N
         text={upcomingOrientation === "vertical" ? t("switch_layout_button.title_vertical") : t("switch_layout_button.title_horizontal")}
         icon={upcomingOrientation === "vertical" ? "bx bxs-dock-bottom" : "bx bxs-dock-left"}
         onClick={() => setSplitEditorOrientation(upcomingOrientation)}
+    />;
+}
+
+function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: NoteActionsCustomInnerProps) {
+    const [ isReadOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
+    const isEnabled = ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
+            && note.isContentAvailable() && isDefaultViewMode;
+
+    return isEnabled && <ActionButton
+        text={isReadOnly ? t("toggle_read_only_button.unlock-editing") : t("toggle_read_only_button.lock-editing")}
+        icon={isReadOnly ? "bx bx-lock-open-alt" : "bx bx-lock-alt"}
+        onClick={() => setReadOnly(!isReadOnly)}
     />;
 }
