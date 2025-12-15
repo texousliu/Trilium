@@ -20,7 +20,7 @@ const INITIAL_ITEMS = 2;
 const FINAL_ITEMS = 2;
 
 export default function Breadcrumb({ note, noteContext }: { note: FNote, noteContext: NoteContext }) {
-    const notePath = buildNotePaths(noteContext?.notePathArray);
+    const notePath = buildNotePaths(noteContext);
 
     return (
         <div className="breadcrumb">
@@ -187,14 +187,27 @@ function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteCont
     );
 }
 
-function buildNotePaths(notePathArray: string[] | undefined) {
+function buildNotePaths(noteContext: NoteContext) {
+    const notePathArray = noteContext.notePathArray;
     if (!notePathArray) return [];
 
     let prefix = "";
-    const output: string[] = [];
+    let output: string[] = [];
+    let pos = 0;
+    let hoistedNotePos = -1;
     for (const notePath of notePathArray) {
+        if (noteContext.hoistedNoteId !== "root" && notePath === noteContext.hoistedNoteId) {
+            hoistedNotePos = pos;
+        }
         output.push(`${prefix}${notePath}`);
         prefix += `${notePath}/`;
+        pos++;
     }
+
+    // When hoisted, display only the path starting with the hoisted note.
+    if (noteContext.hoistedNoteId !== "root") {
+        output = output.slice(hoistedNotePos);
+    }
+
     return output;
 }
