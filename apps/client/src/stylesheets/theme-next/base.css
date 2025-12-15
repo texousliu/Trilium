@@ -172,7 +172,7 @@ body.desktop .dropdown-submenu .dropdown-menu {
 }
 
 .dropdown-item:not(.dropdown-submenu),
-.dropdown-item.dropdown-submenu .dropdown-toggle,
+body.desktop .dropdown-item.dropdown-submenu .dropdown-toggle,
 .excalidraw .context-menu .context-menu-item {
     padding-top: var(--menu-item-vertical-padding) !important;
     padding-bottom: var(--menu-item-vertical-padding) !important;
