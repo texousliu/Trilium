@@ -70,20 +70,10 @@ export default class MainFormView extends View {
 					tag: 'div',
 					attributes: {
 						class: [
-							'ck-math-scroll'
+							'ck-math-view'
 						]
 					},
-					children: [
-						{
-							tag: 'div',
-							attributes: {
-								class: [
-									'ck-math-view'
-								]
-							},
-							children
-						}
-					]
+					children
 				},
 				{
 					tag: 'div',
