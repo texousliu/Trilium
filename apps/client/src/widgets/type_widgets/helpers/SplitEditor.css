@@ -43,7 +43,7 @@
 
 /* Horizontal layout */
 
-.note-detail-split.split-horizontal > .note-detail-split-preview-col {
+.note-detail-split.split-horizontal:not(.split-read-only) > .note-detail-split-preview-col {
     border-inline-start: 1px solid var(--main-border-color);
 }
 
