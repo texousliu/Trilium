@@ -54,6 +54,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
 
     return (innerProps &&
         <div className="note-actions-custom">
+            <AddChildButton {...innerProps} />
             <RunActiveNoteButton {...innerProps } />
             <OpenTriliumApiDocsButton {...innerProps} />
             <SwitchSplitOrientationButton {...innerProps} />
@@ -219,6 +220,15 @@ function OpenTriliumApiDocsButton({ noteMime }: NoteActionsCustomInnerProps) {
         icon="bx bx-help-circle"
         text={t("code_buttons.trilium_api_docs_button_title")}
         onClick={() => openInAppHelpFromUrl(noteMime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
+    />;
+}
+
+function AddChildButton({ parentComponent, noteType, ntxId }: NoteActionsCustomInnerProps) {
+    const isEnabled = noteType === "relationMap";
+    return isEnabled && <ActionButton
+        icon="bx bx-folder-plus"
+        text={t("relation_map_buttons.create_child_note_title")}
+        onClick={() => parentComponent.triggerEvent("relationMapCreateChildNote", { ntxId })}
     />;
 }
 //#endregion
