@@ -13,10 +13,17 @@ interface CollapsibleProps extends Pick<HTMLAttributes<HTMLDivElement>, "classNa
     initiallyExpanded?: boolean;
 }
 
-export default function Collapsible({ title, children, className, initiallyExpanded }: CollapsibleProps) {
+export default function Collapsible({ initiallyExpanded, ...restProps }: CollapsibleProps) {
+    const [ expanded, setExpanded ] = useState(initiallyExpanded);
+    return <ExternallyControlledCollapsible {...restProps} expanded={expanded} setExpanded={setExpanded} />;
+}
+
+export function ExternallyControlledCollapsible({ title, children, className, expanded, setExpanded }: Omit<CollapsibleProps, "initiallyExpanded"> & {
+    expanded: boolean | undefined;
+    setExpanded: (expanded: boolean) => void
+}) {
     const bodyRef = useRef<HTMLDivElement>(null);
     const innerRef = useRef<HTMLDivElement>(null);
-    const [ expanded, setExpanded ] = useState(initiallyExpanded);
     const { height } = useElementSize(innerRef) ?? {};
     const contentId = useUniqueName();
 
@@ -48,5 +55,4 @@ export default function Collapsible({ title, children, className, initiallyExpan
             </div>
         </div>
     );
-
 }

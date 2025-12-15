@@ -1,16 +1,18 @@
-import { useNoteContext, useTriliumEvent } from "./react/hooks"
-import FNote from "../entities/fnote";
-import protected_session_holder from "../services/protected_session_holder";
-import { useEffect, useRef, useState } from "preact/hooks";
-import NoteContext from "../components/note_context";
-import { isValidElement, VNode } from "preact";
-import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
+
+import { isValidElement, VNode } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
+
+import NoteContext from "../components/note_context";
+import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
-import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
-import { dynamicRequire, isElectron, isMobile } from "../services/utils";
-import toast from "../services/toast.js";
 import { t } from "../services/i18n";
+import protected_session_holder from "../services/protected_session_holder";
+import toast from "../services/toast.js";
+import { dynamicRequire, isElectron, isMobile } from "../services/utils";
+import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
+import { useNoteContext, useTriliumEvent } from "./react/hooks";
+import { TypeWidgetProps } from "./type_widgets/type_widget";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -80,7 +82,7 @@ export default function NoteDetail() {
             parentComponent.handleEvent("noteTypeMimeChanged", { noteId: note.noteId });
         } else if (note.noteId
             && loadResults.isNoteReloaded(note.noteId, parentComponent.componentId)
-            && (type !== (await getWidgetType(note, noteContext)) || mime !== note?.mime)) {
+            && (type !== (await getExtendedWidgetType(note, noteContext)) || mime !== note?.mime)) {
             // this needs to have a triggerEvent so that e.g., note type (not in the component subtree) is updated
             parentComponent.triggerEvent("noteTypeMimeChanged", { noteId: note.noteId });
         } else {
@@ -212,7 +214,7 @@ export default function NoteDetail() {
                     isVisible={type === itemType}
                     isFullHeight={isFullHeight}
                     props={props}
-                />
+                />;
             })}
         </div>
     );
@@ -254,7 +256,7 @@ function useNoteInfo() {
     const [ mime, setMime ] = useState<string>();
 
     function refresh() {
-        getWidgetType(actualNote, noteContext).then(type => {
+        getExtendedWidgetType(actualNote, noteContext).then(type => {
             setNote(actualNote);
             setType(type);
             setMime(actualNote?.mime);
@@ -282,12 +284,12 @@ async function getCorrespondingWidget(type: ExtendedNoteType): Promise<null | Ty
     } else if (isValidElement(result)) {
         // Direct VNode provided.
         return result;
-    } else {
-        return result;
     }
+    return result;
+
 }
 
-async function getWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType | undefined> {
+export async function getExtendedWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType | undefined> {
     if (!noteContext) return undefined;
     if (!note) {
         // If the note is null, then it's a new tab. If it's undefined, then it's not loaded yet.
@@ -324,7 +326,7 @@ async function getWidgetType(note: FNote | null | undefined, noteContext: NoteCo
     return resultingType;
 }
 
-function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNoteType | undefined) {
+export function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNoteType | undefined) {
     if (!noteContext) return false;
 
     // https://github.com/zadam/trilium/issues/2522

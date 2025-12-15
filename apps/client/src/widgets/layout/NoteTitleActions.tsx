@@ -1,22 +1,25 @@
 import "./NoteTitleActions.css";
 
 import clsx from "clsx";
+import { useEffect, useState } from "preact/hooks";
 
+import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import CollectionProperties from "../note_bars/CollectionProperties";
+import { checkFullHeight, getExtendedWidgetType } from "../NoteDetail";
 import { PromotedAttributesContent, usePromotedAttributeData } from "../PromotedAttributes";
-import Collapsible from "../react/Collapsible";
+import Collapsible, { ExternallyControlledCollapsible } from "../react/Collapsible";
 import { useNoteContext, useNoteProperty } from "../react/hooks";
 import SearchDefinitionTab from "../ribbon/SearchDefinitionTab";
 
 export default function NoteTitleActions() {
-    const { note, ntxId, componentId } = useNoteContext();
+    const { note, ntxId, componentId, noteContext } = useNoteContext();
     const isHiddenNote = note && note.noteId !== "_search" && note.noteId.startsWith("_");
     const noteType = useNoteProperty(note, "type");
 
     const items = [
-        note && <PromotedAttributes note={note} componentId={componentId} />,
+        note && <PromotedAttributes note={note} componentId={componentId} noteContext={noteContext} />,
         note && noteType === "search" && <SearchProperties note={note} ntxId={ntxId} />,
         note && !isHiddenNote && noteType === "book" && <CollectionProperties note={note} />
     ].filter(Boolean);
@@ -39,15 +42,29 @@ function SearchProperties({ note, ntxId }: { note: FNote, ntxId: string | null |
     );
 }
 
-function PromotedAttributes({ note, componentId }: { note: FNote | null | undefined, componentId: string }) {
+function PromotedAttributes({ note, componentId, noteContext }: {
+    note: FNote | null | undefined,
+    componentId: string,
+    noteContext: NoteContext | undefined
+}) {
     const [ cells, setCells ] = usePromotedAttributeData(note, componentId);
-    if (!cells?.length) return false;
+    const [ expanded, setExpanded ] = useState(false);
 
+    useEffect(() => {
+        getExtendedWidgetType(note, noteContext).then(extendedNoteType => {
+            const fullHeight = checkFullHeight(noteContext, extendedNoteType);
+            setExpanded(!fullHeight);
+        });
+    }, [ note, noteContext ]);
+
+    if (!cells?.length) return false;
     return (note && (
-        <Collapsible
+        <ExternallyControlledCollapsible
+            key={note.noteId}
             title={t("promoted_attributes.promoted_attributes")}
+            expanded={expanded} setExpanded={setExpanded}
         >
             <PromotedAttributesContent note={note} componentId={componentId} cells={cells} setCells={setCells} />
-        </Collapsible>
+        </ExternallyControlledCollapsible>
     ));
 }
