@@ -629,6 +629,7 @@ pre:not(.hljs) {
 
 pre:has(> .cm-editor) {
     padding: 0;
+    margin: 0;
 }
 
 pre > button.copy-button {
