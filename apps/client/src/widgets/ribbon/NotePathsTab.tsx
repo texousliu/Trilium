@@ -3,11 +3,13 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import FNote, { NotePathRecord } from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { NOTE_PATH_TITLE_SEPARATOR } from "../../services/tree";
-import Button from "../react/Button";
 import { useTriliumEvent } from "../react/hooks";
 import NoteLink from "../react/NoteLink";
 import { joinElements } from "../react/react_utils";
 import { TabContext } from "./ribbon-interface";
+import LinkButton from "../react/LinkButton";
+import clsx from "clsx";
+
 
 export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabContext) {
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
@@ -35,9 +37,9 @@ export function NotePathsWidget({ sortedNotePaths, currentNotePath }: {
                     )) : undefined}
                 </ul>
 
-                <Button
-                    triggerCommand="cloneNoteIdsTo"
+                <LinkButton
                     text={t("note_paths.clone_button")}
+                    triggerCommand="cloneNoteIdsTo"
                 />
             </>
         </div>
@@ -108,12 +110,15 @@ function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: strin
 
     return (
         <li class={classes}>
-            {joinElements(fullNotePaths.map(notePath => (
-                <NoteLink key={notePath} notePath={notePath} noPreview />
+            {joinElements(fullNotePaths.map((notePath, index, arr) => (
+                <NoteLink key={notePath}
+                          className={clsx({"basename": (index === arr.length - 1)})}
+                          notePath={notePath}
+                          noPreview />
             )), NOTE_PATH_TITLE_SEPARATOR)}
 
             {icons.map(({ icon, title }) => (
-                <span key={title} class={icon} title={title} />
+                <i key={title} class={icon} title={title} />
             ))}
         </li>
     );

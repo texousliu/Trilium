@@ -139,6 +139,8 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
     return (
         <ul className="breadcrumb-child-list">
             {childNotes.map((note) => {
+                if (note.noteId === "_hidden") return;
+
                 const childNotePath = `${notePath}/${note.noteId}`;
                 return <li key={note.noteId}>
                     <FormListItem

@@ -795,7 +795,7 @@
     "file_type": "File type",
     "file_size": "File size",
     "download": "Download",
-    "open": "Open",
+    "open": "Open externally",
     "upload_new_revision": "Upload new revision",
     "upload_success": "New file revision has been uploaded.",
     "upload_failed": "Upload of a new file revision failed.",
@@ -826,7 +826,8 @@
     "note_size_info": "Note size provides rough estimate of storage requirements for this note. It takes into account note's content and content of its note revisions.",
     "calculate": "calculate",
     "subtree_size": "(subtree size: {{size}} in {{count}} notes)",
-    "title": "Note Info"
+    "title": "Note Info",
+    "show_similar_notes": "Show similar notes"
   },
   "note_map": {
     "open_full": "Expand to full",
@@ -889,7 +890,8 @@
     "search_parameters": "Search Parameters",
     "unknown_search_option": "Unknown search option {{searchOptionName}}",
     "search_note_saved": "Search note has been saved into {{- notePathTitle}}",
-    "actions_executed": "Actions have been executed."
+    "actions_executed": "Actions have been executed.",
+    "view_options": "View options:"
   },
   "similar_notes": {
     "title": "Similar Notes",
@@ -1758,7 +1760,8 @@
     "note_type_switcher_label": "Switch from {{type}} to:",
     "note_type_switcher_others": "More note types",
     "note_type_switcher_templates": "Templates",
-    "note_type_switcher_collection": "Collections"
+    "note_type_switcher_collection": "Collections",
+    "edited_notes": "Edited notes"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",
@@ -2157,16 +2160,22 @@
     "execute_sql_description": "This note is a SQL note. Click to execute the SQL query."
   },
   "status_bar": {
-    "language_title": "Change the language of the entire content",
-    "note_info_title": "View information about this note such as the creation/modification date or the note size.",
-    "backlinks_title_one": "This note is linked from {{count}} other note.\n\nClick to view the list of backlinks.",
-    "backlinks_title_other": "This note is linked from {{count}} other notes.\n\nClick to view the list of backlinks.",
-    "attachments_title_one": "This note has {{count}} attachment. Click to open the list of attachments in a new tab.",
-    "attachments_title_other": "This note has {{count}} attachments. Click to open the list of attachments in a new tab.",
+    "language_title": "Change content language",
+    "note_info_title": "View note info (e.g., dates, note size)",
+    "backlinks_one": "{{count}} backlink",
+    "backlinks_other": "{{count}} backlinks",
+    "backlinks_title_one": "View backlink",
+    "backlinks_title_other": "View backlinks",
+    "attachments_one": "{{count}} attachment",
+    "attachments_other": "{{count}} attachments",
+    "attachments_title_one": "View attachment in a new tab",
+    "attachments_title_other": "View attachments in a new tab",
     "attributes_one": "{{count}} attribute",
     "attributes_other": "{{count}} attributes",
-    "attributes_title": "Click to open a dedicated pane to edit this note's owned attributes, as well as to see the list of inherited attributes.",
-    "note_paths_title": "Click to see the paths where this note is placed into the tree.",
+    "attributes_title": "Owned attributes and inherited attributes",
+    "note_paths_one": "{{count}} path",
+    "note_paths_other": "{{count}} paths",
+    "note_paths_title": "Note paths",
     "code_note_switcher": "Change language mode"
   }
 }

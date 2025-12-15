@@ -4,25 +4,8 @@ body.experimental-feature-new-layout {
     }
 
     .title-actions {
-        padding: 0;
-        display: flex;
-        gap: 0.25em;
-        align-items: center;
-        width: 100%;
-        max-width: unset;
-        padding-inline-start: 15px;
-        padding-bottom: 0.2em;
-        font-size: 0.8em;
-
-        .dropdown-menu {
-            input.form-control {
-                padding: 2px 8px;
-                margin-left: 1em;
-            }
-        }
-
-        .spacer {
-            flex-grow: 1;
+        &.visible {
+            padding: 0.75em 15px;
         }
     }
 }

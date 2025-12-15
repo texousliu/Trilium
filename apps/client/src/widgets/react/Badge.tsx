@@ -10,7 +10,7 @@ import Icon from "./Icon";
 
 interface SimpleBadgeProps {
     className?: string;
-    title: string;
+    title: ComponentChildren;
 }
 
 interface BadgeProps {

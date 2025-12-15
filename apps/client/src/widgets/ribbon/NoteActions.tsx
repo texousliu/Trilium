@@ -1,31 +1,44 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
-import { useContext, useState } from "preact/hooks";
+import { useContext } from "preact/hooks";
 
 import appContext, { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import branches from "../../services/branches";
 import dialog from "../../services/dialog";
+import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { t } from "../../services/i18n";
+import protected_session from "../../services/protected_session";
 import server from "../../services/server";
 import toast from "../../services/toast";
 import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/utils";
 import ws from "../../services/ws";
+import ClosePaneButton from "../buttons/close_pane_button";
+import CreatePaneButton from "../buttons/create_pane_button";
+import MovePaneButton from "../buttons/move_pane_button";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListHeader, FormListItem, FormListToggleableItem } from "../react/FormList";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
-import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { NoteTypeDropdownContent, useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
-import protected_session from "../../services/protected_session";
+import NoteActionsCustom from "./NoteActionsCustom";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
 export default function NoteActions() {
-    const { note, noteContext } = useNoteContext();
+    const { note, ntxId, noteContext } = useNoteContext();
     return (
         <div className="ribbon-button-container" style={{ contain: "none" }}>
+            {isNewLayout && (
+                <>
+                    {note && ntxId && <NoteActionsCustom note={note} ntxId={ntxId} />}
+                    <MovePaneButton direction="left" />
+                    <MovePaneButton direction="right" />
+                    <ClosePaneButton />
+                    <CreatePaneButton />
+                </>
+            )}
             {note && !isNewLayout && <RevisionsButton note={note} />}
             {note && note.type !== "launcher" && <NoteContextMenu note={note as FNote} noteContext={noteContext} />}
         </div>
@@ -79,14 +92,14 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             <CommandItem command="findInText" icon="bx bx-search" disabled={!isSearchable} text={t("note_actions.search_in_note")} />
             <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptionsOrHelp} text={t("note_actions.note_attachments")} />
             {isNewLayout && <CommandItem command="toggleRibbonTabNoteMap" icon="bx bxs-network-chart" disabled={isInOptionsOrHelp} text={t("note_actions.note_map")} />}
-            
+
             <FormDropdownDivider />
 
             {isNewLayout && isNormalViewMode && !isHelpPage && <>
                 <NoteBasicProperties note={note} />
                 <FormDropdownDivider />
             </>}
-            
+
             <CommandItem icon="bx bx-import" text={t("note_actions.import_files")}
                 disabled={isInOptionsOrHelp || note.type === "search"}
                 command={() => parentComponent?.triggerCommand("showImportDialog", { noteId: note.noteId })} />
@@ -98,7 +111,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
                 })} />
             {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
             <CommandItem command="printActiveNote" icon="bx bx-printer" disabled={!isPrintable} text={t("note_actions.print_note")} />
-            
+
             <FormDropdownDivider />
 
             <CommandItem command="showRevisions" icon="bx bx-history" text={t("note_actions.view_revisions")} />
@@ -107,7 +120,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             <FormDropdownDivider />
 
             {canBeConvertedToAttachment && <ConvertToAttachment note={note} />}
-            {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} 
+            {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")}
             />}
 
             <FormDropdownSubmenu icon="bx bx-wrench" title={t("note_actions.advanced")} dropStart>
@@ -122,7 +135,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             </FormDropdownSubmenu>
 
             <FormDropdownDivider />
-            
+
             <CommandItem icon="bx bx-trash destructive-action-icon" text={t("note_actions.delete_note")} destructive
                 disabled={isInOptionsOrHelp}
                 command={() => branches.deleteNotes([note.getParentBranches()[0].branchId])}
@@ -168,7 +181,7 @@ function NoteBasicProperties({ note }: { note: FNote }) {
             currentValue={isTemplate} onChange={setIsTemplate}
             helpPage="KC1HB96bqqHX"
             disabled={note?.noteId.startsWith("_options")}
-            />
+        />
     </>;
 }
 

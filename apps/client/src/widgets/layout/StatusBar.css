@@ -57,10 +57,16 @@
         }
 
         .dropdown-note-info {
+            padding: 1em !important;
+
             ul {
+                --row-block-margin: .2em;
+
                 list-style-type: none;
-                padding: 0.5em;
+                padding: 0;
                 margin: 0;
+                margin-top: calc(0px - var(--row-block-margin));
+                margin-bottom: 12px;
                 display: table;
 
                 li {
@@ -68,7 +74,8 @@
 
                     > strong {
                         display: table-cell;
-                        padding: 0.2em 0;
+                        padding: var(--row-block-margin) 0;
+                        opacity: .5;
                     }
 
                     > span {
@@ -85,9 +92,62 @@
                 padding: 0.5em;
             }
 
+            .note-path-intro {
+                color: var(--muted-text-color);
+            }
+
             .note-path-list {
-                margin: 1em;
+                margin: 12px 0;
                 padding: 0;
+                list-style: none;
+
+                li {
+                    --border-radius: 6px;
+                    
+                    position: relative;
+                    background: var(--card-background-color);
+                    padding: 8px 20px 8px 25px;
+
+                    &:first-child {
+                        border-radius: var(--border-radius) var(--border-radius) 0 0;
+                    }
+
+                    &:last-child {
+                        border-radius: 0 0 var(--border-radius) var(--border-radius);
+                    }
+
+                    & + li {
+                        margin-top: 2px;
+                    }
+
+                    &.path-current::before {
+                        position: absolute;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        content: "\ee8f";
+                        top: 0;
+                        left: 0;
+                        width: 20px;
+                        bottom: 0;
+                        font-family: "boxicons";
+                        font-size: .85em;
+                        color: var(--menu-item-icon-color);
+                    }
+                }
+
+                a {
+                    margin-inline: 2px;
+                    padding-inline: 2px;
+                    color: currentColor;
+                    font-weight: normal;
+                    text-decoration: none;
+
+                    &.basename {
+                        color: var(--muted-text-color);
+                    }
+                }
+
             }
         }
 

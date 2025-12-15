@@ -176,7 +176,7 @@ body.desktop .dropdown-submenu .dropdown-menu {
     cursor: default !important;
 }
 
-.dropdown-menu:has(> .dropdown-submenu.dropstart) > .dropdown-item {
+body.desktop .dropdown-menu:has(> .dropdown-submenu.dropstart) > .dropdown-item {
     padding-inline-end: var(--menu-item-start-padding) !important;
     padding-inline-start: var(--menu-item-end-padding) !important;
 }
@@ -254,7 +254,8 @@ html body .dropdown-item[disabled] {
 }
 
 /* Menu item arrow */
-.dropdown-submenu:not(.dropstart) .dropdown-toggle::after {
+body.mobile .dropdown-submenu .dropdown-toggle::after,
+body.desktop .dropdown-submenu:not(.dropstart) .dropdown-toggle::after {
     content: "\ed3b" !important;
     position: absolute;
     display: flex !important;
@@ -270,7 +271,11 @@ html body .dropdown-item[disabled] {
     color: var(--menu-item-arrow-color) !important;
 }
 
-.dropdown-submenu.dropstart .dropdown-toggle::before {
+body.mobile .dropdown-submenu.dropstart .dropdown-toggle::before {
+    content: unset;
+}
+
+body.desktop .dropdown-submenu.dropstart .dropdown-toggle::before {
     content: "\ea4d" !important;
     position: absolute;
     display: flex !important;

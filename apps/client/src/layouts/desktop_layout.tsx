@@ -79,19 +79,6 @@ export default class DesktopLayout {
         const customTitleBarButtons = !hasNativeTitleBar && !isMac && !isWindows;
         const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
-        const titleRow = new FlexContainer("row")
-            .class("title-row")
-            .cssBlock(".title-row > * { margin: 5px; }")
-            .child(<NoteIconWidget />)
-            .child(<NoteTitleWidget />)
-            .optChild(isNewLayout, <NoteBadges />)
-            .optChild(!isNewLayout, <SpacerWidget baseSize={0} growthFactor={1} />)
-            .child(<MovePaneButton direction="left" />)
-            .child(<MovePaneButton direction="right" />)
-            .child(<ClosePaneButton />)
-            .child(<CreatePaneButton />)
-            .optChild(isNewLayout, <NoteActions />);
-
         const rootContainer = new RootContainer(true)
             .setParent(appContext)
             .class(`${launcherPaneIsHorizontal ? "horizontal" : "vertical"  }-layout`)
@@ -144,9 +131,19 @@ export default class DesktopLayout {
                                             .child(
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
-                                                        .child(titleRow)
-                                                        .optChild(!isNewLayout, <Ribbon><NoteActions /></Ribbon>)
-                                                        .optChild(isNewLayout, <Ribbon />)
+                                                        .child(new FlexContainer("row")
+                                                            .class("title-row")
+                                                            .cssBlock(".title-row > * { margin: 5px; }")
+                                                            .child(<NoteIconWidget />)
+                                                            .child(<NoteTitleWidget />)
+                                                            .optChild(isNewLayout, <NoteBadges />)
+                                                            .child(<SpacerWidget baseSize={0} growthFactor={1} />)
+                                                            .optChild(!isNewLayout, <MovePaneButton direction="left" />)
+                                                            .optChild(!isNewLayout, <MovePaneButton direction="right" />)
+                                                            .optChild(!isNewLayout, <ClosePaneButton />)
+                                                            .optChild(!isNewLayout, <CreatePaneButton />)
+                                                            .optChild(isNewLayout, <NoteActions />))
+                                                        .optChild(!isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(

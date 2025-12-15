@@ -1,6 +1,7 @@
 import "./StatusBar.css";
 
 import { Locale } from "@triliumnext/commons";
+import { Dropdown as BootstrapDropdown } from "bootstrap";
 import clsx from "clsx";
 import { type ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
@@ -18,14 +19,16 @@ import { formatDateTime } from "../../utils/formatters";
 import { BacklinksList, useBacklinkCount } from "../FloatingButtonsDefinitions";
 import Dropdown, { DropdownProps } from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useLegacyImperativeHandlers, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useActiveNoteContext, useLegacyImperativeHandlers, useNoteLabel, useNoteProperty, useStaticTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import Icon from "../react/Icon";
+import LinkButton from "../react/LinkButton";
 import { ParentComponent } from "../react/react_utils";
 import { ContentLanguagesModal, NoteTypeCodeNoteList, NoteTypeOptionsModal, useLanguageSwitcher, useMimeTypes } from "../ribbon/BasicPropertiesTab";
 import AttributeEditor, { AttributeEditorImperativeHandlers } from "../ribbon/components/AttributeEditor";
 import InheritedAttributesTab from "../ribbon/InheritedAttributesTab";
 import { NoteSizeWidget, useNoteMetadata } from "../ribbon/NoteInfoTab";
 import { NotePathsWidget, useSortedNotePaths } from "../ribbon/NotePathsTab";
+import SimilarNotesTab from "../ribbon/SimilarNotesTab";
 import { useAttachments } from "../type_widgets/Attachment";
 import { useProcessedLocales } from "../type_widgets/options/components/LocaleSelector";
 import Breadcrumb from "./Breadcrumb";
@@ -40,17 +43,27 @@ interface StatusBarContext {
 
 export default function StatusBar() {
     const { note, notePath, noteContext, viewScope, hoistedNoteId } = useActiveNoteContext();
-    const [ attributesShown, setAttributesShown ] = useState(false);
+    const [ activePane, setActivePane ] = useState<"attributes" | "similar-notes" | null>(null);
     const context: StatusBarContext | undefined | null = note && noteContext && { note, notePath, noteContext, viewScope, hoistedNoteId };
-    const attributesContext: AttributesProps | undefined | null = context && { ...context, attributesShown, setAttributesShown };
+    const attributesContext: AttributesProps | undefined | null = context && {
+        ...context,
+        attributesShown: activePane === "attributes",
+        setAttributesShown: () => setActivePane("attributes")
+    };
+    const noteInfoContext: NoteInfoContext | undefined | null = context && {
+        ...context,
+        similarNotesShown: activePane === "similar-notes",
+        setSimilarNotesShown: () => setActivePane("similar-notes")
+    };
     const isHiddenNote = note?.isInHiddenSubtree();
 
     return (
         <div className="status-bar">
             {attributesContext && <AttributesPane {...attributesContext} />}
+            {noteInfoContext && <SimilarNotesPane {...noteInfoContext} />}
 
             <div className="status-bar-main-row">
-                {context && attributesContext && <>
+                {context && attributesContext && noteInfoContext && <>
                     <Breadcrumb {...context} />
 
                     <div className="actions-row">
@@ -60,7 +73,7 @@ export default function StatusBar() {
                         <AttributesButton {...attributesContext} />
                         <AttachmentCount {...context} />
                         <BacklinksBadge {...context} />
-                        <NoteInfoBadge {...context} />
+                        <NoteInfoBadge {...noteInfoContext} />
                     </div>
                 </>}
             </div>
@@ -81,6 +94,7 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
                     ...titleOptions?.popperConfig,
                     strategy: "fixed"
                 },
+                animation: false,
                 ...titleOptions
             }}
             dropdownOptions={{
@@ -92,7 +106,7 @@ function StatusBarDropdown({ children, icon, text, buttonClassName, titleOptions
             }}
             text={<>
                 {icon && (<><Icon icon={icon} />&nbsp;</>)}
-                {text}
+                <span className="text">{text}</span>
             </>}
             {...dropdownProps}
         >
@@ -105,7 +119,7 @@ interface StatusBarButtonBaseProps {
     className?: string;
     icon: string;
     title: string;
-    text?: string | number;
+    text: string | number;
     disabled?: boolean;
     active?: boolean;
 }
@@ -120,6 +134,7 @@ function StatusBarButton({ className, icon, text, title, active, ...restProps }:
         placement: "top",
         fallbackPlacements: [ "top" ],
         popperConfig: { strategy: "fixed" },
+        animation: false,
         title
     });
 
@@ -136,7 +151,7 @@ function StatusBarButton({ className, icon, text, title, active, ...restProps }:
                 }
             }}
         >
-            <Icon icon={icon} />&nbsp;{text}
+            <Icon icon={icon} />&nbsp;<span className="text">{text}</span>
         </button>
     );
 }
@@ -194,24 +209,41 @@ export function getLocaleName(locale: Locale | null | undefined) {
 }
 //#endregion
 
-//#region Note info
-export function NoteInfoBadge({ note }: { note: FNote | null | undefined }) {
+//#region Note info & Similar
+interface NoteInfoContext extends StatusBarContext {
+    similarNotesShown: boolean;
+    setSimilarNotesShown: (value: boolean) => void;
+}
+
+export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
+    const dropdownRef = useRef<BootstrapDropdown>(null);
     const { metadata, ...sizeProps } = useNoteMetadata(note);
+    const [ originalFileName ] = useNoteLabel(note, "originalFileName");
 
     return (note &&
         <StatusBarDropdown
             icon="bx bx-info-circle"
             title={t("status_bar.note_info_title")}
+            dropdownRef={dropdownRef}
             dropdownContainerClassName="dropdown-note-info"
             dropdownOptions={{ autoClose: "outside" }}
         >
             <ul>
+                {originalFileName && <NoteInfoValue text={t("file_properties.original_file_name")} value={originalFileName} />}
                 <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
                 <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
                 <NoteInfoValue text={t("note_info_widget.type")} value={<span>{note.type} {note.mime && <span>({note.mime})</span>}</span>} />
                 <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
                 <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
             </ul>
+
+            <LinkButton
+                text={t("note_info_widget.show_similar_notes")}
+                onClick={() => {
+                    dropdownRef.current?.hide();
+                    setSimilarNotesShown(true);
+                }}
+            />
         </StatusBarDropdown>
     );
 }
@@ -224,6 +256,14 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
         </li>
     );
 }
+
+function SimilarNotesPane({ note, similarNotesShown }: NoteInfoContext) {
+    return (similarNotesShown &&
+        <div className="similar-notes-pane">
+            <SimilarNotesTab note={note} />
+        </div>
+    );
+}
 //#endregion
 
 //#region Backlinks
@@ -233,7 +273,7 @@ function BacklinksBadge({ note, viewScope }: StatusBarContext) {
         <StatusBarDropdown
             className="backlinks-badge backlinks-widget"
             icon="bx bx-link"
-            text={count}
+            text={t("status_bar.backlinks", { count })}
             title={t("status_bar.backlinks_title", { count })}
             dropdownContainerClassName="backlinks-items"
         >
@@ -252,7 +292,7 @@ function AttachmentCount({ note }: StatusBarContext) {
         <StatusBarButton
             className="attachment-count-button"
             icon="bx bx-paperclip"
-            text={count}
+            text={t("status_bar.attachments", { count })}
             title={t("status_bar.attachments_title", { count })}
             triggerCommand="showAttachments"
         />
@@ -330,13 +370,14 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 //#region Note paths
 function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
+    const count = sortedNotePaths?.length ?? 0;
 
-    return (
+    return (count > 1 &&
         <StatusBarDropdown
             title={t("status_bar.note_paths_title")}
             dropdownContainerClassName="dropdown-note-paths"
             icon="bx bx-directions"
-            text={sortedNotePaths?.length}
+            text={t("status_bar.note_paths", { count })}
         >
             <NotePathsWidget
                 sortedNotePaths={sortedNotePaths}
