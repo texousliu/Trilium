@@ -275,6 +275,7 @@ export function useNoteContext() {
     const [ noteContext, setNoteContext ] = useState<NoteContext | undefined>(noteContextContext ?? undefined);
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
+    const [ hoistedNoteId, setHoistedNoteId ] = useState(noteContext?.hoistedNoteId);
     const [ , setViewScope ] = useState<ViewScope>();
     const [ isReadOnlyTemporarilyDisabled, setIsReadOnlyTemporarilyDisabled ] = useState<boolean | null | undefined>(noteContext?.viewScope?.isReadOnly);
     const [ refreshCounter, setRefreshCounter ] = useState(0);
@@ -282,6 +283,7 @@ export function useNoteContext() {
     useEffect(() => {
         if (!noteContextContext) return;
         setNoteContext(noteContextContext);
+        setHoistedNoteId(noteContextContext.hoistedNoteId);
         setNote(noteContextContext.note);
         setNotePath(noteContextContext.notePath);
         setViewScope(noteContextContext.viewScope);
@@ -295,6 +297,7 @@ export function useNoteContext() {
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
         if (noteContextContext) return;
         setNoteContext(noteContext);
+        setHoistedNoteId(noteContext.hoistedNoteId);
         setNotePath(noteContext.notePath);
         setViewScope(noteContext.viewScope);
     });
@@ -312,6 +315,11 @@ export function useNoteContext() {
             setIsReadOnlyTemporarilyDisabled(eventNoteContext?.viewScope?.readOnlyTemporarilyDisabled);
         }
     });
+    useTriliumEvent("hoistedNoteChanged", ({ noteId, ntxId }) => {
+        if (ntxId === noteContext?.ntxId) {
+            setHoistedNoteId(noteId);
+        }
+    });
 
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
@@ -320,7 +328,7 @@ export function useNoteContext() {
         note,
         noteId: noteContext?.note?.noteId,
         notePath: noteContext?.notePath,
-        hoistedNoteId: noteContext?.hoistedNoteId,
+        hoistedNoteId,
         ntxId: noteContext?.ntxId,
         viewScope: noteContext?.viewScope,
         componentId: parentComponent.componentId,
@@ -339,6 +347,7 @@ export function useActiveNoteContext() {
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ , setViewScope ] = useState<ViewScope>();
+    const [ hoistedNoteId, setHoistedNoteId ] = useState(noteContext?.hoistedNoteId);
     const [ isReadOnlyTemporarilyDisabled, setIsReadOnlyTemporarilyDisabled ] = useState<boolean | null | undefined>(noteContext?.viewScope?.isReadOnly);
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
@@ -355,6 +364,7 @@ export function useActiveNoteContext() {
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], () => {
         const noteContext = appContext.tabManager.getActiveContext() ?? undefined;
         setNoteContext(noteContext);
+        setHoistedNoteId(noteContext?.hoistedNoteId);
         setNotePath(noteContext?.notePath);
         setViewScope(noteContext?.viewScope);
     });
@@ -371,6 +381,11 @@ export function useActiveNoteContext() {
             setIsReadOnlyTemporarilyDisabled(eventNoteContext?.viewScope?.readOnlyTemporarilyDisabled);
         }
     });
+    useTriliumEvent("hoistedNoteChanged", ({ noteId, ntxId }) => {
+        if (ntxId === noteContext?.ntxId) {
+            setHoistedNoteId(noteId);
+        }
+    });
 
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
@@ -379,7 +394,7 @@ export function useActiveNoteContext() {
         note,
         noteId: noteContext?.note?.noteId,
         notePath: noteContext?.notePath,
-        hoistedNoteId: noteContext?.hoistedNoteId,
+        hoistedNoteId,
         ntxId: noteContext?.ntxId,
         viewScope: noteContext?.viewScope,
         componentId: parentComponent.componentId,
