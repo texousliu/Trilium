@@ -1,5 +1,5 @@
 import { BacklinkCountResponse, BacklinksResponse, SaveSqlConsoleResponse } from "@triliumnext/commons";
-import { VNode } from "preact";
+import { TargetedMouseEvent, VNode } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 
 import appContext, { EventData, EventNames } from "../components/app_context";
@@ -191,21 +191,25 @@ function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
 }
 
 function SaveToNoteButton({ note }: FloatingButtonContext) {
-    const isEnabled = note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
+    const isEnabled = !isNewLayout && note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
     return isEnabled && <FloatingButton
         icon="bx bx-save"
         text={t("code_buttons.save_to_note_button_title")}
-        onClick={async (e) => {
-            e.preventDefault();
-            const { notePath } = await server.post<SaveSqlConsoleResponse>("special-notes/save-sql-console", { sqlConsoleNoteId: note.noteId });
-            if (notePath) {
-                toast.showMessage(t("code_buttons.sql_console_saved_message", { "note_path": await tree.getNotePathTitle(notePath) }));
-                // TODO: This hangs the navigation, for some reason.
-                //await ws.waitForMaxKnownEntityChangeId();
-                await appContext.tabManager.getActiveContext()?.setNote(notePath);
-            }
-        }}
+        onClick={buildSaveSqlToNoteHandler(note)}
     />;
+}
+
+export function buildSaveSqlToNoteHandler(note: FNote) {
+    return async (e: MouseEvent) => {
+        e.preventDefault();
+        const { notePath } = await server.post<SaveSqlConsoleResponse>("special-notes/save-sql-console", { sqlConsoleNoteId: note.noteId });
+        if (notePath) {
+            toast.showMessage(t("code_buttons.sql_console_saved_message", { "note_path": await tree.getNotePathTitle(notePath) }));
+            // TODO: This hangs the navigation, for some reason.
+            //await ws.waitForMaxKnownEntityChangeId();
+            await appContext.tabManager.getActiveContext()?.setNote(notePath);
+        }
+    };
 }
 
 function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingButtonContext) {

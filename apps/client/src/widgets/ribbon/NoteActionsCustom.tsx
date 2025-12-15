@@ -7,6 +7,7 @@ import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
 import { ViewTypeOptions } from "../collections/interface";
+import { buildSaveSqlToNoteHandler } from "../FloatingButtonsDefinitions";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
 import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
@@ -52,6 +53,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
             <RunActiveNoteButton {...innerProps } />
             <SwitchSplitOrientationButton {...innerProps} />
             <ToggleReadOnlyButton {...innerProps} />
+            <SaveToNoteButton {...innerProps} />
             <RefreshButton {...innerProps} />
             <CopyReferenceToClipboardButton {...innerProps} />
             <NoteActionsCustomInner {...innerProps} />
@@ -182,5 +184,14 @@ function RunActiveNoteButton({ note }: NoteActionsCustomInnerProps) {
         icon="bx bx-play"
         text={t("code_buttons.execute_button_title")}
         triggerCommand="runActiveNote"
+    />;
+}
+
+function SaveToNoteButton({ note }: NoteActionsCustomInnerProps) {
+    const isEnabled = note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
+    return isEnabled && <ActionButton
+        icon="bx bx-save"
+        text={t("code_buttons.save_to_note_button_title")}
+        onClick={buildSaveSqlToNoteHandler(note)}
     />;
 }
