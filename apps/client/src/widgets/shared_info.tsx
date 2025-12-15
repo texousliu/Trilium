@@ -1,10 +1,12 @@
 import "./shared_info.css";
-import { t } from "../services/i18n";
+
 import { useEffect, useState } from "preact/hooks";
-import { useNoteContext, useTriliumEvent, useTriliumOption } from "./react/hooks";
-import attributes from "../services/attributes";
+
 import FNote from "../entities/fnote";
+import attributes from "../services/attributes";
+import { t } from "../services/i18n";
 import HelpButton from "./react/HelpButton";
+import { useNoteContext, useTriliumEvent, useTriliumOption } from "./react/hooks";
 import InfoBar from "./react/InfoBar";
 import RawHtml from "./react/RawHtml";
 
@@ -16,8 +18,8 @@ export default function SharedInfo() {
         <InfoBar className="shared-info-widget" type="subtle" style={{display: (!link) ? "none" : undefined}}>
             {link && (
                 <RawHtml html={isSharedExternally
-                ? t("shared_info.shared_publicly", { link })
-                : t("shared_info.shared_locally", { link })} />
+                    ? t("shared_info.shared_publicly", { link })
+                    : t("shared_info.shared_locally", { link })} />
             )}
             <HelpButton helpPage="R9pX4DGra2Vt" style={{ width: "24px", height: "24px" }} />
         </InfoBar>
@@ -33,6 +35,7 @@ export function useShareInfo(note: FNote | null | undefined) {
         if (!note) return;
         if (note.noteId === "_share" || !note?.hasAncestor("_share")) {
             setLink(undefined);
+            setLinkHref(undefined);
             return;
         }
 
