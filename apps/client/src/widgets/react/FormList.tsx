@@ -217,22 +217,19 @@ export function FormDropdownSubmenu({ icon, title, children, dropStart, onDropdo
     const [ openOnMobile, setOpenOnMobile ] = useState(false);
 
     return (
-        <li
-            className={clsx("dropdown-item dropdown-submenu", { "submenu-open": openOnMobile, "dropstart": dropStart })}
-            onClick={(e) => {
-                e.stopPropagation();
-
-                if (!isMobile() && onDropdownToggleClicked) {
-                    onDropdownToggleClicked();
-                }
-            }}
-        >
-            <span className="dropdown-toggle" onClick={(e) => {
-                if (isMobile()) {
+        <li className={clsx("dropdown-item dropdown-submenu", { "submenu-open": openOnMobile, "dropstart": dropStart })}>
+            <span
+                className="dropdown-toggle"
+                onClick={(e) => {
                     e.stopPropagation();
-                    setOpenOnMobile(!openOnMobile);
-                }
-            }}>
+
+                    if (isMobile()) {
+                        setOpenOnMobile(!openOnMobile);
+                    } else if (onDropdownToggleClicked) {
+                        onDropdownToggleClicked();
+                    }
+                }}
+            >
                 <Icon icon={icon} />{" "}
                 {title}
             </span>

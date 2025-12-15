@@ -81,7 +81,7 @@ export const POPUP_HIDDEN_FLOATING_BUTTONS: FloatingButtonsList = [
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
 function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
+    const isEnabled = !isNewLayout && (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
     return isEnabled && <FloatingButton
         text={t("backend_log.refresh")}
         icon="bx bx-refresh"
@@ -90,7 +90,7 @@ function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefault
 }
 
 function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
+    const isEnabled = !isNewLayout && note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
     const [ splitEditorOrientation, setSplitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
     const upcomingOrientation = splitEditorOrientation === "horizontal" ? "vertical" : "horizontal";
 
@@ -103,7 +103,7 @@ function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: F
 
 function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingButtonContext) {
     const [ isReadOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const isEnabled = ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
+    const isEnabled = !isNewLayout && ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
             && note.isContentAvailable() && isDefaultViewMode;
 
     return isEnabled && <FloatingButton
@@ -173,7 +173,7 @@ function ShowHighlightsListWidgetButton({ note, noteContext, isDefaultViewMode }
 }
 
 function RunActiveNoteButton({ note }: FloatingButtonContext) {
-    const isEnabled = note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium";
+    const isEnabled = !isNewLayout && (note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium");
     return isEnabled && <FloatingButton
         icon="bx bx-play"
         text={t("code_buttons.execute_button_title")}
@@ -182,7 +182,7 @@ function RunActiveNoteButton({ note }: FloatingButtonContext) {
 }
 
 function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
-    const isEnabled = note.mime.startsWith("application/javascript;env=");
+    const isEnabled = !isNewLayout && note.mime.startsWith("application/javascript;env=");
     return isEnabled && <FloatingButton
         icon="bx bx-help-circle"
         text={t("code_buttons.trilium_api_docs_button_title")}
@@ -191,25 +191,29 @@ function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
 }
 
 function SaveToNoteButton({ note }: FloatingButtonContext) {
-    const isEnabled = note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
+    const isEnabled = !isNewLayout && note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
     return isEnabled && <FloatingButton
         icon="bx bx-save"
         text={t("code_buttons.save_to_note_button_title")}
-        onClick={async (e) => {
-            e.preventDefault();
-            const { notePath } = await server.post<SaveSqlConsoleResponse>("special-notes/save-sql-console", { sqlConsoleNoteId: note.noteId });
-            if (notePath) {
-                toast.showMessage(t("code_buttons.sql_console_saved_message", { "note_path": await tree.getNotePathTitle(notePath) }));
-                // TODO: This hangs the navigation, for some reason.
-                //await ws.waitForMaxKnownEntityChangeId();
-                await appContext.tabManager.getActiveContext()?.setNote(notePath);
-            }
-        }}
+        onClick={buildSaveSqlToNoteHandler(note)}
     />;
 }
 
+export function buildSaveSqlToNoteHandler(note: FNote) {
+    return async (e: MouseEvent) => {
+        e.preventDefault();
+        const { notePath } = await server.post<SaveSqlConsoleResponse>("special-notes/save-sql-console", { sqlConsoleNoteId: note.noteId });
+        if (notePath) {
+            toast.showMessage(t("code_buttons.sql_console_saved_message", { "note_path": await tree.getNotePathTitle(notePath) }));
+            // TODO: This hangs the navigation, for some reason.
+            //await ws.waitForMaxKnownEntityChangeId();
+            await appContext.tabManager.getActiveContext()?.setNote(notePath);
+        }
+    };
+}
+
 function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingButtonContext) {
-    const isEnabled = (note.type === "relationMap" && isDefaultViewMode);
+    const isEnabled = (!isNewLayout && note.type === "relationMap" && isDefaultViewMode);
     return isEnabled && (
         <>
             <FloatingButton
@@ -242,7 +246,7 @@ function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingB
 }
 
 function GeoMapButtons({ triggerEvent, viewType, isReadOnly }: FloatingButtonContext) {
-    const isEnabled = viewType === "geoMap" && !isReadOnly;
+    const isEnabled = !isNewLayout && viewType === "geoMap" && !isReadOnly;
     return isEnabled && (
         <FloatingButton
             icon="bx bx-plus-circle"
@@ -283,7 +287,7 @@ function CopyImageReferenceButton({ note, isDefaultViewMode }: FloatingButtonCon
 }
 
 function ExportImageButtons({ note, triggerEvent, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = ["mermaid", "mindMap"].includes(note?.type ?? "")
+    const isEnabled = !isNewLayout && ["mermaid", "mindMap"].includes(note?.type ?? "")
             && note?.isContentAvailable() && isDefaultViewMode;
     return isEnabled && (
         <>
@@ -304,7 +308,7 @@ function ExportImageButtons({ note, triggerEvent, isDefaultViewMode }: FloatingB
 
 function InAppHelpButton({ note }: FloatingButtonContext) {
     const helpUrl = getHelpUrlForNote(note);
-    const isEnabled = !!helpUrl && (!isNewLayout || (note?.type !== "book"));
+    const isEnabled = !!helpUrl && !isNewLayout;
 
     return isEnabled && (
         <FloatingButton

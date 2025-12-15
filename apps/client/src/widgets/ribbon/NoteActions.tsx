@@ -2,6 +2,7 @@ import { ConvertToAttachmentResponse } from "@triliumnext/commons";
 import { useContext } from "preact/hooks";
 
 import appContext, { CommandNames } from "../../components/app_context";
+import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import branches from "../../services/branches";
@@ -32,7 +33,7 @@ export default function NoteActions() {
         <div className="ribbon-button-container" style={{ contain: "none" }}>
             {isNewLayout && (
                 <>
-                    {note && ntxId && <NoteActionsCustom note={note} ntxId={ntxId} />}
+                    {note && ntxId && noteContext && <NoteActionsCustom note={note} ntxId={ntxId} noteContext={noteContext} />}
                     <MovePaneButton direction="left" />
                     <MovePaneButton direction="right" />
                     <ClosePaneButton />
@@ -66,6 +67,8 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(noteType);
     const isInOptionsOrHelp = note?.noteId.startsWith("_options") || note?.noteId.startsWith("_help");
     const isPrintable = ["text", "code"].includes(noteType) || (noteType === "book" && ["presentation", "list", "table"].includes(viewType ?? ""));
+    const isExportableToImage = ["mermaid", "mindMap"].includes(noteType);
+    const isContentAvailable = note.isContentAvailable();
     const isElectron = getIsElectron();
     const isMac = getIsMac();
     const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap", "aiChat"].includes(noteType);
@@ -110,6 +113,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
                     defaultType: "single"
                 })} />
             {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
+            {isExportableToImage && isNormalViewMode && isContentAvailable && <ExportAsImage ntxId={noteContext.ntxId} parentComponent={parentComponent} />}
             <CommandItem command="printActiveNote" icon="bx bx-printer" disabled={!isPrintable} text={t("note_actions.print_note")} />
 
             <FormDropdownDivider />
@@ -278,5 +282,25 @@ function ConvertToAttachment({ note }: { note: FNote }) {
                 });
             }}
         >{t("note_actions.convert_into_attachment")}</FormListItem>
+    );
+}
+
+function ExportAsImage({ ntxId, parentComponent }: { ntxId: string | null | undefined, parentComponent: Component | null | undefined }) {
+    return (
+        <FormDropdownSubmenu
+            icon="bx bxs-file-image"
+            title={t("note_actions.export_as_image")}
+            dropStart
+        >
+            <FormListItem
+                icon="bx bxs-file-png"
+                onClick={() => parentComponent?.triggerEvent("exportPng", { ntxId })}
+            >{t("note_actions.export_as_image_png")}</FormListItem>
+
+            <FormListItem
+                icon="bx bx-shape-polygon"
+                onClick={() => parentComponent?.triggerEvent("exportSvg", { ntxId })}
+            >{t("note_actions.export_as_image_svg")}</FormListItem>
+        </FormDropdownSubmenu>
     );
 }
