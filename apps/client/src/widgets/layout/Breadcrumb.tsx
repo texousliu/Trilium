@@ -1,6 +1,6 @@
 import "./Breadcrumb.css";
 
-import { useMemo, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
 import appContext from "../../components/app_context";
@@ -8,10 +8,13 @@ import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
 import froca from "../../services/froca";
+import hoisted_note from "../../services/hoisted_note";
+import { t } from "../../services/i18n";
 import ActionButton from "../react/ActionButton";
+import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNote, useNoteLabel, useNoteProperty } from "../react/hooks";
+import { useChildNotes, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 
@@ -76,13 +79,22 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
         );
     }
 
-    // Hoisted workspace shows both text and icon.
+    // Hoisted workspace shows both text and icon and a way to exit easily out of the hoisting.
     return (
-        <NoteLink
-            notePath={noteId}
-            showNoteIcon
-            noPreview
-        />
+        <>
+            <Badge
+                className="badge-hoisted"
+                icon="bx bxs-chevrons-up"
+                text={t("breadcrumb.hoisted_badge")}
+                tooltip={t("breadcrumb.hoisted_badge_title")}
+                onClick={() => hoisted_note.unhoist()}
+            />
+            <NoteLink
+                notePath={noteId}
+                showNoteIcon
+                noPreview
+            />
+        </>
     );
 }
 

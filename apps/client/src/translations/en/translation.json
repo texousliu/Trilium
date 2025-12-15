@@ -2144,6 +2144,10 @@
     "go-back": "Go back to previous note",
     "go-forward": "Go forward to next note"
   },
+  "breadcrumb": {
+    "hoisted_badge": "Hoisted",
+    "hoisted_badge_title": "Unhoist"
+  },
   "breadcrumb_badges": {
     "read_only_explicit": "Read-only",
     "read_only_explicit_description": "This note has been manually set to read-only.\nClick to edit it temporarily.",
