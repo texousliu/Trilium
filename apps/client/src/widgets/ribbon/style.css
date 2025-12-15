@@ -451,6 +451,14 @@ body.experimental-feature-new-layout {
         margin: 0;
         gap: var(--button-gap);
 
+        button {
+            transition: opacity 250ms ease-in;
+
+            &.disabled {
+                opacity: 0.4;
+            }
+        }
+
         .note-actions-custom {
             display: flex;
             align-items: center;

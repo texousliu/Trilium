@@ -151,14 +151,15 @@ function RefreshButton({ note, noteType, isDefaultViewMode, parentComponent, not
 }
 
 function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: NoteActionsCustomInnerProps) {
-    const isEnabled = note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
+    const isShown = note.type === "mermaid" && note.isContentAvailable() && isDefaultViewMode;
     const [ splitEditorOrientation, setSplitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
     const upcomingOrientation = splitEditorOrientation === "horizontal" ? "vertical" : "horizontal";
 
-    return isEnabled && <ActionButton
+    return isShown && <ActionButton
         text={upcomingOrientation === "vertical" ? t("switch_layout_button.title_vertical") : t("switch_layout_button.title_horizontal")}
         icon={upcomingOrientation === "vertical" ? "bx bxs-dock-bottom" : "bx bxs-dock-left"}
         onClick={() => setSplitEditorOrientation(upcomingOrientation)}
+        disabled={isReadOnly}
     />;
 }
 
