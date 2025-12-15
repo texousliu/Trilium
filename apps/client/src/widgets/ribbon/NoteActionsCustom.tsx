@@ -1,5 +1,5 @@
 import { NoteType } from "@triliumnext/commons";
-import { useContext } from "preact/hooks";
+import { useContext, useEffect, useState } from "preact/hooks";
 
 import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
@@ -11,7 +11,7 @@ import { ViewTypeOptions } from "../collections/interface";
 import { buildSaveSqlToNoteHandler } from "../FloatingButtonsDefinitions";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
 import { buildUploadNewImageRevisionListener } from "./ImagePropertiesTab";
@@ -135,6 +135,7 @@ function DownloadFileButton({ note }: NoteActionsCustomInnerProps) {
     );
 }
 
+//#region Floating buttons
 function CopyReferenceToClipboardButton({ ntxId, noteType, parentComponent }: NoteActionsCustomInnerProps) {
     return (["mermaid", "canvas", "mindMap", "image"].includes(noteType) &&
         <ActionButton
@@ -144,7 +145,6 @@ function CopyReferenceToClipboardButton({ ntxId, noteType, parentComponent }: No
         />
     );
 }
-//#endregion
 
 function RefreshButton({ note, noteType, isDefaultViewMode, parentComponent, noteContext }: NoteActionsCustomInnerProps) {
     const isEnabled = (note.noteId === "_backendLog" || noteType === "render") && isDefaultViewMode;
@@ -193,7 +193,19 @@ function RunActiveNoteButton({ noteMime }: NoteActionsCustomInnerProps) {
 }
 
 function SaveToNoteButton({ note, noteMime }: NoteActionsCustomInnerProps) {
-    const isEnabled = noteMime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
+    const [ isEnabled, setIsEnabled ] = useState(false);
+
+    function refresh() {
+        setIsEnabled(noteMime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely());
+    }
+
+    useEffect(refresh, [ note, noteMime ]);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getBranchRows().find(b => b.noteId === note.noteId)) {
+            refresh();
+        }
+    });
+
     return isEnabled && <ActionButton
         icon="bx bx-save"
         text={t("code_buttons.save_to_note_button_title")}
@@ -209,3 +221,4 @@ function OpenTriliumApiDocsButton({ noteMime }: NoteActionsCustomInnerProps) {
         onClick={() => openInAppHelpFromUrl(noteMime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
     />;
 }
+//#endregion
