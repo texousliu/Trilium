@@ -50,9 +50,11 @@
         max-width: 300px;
     }
 
-    .breadcrumb-last-item {
+    a.breadcrumb-last-item,
+    a.breadcrumb-last-item:visited {
         text-decoration: none;
-        color: unset;
+        color: currentColor;
+        font-weight: 600;
     }
 
     input {
