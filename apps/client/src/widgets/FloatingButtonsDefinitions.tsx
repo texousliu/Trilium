@@ -389,7 +389,7 @@ export function BacklinksList({ note }: { note: FNote }) {
     });
 
     return backlinks.map(backlink => (
-        <div>
+        <li>
             <NoteLink
                 notePath={backlink.noteId}
                 showNotePath showNoteIcon
@@ -403,7 +403,7 @@ export function BacklinksList({ note }: { note: FNote }) {
                     <RawHtml html={excerpt} />
                 ))
             )}
-        </div>
+        </li>
     ));
 }
 
