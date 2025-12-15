@@ -113,13 +113,13 @@ function UploadNewRevisionButton({ note, onChange }: NoteActionsCustomInnerProps
     );
 }
 
-function OpenExternallyButton({ note }: NoteActionsCustomInnerProps) {
+function OpenExternallyButton({ note, noteMime }: NoteActionsCustomInnerProps) {
     return (
         <ActionButton
             icon="bx bx-link-external"
             text={t("file_properties.open")}
             disabled={note.isProtected}
-            onClick={() => openNoteExternally(note.noteId, note.mime)}
+            onClick={() => openNoteExternally(note.noteId, noteMime)}
         />
     );
 }
@@ -183,8 +183,8 @@ function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: NoteActions
     />;
 }
 
-function RunActiveNoteButton({ note }: NoteActionsCustomInnerProps) {
-    const isEnabled = note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium";
+function RunActiveNoteButton({ noteMime }: NoteActionsCustomInnerProps) {
+    const isEnabled = noteMime.startsWith("application/javascript") || noteMime === "text/x-sqlite;schema=trilium";
     return isEnabled && <ActionButton
         icon="bx bx-play"
         text={t("code_buttons.execute_button_title")}
@@ -192,8 +192,8 @@ function RunActiveNoteButton({ note }: NoteActionsCustomInnerProps) {
     />;
 }
 
-function SaveToNoteButton({ note }: NoteActionsCustomInnerProps) {
-    const isEnabled = note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
+function SaveToNoteButton({ note, noteMime }: NoteActionsCustomInnerProps) {
+    const isEnabled = noteMime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
     return isEnabled && <ActionButton
         icon="bx bx-save"
         text={t("code_buttons.save_to_note_button_title")}
@@ -201,11 +201,11 @@ function SaveToNoteButton({ note }: NoteActionsCustomInnerProps) {
     />;
 }
 
-function OpenTriliumApiDocsButton({ note }: NoteActionsCustomInnerProps) {
-    const isEnabled = note.mime.startsWith("application/javascript;env=");
+function OpenTriliumApiDocsButton({ noteMime }: NoteActionsCustomInnerProps) {
+    const isEnabled = noteMime.startsWith("application/javascript;env=");
     return isEnabled && <ActionButton
         icon="bx bx-help-circle"
         text={t("code_buttons.trilium_api_docs_button_title")}
-        onClick={() => openInAppHelpFromUrl(note.mime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
+        onClick={() => openInAppHelpFromUrl(noteMime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
     />;
 }
