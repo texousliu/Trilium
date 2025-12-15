@@ -1761,9 +1761,9 @@
     "created_on": "Created on <Value />",
     "last_modified": "Last modified on <Value />",
     "note_type_switcher_label": "Switch from {{type}} to:",
-    "note_type_switcher_others": "More note types",
-    "note_type_switcher_templates": "Templates",
-    "note_type_switcher_collection": "Collections",
+    "note_type_switcher_others": "Other note type",
+    "note_type_switcher_templates": "Template",
+    "note_type_switcher_collection": "Collection",
     "edited_notes": "Edited notes"
   },
   "search_result": {
