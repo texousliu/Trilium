@@ -7,6 +7,7 @@ import appContext from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
+import { getReadableTextColor } from "../../services/css_class_manager";
 import froca from "../../services/froca";
 import hoisted_note from "../../services/hoisted_note";
 import { t } from "../../services/i18n";
@@ -87,6 +88,7 @@ function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
     const noteIcon = useNoteIcon(note);
     const [ workspace ] = useNoteLabelBoolean(note, "workspace");
     const [ workspaceIconClass ] = useNoteLabel(note, "workspaceIconClass");
+    const [ workspaceColor ] = useNoteLabel(note, "workspaceTabBackgroundColor");
 
     // Hoisted workspace shows both text and icon and a way to exit easily out of the hoisting.
     return (note &&
@@ -97,6 +99,10 @@ function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
                 text={workspace ? t("breadcrumb.workspace_badge") : t("breadcrumb.hoisted_badge")}
                 tooltip={t("breadcrumb.hoisted_badge_title")}
                 onClick={() => hoisted_note.unhoist()}
+                style={workspaceColor ? {
+                    "--color": workspaceColor,
+                    "color": getReadableTextColor(workspaceColor)
+                } : undefined}
             />
             <NoteLink
                 notePath={noteId}

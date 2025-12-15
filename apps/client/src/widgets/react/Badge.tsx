@@ -1,7 +1,7 @@
 import "./Badge.css";
 
 import clsx from "clsx";
-import { ComponentChildren, MouseEventHandler } from "preact";
+import { ComponentChildren, HTMLAttributes } from "preact";
 import { useRef } from "preact/hooks";
 
 import Dropdown, { DropdownProps } from "./Dropdown";
@@ -13,12 +13,11 @@ interface SimpleBadgeProps {
     title: ComponentChildren;
 }
 
-interface BadgeProps {
+interface BadgeProps extends Pick<HTMLAttributes<HTMLDivElement>, "onClick" | "style"> {
     text?: string;
     icon?: string;
     className?: string;
     tooltip?: string;
-    onClick?: MouseEventHandler<HTMLDivElement>;
     href?: string;
 }
 
@@ -26,7 +25,7 @@ export default function SimpleBadge({ title, className }: SimpleBadgeProps) {
     return <span class={`badge ${className ?? ""}`}>{title}</span>;
 }
 
-export function Badge({ icon, className, text, tooltip, onClick, href }: BadgeProps) {
+export function Badge({ icon, className, text, tooltip, href, ...containerProps }: BadgeProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     useStaticTooltip(containerRef, {
         placement: "bottom",
@@ -44,8 +43,8 @@ export function Badge({ icon, className, text, tooltip, onClick, href }: BadgePr
     return (
         <div
             ref={containerRef}
-            className={clsx("ext-badge", className, { "clickable": !!onClick })}
-            onClick={onClick}
+            className={clsx("ext-badge", className, { "clickable": !!containerProps.onClick })}
+            {...containerProps}
         >
             {href ? <a href={href}>{content}</a> : <span>{content}</span>}
         </div>
