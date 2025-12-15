@@ -43,17 +43,17 @@ interface StatusBarContext {
 
 export default function StatusBar() {
     const { note, notePath, noteContext, viewScope, hoistedNoteId } = useActiveNoteContext();
-    const [ activePane, setActivePane ] = useState<"attributes" | "similar-notes" | null>(null);
+    const [ activePane, setActivePane ] = useState<"attributes" | "similar-notes" | false>(false);
     const context: StatusBarContext | undefined | null = note && noteContext && { note, notePath, noteContext, viewScope, hoistedNoteId };
     const attributesContext: AttributesProps | undefined | null = context && {
         ...context,
         attributesShown: activePane === "attributes",
-        setAttributesShown: () => setActivePane("attributes")
+        setAttributesShown: (shown) => setActivePane(shown && "attributes")
     };
     const noteInfoContext: NoteInfoContext | undefined | null = context && {
         ...context,
         similarNotesShown: activePane === "similar-notes",
-        setSimilarNotesShown: () => setActivePane("similar-notes")
+        setSimilarNotesShown: (shown) => setActivePane(shown && "similar-notes")
     };
     const isHiddenNote = note?.isInHiddenSubtree();
 
