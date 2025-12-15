@@ -696,6 +696,9 @@
     "convert_into_attachment_successful": "Note '{{title}}' has been converted to attachment.",
     "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?",
     "print_pdf": "Export as PDF...",
+    "export_as_image": "Export as image",
+    "export_as_image_png": "PNG (raster)",
+    "export_as_image_svg": "SVG (vector)",
     "note_map": "Note map"
   },
   "onclick_button": {

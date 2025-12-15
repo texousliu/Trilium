@@ -521,9 +521,7 @@ body.mobile .dropdown .dropdown-submenu > span {
 .cm-editor {
     height: 100%;
     outline: none !important;
-    border-radius: 6px;
     overflow: hidden;
-    margin: 4px;
     font-size: var(--monospace-font-size);
 }
 
@@ -627,6 +625,11 @@ pre:not(.hljs) {
 
     position: relative;
     padding: var(--padding-size);
+}
+
+pre:has(> .cm-editor) {
+    padding: 0;
+    margin: 0;
 }
 
 pre > button.copy-button {
@@ -2469,6 +2472,11 @@ footer.webview-footer button {
 .content-floating-buttons.top-left {
     top: 10px;
     inset-inline-start: 10px;
+}
+
+.content-floating-buttons.top-right {
+    top: 10px;
+    inset-inline-end: 10px;
 }
 
 .content-floating-buttons.bottom-left {
