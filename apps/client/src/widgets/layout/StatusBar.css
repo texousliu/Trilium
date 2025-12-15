@@ -60,9 +60,13 @@
             padding: 1em !important;
 
             ul {
+                --row-block-margin: .2em;
+
                 list-style-type: none;
                 padding: 0;
                 margin: 0;
+                margin-top: calc(0px - var(--row-block-margin));
+                margin-bottom: 12px;
                 display: table;
 
                 li {
@@ -70,7 +74,8 @@
 
                     > strong {
                         display: table-cell;
-                        padding: 0.2em 0;
+                        padding: var(--row-block-margin) 0;
+                        opacity: .5;
                     }
 
                     > span {

@@ -9,6 +9,7 @@ import LoadingSpinner from "../react/LoadingSpinner";
 import { useTriliumEvent } from "../react/hooks";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import FNote from "../../entities/fnote";
+import LinkButton from "../react/LinkButton";
 
 const isNewLayout = isExperimentalFeatureEnabled("new-layout");
 
@@ -53,9 +54,7 @@ export default function NoteInfoTab({ note }: { note: FNote | null | undefined }
 export function NoteSizeWidget({ isLoading, noteSizeResponse, subtreeSizeResponse, requestSizeInfo }: Omit<ReturnType<typeof useNoteMetadata>, "metadata">) {
     return <>
         {!isLoading && !noteSizeResponse && !subtreeSizeResponse && (
-            <Button
-                className="calculate-button"
-                icon="bx bx-calculator"
+            <LinkButton
                 text={t("note_info_widget.calculate")}
                 onClick={requestSizeInfo}
             />
