@@ -1759,7 +1759,7 @@
   "note_title": {
     "placeholder": "type note's title here...",
     "created_on": "Created on <Value />",
-    "last_modified": "Last modified on <Value />",
+    "last_modified": "Modified on <Value />",
     "note_type_switcher_label": "Switch from {{type}} to:",
     "note_type_switcher_others": "Other note type",
     "note_type_switcher_templates": "Template",
