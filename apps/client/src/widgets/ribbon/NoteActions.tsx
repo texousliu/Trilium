@@ -1,5 +1,5 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
-import { useContext, useState } from "preact/hooks";
+import { useContext } from "preact/hooks";
 
 import appContext, { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
@@ -8,9 +8,7 @@ import branches from "../../services/branches";
 import dialog from "../../services/dialog";
 import { isExperimentalFeatureEnabled } from "../../services/experimental_features";
 import { t } from "../../services/i18n";
-import { downloadFileNote, openNoteExternally } from "../../services/open";
 import protected_session from "../../services/protected_session";
-import protected_session_holder from "../../services/protected_session_holder";
 import server from "../../services/server";
 import toast from "../../services/toast";
 import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/utils";

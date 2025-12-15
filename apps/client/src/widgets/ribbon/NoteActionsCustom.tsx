@@ -46,6 +46,8 @@ function NoteActionsCustomInner(props: NoteActionsCustomInnerProps) {
             return <FileActions {...props} />;
         case "image":
             return <ImageActions {...props} />;
+        default:
+            return null;
     }
 }
 
