@@ -14,7 +14,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNote, useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../react/hooks";
+import { useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 
@@ -84,14 +84,16 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
 
 function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
     const note = useNote(noteId);
+    const noteIcon = useNoteIcon(note);
     const [ workspace ] = useNoteLabelBoolean(note, "workspace");
+    const [ workspaceIconClass ] = useNoteLabel(note, "workspaceIconClass");
 
     // Hoisted workspace shows both text and icon and a way to exit easily out of the hoisting.
     return (note &&
         <>
             <Badge
                 className="badge-hoisted"
-                icon={workspace ? "bx bx-folder-open" : "bx bxs-chevrons-up"}
+                icon={workspace ? (workspaceIconClass || noteIcon) : "bx bxs-chevrons-up"}
                 text={workspace ? t("breadcrumb.workspace_badge") : t("breadcrumb.hoisted_badge")}
                 tooltip={t("breadcrumb.hoisted_badge_title")}
                 onClick={() => hoisted_note.unhoist()}

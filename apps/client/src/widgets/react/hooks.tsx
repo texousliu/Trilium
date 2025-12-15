@@ -1039,3 +1039,13 @@ export function useNote(noteId: string | null | undefined, silentNotFoundError =
     }
     return undefined;
 }
+
+export function useNoteIcon(note: FNote | null | undefined) {
+    const [ icon, setIcon ] = useState(note?.getIcon());
+    const iconClass = useNoteLabel(note, "iconClass");
+    useEffect(() => {
+        setIcon(note?.getIcon());
+    }, [ note, iconClass ]);
+
+    return icon;
+}
