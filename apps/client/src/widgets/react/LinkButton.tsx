@@ -11,6 +11,12 @@ export default function LinkButton({ onClick, text, triggerCommand }: LinkButton
     return (
         <a class="tn-link" href="#"
            data-trigger-command={triggerCommand}
+           role="button"
+           onKeyDown={(e)=> {
+                if (e.code === "Space") {
+                    onClick?.();
+                }
+           }}
            onClick={(e) => {
                 e.preventDefault();
                 onClick?.();
