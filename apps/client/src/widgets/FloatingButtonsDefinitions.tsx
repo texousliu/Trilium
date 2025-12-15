@@ -103,7 +103,7 @@ function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: F
 
 function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingButtonContext) {
     const [ isReadOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const isEnabled = ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
+    const isEnabled = !isNewLayout && ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
             && note.isContentAvailable() && isDefaultViewMode;
 
     return isEnabled && <FloatingButton
@@ -246,7 +246,7 @@ function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingB
 }
 
 function GeoMapButtons({ triggerEvent, viewType, isReadOnly }: FloatingButtonContext) {
-    const isEnabled = viewType === "geoMap" && !isReadOnly;
+    const isEnabled = !isNewLayout && viewType === "geoMap" && !isReadOnly;
     return isEnabled && (
         <FloatingButton
             icon="bx bx-plus-circle"

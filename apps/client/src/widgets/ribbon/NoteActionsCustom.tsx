@@ -42,7 +42,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     const [ viewType ] = useNoteLabel(note, "viewType");
     const parentComponent = useContext(ParentComponent);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const innerProps: NoteActionsCustomInnerProps | false = !!noteType && !!noteMime && !!parentComponent && {
+    const innerProps: NoteActionsCustomInnerProps | false = !!noteType && noteMime !== undefined && !!parentComponent && {
         ...props,
         noteType,
         noteMime,
@@ -223,12 +223,21 @@ function OpenTriliumApiDocsButton({ noteMime }: NoteActionsCustomInnerProps) {
     />;
 }
 
-function AddChildButton({ parentComponent, noteType, ntxId }: NoteActionsCustomInnerProps) {
-    const isEnabled = noteType === "relationMap";
-    return isEnabled && <ActionButton
-        icon="bx bx-folder-plus"
-        text={t("relation_map_buttons.create_child_note_title")}
-        onClick={() => parentComponent.triggerEvent("relationMapCreateChildNote", { ntxId })}
-    />;
+function AddChildButton({ parentComponent, noteType, viewType, ntxId, isReadOnly }: NoteActionsCustomInnerProps) {
+    if (noteType === "book" && viewType === "geoMap") {
+        return <ActionButton
+            icon="bx bx-plus-circle"
+            text={t("geo-map.create-child-note-title")}
+            onClick={() => parentComponent.triggerEvent("geoMapCreateChildNote", { ntxId })}
+            disabled={isReadOnly}
+        />;
+    } else if (noteType === "relationMap") {
+        return <ActionButton
+            icon="bx bx-folder-plus"
+            text={t("relation_map_buttons.create_child_note_title")}
+            onClick={() => parentComponent.triggerEvent("relationMapCreateChildNote", { ntxId })}
+            disabled={isReadOnly}
+        />;
+    }
 }
 //#endregion
