@@ -11,7 +11,7 @@ import froca from "../../services/froca";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNoteLabel, useNoteProperty } from "../react/hooks";
+import { useChildNotes, useNote, useNoteLabel, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 
@@ -57,7 +57,7 @@ export default function Breadcrumb({ note, noteContext }: { note: FNote, noteCon
 }
 
 function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined }) {
-    const note = useMemo(() => froca.getNoteFromCache("root"), []);
+    const note = useNote(noteContext?.hoistedNoteId);
     useNoteLabel(note, "iconClass");
     const title = useNoteProperty(note, "title");
 
@@ -66,7 +66,7 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
             className="root-note"
             icon={note.getIcon()}
             text={title ?? ""}
-            onClick={() => noteContext?.setNote("root")}
+            onClick={() => noteContext?.setNote(note.noteId)}
             onContextMenu={(e) => {
                 e.preventDefault();
                 link_context_menu.openContextMenu(note.noteId, e);
