@@ -225,9 +225,7 @@ export function FormDropdownSubmenu({ icon, title, children, dropStart, onDropdo
 
                     if (isMobile()) {
                         setOpenOnMobile(!openOnMobile);
-                    }
-
-                    if (onDropdownToggleClicked) {
+                    } else if (onDropdownToggleClicked) {
                         onDropdownToggleClicked();
                     }
                 }}

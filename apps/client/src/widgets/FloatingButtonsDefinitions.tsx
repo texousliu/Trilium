@@ -1,5 +1,5 @@
 import { BacklinkCountResponse, BacklinksResponse, SaveSqlConsoleResponse } from "@triliumnext/commons";
-import { TargetedMouseEvent, VNode } from "preact";
+import { VNode } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 
 import appContext, { EventData, EventNames } from "../components/app_context";
