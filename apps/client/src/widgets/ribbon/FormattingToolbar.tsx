@@ -100,7 +100,7 @@ function useRenderState(activeNoteContext: NoteContext | undefined, activeNote: 
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
     const [ state, setState ] = useState("hidden");
 
-    useTriliumEvents([ "newNoteContextCreated", "noteContextRemoved" ], () => {
+    useTriliumEvents([ "newNoteContextCreated", "noteContextRemoved", "readOnlyTemporarilyDisabled" ], () => {
         getFormattingToolbarState(activeNoteContext, activeNote, textNoteEditorType).then(setState);
     });
 
