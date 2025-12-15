@@ -166,17 +166,30 @@ body.desktop .dropdown-submenu .dropdown-menu {
     --menu-item-end-padding: 22px;
     --menu-item-vertical-padding: 2px;
 
-    padding-top: var(--menu-item-vertical-padding) !important;
-    padding-bottom: var(--menu-item-vertical-padding) !important;
-    padding-inline-start: var(--menu-item-start-padding) !important;
-    padding-inline-end: var(--menu-item-end-padding) !important;
-
     /* Note: the right padding should also accommodate the submenu arrow. */
     border-radius: 6px;
     cursor: default !important;
 }
 
-body.desktop .dropdown-menu:has(> .dropdown-submenu.dropstart) > .dropdown-item {
+.dropdown-item:not(.dropdown-submenu),
+.dropdown-item.dropdown-submenu .dropdown-toggle,
+.excalidraw .context-menu .context-menu-item {
+    padding-top: var(--menu-item-vertical-padding) !important;
+    padding-bottom: var(--menu-item-vertical-padding) !important;
+    padding-inline-start: var(--menu-item-start-padding) !important;
+    padding-inline-end: var(--menu-item-end-padding) !important;
+}
+
+.dropdown-item.dropdown-submenu {
+    padding: 0 !important;
+
+    .dropdown-toggle {
+        flex-grow: 1;
+    }
+}
+
+body.desktop .dropdown-menu:has(> .dropdown-submenu.dropstart) > .dropdown-item:not(.dropdown-submenu),
+body.desktop .dropdown-menu:has(> .dropdown-submenu.dropstart) > .dropdown-item.dropdown-submenu .dropdown-toggle {
     padding-inline-end: var(--menu-item-start-padding) !important;
     padding-inline-start: var(--menu-item-end-padding) !important;
 }
