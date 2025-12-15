@@ -2474,6 +2474,11 @@ footer.webview-footer button {
     inset-inline-start: 10px;
 }
 
+.content-floating-buttons.top-right {
+    top: 10px;
+    inset-inline-end: 10px;
+}
+
 .content-floating-buttons.bottom-left {
     bottom: 10px;
     inset-inline-start: 10px;

@@ -213,7 +213,7 @@ export function buildSaveSqlToNoteHandler(note: FNote) {
 }
 
 function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingButtonContext) {
-    const isEnabled = (note.type === "relationMap" && isDefaultViewMode);
+    const isEnabled = (!isNewLayout && note.type === "relationMap" && isDefaultViewMode);
     return isEnabled && (
         <>
             <FloatingButton
