@@ -218,7 +218,8 @@
     "unknown_search_option": "不明な検索オプション {{searchOptionName}}",
     "search_note_saved": "検索ノートが {{- notePathTitle}} に保存されました",
     "actions_executed": "アクションが実行されました。",
-    "ancestor": "祖先:"
+    "ancestor": "祖先:",
+    "view_options": "表示オプション:"
   },
   "shortcuts": {
     "multiple_shortcuts": "同じアクションに対して複数のショートカットを設定する場合、カンマで区切ることができます。",
@@ -461,7 +462,10 @@
     "open_note_on_server": "サーバー上のノートを開く",
     "view_revisions": "ノートの変更履歴...",
     "note_map": "ノートマップ",
-    "advanced": "高度"
+    "advanced": "高度",
+    "export_as_image": "画像としてエクスポート",
+    "export_as_image_png": "PNG (raster)",
+    "export_as_image_svg": "SVG (vector)"
   },
   "command_palette": {
     "export_note_title": "ノートをエクスポート",
@@ -586,7 +590,7 @@
     "file_type": "ファイルタイプ",
     "file_size": "ファイルサイズ",
     "download": "ダウンロード",
-    "open": "開く",
+    "open": "外部で開く",
     "title": "ファイル",
     "upload_new_revision": "編集履歴をアップロード",
     "original_file_name": "元のファイル名",
@@ -602,7 +606,8 @@
     "calculate": "計算",
     "subtree_size": "（サブツリーサイズ: {{size}}、ノード数: {{count}}）",
     "title": "ノート情報",
-    "note_size_info": "ノートのサイズは、このノートに必要なストレージの概算を示します。これは、ノートの内容とそのノートの編集履歴の内容を考慮したものです。"
+    "note_size_info": "ノートのサイズは、このノートに必要なストレージの概算を示します。これは、ノートの内容とそのノートの編集履歴の内容を考慮したものです。",
+    "show_similar_notes": "類似のノートを表示"
   },
   "image_properties": {
     "file_type": "ファイルタイプ",
@@ -1242,7 +1247,8 @@
     "note_type_switcher_label": "{{type}} から切り替え:",
     "note_type_switcher_others": "その他のノートタイプ",
     "note_type_switcher_templates": "テンプレート",
-    "note_type_switcher_collection": "コレクション"
+    "note_type_switcher_collection": "コレクション",
+    "edited_notes": "編集済みノート"
   },
   "search_result": {
     "no_notes_found": "指定された検索パラメータに該当するノートは見つかりませんでした。",
@@ -2156,13 +2162,16 @@
     "execute_sql_description": "このノートは SQL ノートです。クリックすると SQL クエリが実行されます。"
   },
   "status_bar": {
-    "language_title": "コンテンツ全体の言語を変更",
-    "note_info_title": "作成日/変更日やノートのサイズなど、このノートに関する情報を表示する。",
-    "backlinks_title_other": "このノートは {{count}} 件の他のノートからリンクされています。\n\nクリックするとバックリンクのリストが表示されます。",
-    "attachments_title_other": "このノートには {{count}} 件の添付ファイルがあります。クリックすると、添付ファイルのリストが新しいタブで開きます。",
+    "language_title": "コンテンツの言語を変更",
+    "note_info_title": "ノート情報を表示（例: 日付、ノートのサイズなど）",
+    "backlinks_title_other": "バックリンクを表示",
+    "attachments_title_other": "添付ファイルを新しいタブで表示",
     "attributes_other": "{{count}} 個の属性",
-    "attributes_title": "クリックすると専用のペインが開き、このノートの所有属性を編集したり、継承された属性のリストを表示できます。",
-    "note_paths_title": "クリックすると、このノートがツリー内に配置されているパスが表示されます。",
-    "code_note_switcher": "言語モードを変更"
+    "attributes_title": "所有属性と継承属性",
+    "note_paths_title": "ノートパス",
+    "code_note_switcher": "言語モードを変更",
+    "backlinks_other": "{{count}} バックリンク",
+    "attachments_other": "{{count}} 件の添付ファイル",
+    "note_paths_other": "{{count}} 個のパス"
   }
 }
