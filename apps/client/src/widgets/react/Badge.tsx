@@ -59,7 +59,7 @@ export function BadgeWithDropdown({ text, children, tooltip, className, dropdown
         <Dropdown
             className={`dropdown-badge dropdown-${className}`}
             text={<Badge
-                text={<>{text} <Icon icon="bx bx-chevron-down" /></>}
+                text={<>{text} <Icon className="arrow" icon="bx bx-chevron-down" /></>}
                 className={className}
                 {...props}
             />}
