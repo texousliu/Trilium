@@ -182,7 +182,7 @@ function RunActiveNoteButton({ note }: FloatingButtonContext) {
 }
 
 function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
-    const isEnabled = note.mime.startsWith("application/javascript;env=");
+    const isEnabled = !isNewLayout && note.mime.startsWith("application/javascript;env=");
     return isEnabled && <FloatingButton
         icon="bx bx-help-circle"
         text={t("code_buttons.trilium_api_docs_button_title")}

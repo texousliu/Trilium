@@ -6,6 +6,7 @@ import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
+import { openInAppHelpFromUrl } from "../../services/utils";
 import { ViewTypeOptions } from "../collections/interface";
 import { buildSaveSqlToNoteHandler } from "../FloatingButtonsDefinitions";
 import ActionButton from "../react/ActionButton";
@@ -22,6 +23,7 @@ interface NoteActionsCustomProps {
 }
 
 interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
+    noteMime: string;
     noteType: NoteType;
     isReadOnly: boolean;
     isDefaultViewMode: boolean;
@@ -36,12 +38,14 @@ interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
 export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     const { note } = props;
     const noteType = useNoteProperty(note, "type");
+    const noteMime = useNoteProperty(note, "mime");
     const [ viewType ] = useNoteLabel(note, "viewType");
     const parentComponent = useContext(ParentComponent);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const innerProps: NoteActionsCustomInnerProps | null | undefined = noteType && parentComponent && {
+    const innerProps: NoteActionsCustomInnerProps | false = !!noteType && !!noteMime && !!parentComponent && {
         ...props,
         noteType,
+        noteMime,
         viewType: viewType as ViewTypeOptions | null | undefined,
         isDefaultViewMode: props.noteContext.viewScope?.viewMode === "default",
         parentComponent,
@@ -51,6 +55,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     return (innerProps &&
         <div className="note-actions-custom">
             <RunActiveNoteButton {...innerProps } />
+            <OpenTriliumApiDocsButton {...innerProps} />
             <SwitchSplitOrientationButton {...innerProps} />
             <ToggleReadOnlyButton {...innerProps} />
             <SaveToNoteButton {...innerProps} />
@@ -193,5 +198,14 @@ function SaveToNoteButton({ note }: NoteActionsCustomInnerProps) {
         icon="bx bx-save"
         text={t("code_buttons.save_to_note_button_title")}
         onClick={buildSaveSqlToNoteHandler(note)}
+    />;
+}
+
+function OpenTriliumApiDocsButton({ note }: NoteActionsCustomInnerProps) {
+    const isEnabled = note.mime.startsWith("application/javascript;env=");
+    return isEnabled && <ActionButton
+        icon="bx bx-help-circle"
+        text={t("code_buttons.trilium_api_docs_button_title")}
+        onClick={() => openInAppHelpFromUrl(note.mime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
     />;
 }
