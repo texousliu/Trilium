@@ -267,7 +267,7 @@ export function useTriliumOptions<T extends OptionNames>(...names: T[]) {
  * @returns a name with the given prefix and a random alpanumeric string appended to it.
  */
 export function useUniqueName(prefix?: string) {
-    return useMemo(() => (prefix ? `${prefix  }-` : "") + utils.randomString(10), [ prefix ]);
+    return useMemo(() => (prefix ? `${prefix}-` : "") + utils.randomString(10), [ prefix ]);
 }
 
 export function useNoteContext() {

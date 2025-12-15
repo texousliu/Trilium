@@ -241,7 +241,7 @@ function buildNotePaths(noteContext: NoteContext) {
     }
 
     // When hoisted, display only the path starting with the hoisted note.
-    if (noteContext.hoistedNoteId !== "root") {
+    if (noteContext.hoistedNoteId !== "root" && hoistedNotePos > -1) {
         output = output.slice(hoistedNotePos);
     }
 
