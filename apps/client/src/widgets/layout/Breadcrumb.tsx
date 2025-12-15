@@ -1,6 +1,6 @@
 import "./Breadcrumb.css";
 
-import { useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
 import appContext from "../../components/app_context";
@@ -15,7 +15,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../react/hooks";
+import { useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 
@@ -114,14 +114,20 @@ function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
 }
 
 function BreadcrumbLastItem({ notePath }: { notePath: string }) {
+    const linkRef = useRef<HTMLAnchorElement>(null);
     const noteId = notePath.split("/").at(-1);
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
     const title = useNoteProperty(note, "title");
+    useStaticTooltip(linkRef, {
+        placement: "top",
+        title: t("breadcrumb.scroll_to_top_title")
+    });
 
     if (!note) return null;
 
     return (
         <a
+            ref={linkRef}
             href="#"
             className="breadcrumb-last-item tn-link"
             onClick={() => {
