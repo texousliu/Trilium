@@ -101,6 +101,7 @@
                 padding: 0;
                 list-style: none;
 
+                /* Note path card */
                 li {
                     --border-radius: 6px;
                     
@@ -119,7 +120,8 @@
                     & + li {
                         margin-top: 2px;
                     }
-
+                    
+                    /* Current path arrow */
                     &.path-current::before {
                         position: absolute;
                         display: flex;
@@ -136,6 +138,7 @@
                     }
                 }
 
+                /* Note path segment */
                 a {
                     margin-inline: 2px;
                     padding-inline: 2px;
@@ -143,6 +146,7 @@
                     font-weight: normal;
                     text-decoration: none;
 
+                    /* The last segment of the note path */
                     &.basename {
                         color: var(--muted-text-color);
                     }
