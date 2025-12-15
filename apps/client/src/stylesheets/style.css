@@ -2116,58 +2116,106 @@ body.zen:not(.backdrop-effects-disabled) .note-split.type-text .scrolling-contai
 
 /* Fixed formatting toolbar */
 
-body.zen .note-split .ribbon-container {
-    position: fixed;
-    left: 0;
-    bottom: 20px;
-    width: 100%;
-    z-index: 1000;
-    opacity: 0; /* Hidden unless the current note split is focused */
-    pointer-events: none;
-    transition: opacity 100ms linear;
-}
-
-body.zen .note-split:focus-within .ribbon-container {
-    opacity: 1; /* Show when the note split is focused */
-}
-
-body.zen .note-split .ribbon-container .ribbon-body {
-    border: 0;
-}
-
-body.zen .note-split .ribbon-container .classic-toolbar-widget {
-    margin: auto;
-    width: fit-content;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, .1);
-    border-radius: 8px;
-    border: 1px solid var(--main-border-color);
-    padding: 4px;
-    background: var(--menu-background-color);
-}
-
-body.zen .note-split .ribbon-container .classic-toolbar-widget:not(:has(> .ck-toolbar)) {
-    /* Hide the toolbar wrapper if the toolbar is missing */
-    display: none;
-}
-
-body.zen .note-split:focus-within .ribbon-container .classic-toolbar-widget {
-    pointer-events: all;
-}
-
-@media (max-width: 1300px) {
-    body.zen .note-split .ribbon-container .classic-toolbar-widget {
-        /* Set the toolbar to full with */
+body.zen:not(.experimental-feature-new-layout) {
+    .note-split .ribbon-container {
+        position: fixed;
+        left: 0;
+        bottom: 20px;
         width: 100%;
+        z-index: 1000;
+        opacity: 0; /* Hidden unless the current note split is focused */
+        pointer-events: none;
+        transition: opacity 100ms linear;
     }
 
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sw,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_smw,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sme,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_s {
-        /* Force toolbar items overflow dropdowns open upwards */
-        top: auto;
-        bottom: 100%;
+    .note-split:focus-within .ribbon-container {
+        opacity: 1; /* Show when the note split is focused */
+    }
+
+    .note-split .ribbon-container .ribbon-body {
+        border: 0;
+    }
+
+    .note-split .ribbon-container .classic-toolbar-widget {
+        margin: auto;
+        width: fit-content;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, .1);
+        border-radius: 8px;
+        border: 1px solid var(--main-border-color);
+        padding: 4px;
+        background: var(--menu-background-color);
+    }
+
+    .note-split .ribbon-container .classic-toolbar-widget:not(:has(> .ck-toolbar)) {
+        /* Hide the toolbar wrapper if the toolbar is missing */
+        display: none;
+    }
+
+    .note-split:focus-within .ribbon-container .classic-toolbar-widget {
+        pointer-events: all;
+    }
+
+    @media (max-width: 1300px) {
+        .note-split .ribbon-container .classic-toolbar-widget {
+            /* Set the toolbar to full with */
+            width: 100%;
+        }
+
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_smw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sme,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_s {
+            /* Force toolbar items overflow dropdowns open upwards */
+            top: auto;
+            bottom: 100%;
+        }
+    }
+}
+
+body.zen.experimental-feature-new-layout {
+    .status-bar {
+        display: none;
+    }
+
+    .classic-toolbar-widget {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        z-index: 1000;
+        opacity: 0; /* Hidden unless the current note split is focused */
+        pointer-events: none;
+        transition: opacity 100ms linear;
+        width: fit-content;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, .1);
+        border-radius: 8px;
+        border: 1px solid var(--main-border-color);
+        padding: 4px;
+        background: var(--menu-background-color);
+        transform: translateX(-50%);
+    }
+
+    #root-widget:has(.note-split.type-text:focus-within) .classic-toolbar-widget,
+    .classic-toolbar-widget:focus-within {
+        opacity: 1; /* Show when the note split is focused */
+        pointer-events: all;
+    }
+
+    @media (max-width: 1300px) {
+        .classic-toolbar-widget {
+            /* Set the toolbar to full with */
+            width: 100%;
+        }
+
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_smw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sme,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_s {
+            /* Force toolbar items overflow dropdowns open upwards */
+            top: auto;
+            bottom: 100%;
+        }
     }
 }
 
