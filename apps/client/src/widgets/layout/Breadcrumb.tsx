@@ -57,31 +57,35 @@ export default function Breadcrumb({ note, noteContext }: { note: FNote, noteCon
 }
 
 function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined }) {
-    const note = useNote(noteContext?.hoistedNoteId);
-    useNoteLabel(note, "iconClass");
-    const title = useNoteProperty(note, "title");
+    const noteId = noteContext?.hoistedNoteId ?? "root";
 
-    return (note &&
-        <ActionButton
-            className="root-note"
-            icon={note.getIcon()}
-            text={title ?? ""}
-            onClick={() => noteContext?.setNote(note.noteId)}
-            onContextMenu={(e) => {
-                e.preventDefault();
-                link_context_menu.openContextMenu(note.noteId, e);
-            }}
-        />
-    );
-}
+    // Root note is icon only.
+    if (noteId === "root") {
+        const note = froca.getNoteFromCache("root");
+        return (note &&
+            <ActionButton
+                className="root-note"
+                icon={note.getIcon()}
+                text={""}
+                onClick={() => noteContext?.setNote(note.noteId)}
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                    link_context_menu.openContextMenu(note.noteId, e);
+                }}
+            />
+        );
+    }
 
-function BreadcrumbLink({ notePath }: { notePath: string }) {
+    // Hoisted workspace shows both text and icon.
     return (
         <NoteLink
-            notePath={notePath}
+            notePath={noteId}
+            showNoteIcon
+            noPreview
         />
     );
 }
+
 
 function BreadcrumbLastItem({ notePath }: { notePath: string }) {
     const noteId = notePath.split("/").at(-1);
@@ -114,7 +118,7 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
         </>;
     }
 
-    return <BreadcrumbLink notePath={notePath} />;
+    return <NoteLink notePath={notePath} />;
 }
 
 function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
