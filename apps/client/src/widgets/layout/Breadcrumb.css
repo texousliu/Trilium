@@ -40,6 +40,14 @@
         padding: 0;
     }
 
+    .btn.root-note {
+        box-shadow: unset;
+        background: unset;
+        padding-inline: 0.5em;
+        color: inherit;
+        min-width: unset;
+    }
+
     .dropdown-item span,
     .dropdown-item strong,
     .breadcrumb-last-item {

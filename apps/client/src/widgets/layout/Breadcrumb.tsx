@@ -9,6 +9,7 @@ import FNote from "../../entities/fnote";
 import link_context_menu from "../../menus/link_context_menu";
 import froca from "../../services/froca";
 import ActionButton from "../react/ActionButton";
+import Button from "../react/Button";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
 import { useChildNotes, useNote, useNoteLabel, useNoteProperty } from "../react/hooks";
@@ -62,10 +63,10 @@ function BreadcrumbRoot({ noteContext }: { noteContext: NoteContext | undefined 
     const title = useNoteProperty(note, "title");
 
     return (note &&
-        <ActionButton
+        <Button
             className="root-note"
             icon={note.getIcon()}
-            text={title ?? ""}
+            text={note.noteId !== "root" ? (title ?? "") : ""}
             onClick={() => noteContext?.setNote(note.noteId)}
             onContextMenu={(e) => {
                 e.preventDefault();

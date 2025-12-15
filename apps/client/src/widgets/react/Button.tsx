@@ -1,11 +1,11 @@
-import type { ComponentChildren, RefObject } from "preact";
-import type { CSSProperties } from "preact/compat";
-import { useMemo } from "preact/hooks";
+import type { ComponentChildren, HTMLAttributes, RefObject } from "preact";
 import { memo } from "preact/compat";
+import { useMemo } from "preact/hooks";
+
 import { CommandNames } from "../../components/app_context";
 import Icon from "./Icon";
 
-export interface ButtonProps {
+export interface ButtonProps extends Pick<HTMLAttributes<HTMLButtonElement>, "className" | "style" | "onContextMenu"> {
     name?: string;
     /** Reference to the button element. Mostly useful for requesting focus. */
     buttonRef?: RefObject<HTMLButtonElement>;
@@ -18,7 +18,6 @@ export interface ButtonProps {
     primary?: boolean;
     disabled?: boolean;
     size?: "normal" | "small" | "micro";
-    style?: CSSProperties;
     triggerCommand?: CommandNames;
     title?: string;
 }
@@ -78,7 +77,7 @@ export function ButtonGroup({ children }: { children: ComponentChildren }) {
         <div className="btn-group" role="group">
             {children}
         </div>
-    )
+    );
 }
 
 export function SplitButton({ text, icon, children, ...restProps }: {
@@ -103,7 +102,7 @@ export function SplitButton({ text, icon, children, ...restProps }: {
                 {children}
             </ul>
         </ButtonGroup>
-    )
+    );
 }
 
 export default Button;
