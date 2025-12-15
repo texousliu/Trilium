@@ -1,8 +1,12 @@
 import "./NoteBadges.css";
 
+import { copyTextWithToast } from "../../services/clipboard_ext";
 import { t } from "../../services/i18n";
-import { Badge } from "../react/Badge";
+import { goToLinkExt } from "../../services/link";
+import { Badge, BadgeWithDropdown } from "../react/Badge";
+import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
+import { useShareState } from "../ribbon/BasicPropertiesTab";
 import { useShareInfo } from "../shared_info";
 
 export default function NoteBadges() {
@@ -43,19 +47,29 @@ function ReadOnlyBadge() {
 
 function ShareBadge() {
     const { note } = useNoteContext();
-    const { isSharedExternally, link, linkHref } = useShareInfo(note);
+    const [ , switchShareState ] = useShareState(note);
+    const { isSharedExternally, linkHref } = useShareInfo(note);
 
-    return (link &&
-        <Badge
+    return (linkHref &&
+        <BadgeWithDropdown
             icon={isSharedExternally ? "bx bx-world" : "bx bx-share-alt"}
             text={isSharedExternally ? t("breadcrumb_badges.shared_publicly") : t("breadcrumb_badges.shared_locally")}
-            tooltip={isSharedExternally ?
-                t("breadcrumb_badges.shared_publicly_description", { link }) :
-                t("breadcrumb_badges.shared_locally_description", { link })
-            }
             className="share-badge"
-            href={linkHref}
-        />
+        >
+            <FormListItem
+                icon="bx bx-copy"
+                onClick={() => copyTextWithToast(linkHref)}
+            >{t("breadcrumb_badges.shared_copy_to_clipboard")}</FormListItem>
+            <FormListItem
+                icon="bx bx-link-external"
+                onClick={(e) => goToLinkExt(e, linkHref)}
+            >{t("breadcrumb_badges.shared_open_in_browser")}</FormListItem>
+            <FormDropdownDivider />
+            <FormListItem
+                icon="bx bx-unlink"
+                onClick={() => switchShareState(false)}
+            >{t("breadcrumb_badges.shared_unshare")}</FormListItem>
+        </BadgeWithDropdown>
     );
 }
 
