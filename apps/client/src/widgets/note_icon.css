@@ -74,3 +74,34 @@ div.note-icon-widget {
     width: 1em;
     height: 1em;
 }
+
+body.experimental-feature-new-layout {
+    --note-icon-button-background-color: #444444;
+    --note-icon-button-color: white;
+
+    .note-icon-widget button.note-icon {
+        position: relative;
+        background: transparent !important;
+
+        &:hover {
+            transform: scale(1.15);
+            transition: transform 150ms ease-out;
+        }
+
+        /* The icon */
+        &::before {
+            position: relative;
+            z-index: 1;
+            color: var(--note-icon-button-color);
+        }
+
+        /* The background circle */
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: var(--note-icon-button-background-color);
+        }
+    }
+}
