@@ -8,6 +8,7 @@ import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import contextMenu from "../../menus/context_menu";
 import link_context_menu from "../../menus/link_context_menu";
+import { buildTreeMenuItems } from "../../menus/tree_context_menu";
 import { getReadableTextColor } from "../../services/css_class_manager";
 import froca from "../../services/froca";
 import hoisted_note from "../../services/hoisted_note";
@@ -154,14 +155,31 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
     return <NoteLink
         notePath={notePath}
         noContextMenu
-        onContextMenu={(e) => {
+        onContextMenu={async (e) => {
             e.preventDefault();
+
+            const notePathArray = notePath.split("/");
+            const parentNoteId = notePathArray.at(-2);
+            const childNoteId = notePathArray.at(-1);
+            console.log(parentNoteId, childNoteId);
+            if (!parentNoteId || !childNoteId) return;
+
+            const branchId = await froca.getBranchId(parentNoteId, childNoteId);
+            if (!branchId) return;
+
+            const branch = froca.getBranch(branchId);
+            const note = await branch?.getNote();
+            if (!branch || !note) return;
+
+            const items = await buildTreeMenuItems({
+                branch,
+                note,
+                noSelectedNotes: true,
+                selectedNotes: []
+            });
+
             contextMenu.show({
-                items: [
-                    {
-                        title: "Foo"
-                    }
-                ],
+                items,
                 x: e.pageX,
                 y: e.pageY
             });
