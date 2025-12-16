@@ -130,6 +130,7 @@ function BreadcrumbLastItem({ notePath, parentComponent }: { notePath: string, p
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
     const title = useNoteProperty(note, "title");
     const colorClass = useNoteColorClass(note);
+    const [ archived ] = useNoteLabelBoolean(note, "archived");
     useStaticTooltip(linkRef, {
         placement: "top",
         title: t("breadcrumb.scroll_to_top_title")
@@ -141,7 +142,7 @@ function BreadcrumbLastItem({ notePath, parentComponent }: { notePath: string, p
         <a
             ref={linkRef}
             href="#"
-            className={clsx("breadcrumb-last-item tn-link", colorClass)}
+            className={clsx("breadcrumb-last-item tn-link", colorClass, archived && "archived")}
             onClick={() => {
                 const activeNtxId = appContext.tabManager.activeNtxId;
                 const scrollingContainer = document.querySelector(`[data-ntx-id="${activeNtxId}"] .scrolling-container`);
