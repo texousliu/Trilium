@@ -87,7 +87,7 @@ body.experimental-feature-new-layout {
         background: transparent !important;
 
         &, &:hover {
-            border-radius: 50%; 
+            border-radius: 50%;
         }
 
         /* The icon */
@@ -104,6 +104,12 @@ body.experimental-feature-new-layout {
             inset: 0;
             border-radius: 50%;
             background: var(--note-icon-button-background-color);
+        }
+
+        
+        &:hover::after {
+            background: var(--note-icon-button-hover-background-color);
+            transition: background 200ms ease-out;
         }
 
         &:focus-visible {
