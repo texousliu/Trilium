@@ -13,6 +13,7 @@
     & > .inline-title-row {
         display: flex;
         align-items: center;
+        gap: 16px;
         transition: var(--title-transition);
 
         &.hidden {
@@ -26,12 +27,22 @@
     }
 
     .note-icon-widget {
-        padding: 0;
+        --note-icon-size: 35px;
     }
 
-    .inline-title-row {
-        border-bottom: 2px solid gray;
+    .note-title-caption {
+        flex-grow: 1;
     }
+
+    .note-title-widget {
+        --note-title-size: 1.8em;
+        --note-title-padding-inline: 0;
+
+        input {
+            line-height: 1;
+        }
+    }
+
 }
 
 .title-row {
@@ -59,10 +70,11 @@ body.prefers-centered-content .inline-title {
     display: flex;
     gap: 0.25em;
     margin: 0;
-    margin-top: 4px;
     list-style-type: none;
     opacity: .5;
     flex-wrap: wrap;
+    font-size: .85rem;
+    line-height: 1;
 
     span.value {
         font-weight: 500;

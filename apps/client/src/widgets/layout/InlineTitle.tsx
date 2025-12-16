@@ -71,10 +71,12 @@ export default function InlineTitle() {
         >
             <div class={clsx("inline-title-row", titleHidden && "hidden")}>
                 <NoteIcon />
-                <NoteTitleWidget />
+                <div class="note-title-caption">
+                    <NoteTitleWidget />
+                    <NoteTitleDetails />
+                </div>
             </div>
 
-            <NoteTitleDetails />
             <EditedNotes />
             <NoteTypeSwitcher />
         </div>
