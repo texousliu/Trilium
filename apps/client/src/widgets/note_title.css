@@ -1,15 +1,21 @@
-.note-title-widget {
+div.note-title-widget {
+    /* The font size for the title */
+    --note-title-size: 180%;
+    /* The horizontal padding of the title widget */
+    --note-title-padding-inline: 12px;
+
     flex-grow: 1000;
-    height: 100%;
+    height: auto;
+    contain: unset;
 }
 
 .note-title-widget input.note-title {
-    font-size: 110%;
+    font-size: var(--note-title-size);
     border: 0;
-    margin: 2px 0px;
     min-width: 5em;
     width: 100%;
-    padding: 1px 12px;
+    padding-block: 0;
+    padding-inline: var(--note-title-padding-inline);
 }
 
 .note-title-widget input.note-title[readonly] {
@@ -22,15 +28,12 @@
 }
 
 body.mobile .note-title-widget input.note-title {
-    padding: 0;
-}
-
-body.desktop .note-title-widget input.note-title {
-    font-size: 180%;
+    --note-title-padding-inline: 0;
 }
 
 body.experimental-feature-new-layout {
     .title-row {
+
         container-type: size;
         border-bottom: 1px solid var(--main-border-color);
         transition: border 400ms ease-out;
@@ -40,9 +43,20 @@ body.experimental-feature-new-layout {
             transition: none;
         }
 
+        .note-icon-widget {
+            --note-icon-size: 20px;
+            --note-icon-padding-size: 8px;
+        }
+        
+        .note-title-widget {
+            --note-title-size: 18px;
+            --note-title-padding-inline: 4px;
+        }
+
         @container (max-width: 700px) {
-            .note-icon-widget .note-icon {
-                font-size: 1.3em;
+            .note-title-widget {
+                --note-title-size: 1.25rem;
+                --note-title-padding-inline: 4px;
             }
 
             .note-title-widget {
