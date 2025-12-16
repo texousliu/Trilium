@@ -8,6 +8,7 @@ import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import contextMenu from "../../menus/context_menu";
 import link_context_menu from "../../menus/link_context_menu";
+import { copyTextWithToast } from "../../services/clipboard_ext";
 import { getReadableTextColor } from "../../services/css_class_manager";
 import froca from "../../services/froca";
 import hoisted_note from "../../services/hoisted_note";
@@ -173,6 +174,7 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
             if (!note) return;
 
             const notSearch = note?.type !== "search";
+            const notOptionsOrHelp = !note?.noteId.startsWith("_options") && !note?.noteId.startsWith("_help");
             const isNotRoot = note?.noteId !== "root";
             const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
             const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
@@ -200,6 +202,9 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                         uiIcon: "bx bx-duplicate",
                         enabled: isNotRoot && !isHoisted
                     },
+                    { kind: "separator" },
+                    { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
+                    { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp }
                 ],
                 x: e.pageX,
                 y: e.pageY,
@@ -208,12 +213,20 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                         return;
                     }
 
-                    if (command) {
-                        parentComponent?.triggerCommand(command, {
-                            noteId,
-                            selectedOrActiveBranchIds: [ branchId ],
-                            selectedOrActiveNoteIds: [ noteId ]
-                        });
+                    if (!command) return;
+                    switch (command) {
+                        case "copyNotePathToClipboard":
+                            copyTextWithToast(`#${notePath}`);
+                            break;
+                        case "recentChangesInSubtree":
+                            parentComponent?.triggerCommand("showRecentChanges", { ancestorNoteId: noteId });
+                            break;
+                        default:
+                            parentComponent?.triggerCommand(command, {
+                                noteId,
+                                selectedOrActiveBranchIds: [ branchId ],
+                                selectedOrActiveNoteIds: [ noteId ]
+                            });
                     }
                 },
             });
