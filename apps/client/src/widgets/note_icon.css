@@ -109,5 +109,10 @@ body.experimental-feature-new-layout {
         &:focus-visible {
             outline: 2px solid var(--note-icon-button-color);
         }
+
+        &:hover:not(.bx-empty:disabled)::after {
+            background: var(--note-icon-button-hover-background-color);
+            transition: background 200ms ease-out;
+        }
     }
 }
