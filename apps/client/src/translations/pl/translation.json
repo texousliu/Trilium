@@ -1964,7 +1964,7 @@
   "note_title": {
     "placeholder": "wpisz tytuł notatki tutaj...",
     "created_on": "Utworzono <Value />",
-    "last_modified": "Ostatnio zmodyfikowano <Value />",
+    "last_modified": "Zmodyfikowano: <Value />",
     "note_type_switcher_label": "Zmień z {{type}} na:",
     "note_type_switcher_others": "Inny typ notatki",
     "note_type_switcher_templates": "Szablon",
@@ -2159,7 +2159,10 @@
     "execute_script": "Uruchom skrypt",
     "execute_script_description": "Ta notatka jest notatką skryptową. Kliknij, aby wykonać skrypt.",
     "execute_sql": "Uruchom SQL",
-    "execute_sql_description": "Ta notatka jest notatką SQL. Kliknij, aby wykonać zapytanie SQL."
+    "execute_sql_description": "Ta notatka jest notatką SQL. Kliknij, aby wykonać zapytanie SQL.",
+    "shared_copy_to_clipboard": "Kopiuj link do schowka",
+    "shared_open_in_browser": "Otwórz link w przeglądarce",
+    "shared_unshare": "Usuń udostępnienie"
   },
   "status_bar": {
     "language_title": "Zmień język treści",
