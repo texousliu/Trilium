@@ -98,18 +98,12 @@ body.experimental-feature-new-layout {
         }
 
         /* The background circle */
-        &::after {
+        &:not(.bx-empty:disabled)::after {
             content: "";
             position: absolute;
             inset: 0;
             border-radius: 50%;
             background: var(--note-icon-button-background-color);
-        }
-
-        
-        &:hover::after {
-            background: var(--note-icon-button-hover-background-color);
-            transition: background 200ms ease-out;
         }
 
         &:focus-visible {
