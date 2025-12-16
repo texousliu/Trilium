@@ -9,7 +9,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
-import FNote from "../../entities/fnote";
+import FNote, { NOTE_TYPE_ICONS } from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { t } from "../../services/i18n";
 import { ViewScope } from "../../services/link";
@@ -220,10 +220,10 @@ export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
     const dropdownRef = useRef<BootstrapDropdown>(null);
     const { metadata, ...sizeProps } = useNoteMetadata(note);
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
-    const currentNoteType = useNoteProperty(note, "type");
-    const currentNoteTypeData = useMemo(() => NOTE_TYPES.find(t => t.type === currentNoteType), [ currentNoteType ]);
+    const noteType = useNoteProperty(note, "type");
+    const noteTypeMapping = useMemo(() => NOTE_TYPES.find(t => t.type === noteType), [ noteType ]);
 
-    return (note && currentNoteTypeData &&
+    return (note && noteType && noteTypeMapping &&
         <StatusBarDropdown
             icon="bx bx-info-circle"
             title={t("status_bar.note_info_title")}
@@ -235,7 +235,7 @@ export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
                 {originalFileName && <NoteInfoValue text={t("file_properties.original_file_name")} value={originalFileName} />}
                 <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
                 <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
-                <NoteInfoValue text={t("note_info_widget.type")} value={<><Icon icon={`bx ${currentNoteTypeData.icon}`}/>{" "}{currentNoteTypeData?.title}</>} />
+                <NoteInfoValue text={t("note_info_widget.type")} value={<><Icon icon={`bx ${noteTypeMapping.icon ?? NOTE_TYPE_ICONS[noteType]}`}/>{" "}{noteTypeMapping?.title}</>} />
                 {note.mime && <NoteInfoValue text={t("note_info_widget.mime")} value={note.mime} />}
                 <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
                 <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
