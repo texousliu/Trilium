@@ -16,7 +16,7 @@ function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewS
     });
 }
 
-function getItems(e: ContextMenuEvent | LeafletMouseEvent): MenuItem<"openNoteInNewTab" | "openNoteInNewSplit" | "openNoteInNewWindow" | "openNoteInPopup">[] {
+function getItems(e: ContextMenuEvent | LeafletMouseEvent): MenuItem<CommandNames>[] {
     const ntxId = getNtxId(e);
     const isMobileSplitOpen = isMobile() && appContext.tabManager.getNoteContextById(ntxId).getMainContext().getSubContexts().length > 1;
 
