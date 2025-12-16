@@ -425,7 +425,7 @@
     "convert-to-attachment-confirm": "選択したノートを親ノートの添付ファイルに変換してもよろしいですか？この操作は画像ノートにのみ適用され、その他のノートはスキップされます。",
     "open-in-popup": "クイック編集",
     "hoist-note": "ホイストノート",
-    "unhoist-note": "ノートをホイストしない",
+    "unhoist-note": "ノートのホイストを解除",
     "edit-branch-prefix": "ブランチの接頭辞を編集",
     "archive": "アーカイブ",
     "unarchive": "アーカイブ解除"
@@ -1242,8 +1242,8 @@
   },
   "note_title": {
     "placeholder": "ここにノートのタイトルを入力...",
-    "created_on": "作成日 <Value />",
-    "last_modified": "最終更新日 <Value />",
+    "created_on": "<Value /> に作成",
+    "last_modified": "<Value /> に変更",
     "note_type_switcher_label": "{{type}} から切り替え:",
     "note_type_switcher_others": "その他のノートタイプ",
     "note_type_switcher_templates": "テンプレート",
@@ -2157,7 +2157,10 @@
     "execute_script": "スクリプトを実行",
     "execute_script_description": "このノートはスクリプトノートです。クリックするとスクリプトが実行されます。",
     "execute_sql": "SQL を実行",
-    "execute_sql_description": "このノートは SQL ノートです。クリックすると SQL クエリが実行されます。"
+    "execute_sql_description": "このノートは SQL ノートです。クリックすると SQL クエリが実行されます。",
+    "shared_copy_to_clipboard": "リンクをクリップボードにコピー",
+    "shared_open_in_browser": "ブラウザでリンクを開く",
+    "shared_unshare": "共有を削除"
   },
   "status_bar": {
     "language_title": "コンテンツの言語を変更",
@@ -2171,5 +2174,11 @@
     "backlinks_other": "{{count}} バックリンク",
     "attachments_other": "{{count}} 件の添付ファイル",
     "note_paths_other": "{{count}} 個のパス"
+  },
+  "breadcrumb": {
+    "hoisted_badge": "ホイスト",
+    "hoisted_badge_title": "ホイスト解除",
+    "workspace_badge": "ワークスペース",
+    "scroll_to_top_title": "ノートの先頭にジャンプ"
   }
 }
