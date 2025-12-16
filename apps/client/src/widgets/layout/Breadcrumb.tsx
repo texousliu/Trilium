@@ -3,7 +3,7 @@ import "./Breadcrumb.css";
 import { useContext, useRef, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
-import appContext, { CommandNames } from "../../components/app_context";
+import appContext from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import contextMenu, { MenuItem } from "../../menus/context_menu";
@@ -12,7 +12,6 @@ import link_context_menu from "../../menus/link_context_menu";
 import { TreeCommandNames } from "../../menus/tree_context_menu";
 import attributes from "../../services/attributes";
 import branches from "../../services/branches";
-import { executeBulkActions } from "../../services/bulk_action";
 import { copyTextWithToast } from "../../services/clipboard_ext";
 import { getReadableTextColor } from "../../services/css_class_manager";
 import froca from "../../services/froca";
@@ -246,6 +245,13 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                         return NoteColorPicker({note});
                     }
                 } : null),
+                { kind: "separator" },
+                {
+                    title: t("tree-context-menu.search-in-subtree"),
+                    command: "searchInSubtree",
+                    uiIcon: "bx bx-search",
+                    enabled: notSearch
+                }
             ];
 
             contextMenu.show({
@@ -268,6 +274,7 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                         default:
                             parentComponent?.triggerCommand(command, {
                                 noteId,
+                                notePath,
                                 selectedOrActiveBranchIds: [ branchId ],
                                 selectedOrActiveNoteIds: [ noteId ]
                             });
