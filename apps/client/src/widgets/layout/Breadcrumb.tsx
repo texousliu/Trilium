@@ -154,16 +154,21 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
     return <NoteLink
         notePath={notePath}
         noContextMenu
-        onContextMenu={(e) => {
+        onContextMenu={async (e) => {
             e.preventDefault();
+
+            const noteId = notePath.split("/").at(-1);
+            if (!noteId) return;
+            const note = await froca.getNote(noteId);
+            if (!note) return;
+
             contextMenu.show({
                 items: [
-                    {
-                        title: "Foo"
-                    }
+                    ...link_context_menu.getItems(e),
                 ],
                 x: e.pageX,
-                y: e.pageY
+                y: e.pageY,
+                selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, e, note.noteId),
             });
         }}
     />;
