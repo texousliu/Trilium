@@ -91,7 +91,6 @@ body.prefers-centered-content .inline-title {
     margin-top: .2rem;
     list-style-type: none;
     opacity: .5;
-    flex-wrap: wrap;
     font-size: .85rem;
     line-height: 1;
     flex-wrap: nowrap;
