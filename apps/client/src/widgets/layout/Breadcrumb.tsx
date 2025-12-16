@@ -313,11 +313,11 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
         const note = await branch?.getNote();
         if (!note) return;
 
-        const notSearch = note?.type !== "search";
-        const notOptionsOrHelp = !note?.noteId.startsWith("_options") && !note?.noteId.startsWith("_help");
+        const notSearch = note.type !== "search";
+        const notOptionsOrHelp = !note.noteId.startsWith("_options") && !note.noteId.startsWith("_help");
         const isArchived = note.isArchived;
-        const isNotRoot = note?.noteId !== "root";
-        const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
+        const isNotRoot = note.noteId !== "root";
+        const isHoisted = note.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
         const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
         const parentNotSearch = !parentNote || parentNote.type !== "search";
 
@@ -369,7 +369,7 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
                 enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp,
                 handler: () => branches.deleteNotes([ branchId ])
             },
-            { kind: "separator"},
+            { kind: "separator" },
             (notOptionsOrHelp ? {
                 kind: "custom",
                 componentFn: () => {
@@ -396,7 +396,7 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
             x: e.pageX,
             y: e.pageY,
             selectMenuItemHandler: ({ command }) => {
-                if (link_context_menu.handleLinkContextMenuItem(command, e, note.noteId)) {
+                if (link_context_menu.handleLinkContextMenuItem(command, e, notePath)) {
                     return;
                 }
 

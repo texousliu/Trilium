@@ -335,7 +335,7 @@ export function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDo
                 window.open(hrefLink, "_blank");
             } else {
                 // Enable protocols supported by CKEditor 5 to be clickable.
-                if (ALLOWED_PROTOCOLS.some((protocol) => hrefLink.toLowerCase().startsWith(`${protocol  }:`))) {
+                if (ALLOWED_PROTOCOLS.some((protocol) => hrefLink.toLowerCase().startsWith(`${protocol}:`))) {
                     if ( utils.isElectron()) {
                         const electron = utils.dynamicRequire("electron");
                         electron.shell.openExternal(hrefLink);
