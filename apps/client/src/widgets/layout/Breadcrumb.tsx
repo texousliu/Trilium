@@ -19,6 +19,7 @@ import froca from "../../services/froca";
 import hoisted_note from "../../services/hoisted_note";
 import { t } from "../../services/i18n";
 import note_create from "../../services/note_create";
+import tree from "../../services/tree";
 import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
@@ -268,9 +269,7 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
     return async (e: MouseEvent) => {
         e.preventDefault();
 
-        const notePathComponents = notePath.split("/");
-        const parentNoteId = notePathComponents.at(-2);
-        const noteId = notePathComponents.at(-1);
+        const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
         if (!parentNoteId || !noteId) return;
 
         const branchId = await froca.getBranchId(parentNoteId, noteId);
