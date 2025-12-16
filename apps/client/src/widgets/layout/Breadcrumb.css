@@ -63,7 +63,7 @@
     a.breadcrumb-last-item,
     a.breadcrumb-last-item:visited {
         text-decoration: none;
-        color: currentColor;
+        color: var(--custom-color, currentColor);
         font-weight: 600;
     }
 

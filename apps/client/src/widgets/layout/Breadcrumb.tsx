@@ -1,5 +1,6 @@
 import "./Breadcrumb.css";
 
+import clsx from "clsx";
 import { useContext, useRef, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
@@ -23,7 +24,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
+import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import { NewNoteLink } from "../react/NoteLink";
 import { ParentComponent } from "../react/react_utils";
@@ -128,6 +129,7 @@ function BreadcrumbLastItem({ notePath, parentComponent }: { notePath: string, p
     const noteId = notePath.split("/").at(-1);
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
     const title = useNoteProperty(note, "title");
+    const colorClass = useNoteColorClass(note);
     useStaticTooltip(linkRef, {
         placement: "top",
         title: t("breadcrumb.scroll_to_top_title")
@@ -139,7 +141,7 @@ function BreadcrumbLastItem({ notePath, parentComponent }: { notePath: string, p
         <a
             ref={linkRef}
             href="#"
-            className="breadcrumb-last-item tn-link"
+            className={clsx("breadcrumb-last-item tn-link", colorClass)}
             onClick={() => {
                 const activeNtxId = appContext.tabManager.activeNtxId;
                 const scrollingContainer = document.querySelector(`[data-ntx-id="${activeNtxId}"] .scrolling-container`);
