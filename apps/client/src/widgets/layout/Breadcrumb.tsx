@@ -6,7 +6,6 @@ import { Fragment } from "preact/jsx-runtime";
 import appContext from "../../components/app_context";
 import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
-import FNote from "../../entities/fnote";
 import contextMenu, { MenuItem } from "../../menus/context_menu";
 import NoteColorPicker from "../../menus/custom-items/NoteColorPicker";
 import link_context_menu from "../../menus/link_context_menu";
@@ -24,7 +23,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
-import { useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
+import { useActiveNoteContext, useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
 import { ParentComponent } from "../react/react_utils";
@@ -33,37 +32,37 @@ const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
 const FINAL_ITEMS = 2;
 
-export default function Breadcrumb({ note, noteContext }: { note: FNote, noteContext: NoteContext }) {
-    const notePath = buildNotePaths(noteContext);
+export default function Breadcrumb() {
+    const { note, notePaths, noteContext } = useNotePaths();
     const parentComponent = useContext(ParentComponent);
 
     return (
         <div className="breadcrumb">
-            {notePath.length > COLLAPSE_THRESHOLD ? (
+            {notePaths.length > COLLAPSE_THRESHOLD ? (
                 <>
-                    {notePath.slice(0, INITIAL_ITEMS).map((item, index) => (
+                    {notePaths.slice(0, INITIAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
-                            <BreadcrumbItem index={index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} parentComponent={parentComponent} />
-                            <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />
+                            <BreadcrumbItem index={index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
+                            <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} noteContext={noteContext} />
                         </Fragment>
                     ))}
-                    <BreadcrumbCollapsed items={notePath.slice(INITIAL_ITEMS, -FINAL_ITEMS)} noteContext={noteContext} />
-                    {notePath.slice(-FINAL_ITEMS).map((item, index) => (
+                    <BreadcrumbCollapsed items={notePaths.slice(INITIAL_ITEMS, -FINAL_ITEMS)} noteContext={noteContext} />
+                    {notePaths.slice(-FINAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
-                            <BreadcrumbSeparator notePath={notePath[notePath.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
-                            <BreadcrumbItem index={notePath.length - FINAL_ITEMS + index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} parentComponent={parentComponent} />
+                            <BreadcrumbSeparator notePath={notePaths[notePaths.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
+                            <BreadcrumbItem index={notePaths.length - FINAL_ITEMS + index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
                         </Fragment>
                     ))}
                 </>
             ) : (
-                notePath.map((item, index) => (
+                notePaths.map((item, index) => (
                     <Fragment key={item}>
                         {index === 0
                             ? <BreadcrumbRoot noteContext={noteContext} />
-                            : <BreadcrumbItem index={index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} parentComponent={parentComponent} />
+                            : <BreadcrumbItem index={index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
                         }
-                        {(index < notePath.length - 1 || note?.hasChildren()) &&
-                            <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />}
+                        {(index < notePaths.length - 1 || note?.hasChildren()) &&
+                            <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} noteContext={noteContext} />}
                     </Fragment>
                 ))
             )}
@@ -239,16 +238,16 @@ function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteCont
     );
 }
 
-function buildNotePaths(noteContext: NoteContext) {
-    const notePathArray = noteContext.notePathArray;
-    if (!notePathArray) return [];
+function useNotePaths() {
+    const { note, notePath, hoistedNoteId, noteContext } = useActiveNoteContext();
+    const notePathArray = (notePath ?? "").split("/");
 
     let prefix = "";
     let output: string[] = [];
     let pos = 0;
     let hoistedNotePos = -1;
     for (const notePath of notePathArray) {
-        if (noteContext.hoistedNoteId !== "root" && notePath === noteContext.hoistedNoteId) {
+        if (hoistedNoteId !== "root" && notePath === hoistedNoteId) {
             hoistedNotePos = pos;
         }
         output.push(`${prefix}${notePath}`);
@@ -257,11 +256,15 @@ function buildNotePaths(noteContext: NoteContext) {
     }
 
     // When hoisted, display only the path starting with the hoisted note.
-    if (noteContext.hoistedNoteId !== "root" && hoistedNotePos > -1) {
+    if (hoistedNoteId !== "root" && hoistedNotePos > -1) {
         output = output.slice(hoistedNotePos);
     }
 
-    return output;
+    return {
+        note,
+        notePaths: output,
+        noteContext
+    };
 }
 
 //#region Context menu

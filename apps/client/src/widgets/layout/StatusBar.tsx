@@ -64,7 +64,7 @@ export default function StatusBar() {
 
             <div className="status-bar-main-row">
                 {context && attributesContext && noteInfoContext && <>
-                    <Breadcrumb {...context} />
+                    <Breadcrumb />
 
                     <div className="actions-row">
                         <CodeNoteSwitcher {...context} />

@@ -20,6 +20,7 @@ import server from "../../services/server";
 import shortcuts, { Handler, removeIndividualBinding } from "../../services/shortcuts";
 import SpacedUpdate from "../../services/spaced_update";
 import toast, { ToastOptions } from "../../services/toast";
+import tree from "../../services/tree";
 import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../services/utils";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import NoteContextAwareWidget from "../note_context_aware_widget";
@@ -386,6 +387,16 @@ export function useActiveNoteContext() {
             setHoistedNoteId(noteId);
         }
     });
+    /**
+     * Note context doesn't actually refresh at all if the active note is moved around (e.g. the note path changes).
+     * Address that by listening to note changes.
+     */
+    useTriliumEvent("entitiesReloaded", async ({ loadResults }) => {
+        if (note && notePath && loadResults.getBranchRows().some(b => b.noteId === note.noteId)) {
+            const resolvedNotePath = await tree.resolveNotePath(notePath, hoistedNoteId);
+            setNotePath(resolvedNotePath);
+        }
+    });
 
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
@@ -393,7 +404,8 @@ export function useActiveNoteContext() {
     return {
         note,
         noteId: noteContext?.note?.noteId,
-        notePath: noteContext?.notePath,
+        /** The note path of the note context. Unlike `noteContext.notePath`, this one actually reacts to the active note being moved around. */
+        notePath,
         hoistedNoteId,
         ntxId: noteContext?.ntxId,
         viewScope: noteContext?.viewScope,
