@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
+
 import link, { ViewScope } from "../../services/link";
 import { useImperativeSearchHighlighlighting, useTriliumEvent } from "./hooks";
 
@@ -16,9 +17,10 @@ interface NoteLinkOpts {
     title?: string;
     viewScope?: ViewScope;
     noContextMenu?: boolean;
+    onContextMenu?: (e: MouseEvent) => void;
 }
 
-export default function NoteLink({ className, containerClassName, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens, title, viewScope, noContextMenu }: NoteLinkOpts) {
+export default function NoteLink({ className, containerClassName, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens, title, viewScope, noContextMenu, onContextMenu }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
     const noteId = stringifiedNotePath.split("/").at(-1);
     const ref = useRef<HTMLSpanElement>(null);
@@ -34,6 +36,13 @@ export default function NoteLink({ className, containerClassName, notePath, show
             viewScope
         }).then(setJqueryEl);
     }, [ stringifiedNotePath, showNotePath, title, viewScope, noteTitle ]);
+
+    useEffect(() => {
+        const el = jqueryEl?.[0];
+        if (!el || !onContextMenu) return;
+        el.addEventListener("contextmenu", onContextMenu);
+        return () => el.removeEventListener("contextmenu", onContextMenu);
+    }, [ jqueryEl, onContextMenu ]);
 
     useEffect(() => {
         if (!ref.current || !jqueryEl) return;

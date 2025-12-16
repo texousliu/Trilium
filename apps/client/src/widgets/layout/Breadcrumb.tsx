@@ -6,6 +6,7 @@ import { Fragment } from "preact/jsx-runtime";
 import appContext from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
+import contextMenu from "../../menus/context_menu";
 import link_context_menu from "../../menus/link_context_menu";
 import { getReadableTextColor } from "../../services/css_class_manager";
 import froca from "../../services/froca";
@@ -150,7 +151,22 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
         </>;
     }
 
-    return <NoteLink notePath={notePath} />;
+    return <NoteLink
+        notePath={notePath}
+        noContextMenu
+        onContextMenu={(e) => {
+            e.preventDefault();
+            contextMenu.show({
+                items: [
+                    {
+                        title: "Foo"
+                    }
+                ],
+                x: e.pageX,
+                y: e.pageY
+            });
+        }}
+    />;
 }
 
 function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
