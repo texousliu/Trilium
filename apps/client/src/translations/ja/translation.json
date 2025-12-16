@@ -425,7 +425,7 @@
     "convert-to-attachment-confirm": "選択したノートを親ノートの添付ファイルに変換してもよろしいですか？この操作は画像ノートにのみ適用され、その他のノートはスキップされます。",
     "open-in-popup": "クイック編集",
     "hoist-note": "ホイストノート",
-    "unhoist-note": "ノートをホイストしない",
+    "unhoist-note": "ノートのホイストを解除",
     "edit-branch-prefix": "ブランチの接頭辞を編集",
     "archive": "アーカイブ",
     "unarchive": "アーカイブ解除"
@@ -1242,8 +1242,8 @@
   },
   "note_title": {
     "placeholder": "ここにノートのタイトルを入力...",
-    "created_on": "作成日 <Value />",
-    "last_modified": "最終更新日 <Value />",
+    "created_on": "<Value /> に作成",
+    "last_modified": "<Value /> に変更",
     "note_type_switcher_label": "{{type}} から切り替え:",
     "note_type_switcher_others": "その他のノートタイプ",
     "note_type_switcher_templates": "テンプレート",
@@ -2152,14 +2152,15 @@
     "read_only_temporarily_disabled": "一時的に編集可能",
     "read_only_auto_description": "このノートはパフォーマンス上の理由により、自動的に読み取り専用モードに設定されました。この自動制限は設定から調整できます。\n\n一時的に編集するにはクリックしてください。",
     "read_only_temporarily_disabled_description": "このノートは現在編集可能ですが、通常は読み取り専用です。別のノートに移動すると読み取り専用に戻ります。\n\nクリックすると読み取り専用モードが再度有効になります。",
-    "shared_publicly_description": "このノートは {{- link}} でオンライン公開されており、誰でも閲覧可能です。\n\n共有ノートに移動するにはクリックするか、右クリックしてその他のオプションを選択してください。",
-    "shared_locally_description": "このノートは、{{- link}} でローカルネットワークのみで共有されています。\n\nクリックして共有ノートに移動するか、右クリックしてその他のオプションを選択してください。",
     "clipped_note": "Web クリップ",
     "clipped_note_description": "このノートは {{url}} から取得されました。\n\nクリックすると元の web ページに移動します。",
     "execute_script": "スクリプトを実行",
     "execute_script_description": "このノートはスクリプトノートです。クリックするとスクリプトが実行されます。",
     "execute_sql": "SQL を実行",
-    "execute_sql_description": "このノートは SQL ノートです。クリックすると SQL クエリが実行されます。"
+    "execute_sql_description": "このノートは SQL ノートです。クリックすると SQL クエリが実行されます。",
+    "shared_copy_to_clipboard": "リンクをクリップボードにコピー",
+    "shared_open_in_browser": "ブラウザでリンクを開く",
+    "shared_unshare": "共有を削除"
   },
   "status_bar": {
     "language_title": "コンテンツの言語を変更",
@@ -2173,5 +2174,11 @@
     "backlinks_other": "{{count}} バックリンク",
     "attachments_other": "{{count}} 件の添付ファイル",
     "note_paths_other": "{{count}} 個のパス"
+  },
+  "breadcrumb": {
+    "hoisted_badge": "ホイスト",
+    "hoisted_badge_title": "ホイスト解除",
+    "workspace_badge": "ワークスペース",
+    "scroll_to_top_title": "ノートの先頭にジャンプ"
   }
 }
