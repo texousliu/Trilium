@@ -1,6 +1,7 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
 import { Dropdown as BootstrapDropdown } from "bootstrap";
-import { useContext, useRef } from "preact/hooks";
+import { RefObject } from "preact";
+import { useContext, useEffect, useRef } from "preact/hooks";
 
 import appContext, { CommandNames } from "../../components/app_context";
 import Component from "../../components/component";
@@ -60,6 +61,8 @@ function RevisionsButton({ note }: { note: FNote }) {
     );
 }
 
+type ItemToFocus = "basic-properties";
+
 function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
     const dropdownRef = useRef<BootstrapDropdown>(null);
     const parentComponent = useContext(ParentComponent);
@@ -79,10 +82,12 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     const [syncServerHost] = useTriliumOption("syncServerHost");
     const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
     const isNormalViewMode = noteContext?.viewScope?.viewMode === "default";
+    const itemToFocusRef = useRef<ItemToFocus>(null);
 
     // Keyboard shortcuts.
     useTriliumEvent("toggleRibbonTabBasicProperties", () => {
         if (!isNewLayout) return;
+        itemToFocusRef.current = "basic-properties";
         dropdownRef.current?.toggle();
     });
 
@@ -93,7 +98,9 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             className="note-actions"
             hideToggleArrow
             noSelectButtonStyle
-            iconAction>
+            iconAction
+            onHidden={() => itemToFocusRef.current = null }
+        >
 
             {isReadOnly && <>
                 <CommandItem icon="bx bx-pencil" text={t("read-only-info.edit-note")}
@@ -108,7 +115,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             <FormDropdownDivider />
 
             {isNewLayout && isNormalViewMode && !isHelpPage && <>
-                <NoteBasicProperties note={note} />
+                <NoteBasicProperties note={note} focus={itemToFocusRef} />
                 <FormDropdownDivider />
             </>}
 
@@ -157,13 +164,21 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     );
 }
 
-function NoteBasicProperties({ note }: {
+function NoteBasicProperties({ note, focus }: {
     note: FNote;
+    focus: RefObject<ItemToFocus>;
 }) {
+    const itemToFocusRef = useRef<HTMLLIElement>(null);
     const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
     const [ isShared, switchShareState ] = useShareState(note);
     const [ isTemplate, setIsTemplate ] = useNoteLabelBoolean(note, "template");
     const isProtected = useNoteProperty(note, "isProtected");
+
+    useEffect(() => {
+        if (focus.current === "basic-properties") {
+            itemToFocusRef.current?.focus();
+        }
+    }, [ focus ]);
 
     return <>
         <FormListToggleableItem
@@ -172,6 +187,7 @@ function NoteBasicProperties({ note }: {
             currentValue={isShared} onChange={switchShareState}
             helpPage="R9pX4DGra2Vt"
             disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
+            itemRef={itemToFocusRef}
         />
         <FormListToggleableItem
             icon="bx bx-lock-alt"
