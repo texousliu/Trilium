@@ -25,7 +25,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
+import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip, useTriliumOptionBool } from "../react/hooks";
 import Icon from "../react/Icon";
 import { NewNoteLink } from "../react/NoteLink";
 import { ParentComponent } from "../react/react_utils";
@@ -37,6 +37,8 @@ const FINAL_ITEMS = 2;
 export default function Breadcrumb() {
     const { note, notePaths, noteContext } = useNotePaths();
     const parentComponent = useContext(ParentComponent);
+    const [ hideArchivedNotes ] = useTriliumOptionBool("hideArchivedNotes_main");
+    const separatorProps: Omit<BreadcrumbSeparatorProps, "notePath" | "activeNotePath"> = { noteContext, hideArchivedNotes };
 
     return (
         <div className="breadcrumb">
@@ -45,13 +47,13 @@ export default function Breadcrumb() {
                     {notePaths.slice(0, INITIAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
                             <BreadcrumbItem index={index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
-                            <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} noteContext={noteContext} />
+                            <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} {...separatorProps} />
                         </Fragment>
                     ))}
                     <BreadcrumbCollapsed items={notePaths.slice(INITIAL_ITEMS, -FINAL_ITEMS)} noteContext={noteContext} />
                     {notePaths.slice(-FINAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
-                            <BreadcrumbSeparator notePath={notePaths[notePaths.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
+                            <BreadcrumbSeparator notePath={notePaths[notePaths.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} {...separatorProps} />
                             <BreadcrumbItem index={notePaths.length - FINAL_ITEMS + index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
                         </Fragment>
                     ))}
@@ -64,7 +66,7 @@ export default function Breadcrumb() {
                             : <BreadcrumbItem index={index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
                         }
                         {(index < notePaths.length - 1 || note?.hasChildren()) &&
-                            <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} noteContext={noteContext} />}
+                            <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} {...separatorProps} />}
                     </Fragment>
                 ))
             )}
@@ -177,7 +179,14 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength, parentCo
     />;
 }
 
-function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
+interface BreadcrumbSeparatorProps {
+    notePath: string,
+    activeNotePath: string,
+    noteContext: NoteContext | undefined,
+    hideArchivedNotes: boolean;
+}
+
+function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
     return (
         <Dropdown
             text={<Icon icon="bx bx-chevron-right" />}
@@ -186,12 +195,12 @@ function BreadcrumbSeparator({ notePath, noteContext, activeNotePath }: { notePa
             hideToggleArrow
             dropdownOptions={{  popperConfig: { strategy: "fixed", placement: "top" } }}
         >
-            <BreadcrumbSeparatorDropdownContent notePath={notePath} noteContext={noteContext} activeNotePath={activeNotePath} />
+            <BreadcrumbSeparatorDropdownContent {...props} />
         </Dropdown>
     );
 }
 
-function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNotePath }: { notePath: string, activeNotePath: string, noteContext: NoteContext | undefined }) {
+function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNotePath, hideArchivedNotes }: BreadcrumbSeparatorProps) {
     const notePathComponents = notePath.split("/");
     const parentNoteId = notePathComponents.at(-1);
     const childNotes = useChildNotes(parentNoteId);
@@ -200,6 +209,7 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
         <ul className="breadcrumb-child-list">
             {childNotes.map((note) => {
                 if (note.noteId === "_hidden") return;
+                if (hideArchivedNotes && note.isArchived) return null;
 
                 const childNotePath = `${notePath}/${note.noteId}`;
                 return <li key={note.noteId}>
@@ -224,7 +234,10 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
     );
 }
 
-function BreadcrumbCollapsed({ items, noteContext }: { items: string[], noteContext: NoteContext | undefined }) {
+function BreadcrumbCollapsed({ items, noteContext }: {
+    items: string[],
+    noteContext: NoteContext | undefined,
+}) {
     return (
         <Dropdown
             text={<Icon icon="bx bx-dots-horizontal-rounded" />}
