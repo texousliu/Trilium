@@ -12,7 +12,7 @@ import { ViewTypeOptions } from "../collections/interface";
 import { buildSaveSqlToNoteHandler } from "../FloatingButtonsDefinitions";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
 import { buildUploadNewImageRevisionListener } from "./ImagePropertiesTab";
@@ -54,7 +54,7 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
         isReadOnly
     };
 
-    useTriliumEvent("toggleRibbonTabFileProperties", () => {
+    useTriliumEvents([ "toggleRibbonTabFileProperties", "toggleRibbonTabImageProperties" ], () => {
         (containerRef.current?.firstElementChild as HTMLElement)?.focus();
     });
 
