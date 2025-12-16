@@ -3,7 +3,7 @@ import { HTMLAttributes } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import link, { calculateHash, ViewScope } from "../../services/link";
-import { useImperativeSearchHighlighlighting, useNote, useNoteColorClass, useNoteIcon, useNoteProperty, useTriliumEvent } from "./hooks";
+import { useImperativeSearchHighlighlighting, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent } from "./hooks";
 import Icon from "./Icon";
 
 interface NoteLinkOpts {
@@ -88,6 +88,7 @@ export default function NoteLink({ className, containerClassName, notePath, show
 }
 
 interface NewNoteLinkProps extends Pick<HTMLAttributes<HTMLAnchorElement>, "onContextMenu"> {
+    className?: string;
     notePath: string;
     viewScope?: ViewScope;
     noContextMenu?: boolean;
@@ -101,6 +102,7 @@ export function NewNoteLink({ notePath, viewScope, noContextMenu, showNoteIcon, 
     const title = useNoteProperty(note, "title");
     const icon = useNoteIcon(showNoteIcon ? note : null);
     const colorClass = useNoteColorClass(note);
+    const [ archived ] = useNoteLabelBoolean(note, "archived");
 
     return (
         <span>
@@ -109,7 +111,8 @@ export function NewNoteLink({ notePath, viewScope, noContextMenu, showNoteIcon, 
 
                 <a
                     className={clsx("tn-link", colorClass, {
-                        "no-tooltip-preview": noPreview
+                        "no-tooltip-preview": noPreview,
+                        archived
                     })}
                     href={calculateHash({ notePath, viewScope })}
                     data-no-context-menu={noContextMenu}

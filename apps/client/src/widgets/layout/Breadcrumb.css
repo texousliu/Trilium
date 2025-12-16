@@ -21,6 +21,10 @@
         &:hover {
             color: var(--custom-color, inherit);
         }
+
+        &.archived {
+            opacity: 0.6;
+        }
     }
 
     > span,
