@@ -71,7 +71,7 @@ export default function Breadcrumb() {
 
             <div
                 className="filler"
-                onContextMenu={buildEmptyAreaContextMenu()}
+                onContextMenu={buildEmptyAreaContextMenu(parentComponent)}
             />
         </div>
     );
@@ -406,7 +406,7 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
 //#endregion
 
 //#region Empty context menu
-function buildEmptyAreaContextMenu() {
+function buildEmptyAreaContextMenu(parentComponent: Component | null) {
     return (e: MouseEvent) => {
         const hideArchivedNotes = (options.get("hideArchivedNotes_main") === "true");
 
@@ -415,7 +415,12 @@ function buildEmptyAreaContextMenu() {
             items: [
                 {
                     title: t("breadcrumb.empty_hide_archived_notes"),
-                    handler: () => options.save("hideArchivedNotes_main", !hideArchivedNotes ? "true" : "false"),
+                    handler: async () => {
+                        await options.save("hideArchivedNotes_main", !hideArchivedNotes ? "true" : "false");
+
+                        // Note tree doesn't update by itself.
+                        parentComponent?.triggerEvent("frocaReloaded", {});
+                    },
                     checked: hideArchivedNotes
                 }
             ],
