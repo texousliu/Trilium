@@ -4,6 +4,7 @@ import { useContext, useRef, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
 import appContext from "../../components/app_context";
+import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import contextMenu, { MenuItem } from "../../menus/context_menu";
@@ -33,6 +34,7 @@ const FINAL_ITEMS = 2;
 
 export default function Breadcrumb({ note, noteContext }: { note: FNote, noteContext: NoteContext }) {
     const notePath = buildNotePaths(noteContext);
+    const parentComponent = useContext(ParentComponent);
 
     return (
         <div className="breadcrumb">
@@ -40,7 +42,7 @@ export default function Breadcrumb({ note, noteContext }: { note: FNote, noteCon
                 <>
                     {notePath.slice(0, INITIAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
-                            <BreadcrumbItem index={index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} />
+                            <BreadcrumbItem index={index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} parentComponent={parentComponent} />
                             <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />
                         </Fragment>
                     ))}
@@ -48,7 +50,7 @@ export default function Breadcrumb({ note, noteContext }: { note: FNote, noteCon
                     {notePath.slice(-FINAL_ITEMS).map((item, index) => (
                         <Fragment key={item}>
                             <BreadcrumbSeparator notePath={notePath[notePath.length - FINAL_ITEMS - (1 - index)]} activeNotePath={item} noteContext={noteContext} />
-                            <BreadcrumbItem index={notePath.length - FINAL_ITEMS + index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} />
+                            <BreadcrumbItem index={notePath.length - FINAL_ITEMS + index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} parentComponent={parentComponent} />
                         </Fragment>
                     ))}
                 </>
@@ -57,7 +59,7 @@ export default function Breadcrumb({ note, noteContext }: { note: FNote, noteCon
                     <Fragment key={item}>
                         {index === 0
                             ? <BreadcrumbRoot noteContext={noteContext} />
-                            : <BreadcrumbItem index={index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} />
+                            : <BreadcrumbItem index={index} notePath={item} notePathLength={notePath.length} noteContext={noteContext} parentComponent={parentComponent} />
                         }
                         {(index < notePath.length - 1 || note?.hasChildren()) &&
                             <BreadcrumbSeparator notePath={item} activeNotePath={notePath[index + 1]} noteContext={noteContext} />}
@@ -121,7 +123,7 @@ function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
     );
 }
 
-function BreadcrumbLastItem({ notePath }: { notePath: string }) {
+function BreadcrumbLastItem({ notePath, parentComponent }: { notePath: string, parentComponent: Component | null }) {
     const linkRef = useRef<HTMLAnchorElement>(null);
     const noteId = notePath.split("/").at(-1);
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
@@ -143,145 +145,26 @@ function BreadcrumbLastItem({ notePath }: { notePath: string }) {
                 const scrollingContainer = document.querySelector(`[data-ntx-id="${activeNtxId}"] .scrolling-container`);
                 scrollingContainer?.scrollTo({ top: 0, behavior: "smooth" });
             }}
+            onContextMenu={buildContextMenu(notePath, parentComponent)}
         >{title}</a>
     );
 }
 
-function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { index: number, notePathLength: number, notePath: string, noteContext: NoteContext | undefined }) {
-    const parentComponent = useContext(ParentComponent);
-
+function BreadcrumbItem({ index, notePath, noteContext, notePathLength, parentComponent }: { index: number, notePathLength: number, notePath: string, noteContext: NoteContext | undefined, parentComponent: Component | null }) {
     if (index === 0) {
         return <BreadcrumbRoot noteContext={noteContext} />;
     }
 
     if (index === notePathLength - 1) {
         return <>
-            <BreadcrumbLastItem notePath={notePath} />
+            <BreadcrumbLastItem notePath={notePath} parentComponent={parentComponent} />
         </>;
     }
 
     return <NoteLink
         notePath={notePath}
         noContextMenu
-        onContextMenu={async (e) => {
-            e.preventDefault();
-
-            const notePathComponents = notePath.split("/");
-            const parentNoteId = notePathComponents.at(-2);
-            const noteId = notePathComponents.at(-1);
-            if (!parentNoteId || !noteId) return;
-
-            const branchId = await froca.getBranchId(parentNoteId, noteId);
-            if (!branchId) return;
-            const branch = froca.getBranch(branchId);
-            if (!branch) return;
-
-            const note = await branch?.getNote();
-            if (!note) return;
-
-            const notSearch = note?.type !== "search";
-            const notOptionsOrHelp = !note?.noteId.startsWith("_options") && !note?.noteId.startsWith("_help");
-            const isArchived = note.isArchived;
-            const isNotRoot = note?.noteId !== "root";
-            const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
-            const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
-            const parentNotSearch = !parentNote || parentNote.type !== "search";
-
-            const items = [
-                ...link_context_menu.getItems(e),
-                {
-                    title: `${t("tree-context-menu.hoist-note")}`,
-                    command: "toggleNoteHoisting",
-                    uiIcon: "bx bxs-chevrons-up",
-                    enabled: notSearch
-                },
-                { kind: "separator" },
-                {
-                    title: t("tree-context-menu.move-to"),
-                    command: "moveNotesTo",
-                    uiIcon: "bx bx-transfer",
-                    enabled: isNotRoot && !isHoisted && parentNotSearch
-                },
-                {
-                    title: t("tree-context-menu.clone-to"),
-                    command: "cloneNotesTo",
-                    uiIcon: "bx bx-duplicate",
-                    enabled: isNotRoot && !isHoisted
-                },
-                { kind: "separator" },
-                { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
-                { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp },
-                { kind: "separator" },
-                {
-                    title: t("tree-context-menu.duplicate"),
-                    command: "duplicateSubtree",
-                    uiIcon: "bx bx-outline",
-                    enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp && note.isContentAvailable(),
-                    handler: () => note_create.duplicateSubtree(noteId, branch.parentNoteId)
-                },
-
-                {
-                    title: !isArchived ? t("tree-context-menu.archive") : t("tree-context-menu.unarchive"),
-                    uiIcon: !isArchived ? "bx bx-archive" : "bx bx-archive-out",
-                    handler: () => {
-                        if (!isArchived) {
-                            attributes.addLabel(note.noteId, "archived");
-                        } else {
-                            attributes.removeOwnedLabelByName(note, "archived");
-                        }
-                    }
-                },
-                {
-                    title: t("tree-context-menu.delete"),
-                    command: "deleteNotes",
-                    uiIcon: "bx bx-trash destructive-action-icon",
-                    enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp,
-                    handler: () => branches.deleteNotes([ branchId ])
-                },
-                { kind: "separator"},
-                (notOptionsOrHelp ? {
-                    kind: "custom",
-                    componentFn: () => {
-                        return NoteColorPicker({note});
-                    }
-                } : null),
-                { kind: "separator" },
-                {
-                    title: t("tree-context-menu.search-in-subtree"),
-                    command: "searchInSubtree",
-                    uiIcon: "bx bx-search",
-                    enabled: notSearch
-                }
-            ];
-
-            contextMenu.show({
-                items: items.filter(Boolean) as MenuItem<TreeCommandNames>[],
-                x: e.pageX,
-                y: e.pageY,
-                selectMenuItemHandler: ({ command }) => {
-                    if (link_context_menu.handleLinkContextMenuItem(command, e, note.noteId)) {
-                        return;
-                    }
-
-                    if (!command) return;
-                    switch (command) {
-                        case "copyNotePathToClipboard":
-                            copyTextWithToast(`#${notePath}`);
-                            break;
-                        case "recentChangesInSubtree":
-                            parentComponent?.triggerCommand("showRecentChanges", { ancestorNoteId: noteId });
-                            break;
-                        default:
-                            parentComponent?.triggerCommand(command, {
-                                noteId,
-                                notePath,
-                                selectedOrActiveBranchIds: [ branchId ],
-                                selectedOrActiveNoteIds: [ noteId ]
-                            });
-                    }
-                },
-            });
-        }}
+        onContextMenu={buildContextMenu(notePath, parentComponent)}
     />;
 }
 
@@ -379,3 +262,127 @@ function buildNotePaths(noteContext: NoteContext) {
 
     return output;
 }
+
+//#region Context menu
+function buildContextMenu(notePath: string, parentComponent: Component | null) {
+    return async (e: MouseEvent) => {
+        e.preventDefault();
+
+        const notePathComponents = notePath.split("/");
+        const parentNoteId = notePathComponents.at(-2);
+        const noteId = notePathComponents.at(-1);
+        if (!parentNoteId || !noteId) return;
+
+        const branchId = await froca.getBranchId(parentNoteId, noteId);
+        if (!branchId) return;
+        const branch = froca.getBranch(branchId);
+        if (!branch) return;
+
+        const note = await branch?.getNote();
+        if (!note) return;
+
+        const notSearch = note?.type !== "search";
+        const notOptionsOrHelp = !note?.noteId.startsWith("_options") && !note?.noteId.startsWith("_help");
+        const isArchived = note.isArchived;
+        const isNotRoot = note?.noteId !== "root";
+        const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
+        const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
+        const parentNotSearch = !parentNote || parentNote.type !== "search";
+
+        const items = [
+            ...link_context_menu.getItems(e),
+            {
+                title: `${t("tree-context-menu.hoist-note")}`,
+                command: "toggleNoteHoisting",
+                uiIcon: "bx bxs-chevrons-up",
+                enabled: notSearch
+            },
+            { kind: "separator" },
+            {
+                title: t("tree-context-menu.move-to"),
+                command: "moveNotesTo",
+                uiIcon: "bx bx-transfer",
+                enabled: isNotRoot && !isHoisted && parentNotSearch
+            },
+            {
+                title: t("tree-context-menu.clone-to"),
+                command: "cloneNotesTo",
+                uiIcon: "bx bx-duplicate",
+                enabled: isNotRoot && !isHoisted
+            },
+            { kind: "separator" },
+            { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
+            { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp },
+            { kind: "separator" },
+            {
+                title: t("tree-context-menu.duplicate"),
+                command: "duplicateSubtree",
+                uiIcon: "bx bx-outline",
+                enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp && note.isContentAvailable(),
+                handler: () => note_create.duplicateSubtree(noteId, branch.parentNoteId)
+            },
+
+            {
+                title: !isArchived ? t("tree-context-menu.archive") : t("tree-context-menu.unarchive"),
+                uiIcon: !isArchived ? "bx bx-archive" : "bx bx-archive-out",
+                handler: () => {
+                    if (!isArchived) {
+                        attributes.addLabel(note.noteId, "archived");
+                    } else {
+                        attributes.removeOwnedLabelByName(note, "archived");
+                    }
+                }
+            },
+            {
+                title: t("tree-context-menu.delete"),
+                command: "deleteNotes",
+                uiIcon: "bx bx-trash destructive-action-icon",
+                enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp,
+                handler: () => branches.deleteNotes([ branchId ])
+            },
+            { kind: "separator"},
+            (notOptionsOrHelp ? {
+                kind: "custom",
+                componentFn: () => {
+                    return NoteColorPicker({note});
+                }
+            } : null),
+            { kind: "separator" },
+            {
+                title: t("tree-context-menu.search-in-subtree"),
+                command: "searchInSubtree",
+                uiIcon: "bx bx-search",
+                enabled: notSearch
+            }
+        ];
+
+        contextMenu.show({
+            items: items.filter(Boolean) as MenuItem<TreeCommandNames>[],
+            x: e.pageX,
+            y: e.pageY,
+            selectMenuItemHandler: ({ command }) => {
+                if (link_context_menu.handleLinkContextMenuItem(command, e, note.noteId)) {
+                    return;
+                }
+
+                if (!command) return;
+                switch (command) {
+                    case "copyNotePathToClipboard":
+                        copyTextWithToast(`#${notePath}`);
+                        break;
+                    case "recentChangesInSubtree":
+                        parentComponent?.triggerCommand("showRecentChanges", { ancestorNoteId: noteId });
+                        break;
+                    default:
+                        parentComponent?.triggerCommand(command, {
+                            noteId,
+                            notePath,
+                            selectedOrActiveBranchIds: [ branchId ],
+                            selectedOrActiveNoteIds: [ noteId ]
+                        });
+                }
+            },
+        });
+    };
+}
+//#endregion
