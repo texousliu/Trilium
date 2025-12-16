@@ -1,6 +1,6 @@
 import "./StatusBar.css";
 
-import { Locale } from "@triliumnext/commons";
+import { KeyboardActionNames, Locale } from "@triliumnext/commons";
 import { Dropdown as BootstrapDropdown } from "bootstrap";
 import clsx from "clsx";
 import { type ComponentChildren } from "preact";
@@ -381,12 +381,18 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 
 //#region Note paths
 function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
+    const dropdownRef = useRef<BootstrapDropdown>(null);
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
     const count = sortedNotePaths?.length ?? 0;
+    const enabled = count > 1;
 
-    return (count > 1 &&
+    // Keyboard shortcut.
+    useTriliumEvent("toggleRibbonTabNotePaths", () => enabled && dropdownRef.current?.show());
+
+    return (enabled &&
         <StatusBarDropdown
             title={t("status_bar.note_paths_title")}
+            dropdownRef={dropdownRef}
             dropdownContainerClassName="dropdown-note-paths"
             icon="bx bx-directions"
             text={t("status_bar.note_paths", { count })}
