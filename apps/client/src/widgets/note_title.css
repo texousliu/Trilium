@@ -46,12 +46,12 @@ body.experimental-feature-new-layout {
         .note-icon-widget {
             --note-icon-size: 20px;
             --note-icon-container-padding-size: 4px;
-            margin-inline: 8px;
+            margin-inline: 12px 8px;
         }
         
         .note-title-widget {
             --note-title-size: 18px;
-            --note-title-padding-inline: 4px;
+            --note-title-padding-inline: 0;
         }
 
         @container (max-width: 700px) {

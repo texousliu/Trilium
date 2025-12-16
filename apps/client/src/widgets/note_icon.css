@@ -81,6 +81,8 @@ body.experimental-feature-new-layout {
 
     .note-icon-widget button.note-icon {
         position: relative;
+        outline-offset: 4px;
+        border-radius: 50%;
         background: transparent !important;
 
         &:hover {
