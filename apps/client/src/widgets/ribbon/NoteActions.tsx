@@ -1,5 +1,6 @@
 import { ConvertToAttachmentResponse } from "@triliumnext/commons";
-import { useContext } from "preact/hooks";
+import { Dropdown as BootstrapDropdown } from "bootstrap";
+import { useContext, useRef } from "preact/hooks";
 
 import appContext, { CommandNames } from "../../components/app_context";
 import Component from "../../components/component";
@@ -20,7 +21,7 @@ import MovePaneButton from "../buttons/move_pane_button";
 import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListHeader, FormListItem, FormListToggleableItem } from "../react/FormList";
-import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
+import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { NoteTypeDropdownContent, useNoteBookmarkState, useShareState } from "./BasicPropertiesTab";
 import NoteActionsCustom from "./NoteActionsCustom";
@@ -60,6 +61,7 @@ function RevisionsButton({ note }: { note: FNote }) {
 }
 
 function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
+    const dropdownRef = useRef<BootstrapDropdown>(null);
     const parentComponent = useContext(ParentComponent);
     const noteType = useNoteProperty(note, "type") ?? "";
     const [viewType] = useNoteLabel(note, "viewType");
@@ -78,8 +80,15 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
     const isNormalViewMode = noteContext?.viewScope?.viewMode === "default";
 
+    // Keyboard shortcuts.
+    useTriliumEvent("toggleRibbonTabBasicProperties", () => {
+        if (!isNewLayout) return;
+        dropdownRef.current?.toggle();
+    });
+
     return (
         <Dropdown
+            dropdownRef={dropdownRef}
             buttonClassName={ isNewLayout ? "bx bx-dots-horizontal-rounded" : "bx bx-dots-vertical-rounded" }
             className="note-actions"
             hideToggleArrow
@@ -148,7 +157,9 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
     );
 }
 
-function NoteBasicProperties({ note }: { note: FNote }) {
+function NoteBasicProperties({ note }: {
+    note: FNote;
+}) {
     const [ isBookmarked, setIsBookmarked ] = useNoteBookmarkState(note);
     const [ isShared, switchShareState ] = useShareState(note);
     const [ isTemplate, setIsTemplate ] = useNoteLabelBoolean(note, "template");
