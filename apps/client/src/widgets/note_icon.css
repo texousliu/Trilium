@@ -76,10 +76,6 @@ div.note-icon-widget {
 }
 
 body.experimental-feature-new-layout {
-    --note-icon-button-background-color: #444444;
-    --note-icon-button-hover-background-color: #5a5a5a;
-    --note-icon-button-color: white;
-
     .note-icon-widget button.note-icon {
         --input-focus-outline-color: var(--note-icon-button-hover-background-color);
 
