@@ -1,7 +1,10 @@
+import clsx from "clsx";
+import { HTMLAttributes } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 
-import link, { ViewScope } from "../../services/link";
-import { useImperativeSearchHighlighlighting, useTriliumEvent } from "./hooks";
+import link, { calculateHash, ViewScope } from "../../services/link";
+import { useImperativeSearchHighlighlighting, useNote, useNoteIcon, useNoteProperty, useTriliumEvent } from "./hooks";
+import Icon from "./Icon";
 
 interface NoteLinkOpts {
     className?: string;
@@ -82,4 +85,38 @@ export default function NoteLink({ className, containerClassName, notePath, show
     }
 
     return <span className={containerClassName} ref={ref} />;
+}
+
+interface NewNoteLinkProps extends Pick<HTMLAttributes<HTMLAnchorElement>, "onContextMenu"> {
+    notePath: string;
+    viewScope?: ViewScope;
+    noContextMenu?: boolean;
+    showNoteIcon?: boolean;
+    noPreview?: boolean;
+}
+
+export function NewNoteLink({ notePath, viewScope, noContextMenu, showNoteIcon, noPreview, ...linkProps }: NewNoteLinkProps) {
+    const noteId = notePath.split("/").at(-1);
+    const note = useNote(noteId);
+    const title = useNoteProperty(note, "title");
+    const icon = useNoteIcon(showNoteIcon ? note : null);
+
+    return (
+        <span>
+            <span>
+                {icon && <Icon icon={icon} />}
+
+                <a
+                    className={clsx("tn-link", {
+                        "no-tooltip-preview": noPreview
+                    })}
+                    href={calculateHash({ notePath, viewScope })}
+                    data-no-context-menu={noContextMenu}
+                    {...linkProps}
+                >
+                    {title}
+                </a>
+            </span>
+        </span>
+    );
 }

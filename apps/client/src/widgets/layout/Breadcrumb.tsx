@@ -25,7 +25,7 @@ import Dropdown from "../react/Dropdown";
 import { FormListItem } from "../react/FormList";
 import { useActiveNoteContext, useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
-import NoteLink from "../react/NoteLink";
+import { NewNoteLink } from "../react/NoteLink";
 import { ParentComponent } from "../react/react_utils";
 
 const COLLAPSE_THRESHOLD = 5;
@@ -114,7 +114,7 @@ function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
                     "color": getReadableTextColor(workspaceColor)
                 } : undefined}
             />
-            <NoteLink
+            <NewNoteLink
                 notePath={noteId}
                 showNoteIcon
                 noPreview
@@ -161,7 +161,7 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength, parentCo
         </>;
     }
 
-    return <NoteLink
+    return <NewNoteLink
         notePath={notePath}
         noContextMenu
         onContextMenu={buildContextMenu(notePath, parentComponent)}
