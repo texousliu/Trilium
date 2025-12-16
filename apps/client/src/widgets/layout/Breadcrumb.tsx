@@ -23,7 +23,7 @@ import tree from "../../services/tree";
 import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
-import { FormListItem } from "../react/FormList";
+import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import { NewNoteLink } from "../react/NoteLink";
@@ -208,6 +208,12 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
                     </FormListItem>
                 </li>;
             })}
+
+            <FormDropdownDivider />
+            <FormListItem
+                icon="bx bx-plus"
+                onClick={() => note_create.createNote(notePath, { activate: true })}
+            >{t("breadcrumb.create_new_note")}</FormListItem>
         </ul>
     );
 }
