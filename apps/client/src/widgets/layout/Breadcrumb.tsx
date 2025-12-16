@@ -8,11 +8,15 @@ import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 import contextMenu from "../../menus/context_menu";
 import link_context_menu from "../../menus/link_context_menu";
+import attributes from "../../services/attributes";
+import branches from "../../services/branches";
+import { executeBulkActions } from "../../services/bulk_action";
 import { copyTextWithToast } from "../../services/clipboard_ext";
 import { getReadableTextColor } from "../../services/css_class_manager";
 import froca from "../../services/froca";
 import hoisted_note from "../../services/hoisted_note";
 import { t } from "../../services/i18n";
+import note_create from "../../services/note_create";
 import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
@@ -169,12 +173,14 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
             const branchId = await froca.getBranchId(parentNoteId, noteId);
             if (!branchId) return;
             const branch = froca.getBranch(branchId);
+            if (!branch) return;
 
-            const note = await froca.getNote(noteId);
+            const note = await branch?.getNote();
             if (!note) return;
 
             const notSearch = note?.type !== "search";
             const notOptionsOrHelp = !note?.noteId.startsWith("_options") && !note?.noteId.startsWith("_help");
+            const isArchived = note.isArchived;
             const isNotRoot = note?.noteId !== "root";
             const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
             const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
@@ -204,7 +210,34 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                     },
                     { kind: "separator" },
                     { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
-                    { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp }
+                    { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp },
+                    { kind: "separator" },
+                    {
+                        title: t("tree-context-menu.duplicate"),
+                        command: "duplicateSubtree",
+                        uiIcon: "bx bx-outline",
+                        enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp && note.isContentAvailable(),
+                        handler: () => note_create.duplicateSubtree(noteId, branch.parentNoteId)
+                    },
+
+                    {
+                        title: !isArchived ? t("tree-context-menu.archive") : t("tree-context-menu.unarchive"),
+                        uiIcon: !isArchived ? "bx bx-archive" : "bx bx-archive-out",
+                        handler: () => {
+                            if (!isArchived) {
+                                attributes.addLabel(note.noteId, "archived");
+                            } else {
+                                attributes.removeOwnedLabelByName(note, "archived");
+                            }
+                        }
+                    },
+                    {
+                        title: t("tree-context-menu.delete"),
+                        command: "deleteNotes",
+                        uiIcon: "bx bx-trash destructive-action-icon",
+                        enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp,
+                        handler: () => branches.deleteNotes([ branchId ])
+                    }
                 ],
                 x: e.pageX,
                 y: e.pageY,
