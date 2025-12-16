@@ -825,6 +825,7 @@
     "created": "Created",
     "modified": "Modified",
     "type": "Type",
+    "mime": "MIME type",
     "note_size": "Note size",
     "note_size_info": "Note size provides rough estimate of storage requirements for this note. It takes into account note's content and content of its note revisions.",
     "calculate": "calculate",
