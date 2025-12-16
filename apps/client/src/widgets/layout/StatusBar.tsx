@@ -216,7 +216,7 @@ interface NoteInfoContext extends StatusBarContext {
     setSimilarNotesShown: (value: boolean) => void;
 }
 
-export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
+export function NoteInfoBadge({ note, similarNotesShown, setSimilarNotesShown }: NoteInfoContext) {
     const dropdownRef = useRef<BootstrapDropdown>(null);
     const { metadata, ...sizeProps } = useNoteMetadata(note);
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
@@ -226,6 +226,7 @@ export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
 
     // Keyboard shortcut.
     useTriliumEvent("toggleRibbonTabNoteInfo", () => enabled && dropdownRef.current?.show());
+    useTriliumEvent("toggleRibbonTabSimilarNotes", () => setSimilarNotesShown(!similarNotesShown));
 
     return (enabled &&
         <StatusBarDropdown
