@@ -1,5 +1,5 @@
 import { NoteType } from "@triliumnext/commons";
-import { useContext, useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 
 import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
@@ -38,6 +38,7 @@ interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
  */
 export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     const { note } = props;
+    const containerRef = useRef<HTMLDivElement>(null);
     const noteType = useNoteProperty(note, "type");
     const noteMime = useNoteProperty(note, "mime");
     const [ viewType ] = useNoteLabel(note, "viewType");
@@ -53,8 +54,15 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
         isReadOnly
     };
 
+    useTriliumEvent("toggleRibbonTabFileProperties", () => {
+        (containerRef.current?.firstElementChild as HTMLElement)?.focus();
+    });
+
     return (innerProps &&
-        <div className="note-actions-custom">
+        <div
+            ref={containerRef}
+            className="note-actions-custom"
+        >
             <AddChildButton {...innerProps} />
             <RunActiveNoteButton {...innerProps } />
             <OpenTriliumApiDocsButton {...innerProps} />
