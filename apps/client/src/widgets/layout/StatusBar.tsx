@@ -222,8 +222,12 @@ export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
     const noteType = useNoteProperty(note, "type");
     const noteTypeMapping = useMemo(() => NOTE_TYPES.find(t => t.type === noteType), [ noteType ]);
+    const enabled = note && noteType && noteTypeMapping;
 
-    return (note && noteType && noteTypeMapping &&
+    // Keyboard shortcut.
+    useTriliumEvent("toggleRibbonTabNoteInfo", () => enabled && dropdownRef.current?.show());
+
+    return (enabled &&
         <StatusBarDropdown
             icon="bx bx-info-circle"
             title={t("status_bar.note_info_title")}
