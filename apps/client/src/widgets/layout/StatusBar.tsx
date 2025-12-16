@@ -236,7 +236,7 @@ export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
                 <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
                 <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
                 <NoteInfoValue text={t("note_info_widget.type")} value={<><Icon icon={`bx ${currentNoteTypeData.icon}`}/>{" "}{currentNoteTypeData?.title}</>} />
-                <NoteInfoValue text={t("note_info_widget.mime")} value={note.mime} />
+                {note.mime && <NoteInfoValue text={t("note_info_widget.mime")} value={note.mime} />}
                 <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
                 <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
             </ul>
