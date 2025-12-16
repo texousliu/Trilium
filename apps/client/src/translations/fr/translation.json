@@ -1079,7 +1079,7 @@
   "vacuum_database": {
     "title": "Nettoyage la base de donnée",
     "description": "Cela reconstruira la base de données, ce qui générera un fichier de base de données généralement plus petit. Aucune donnée ne sera réellement modifiée.",
-    "button_text": "Nettoyer de la base de donnée",
+    "button_text": "Nettoyer la base de données",
     "vacuuming_database": "Nettoyage de la base de données en cours...",
     "database_vacuumed": "La base de données a été nettoyée"
   },
