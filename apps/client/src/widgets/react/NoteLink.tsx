@@ -3,7 +3,7 @@ import { HTMLAttributes } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import link, { calculateHash, ViewScope } from "../../services/link";
-import { useImperativeSearchHighlighlighting, useNote, useNoteIcon, useNoteProperty, useTriliumEvent } from "./hooks";
+import { useImperativeSearchHighlighlighting, useNote, useNoteColorClass, useNoteIcon, useNoteProperty, useTriliumEvent } from "./hooks";
 import Icon from "./Icon";
 
 interface NoteLinkOpts {
@@ -100,6 +100,7 @@ export function NewNoteLink({ notePath, viewScope, noContextMenu, showNoteIcon, 
     const note = useNote(noteId);
     const title = useNoteProperty(note, "title");
     const icon = useNoteIcon(showNoteIcon ? note : null);
+    const colorClass = useNoteColorClass(note);
 
     return (
         <span>
@@ -107,7 +108,7 @@ export function NewNoteLink({ notePath, viewScope, noContextMenu, showNoteIcon, 
                 {icon && <Icon icon={icon} />}
 
                 <a
-                    className={clsx("tn-link", {
+                    className={clsx("tn-link", colorClass, {
                         "no-tooltip-preview": noPreview
                     })}
                     href={calculateHash({ notePath, viewScope })}

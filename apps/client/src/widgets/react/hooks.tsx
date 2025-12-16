@@ -1061,3 +1061,12 @@ export function useNoteIcon(note: FNote | null | undefined) {
 
     return icon;
 }
+
+export function useNoteColorClass(note: FNote | null | undefined) {
+    const [ colorClass, setColorClass ] = useState(note?.getColorClass());
+    const [ color ] = useNoteLabel(note, "color");
+    useEffect(() => {
+        setColorClass(note?.getColorClass());
+    }, [ color, note ]);
+    return colorClass;
+}
