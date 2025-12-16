@@ -35,7 +35,7 @@ const INITIAL_ITEMS = 2;
 const FINAL_ITEMS = 2;
 
 export default function Breadcrumb() {
-    const { note, notePaths, noteContext } = useNotePaths();
+    const { note, notePath, notePaths, noteContext } = useNotePaths();
     const parentComponent = useContext(ParentComponent);
     const [ hideArchivedNotes ] = useTriliumOptionBool("hideArchivedNotes_main");
     const separatorProps: Omit<BreadcrumbSeparatorProps, "notePath" | "activeNotePath"> = { noteContext, hideArchivedNotes };
@@ -73,7 +73,7 @@ export default function Breadcrumb() {
 
             <div
                 className="filler"
-                onContextMenu={buildEmptyAreaContextMenu(parentComponent)}
+                onContextMenu={buildEmptyAreaContextMenu(parentComponent, notePath)}
             />
         </div>
     );
@@ -291,6 +291,7 @@ function useNotePaths() {
 
     return {
         note,
+        notePath,
         notePaths: output,
         noteContext
     };
@@ -342,9 +343,6 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
                 enabled: isNotRoot && !isHoisted
             },
             { kind: "separator" },
-            { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
-            { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp },
-            { kind: "separator" },
             {
                 title: t("tree-context-menu.duplicate"),
                 command: "duplicateSubtree",
@@ -380,6 +378,12 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
             } : null),
             { kind: "separator" },
             {
+                title: t("tree-context-menu.recent-changes-in-subtree"),
+                uiIcon: "bx bx-history",
+                enabled: notOptionsOrHelp,
+                handler: () => parentComponent?.triggerCommand("showRecentChanges", { ancestorNoteId: noteId })
+            },
+            {
                 title: t("tree-context-menu.search-in-subtree"),
                 command: "searchInSubtree",
                 uiIcon: "bx bx-search",
@@ -397,21 +401,12 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
                 }
 
                 if (!command) return;
-                switch (command) {
-                    case "copyNotePathToClipboard":
-                        copyTextWithToast(`#${notePath}`);
-                        break;
-                    case "recentChangesInSubtree":
-                        parentComponent?.triggerCommand("showRecentChanges", { ancestorNoteId: noteId });
-                        break;
-                    default:
-                        parentComponent?.triggerCommand(command, {
-                            noteId,
-                            notePath,
-                            selectedOrActiveBranchIds: [ branchId ],
-                            selectedOrActiveNoteIds: [ noteId ]
-                        });
-                }
+                parentComponent?.triggerCommand(command, {
+                    noteId,
+                    notePath,
+                    selectedOrActiveBranchIds: [ branchId ],
+                    selectedOrActiveNoteIds: [ noteId ]
+                });
             },
         });
     };
@@ -419,7 +414,7 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
 //#endregion
 
 //#region Empty context menu
-function buildEmptyAreaContextMenu(parentComponent: Component | null) {
+function buildEmptyAreaContextMenu(parentComponent: Component | null, notePath: string | null | undefined) {
     return (e: MouseEvent) => {
         const hideArchivedNotes = (options.get("hideArchivedNotes_main") === "true");
 
@@ -435,7 +430,14 @@ function buildEmptyAreaContextMenu(parentComponent: Component | null) {
                         parentComponent?.triggerEvent("frocaReloaded", {});
                     },
                     checked: hideArchivedNotes
-                }
+                },
+                { kind: "separator" },
+                {
+                    title: t("tree-context-menu.copy-note-path-to-clipboard"),
+                    command: "copyNotePathToClipboard",
+                    uiIcon: "bx bx-directions",
+                    handler: () => copyTextWithToast(`#${notePath}`)
+                },
             ],
             x: e.pageX,
             y: e.pageY,
