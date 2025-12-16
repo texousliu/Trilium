@@ -16,7 +16,7 @@ function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewS
     });
 }
 
-function getItems(e: ContextMenuEvent | LeafletMouseEvent): MenuItem<CommandNames>[] {
+function getItems(e: ContextMenuEvent | LeafletMouseEvent): MenuItem<"openNoteInNewTab" | "openNoteInNewSplit" | "openNoteInNewWindow" | "openNoteInPopup">[] {
     const ntxId = getNtxId(e);
     const isMobileSplitOpen = isMobile() && appContext.tabManager.getNoteContextById(ntxId).getMainContext().getSubContexts().length > 1;
 
@@ -59,9 +59,9 @@ function getNtxId(e: ContextMenuEvent | LeafletMouseEvent) {
         return subContexts[subContexts.length - 1].ntxId;
     } else if (e.target instanceof HTMLElement) {
         return getClosestNtxId(e.target);
-    } 
+    }
     return null;
-    
+
 }
 
 export default {

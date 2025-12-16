@@ -3,11 +3,13 @@ import "./Breadcrumb.css";
 import { useContext, useRef, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
-import appContext from "../../components/app_context";
+import appContext, { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
-import contextMenu from "../../menus/context_menu";
+import contextMenu, { MenuItem } from "../../menus/context_menu";
+import NoteColorPicker from "../../menus/custom-items/NoteColorPicker";
 import link_context_menu from "../../menus/link_context_menu";
+import { TreeCommandNames } from "../../menus/tree_context_menu";
 import attributes from "../../services/attributes";
 import branches from "../../services/branches";
 import { executeBulkActions } from "../../services/bulk_action";
@@ -186,59 +188,68 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
             const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
             const parentNotSearch = !parentNote || parentNote.type !== "search";
 
-            contextMenu.show({
-                items: [
-                    ...link_context_menu.getItems(e),
-                    {
-                        title: `${t("tree-context-menu.hoist-note")}`,
-                        command: "toggleNoteHoisting",
-                        uiIcon: "bx bxs-chevrons-up",
-                        enabled: notSearch
-                    },
-                    { kind: "separator" },
-                    {
-                        title: t("tree-context-menu.move-to"),
-                        command: "moveNotesTo",
-                        uiIcon: "bx bx-transfer",
-                        enabled: isNotRoot && !isHoisted && parentNotSearch
-                    },
-                    {
-                        title: t("tree-context-menu.clone-to"),
-                        command: "cloneNotesTo",
-                        uiIcon: "bx bx-duplicate",
-                        enabled: isNotRoot && !isHoisted
-                    },
-                    { kind: "separator" },
-                    { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
-                    { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp },
-                    { kind: "separator" },
-                    {
-                        title: t("tree-context-menu.duplicate"),
-                        command: "duplicateSubtree",
-                        uiIcon: "bx bx-outline",
-                        enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp && note.isContentAvailable(),
-                        handler: () => note_create.duplicateSubtree(noteId, branch.parentNoteId)
-                    },
+            const items = [
+                ...link_context_menu.getItems(e),
+                {
+                    title: `${t("tree-context-menu.hoist-note")}`,
+                    command: "toggleNoteHoisting",
+                    uiIcon: "bx bxs-chevrons-up",
+                    enabled: notSearch
+                },
+                { kind: "separator" },
+                {
+                    title: t("tree-context-menu.move-to"),
+                    command: "moveNotesTo",
+                    uiIcon: "bx bx-transfer",
+                    enabled: isNotRoot && !isHoisted && parentNotSearch
+                },
+                {
+                    title: t("tree-context-menu.clone-to"),
+                    command: "cloneNotesTo",
+                    uiIcon: "bx bx-duplicate",
+                    enabled: isNotRoot && !isHoisted
+                },
+                { kind: "separator" },
+                { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
+                { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: notOptionsOrHelp },
+                { kind: "separator" },
+                {
+                    title: t("tree-context-menu.duplicate"),
+                    command: "duplicateSubtree",
+                    uiIcon: "bx bx-outline",
+                    enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp && note.isContentAvailable(),
+                    handler: () => note_create.duplicateSubtree(noteId, branch.parentNoteId)
+                },
 
-                    {
-                        title: !isArchived ? t("tree-context-menu.archive") : t("tree-context-menu.unarchive"),
-                        uiIcon: !isArchived ? "bx bx-archive" : "bx bx-archive-out",
-                        handler: () => {
-                            if (!isArchived) {
-                                attributes.addLabel(note.noteId, "archived");
-                            } else {
-                                attributes.removeOwnedLabelByName(note, "archived");
-                            }
+                {
+                    title: !isArchived ? t("tree-context-menu.archive") : t("tree-context-menu.unarchive"),
+                    uiIcon: !isArchived ? "bx bx-archive" : "bx bx-archive-out",
+                    handler: () => {
+                        if (!isArchived) {
+                            attributes.addLabel(note.noteId, "archived");
+                        } else {
+                            attributes.removeOwnedLabelByName(note, "archived");
                         }
-                    },
-                    {
-                        title: t("tree-context-menu.delete"),
-                        command: "deleteNotes",
-                        uiIcon: "bx bx-trash destructive-action-icon",
-                        enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp,
-                        handler: () => branches.deleteNotes([ branchId ])
                     }
-                ],
+                },
+                {
+                    title: t("tree-context-menu.delete"),
+                    command: "deleteNotes",
+                    uiIcon: "bx bx-trash destructive-action-icon",
+                    enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp,
+                    handler: () => branches.deleteNotes([ branchId ])
+                },
+                { kind: "separator"},
+                (notOptionsOrHelp ? {
+                    kind: "custom",
+                    componentFn: () => {
+                        return NoteColorPicker({note});
+                    }
+                } : null),
+            ];
+
+            contextMenu.show({
+                items: items.filter(Boolean) as MenuItem<TreeCommandNames>[],
                 x: e.pageX,
                 y: e.pageY,
                 selectMenuItemHandler: ({ command }) => {
