@@ -2149,7 +2149,8 @@
     "hoisted_badge_title": "Unhoist",
     "workspace_badge": "Workspace",
     "scroll_to_top_title": "Jump to the beginning of the note",
-    "create_new_note": "Create new child note"
+    "create_new_note": "Create new child note",
+    "empty_hide_archived_notes": "Hide archived notes"
   },
   "breadcrumb_badges": {
     "read_only_explicit": "Read-only",

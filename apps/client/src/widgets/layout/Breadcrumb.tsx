@@ -19,6 +19,7 @@ import froca from "../../services/froca";
 import hoisted_note from "../../services/hoisted_note";
 import { t } from "../../services/i18n";
 import note_create from "../../services/note_create";
+import options from "../../services/options";
 import tree from "../../services/tree";
 import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
@@ -67,6 +68,11 @@ export default function Breadcrumb() {
                     </Fragment>
                 ))
             )}
+
+            <div
+                className="filler"
+                onContextMenu={buildEmptyAreaContextMenu()}
+            />
         </div>
     );
 }
@@ -277,7 +283,7 @@ function useNotePaths() {
     };
 }
 
-//#region Context menu
+//#region Note Context menu
 function buildContextMenu(notePath: string, parentComponent: Component | null) {
     return async (e: MouseEvent) => {
         e.preventDefault();
@@ -394,6 +400,28 @@ function buildContextMenu(notePath: string, parentComponent: Component | null) {
                         });
                 }
             },
+        });
+    };
+}
+//#endregion
+
+//#region Empty context menu
+function buildEmptyAreaContextMenu() {
+    return (e: MouseEvent) => {
+        const hideArchivedNotes = (options.get("hideArchivedNotes_main") === "true");
+
+        e.preventDefault();
+        contextMenu.show({
+            items: [
+                {
+                    title: t("breadcrumb.empty_hide_archived_notes"),
+                    handler: () => options.save("hideArchivedNotes_main", !hideArchivedNotes ? "true" : "false"),
+                    checked: hideArchivedNotes
+                }
+            ],
+            x: e.pageX,
+            y: e.pageY,
+            selectMenuItemHandler: () => {}
         });
     };
 }
