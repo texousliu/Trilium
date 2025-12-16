@@ -198,6 +198,7 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
                 return <li key={note.noteId}>
                     <FormListItem
                         icon={note.getIcon()}
+                        className={note.getColorClass()}
                         onClick={() => noteContext?.setNote(childNotePath)}
                     >
                         {childNotePath !== activeNotePath

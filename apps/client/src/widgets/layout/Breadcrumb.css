@@ -69,6 +69,7 @@
         overflow: hidden;
         display: block;
         max-width: 300px;
+        color: var(--custom-color, inherit) !important;
     }
 
     a.breadcrumb-last-item,
