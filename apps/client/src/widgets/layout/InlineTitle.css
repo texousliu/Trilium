@@ -102,7 +102,17 @@ body.prefers-centered-content .inline-title {
     }
 }
 
+@keyframes note-type-switcher-intro {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
 .note-type-switcher {
+    --badge-radius: 12px;
+    
     position: relative;
     top: 5px;
     padding: .25em 0;
@@ -112,10 +122,10 @@ body.prefers-centered-content .inline-title {
     min-width: 0;
     gap: 5px;
     min-height: 35px;
-    --badge-radius: 12px;
-
+    
     >* {
         flex-shrink: 0;
+        animation: note-type-switcher-intro 200ms ease-in;
     }
 
     .ext-badge {
