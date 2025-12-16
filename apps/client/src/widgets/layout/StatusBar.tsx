@@ -349,6 +349,10 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 
     // Show on keyboard shortcuts.
     useTriliumEvents([ "addNewLabel", "addNewRelation" ], () => setAttributesShown(true));
+    useTriliumEvents([ "toggleRibbonTabOwnedAttributes", "toggleRibbonTabInheritedAttributes" ], () => setAttributesShown(!attributesShown));
+
+    // Auto-focus the owned attributes.
+    useEffect(() => api.current?.focus(), [ attributesShown ]);
 
     // Interaction with the attribute editor.
     useLegacyImperativeHandlers(useMemo(() => ({
