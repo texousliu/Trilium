@@ -160,12 +160,23 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
         onContextMenu={async (e) => {
             e.preventDefault();
 
-            const noteId = notePath.split("/").at(-1);
-            if (!noteId) return;
+            const notePathComponents = notePath.split("/");
+            const parentNoteId = notePathComponents.at(-2);
+            const noteId = notePathComponents.at(-1);
+            if (!parentNoteId || !noteId) return;
+
+            const branchId = await froca.getBranchId(parentNoteId, noteId);
+            if (!branchId) return;
+            const branch = froca.getBranch(branchId);
+
             const note = await froca.getNote(noteId);
             if (!note) return;
 
             const notSearch = note?.type !== "search";
+            const isNotRoot = note?.noteId !== "root";
+            const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
+            const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
+            const parentNotSearch = !parentNote || parentNote.type !== "search";
 
             contextMenu.show({
                 items: [
@@ -177,6 +188,21 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                         uiIcon: "bx bxs-chevrons-up",
                         enabled: notSearch
                     },
+                    { kind: "separator" },
+                    {
+                        title: t("tree-context-menu.move-to"),
+                        command: "moveNotesTo",
+                        keyboardShortcut: "moveNotesTo",
+                        uiIcon: "bx bx-transfer",
+                        enabled: isNotRoot && !isHoisted && parentNotSearch
+                    },
+                    {
+                        title: t("tree-context-menu.clone-to"),
+                        command: "cloneNotesTo",
+                        keyboardShortcut: "cloneNotesTo",
+                        uiIcon: "bx bx-duplicate",
+                        enabled: isNotRoot && !isHoisted
+                    },
                 ],
                 x: e.pageX,
                 y: e.pageY,
@@ -187,7 +213,9 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
 
                     if (command) {
                         parentComponent?.triggerCommand(command, {
-                            noteId
+                            noteId,
+                            selectedOrActiveBranchIds: [ branchId ],
+                            selectedOrActiveNoteIds: [ noteId ]
                         });
                     }
                 },
