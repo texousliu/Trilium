@@ -81,10 +81,14 @@ body.experimental-feature-new-layout {
     --note-icon-button-color: white;
 
     .note-icon-widget button.note-icon {
+        --input-focus-outline-color: var(--note-icon-button-hover-background-color);
+
         position: relative;
-        outline-offset: 4px;
-        border-radius: 50%;
         background: transparent !important;
+
+        &, &:hover {
+            border-radius: 50%; 
+        }
 
         /* The icon */
         &::before {
@@ -102,9 +106,8 @@ body.experimental-feature-new-layout {
             background: var(--note-icon-button-background-color);
         }
 
-        &:hover::after {
-            background: var(--note-icon-button-hover-background-color);
-            transition: background 200ms ease-out;
+        &:focus-visible {
+            outline: 2px solid var(--note-icon-button-color);
         }
     }
 }
