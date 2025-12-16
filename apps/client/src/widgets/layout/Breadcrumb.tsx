@@ -1,6 +1,6 @@
 import "./Breadcrumb.css";
 
-import { useRef, useState } from "preact/hooks";
+import { useContext, useRef, useState } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
 import appContext from "../../components/app_context";
@@ -19,6 +19,7 @@ import { FormListItem } from "../react/FormList";
 import { useChildNotes, useNote, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip } from "../react/hooks";
 import Icon from "../react/Icon";
 import NoteLink from "../react/NoteLink";
+import { ParentComponent } from "../react/react_utils";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
@@ -141,6 +142,8 @@ function BreadcrumbLastItem({ notePath }: { notePath: string }) {
 }
 
 function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { index: number, notePathLength: number, notePath: string, noteContext: NoteContext | undefined }) {
+    const parentComponent = useContext(ParentComponent);
+
     if (index === 0) {
         return <BreadcrumbRoot noteContext={noteContext} />;
     }
@@ -162,13 +165,32 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
             const note = await froca.getNote(noteId);
             if (!note) return;
 
+            const notSearch = note?.type !== "search";
+
             contextMenu.show({
                 items: [
                     ...link_context_menu.getItems(e),
+                    {
+                        title: `${t("tree-context-menu.hoist-note")}`,
+                        command: "toggleNoteHoisting",
+                        keyboardShortcut: "toggleNoteHoisting",
+                        uiIcon: "bx bxs-chevrons-up",
+                        enabled: notSearch
+                    },
                 ],
                 x: e.pageX,
                 y: e.pageY,
-                selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, e, note.noteId),
+                selectMenuItemHandler: ({ command }) => {
+                    if (link_context_menu.handleLinkContextMenuItem(command, e, note.noteId)) {
+                        return;
+                    }
+
+                    if (command) {
+                        parentComponent?.triggerCommand(command, {
+                            noteId
+                        });
+                    }
+                },
             });
         }}
     />;
