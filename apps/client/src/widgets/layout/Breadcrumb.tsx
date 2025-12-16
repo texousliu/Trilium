@@ -184,7 +184,6 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                     {
                         title: `${t("tree-context-menu.hoist-note")}`,
                         command: "toggleNoteHoisting",
-                        keyboardShortcut: "toggleNoteHoisting",
                         uiIcon: "bx bxs-chevrons-up",
                         enabled: notSearch
                     },
@@ -192,14 +191,12 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength }: { inde
                     {
                         title: t("tree-context-menu.move-to"),
                         command: "moveNotesTo",
-                        keyboardShortcut: "moveNotesTo",
                         uiIcon: "bx bx-transfer",
                         enabled: isNotRoot && !isHoisted && parentNotSearch
                     },
                     {
                         title: t("tree-context-menu.clone-to"),
                         command: "cloneNotesTo",
-                        keyboardShortcut: "cloneNotesTo",
                         uiIcon: "bx bx-duplicate",
                         enabled: isNotRoot && !isHoisted
                     },
