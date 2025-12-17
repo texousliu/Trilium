@@ -191,6 +191,10 @@
     --badge-background-color: #00000011;
     --badge-text-color: var(--muted-text-color);
 
+    --note-icon-button-background-color: #4f4f4f;
+    --note-icon-button-hover-background-color: #737373;
+    --note-icon-button-color: white;
+
     --promoted-attribute-card-background-color: #00000014;
     --promoted-attribute-card-shadow: none;
 
