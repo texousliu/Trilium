@@ -440,7 +440,8 @@
     "calculate": "oblicz",
     "subtree_size": "(rozmiar poddrzewa: {{size}} w {{count}} notatkach)",
     "title": "Info o notatce",
-    "show_similar_notes": "Pokaż podobne notatki"
+    "show_similar_notes": "Pokaż podobne notatki",
+    "mime": "Typ MIME"
   },
   "note_map": {
     "open_full": "Rozwiń do pełnego",
@@ -2193,6 +2194,8 @@
     "hoisted_badge": "Wyróżniony",
     "hoisted_badge_title": "Usuń wyróżnienie",
     "workspace_badge": "Obszar roboczy",
-    "scroll_to_top_title": "Przejdź na początek notatki"
+    "scroll_to_top_title": "Przejdź na początek notatki",
+    "create_new_note": "Utwórz nową notatkę podrzędną",
+    "empty_hide_archived_notes": "Ukryj zarchiwizowane notatki"
   }
 }
