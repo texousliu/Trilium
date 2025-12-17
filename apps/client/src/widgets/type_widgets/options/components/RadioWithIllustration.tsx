@@ -10,7 +10,7 @@ interface RadioWithIllustrationProps {
         illustration: ComponentChild;
     }[];
     currentValue: string;
-    onChange(newValue: string);
+    onChange(newValue: string): void;
 }
 
 export default function RadioWithIllustration({ currentValue, onChange, values }: RadioWithIllustrationProps) {

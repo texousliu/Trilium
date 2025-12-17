@@ -175,9 +175,28 @@ function LayoutIllustration({ isNewLayout }: { isNewLayout?: boolean }) {
                         <div className="ribbon-body" />
                     </div>}
 
+                    {isNewLayout && <div className="note-title-actions">
+                        <Icon icon="bx bx-chevron-down" />{" "}Promoted attributes
+                    </div>}
+
                     <div className="content-inner">
                         This is a "demo" document packaged with Trilium to showcase some of its features and also give you some ideas on how you might structure your notes. You can play with it, and modify the note content and tree structure as you wish.
                     </div>
+
+                    {isNewLayout && <div className="status-bar">
+                        <div className="status-bar-breadcrumb">
+                            <Icon icon="bx bx-home" />
+                            <Icon icon="bx bx-chevron-right" />
+                            Note
+                            <Icon icon="bx bx-chevron-right" />
+                            Note
+                        </div>
+
+                        <div className="status-bar-actions">
+                            <Icon icon="bx bx-list-check" />
+                            <Icon icon="bx bx-info-circle" />
+                        </div>
+                    </div>}
                 </div>
             </div>
         </div>
