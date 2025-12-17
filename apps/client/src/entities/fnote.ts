@@ -268,9 +268,8 @@ export default class FNote {
                 }
             }
             return results;
-        } 
+        }
         return this.children;
-        
     }
 
     async getSubtreeNoteIds(includeArchived = false) {
@@ -471,9 +470,8 @@ export default class FNote {
                 return a.isHidden ? 1 : -1;
             } else if (a.isSearch !== b.isSearch) {
                 return a.isSearch ? 1 : -1;
-            } 
+            }
             return a.notePath.length - b.notePath.length;
-            
         });
 
         return notePaths;
@@ -597,14 +595,12 @@ export default class FNote {
         } else if (this.type === "text") {
             if (this.isFolder()) {
                 return "bx bx-folder";
-            } 
+            }
             return "bx bx-note";
-            
         } else if (this.type === "code" && this.mime.startsWith("text/x-sql")) {
             return "bx bx-data";
-        } 
+        }
         return NOTE_TYPE_ICONS[this.type];
-        
     }
 
     getColorClass() {
@@ -811,9 +807,9 @@ export default class FNote {
             return this.getLabelValue(nameWithPrefix.substring(1));
         } else if (nameWithPrefix.startsWith("~")) {
             return this.getRelationValue(nameWithPrefix.substring(1));
-        } 
+        }
         return this.getLabelValue(nameWithPrefix);
-        
+
     }
 
     /**
@@ -878,10 +874,10 @@ export default class FNote {
         promotedAttrs.sort((a, b) => {
             if (a.noteId === b.noteId) {
                 return a.position < b.position ? -1 : 1;
-            } 
+            }
             // inherited promoted attributes should stay grouped: https://github.com/zadam/trilium/issues/3761
             return a.noteId < b.noteId ? -1 : 1;
-            
+
         });
 
         return promotedAttrs;

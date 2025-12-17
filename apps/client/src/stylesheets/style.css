@@ -724,6 +724,10 @@ table.promoted-attributes-in-tooltip th {
     z-index: 32767 !important;
 }
 
+.pre-wrap-text {
+    white-space: pre-wrap;
+}
+
 .bs-tooltip-bottom .tooltip-arrow::before {
     border-bottom-color: var(--main-border-color) !important;
 }

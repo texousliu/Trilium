@@ -41,9 +41,7 @@ export default function CallToActionDialog() {
                 )}
             </>}
         >
-            <p style={{
-                whiteSpace: "pre-wrap"
-            }}>{activeItem.message}</p>
+            <p className="pre-wrap-text">{activeItem.message}</p>
         </Modal>
     );
 }
