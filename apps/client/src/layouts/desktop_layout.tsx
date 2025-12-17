@@ -44,6 +44,7 @@ import Ribbon from "../widgets/ribbon/Ribbon.jsx";
 import ScrollPadding from "../widgets/scroll_padding.js";
 import SearchResult from "../widgets/search_result.jsx";
 import SharedInfo from "../widgets/shared_info.jsx";
+import RightPanelContainer from "../widgets/sidebar/RightPanelContainer.jsx";
 import SqlResults from "../widgets/sql_result.js";
 import SqlTableSchemas from "../widgets/sql_table_schemas.js";
 import TabRowWidget from "../widgets/tab_row.js";
@@ -174,12 +175,13 @@ export default class DesktopLayout {
                                             .child(...this.customWidgets.get("center-pane"))
 
                                     )
-                                    .child(
+                                    .optChild(!isNewLayout,
                                         new RightPaneContainer()
                                             .child(new TocWidget())
                                             .child(new HighlightsListWidget())
                                             .child(...this.customWidgets.get("right-pane"))
                                     )
+                                    .optChild(isNewLayout, <RightPanelContainer />)
                             )
                             .optChild(!launcherPaneIsHorizontal && isNewLayout, <StatusBar />)
                     )
