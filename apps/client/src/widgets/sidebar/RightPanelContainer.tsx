@@ -6,6 +6,7 @@ import { useEffect } from "preact/hooks";
 
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
+import TableOfContents from "./TableOfContents";
 
 const MIN_WIDTH_PERCENT = 5;
 
@@ -25,7 +26,7 @@ export default function RightPanelContainer() {
 
     return (
         <div id="right-pane">
-            Hi there.
+            <TableOfContents />
         </div>
     );
 }
