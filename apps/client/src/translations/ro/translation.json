@@ -2142,8 +2142,6 @@
     "read_only_temporarily_disabled": "Editabilă temporar",
     "read_only_temporarily_disabled_description": "Această notiță se poate modifica, deși în mod normal ea este doar în citire. Notița va reveni la modul doar în citire imediat ce navigați către altă notiță.\n\nClick pentru a re-activa modul doar în citire.",
     "shared_publicly": "Partajată public",
-    "shared_publicly_description": "Această notiță este publicată online la {{- link}} și este acesibilă public.\n\nClic pentru a naviga la pagina partajată sau click dreapta pentru mai multe opțiuni.",
-    "shared_locally": "Partajată local",
-    "shared_locally_description": "Această notiță este partajată doar pe rețeaua locală la {{- link}}.\n\nClic pentru a naviga la pagina partajată sau click dreapta pentru mai multe opțiuni."
+    "shared_locally": "Partajată local"
   }
 }

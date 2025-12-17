@@ -696,7 +696,10 @@
     "open_note_on_server": "在服务器上打开笔记",
     "view_revisions": "笔记修订...",
     "note_map": "笔记地图",
-    "advanced": "高级"
+    "advanced": "高级",
+    "export_as_image": "导出为图像",
+    "export_as_image_png": "PNG（栅格）",
+    "export_as_image_svg": "SVG（矢量图）"
   },
   "onclick_button": {
     "no_click_handler": "按钮组件'{{componentId}}'没有定义点击处理程序"
@@ -794,7 +797,7 @@
     "file_type": "文件类型",
     "file_size": "文件大小",
     "download": "下载",
-    "open": "打开",
+    "open": "用外部程序打开",
     "upload_new_revision": "上传新修订版本",
     "upload_success": "新文件修订版本已上传。",
     "upload_failed": "新文件修订版本上传失败。",
@@ -825,7 +828,8 @@
     "note_size_info": "笔记大小提供了该笔记存储需求的粗略估计。它考虑了笔记的内容及其笔记修订历史的内容。",
     "calculate": "计算",
     "subtree_size": "(子树大小: {{size}}, 共计 {{count}} 个笔记)",
-    "title": "笔记信息"
+    "title": "笔记信息",
+    "show_similar_notes": "显示相似的笔记"
   },
   "note_map": {
     "open_full": "展开显示",
@@ -888,7 +892,8 @@
     "search_parameters": "搜索参数",
     "unknown_search_option": "未知的搜索选项 {{searchOptionName}}",
     "search_note_saved": "搜索笔记已保存到 {{- notePathTitle}}",
-    "actions_executed": "操作已执行。"
+    "actions_executed": "操作已执行。",
+    "view_options": "查看选项："
   },
   "similar_notes": {
     "title": "相似笔记",
@@ -1582,11 +1587,12 @@
   "note_title": {
     "placeholder": "请输入笔记标题...",
     "created_on": "建立于 <Value />",
-    "last_modified": "最后修改于 <Value />",
+    "last_modified": "修改于 <Value />",
     "note_type_switcher_label": "从 {{type}} 切换到:",
-    "note_type_switcher_others": "更多笔记类型",
+    "note_type_switcher_others": "其他笔记类型",
     "note_type_switcher_templates": "模板",
-    "note_type_switcher_collection": "集合"
+    "note_type_switcher_collection": "集合",
+    "edited_notes": "编辑过的笔记"
   },
   "search_result": {
     "no_notes_found": "没有找到符合搜索条件的笔记。",
@@ -2061,7 +2067,7 @@
     "configure_launch_bar_description": "打开启动栏配置，添加或移除项目。"
   },
   "content_renderer": {
-    "open_externally": "在外部打开"
+    "open_externally": "用外部程序打开"
   },
   "modal": {
     "close": "关闭",
@@ -2096,7 +2102,7 @@
   },
   "pagination": {
     "page_title": "第 {{startIndex}} 页 - 第 {{endIndex}} 页",
-    "total_notes": "{{count}} 笔记"
+    "total_notes": "{{count}} 篇笔记"
   },
   "collections": {
     "rendering_error": "出现错误无法显示内容。"
@@ -2146,23 +2152,33 @@
     "read_only_auto_description": "出于性能原因，此笔记已被自动设置为只读模式。此自动限制可以在设置中调整。\n\n点击可临时编辑。",
     "read_only_temporarily_disabled": "临时编辑",
     "read_only_temporarily_disabled_description": "此笔记当前可编辑，但通常是只读的。一旦你切换到其他笔记，该笔记将恢复为只读模式。\n\n点击以重新启用只读模式。",
-    "shared_publicly_description": "此笔记已在网上发布，链接为 {{- link}}，并且可公开访问。\n\n点击以导航到共享笔记，或右键点击查看更多选项。",
-    "shared_locally_description": "此笔记仅在本地网络共享，链接为 {{- link}}。\n\n点击以导航到共享笔记，或右键点击查看更多选项。",
     "clipped_note": "网页剪辑",
     "clipped_note_description": "此笔记最初来自 {{url}}。\n\n点击即可跳转至源网页。",
     "execute_script": "运行脚本",
     "execute_script_description": "这是一篇脚本笔记。点击即可执行脚本。",
     "execute_sql": "运行SQL",
-    "execute_sql_description": "这是一篇 SQL 笔记。点击即可执行 SQL 查询。"
+    "execute_sql_description": "这是一篇 SQL 笔记。点击即可执行 SQL 查询。",
+    "shared_copy_to_clipboard": "复制链接到剪贴板",
+    "shared_open_in_browser": "在浏览器中打开链接",
+    "shared_unshare": "取消共享"
   },
   "status_bar": {
-    "language_title": "更改所有内容的语言",
-    "note_info_title": "查看有关此笔记的信息，例如创建/修改日期或笔记大小。",
-    "backlinks_title_other": "此笔记由 {{count}} 个其他笔记链接而来。\n\n点击查看反向链接列表。",
-    "attachments_title_other": "此笔记包含 {{count}} 个附件。点击即可在新标签页中打开附件列表。",
+    "language_title": "更改内容语言",
+    "note_info_title": "查看笔记信息（例如日期，笔记大小）",
+    "backlinks_title_other": "查看反链",
+    "attachments_title_other": "在新标签页中查看附件",
     "attributes_other": "{{count}} 个属性",
-    "attributes_title": "单击以打开专用窗格，编辑此笔记拥有的属性，以及查看继承属性列表。",
-    "note_paths_title": "点击查看此笔记在树状图中的位置路径。",
-    "code_note_switcher": "更改语言模式"
+    "attributes_title": "拥有的属性和继承的属性",
+    "note_paths_title": "笔记路径",
+    "code_note_switcher": "更改语言模式",
+    "backlinks_other": "{{count}} 个反链",
+    "attachments_other": "{{count}} 个附件",
+    "note_paths_other": "{{count}} 条路径"
+  },
+  "breadcrumb": {
+    "workspace_badge": "工作空间",
+    "scroll_to_top_title": "跳转到笔记开始",
+    "hoisted_badge_title": "取消聚焦",
+    "hoisted_badge": "聚焦"
   }
 }
