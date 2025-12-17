@@ -325,3 +325,8 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
 .use-note-color {
     --custom-color: var(--dark-theme-custom-color);
 }
+
+.note-split.with-hue {
+    --note-icon-custom-background-color: hsl(var(--custom-color-hue), 8%, 29.4%);
+    --note-icon-custom-color: hsl(var(--custom-color-hue), 89%, 78%);
+}

@@ -296,3 +296,8 @@
     --modal-border-color: hsl(var(--custom-color-hue), 33%, 41%);
     --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 40%, 88%);
 }
+
+.note-split.with-hue {
+    --note-icon-custom-background-color: hsl(var(--custom-color-hue), 50%, 86.7%);
+    --note-icon-custom-color: hsl(var(--custom-color-hue), 36%, 23%);
+}

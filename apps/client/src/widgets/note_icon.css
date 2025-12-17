@@ -90,7 +90,7 @@ body.experimental-feature-new-layout {
         &::before {
             position: relative;
             z-index: 1;
-            color: var(--note-icon-button-color);
+            color: var(--note-icon-custom-color, var(--note-icon-button-color));
         }
 
         /* The background circle */
@@ -99,11 +99,11 @@ body.experimental-feature-new-layout {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            background: var(--note-icon-button-background-color);
+            background: var(--note-icon-custom-background-color, var(--note-icon-button-background-color));
         }
 
         &:focus-visible {
-            outline: 2px solid var(--note-icon-button-color);
+            outline: 2px solid var(--note-icon-custom-color, var(--note-icon-button-color));
         }
 
         &:hover:not(.bx-empty:disabled)::after {
