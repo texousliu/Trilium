@@ -1,5 +1,5 @@
 import { NoteType } from "@triliumnext/commons";
-import { useContext, useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 
 import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
@@ -12,7 +12,7 @@ import { ViewTypeOptions } from "../collections/interface";
 import { buildSaveSqlToNoteHandler } from "../FloatingButtonsDefinitions";
 import ActionButton from "../react/ActionButton";
 import { FormFileUploadActionButton } from "../react/FormFileUpload";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumOption } from "../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { buildUploadNewFileRevisionListener } from "./FilePropertiesTab";
 import { buildUploadNewImageRevisionListener } from "./ImagePropertiesTab";
@@ -38,6 +38,7 @@ interface NoteActionsCustomInnerProps extends NoteActionsCustomProps {
  */
 export default function NoteActionsCustom(props: NoteActionsCustomProps) {
     const { note } = props;
+    const containerRef = useRef<HTMLDivElement>(null);
     const noteType = useNoteProperty(note, "type");
     const noteMime = useNoteProperty(note, "mime");
     const [ viewType ] = useNoteLabel(note, "viewType");
@@ -53,8 +54,15 @@ export default function NoteActionsCustom(props: NoteActionsCustomProps) {
         isReadOnly
     };
 
+    useTriliumEvents([ "toggleRibbonTabFileProperties", "toggleRibbonTabImageProperties" ], () => {
+        (containerRef.current?.firstElementChild as HTMLElement)?.focus();
+    });
+
     return (innerProps &&
-        <div className="note-actions-custom">
+        <div
+            ref={containerRef}
+            className="note-actions-custom"
+        >
             <AddChildButton {...innerProps} />
             <RunActiveNoteButton {...innerProps } />
             <OpenTriliumApiDocsButton {...innerProps} />

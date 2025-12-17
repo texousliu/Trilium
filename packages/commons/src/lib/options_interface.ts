@@ -131,6 +131,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     /** Whether keyboard auto-completion for editing commands is triggered when typing `/`. */
     textNoteSlashCommandsEnabled: boolean;
     backgroundEffects: boolean;
+    newLayout: boolean;
 
     // Share settings
     redirectBareDomain: boolean;

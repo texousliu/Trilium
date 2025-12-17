@@ -22,11 +22,10 @@ export default function NoteBadges() {
 
 function ReadOnlyBadge() {
     const { note, noteContext } = useNoteContext();
-    const { isReadOnly, enableEditing } = useIsNoteReadOnly(note, noteContext);
+    const { isReadOnly, enableEditing, temporarilyEditable } = useIsNoteReadOnly(note, noteContext);
     const isExplicitReadOnly = note?.isLabelTruthy("readOnly");
-    const isTemporarilyEditable = noteContext?.ntxId !== "_popup-editor" && noteContext?.viewScope?.readOnlyTemporarilyDisabled;
 
-    if (isTemporarilyEditable) {
+    if (temporarilyEditable) {
         return <Badge
             icon="bx bx-lock-open-alt"
             text={t("breadcrumb_badges.read_only_temporarily_disabled")}

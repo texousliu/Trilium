@@ -1,6 +1,6 @@
-import utils from "../../services/utils";
-import options from "../../services/options";
 import { t } from "../../services/i18n";
+import options from "../../services/options";
+import utils from "../../services/utils";
 
 /**
  * A "call-to-action" is an interactive message for the user, generally to present new features.
@@ -46,20 +46,11 @@ function isNextTheme() {
 
 const CALL_TO_ACTIONS: CallToAction[] = [
     {
-        id: "next_theme",
-        title: t("call_to_action.next_theme_title"),
-        message: t("call_to_action.next_theme_message"),
-        enabled: () => !isNextTheme(),
-        buttons: [
-            {
-                text: t("call_to_action.next_theme_button"),
-                async onClick() {
-                    await options.save("theme", "next");
-                    await options.save("backgroundEffects", "true");
-                    utils.reloadFrontendApp("call-to-action");
-                }
-            }
-        ]
+        id: "new_layout",
+        title: t("call_to_action.new_layout_title"),
+        message: t("call_to_action.new_layout_message"),
+        enabled: () => true,
+        buttons: []
     },
     {
         id: "background_effects",
@@ -72,6 +63,22 @@ const CALL_TO_ACTIONS: CallToAction[] = [
                 async onClick() {
                     await options.save("backgroundEffects", "true");
                     utils.restartDesktopApp();
+                }
+            }
+        ]
+    },
+    {
+        id: "next_theme",
+        title: t("call_to_action.next_theme_title"),
+        message: t("call_to_action.next_theme_message"),
+        enabled: () => !isNextTheme(),
+        buttons: [
+            {
+                text: t("call_to_action.next_theme_button"),
+                async onClick() {
+                    await options.save("theme", "next");
+                    await options.save("backgroundEffects", "true");
+                    utils.reloadFrontendApp("call-to-action");
                 }
             }
         ]

@@ -7,7 +7,6 @@
 }
 
 .inline-title {
-    margin-top: 2px; /* Allow space for the focus outline */
     max-width: var(--max-content-width);
     container-type: inline-size;
     padding-inline-start: 24px;
@@ -111,7 +110,7 @@ body.prefers-centered-content .inline-title {
 
 .note-type-switcher {
     --badge-radius: 12px;
-    
+
     position: relative;
     top: 5px;
     padding: .25em 0;
@@ -121,7 +120,7 @@ body.prefers-centered-content .inline-title {
     min-width: 0;
     gap: 5px;
     min-height: 35px;
-    
+
     >* {
         flex-shrink: 0;
         animation: note-type-switcher-intro 200ms ease-in;

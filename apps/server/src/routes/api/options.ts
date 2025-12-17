@@ -1,13 +1,14 @@
-"use strict";
 
-import optionService from "../../services/options.js";
-import log from "../../services/log.js";
-import searchService from "../../services/search/services/search.js";
-import ValidationError from "../../errors/validation_error.js";
-import type { Request } from "express";
-import { changeLanguage, getLocales } from "../../services/i18n.js";
+
 import type { OptionNames } from "@triliumnext/commons";
+import type { Request } from "express";
+
+import ValidationError from "../../errors/validation_error.js";
 import config from "../../services/config.js";
+import { changeLanguage, getLocales } from "../../services/i18n.js";
+import log from "../../services/log.js";
+import optionService from "../../services/options.js";
+import searchService from "../../services/search/services/search.js";
 
 interface UserTheme {
     val: string; // value of the theme, used in the URL
@@ -100,6 +101,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "splitEditorOrientation",
     "seenCallToActions",
     "experimentalFeatures",
+    "newLayout",
 
     // AI/LLM integration options
     "aiEnabled",

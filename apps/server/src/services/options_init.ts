@@ -1,10 +1,11 @@
-import optionService from "./options.js";
+import { type KeyboardShortcutWithRequiredActionName, type OptionMap, type OptionNames, SANITIZER_DEFAULT_ALLOWED_TAGS } from "@triliumnext/commons";
+
 import appInfo from "./app_info.js";
-import { randomSecureToken, isWindows } from "./utils.js";
-import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
-import { SANITIZER_DEFAULT_ALLOWED_TAGS, type KeyboardShortcutWithRequiredActionName, type OptionMap, type OptionNames } from "@triliumnext/commons";
+import log from "./log.js";
+import optionService from "./options.js";
+import { isWindows,randomSecureToken } from "./utils.js";
 
 function initDocumentOptions() {
     optionService.createOption("documentId", randomSecureToken(16), false);
@@ -156,6 +157,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "shadowsEnabled", value: "true", isSynced: false },
     { name: "backdropEffectsEnabled", value: "true", isSynced: false },
     { name: "smoothScrollEnabled", value: "true", isSynced: false },
+    { name: "newLayout", value: "true", isSynced: true },
 
     // Internationalization
     { name: "locale", value: "en", isSynced: true },
@@ -171,9 +173,9 @@ const defaultOptions: DefaultOption[] = [
         value: (optionsMap) => {
             if (optionsMap.theme === "light") {
                 return "default:stackoverflow-light";
-            } else {
-                return "default:stackoverflow-dark";
             }
+            return "default:stackoverflow-dark";
+
         },
         isSynced: false
     },
