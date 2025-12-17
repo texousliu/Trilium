@@ -409,7 +409,8 @@
     "search_parameters": "Parametri di ricerca",
     "unknown_search_option": "Opzione di ricerca sconosciuta {{searchOptionName}}",
     "search_note_saved": "La nota di ricerca è stata salvata in {{- notePathTitle}}",
-    "actions_executed": "Le azioni sono state eseguite."
+    "actions_executed": "Le azioni sono state eseguite.",
+    "view_options": "Opzioni di visualizzazione:"
   },
   "modal": {
     "close": "Chiudi",
@@ -1262,7 +1263,12 @@
     "convert_into_attachment_prompt": "Sei sicuro di voler convertire la nota '{{title}}' in un allegato della nota padre?",
     "print_pdf": "Esporta come PDF...",
     "open_note_on_server": "Apri una nota sul server",
-    "view_revisions": "Revisioni..."
+    "view_revisions": "Revisioni...",
+    "advanced": "Avanzato",
+    "export_as_image": "Esporta come immagine",
+    "export_as_image_png": "PNG (raster)",
+    "export_as_image_svg": "SVG (vector)",
+    "note_map": "Mappa"
   },
   "onclick_button": {
     "no_click_handler": "Il widget pulsante '{{componentId}}' non ha un gestore di clic definito"
@@ -1362,7 +1368,7 @@
     "file_type": "Tipo di file",
     "file_size": "Dimensione del file",
     "download": "Scaricamento",
-    "open": "Aprire",
+    "open": "Aprire esternamente",
     "upload_new_revision": "Carica nuova revisione",
     "upload_success": "È stata caricata una nuova revisione del file.",
     "upload_failed": "Caricamento di una nuova revisione del file non riuscito.",
@@ -1393,7 +1399,8 @@
     "note_size_info": "La dimensione della nota fornisce una stima approssimativa dei requisiti di archiviazione per questa nota. Tiene conto del contenuto della nota e del contenuto delle sue revisioni.",
     "calculate": "calcolare",
     "subtree_size": "(dimensione del sottoalbero: {{size}} in {{count}} note)",
-    "title": "Nota informativa"
+    "title": "Nota informativa",
+    "show_similar_notes": "Mostra note simili"
   },
   "note_map": {
     "open_full": "Espandi completamente",
@@ -1876,7 +1883,12 @@
   "note_title": {
     "placeholder": "scrivi qui il titolo della nota...",
     "created_on": "Creato il <Value />",
-    "last_modified": "Ultima modifica il <Value />"
+    "last_modified": "Modificato il <Value />",
+    "note_type_switcher_label": "Passa da {{type}} a:",
+    "note_type_switcher_others": "Altro tipo di nota",
+    "note_type_switcher_templates": "Modello",
+    "note_type_switcher_collection": "Collezione",
+    "edited_notes": "Note modificate"
   },
   "search_result": {
     "no_notes_found": "Non sono state trovate note per i parametri di ricerca specificati.",
@@ -2043,7 +2055,7 @@
   "book_properties_config": {
     "hide-weekends": "Nascondi i fine settimana",
     "display-week-numbers": "Visualizza i numeri delle settimane",
-    "map-style": "Stile mappa:",
+    "map-style": "Stile mappa",
     "max-nesting-depth": "Profondità massima di nidificazione:",
     "raster": "Trama",
     "vector_light": "Vettore (Luce)",
@@ -2141,8 +2153,43 @@
     "read_only_temporarily_disabled": "Modificabile temporaneamente",
     "read_only_temporarily_disabled_description": "Questa nota è attualmente modificabile, ma normalmente è di sola lettura. La nota tornerà ad essere di sola lettura non appena passerai a un'altra nota.\n\nClicca per riattivare la modalità di sola lettura.",
     "shared_publicly": "Condiviso pubblicamente",
-    "shared_publicly_description": "Questa nota è stata pubblicata online all'indirizzo {{- link}} ed è accessibile al pubblico.\n\nClicca per visualizzare la nota condivisa o clicca con il tasto destro del mouse per ulteriori opzioni.",
     "shared_locally": "Condiviso localmente",
-    "shared_locally_description": "Questa nota è condivisa sulla rete locale solo all'indirizzo {{- link}}.\n\nClicca per accedere alla nota condivisa o clicca con il tasto destro del mouse per ulteriori opzioni."
+    "clipped_note": "Clip web",
+    "clipped_note_description": "Questa nota è stata originariamente presa da {{url}}.\n\nClicca per andare alla pagina web di origine.",
+    "execute_script": "Esegui script",
+    "execute_script_description": "Questa nota è una nota di script. Clicca per eseguire lo script.",
+    "execute_sql": "Esegui SQL",
+    "execute_sql_description": "Questa nota è una nota SQL. Clicca per eseguire la query SQL."
+  },
+  "breadcrumb": {
+    "workspace_badge": "Area di lavoro",
+    "scroll_to_top_title": "Vai all'inizio della nota",
+    "hoisted_badge": "Sollevato",
+    "hoisted_badge_title": "Abbassato"
+  },
+  "status_bar": {
+    "language_title": "Cambia lingua dei contenuti",
+    "note_info_title": "Visualizza informazioni sulla nota (ad es. date, dimensioni della nota)",
+    "backlinks_one": "{{count}} backlink",
+    "backlinks_many": "{{count}} backlinks",
+    "backlinks_other": "{{count}} backlinks",
+    "backlinks_title_one": "Visualizza backlink",
+    "backlinks_title_many": "Visualizza backlinks",
+    "backlinks_title_other": "Visualizza backlinks",
+    "attachments_one": "{{count}} allegato",
+    "attachments_many": "{{count}} allegati",
+    "attachments_other": "{{count}} allegati",
+    "attachments_title_one": "Visualizza allegato in una nuova scheda",
+    "attachments_title_many": "Visualizza allegati in una nuova scheda",
+    "attachments_title_other": "Visualizza allegati in una nuova scheda",
+    "attributes_one": "{{count}} attributo",
+    "attributes_many": "{{count}} attributi",
+    "attributes_other": "{{count}} attributi",
+    "attributes_title": "Attributi posseduti e attributi ereditati",
+    "note_paths_one": "{{count}} percorso",
+    "note_paths_many": "{{count}} percorsi",
+    "note_paths_other": "{{count}} percorsi",
+    "note_paths_title": "Nota percorsi",
+    "code_note_switcher": "Cambia modalità lingua"
   }
 }
