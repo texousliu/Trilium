@@ -101,5 +101,5 @@ html {
 }
 
 span.fancytree-active {
-    color: var(--light-theme-custom-color);
+    color: var(--custom-color, var(--active-item-text-color));
 }
