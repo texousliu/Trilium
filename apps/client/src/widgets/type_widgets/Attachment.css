@@ -74,7 +74,7 @@
 .attachment-detail-wrapper.list-view {
     border-radius: 12px;
     background-color: var(--card-background-color);
-    padding: 0 6px;
+    padding: 6px 6px 0 6px;
     box-shadow: var(--card-box-shadow);
 }
 
@@ -127,15 +127,6 @@
 /* #endregion */
 
 /* #region Attachment actions */
-.attachment-actions {
-    width: 35px;
-    height: 35px;
-}
-
-.attachment-actions .select-button {
-    position: relative;
-    top: 3px;
-}
 
 .attachment-actions .dropdown-menu {
     width: 20em;
