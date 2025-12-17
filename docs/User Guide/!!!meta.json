@@ -237,6 +237,20 @@
                             "value": "feature-highlights",
                             "isInheritable": false,
                             "position": 170
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "IjZS7iK5EXtb",
+                            "isInheritable": false,
+                            "position": 180
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "I6p2a06hdnL6",
+                            "isInheritable": false,
+                            "position": 190
                         }
                     ],
                     "format": "markdown",
