@@ -607,7 +607,8 @@
     "subtree_size": "（サブツリーサイズ: {{size}}、ノード数: {{count}}）",
     "title": "ノート情報",
     "note_size_info": "ノートのサイズは、このノートに必要なストレージの概算を示します。これは、ノートの内容とそのノートの編集履歴の内容を考慮したものです。",
-    "show_similar_notes": "類似のノートを表示"
+    "show_similar_notes": "類似のノートを表示",
+    "mime": "MIME タイプ"
   },
   "image_properties": {
     "file_type": "ファイルタイプ",
@@ -2179,6 +2180,8 @@
     "hoisted_badge": "ホイスト",
     "hoisted_badge_title": "ホイスト解除",
     "workspace_badge": "ワークスペース",
-    "scroll_to_top_title": "ノートの先頭にジャンプ"
+    "scroll_to_top_title": "ノートの先頭にジャンプ",
+    "create_new_note": "新しい子ノートを作成",
+    "empty_hide_archived_notes": "アーカイブされたノートを非表示"
   }
 }
