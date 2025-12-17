@@ -28,7 +28,11 @@ export function isExperimentalFeatureEnabled(featureId: ExperimentalFeatureId): 
 }
 
 export function getEnabledExperimentalFeatureIds() {
-    return getEnabledFeatures().values();
+    const values = [ ...getEnabledFeatures().values() ];
+    if (options.is("newLayout")) {
+        values.push("new-layout");
+    }
+    return values;
 }
 
 export async function toggleExperimentalFeature(featureId: ExperimentalFeatureId, enable: boolean) {
