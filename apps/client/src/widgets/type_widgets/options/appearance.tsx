@@ -115,7 +115,7 @@ function LayoutSwitcher() {
     const [ newLayout, setNewLayout ] = useTriliumOptionBool("newLayout");
 
     return (
-        <OptionsSection title="User interface">
+        <OptionsSection title={t("settings_appearance.ui")}>
             <RadioWithIllustration
                 currentValue={newLayout ? "new-layout" : "old-layout"}
                 onChange={async newValue => {
@@ -123,8 +123,8 @@ function LayoutSwitcher() {
                     reloadFrontendApp();
                 }}
                 values={[
-                    { key: "old-layout", text: "Old layout", illustration: <LayoutIllustration /> },
-                    { key: "new-layout", text: "New layout", illustration: <LayoutIllustration isNewLayout /> }
+                    { key: "old-layout", text: t("settings_appearance.ui_old_layout"), illustration: <LayoutIllustration /> },
+                    { key: "new-layout", text: t("settings_appearance.ui_new_layout"), illustration: <LayoutIllustration isNewLayout /> }
                 ]}
             />
         </OptionsSection>
