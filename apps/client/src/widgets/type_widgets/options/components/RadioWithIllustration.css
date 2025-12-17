@@ -13,5 +13,16 @@
         }
 
         margin-bottom: 0;
+
+        &> .illustration {
+            border-radius: 6px;
+            padding: 3px;
+            cursor: pointer;
+        }
     }
+
+    &> .selected figure > .illustration {
+        outline: 3px solid var(--input-focus-outline-color);
+    }
+
 }

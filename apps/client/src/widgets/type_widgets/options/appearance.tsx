@@ -112,9 +112,16 @@ export default function AppearanceSettings() {
 }
 
 function LayoutSwitcher() {
+    const [ newLayout, setNewLayout ] = useTriliumOptionBool("newLayout");
+
     return (
-        <OptionsSection title="Layout">
+        <OptionsSection title="User interface">
             <RadioWithIllustration
+                currentValue={newLayout ? "new-layout" : "old-layout"}
+                onChange={async newValue => {
+                    await setNewLayout(newValue === "new-layout");
+                    reloadFrontendApp();
+                }}
                 values={[
                     { key: "old-layout", text: "Old layout", illustration: <LayoutIllustration /> },
                     { key: "new-layout", text: "New layout", illustration: <LayoutIllustration isNewLayout /> }
@@ -124,7 +131,7 @@ function LayoutSwitcher() {
     );
 }
 
-function LayoutIllustration({ isNewLayout }: { isNewLayout: boolean }) {
+function LayoutIllustration({ isNewLayout }: { isNewLayout?: boolean }) {
     return (
         <div className="old-layout-illustration">
             <div className="launcher-pane">
