@@ -1,3 +1,4 @@
+import appContext from "../../components/app_context";
 import { t } from "../../services/i18n";
 import options from "../../services/options";
 import utils from "../../services/utils";
@@ -50,7 +51,13 @@ const CALL_TO_ACTIONS: CallToAction[] = [
         title: t("call_to_action.new_layout_title"),
         message: t("call_to_action.new_layout_message"),
         enabled: () => true,
-        buttons: []
+        buttons: [
+            {
+
+                text: t("call_to_action.new_layout_button"),
+                onClick: () => appContext.tabManager.openInNewTab("_help_IjZS7iK5EXtb", "_help", true)
+            }
+        ]
     },
     {
         id: "background_effects",
