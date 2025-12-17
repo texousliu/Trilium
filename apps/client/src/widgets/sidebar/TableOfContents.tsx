@@ -1,9 +1,8 @@
 import { CKTextEditor, ModelElement } from "@triliumnext/ckeditor5";
 import { useEffect, useState } from "preact/hooks";
 
-import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
-import { useActiveNoteContext, useNoteSavedData, useTriliumEvent } from "../react/hooks";
+import { useActiveNoteContext, useTriliumEvent } from "../react/hooks";
 import RightPanelWidget from "./RightPanelWidget";
 
 interface CKHeading {
@@ -26,10 +25,26 @@ export default function TableOfContents() {
     useEffect(() => {
         if (!textEditor) return;
         const headings  = extractTocFromTextEditor(textEditor);
-        setHeadings(headings);
-    }, [ textEditor ]);
 
-    console.log("Render with ", headings);
+        // React to changes.
+        const changeCallback = () => {
+            const changes = textEditor.model.document.differ.getChanges();
+
+            const affectsHeadings = changes.some( change => {
+                return (
+                    change.type === 'insert' || change.type === 'remove' || (change.type === 'attribute' && change.attributeKey === 'headingLevel')
+                );
+            });
+            if (affectsHeadings) {
+                setHeadings(extractTocFromTextEditor(textEditor));
+            }
+        };
+
+        textEditor.model.document.on("change:data", changeCallback);
+        setHeadings(headings);
+
+        return () => textEditor.model.document.off("change:data", changeCallback);
+    }, [ textEditor ]);
 
     return (
         <RightPanelWidget title={t("toc.table_of_contents")}>
