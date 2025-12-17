@@ -22,12 +22,13 @@
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .attachment-title {
     font-size: 1.1rem;
     margin: 0;
-    
+
     a {
         color: inherit !important;
     }
@@ -72,7 +73,7 @@
 
 .attachment-detail-wrapper.list-view {
     border-radius: 12px;
-    background-color: var(--card-background-color);    
+    background-color: var(--card-background-color);
     padding: 0 6px;
     box-shadow: var(--card-box-shadow);
 }
