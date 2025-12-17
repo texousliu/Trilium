@@ -6,11 +6,13 @@ import { useEffect } from "preact/hooks";
 
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
+import { useActiveNoteContext } from "../react/hooks";
 import TableOfContents from "./TableOfContents";
 
 const MIN_WIDTH_PERCENT = 5;
 
 export default function RightPanelContainer() {
+    const { note } = useActiveNoteContext();
     useEffect(() => {
         // We are intentionally omitting useTriliumOption to avoid re-render due to size change.
         const rightPaneWidth = Math.max(MIN_WIDTH_PERCENT, options.getInt("rightPaneWidth") ?? MIN_WIDTH_PERCENT);
@@ -26,7 +28,9 @@ export default function RightPanelContainer() {
 
     return (
         <div id="right-pane">
-            <TableOfContents />
+            {note && <>
+                <TableOfContents note={note} />
+            </>}
         </div>
     );
 }

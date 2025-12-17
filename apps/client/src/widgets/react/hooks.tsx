@@ -2,7 +2,7 @@ import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } f
 import { Tooltip } from "bootstrap";
 import Mark from "mark.js";
 import { RefObject, VNode } from "preact";
-import { CSSProperties } from "preact/compat";
+import { CSSProperties, useSyncExternalStore } from "preact/compat";
 import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import appContext, { EventData, EventNames } from "../../components/app_context";
@@ -25,6 +25,7 @@ import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../serv
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { DragData } from "../note_tree";
+import { noteSavedDataStore } from "./NoteStore";
 import { NoteContextContext, ParentComponent, refToJQuerySelector } from "./react_utils";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
@@ -112,6 +113,7 @@ export function useEditorSpacedUpdate({ note, noteContext, getData, onContentCha
             protected_session_holder.touchProtectedSessionIfNecessary(note);
             await server.put(`notes/${note.noteId}/data`, data, parentComponent?.componentId);
 
+            noteSavedDataStore.set(note.noteId, data.content);
             dataSaved?.(data);
         };
     }, [ note, getData, dataSaved ]);
@@ -120,6 +122,7 @@ export function useEditorSpacedUpdate({ note, noteContext, getData, onContentCha
     // React to note/blob changes.
     useEffect(() => {
         if (!blob) return;
+        noteSavedDataStore.set(note.noteId, blob.content);
         spacedUpdate.allowUpdateWithoutChange(() => onContentChange(blob.content));
     }, [ blob ]);
 
@@ -150,6 +153,14 @@ export function useEditorSpacedUpdate({ note, noteContext, getData, onContentCha
 
     return spacedUpdate;
 }
+
+export function useNoteSavedData(noteId: string | undefined) {
+    return useSyncExternalStore(
+        (cb) => noteId ? noteSavedDataStore.subscribe(noteId, cb) : () => {},
+        () => noteId ? noteSavedDataStore.get(noteId) : undefined
+    );
+}
+
 
 /**
  * Allows a React component to read and write a Trilium option, while also watching for external changes.
