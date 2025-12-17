@@ -829,7 +829,8 @@
     "calculate": "计算",
     "subtree_size": "(子树大小: {{size}}, 共计 {{count}} 个笔记)",
     "title": "笔记信息",
-    "show_similar_notes": "显示相似的笔记"
+    "show_similar_notes": "显示相似的笔记",
+    "mime": "文件类型"
   },
   "note_map": {
     "open_full": "展开显示",
@@ -2179,6 +2180,8 @@
     "workspace_badge": "工作空间",
     "scroll_to_top_title": "跳转到笔记开始",
     "hoisted_badge_title": "取消聚焦",
-    "hoisted_badge": "聚焦"
+    "hoisted_badge": "聚焦",
+    "create_new_note": "新建子笔记",
+    "empty_hide_archived_notes": "隐藏已存档的笔记"
   }
 }
