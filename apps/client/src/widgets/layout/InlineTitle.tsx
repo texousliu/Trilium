@@ -328,20 +328,19 @@ function EditedNotes() {
 function EditedNotesContent({ note }: { note: FNote }) {
     const editedNotes = useEditedNotes(note);
 
-    return (
-        <>
-            {editedNotes?.map(editedNote => (
-                <SimpleBadge
-                    key={editedNote.noteId}
-                    title={(
-                        <NoteLink
-                            notePath={editedNote.noteId}
-                            showNoteIcon
-                        />
-                    )}
-                />
-            ))}
-        </>
-    );
+    return (editedNotes !== undefined &&
+        (editedNotes.length > 0 ? editedNotes?.map(editedNote => (
+            <SimpleBadge
+                key={editedNote.noteId}
+                title={(
+                    <NoteLink
+                        notePath={editedNote.noteId}
+                        showNoteIcon
+                    />
+                )}
+            />
+        )) : (
+            <div className="no-edited-notes-found">{t("edited_notes.no_edited_notes_found")}</div>
+        )));
 }
 //#endregion
