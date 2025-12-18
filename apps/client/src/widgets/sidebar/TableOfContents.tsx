@@ -2,7 +2,7 @@ import { CKTextEditor, ModelElement } from "@triliumnext/ckeditor5";
 import { useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
-import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTriliumEvent } from "../react/hooks";
+import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor, useTriliumEvent } from "../react/hooks";
 import RightPanelWidget from "./RightPanelWidget";
 
 interface CKHeading {
@@ -24,18 +24,13 @@ export default function TableOfContents() {
 }
 
 function EditableTextTableOfContents() {
-    const { ntxId } = useActiveNoteContext();
-    const [ textEditor, setTextEditor ] = useState<CKTextEditor | null>(null);
+    const { note, noteContext } = useActiveNoteContext();
+    const textEditor = useTextEditor(noteContext);
     const [ headings, setHeadings ] = useState<CKHeading[]>([]);
-
-    useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
-        if (eventNtxId !== ntxId) return;
-        setTextEditor(editor);
-    });
 
     useEffect(() => {
         if (!textEditor) return;
-        const headings  = extractTocFromTextEditor(textEditor);
+        const headings = extractTocFromTextEditor(textEditor);
 
         // React to changes.
         const changeCallback = () => {
@@ -55,7 +50,7 @@ function EditableTextTableOfContents() {
         setHeadings(headings);
 
         return () => textEditor.model.document.off("change:data", changeCallback);
-    }, [ textEditor ]);
+    }, [ textEditor, note ]);
 
     return <AbstractTableOfContents headings={headings} />;
 }

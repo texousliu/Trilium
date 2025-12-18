@@ -1,3 +1,4 @@
+import { CKTextEditor } from "@triliumnext/ckeditor5";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
 import { Tooltip } from "bootstrap";
 import Mark from "mark.js";
@@ -25,6 +26,7 @@ import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../serv
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { DragData } from "../note_tree";
+import CKEditor from "./CKEditor";
 import { noteSavedDataStore } from "./NoteStore";
 import { NoteContextContext, ParentComponent, refToJQuerySelector } from "./react_utils";
 
@@ -1084,4 +1086,32 @@ export function useNoteColorClass(note: FNote | null | undefined) {
         setColorClass(note?.getColorClass());
     }, [ color, note ]);
     return colorClass;
+}
+
+export function useTextEditor(noteContext: NoteContext | null | undefined) {
+    const [ textEditor, setTextEditor ] = useState<CKTextEditor | null>(null);
+    const requestIdRef = useRef(0);
+
+    // React to note context change and initial state.
+    useEffect(() => {
+        if (!noteContext) {
+            setTextEditor(null);
+            return;
+        }
+
+        const requestId = ++requestIdRef.current;
+        noteContext.getTextEditor((textEditor) => {
+            // Prevent stale async.
+            if (requestId !== requestIdRef.current) return;
+            setTextEditor(textEditor);
+        });
+    }, [ noteContext ]);
+
+    // React to editor initializing.
+    useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
+        if (eventNtxId !== noteContext?.ntxId) return;
+        setTextEditor(editor);
+    });
+
+    return textEditor;
 }
