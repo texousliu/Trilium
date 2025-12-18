@@ -46,7 +46,7 @@ export default function RightPanelContainer() {
         const splitInstance = Split(elements, {
             direction: "vertical",
             minSize: COLLAPSED_SIZE,
-            gutterSize: 1
+            gutterSize: 4
         });
         innerSplitRef.current = splitInstance;
         return () => splitInstance.destroy();
