@@ -191,7 +191,7 @@ function extractHeadingsFromStaticHtml(el: HTMLElement | null) {
     let node: Node | null;
     while ((node = walker.nextNode())) {
         const el = node.parentElement;
-        if (!el || !node.textContent?.trim()) continue;
+        if (!el || !node.textContent) continue;
 
         const style = getComputedStyle(el);
 
@@ -199,18 +199,22 @@ function extractHeadingsFromStaticHtml(el: HTMLElement | null) {
             el.closest('strong, em, u') ||
             style.color || style.backgroundColor
         ) {
-            highlights.push({
-                id: crypto.randomUUID(),
-                text: node.textContent,
-                element: el,
-                attrs: {
-                    bold: !!el.closest("strong"),
-                    italic: !!el.closest("em"),
-                    underline: !!el.closest("u"),
-                    background: el.style.backgroundColor,
-                    color: el.style.color
-                }
-            });
+            const attrs: RawHighlight["attrs"] = {
+                bold: !!el.closest("strong"),
+                italic: !!el.closest("em"),
+                underline: !!el.closest("u"),
+                background: el.style.backgroundColor,
+                color: el.style.color
+            };
+
+            if (Object.values(attrs).some(Boolean)) {
+                highlights.push({
+                    id: crypto.randomUUID(),
+                    text: node.textContent,
+                    element: el,
+                    attrs
+                });
+            }
         }
     }
 
