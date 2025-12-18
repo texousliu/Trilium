@@ -25,7 +25,7 @@ export default function TableOfContents() {
     const noteType = useNoteProperty(note, "type");
     const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
 
-    return (noteType === "text" || noteType === "doc") && (
+    return (
         <RightPanelWidget id="toc" title={t("toc.table_of_contents")}>
             {((noteType === "text" && isReadOnly) || (noteType === "doc")) && <ReadOnlyTextTableOfContents />}
             {noteType === "text" && !isReadOnly && <EditableTextTableOfContents />}

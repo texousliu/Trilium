@@ -22,7 +22,7 @@ export default function HighlightsList() {
     const noteType = useNoteProperty(note, "type");
     const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
 
-    return (noteType === "text") && (
+    return (
         <RightPanelWidget id="highlights" title={t("highlights_list_2.title")}>
             {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
             {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}
