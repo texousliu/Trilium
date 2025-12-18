@@ -10,6 +10,7 @@ import Icon from "../react/Icon";
 import RightPanelWidget from "./RightPanelWidget";
 
 interface RawHeading {
+    id: string;
     level: number;
     text: string;
 }
@@ -73,7 +74,7 @@ function AbstractTableOfContents({ headings }: {
     return (
         <span className="toc">
             <ol>
-                {nestedHeadings.map(heading => <TableOfContentsHeading heading={heading} />)}
+                {nestedHeadings.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} />)}
             </ol>
         </span>
     );
@@ -95,7 +96,7 @@ function TableOfContentsHeading({ heading }: { heading: HeadingsWithNesting }) {
             </li>
             {heading.children && (
                 <ol>
-                    {heading.children.map(heading => <TableOfContentsHeading heading={heading} />)}
+                    {heading.children.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} />)}
                 </ol>
             )}
         </>
@@ -103,7 +104,7 @@ function TableOfContentsHeading({ heading }: { heading: HeadingsWithNesting }) {
 }
 
 function buildHeadingTree(headings: RawHeading[]): HeadingsWithNesting[] {
-    const root: HeadingsWithNesting = { level: 0, text: "", children: [] };
+    const root: HeadingsWithNesting = { level: 0, text: "", children: [], id: "_root" };
     const stack: HeadingsWithNesting[] = [root];
 
     for (const h of headings) {
@@ -124,6 +125,7 @@ function buildHeadingTree(headings: RawHeading[]): HeadingsWithNesting[] {
     return root.children;
 }
 
+const TOC_ID = 'tocId';
 
 function extractTocFromTextEditor(editor: CKTextEditor) {
     const headings: CKHeading[] = [];
@@ -131,16 +133,25 @@ function extractTocFromTextEditor(editor: CKTextEditor) {
     const root = editor.model.document.getRoot();
     if (!root) return [];
 
-    for (const { type, item } of editor.model.createRangeIn(root).getWalker()) {
-        if (type !== "elementStart" || !item.is('element') || !item.name.startsWith('heading')) continue;
+    editor.model.change(writer => {
+        for (const { type, item } of editor.model.createRangeIn(root).getWalker()) {
+            if (type !== "elementStart" || !item.is('element') || !item.name.startsWith('heading')) continue;
 
-        const level = Number(item.name.replace( 'heading', '' ));
-        const text = Array.from( item.getChildren() )
-            .map( c => c.is( '$text' ) ? c.data : '' )
-            .join( '' );
+            const level = Number(item.name.replace( 'heading', '' ));
+            const text = Array.from( item.getChildren() )
+                .map( c => c.is( '$text' ) ? c.data : '' )
+                .join( '' );
 
-        headings.push({ level, text, element: item });
-    }
+            // Assign a unique ID
+            let tocId = item.getAttribute(TOC_ID) as string | undefined;
+            if (!tocId) {
+                tocId = crypto.randomUUID();
+                writer.setAttribute(TOC_ID, tocId, item);
+            }
+
+            headings.push({ level, text, element: item, id: tocId });
+        }
+    });
 
     return headings;
 }
