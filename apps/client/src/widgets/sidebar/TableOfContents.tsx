@@ -2,7 +2,7 @@ import "./TableOfContents.css";
 
 import { CKTextEditor, ModelElement } from "@triliumnext/ckeditor5";
 import clsx from "clsx";
-import { useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
 import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
@@ -33,20 +33,25 @@ export default function TableOfContents() {
     );
 }
 
-function AbstractTableOfContents({ headings }: {
+function AbstractTableOfContents({ headings, scrollToHeading }: {
     headings: RawHeading[];
+    scrollToHeading(heading: RawHeading): void;
 }) {
     const nestedHeadings = buildHeadingTree(headings);
     return (
         <span className="toc">
             <ol>
-                {nestedHeadings.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} />)}
+                {nestedHeadings.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} />)}
             </ol>
         </span>
     );
 }
 
-function TableOfContentsHeading({ heading }: { heading: HeadingsWithNesting }) {
+function TableOfContentsHeading({ heading, scrollToHeading }: {
+    heading: HeadingsWithNesting;
+    scrollToHeading(heading: RawHeading): void;
+}) {
+    console.log("Got ", scrollToHeading);
     const [ collapsed, setCollapsed ] = useState(false);
     return (
         <>
@@ -58,11 +63,14 @@ function TableOfContentsHeading({ heading }: { heading: HeadingsWithNesting }) {
                         onClick={() => setCollapsed(!collapsed)}
                     />
                 )}
-                <span className="item-content">{heading.text}</span>
+                <span
+                    className="item-content"
+                    onClick={() => scrollToHeading(heading)}
+                >{heading.text}</span>
             </li>
             {heading.children && (
                 <ol>
-                    {heading.children.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} />)}
+                    {heading.children.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} />)}
                 </ol>
             )}
         </>
@@ -128,7 +136,20 @@ function EditableTextTableOfContents() {
         return () => textEditor.model.document.off("change:data", changeCallback);
     }, [ textEditor, note ]);
 
-    return <AbstractTableOfContents headings={headings} />;
+    const scrollToHeading = useCallback((heading: CKHeading) => {
+        if (!textEditor) return;
+
+        const viewEl = textEditor.editing.mapper.toViewElement(heading.element);
+        if (!viewEl) return;
+
+        const domEl = textEditor.editing.view.domConverter.mapViewToDom(viewEl);
+        domEl?.scrollIntoView();
+    }, [ textEditor ]);
+
+    return <AbstractTableOfContents
+        headings={headings}
+        scrollToHeading={scrollToHeading}
+    />;
 }
 
 function extractTocFromTextEditor(editor: CKTextEditor) {
