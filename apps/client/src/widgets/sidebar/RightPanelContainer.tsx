@@ -28,16 +28,10 @@ export default function RightPanelContainer() {
         return () => splitInstance.destroy();
     }, []);
 
-    const items = [
-        <TableOfContents />,
-        <HighlightsList />
-    ];
-
-    const sizesBeforeCollapse = useRef(new WeakMap<HTMLElement, number>());
-
     return (
         <div id="right-pane">
-            {items}
+            <TableOfContents />
+            <HighlightsList />
         </div>
     );
 }

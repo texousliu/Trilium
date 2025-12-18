@@ -2,17 +2,20 @@ import clsx from "clsx";
 import { ComponentChildren } from "preact";
 import { useContext, useRef, useState } from "preact/hooks";
 
+import { useTriliumOptionJson } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 
 interface RightPanelWidgetProps {
+    id: string;
     title: string;
     children: ComponentChildren;
     buttons?: ComponentChildren;
 }
 
-export default function RightPanelWidget({ title, buttons, children }: RightPanelWidgetProps) {
-    const [ expanded, setExpanded ] = useState(true);
+export default function RightPanelWidget({ id, title, buttons, children }: RightPanelWidgetProps) {
+    const [ rightPaneCollapsedItems, setRightPaneCollapsedItems ] = useTriliumOptionJson<string[]>("rightPaneCollapsedItems");
+    const [ expanded, setExpanded ] = useState(!rightPaneCollapsedItems.includes(id));
     const containerRef = useRef<HTMLDivElement>(null);
     const parentComponent = useContext(ParentComponent);
 
@@ -27,7 +30,19 @@ export default function RightPanelWidget({ title, buttons, children }: RightPane
         >
             <div
                 class="card-header"
-                onClick={() => setExpanded(!expanded)}
+                onClick={() => {
+                    const newExpanded = !expanded;
+                    setExpanded(newExpanded);
+                    const rightPaneCollapsedItemsSet = new Set(rightPaneCollapsedItems);
+                    if (newExpanded) {
+                        rightPaneCollapsedItemsSet.delete(id);
+                    } else {
+                        rightPaneCollapsedItemsSet.add(id);
+                    }
+                    if (rightPaneCollapsedItemsSet.size !== rightPaneCollapsedItems.length) {
+                        setRightPaneCollapsedItems(Array.from(rightPaneCollapsedItemsSet));
+                    }
+                }}
             >
                 <Icon
                     icon="bx bx-chevron-down"

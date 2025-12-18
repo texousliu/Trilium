@@ -77,6 +77,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     imageJpegQuality: number;
     leftPaneWidth: number;
     rightPaneWidth: number;
+    rightPaneCollapsedItems: string;
     eraseEntitiesAfterTimeInSeconds: number;
     eraseEntitiesAfterTimeScale: number;
     autoReadonlySizeText: number;
