@@ -2,13 +2,20 @@ import { CKTextEditor, ModelElement } from "@triliumnext/ckeditor5";
 import { useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
-import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor, useTriliumEvent } from "../react/hooks";
+import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
 import RightPanelWidget from "./RightPanelWidget";
 
-interface CKHeading {
+interface RawHeading {
     level: number;
     text: string;
+}
+
+interface CKHeading extends RawHeading {
     element: ModelElement;
+}
+
+interface HeadingsWithNesting extends RawHeading {
+    children: HeadingsWithNesting[];
 }
 
 export default function TableOfContents() {
@@ -56,15 +63,47 @@ function EditableTextTableOfContents() {
 }
 
 function AbstractTableOfContents({ headings }: {
-    headings: {
-        level: number;
-        text: string;
-    }[];
+    headings: RawHeading[];
 }) {
-    return headings.map(heading => (
-        <li>{heading.text}</li>
-    ));
+    const nestedHeadings = buildHeadingTree(headings);
+    return nestedHeadings.map(heading => <TableOfContentsHeading heading={heading} />);
 }
+
+function TableOfContentsHeading({ heading }: { heading: HeadingsWithNesting }) {
+    return (
+        <li>
+            <span className="title">{heading.text}</span>
+            {heading.children && (
+                <ul>
+                    {heading.children.map(heading => <TableOfContentsHeading heading={heading} />)}
+                </ul>
+            )}
+        </li>
+    );
+}
+
+function buildHeadingTree(headings: RawHeading[]): HeadingsWithNesting[] {
+    const root: HeadingsWithNesting = { level: 0, text: "", children: [] };
+    const stack: HeadingsWithNesting[] = [root];
+
+    for (const h of headings) {
+        const node: HeadingsWithNesting = { ...h, children: [] };
+
+        // Pop until we find a parent with lower level
+        while (stack.length > 1 && stack[stack.length - 1].level >= h.level) {
+            stack.pop();
+        }
+
+        // Attach to current parent
+        stack[stack.length - 1].children.push(node);
+
+        // This node becomes the new parent
+        stack.push(node);
+    }
+
+    return root.children;
+}
+
 
 function extractTocFromTextEditor(editor: CKTextEditor) {
     const headings: CKHeading[] = [];
@@ -85,3 +124,4 @@ function extractTocFromTextEditor(editor: CKTextEditor) {
 
     return headings;
 }
+
