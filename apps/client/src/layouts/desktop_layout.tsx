@@ -146,7 +146,7 @@ export default class DesktopLayout {
                                                             .optChild(isNewLayout, <NoteActions />))
                                                         .optChild(!isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
-                                                        .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
+                                                        .optChild(!isNewLayout, <FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
