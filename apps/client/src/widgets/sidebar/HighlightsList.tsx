@@ -117,7 +117,12 @@ function EditableTextHighlightsList() {
         const domPos = domConverter.viewPositionToDom(viewPos);
 
         if (!domPos) return;
-        (domPos.parent as HTMLElement).scrollIntoView();
+        if (domPos.parent instanceof HTMLElement) {
+            domPos.parent.scrollIntoView();
+        } else if (domPos.parent instanceof Text) {
+            domPos.parent.parentElement?.scrollIntoView();
+        }
+
     }, [ textEditor ]);
 
     return <AbstractHighlightsList
