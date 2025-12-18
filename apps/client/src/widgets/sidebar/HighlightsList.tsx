@@ -180,6 +180,8 @@ function ReadOnlyTextHighlightsList() {
 function extractHeadingsFromStaticHtml(el: HTMLElement | null) {
     if (!el) return [];
 
+    const { color: defaultColor, backgroundColor: defaultBackgroundColor } = getComputedStyle(el);
+
     const walker = document.createTreeWalker(
         el,
         NodeFilter.SHOW_TEXT,
@@ -197,7 +199,8 @@ function extractHeadingsFromStaticHtml(el: HTMLElement | null) {
 
         if (
             el.closest('strong, em, u') ||
-            style.color || style.backgroundColor
+            style.color !== defaultColor ||
+            style.backgroundColor !== defaultBackgroundColor
         ) {
             const attrs: RawHighlight["attrs"] = {
                 bold: !!el.closest("strong"),
