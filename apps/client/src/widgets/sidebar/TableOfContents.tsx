@@ -33,9 +33,9 @@ export default function TableOfContents() {
     );
 }
 
-function AbstractTableOfContents({ headings, scrollToHeading }: {
-    headings: RawHeading[];
-    scrollToHeading(heading: RawHeading): void;
+function AbstractTableOfContents<T extends RawHeading>({ headings, scrollToHeading }: {
+    headings: T[];
+    scrollToHeading(heading: T): void;
 }) {
     const nestedHeadings = buildHeadingTree(headings);
     return (
@@ -51,7 +51,6 @@ function TableOfContentsHeading({ heading, scrollToHeading }: {
     heading: HeadingsWithNesting;
     scrollToHeading(heading: RawHeading): void;
 }) {
-    console.log("Got ", scrollToHeading);
     const [ collapsed, setCollapsed ] = useState(false);
     return (
         <>
@@ -181,24 +180,35 @@ function extractTocFromTextEditor(editor: CKTextEditor) {
     return headings;
 }
 //#endregion
+interface DomHeading extends RawHeading {
+    element: HTMLHeadingElement;
+}
 
 function ReadOnlyTextTableOfContents() {
     const { noteContext } = useActiveNoteContext();
     const contentEl = useContentElement(noteContext);
     const headings = extractTocFromStaticHtml(contentEl);
 
-    return <AbstractTableOfContents headings={headings} />;
+    const scrollToHeading = useCallback((heading: DomHeading) => {
+        heading.element.scrollIntoView();
+    }, []);
+
+    return <AbstractTableOfContents
+        headings={headings}
+        scrollToHeading={scrollToHeading}
+    />;
 }
 
 function extractTocFromStaticHtml(el: HTMLElement | null) {
     if (!el) return [];
 
-    const headings: RawHeading[] = [];
-    for (const headingEl of el.querySelectorAll("h1,h2,h3,h4,h5,h6")) {
+    const headings: DomHeading[] = [];
+    for (const headingEl of el.querySelectorAll<HTMLHeadingElement>("h1,h2,h3,h4,h5,h6")) {
         headings.push({
             id: crypto.randomUUID(),
             level: parseInt(headingEl.tagName.substring(1), 10),
-            text: headingEl.textContent
+            text: headingEl.textContent,
+            element: headingEl
         });
     }
 
