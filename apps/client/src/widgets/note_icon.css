@@ -77,7 +77,7 @@ div.note-icon-widget {
 
 body.experimental-feature-new-layout {
     .note-icon-widget button.note-icon {
-        --input-focus-outline-color: var(--note-icon-button-hover-background-color);
+        --input-focus-outline-color: var(--note-icon-hover-background-color);
 
         position: relative;
         background: transparent !important;
@@ -90,7 +90,7 @@ body.experimental-feature-new-layout {
         &::before {
             position: relative;
             z-index: 1;
-            color: var(--note-icon-custom-color, var(--note-icon-button-color));
+            color: var(--note-icon-custom-color, var(--note-icon-color));
         }
 
         /* The background circle */
@@ -99,15 +99,15 @@ body.experimental-feature-new-layout {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            background: var(--note-icon-custom-background-color, var(--note-icon-button-background-color));
+            background: var(--note-icon-custom-background-color, var(--note-icon-background-color));
         }
 
         &:focus-visible {
-            outline: 2px solid var(--note-icon-custom-color, var(--note-icon-button-color));
+            outline: 2px solid var(--note-icon-custom-color, var(--note-icon-color));
         }
 
         &:hover:not(.bx-empty:disabled)::after {
-            background: var(--note-icon-hover-custom-background-color, --note-icon-button-hover-background-color);
+            background: var(--note-icon-hover-custom-background-color, --note-icon-hover-background-color);
             transition: background 200ms ease-out;
         }
     }
