@@ -114,6 +114,7 @@ function EditableTextTableOfContents() {
     useEffect(() => {
         if (!textEditor) return;
         const headings = extractTocFromTextEditor(textEditor);
+        setHeadings(headings);
 
         // React to changes.
         const changeCallback = () => {
@@ -130,7 +131,6 @@ function EditableTextTableOfContents() {
         };
 
         textEditor.model.document.on("change:data", changeCallback);
-        setHeadings(headings);
 
         return () => textEditor.model.document.off("change:data", changeCallback);
     }, [ textEditor, note ]);
