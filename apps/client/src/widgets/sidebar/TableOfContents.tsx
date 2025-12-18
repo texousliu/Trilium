@@ -1,8 +1,12 @@
+import "./TableOfContents.css";
+
 import { CKTextEditor, ModelElement } from "@triliumnext/ckeditor5";
+import clsx from "clsx";
 import { useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
 import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
+import Icon from "../react/Icon";
 import RightPanelWidget from "./RightPanelWidget";
 
 interface RawHeading {
@@ -66,19 +70,35 @@ function AbstractTableOfContents({ headings }: {
     headings: RawHeading[];
 }) {
     const nestedHeadings = buildHeadingTree(headings);
-    return nestedHeadings.map(heading => <TableOfContentsHeading heading={heading} />);
+    return (
+        <span className="toc">
+            <ol>
+                {nestedHeadings.map(heading => <TableOfContentsHeading heading={heading} />)}
+            </ol>
+        </span>
+    );
 }
 
 function TableOfContentsHeading({ heading }: { heading: HeadingsWithNesting }) {
+    const [ collapsed, setCollapsed ] = useState(false);
     return (
-        <li>
-            <span className="title">{heading.text}</span>
+        <>
+            <li className={clsx(collapsed && "collapsed")}>
+                {heading.children.length > 0 && (
+                    <Icon
+                        className="collapse-button"
+                        icon="bx bx-chevron-down"
+                        onClick={() => setCollapsed(!collapsed)}
+                    />
+                )}
+                <span className="item-content">{heading.text}</span>
+            </li>
             {heading.children && (
-                <ul>
+                <ol>
                     {heading.children.map(heading => <TableOfContentsHeading heading={heading} />)}
-                </ul>
+                </ol>
             )}
-        </li>
+        </>
     );
 }
 
