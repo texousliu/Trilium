@@ -25,12 +25,12 @@ export default function RightPanelWidget({ title, buttons, children }: RightPane
             ref={containerRef}
             class={clsx("card widget", !expanded && "collapsed")}
         >
-            <div class="card-header">
+            <div
+                class="card-header"
+                onClick={() => setExpanded(!expanded)}
+            >
                 <Icon
                     icon="bx bx-chevron-down"
-                    onClick={() => {
-                        setExpanded(!expanded);
-                    }}
                 />
                 <div class="card-header-title">{title}</div>
                 <div class="card-header-buttons">{buttons}</div>

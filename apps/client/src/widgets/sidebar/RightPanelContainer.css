@@ -10,6 +10,7 @@ body.experimental-feature-new-layout #right-pane {
 
         .card-header {
             padding-block: 0.2em;
+            cursor: pointer;
 
             .card-header-title {
                 padding-inline: 0.5em;
