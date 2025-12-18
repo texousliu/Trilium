@@ -54,9 +54,40 @@ function EditableTextHighlightsList() {
 
     useEffect(() => {
         if (!textEditor) return;
+        setHighlights(extractHighlightsFromTextEditor(textEditor));
 
-        const highlights = extractHighlightsFromTextEditor(textEditor);
-        setHighlights(highlights);
+        // React to changes.
+        const changeCallback = () => {
+            const changes = textEditor.model.document.differ.getChanges();
+            const affectsHighlights = changes.some(change => {
+                // Text inserted or removed
+                if (change.type === 'insert' || change.type === 'remove') {
+                    return true;
+                }
+
+                // Formatting attribute changed
+                if (change.type === 'attribute' &&
+                    (
+                        change.attributeKey === 'bold' ||
+                        change.attributeKey === 'italic' ||
+                        change.attributeKey === 'underline' ||
+                        change.attributeKey === 'fontColor' ||
+                        change.attributeKey === 'fontBackgroundColor'
+                    )
+                ) {
+                    return true;
+                }
+
+                return false;
+            });
+
+            if (affectsHighlights) {
+                setHighlights(extractHighlightsFromTextEditor(textEditor));
+            }
+        };
+
+        textEditor.model.document.on("change:data", changeCallback);
+        return () => textEditor.model.document.off("change:data", changeCallback);
     }, [ textEditor, note ]);
 
     const scrollToHeading = useCallback((highlight: CKHighlight) => {
@@ -84,7 +115,6 @@ function extractHighlightsFromTextEditor(editor: CKTextEditor) {
 
     for (const { item } of editor.model.createRangeIn(root).getWalker({ ignoreElementEnd: true })) {
         if (!item.is('$textProxy')) continue;
-        console.log("Got ", item);
 
         const attrs = {
             bold: item.hasAttribute('bold'),
@@ -93,7 +123,6 @@ function extractHighlightsFromTextEditor(editor: CKTextEditor) {
             color: item.getAttribute('fontColor'),
             background: item.getAttribute('fontBackgroundColor')
         };
-        console.log("Got ", attrs);
 
         if (Object.values(attrs).some(Boolean)) {
             result.push({

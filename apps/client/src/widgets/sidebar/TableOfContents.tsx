@@ -131,7 +131,6 @@ function EditableTextTableOfContents() {
         };
 
         textEditor.model.document.on("change:data", changeCallback);
-
         return () => textEditor.model.document.off("change:data", changeCallback);
     }, [ textEditor, note ]);
 
