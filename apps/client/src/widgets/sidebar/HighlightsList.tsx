@@ -137,7 +137,7 @@ function extractHighlightsFromTextEditor(editor: CKTextEditor) {
     if (!root) return [];
 
     for (const { item } of editor.model.createRangeIn(root).getWalker({ ignoreElementEnd: true })) {
-        if (!item.is('$textProxy')) continue;
+        if (!item.is('$textProxy') || !item.data.trim()) continue;
 
         const attrs: RawHighlight["attrs"] = {
             bold: item.hasAttribute('bold'),
@@ -198,7 +198,7 @@ function extractHeadingsFromStaticHtml(el: HTMLElement | null) {
     let node: Node | null;
     while ((node = walker.nextNode())) {
         const el = node.parentElement;
-        if (!el || !node.textContent) continue;
+        if (!el || !node.textContent?.trim()) continue;
 
         const style = getComputedStyle(el);
 
