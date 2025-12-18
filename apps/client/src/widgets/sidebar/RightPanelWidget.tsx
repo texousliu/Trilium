@@ -1,6 +1,10 @@
-import { useContext, useRef } from "preact/hooks";
-import { ParentComponent } from "../react/react_utils";
+import clsx from "clsx";
 import { ComponentChildren } from "preact";
+import { useContext, useRef, useState } from "preact/hooks";
+
+import Icon from "../react/Icon";
+import { ParentComponent } from "../react/react_utils";
+import { RightPanelContext } from "./RightPanelContainer";
 
 interface RightPanelWidgetProps {
     title: string;
@@ -9,6 +13,8 @@ interface RightPanelWidgetProps {
 }
 
 export default function RightPanelWidget({ title, buttons, children }: RightPanelWidgetProps) {
+    const rightPanelContext = useContext(RightPanelContext);
+    const [ expanded, setExpanded ] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const parentComponent = useContext(ParentComponent);
 
@@ -17,15 +23,27 @@ export default function RightPanelWidget({ title, buttons, children }: RightPane
     }
 
     return (
-        <div ref={containerRef} class="card widget" style={{contain: "none"}}>
+        <div
+            ref={containerRef}
+            class={clsx("card widget", !expanded && "collapsed")}
+        >
             <div class="card-header">
+                <Icon
+                    icon="bx bx-chevron-down"
+                    onClick={() => {
+                        if (containerRef.current) {
+                            rightPanelContext.setExpanded(containerRef.current, !expanded);
+                        }
+                        setExpanded(!expanded);
+                    }}
+                />
                 <div class="card-header-title">{title}</div>
                 <div class="card-header-buttons">{buttons}</div>
             </div>
 
             <div id={parentComponent?.componentId} class="body-wrapper">
                 <div class="card-body">
-                    {children}
+                    {expanded && children}
                 </div>
             </div>
         </div>

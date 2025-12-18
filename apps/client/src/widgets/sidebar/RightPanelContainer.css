@@ -13,5 +13,9 @@ body.experimental-feature-new-layout #right-pane {
         &:last-of-type {
             border-bottom: 0;
         }
+
+        &.collapsed .card-header > .bx {
+            transform: rotate(-90deg);
+        }
     }
 }

@@ -2,7 +2,8 @@
 import "./RightPanelContainer.css";
 
 import Split from "@triliumnext/split.js";
-import { useEffect } from "preact/hooks";
+import { createContext } from "preact";
+import { useEffect, useRef } from "preact/hooks";
 
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
@@ -10,6 +11,11 @@ import HighlightsList from "./HighlightsList";
 import TableOfContents from "./TableOfContents";
 
 const MIN_WIDTH_PERCENT = 5;
+const COLLAPSED_SIZE = 32;
+
+export const RightPanelContext = createContext({
+    setExpanded(cardEl: HTMLElement, expanded: boolean) {}
+});
 
 export default function RightPanelContainer() {
     // Split between right pane and the content pane.
@@ -32,19 +38,46 @@ export default function RightPanelContainer() {
     ];
 
     // Split between items.
+    const innerSplitRef = useRef<Split.Instance>(null);
     useEffect(() => {
         const rightPaneContainer = document.getElementById("right-pane");
         const elements = Array.from(rightPaneContainer?.children ?? []) as HTMLElement[];
-        console.log("Got ", elements);
         const splitInstance = Split(elements, {
-            direction: "vertical"
+            direction: "vertical",
+            minSize: COLLAPSED_SIZE,
+            gutterSize: 1
         });
+        innerSplitRef.current = splitInstance;
         return () => splitInstance.destroy();
     }, [ items ]);
 
     return (
         <div id="right-pane">
-            {items}
+            <RightPanelContext.Provider value={{
+                setExpanded(cardEl, expanded) {
+                    const splitInstance = innerSplitRef.current;
+                    if (!splitInstance) return;
+
+                    const rightPaneEl = document.getElementById("right-pane");
+                    const children = Array.from(rightPaneEl?.querySelectorAll(":scope > .card") ?? []);
+                    const pos = children.indexOf(cardEl);
+                    if (pos === -1) return;
+                    const sizes = splitInstance.getSizes();
+                    if (!expanded) {
+                        const sizeBeforeCollapse = sizes[pos];
+                        sizes[pos] = 0;
+                        const itemToExpand = pos > 0 ? pos - 1 : pos + 1;
+
+                        if (sizes[itemToExpand] > COLLAPSED_SIZE) {
+                            sizes[itemToExpand] += sizeBeforeCollapse;
+                        }
+                    }
+                    console.log("Set sizes to ", sizes);
+                    splitInstance.setSizes(sizes);
+                },
+            }}>
+                {items}
+            </RightPanelContext.Provider>
         </div>
     );
 }
