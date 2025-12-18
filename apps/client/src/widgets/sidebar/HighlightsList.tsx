@@ -38,7 +38,10 @@ function AbstractHighlightsList<T extends RawHighlight>({ highlights, scrollToHi
         <span className="highlights-list">
             <ol>
                 {highlights.map(highlight => (
-                    <li onClick={() => scrollToHighlight(highlight)}>
+                    <li
+                        key={highlight.id}
+                        onClick={() => scrollToHighlight(highlight)}
+                    >
                         <span
                             style={{
                                 fontWeight: highlight.attrs.bold ? "700" : undefined,
