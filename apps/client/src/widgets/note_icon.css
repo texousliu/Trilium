@@ -107,7 +107,7 @@ body.experimental-feature-new-layout {
         }
 
         &:hover:not(.bx-empty:disabled)::after {
-            background: var(--note-icon-hover-custom-background-color, --note-icon-hover-background-color);
+            background: var(--note-icon-hover-custom-background-color, var(--note-icon-hover-background-color));
             transition: background 200ms ease-out;
         }
     }
