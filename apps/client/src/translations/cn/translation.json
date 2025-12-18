@@ -829,7 +829,8 @@
     "calculate": "计算",
     "subtree_size": "(子树大小: {{size}}, 共计 {{count}} 个笔记)",
     "title": "笔记信息",
-    "show_similar_notes": "显示相似的笔记"
+    "show_similar_notes": "显示相似的笔记",
+    "mime": "文件类型"
   },
   "note_map": {
     "open_full": "展开显示",
@@ -2080,14 +2081,20 @@
     "next_theme_title": "试用新 Trilium 主题",
     "next_theme_message": "当前使用旧版主题，要试用新主题吗？",
     "next_theme_button": "试用新主题",
-    "dismiss": "关闭"
+    "dismiss": "关闭",
+    "new_layout_message": "我们为 Trilium 引入了现代化的布局。Ribbon 界面已被移除并无缝集成到主界面中，新的状态栏和可展开部分（例如“已提升属性”）取代了其主要功能。\n\n新布局默认启用，您可以通过“选项”→“外观”暂时禁用它。",
+    "new_layout_button": "更多信息",
+    "new_layout_title": "新布局"
   },
   "settings": {
     "related_settings": "相关设置"
   },
   "settings_appearance": {
     "related_code_blocks": "文本笔记中代码块的色彩方案",
-    "related_code_notes": "代码笔记的色彩方案"
+    "related_code_notes": "代码笔记的色彩方案",
+    "ui": "用户界面",
+    "ui_old_layout": "旧布局",
+    "ui_new_layout": "新布局"
   },
   "units": {
     "percentage": "%"
@@ -2179,6 +2186,8 @@
     "workspace_badge": "工作空间",
     "scroll_to_top_title": "跳转到笔记开始",
     "hoisted_badge_title": "取消聚焦",
-    "hoisted_badge": "聚焦"
+    "hoisted_badge": "聚焦",
+    "create_new_note": "新建子笔记",
+    "empty_hide_archived_notes": "隐藏已存档的笔记"
   }
 }

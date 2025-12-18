@@ -57,11 +57,11 @@ Onze documentatie is beschikbaar in meerdere formaten:
 
 ### Snelkoppelingen
 - [Getting Started Gids](https://docs.triliumnotes.org/)
-- [Vertaal Instructies](https://docs.triliumnotes.org/user-guide/setup)
+- [Installatie Instructies](https://docs.triliumnotes.org/user-guide/setup)
 - [Docker
   Installatie](https://docs.triliumnotes.org/user-guide/setup/server/installation/docker)
-- [TriliumNext
-  Upgraden](https://docs.triliumnotes.org/user-guide/setup/upgrading)
+- [Upgrading
+  TriliumNext](https://docs.triliumnotes.org/user-guide/setup/upgrading)
 - [Basis Concepten en
   Features](https://docs.triliumnotes.org/user-guide/concepts/notes)
 - [Patronen van Personal Knowledge
@@ -87,15 +87,15 @@ Onze documentatie is beschikbaar in meerdere formaten:
 * Notitie[-attributen](https://docs.triliumnotes.org/user-guide/advanced-usage/attributes)
   kunnen worden ingezet voor notitie-organisatie, queries en geavanceerd
   [scripten](https://docs.triliumnotes.org/user-guide/scripts)
-* Gebruikersinterfacevariabele in het Engels, Duits, Spaans, Frans, Roemeens en
-  Chinees (versimpeld en traditioneel)
+* Gebruikersinterface verkrijgbaar in het Engels, Duits, Spaans, Frans, Roemeens
+  en Chinees (versimpeld en traditioneel)
 * Directe [OpenID en TOTP
   integratie](https://docs.triliumnotes.org/user-guide/setup/server/mfa) voor
   beter beveiligde aanmelding
 * [Synchronisatie](https://docs.triliumnotes.org/user-guide/setup/synchronization)
   met zelfgehoste synchronisatieserver
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * er zijn [diensten van derden voor het hosten van de
+    synchronisatieserver](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * [Sharing](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
   (publishing) notes to public internet
 * Strong [note
