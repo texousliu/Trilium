@@ -1,3 +1,17 @@
 body.experimental-feature-new-layout #right-pane {
     width: 300px;
+
+    .card {
+        margin-inline: 0;
+        border-bottom: 1px solid var(--main-border-color);
+        border-radius: 0;
+
+        .card-header-title {
+            padding-inline: 0.5em;
+        }
+
+        &:last-of-type {
+            border-bottom: 0;
+        }
+    }
 }
