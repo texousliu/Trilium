@@ -1,6 +1,6 @@
 import "./StatusBar.css";
 
-import { Locale } from "@triliumnext/commons";
+import { KeyboardActionNames, Locale } from "@triliumnext/commons";
 import { Dropdown as BootstrapDropdown } from "bootstrap";
 import clsx from "clsx";
 import { type ComponentChildren } from "preact";
@@ -9,7 +9,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import { CommandNames } from "../../components/app_context";
 import NoteContext from "../../components/note_context";
-import FNote from "../../entities/fnote";
+import FNote, { NOTE_TYPE_ICONS } from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { t } from "../../services/i18n";
 import { ViewScope } from "../../services/link";
@@ -216,14 +216,19 @@ interface NoteInfoContext extends StatusBarContext {
     setSimilarNotesShown: (value: boolean) => void;
 }
 
-export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
+export function NoteInfoBadge({ note, similarNotesShown, setSimilarNotesShown }: NoteInfoContext) {
     const dropdownRef = useRef<BootstrapDropdown>(null);
     const { metadata, ...sizeProps } = useNoteMetadata(note);
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
-    const currentNoteType = useNoteProperty(note, "type");
-    const currentNoteTypeData = useMemo(() => NOTE_TYPES.find(t => t.type === currentNoteType), [ currentNoteType ]);
+    const noteType = useNoteProperty(note, "type");
+    const noteTypeMapping = useMemo(() => NOTE_TYPES.find(t => t.type === noteType), [ noteType ]);
+    const enabled = note && noteType && noteTypeMapping;
 
-    return (note && currentNoteTypeData &&
+    // Keyboard shortcut.
+    useTriliumEvent("toggleRibbonTabNoteInfo", () => enabled && dropdownRef.current?.show());
+    useTriliumEvent("toggleRibbonTabSimilarNotes", () => setSimilarNotesShown(!similarNotesShown));
+
+    return (enabled &&
         <StatusBarDropdown
             icon="bx bx-info-circle"
             title={t("status_bar.note_info_title")}
@@ -235,7 +240,7 @@ export function NoteInfoBadge({ note, setSimilarNotesShown }: NoteInfoContext) {
                 {originalFileName && <NoteInfoValue text={t("file_properties.original_file_name")} value={originalFileName} />}
                 <NoteInfoValue text={t("note_info_widget.created")} value={formatDateTime(metadata?.dateCreated)} />
                 <NoteInfoValue text={t("note_info_widget.modified")} value={formatDateTime(metadata?.dateModified)} />
-                <NoteInfoValue text={t("note_info_widget.type")} value={<><Icon icon={`bx ${currentNoteTypeData.icon}`}/>{" "}{currentNoteTypeData?.title}</>} />
+                <NoteInfoValue text={t("note_info_widget.type")} value={<><Icon icon={`bx ${noteTypeMapping.icon ?? NOTE_TYPE_ICONS[noteType]}`}/>{" "}{noteTypeMapping?.title}</>} />
                 {note.mime && <NoteInfoValue text={t("note_info_widget.mime")} value={note.mime} />}
                 <NoteInfoValue text={t("note_info_widget.note_id")} value={<code>{note.noteId}</code>} />
                 <NoteInfoValue text={t("note_info_widget.note_size")} title={t("note_info_widget.note_size_info")} value={<NoteSizeWidget {...sizeProps} />} />
@@ -349,6 +354,10 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 
     // Show on keyboard shortcuts.
     useTriliumEvents([ "addNewLabel", "addNewRelation" ], () => setAttributesShown(true));
+    useTriliumEvents([ "toggleRibbonTabOwnedAttributes", "toggleRibbonTabInheritedAttributes" ], () => setAttributesShown(!attributesShown));
+
+    // Auto-focus the owned attributes.
+    useEffect(() => api.current?.focus(), [ attributesShown ]);
 
     // Interaction with the attribute editor.
     useLegacyImperativeHandlers(useMemo(() => ({
@@ -373,12 +382,18 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 
 //#region Note paths
 function NotePaths({ note, hoistedNoteId, notePath }: StatusBarContext) {
+    const dropdownRef = useRef<BootstrapDropdown>(null);
     const sortedNotePaths = useSortedNotePaths(note, hoistedNoteId);
     const count = sortedNotePaths?.length ?? 0;
+    const enabled = count > 1;
 
-    return (count > 1 &&
+    // Keyboard shortcut.
+    useTriliumEvent("toggleRibbonTabNotePaths", () => enabled && dropdownRef.current?.show());
+
+    return (enabled &&
         <StatusBarDropdown
             title={t("status_bar.note_paths_title")}
+            dropdownRef={dropdownRef}
             dropdownContainerClassName="dropdown-note-paths"
             icon="bx bx-directions"
             text={t("status_bar.note_paths", { count })}

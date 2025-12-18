@@ -1,7 +1,7 @@
 import "./CollectionProperties.css";
 
 import { t } from "i18next";
-import { useContext } from "preact/hooks";
+import { useContext, useRef } from "preact/hooks";
 import { Fragment } from "preact/jsx-runtime";
 
 import FNote from "../../entities/fnote";
@@ -12,7 +12,7 @@ import ActionButton from "../react/ActionButton";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListItem, FormListToggleableItem } from "../react/FormList";
 import FormTextBox from "../react/FormTextBox";
-import { useNoteLabel, useNoteLabelBoolean, useNoteLabelWithDefault } from "../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteLabelWithDefault, useTriliumEvent } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxItem, ComboBoxProperty, NumberProperty, SplitButtonProperty } from "../ribbon/collection-properties-config";
@@ -42,8 +42,15 @@ export default function CollectionProperties({ note }: { note: FNote }) {
 }
 
 function ViewTypeSwitcher({ viewType, setViewType }: { viewType: ViewTypeOptions, setViewType: (newValue: ViewTypeOptions) => void }) {
+    // Keyboard shortcut
+    const dropdownContainerRef = useRef<HTMLDivElement>(null);
+    useTriliumEvent("toggleRibbonTabBookProperties", () => {
+        dropdownContainerRef.current?.querySelector("button")?.focus();
+    });
+
     return (
         <Dropdown
+            dropdownContainerRef={dropdownContainerRef}
             text={<>
                 <Icon icon={ICON_MAPPINGS[viewType]} />&nbsp;
                 {VIEW_TYPE_MAPPINGS[viewType]}

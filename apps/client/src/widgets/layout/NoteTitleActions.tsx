@@ -1,7 +1,7 @@
 import "./NoteTitleActions.css";
 
 import clsx from "clsx";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
@@ -10,7 +10,7 @@ import CollectionProperties from "../note_bars/CollectionProperties";
 import { checkFullHeight, getExtendedWidgetType } from "../NoteDetail";
 import { PromotedAttributesContent, usePromotedAttributeData } from "../PromotedAttributes";
 import Collapsible, { ExternallyControlledCollapsible } from "../react/Collapsible";
-import { useNoteContext, useNoteProperty } from "../react/hooks";
+import { useNoteContext, useNoteProperty, useTriliumEvent } from "../react/hooks";
 import SearchDefinitionTab from "../ribbon/SearchDefinitionTab";
 
 export default function NoteTitleActions() {
@@ -56,6 +56,9 @@ function PromotedAttributes({ note, componentId, noteContext }: {
             setExpanded(!fullHeight);
         });
     }, [ note, noteContext ]);
+
+    // Keyboard shortcut.
+    useTriliumEvent("toggleRibbonTabPromotedAttributes", () => setExpanded(!expanded));
 
     if (!cells?.length) return false;
     return (note && (

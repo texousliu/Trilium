@@ -20,11 +20,19 @@ export type ExperimentalFeatureId = typeof experimentalFeatures[number]["id"];
 let enabledFeatures: Set<ExperimentalFeatureId> | null = null;
 
 export function isExperimentalFeatureEnabled(featureId: ExperimentalFeatureId): boolean {
+    if (featureId === "new-layout") {
+        return options.is("newLayout");
+    }
+
     return getEnabledFeatures().has(featureId);
 }
 
 export function getEnabledExperimentalFeatureIds() {
-    return getEnabledFeatures().values();
+    const values = [ ...getEnabledFeatures().values() ];
+    if (options.is("newLayout")) {
+        values.push("new-layout");
+    }
+    return values;
 }
 
 export async function toggleExperimentalFeature(featureId: ExperimentalFeatureId, enable: boolean) {

@@ -49,6 +49,21 @@ export function FixedFormattingToolbar() {
     const renderState = useRenderState(noteContext, note);
     const [ toolbarToRender, setToolbarToRender ] = useState<HTMLElement | null | undefined>();
 
+    // Keyboard shortcut.
+    const lastFocusedElement = useRef<Element>(null);
+    useTriliumEvent("toggleRibbonTabClassicEditor", () => {
+        if (!toolbarToRender) return;
+        if (!toolbarToRender.contains(document.activeElement)) {
+            // Focus to the fixed formatting toolbar.
+            lastFocusedElement.current = document.activeElement;
+            toolbarToRender.querySelector<HTMLButtonElement>(".ck-toolbar__items button")?.focus();
+        } else {
+            // Focus back to the last selection.
+            (lastFocusedElement.current as HTMLElement)?.focus();
+            lastFocusedElement.current = null;
+        }
+    });
+
     // Populate the cache with the toolbar of every note context.
     useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
         if (!eventNtxId) return;

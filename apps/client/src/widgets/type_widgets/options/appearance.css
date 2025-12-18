@@ -1,0 +1,114 @@
+.old-layout-illustration {
+    width: 170px;
+    height: 130px;
+    border: 1px solid var(--main-border-color);
+    border-radius: 6px;
+    display: flex;
+    background: var(--root-background);
+    overflow: hidden;
+
+    .launcher-pane {
+        width: 10%;
+        background: var(--launcher-pane-vert-background-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1px 0;
+
+        svg {
+            margin-top: 1px;
+            margin-bottom: 5px;
+        }
+
+        .bx {
+            margin: 4px 0;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+    }
+
+    .tree {
+        width: 20%;
+        font-size: 4px;
+        padding: 12px 5px;
+        overflow: hidden;
+        flex-shrink: 0;
+        filter: blur(1px);
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        font-size: 8px;
+
+        .tab-bar {
+            height: 10px;
+            flex-shrink: 0;
+        }
+
+        .content {
+            background-color: var(--main-background-color);
+            flex-grow: 1;
+            border-top-left-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+
+            .title-bar {
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                padding: 5px;
+
+                .title {
+                    flex-grow: 1;
+                }
+            }
+
+            .ribbon {
+                padding: 0 5px;
+
+                .bx {
+                    font-size: 10px;
+                }
+
+                .ribbon-header {
+                    display: flex;
+                }
+
+                .ribbon-body {
+                    height: 20px;
+                    background-color: rgba(0, 0, 0, 0.05);
+                    border-radius: 6px;
+                    margin: 1px 0;
+                }
+            }
+
+            .content-inner {
+                font-size: 6px;
+                overflow: hidden;
+                padding: 5px;
+                opacity: 0.5;
+                filter: blur(1px);
+            }
+
+            .status-bar {
+                background-color: var(--left-pane-background-color);
+                flex-shrink: 0;
+                padding: 0 2px;
+                display: flex;
+
+                &> .status-bar-breadcrumb {
+                    flex-grow: 1;
+                }
+            }
+        }
+    }
+}

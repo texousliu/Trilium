@@ -933,11 +933,13 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
     const [ isReadOnly, setIsReadOnly ] = useState<boolean | undefined>(undefined);
     const [ readOnlyAttr ] = useNoteLabelBoolean(note, "readOnly");
     const [ autoReadOnlyDisabledAttr ] = useNoteLabelBoolean(note, "autoReadOnlyDisabled");
+    const [ temporarilyEditable, setTemporarilyEditable ] = useState(false);
 
     const enableEditing = useCallback((enabled = true) => {
         if (noteContext?.viewScope) {
             noteContext.viewScope.readOnlyTemporarilyDisabled = enabled;
             appContext.triggerEvent("readOnlyTemporarilyDisabled", {noteContext});
+            setTemporarilyEditable(enabled);
         }
     }, [noteContext]);
 
@@ -945,6 +947,7 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
         if (note && noteContext) {
             isNoteReadOnly(note, noteContext).then((readOnly) => {
                 setIsReadOnly(readOnly);
+                setTemporarilyEditable(false);
             });
         }
     }, [ note, noteContext, noteContext?.viewScope, readOnlyAttr, autoReadOnlyDisabledAttr ]);
@@ -952,10 +955,11 @@ export function useIsNoteReadOnly(note: FNote | null | undefined, noteContext: N
     useTriliumEvent("readOnlyTemporarilyDisabled", ({noteContext: eventNoteContext}) => {
         if (noteContext?.ntxId === eventNoteContext.ntxId) {
             setIsReadOnly(!noteContext.viewScope?.readOnlyTemporarilyDisabled);
+            setTemporarilyEditable(true);
         }
     });
 
-    return { isReadOnly, enableEditing };
+    return { isReadOnly, enableEditing, temporarilyEditable };
 }
 
 async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {

@@ -1,7 +1,7 @@
 import "./global_menu.css";
 
 import { KeyboardActionNames } from "@triliumnext/commons";
-import { ComponentChildren } from "preact";
+import { ComponentChildren, RefObject } from "preact";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 
 import { CommandNames } from "../../components/app_context";
@@ -30,13 +30,15 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
     const parentComponent = useContext(ParentComponent);
     const { isUpdateAvailable, latestVersion } = useTriliumUpdateStatus();
     const isMobileLocal = isMobile();
+    const logoRef = useRef<SVGSVGElement>(null);
+    useStaticTooltip(logoRef);
 
     return (
         <Dropdown
             className="global-menu"
             buttonClassName={`global-menu-button ${isHorizontalLayout ? "bx bx-menu" : ""}`} noSelectButtonStyle iconAction hideToggleArrow
             text={<>
-                {isVerticalLayout && <VerticalLayoutIcon />}
+                {isVerticalLayout && <VerticalLayoutIcon logoRef={logoRef} />}
                 {isUpdateAvailable && <div class="global-menu-button-update-available">
                     <span className="bx bxs-down-arrow-alt global-menu-button-update-available-button" title={t("update_available.update_available")} />
                 </div>}
@@ -135,9 +137,9 @@ function SwitchToOptions() {
         return;
     } else if (!isMobile()) {
         return <MenuItem command="switchToMobileVersion" icon="bx bx-mobile" text={t("global_menu.switch_to_mobile_version")} />;
-    } 
+    }
     return <MenuItem command="switchToDesktopVersion" icon="bx bx-desktop" text={t("global_menu.switch_to_desktop_version")} />;
-    
+
 }
 
 function MenuItem({ icon, text, title, command, disabled, active }: MenuItemProps<KeyboardActionNames | CommandNames | (() => void)>) {
@@ -159,10 +161,7 @@ function KeyboardActionMenuItem({ text, command, ...props }: MenuItemProps<Keybo
     />;
 }
 
-function VerticalLayoutIcon() {
-    const logoRef = useRef<SVGSVGElement>(null);
-    useStaticTooltip(logoRef);
-
+export function VerticalLayoutIcon({ logoRef }: { logoRef?: RefObject<SVGSVGElement> }) {
     return (
         <svg ref={logoRef} viewBox="0 0 256 256" title={t("global_menu.menu")}>
             <g>

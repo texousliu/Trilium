@@ -1,25 +1,26 @@
-import { MutableRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "preact/hooks";
 import { AttributeEditor as CKEditorAttributeEditor, MentionFeed, ModelElement, ModelNode, ModelPosition } from "@triliumnext/ckeditor5";
+import { AttributeType } from "@triliumnext/commons";
+import { MutableRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "preact/hooks";
+
+import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
+import FAttribute from "../../../entities/fattribute";
+import FNote from "../../../entities/fnote";
+import contextMenu from "../../../menus/context_menu";
+import attribute_parser, { Attribute } from "../../../services/attribute_parser";
+import attribute_renderer from "../../../services/attribute_renderer";
+import attributes from "../../../services/attributes";
+import froca from "../../../services/froca";
 import { t } from "../../../services/i18n";
-import server from "../../../services/server";
+import link from "../../../services/link";
 import note_autocomplete, { Suggestion } from "../../../services/note_autocomplete";
+import note_create from "../../../services/note_create";
+import server from "../../../services/server";
+import { isIMEComposing } from "../../../services/shortcuts";
+import { escapeQuotes, getErrorMessage } from "../../../services/utils";
+import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
+import ActionButton from "../../react/ActionButton";
 import CKEditor, { CKEditorApi } from "../../react/CKEditor";
 import { useLegacyImperativeHandlers, useLegacyWidget, useTooltip, useTriliumEvent, useTriliumOption } from "../../react/hooks";
-import FAttribute from "../../../entities/fattribute";
-import attribute_renderer from "../../../services/attribute_renderer";
-import FNote from "../../../entities/fnote";
-import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
-import attribute_parser, { Attribute } from "../../../services/attribute_parser";
-import ActionButton from "../../react/ActionButton";
-import { escapeQuotes, getErrorMessage } from "../../../services/utils";
-import link from "../../../services/link";
-import { isIMEComposing } from "../../../services/shortcuts";
-import froca from "../../../services/froca";
-import contextMenu from "../../../menus/context_menu";
-import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
-import { AttributeType } from "@triliumnext/commons";
-import attributes from "../../../services/attributes";
-import note_create from "../../../services/note_create";
 
 type AttributeCommandNames = FilteredCommandNames<CommandData>;
 
@@ -52,7 +53,7 @@ const mentionSetup: MentionFeed[] = [
             return names.map((name) => {
                 return {
                     id: `#${name}`,
-                    name: name
+                    name
                 };
             });
         },
@@ -66,7 +67,7 @@ const mentionSetup: MentionFeed[] = [
             return names.map((name) => {
                 return {
                     id: `~${name}`,
-                    name: name
+                    name
                 };
             });
         },
@@ -85,9 +86,10 @@ interface AttributeEditorProps {
 }
 
 export interface AttributeEditorImperativeHandlers {
-    save: () => Promise<void>;
-    refresh: () => void;
-    renderOwnedAttributes: (ownedAttributes: FAttribute[]) => Promise<void>;
+    save(): Promise<void>;
+    refresh(): void;
+    focus(): void;
+    renderOwnedAttributes(ownedAttributes: FAttribute[]): Promise<void>;
 }
 
 export default function AttributeEditor({ api, note, componentId, notePath, ntxId, hidden }: AttributeEditorProps) {
@@ -124,7 +126,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
         // attrs are not resorted if position changes after the initial load
         ownedAttributes.sort((a, b) => a.position - b.position);
 
-        let htmlAttrs = ("<p>" + (await attribute_renderer.renderAttributes(ownedAttributes, true)).html() + "</p>");
+        let htmlAttrs = (`<p>${(await attribute_renderer.renderAttributes(ownedAttributes, true)).html()}</p>`);
 
         if (saved) {
             lastSavedContent.current = htmlAttrs;
@@ -162,7 +164,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
             wrapperRef.current.style.opacity = "0";
             setTimeout(() => {
                 if (wrapperRef.current) {
-                    wrapperRef.current.style.opacity = "1"
+                    wrapperRef.current.style.opacity = "1";
                 }
             }, 100);
         }
@@ -252,7 +254,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
             if (notePath) {
                 result = await note_create.createNoteWithTypePrompt(notePath, {
                     activate: false,
-                    title: title
+                    title
                 });
             }
 
@@ -274,7 +276,8 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
     useImperativeHandle(api, () => ({
         save,
         refresh,
-        renderOwnedAttributes: (attributes) => renderOwnedAttributes(attributes as FAttribute[], false)
+        renderOwnedAttributes: (attributes) => renderOwnedAttributes(attributes as FAttribute[], false),
+        focus: () => editorRef.current?.focus()
     }), [ save, refresh, renderOwnedAttributes ]);
 
     return (
@@ -404,7 +407,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
 
             {attributeDetailWidgetEl}
         </>
-    )
+    );
 }
 
 function getPreprocessedData(currentValue: string) {

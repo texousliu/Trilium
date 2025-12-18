@@ -717,10 +717,15 @@ table.promoted-attributes-in-tooltip th {
 .tooltip {
     font-size: var(--main-font-size) !important;
     z-index: calc(var(--ck-z-panel) - 1) !important;
+    white-space: pre-wrap;
 }
 
 .tooltip.tooltip-top {
     z-index: 32767 !important;
+}
+
+.pre-wrap-text {
+    white-space: pre-wrap;
 }
 
 .bs-tooltip-bottom .tooltip-arrow::before {

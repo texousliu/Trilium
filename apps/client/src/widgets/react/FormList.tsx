@@ -2,13 +2,13 @@ import "./FormList.css";
 
 import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import clsx from "clsx";
-import { ComponentChildren } from "preact";
+import { ComponentChildren, RefObject } from "preact";
 import { type CSSProperties,useEffect, useMemo, useRef, useState } from "preact/compat";
 
 import { CommandNames } from "../../components/app_context";
 import { handleRightToLeftPlacement, isMobile, openInAppHelpFromUrl } from "../../services/utils";
 import FormToggle from "./FormToggle";
-import { useStaticTooltip } from "./hooks";
+import { useStaticTooltip, useSyncedRef } from "./hooks";
 import Icon from "./Icon";
 
 interface FormListOpts {
@@ -97,6 +97,7 @@ interface FormListItemOpts {
     className?: string;
     rtl?: boolean;
     postContent?: ComponentChildren;
+    itemRef?: RefObject<HTMLLIElement>;
 }
 
 const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
@@ -104,8 +105,8 @@ const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
     fallbackPlacements: [ handleRightToLeftPlacement("right") ]
 };
 
-export function FormListItem({ className, icon, value, title, active, disabled, checked, container, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
-    const itemRef = useRef<HTMLLIElement>(null);
+export function FormListItem({ className, icon, value, title, active, disabled, checked, container, onClick, selected, rtl, triggerCommand, description, itemRef: externalItemRef, ...contentProps }: FormListItemOpts) {
+    const itemRef = useSyncedRef<HTMLLIElement>(externalItemRef, null);
 
     if (checked) {
         icon = "bx bx-check";
