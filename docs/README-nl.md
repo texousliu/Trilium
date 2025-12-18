@@ -57,10 +57,11 @@ Onze documentatie is beschikbaar in meerdere formaten:
 
 ### Snelkoppelingen
 - [Getting Started Gids](https://docs.triliumnotes.org/)
-- [Installatie Instructies]
+- [Installatie Instructies](https://docs.triliumnotes.org/user-guide/setup)
 - [Docker
   Installatie](https://docs.triliumnotes.org/user-guide/setup/server/installation/docker)
-- [Upgrading TriliumNext]
+- [Upgrading
+  TriliumNext](https://docs.triliumnotes.org/user-guide/setup/upgrading)
 - [Basis Concepten en
   Features](https://docs.triliumnotes.org/user-guide/concepts/notes)
 - [Patronen van Personal Knowledge
@@ -93,8 +94,8 @@ Onze documentatie is beschikbaar in meerdere formaten:
   beter beveiligde aanmelding
 * [Synchronisatie](https://docs.triliumnotes.org/user-guide/setup/synchronization)
   met zelfgehoste synchronisatieserver
-  * er zijn [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * er zijn [diensten van derden voor het hosten van de
+    synchronisatieserver](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * [Sharing](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
   (publishing) notes to public internet
 * Strong [note
