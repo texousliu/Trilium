@@ -7,6 +7,7 @@ import { useEffect } from "preact/hooks";
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
 import { useActiveNoteContext } from "../react/hooks";
+import HighlightsList from "./HighlightsList";
 import TableOfContents from "./TableOfContents";
 
 const MIN_WIDTH_PERCENT = 5;
@@ -29,7 +30,8 @@ export default function RightPanelContainer() {
     return (
         <div id="right-pane">
             {note && <>
-                <TableOfContents note={note} />
+                <TableOfContents />
+                <HighlightsList />
             </>}
         </div>
     );
