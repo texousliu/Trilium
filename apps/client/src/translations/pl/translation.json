@@ -232,14 +232,20 @@
     "background_effects_title": "Efekty tła są teraz stabilne",
     "dismiss": "Odrzuć",
     "background_effects_button": "Włącz efekty tła",
-    "background_effects_message": "Na urządzeniach z systemem Windows efekty tła są teraz w pełni stabilne. Efekty tła dodają odrobinę koloru do interfejsu użytkownika poprzez rozmycie tła za nim. Ta technika jest również stosowana w innych aplikacjach, takich jak Eksplorator Windows."
+    "background_effects_message": "Na urządzeniach z systemem Windows efekty tła są teraz w pełni stabilne. Efekty tła dodają odrobinę koloru do interfejsu użytkownika poprzez rozmycie tła za nim. Ta technika jest również stosowana w innych aplikacjach, takich jak Eksplorator Windows.",
+    "new_layout_title": "Nowy układ",
+    "new_layout_message": "Wprowadziliśmy zmodernizowany układ interfejsu dla Trilium. Wstążka została usunięta i płynnie zintegrowana z głównym interfejsem, a jej kluczowe funkcje przejęły nowy pasek stanu i rozwijane sekcje (takie jak promowane atrybuty).\n\nNowy układ jest domyślnie włączony i można go tymczasowo wyłączyć w Ustawienia → Wygląd.",
+    "new_layout_button": "Szczegóły"
   },
   "settings": {
     "related_settings": "Powiązane ustawienia"
   },
   "settings_appearance": {
     "related_code_blocks": "Schemat kolorów dla bloków kodu w notatkach tekstowych",
-    "related_code_notes": "Schemat kolorów dla notatek kodu"
+    "related_code_notes": "Schemat kolorów dla notatek kodu",
+    "ui": "Interfejs użytkownika",
+    "ui_old_layout": "Stary układ",
+    "ui_new_layout": "Nowy układ"
   },
   "units": {
     "percentage": "%"
