@@ -1,5 +1,7 @@
 body.experimental-feature-new-layout #right-pane {
     width: 300px;
+    display: flex;
+    flex-direction: column;
 
     .card {
         margin-inline: 0;
@@ -21,6 +23,10 @@ body.experimental-feature-new-layout #right-pane {
         &.collapsed .card-header > .bx {
             transform: rotate(-90deg);
         }
+    }
+
+    .card:not(.collapsed) {
+        flex-grow: 1;
     }
 
     .gutter-vertical + .card .card-header {

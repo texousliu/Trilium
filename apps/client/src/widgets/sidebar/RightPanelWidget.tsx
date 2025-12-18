@@ -4,7 +4,6 @@ import { useContext, useRef, useState } from "preact/hooks";
 
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
-import { RightPanelContext } from "./RightPanelContainer";
 
 interface RightPanelWidgetProps {
     title: string;
@@ -13,7 +12,6 @@ interface RightPanelWidgetProps {
 }
 
 export default function RightPanelWidget({ title, buttons, children }: RightPanelWidgetProps) {
-    const rightPanelContext = useContext(RightPanelContext);
     const [ expanded, setExpanded ] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const parentComponent = useContext(ParentComponent);
@@ -31,9 +29,6 @@ export default function RightPanelWidget({ title, buttons, children }: RightPane
                 <Icon
                     icon="bx bx-chevron-down"
                     onClick={() => {
-                        if (containerRef.current) {
-                            rightPanelContext.setExpanded(containerRef.current, !expanded);
-                        }
                         setExpanded(!expanded);
                     }}
                 />
@@ -42,9 +37,9 @@ export default function RightPanelWidget({ title, buttons, children }: RightPane
             </div>
 
             <div id={parentComponent?.componentId} class="body-wrapper">
-                <div class="card-body">
-                    {expanded && children}
-                </div>
+                {expanded && <div class="card-body">
+                    {children}
+                </div>}
             </div>
         </div>
     );
