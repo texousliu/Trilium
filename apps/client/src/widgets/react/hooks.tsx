@@ -1119,6 +1119,7 @@ export function useTextEditor(noteContext: NoteContext | null | undefined) {
 export function useContentElement(noteContext: NoteContext | null | undefined) {
     const [ contentElement, setContentElement ] = useState<HTMLElement | null>(null);
     const requestIdRef = useRef(0);
+    const [, forceUpdate] = useState(0);
 
     useEffect(() => {
         const requestId = ++requestIdRef.current;
@@ -1126,8 +1127,16 @@ export function useContentElement(noteContext: NoteContext | null | undefined) {
             // Prevent stale async.
             if (requestId !== requestIdRef.current) return;
             setContentElement(contentElement?.[0] ?? null);
+            forceUpdate(v => v + 1);
         });
     }, [ noteContext ]);
+
+    // React to content changes initializing.
+    useTriliumEvent("contentElRefreshed", ({ ntxId: eventNtxId, contentEl }) => {
+        if (eventNtxId !== noteContext?.ntxId) return;
+        setContentElement(contentEl);
+        forceUpdate(v => v + 1);
+    });
 
     return contentElement;
 }

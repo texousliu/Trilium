@@ -27,9 +27,8 @@ export default function TableOfContents() {
 
     return (
         <RightPanelWidget title={t("toc.table_of_contents")}>
-            {noteType === "text" && (
-                isReadOnly ? <ReadOnlyTextTableOfContents /> : <EditableTextTableOfContents />
-            )}
+            {((noteType === "text" && isReadOnly) || (noteType === "doc")) && <ReadOnlyTextTableOfContents />}
+            {noteType === "text" && !isReadOnly && <EditableTextTableOfContents />}
         </RightPanelWidget>
     );
 }
