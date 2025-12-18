@@ -8,7 +8,13 @@ import RightPanelWidget from "./RightPanelWidget";
 interface RawHighlight {
     id: string;
     text: string;
-    attrs: Record<string, any>;
+    attrs: {
+        bold: boolean;
+        italic: boolean;
+        underline: boolean;
+        color: string | undefined;
+        background: string | undefined;
+    }
 }
 
 export default function HighlightsList() {
@@ -33,7 +39,15 @@ function AbstractHighlightsList<T extends RawHighlight>({ highlights, scrollToHi
             <ol>
                 {highlights.map(highlight => (
                     <li onClick={() => scrollToHighlight(highlight)}>
-                        <span>{highlight.text}</span>
+                        <span
+                            style={{
+                                fontWeight: highlight.attrs.bold ? "700" : undefined,
+                                fontStyle: highlight.attrs.italic ? "italic" : undefined,
+                                textDecoration: highlight.attrs.underline ? "underline" : undefined,
+                                color: highlight.attrs.color,
+                                backgroundColor: highlight.attrs.background
+                            }}
+                        >{highlight.text}</span>
                     </li>
                 ))}
             </ol>
@@ -116,12 +130,12 @@ function extractHighlightsFromTextEditor(editor: CKTextEditor) {
     for (const { item } of editor.model.createRangeIn(root).getWalker({ ignoreElementEnd: true })) {
         if (!item.is('$textProxy')) continue;
 
-        const attrs = {
+        const attrs: RawHighlight["attrs"] = {
             bold: item.hasAttribute('bold'),
             italic: item.hasAttribute('italic'),
             underline: item.hasAttribute('underline'),
-            color: item.getAttribute('fontColor'),
-            background: item.getAttribute('fontBackgroundColor')
+            color: item.getAttribute('fontColor') as string | undefined,
+            background: item.getAttribute('fontBackgroundColor') as string | undefined
         };
 
         if (Object.values(attrs).some(Boolean)) {
