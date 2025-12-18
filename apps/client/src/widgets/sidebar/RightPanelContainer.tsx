@@ -51,6 +51,8 @@ export default function RightPanelContainer() {
         return () => splitInstance.destroy();
     }, [ items ]);
 
+    const sizesBeforeCollapse = useRef(new WeakMap<HTMLElement, number>());
+
     return (
         <div id="right-pane">
             <RightPanelContext.Provider value={{
@@ -65,12 +67,21 @@ export default function RightPanelContainer() {
                     const sizes = splitInstance.getSizes();
                     if (!expanded) {
                         const sizeBeforeCollapse = sizes[pos];
+                        sizesBeforeCollapse.current.set(cardEl, sizeBeforeCollapse);
                         sizes[pos] = 0;
                         const itemToExpand = pos > 0 ? pos - 1 : pos + 1;
 
                         if (sizes[itemToExpand] > COLLAPSED_SIZE) {
                             sizes[itemToExpand] += sizeBeforeCollapse;
                         }
+                    } else {
+                        const itemToExpand = pos > 0 ? pos - 1 : pos + 1;
+                        const sizeBeforeCollapse = sizesBeforeCollapse.current.get(cardEl) ?? 50;
+
+                        if (sizes[itemToExpand] > COLLAPSED_SIZE) {
+                            sizes[itemToExpand] -= sizeBeforeCollapse;
+                        }
+                        sizes[pos] = sizeBeforeCollapse;
                     }
                     console.log("Set sizes to ", sizes);
                     splitInstance.setSizes(sizes);
