@@ -1,5 +1,5 @@
-import { CKTextEditor, ModelTextProxy } from "@triliumnext/ckeditor5";
-import { useEffect, useState } from "preact/hooks";
+import { CKTextEditor, ModelText } from "@triliumnext/ckeditor5";
+import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
 import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
@@ -24,14 +24,15 @@ export default function HighlightsList() {
     );
 }
 
-function AbstractHighlightsList({ highlights }: {
-    highlights: RawHighlight[]
+function AbstractHighlightsList<T extends RawHighlight>({ highlights, scrollToHighlight }: {
+    highlights: T[],
+    scrollToHighlight(highlight: T): void;
 }) {
     return (
         <span className="highlights-list">
             <ol>
                 {highlights.map(highlight => (
-                    <li>
+                    <li onClick={() => scrollToHighlight(highlight)}>
                         <span>{highlight.text}</span>
                     </li>
                 ))}
@@ -42,7 +43,8 @@ function AbstractHighlightsList({ highlights }: {
 
 //#region Editable text (CKEditor)
 interface CKHighlight extends RawHighlight {
-    element: ModelTextProxy;
+    textNode: ModelText;
+    offset: number | null;
 }
 
 function EditableTextHighlightsList() {
@@ -57,8 +59,21 @@ function EditableTextHighlightsList() {
         setHighlights(highlights);
     }, [ textEditor, note ]);
 
+    const scrollToHeading = useCallback((highlight: CKHighlight) => {
+        if (!textEditor) return;
+
+        const modelPos = textEditor.model.createPositionAt(highlight.textNode, "before");
+        const viewPos = textEditor.editing.mapper.toViewPosition(modelPos);
+        const domConverter = textEditor.editing.view.domConverter;
+        const domPos = domConverter.viewPositionToDom(viewPos);
+
+        if (!domPos) return;
+        (domPos.parent as HTMLElement).scrollIntoView();
+    }, [ textEditor ]);
+
     return <AbstractHighlightsList
         highlights={highlights}
+        scrollToHighlight={scrollToHeading}
     />;
 }
 
@@ -85,7 +100,8 @@ function extractHighlightsFromTextEditor(editor: CKTextEditor) {
                 id: crypto.randomUUID(),
                 text: item.data,
                 attrs,
-                element: item
+                textNode: item.textNode,
+                offset: item.startOffset
             });
         }
     }
