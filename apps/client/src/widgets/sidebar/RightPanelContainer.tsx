@@ -22,7 +22,7 @@ export default function RightPanelContainer() {
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const items = [
-        noteType === "text" || noteType === "doc" && <TableOfContents />,
+        (noteType === "text" || noteType === "doc") && <TableOfContents />,
         noteType === "text" && <HighlightsList />
     ].filter(Boolean);
 
