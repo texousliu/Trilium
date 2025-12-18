@@ -1115,3 +1115,19 @@ export function useTextEditor(noteContext: NoteContext | null | undefined) {
 
     return textEditor;
 }
+
+export function useContentElement(noteContext: NoteContext | null | undefined) {
+    const [ contentElement, setContentElement ] = useState<HTMLElement | null>(null);
+    const requestIdRef = useRef(0);
+
+    useEffect(() => {
+        const requestId = ++requestIdRef.current;
+        noteContext?.getContentElement().then(contentElement => {
+            // Prevent stale async.
+            if (requestId !== requestIdRef.current) return;
+            setContentElement(contentElement?.[0] ?? null);
+        });
+    }, [ noteContext ]);
+
+    return contentElement;
+}

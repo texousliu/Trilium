@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
-import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
+import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
 import Icon from "../react/Icon";
 import RightPanelWidget from "./RightPanelWidget";
 
@@ -27,7 +27,9 @@ export default function TableOfContents() {
 
     return (
         <RightPanelWidget title={t("toc.table_of_contents")}>
-            {noteType === "text" && !isReadOnly && <EditableTextTableOfContents />}
+            {noteType === "text" && (
+                isReadOnly ? <ReadOnlyTextTableOfContents /> : <EditableTextTableOfContents />
+            )}
         </RightPanelWidget>
     );
 }
@@ -159,3 +161,26 @@ function extractTocFromTextEditor(editor: CKTextEditor) {
     return headings;
 }
 //#endregion
+
+function ReadOnlyTextTableOfContents() {
+    const { noteContext } = useActiveNoteContext();
+    const contentEl = useContentElement(noteContext);
+    const headings = extractTocFromStaticHtml(contentEl);
+
+    return <AbstractTableOfContents headings={headings} />;
+}
+
+function extractTocFromStaticHtml(el: HTMLElement | null) {
+    if (!el) return [];
+
+    const headings: RawHeading[] = [];
+    for (const headingEl of el.querySelectorAll("h1,h2,h3,h4,h5,h6")) {
+        headings.push({
+            id: crypto.randomUUID(),
+            level: parseInt(headingEl.tagName.substring(1), 10),
+            text: headingEl.textContent
+        });
+    }
+
+    return headings;
+}
