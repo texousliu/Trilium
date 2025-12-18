@@ -179,6 +179,8 @@ function extractTocFromTextEditor(editor: CKTextEditor) {
     return headings;
 }
 //#endregion
+
+//#region Read-only text
 interface DomHeading extends RawHeading {
     element: HTMLHeadingElement;
 }
@@ -213,3 +215,4 @@ function extractTocFromStaticHtml(el: HTMLElement | null) {
 
     return headings;
 }
+//#endregion

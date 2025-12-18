@@ -1,8 +1,9 @@
+import { headingIsHorizontal } from "@excalidraw/excalidraw/element/heading";
 import { CKTextEditor, ModelText } from "@triliumnext/ckeditor5";
 import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
-import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
+import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
 import RightPanelWidget from "./RightPanelWidget";
 
 interface RawHighlight {
@@ -157,7 +158,62 @@ function extractHighlightsFromTextEditor(editor: CKTextEditor) {
 //#endregion
 
 //#region Read-only text
+interface DomHighlight extends RawHighlight {
+    element: HTMLElement;
+}
+
 function ReadOnlyTextHighlightsList() {
-    return "Read-only";
+    const { noteContext } = useActiveNoteContext();
+    const contentEl = useContentElement(noteContext);
+    const highlights = extractHeadingsFromStaticHtml(contentEl);
+
+    const scrollToHighlight = useCallback((highlight: DomHighlight) => {
+        highlight.element.scrollIntoView();
+    }, []);
+
+    return <AbstractHighlightsList
+        highlights={highlights}
+        scrollToHighlight={scrollToHighlight}
+    />;
+}
+
+function extractHeadingsFromStaticHtml(el: HTMLElement | null) {
+    if (!el) return [];
+
+    const walker = document.createTreeWalker(
+        el,
+        NodeFilter.SHOW_TEXT,
+        null
+    );
+
+    const highlights: DomHighlight[] = [];
+
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+        const el = node.parentElement;
+        if (!el || !node.textContent?.trim()) continue;
+
+        const style = getComputedStyle(el);
+
+        if (
+            el.closest('strong, em, u') ||
+            style.color || style.backgroundColor
+        ) {
+            highlights.push({
+                id: crypto.randomUUID(),
+                text: node.textContent,
+                element: el,
+                attrs: {
+                    bold: !!el.closest("strong"),
+                    italic: !!el.closest("em"),
+                    underline: !!el.closest("u"),
+                    background: el.style.backgroundColor,
+                    color: el.style.color
+                }
+            });
+        }
+    }
+
+    return highlights;
 }
 //#endregion
