@@ -2,7 +2,7 @@ import { CKTextEditor, ModelElement } from "@triliumnext/ckeditor5";
 import { useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
-import { useActiveNoteContext, useTriliumEvent } from "../react/hooks";
+import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTriliumEvent } from "../react/hooks";
 import RightPanelWidget from "./RightPanelWidget";
 
 interface CKHeading {
@@ -12,11 +12,22 @@ interface CKHeading {
 }
 
 export default function TableOfContents() {
+    const { note, noteContext } = useActiveNoteContext();
+    const noteType = useNoteProperty(note, "type");
+    const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
+
+    return (
+        <RightPanelWidget title={t("toc.table_of_contents")}>
+            {noteType === "text" && !isReadOnly && <EditableTextTableOfContents />}
+        </RightPanelWidget>
+    );
+}
+
+function EditableTextTableOfContents() {
     const { ntxId } = useActiveNoteContext();
     const [ textEditor, setTextEditor ] = useState<CKTextEditor | null>(null);
     const [ headings, setHeadings ] = useState<CKHeading[]>([]);
 
-    // Populate the cache with the toolbar of every note context.
     useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
         if (eventNtxId !== ntxId) return;
         setTextEditor(editor);
@@ -46,14 +57,18 @@ export default function TableOfContents() {
         return () => textEditor.model.document.off("change:data", changeCallback);
     }, [ textEditor ]);
 
-    return (
-        <RightPanelWidget title={t("toc.table_of_contents")}>
-            {headings.map(heading => (
-                <li>{heading.text}</li>
-            ))}
-        </RightPanelWidget>
-    );
+    return <AbstractTableOfContents headings={headings} />;
+}
 
+function AbstractTableOfContents({ headings }: {
+    headings: {
+        level: number;
+        text: string;
+    }[];
+}) {
+    return headings.map(heading => (
+        <li>{heading.text}</li>
+    ));
 }
 
 function extractTocFromTextEditor(editor: CKTextEditor) {
