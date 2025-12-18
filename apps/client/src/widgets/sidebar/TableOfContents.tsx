@@ -9,14 +9,11 @@ import { useActiveNoteContext, useIsNoteReadOnly, useNoteProperty, useTextEditor
 import Icon from "../react/Icon";
 import RightPanelWidget from "./RightPanelWidget";
 
+//#region Generic impl.
 interface RawHeading {
     id: string;
     level: number;
     text: string;
-}
-
-interface CKHeading extends RawHeading {
-    element: ModelElement;
 }
 
 interface HeadingsWithNesting extends RawHeading {
@@ -33,38 +30,6 @@ export default function TableOfContents() {
             {noteType === "text" && !isReadOnly && <EditableTextTableOfContents />}
         </RightPanelWidget>
     );
-}
-
-function EditableTextTableOfContents() {
-    const { note, noteContext } = useActiveNoteContext();
-    const textEditor = useTextEditor(noteContext);
-    const [ headings, setHeadings ] = useState<CKHeading[]>([]);
-
-    useEffect(() => {
-        if (!textEditor) return;
-        const headings = extractTocFromTextEditor(textEditor);
-
-        // React to changes.
-        const changeCallback = () => {
-            const changes = textEditor.model.document.differ.getChanges();
-
-            const affectsHeadings = changes.some( change => {
-                return (
-                    change.type === 'insert' || change.type === 'remove' || (change.type === 'attribute' && change.attributeKey === 'headingLevel')
-                );
-            });
-            if (affectsHeadings) {
-                setHeadings(extractTocFromTextEditor(textEditor));
-            }
-        };
-
-        textEditor.model.document.on("change:data", changeCallback);
-        setHeadings(headings);
-
-        return () => textEditor.model.document.off("change:data", changeCallback);
-    }, [ textEditor, note ]);
-
-    return <AbstractTableOfContents headings={headings} />;
 }
 
 function AbstractTableOfContents({ headings }: {
@@ -124,8 +89,46 @@ function buildHeadingTree(headings: RawHeading[]): HeadingsWithNesting[] {
 
     return root.children;
 }
+//#endregion
 
+//#region Editable text (CKEditor)
 const TOC_ID = 'tocId';
+
+interface CKHeading extends RawHeading {
+    element: ModelElement;
+}
+
+function EditableTextTableOfContents() {
+    const { note, noteContext } = useActiveNoteContext();
+    const textEditor = useTextEditor(noteContext);
+    const [ headings, setHeadings ] = useState<CKHeading[]>([]);
+
+    useEffect(() => {
+        if (!textEditor) return;
+        const headings = extractTocFromTextEditor(textEditor);
+
+        // React to changes.
+        const changeCallback = () => {
+            const changes = textEditor.model.document.differ.getChanges();
+
+            const affectsHeadings = changes.some( change => {
+                return (
+                    change.type === 'insert' || change.type === 'remove' || (change.type === 'attribute' && change.attributeKey === 'headingLevel')
+                );
+            });
+            if (affectsHeadings) {
+                setHeadings(extractTocFromTextEditor(textEditor));
+            }
+        };
+
+        textEditor.model.document.on("change:data", changeCallback);
+        setHeadings(headings);
+
+        return () => textEditor.model.document.off("change:data", changeCallback);
+    }, [ textEditor, note ]);
+
+    return <AbstractTableOfContents headings={headings} />;
+}
 
 function extractTocFromTextEditor(editor: CKTextEditor) {
     const headings: CKHeading[] = [];
@@ -155,4 +158,4 @@ function extractTocFromTextEditor(editor: CKTextEditor) {
 
     return headings;
 }
-
+//#endregion
