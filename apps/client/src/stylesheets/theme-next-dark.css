@@ -327,6 +327,6 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
 }
 
 .note-split.with-hue {
-    --note-icon-custom-background-color: hsl(var(--custom-color-hue), 8%, 29.4%);
-    --note-icon-custom-color: hsl(var(--custom-color-hue), 89%, 78%);
+    --note-icon-custom-background-color: hsl(var(--custom-color-hue), 15.8%, 30.9%);
+    --note-icon-custom-color: hsl(var(--custom-color-hue), 100%, 76.5%);
 }
