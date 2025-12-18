@@ -12,7 +12,7 @@ import HighlightsList from "./HighlightsList";
 import TableOfContents from "./TableOfContents";
 
 const MIN_WIDTH_PERCENT = 5;
-const COLLAPSED_SIZE = 32;
+const COLLAPSED_SIZE = 25;
 
 export const RightPanelContext = createContext({
     setExpanded(cardEl: HTMLElement, expanded: boolean) {}

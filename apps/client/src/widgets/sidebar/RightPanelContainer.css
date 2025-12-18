@@ -6,8 +6,12 @@ body.experimental-feature-new-layout #right-pane {
         border-bottom: 1px solid var(--main-border-color);
         border-radius: 0;
 
-        .card-header-title {
-            padding-inline: 0.5em;
+        .card-header {
+            padding-block: 0.2em;
+
+            .card-header-title {
+                padding-inline: 0.5em;
+            }
         }
 
         &:last-of-type {
@@ -17,5 +21,9 @@ body.experimental-feature-new-layout #right-pane {
         &.collapsed .card-header > .bx {
             transform: rotate(-90deg);
         }
+    }
+
+    .gutter-vertical + .card .card-header {
+        padding-top: 0;
     }
 }
