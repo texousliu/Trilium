@@ -33,4 +33,21 @@ body.experimental-feature-new-layout #right-pane {
     .gutter-vertical + .card .card-header {
         padding-top: 0;
     }
+
+    .no-items {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        flex-direction: column;
+        color: var(--muted-text-color);
+
+        .bx {
+            font-size: 3em;
+        }
+
+        button {
+            margin-top: 1em;
+        }
+    }
 }

@@ -2196,5 +2196,9 @@
     "note_paths_other": "{{count}} paths",
     "note_paths_title": "Note paths",
     "code_note_switcher": "Change language mode"
+  },
+  "right_pane": {
+    "empty_message": "Nothing to show for this note",
+    "empty_button": "Hide the panel"
   }
 }

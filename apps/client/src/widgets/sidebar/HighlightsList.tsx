@@ -1,4 +1,3 @@
-import { headingIsHorizontal } from "@excalidraw/excalidraw/element/heading";
 import { CKTextEditor, ModelText } from "@triliumnext/ckeditor5";
 import { useCallback, useEffect, useState } from "preact/hooks";
 
@@ -23,9 +22,9 @@ export default function HighlightsList() {
     const noteType = useNoteProperty(note, "type");
     const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
 
-    return (
+    return (noteType === "text") && (
         <RightPanelWidget id="highlights" title={t("highlights_list_2.title")}>
-            {((noteType === "text" && isReadOnly) || (noteType === "doc")) && <ReadOnlyTextHighlightsList />}
+            {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
             {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}
         </RightPanelWidget>
     );
