@@ -89,10 +89,10 @@ html {
     --custom-color: var(--light-theme-custom-color);
 }
 
-:root .reference-link,
-:root .reference-link:hover,
-.ck-content a.reference-link > span,
-.board-note {
+:root .reference-link.use-note-color,
+:root .reference-link.use-note-color:hover,
+.ck-content a.reference-link.use-note-color > span,
+.board-note.use-note-color {
     color: var(--light-theme-custom-color, inherit);
 }
 

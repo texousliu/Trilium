@@ -199,9 +199,9 @@
     --badge-background-color: #ffffff1a;
     --badge-text-color: var(--muted-text-color);
 
-    --note-icon-button-background-color: #a6a6a6;
-    --note-icon-button-hover-background-color: #d0d0d0;
-    --note-icon-button-color: black;
+    --note-icon-background-color: #444444;
+    --note-icon-color: #d4d4d4;
+    --note-icon-hover-background-color: #555555;
 
     --promoted-attribute-card-background-color: #ffffff21;
     --promoted-attribute-card-shadow: none;
@@ -297,10 +297,10 @@
     --custom-bg-color: hsl(var(--custom-color-hue), 20%, 33%, 0.4);
 }
 
-:root .reference-link,
-:root .reference-link:hover,
-.ck-content a.reference-link > span,
-.board-note {
+:root .reference-link.use-note-color,
+:root .reference-link.use-note-color:hover,
+.ck-content a.reference-link.use-note-color > span,
+.board-note.use-note-color {
     color: var(--dark-theme-custom-color, inherit);
 }
 
@@ -324,4 +324,11 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
 
 .use-note-color {
     --custom-color: var(--dark-theme-custom-color);
+}
+
+.note-split.with-hue,
+.quick-edit-dialog-wrapper.with-hue {
+    --note-icon-custom-background-color: hsl(var(--custom-color-hue), 15.8%, 30.9%);
+    --note-icon-custom-color: hsl(var(--custom-color-hue), 100%, 76.5%);
+    --note-icon-hover-custom-background-color: hsl(var(--custom-color-hue), 28.3%, 36.7%);
 }

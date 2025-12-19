@@ -191,9 +191,9 @@
     --badge-background-color: #00000011;
     --badge-text-color: var(--muted-text-color);
 
-    --note-icon-button-background-color: #4f4f4f;
-    --note-icon-button-hover-background-color: #737373;
-    --note-icon-button-color: white;
+    --note-icon-background-color: #4f4f4f;
+    --note-icon-color: white;
+    --note-icon-hover-background-color: #737373;
 
     --promoted-attribute-card-background-color: #00000014;
     --promoted-attribute-card-shadow: none;
@@ -295,4 +295,11 @@
     --modal-background-color: hsl(var(--custom-color-hue), 56%, 96%);
     --modal-border-color: hsl(var(--custom-color-hue), 33%, 41%);
     --promoted-attribute-card-background-color: hsl(var(--custom-color-hue), 40%, 88%);
+}
+
+.note-split.with-hue,
+.quick-edit-dialog-wrapper.with-hue {
+    --note-icon-custom-background-color: hsl(var(--custom-color-hue), 44.5%, 43.1%);
+    --note-icon-custom-color: hsl(var(--custom-color-hue), 91.3%, 91%);
+    --note-icon-hover-custom-background-color: hsl(var(--custom-color-hue), 55.1%, 50.2%);
 }
