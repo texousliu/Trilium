@@ -118,8 +118,11 @@ export default class DesktopLayout {
                                 new FlexContainer("row")
                                     .child(<TabHistoryNavigationButtons />)
                                     .child(new TabRowWidget())
+                                    .optChild(isNewLayout, <RightPaneToggle />)
                                     .optChild(customTitleBarButtons, <TitleBarButtons />)
-                                    .css("height", "40px"))
+                                    .css("height", "40px")
+                                    .css("align-items", "center")
+                            )
                             .optChild(isNewLayout, <FixedFormattingToolbar />)
                             .child(
                                 new FlexContainer("row")
