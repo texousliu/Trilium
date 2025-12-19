@@ -607,7 +607,8 @@
     "subtree_size": "（サブツリーサイズ: {{size}}、ノード数: {{count}}）",
     "title": "ノート情報",
     "note_size_info": "ノートのサイズは、このノートに必要なストレージの概算を示します。これは、ノートの内容とそのノートの編集履歴の内容を考慮したものです。",
-    "show_similar_notes": "類似のノートを表示"
+    "show_similar_notes": "類似のノートを表示",
+    "mime": "MIME タイプ"
   },
   "image_properties": {
     "file_type": "ファイルタイプ",
@@ -2004,14 +2005,20 @@
     "background_effects_title": "背景効果が安定しました",
     "background_effects_message": "Windowsデバイスでは、背景効果が完全に安定しました。背景効果は、背景をぼかすことでユーザーインターフェースに彩りを添えます。この技術は、Windowsエクスプローラーなどの他のアプリケーションでも使用されています。",
     "background_effects_button": "背景効果を有効にする",
-    "dismiss": "却下"
+    "dismiss": "却下",
+    "new_layout_title": "新しいレイアウト",
+    "new_layout_message": "Trilium のレイアウトを刷新しました。リボンは廃止され、メインインターフェースにシームレスに統合されました。主要な機能は、新しいステータスバーと展開可能なセクション（プロモート属性など）に集約されています。\n\n新しいレイアウトはデフォルトで有効になっていますが、「オプション」→「外観」から一時的に無効にすることもできます。",
+    "new_layout_button": "詳細情報"
   },
   "settings": {
     "related_settings": "関連設定"
   },
   "settings_appearance": {
     "related_code_blocks": "テキストノート内のコードブロックの配色",
-    "related_code_notes": "コードノートの配色"
+    "related_code_notes": "コードノートの配色",
+    "ui": "ユーザーインターフェース",
+    "ui_old_layout": "旧レイアウト",
+    "ui_new_layout": "新しいレイアウト"
   },
   "units": {
     "percentage": "%"
@@ -2179,6 +2186,8 @@
     "hoisted_badge": "ホイスト",
     "hoisted_badge_title": "ホイスト解除",
     "workspace_badge": "ワークスペース",
-    "scroll_to_top_title": "ノートの先頭にジャンプ"
+    "scroll_to_top_title": "ノートの先頭にジャンプ",
+    "create_new_note": "新しい子ノートを作成",
+    "empty_hide_archived_notes": "アーカイブされたノートを非表示"
   }
 }
