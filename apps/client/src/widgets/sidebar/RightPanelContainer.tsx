@@ -8,7 +8,7 @@ import { t } from "../../services/i18n";
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
 import Button from "../react/Button";
-import { useActiveNoteContext, useNoteProperty, useTriliumOptionBool } from "../react/hooks";
+import { useActiveNoteContext, useNoteProperty, useTriliumOptionBool, useTriliumOptionJson } from "../react/hooks";
 import Icon from "../react/Icon";
 import HighlightsList from "./HighlightsList";
 import TableOfContents from "./TableOfContents";
@@ -17,13 +17,14 @@ const MIN_WIDTH_PERCENT = 5;
 
 export default function RightPanelContainer() {
     const [ rightPaneVisible, setRightPaneVisible ] = useTriliumOptionBool("rightPaneVisible");
+    const [ highlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
     useSplit(rightPaneVisible);
 
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const items = (rightPaneVisible ? [
         (noteType === "text" || noteType === "doc") && <TableOfContents />,
-        noteType === "text" && <HighlightsList />
+        noteType === "text" && highlightsList.length > 0 && <HighlightsList />
     ] : []).filter(Boolean);
 
     return (
