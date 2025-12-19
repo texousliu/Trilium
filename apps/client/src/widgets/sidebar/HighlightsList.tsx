@@ -1,8 +1,12 @@
 import { CKTextEditor, ModelText } from "@triliumnext/ckeditor5";
+import { createPortal } from "preact/compat";
 import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
+import ActionButton from "../react/ActionButton";
 import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
+import Modal from "../react/Modal";
+import { HighlightsListOptions } from "../type_widgets/options/text_notes";
 import RightPanelWidget from "./RightPanelWidget";
 
 interface RawHighlight {
@@ -21,12 +25,43 @@ export default function HighlightsList() {
     const { note, noteContext } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
+    const [ shown, setShown ] = useState(false);
 
     return (
-        <RightPanelWidget id="highlights" title={t("highlights_list_2.title")}>
-            {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
-            {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}
-        </RightPanelWidget>
+        <>
+            <RightPanelWidget
+                id="highlights"
+                title={t("highlights_list_2.title")}
+                buttons={(
+                    <ActionButton
+                        icon="bx bx-cog"
+                        text={t("highlights_list_2.options")}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShown(true);
+                        }}
+                    />
+                )}
+            >
+                {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
+                {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}
+            </RightPanelWidget>
+            {createPortal(<HighlightListOptionsModal shown={shown} setShown={setShown} />, document.body)}
+        </>
+    );
+}
+
+function HighlightListOptionsModal({ shown, setShown }: { shown: boolean, setShown(value: boolean): void }) {
+    return (
+        <Modal
+            className="highlights-list-options-modal"
+            size="md"
+            title={t("highlights_list_2.modal_title")}
+            show={shown}
+            onHidden={() => setShown(false)}
+        >
+            <HighlightsListOptions />
+        </Modal>
     );
 }
 

@@ -265,10 +265,27 @@ function TableOfContent() {
 }
 
 function HighlightsList() {
+    return (
+        <OptionsSection title={t("highlights_list.title")}>
+            <HighlightsListOptions />
+
+            {!isNewLayout && (
+                <>
+                    <hr />
+                    <h5>{t("highlights_list.visibility_title")}</h5>
+                    <FormText>{t("highlights_list.visibility_description")}</FormText>
+                    <FormText>{t("highlights_list.shortcut_info")}</FormText>
+                </>
+            )}
+        </OptionsSection>
+    );
+}
+
+export function HighlightsListOptions() {
     const [ highlightsList, setHighlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
 
     return (
-        <OptionsSection title={t("highlights_list.title")}>
+        <>
             <FormText>{t("highlights_list.description")}</FormText>
             <CheckboxList
                 values={[
@@ -281,16 +298,7 @@ function HighlightsList() {
                 keyProperty="val" titleProperty="title"
                 currentValue={highlightsList} onChange={setHighlightsList}
             />
-
-            {!isNewLayout && (
-                <>
-                    <hr />
-                    <h5>{t("highlights_list.visibility_title")}</h5>
-                    <FormText>{t("highlights_list.visibility_description")}</FormText>
-                    <FormText>{t("highlights_list.shortcut_info")}</FormText>
-                </>
-            )}
-        </OptionsSection>
+        </>
     );
 }
 

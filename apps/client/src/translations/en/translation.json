@@ -1723,7 +1723,8 @@
   },
   "highlights_list_2": {
     "title": "Highlights List",
-    "options": "Options"
+    "options": "Options",
+    "modal_title": "Configure Highlights List"
   },
   "quick-search": {
     "placeholder": "Quick search",
