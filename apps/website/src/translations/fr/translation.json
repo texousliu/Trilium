@@ -55,7 +55,7 @@
         "title": "Plusieurs façons de représenter vos informations"
     },
     "faq": {
-        "database_question": "Où sont les données stockées?",
+        "database_question": "Où sont stockées les données ?",
         "database_answer": "Toutes vos notes seront stockées dans une base de données SQLite, dans un dossier d'application. Trilium utilise une base de données plutôt que des fichiers texte pour des raisons de performances, et certaines fonctionnalités seraient beaucoup plus complexes à implémenter, comme les clones (même note à plusieurs endroits de l'arborescence). Pour trouver le dossier d'application, accédez simplement à la fenêtre « À propos ».",
         "mobile_answer": "Il n'existe actuellement aucune application mobile officielle. Cependant, si vous disposez d'une instance serveur, vous pouvez y accéder via un navigateur web et même l'installer en tant que PWA. Pour Android, il existe une application non officielle appelée \"TriliumDroid\", qui fonctionne même hors ligne (comme un client de bureau).",
         "mobile_question": "Y a-t-il une application mobile ?",
@@ -171,7 +171,8 @@
         "geomap_title": "Géocarte",
         "geomap_description": "Planifiez vos vacances ou marquez vos points d'intérêt directement sur une carte géographique grâce à des marqueurs personnalisables. Affichez les traces GPX enregistrées pour suivre vos itinéraires.",
         "title": "Collections",
-        "presentation_title": "Présentation"
+        "presentation_title": "Présentation",
+        "presentation_description": "Organisez les informations sous forme de diapositives et présentez-les en plein écran avec des transitions fluides. Les diapositives peuvent également être exportées au format PDF pour faciliter leur partage."
     },
     "download_now": {
         "text": "Télécharger maintenant. ",
@@ -190,5 +191,10 @@
         "github_discussions": "Discussions GitHub",
         "matrix": "Matrix",
         "reddit": "Reddit"
+    },
+    "header": {
+        "get-started": "Commencer",
+        "documentation": "Documentation",
+        "support-us": "Soutenez-nous"
     }
 }
