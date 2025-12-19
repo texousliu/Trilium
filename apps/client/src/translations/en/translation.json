@@ -1796,7 +1796,8 @@
   },
   "toc": {
     "table_of_contents": "Table of Contents",
-    "options": "Options"
+    "options": "Options",
+    "no_headings": "No headings."
   },
   "watched_file_update_status": {
     "file_last_modified": "File <code class=\"file-path\"></code> has been last modified on <span class=\"file-last-modified\"></span>.",

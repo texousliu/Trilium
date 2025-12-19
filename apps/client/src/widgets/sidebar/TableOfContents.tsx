@@ -40,9 +40,13 @@ function AbstractTableOfContents<T extends RawHeading>({ headings, scrollToHeadi
     const nestedHeadings = buildHeadingTree(headings);
     return (
         <span className="toc">
-            <ol>
-                {nestedHeadings.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} />)}
-            </ol>
+            {nestedHeadings.length > 0 ? (
+                <ol>
+                    {nestedHeadings.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} />)}
+                </ol>
+            ) : (
+                <div className="no-headings">{t("toc.no_headings")}</div>
+            )}
         </span>
     );
 }
