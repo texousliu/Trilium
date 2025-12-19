@@ -43,7 +43,7 @@ conhecimento pessoal.
   unstable development version, updated daily with the latest features and
   fixes.
 
-## 📚 Documentation
+## 📚 Documentação
 
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
