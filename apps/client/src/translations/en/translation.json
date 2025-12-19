@@ -2199,6 +2199,7 @@
   },
   "right_pane": {
     "empty_message": "Nothing to show for this note",
-    "empty_button": "Hide the panel"
+    "empty_button": "Hide the panel",
+    "toggle": "Toggle right panel"
   }
 }
