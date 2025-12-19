@@ -140,8 +140,8 @@ importers:
         specifier: 7.0.1
         version: 7.0.1
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
       react:
         specifier: 19.2.3
         version: 19.2.3
@@ -480,8 +480,8 @@ importers:
         specifier: 39.2.7
         version: 39.2.7
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
 
   apps/server:
     dependencies:
@@ -673,8 +673,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
       helmet:
         specifier: 8.1.0
         version: 8.1.0
@@ -8533,8 +8533,8 @@ packages:
     resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
     engines: {node: '>=12'}
 
-  fs-extra@11.3.2:
-    resolution: {integrity: sha512-Xr9F6z6up6Ws+NjzMCZc6WXg2YFRlrLP9NQDO3VQrWrfiojdhS56TzueT88ze0uBdCTwEIhQ3ptnmKeWGFAe0A==}
+  fs-extra@11.3.3:
+    resolution: {integrity: sha512-VWSRii4t0AFm6ixFFmLLx1t7wS1gh+ckoa84aOeapGum0h+EZd1EhEumSB+ZdDLnEPuucsVB9oB7cxJHap6Afg==}
     engines: {node: '>=14.14'}
 
   fs-extra@7.0.1:
@@ -15079,6 +15079,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.3.0
       '@ckeditor/ckeditor5-upload': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-ai@47.3.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15332,7 +15334,7 @@ snapshots:
       '@babel/traverse': 7.28.4
       '@ckeditor/ckeditor5-dev-utils': 54.0.0(@babel/core@7.28.0)(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.2)(typescript@5.0.4)(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.2))
       chalk: 5.6.2
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       glob: 11.0.3
       plural-forms: 0.5.5
       pofile: 1.1.4
@@ -15361,7 +15363,7 @@ snapshots:
       css-loader: 7.1.2(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.2))
       cssnano: 7.1.1(postcss@8.5.6)
       esbuild-loader: 4.3.0(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.2))
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       glob: 11.0.3
       is-interactive: 2.0.0
       mini-css-extract-plugin: 2.9.4(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.2))
@@ -15430,6 +15432,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-decoupled@47.3.0':
     dependencies:
@@ -15439,6 +15443,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-inline@47.3.0':
     dependencies:
@@ -15556,6 +15562,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-font@47.3.0':
     dependencies:
@@ -15630,6 +15638,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.3.0
       '@ckeditor/ckeditor5-widget': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@47.3.0':
     dependencies:
@@ -15855,7 +15865,7 @@ snapshots:
       buffer: 6.0.3
       chalk: 5.6.2
       css-loader: 5.2.7(webpack@5.101.3(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.27.2))
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       glob: 11.0.3
       minimist: 1.2.8
       postcss: 8.5.6
@@ -15922,6 +15932,8 @@ snapshots:
       '@ckeditor/ckeditor5-paste-from-office': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-paste-from-office@47.3.0':
     dependencies:
@@ -15929,6 +15941,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.3.0
       '@ckeditor/ckeditor5-engine': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-real-time-collaboration@47.3.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15970,6 +15984,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-revision-history@47.3.0':
     dependencies:
@@ -16047,6 +16063,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@47.3.0':
     dependencies:
@@ -16056,6 +16074,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-style@47.3.0':
     dependencies:
@@ -16751,7 +16771,7 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       extract-zip: 2.0.1
       filenamify: 4.3.0
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       galactus: 1.0.0
       get-package-info: 1.0.0
       junk: 3.1.0
@@ -16812,7 +16832,7 @@ snapshots:
       '@malept/cross-spawn-promise': 2.0.0
       debug: 4.4.3(supports-color@8.1.1)
       dir-compare: 4.2.0
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       minimatch: 9.0.5
       plist: 3.1.0
     transitivePeerDependencies:
@@ -16822,7 +16842,7 @@ snapshots:
     dependencies:
       cross-dirname: 0.1.0
       debug: 4.4.3(supports-color@8.1.1)
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       minimist: 1.2.8
       postject: 1.0.0-alpha.6
     transitivePeerDependencies:
@@ -19157,7 +19177,7 @@ snapshots:
       ajv: 8.13.0
       ajv-draft-04: 1.0.0(ajv@8.13.0)
       ajv-formats: 3.0.1(ajv@8.13.0)
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       import-lazy: 4.0.0
       jju: 1.4.0
       resolve: 1.22.10
@@ -23017,7 +23037,7 @@ snapshots:
   dpdm@3.14.0:
     dependencies:
       chalk: 4.1.2
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       glob: 10.4.5
       ora: 5.4.1
       tslib: 2.8.1
@@ -24232,7 +24252,7 @@ snapshots:
       jsonfile: 6.1.0
       universalify: 2.0.1
 
-  fs-extra@11.3.2:
+  fs-extra@11.3.3:
     dependencies:
       graceful-fs: 4.2.11
       jsonfile: 6.1.0
