@@ -11,6 +11,7 @@ body.experimental-feature-new-layout #right-pane {
         .card-header {
             padding-block: 0.2em;
             cursor: pointer;
+            justify-content: flex-start;
 
             .card-header-title {
                 padding-inline: 0.5em;
