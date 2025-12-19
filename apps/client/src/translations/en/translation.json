@@ -1724,7 +1724,8 @@
   "highlights_list_2": {
     "title": "Highlights List",
     "options": "Options",
-    "modal_title": "Configure Highlights List"
+    "modal_title": "Configure Highlights List",
+    "no_highlights": "No highlights found."
   },
   "quick-search": {
     "placeholder": "Quick search",

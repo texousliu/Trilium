@@ -71,22 +71,22 @@ function AbstractHighlightsList<T extends RawHighlight>({ highlights, scrollToHi
 }) {
     const [ highlightsList ] = useTriliumOptionJson<["bold" | "italic" | "underline" | "color" | "bgColor"]>("highlightsList");
     const highlightsListSet = new Set(highlightsList || []);
+    const filteredHighlights = highlights.filter(highlight => {
+        const { attrs } = highlight;
+        return (
+            (highlightsListSet.has("bold") && attrs.bold) ||
+            (highlightsListSet.has("italic") && attrs.italic) ||
+            (highlightsListSet.has("underline") && attrs.underline) ||
+            (highlightsListSet.has("color") && !!attrs.color) ||
+            (highlightsListSet.has("bgColor") && !!attrs.background)
+        );
+    });
 
     return (
         <span className="highlights-list">
-            <ol>
-                {highlights
-                    .filter(highlight => {
-                        const { attrs } = highlight;
-                        return (
-                            (highlightsListSet.has("bold") && attrs.bold) ||
-                            (highlightsListSet.has("italic") && attrs.italic) ||
-                            (highlightsListSet.has("underline") && attrs.underline) ||
-                            (highlightsListSet.has("color") && !!attrs.color) ||
-                            (highlightsListSet.has("bgColor") && !!attrs.background)
-                        );
-                    })
-                    .map(highlight => (
+            {filteredHighlights.length > 0 ? (
+                <ol>
+                    {filteredHighlights.map(highlight => (
                         <li
                             key={highlight.id}
                             onClick={() => scrollToHighlight(highlight)}
@@ -102,7 +102,12 @@ function AbstractHighlightsList<T extends RawHighlight>({ highlights, scrollToHi
                             >{highlight.text}</span>
                         </li>
                     ))}
-            </ol>
+                </ol>
+            ) : (
+                <div className="no-highlights">
+                    {t("highlights_list_2.no_highlights")}
+                </div>
+            )}
         </span>
     );
 }
