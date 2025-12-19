@@ -132,7 +132,7 @@ export default class DesktopLayout {
                                                 new SplitNoteContainer(() =>
                                                     new NoteWrapperWidget()
                                                         .child(new FlexContainer("row")
-                                                            .class("title-row")
+                                                            .class("title-row note-split-title")
                                                             .cssBlock(".title-row > * { margin: 5px; }")
                                                             .child(<NoteIconWidget />)
                                                             .child(<NoteTitleWidget />)

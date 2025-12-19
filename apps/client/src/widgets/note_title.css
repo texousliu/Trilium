@@ -36,18 +36,25 @@ body.mobile .note-title-widget input.note-title {
 body.experimental-feature-new-layout {
     .title-row {
         container-type: size;
-        border-bottom: 1px solid var(--main-border-color);
         transition: border 400ms ease-out;
+        
+        &.note-split-title {
+            border-bottom: 1px solid var(--main-border-color);
 
-        &.hide-title {
-            border-bottom-color: transparent;
-            transition: none;
+            &.hide-title {
+                border-bottom-color: transparent;
+                transition: none;
+            }
+
+            .note-icon-widget {
+                margin-inline: 12px 8px;
+            }
         }
 
         .note-icon-widget {
             --note-icon-size: 16px;
             --note-icon-container-padding-size: 6px;
-            margin-inline: 12px 8px;
+            margin-inline: 0;
         }
         
         .note-title-widget {
