@@ -16,37 +16,41 @@ import TableOfContents from "./TableOfContents";
 const MIN_WIDTH_PERCENT = 5;
 
 export default function RightPanelContainer() {
-    useSplit();
-
     const [ rightPaneVisible, setRightPaneVisible ] = useTriliumOptionBool("rightPaneVisible");
+    useSplit(rightPaneVisible);
+
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
-    const items = [
+    const items = (rightPaneVisible ? [
         (noteType === "text" || noteType === "doc") && <TableOfContents />,
         noteType === "text" && <HighlightsList />
-    ].filter(Boolean);
+    ] : []).filter(Boolean);
 
     return (
         <div id="right-pane">
-            {items.length > 0 ? (
-                items
-            ) : (
-                <div className="no-items">
-                    <Icon icon="bx bx-sidebar" />
-                    {t("right_pane.empty_message")}
-                    <Button
-                        text={t("right_pane.empty_button")}
-                        onClick={() => setRightPaneVisible(!rightPaneVisible)}
-                    />
-                </div>
+            {rightPaneVisible && (
+                items.length > 0 ? (
+                    items
+                ) : (
+                    <div className="no-items">
+                        <Icon icon="bx bx-sidebar" />
+                        {t("right_pane.empty_message")}
+                        <Button
+                            text={t("right_pane.empty_button")}
+                            onClick={() => setRightPaneVisible(!rightPaneVisible)}
+                        />
+                    </div>
+                )
             )}
         </div>
     );
 }
 
-function useSplit() {
+function useSplit(visible: boolean) {
     // Split between right pane and the content pane.
     useEffect(() => {
+        if (!visible) return;
+
         // We are intentionally omitting useTriliumOption to avoid re-render due to size change.
         const rightPaneWidth = Math.max(MIN_WIDTH_PERCENT, options.getInt("rightPaneWidth") ?? MIN_WIDTH_PERCENT);
         const splitInstance = Split(["#center-pane", "#right-pane"], {
@@ -57,5 +61,5 @@ function useSplit() {
             onDragEnd: (sizes) => options.save("rightPaneWidth", Math.round(sizes[1]))
         });
         return () => splitInstance.destroy();
-    }, []);
+    }, [ visible ]);
 }
