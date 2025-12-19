@@ -81,9 +81,8 @@ Trilium Notes – это приложение для заметок с иера�
   подсветку синтаксиса
 * Быстрая и простая [навигация между
   заметками](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-navigation),
-  полнотекстовый поиск и [выделение
-  заметок](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-hoisting)
-  в отдельный блок
+  полнотекстовый поиск и [режим фокуса на
+  заметке](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-hoisting)
 * Бесшовное [версионирование
   заметки](https://docs.triliumnotes.org/user-guide/concepts/notes/note-revisions)
 * Специальные
