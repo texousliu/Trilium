@@ -116,6 +116,7 @@ export default class DesktopLayout {
                             .css("flex-grow", "1")
                             .optChild(!fullWidthTabBar,
                                 new FlexContainer("row")
+                                    .class("tab-row-container")
                                     .child(<TabHistoryNavigationButtons />)
                                     .child(new TabRowWidget())
                                     .optChild(isNewLayout, <RightPaneToggle />)

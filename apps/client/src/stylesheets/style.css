@@ -1961,7 +1961,7 @@ body.electron.platform-darwin:not(.native-titlebar):not(.full-screen) #tab-row-l
     width: 80px;
 }
 
-.tab-row-widget {
+.tab-row-container {
     padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw));
 }
 
