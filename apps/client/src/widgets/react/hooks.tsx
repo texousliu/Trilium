@@ -168,6 +168,7 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
 
     const wrappedSetValue = useMemo(() => {
         return async (newValue: OptionValue) => {
+            setValue(String(newValue));
             await options.save(name, newValue);
 
             if (needsRefresh) {
