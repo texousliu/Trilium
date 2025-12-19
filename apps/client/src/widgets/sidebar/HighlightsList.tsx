@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
 import ActionButton from "../react/ActionButton";
-import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
+import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor, useTriliumOptionJson } from "../react/hooks";
 import Modal from "../react/Modal";
 import { HighlightsListOptions } from "../type_widgets/options/text_notes";
 import RightPanelWidget from "./RightPanelWidget";
@@ -69,25 +69,39 @@ function AbstractHighlightsList<T extends RawHighlight>({ highlights, scrollToHi
     highlights: T[],
     scrollToHighlight(highlight: T): void;
 }) {
+    const [ highlightsList ] = useTriliumOptionJson<["bold" | "italic" | "underline" | "color" | "bgColor"]>("highlightsList");
+    const highlightsListSet = new Set(highlightsList || []);
+
     return (
         <span className="highlights-list">
             <ol>
-                {highlights.map(highlight => (
-                    <li
-                        key={highlight.id}
-                        onClick={() => scrollToHighlight(highlight)}
-                    >
-                        <span
-                            style={{
-                                fontWeight: highlight.attrs.bold ? "700" : undefined,
-                                fontStyle: highlight.attrs.italic ? "italic" : undefined,
-                                textDecoration: highlight.attrs.underline ? "underline" : undefined,
-                                color: highlight.attrs.color,
-                                backgroundColor: highlight.attrs.background
-                            }}
-                        >{highlight.text}</span>
-                    </li>
-                ))}
+                {highlights
+                    .filter(highlight => {
+                        const { attrs } = highlight;
+                        return (
+                            (highlightsListSet.has("bold") && attrs.bold) ||
+                            (highlightsListSet.has("italic") && attrs.italic) ||
+                            (highlightsListSet.has("underline") && attrs.underline) ||
+                            (highlightsListSet.has("color") && !!attrs.color) ||
+                            (highlightsListSet.has("bgColor") && !!attrs.background)
+                        );
+                    })
+                    .map(highlight => (
+                        <li
+                            key={highlight.id}
+                            onClick={() => scrollToHighlight(highlight)}
+                        >
+                            <span
+                                style={{
+                                    fontWeight: highlight.attrs.bold ? "700" : undefined,
+                                    fontStyle: highlight.attrs.italic ? "italic" : undefined,
+                                    textDecoration: highlight.attrs.underline ? "underline" : undefined,
+                                    color: highlight.attrs.color,
+                                    backgroundColor: highlight.attrs.background
+                                }}
+                            >{highlight.text}</span>
+                        </li>
+                    ))}
             </ol>
         </span>
     );
