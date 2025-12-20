@@ -33,6 +33,8 @@ async function getAndExecuteBundle(noteId: string, originEntity = null, script =
     return await executeBundle(bundle, originEntity);
 }
 
+export type ParentName = "left-pane" | "center-pane" | "note-detail-pane" | "right-pane";
+
 export async function executeBundle(bundle: Bundle, originEntity?: Entity | null, $container?: JQuery<HTMLElement>) {
     const apiContext = await ScriptContext(bundle.noteId, bundle.allNoteIds, originEntity, $container);
 
@@ -88,7 +90,7 @@ export class WidgetsByParent {
         }
     }
 
-    get(parentName: string) {
+    get(parentName: ParentName) {
         if (!this.legacyWidgets[parentName]) {
             return [];
         }
@@ -102,7 +104,7 @@ export class WidgetsByParent {
         );
     }
 
-    getPreactWidgets(parentName: string) {
+    getPreactWidgets(parentName: ParentName) {
         return this.preactWidgets[parentName] ?? [];
     }
 }
