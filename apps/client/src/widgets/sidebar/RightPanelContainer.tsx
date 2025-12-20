@@ -28,7 +28,7 @@ export default function RightPanelContainer({ customWidgets }: { customWidgets: 
     const items = (rightPaneVisible ? [
         (noteType === "text" || noteType === "doc") && <TableOfContents />,
         noteType === "text" && highlightsList.length > 0 && <HighlightsList />,
-        ...customWidgets.map((w) => <CustomWidget originalWidget={w} />)
+        ...customWidgets.map((w) => <CustomWidget key={w._noteId} originalWidget={w as LegacyRightPanelWidget} />)
     ] : []).filter(Boolean);
 
     return (
