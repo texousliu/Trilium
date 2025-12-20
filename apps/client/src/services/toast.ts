@@ -1,5 +1,6 @@
 import { signal } from "@preact/signals";
 
+import froca from "./froca.js";
 import utils from "./utils.js";
 
 export interface ToastOptions {
@@ -61,6 +62,17 @@ function showErrorTitleAndMessage(title: string, message: string, timeout = 1000
     });
 }
 
+export async function showErrorForScriptNote(noteId: string, message: string) {
+    const note = await froca.getNote(noteId, true);
+
+    addToast({
+        title: note?.title ?? "",
+        icon: note?.getIcon() ?? "bx bx-error-circle",
+        message,
+        timeout: 15_000
+    });
+}
+
 //#region Toast store
 export const toasts = signal<ToastOptionsWithRequiredId[]>([]);
 
@@ -74,7 +86,7 @@ function addToast(opts: ToastOptions) {
 function updateToast(id: string, partial: Partial<ToastOptions>) {
     toasts.value = toasts.value.map(toast => {
         if (toast.id === id) {
-            return { ...toast, ...partial }
+            return { ...toast, ...partial };
         }
         return toast;
     });

@@ -6,7 +6,7 @@ import { WidgetDefinitionWithType } from "./frontend_script_api_preact.js";
 import { t } from "./i18n.js";
 import ScriptContext from "./script_context.js";
 import server from "./server.js";
-import toastService from "./toast.js";
+import toastService, { showErrorForScriptNote } from "./toast.js";
 import utils, { getErrorMessage } from "./utils.js";
 
 // TODO: Deduplicate with server.
@@ -86,7 +86,7 @@ export class WidgetsByParent {
             this.legacyWidgets[widget.parentWidget] = this.legacyWidgets[widget.parentWidget] || [];
             this.legacyWidgets[widget.parentWidget].push(widget);
         } else {
-            console.log(`Custom widget does not have mandatory 'parentWidget' property defined`);
+            showErrorForScriptNote(widget._noteId, t("toast.widget-missing-parent"));
         }
     }
 

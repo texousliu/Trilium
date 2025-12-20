@@ -28,7 +28,8 @@
     },
     "widget-render-error": {
       "title": "Failed to render a custom React widget"
-    }
+    },
+    "widget-missing-parent": "Custom widget does not have mandatory 'parentWidget' property defined."
   },
   "add_link": {
     "add_link": "Add link",
