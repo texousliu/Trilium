@@ -9,7 +9,7 @@ export interface WidgetDefinition {
 }
 
 export interface WidgetDefinitionWithType extends WidgetDefinition {
-    type: "react-widget"
+    type: "preact-widget"
 }
 
 export const preactAPI = Object.freeze({
@@ -24,7 +24,7 @@ export const preactAPI = Object.freeze({
      */
     defineWidget(definition: WidgetDefinition) {
         return {
-            type: "react-widget",
+            type: "preact-widget",
             ...definition
         };
     },

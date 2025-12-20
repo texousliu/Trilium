@@ -75,7 +75,7 @@ export class WidgetsByParent {
     }
 
     add(widget: Widget) {
-        if ("type" in widget && widget.type === "react-widget") {
+        if ("type" in widget && widget.type === "preact-widget") {
             // React-based script.
             const reactWidget = widget as WidgetDefinitionWithType;
             this.preactWidgets[reactWidget.parent] = this.preactWidgets[reactWidget.parent] || [];
