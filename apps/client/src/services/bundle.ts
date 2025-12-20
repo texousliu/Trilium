@@ -5,8 +5,9 @@ import type { Entity, WidgetDefinition } from "./frontend_script_api.js";
 import { t } from "./i18n.js";
 import ScriptContext from "./script_context.js";
 import server from "./server.js";
+import toast from "./toast.js";
 import toastService, { showError } from "./toast.js";
-import utils from "./utils.js";
+import utils, { getErrorMessage } from "./utils.js";
 
 // TODO: Deduplicate with server.
 export interface Bundle {
@@ -95,11 +96,17 @@ export class WidgetsByParent {
                 // https://github.com/zadam/trilium/issues/4274
                 .map((w: any) => {
                     if ("type" in w && w.type === "react-widget") {
-                        return w.render();
+                        try {
+                            return w.render();
+                        } catch (e: unknown) {
+                            toast.showErrorTitleAndMessage(t("toast.widget-render-error.title"), getErrorMessage(e));
+                            return null;
+                        }
                     }
 
                     return (w.prototype ? new w() : w);
                 })
+                .filter(Boolean)
         );
     }
 }
@@ -140,7 +147,7 @@ async function getWidgetBundlesByParent() {
     } catch (e) {
         toastService.showPersistent({
             title: t("toast.widget-list-error.title"),
-            message: e.toString(),
+            message: getErrorMessage(e),
             icon: "bx bx-error-circle"
         });
     }

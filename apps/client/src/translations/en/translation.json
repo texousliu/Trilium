@@ -25,6 +25,9 @@
     },
     "widget-list-error": {
       "title": "Failed to obtain the list of widgets from the server"
+    },
+    "widget-render-error": {
+      "title": "Failed to render a custom React widget"
     }
   },
   "add_link": {
