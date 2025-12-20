@@ -198,8 +198,7 @@ export function getScriptBundle(note: BNote, root: boolean = true, scriptEnv: st
         let scriptContent = note.getContent();
 
         if (note.isJsx()) {
-            console.log("GOT JSX!!!");
-            scriptContent = buildJsx(note).code;
+            scriptContent = buildJsx(scriptContent).code;
         }
 
         bundle.script += `
@@ -219,8 +218,7 @@ return module.exports;
     return bundle;
 }
 
-function buildJsx(jsxNote: BNote) {
-    const contentRaw = jsxNote.getContent();
+export function buildJsx(contentRaw: string | Buffer) {
     const content = Buffer.isBuffer(contentRaw) ? contentRaw.toString("utf-8") : contentRaw;
     return transform(content, {
         transforms: ["jsx"],

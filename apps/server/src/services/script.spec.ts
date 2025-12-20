@@ -1,9 +1,11 @@
+import { trimIndentation } from "@triliumnext/commons";
+
 import becca from "../becca/becca.js";
-import { note, NoteBuilder } from "../test/becca_mocking.js";
-import cls from "./cls.js";
-import { executeBundle, getScriptBundle } from "./script.js";
 import BBranch from "../becca/entities/bbranch.js";
 import BNote from "../becca/entities/bnote.js";
+import { note, NoteBuilder } from "../test/becca_mocking.js";
+import cls from "./cls.js";
+import { buildJsx, executeBundle, getScriptBundle } from "./script.js";
 
 
 describe("Script", () => {
@@ -82,5 +84,21 @@ describe("Script", () => {
                 expect(result).toBe(true);
             });
         });
+    });
+});
+
+describe("JSX building", () => {
+    it("processes basic JSX", () => {
+        const script = trimIndentation`\
+            function MyComponent() {
+                return <p>Hello world.</p>;
+            }
+        `;
+        const expected = trimIndentation`\
+            const _jsxFileName = "";function MyComponent() {
+                return api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 2}}, "Hello world." );
+            }
+        `;
+        expect(buildJsx(script).code).toStrictEqual(expected);
     });
 });
