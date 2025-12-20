@@ -1,26 +1,28 @@
-import server from "./server.js";
-import utils from "./utils.js";
-import toastService from "./toast.js";
-import linkService from "./link.js";
+import { dayjs } from "@triliumnext/commons";
+import { formatLogMessage } from "@triliumnext/commons";
+import { VNode } from "preact";
+
+import appContext from "../components/app_context.js";
+import type Component from "../components/component.js";
+import type NoteContext from "../components/note_context.js";
+import type FNote from "../entities/fnote.js";
+import BasicWidget, { ReactWrappedWidget } from "../widgets/basic_widget.js";
+import NoteContextAwareWidget from "../widgets/note_context_aware_widget.js";
+import RightPanelWidget from "../widgets/right_panel_widget.js";
+import dateNotesService from "./date_notes.js";
+import dialogService from "./dialog.js";
 import froca from "./froca.js";
+import { t } from "./i18n.js";
+import linkService from "./link.js";
 import noteTooltipService from "./note_tooltip.js";
 import protectedSessionService from "./protected_session.js";
-import dateNotesService from "./date_notes.js";
 import searchService from "./search.js";
-import RightPanelWidget from "../widgets/right_panel_widget.js";
-import ws from "./ws.js";
-import appContext from "../components/app_context.js";
-import NoteContextAwareWidget from "../widgets/note_context_aware_widget.js";
-import BasicWidget, { ReactWrappedWidget } from "../widgets/basic_widget.js";
-import SpacedUpdate from "./spaced_update.js";
+import server from "./server.js";
 import shortcutService from "./shortcuts.js";
-import dialogService from "./dialog.js";
-import type FNote from "../entities/fnote.js";
-import { t } from "./i18n.js";
-import { dayjs } from "@triliumnext/commons";
-import type NoteContext from "../components/note_context.js";
-import type Component from "../components/component.js";
-import { formatLogMessage } from "@triliumnext/commons";
+import SpacedUpdate from "./spaced_update.js";
+import toastService from "./toast.js";
+import utils from "./utils.js";
+import ws from "./ws.js";
 
 /**
  * A whole number
@@ -464,6 +466,18 @@ export interface Api {
      * Log given message to the log pane in UI
      */
     log(message: string | object): void;
+
+    /**
+     * Method that must be run for widget scripts that run on Preact, using JSX. The method just returns the same definition, reserved for future typechecking and perhaps validation purposes.
+     *
+     * @param definition the widget definition.
+     */
+    defineWidget(definition: WidgetDefinition): void;
+}
+
+export interface WidgetDefinition {
+    parent: "right-pane",
+    render: () => VNode
 }
 
 /**
@@ -533,9 +547,9 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         return params.map((p) => {
             if (typeof p === "function") {
                 return `!@#Function: ${p.toString()}`;
-            } else {
-                return p;
             }
+            return p;
+
         });
     }
 
@@ -562,9 +576,9 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
             await ws.waitForMaxKnownEntityChangeId();
 
             return ret.executionResult;
-        } else {
-            throw new Error(`server error: ${ret.error}`);
         }
+        throw new Error(`server error: ${ret.error}`);
+
     };
 
     this.runOnBackend = async (func, params = []) => {
@@ -720,6 +734,9 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
 
         this.logMessages[noteId].push(message);
         this.logSpacedUpdates[noteId].scheduleUpdate();
+    };
+    this.defineWidget = (definition) => {
+        module.exports = definition;
     };
 }
 

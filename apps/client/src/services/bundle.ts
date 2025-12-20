@@ -1,10 +1,12 @@
+import BasicWidget from "../widgets/basic_widget.js";
+import RightPanelWidget from "../widgets/right_panel_widget.js";
+import froca from "./froca.js";
+import type { Entity, WidgetDefinition } from "./frontend_script_api.js";
+import { t } from "./i18n.js";
 import ScriptContext from "./script_context.js";
 import server from "./server.js";
 import toastService, { showError } from "./toast.js";
-import froca from "./froca.js";
 import utils from "./utils.js";
-import { t } from "./i18n.js";
-import type { Entity } from "./frontend_script_api.js";
 
 // TODO: Deduplicate with server.
 export interface Bundle {
@@ -14,9 +16,10 @@ export interface Bundle {
     allNoteIds: string[];
 }
 
-interface Widget {
+type LegacyWidget = (BasicWidget | RightPanelWidget) & {
     parentWidget?: string;
-}
+};
+type Widget = LegacyWidget | WidgetDefinition;
 
 async function getAndExecuteBundle(noteId: string, originEntity = null, script = null, params = null) {
     const bundle = await server.post<Bundle>(`script/bundle/${noteId}`, {
@@ -52,7 +55,7 @@ export async function executeBundle(bundle: Bundle, originEntity?: Entity | null
 
 async function executeStartupBundles() {
     const isMobile = utils.isMobile();
-    const scriptBundles = await server.get<Bundle[]>("script/startup" + (isMobile ? "?mobile=true" : ""));
+    const scriptBundles = await server.get<Bundle[]>(`script/startup${  isMobile ? "?mobile=true" : ""}`);
 
     for (const bundle of scriptBundles) {
         await executeBundle(bundle);
@@ -67,13 +70,16 @@ export class WidgetsByParent {
     }
 
     add(widget: Widget) {
-        if (!widget.parentWidget) {
+        if ("parent" in widget) {
+            // React-based script.
+            this.byParent[widget.parent] = this.byParent[widget.parent] || [];
+            this.byParent[widget.parent].push(widget);
+        } else if (widget.parentWidget) {
+            this.byParent[widget.parentWidget] = this.byParent[widget.parentWidget] || [];
+            this.byParent[widget.parentWidget].push(widget);
+        } else {
             console.log(`Custom widget does not have mandatory 'parentWidget' property defined`);
-            return;
         }
-
-        this.byParent[widget.parentWidget] = this.byParent[widget.parentWidget] || [];
-        this.byParent[widget.parentWidget].push(widget);
     }
 
     get(parentName: string) {
