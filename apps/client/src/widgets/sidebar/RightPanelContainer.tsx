@@ -71,15 +71,26 @@ function useSplit(visible: boolean) {
 
 function CustomWidget({ originalWidget }: { originalWidget: LegacyRightPanelWidget }) {
     const containerRef = useRef<HTMLDivElement>(null);
+
+    return (
+        <RightPanelWidget
+            id={originalWidget._noteId}
+            title={originalWidget.widgetTitle}
+            containerRef={containerRef}
+        >
+            <CustomWidgetContent originalWidget={originalWidget} />
+        </RightPanelWidget>
+    );
+}
+
+function CustomWidgetContent({ originalWidget }: { originalWidget: LegacyRightPanelWidget }) {
     const [ el ] = useLegacyWidget(() => {
+        originalWidget.contentSized();
+
         // Monkey-patch the original widget by replacing the default initialization logic.
         originalWidget.doRender = function doRender(this: LegacyRightPanelWidget) {
-            if (!containerRef.current) {
-                this.$widget = $("<div>");
-                return;
-            };
-            this.$widget = $(containerRef.current);
-            this.$body = this.$widget.find(".card-body");
+            this.$widget = $("<div>");
+            this.$body = this.$widget;
             const renderResult = this.doRenderBody();
             if (typeof renderResult === "object" && "catch" in renderResult) {
                 this.initialized = renderResult.catch((e) => {
@@ -91,14 +102,7 @@ function CustomWidget({ originalWidget }: { originalWidget: LegacyRightPanelWidg
         };
 
         return originalWidget;
-    }, {
-        noAttach: true
     });
-    return (
-        <RightPanelWidget
-            id={originalWidget._noteId}
-            title={originalWidget.widgetTitle}
-            containerRef={containerRef}
-        >{el}</RightPanelWidget>
-    );
+
+    return el;
 }
