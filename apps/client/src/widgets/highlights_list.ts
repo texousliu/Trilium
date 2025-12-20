@@ -234,7 +234,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         }
 
         findSubStr = findSubStr.substring(1);
-        combinedRegexStr = `(${combinedRegexStr.substring(1)}`;
+        combinedRegexStr = `(${combinedRegexStr.substring(1)})`;
         const combinedRegex = new RegExp(combinedRegexStr, "gi");
         const $highlightsList = $("<ol>");
         let prevEndIndex = -1,
