@@ -2,6 +2,7 @@
 import "./RightPanelContainer.css";
 
 import Split from "@triliumnext/split.js";
+import { VNode } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 
 import appContext from "../../components/app_context";
@@ -19,18 +20,16 @@ import TableOfContents from "./TableOfContents";
 
 const MIN_WIDTH_PERCENT = 5;
 
+interface RightPanelWidgetDefinition {
+    el: VNode;
+    enabled: boolean;
+    position: number;
+}
+
 export default function RightPanelContainer({ customWidgets }: { customWidgets: BasicWidget[] }) {
     const [ rightPaneVisible, setRightPaneVisible ] = useTriliumOptionBool("rightPaneVisible");
-    const [ highlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
+    const items = useItems(rightPaneVisible, customWidgets);
     useSplit(rightPaneVisible);
-
-    const { note } = useActiveNoteContext();
-    const noteType = useNoteProperty(note, "type");
-    const items = (rightPaneVisible ? [
-        (noteType === "text" || noteType === "doc") && <TableOfContents />,
-        noteType === "text" && highlightsList.length > 0 && <HighlightsList />,
-        ...customWidgets.map((w) => <CustomWidget key={w._noteId} originalWidget={w as LegacyRightPanelWidget} />)
-    ] : []).filter(Boolean);
 
     return (
         <div id="right-pane">
@@ -50,6 +49,36 @@ export default function RightPanelContainer({ customWidgets }: { customWidgets: 
             )}
         </div>
     );
+}
+
+function useItems(rightPaneVisible: boolean, customWidgets: BasicWidget[]) {
+    const { note } = useActiveNoteContext();
+    const noteType = useNoteProperty(note, "type");
+    const [ highlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
+
+    if (!rightPaneVisible) return [];
+    const definitions: RightPanelWidgetDefinition[] = [
+        {
+            el: <TableOfContents />,
+            enabled: (noteType === "text" || noteType === "doc"),
+            position: 10,
+        },
+        {
+            el: <HighlightsList />,
+            enabled: noteType === "text" && highlightsList.length > 0,
+            position: 20,
+        },
+        ...customWidgets.map((w, i) => ({
+            el: <CustomWidget key={w._noteId} originalWidget={w as LegacyRightPanelWidget} />,
+            enabled: true,
+            position: w.position ?? 30 + i * 10
+        }))
+    ];
+
+    return definitions
+        .filter(e => e.enabled)
+        .toSorted((a, b) => a.position - b.position)
+        .map(e => e.el);
 }
 
 function useSplit(visible: boolean) {
