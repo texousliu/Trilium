@@ -48,9 +48,7 @@ export default function RightPanelWidget({ id, title, buttons, children, contain
                     }
                 }}
             >
-                <Icon
-                    icon="bx bx-chevron-down"
-                />
+                <ActionButton icon="bx bx-chevron-down" text="" />
                 <div class="card-header-title">{title}</div>
                 <div class="card-header-buttons">
                     {buttons}
