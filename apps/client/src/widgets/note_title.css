@@ -80,6 +80,18 @@ body.experimental-feature-new-layout {
             .ext-badge .text {
                 display: none;
             }
+        
+            .ext-badge {
+                --size: 2em;
+                width: var(--size);
+                height: var(--size);
+                padding: 0;
+
+                .bx {
+                    opacity: 1;
+                    margin: 0;
+                }
+            };
         }
     }
 

@@ -1,20 +1,31 @@
 .ext-badge {
     display: flex;
+    height: 1.9em;
     align-items: center;
-    padding: 2px 6px;
+    justify-content: center;
     border-radius: var(--badge-radius);
+    padding-inline: 8px;
     font-size: 0.75em;
+    letter-spacing: .2pt;
     background-color: var(--color, transparent);
     color: white;
     min-width: 0;
     flex-shrink: 1;
+    white-space: collapse;
 
-    &.clickable {
+    &.clickable,
+    .dropdown-badge & {
         cursor: pointer;
 
         &:hover {
             background-color: color-mix(in srgb, var(--color, --badge-background-color) 80%, black);
         }
+    }
+
+    .bx {
+        font-size: 1.2em;
+        margin-inline-end: 4px;
+        opacity: .6;
     }
 
     a {
@@ -23,6 +34,8 @@
     }
 
     > * {
+        display: flex;
+        align-items: center;
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -36,7 +36,7 @@ export function Badge({ icon, className, text, tooltip, href, ...containerProps 
     });
 
     const content = <>
-        {icon && <><Icon icon={icon} />&nbsp;</>}
+        {icon && <Icon icon={icon} />}
         <span class="text">{text}</span>
     </>;
 
