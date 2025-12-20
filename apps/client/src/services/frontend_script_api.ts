@@ -1,5 +1,5 @@
 import { dayjs, formatLogMessage } from "@triliumnext/commons";
-import { Fragment, h, VNode } from "preact";
+import { VNode } from "preact";
 
 import appContext from "../components/app_context.js";
 import type Component from "../components/component.js";
@@ -11,6 +11,7 @@ import RightPanelWidget from "../widgets/right_panel_widget.js";
 import dateNotesService from "./date_notes.js";
 import dialogService from "./dialog.js";
 import froca from "./froca.js";
+import { preactAPI } from "./frontend_script_api_preact.js";
 import { t } from "./i18n.js";
 import linkService from "./link.js";
 import noteTooltipService from "./note_tooltip.js";
@@ -475,8 +476,7 @@ export interface Api {
      */
     defineWidget(definition: WidgetDefinition): void;
 
-    h: typeof h;
-    Fragment: typeof Fragment;
+    preact: typeof preactAPI;
 }
 
 export interface WidgetDefinition {
@@ -751,8 +751,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
             ...definition
         };
     };
-    this.h = h;
-    this.Fragment = Fragment;
+    this.preact = preactAPI;
 }
 
 export default FrontendScriptApi as any as {
