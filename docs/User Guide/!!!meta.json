@@ -15734,6 +15734,13 @@
                                                     "value": "right-pane-widget",
                                                     "isInheritable": false,
                                                     "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "IjZS7iK5EXtb",
+                                                    "isInheritable": false,
+                                                    "position": 30
                                                 }
                                             ],
                                             "format": "markdown",
