@@ -1,7 +1,8 @@
 import BasicWidget from "../widgets/basic_widget.js";
 import RightPanelWidget from "../widgets/right_panel_widget.js";
 import froca from "./froca.js";
-import type { Entity, WidgetDefinition } from "./frontend_script_api.js";
+import type { Entity } from "./frontend_script_api.js";
+import { WidgetDefinitionWithType } from "./frontend_script_api_preact.js";
 import { t } from "./i18n.js";
 import ScriptContext from "./script_context.js";
 import server from "./server.js";
@@ -19,7 +20,7 @@ export interface Bundle {
 type LegacyWidget = (BasicWidget | RightPanelWidget) & {
     parentWidget?: string;
 };
-export type Widget = (LegacyWidget | WidgetDefinition) & {
+export type Widget = (LegacyWidget | WidgetDefinitionWithType) & {
     _noteId: string;
 };
 
@@ -66,7 +67,7 @@ async function executeStartupBundles() {
 
 export class WidgetsByParent {
     private legacyWidgets: Record<string, LegacyWidget[]>;
-    private preactWidgets: Record<string, WidgetDefinition[]>;
+    private preactWidgets: Record<string, WidgetDefinitionWithType[]>;
 
     constructor() {
         this.legacyWidgets = {};
@@ -76,7 +77,7 @@ export class WidgetsByParent {
     add(widget: Widget) {
         if ("type" in widget && widget.type === "react-widget") {
             // React-based script.
-            const reactWidget = widget as WidgetDefinition;
+            const reactWidget = widget as WidgetDefinitionWithType;
             this.preactWidgets[reactWidget.parent] = this.preactWidgets[reactWidget.parent] || [];
             this.preactWidgets[reactWidget.parent].push(reactWidget);
         } else if ("parentWidget" in widget && widget.parentWidget) {

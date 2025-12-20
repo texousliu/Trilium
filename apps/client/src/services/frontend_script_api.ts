@@ -1,5 +1,4 @@
 import { dayjs, formatLogMessage } from "@triliumnext/commons";
-import { VNode } from "preact";
 
 import appContext from "../components/app_context.js";
 import type Component from "../components/component.js";
@@ -467,25 +466,7 @@ export interface Api {
      */
     log(message: string | object): void;
 
-
-    // Preact support
-    /**
-     * Method that must be run for widget scripts that run on Preact, using JSX. The method just returns the same definition, reserved for future typechecking and perhaps validation purposes.
-     *
-     * @param definition the widget definition.
-     */
-    defineWidget(definition: WidgetDefinition): void;
-
     preact: typeof preactAPI;
-}
-
-export interface WidgetDefinition {
-    parent: "right-pane",
-    render: () => VNode
-}
-
-export interface WidgetDefinitionWithType extends WidgetDefinition {
-    type: "react-widget"
 }
 
 /**
@@ -744,13 +725,6 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         this.logSpacedUpdates[noteId].scheduleUpdate();
     };
 
-    // React support.
-    this.defineWidget = (definition) => {
-        return {
-            type: "react-widget",
-            ...definition
-        };
-    };
     this.preact = preactAPI;
 }
 
