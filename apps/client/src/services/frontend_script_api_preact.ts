@@ -1,6 +1,7 @@
 import { Fragment, h, VNode } from "preact";
 import * as hooks from "preact/hooks";
 
+import * as triliumHooks from "../widgets/react/hooks";
 import RightPanelWidget from "../widgets/sidebar/RightPanelWidget";
 
 export interface WidgetDefinition {
@@ -31,5 +32,6 @@ export const preactAPI = Object.freeze({
 
     RightPanelWidget,
 
-    ...hooks
+    ...hooks,
+    ...triliumHooks
 });
