@@ -1025,11 +1025,11 @@ body.layout-vertical.electron.platform-darwin .tab-row-container {
 }
 
 .tab-row-widget > * {
-    margin-top: calc(var(--tab-bar-height) - var(--tab-height));
+    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
 }
 
 body.layout-horizontal .tab-row-container {
-    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
+    padding-top: calc(var(--tab-bar-height) - var(--tab-height));
 }
 
 /* Define extra drag areas for Electron windows */
@@ -1071,7 +1071,7 @@ body.desktop:not(.background-effects.platform-win32) #root-widget.horizontal-lay
 
 :root div.tab-row-widget div.note-tab div.note-tab-wrapper {
     height: var(--tab-height) !important;
-    border-radius: 8px 8px 0 0;
+    border-radius: 8px;
     transition:
         background 75ms ease-in,
         box-shadow 75ms ease-in;
