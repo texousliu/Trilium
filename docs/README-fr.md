@@ -133,8 +133,8 @@ Notre documentation est disponible sous plusieurs formats :
   une sauvegarde facile du contenu web
 * Interface utilisateur personnalisable (boutons de la barre latérale, widgets
   définis par l'utilisateur, ...)
-* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
-  along with a Grafana Dashboard.
+* [Statistiques](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
+  avec un tableau de bord Grafana.
 
 ✨ Consultez les ressources/communautés tierces suivantes pour plus de
 fonctionnalités liées à TriliumNext :
