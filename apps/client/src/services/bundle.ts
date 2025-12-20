@@ -6,7 +6,7 @@ import { t } from "./i18n.js";
 import ScriptContext from "./script_context.js";
 import server from "./server.js";
 import toast from "./toast.js";
-import toastService, { showError } from "./toast.js";
+import toastService from "./toast.js";
 import utils, { getErrorMessage } from "./utils.js";
 
 // TODO: Deduplicate with server.
@@ -20,7 +20,9 @@ export interface Bundle {
 type LegacyWidget = (BasicWidget | RightPanelWidget) & {
     parentWidget?: string;
 };
-type Widget = LegacyWidget | WidgetDefinition;
+export type Widget = (LegacyWidget | WidgetDefinition) & {
+    _noteId: string;
+};
 
 async function getAndExecuteBundle(noteId: string, originEntity = null, script = null, params = null) {
     const bundle = await server.post<Bundle>(`script/bundle/${noteId}`, {

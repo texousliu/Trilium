@@ -2,10 +2,11 @@
 import "./RightPanelContainer.css";
 
 import Split from "@triliumnext/split.js";
-import { VNode } from "preact";
+import { isValidElement, VNode } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 
 import appContext from "../../components/app_context";
+import { Widget } from "../../services/bundle";
 import { t } from "../../services/i18n";
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
@@ -51,7 +52,7 @@ export default function RightPanelContainer({ customWidgets }: { customWidgets: 
     );
 }
 
-function useItems(rightPaneVisible: boolean, customWidgets: BasicWidget[]) {
+function useItems(rightPaneVisible: boolean, customWidgets: Widget[]) {
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const [ highlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
@@ -69,7 +70,7 @@ function useItems(rightPaneVisible: boolean, customWidgets: BasicWidget[]) {
             position: 20,
         },
         ...customWidgets.map((w, i) => ({
-            el: <CustomWidget key={w._noteId} originalWidget={w as LegacyRightPanelWidget} />,
+            el: isValidElement(w) ? w : <CustomLegacyWidget key={w._noteId} originalWidget={w as LegacyRightPanelWidget} />,
             enabled: true,
             position: w.position ?? 30 + i * 10
         }))
@@ -99,7 +100,7 @@ function useSplit(visible: boolean) {
     }, [ visible ]);
 }
 
-function CustomWidget({ originalWidget }: { originalWidget: LegacyRightPanelWidget }) {
+function CustomLegacyWidget({ originalWidget }: { originalWidget: LegacyRightPanelWidget }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     return (
