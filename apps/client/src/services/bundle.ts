@@ -98,36 +98,44 @@ export class WidgetsByParent {
 }
 
 async function getWidgetBundlesByParent() {
-    const scriptBundles = await server.get<Bundle[]>("script/widgets");
-
     const widgetsByParent = new WidgetsByParent();
 
-    for (const bundle of scriptBundles) {
-        let widget;
+    try {
+        const scriptBundles = await server.get<Bundle[]>("script/widgets");
 
-        try {
-            widget = await executeBundle(bundle);
-            if (widget) {
-                widget._noteId = bundle.noteId;
-                widgetsByParent.add(widget);
+        for (const bundle of scriptBundles) {
+            let widget;
+
+            try {
+                widget = await executeBundle(bundle);
+                if (widget) {
+                    widget._noteId = bundle.noteId;
+                    widgetsByParent.add(widget);
+                }
+            } catch (e: any) {
+                const noteId = bundle.noteId;
+                const note = await froca.getNote(noteId);
+                toastService.showPersistent({
+                    id: `custom-script-failure-${noteId}`,
+                    title: t("toast.bundle-error.title"),
+                    icon: "bx bx-error-circle",
+                    message: t("toast.bundle-error.message", {
+                        id: noteId,
+                        title: note?.title,
+                        message: e.message
+                    })
+                });
+
+                logError("Widget initialization failed: ", e);
+                continue;
             }
-        } catch (e: any) {
-            const noteId = bundle.noteId;
-            const note = await froca.getNote(noteId);
-            toastService.showPersistent({
-                id: `custom-script-failure-${noteId}`,
-                title: t("toast.bundle-error.title"),
-                icon: "bx bx-error-circle",
-                message: t("toast.bundle-error.message", {
-                    id: noteId,
-                    title: note?.title,
-                    message: e.message
-                })
-            });
-
-            logError("Widget initialization failed: ", e);
-            continue;
         }
+    } catch (e) {
+        toastService.showPersistent({
+            title: t("toast.widget-list-error.title"),
+            message: e.toString(),
+            icon: "bx bx-error-circle"
+        });
     }
 
     return widgetsByParent;

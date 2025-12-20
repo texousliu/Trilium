@@ -22,6 +22,9 @@
     "bundle-error": {
       "title": "Failed to load a custom script",
       "message": "Script from note with ID \"{{id}}\", titled \"{{title}}\" could not be executed due to:\n\n{{message}}"
+    },
+    "widget-list-error": {
+      "title": "Failed to obtain the list of widgets from the server"
     }
   },
   "add_link": {
