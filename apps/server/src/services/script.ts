@@ -240,6 +240,12 @@ export function buildJsx(contentRaw: string | Buffer) {
         'const $1 = api.preact;'
     );
 
+    // Rewrite ESM-like imports to internal API, to `const { foo } = api.preact`
+    code = code.replaceAll(
+        /var\s+(\w+)\s*=\s*require\(['"]trilium:api['"]\);?/g,
+        'const $1 = api;'
+    );
+
     output.code = code;
     return output;
 }

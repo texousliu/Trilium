@@ -146,7 +146,7 @@ describe("JSX building", () => {
         expect(buildJsx(script).code).toStrictEqual(expected);
     });
 
-    it("rewrite React API imports", () => {
+    it("rewrites React API imports", () => {
         const script = trimIndentation`\
             import { defineWidget, RightPanelWidget} from "trilium:preact";
             defineWidget({
@@ -162,6 +162,18 @@ describe("JSX building", () => {
                     return api.preact.h(_triliumpreact.RightPanelWidget, {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}} );
                 }
             });
+        `;
+        expect(buildJsx(script).code).toStrictEqual(expected);
+    });
+
+    it("rewrites internal API imports", () => {
+        const script = trimIndentation`\
+            import { log } from "trilium:api";
+            log("Hi");
+        `;
+        const expected = trimIndentation`\
+            "use strict";const _triliumapi = api;
+            _triliumapi.log.call(void 0, "Hi");
         `;
         console.log(buildJsx(script).code);
         expect(buildJsx(script).code).toStrictEqual(expected);
