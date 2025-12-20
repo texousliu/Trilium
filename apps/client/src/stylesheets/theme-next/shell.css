@@ -1223,6 +1223,22 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
 }
 
 /*
+ * CLASSIC FORMATTING TOOLBAR
+ */
+
+#rest-pane > .classic-toolbar-widget {
+    margin-bottom: 2px;
+}
+
+body.layout-vertical #rest-pane > .classic-toolbar-widget {
+    background: var(--classic-toolbar-vert-layout-background-color);
+}
+
+body.layout-horizontal #rest-pane > .classic-toolbar-widget {
+    background: var(--classic-toolbar-horiz-layout-background-color);
+}
+
+/*
  * CENTER PANE
  */
 
