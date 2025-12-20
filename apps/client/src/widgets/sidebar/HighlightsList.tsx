@@ -32,16 +32,13 @@ export default function HighlightsList() {
             <RightPanelWidget
                 id="highlights"
                 title={t("highlights_list_2.title")}
-                buttons={(
-                    <ActionButton
-                        icon="bx bx-cog"
-                        text={t("highlights_list_2.options")}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setShown(true);
-                        }}
-                    />
-                )}
+                contextMenuItems={[
+                    {
+                        title: t("highlights_list_2.menu_configure"),
+                        uiIcon: "bx bx-cog",
+                        handler: () => setShown(true)
+                    }
+                ]}
             >
                 {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
                 {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}

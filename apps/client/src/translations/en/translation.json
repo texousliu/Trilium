@@ -1725,6 +1725,7 @@
     "title": "Highlights List",
     "options": "Options",
     "modal_title": "Configure Highlights List",
+    "menu_configure": "Configure highlights list...",
     "no_highlights": "No highlights found."
   },
   "quick-search": {
