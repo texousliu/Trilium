@@ -1,3 +1,6 @@
+import { h, VNode } from "preact";
+
+import Component from "../components/component.js";
 import BasicWidget from "../widgets/basic_widget.js";
 import RightPanelWidget from "../widgets/right_panel_widget.js";
 import froca from "./froca.js";
@@ -77,23 +80,41 @@ export class WidgetsByParent {
     }
 
     add(widget: Widget) {
+        let hasParentWidget = false;
+        let isPreact = false;
         if ("type" in widget && widget.type === "preact-widget") {
             // React-based script.
             const reactWidget = widget as WidgetDefinitionWithType;
             this.preactWidgets[reactWidget.parent] = this.preactWidgets[reactWidget.parent] || [];
             this.preactWidgets[reactWidget.parent].push(reactWidget);
+            isPreact = true;
+            hasParentWidget = !!reactWidget.parent;
         } else if ("parentWidget" in widget && widget.parentWidget) {
             this.legacyWidgets[widget.parentWidget] = this.legacyWidgets[widget.parentWidget] || [];
             this.legacyWidgets[widget.parentWidget].push(widget);
-        } else {
-            showErrorForScriptNote(widget._noteId, t("toast.widget-missing-parent"));
+            hasParentWidget = !!widget.parentWidget;
+        }
+
+        if (!hasParentWidget) {
+            showErrorForScriptNote(widget._noteId, t("toast.widget-missing-parent", {
+                property: isPreact ? "parent" : "parentWidget"
+            }));
         }
     }
 
     get(parentName: ParentName) {
-        if (!this.legacyWidgets[parentName]) {
-            return [];
+        const widgets: (Component | VNode)[] = this.getLegacyWidgets(parentName);
+        for (const preactWidget of this.getPreactWidgets(parentName)) {
+            const el = h(preactWidget.render, {});
+            // TODO: set position here.
+            widgets.push(el);
         }
+
+        return widgets;
+    }
+
+    getLegacyWidgets(parentName: ParentName): (BasicWidget | RightPanelWidget)[] {
+        if (!this.legacyWidgets[parentName]) return [];
 
         return (
             this.legacyWidgets[parentName]

@@ -69,7 +69,7 @@ function useItems(rightPaneVisible: boolean, widgetsByParent: WidgetsByParent) {
             enabled: noteType === "text" && highlightsList.length > 0,
             position: 20,
         },
-        ...widgetsByParent.get("right-pane").map((widget, i) => ({
+        ...widgetsByParent.getLegacyWidgets("right-pane").map((widget, i) => ({
             el: <CustomLegacyWidget key={widget._noteId} originalWidget={widget as LegacyRightPanelWidget} />,
             enabled: true,
             position: widget.position ?? 30 + i * 10

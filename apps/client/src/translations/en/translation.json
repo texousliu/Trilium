@@ -29,7 +29,7 @@
     "widget-render-error": {
       "title": "Failed to render a custom React widget"
     },
-    "widget-missing-parent": "Custom widget does not have mandatory 'parentWidget' property defined.",
+    "widget-missing-parent": "Custom widget does not have mandatory '{{property}}' property defined.",
     "open-script-note": "Open script note"
   },
   "add_link": {
