@@ -1029,7 +1029,7 @@ body.layout-vertical.electron.platform-darwin .tab-row-container {
 }
 
 body.layout-horizontal .tab-row-container {
-    padding-top: calc((var(--tab-bar-height) - var(--tab-height)));
+    padding-top: calc(var(--tab-bar-height) - var(--tab-height));
 }
 
 /* Define extra drag areas for Electron windows */
@@ -1069,8 +1069,9 @@ body.desktop:not(.background-effects.platform-win32) #root-widget.horizontal-lay
     border-bottom-color: transparent;
 }
 
-.tab-row-widget .note-tab .note-tab-wrapper {
+:root div.tab-row-widget div.note-tab div.note-tab-wrapper {
     height: var(--tab-height) !important;
+    border-radius: 8px;
     transition:
         background 75ms ease-in,
         box-shadow 75ms ease-in;
@@ -1222,12 +1223,34 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
 }
 
 /*
+ * CLASSIC FORMATTING TOOLBAR
+ */
+
+#rest-pane > .classic-toolbar-widget {
+    margin-bottom: 2px;
+    border-start-start-radius: var(--center-pane-border-radius);
+}
+
+body.layout-vertical #rest-pane > .classic-toolbar-widget {
+    background: var(--classic-toolbar-vert-layout-background-color);
+}
+
+body.layout-horizontal #rest-pane > .classic-toolbar-widget {
+    background: var(--classic-toolbar-horiz-layout-background-color);
+}
+
+.classic-toolbar-widget:not(.hidden-ext) + #vertical-main-container {
+    /* Remove the center panel border radius when the toolbar is visible */
+    --center-pane-border-radius: 0;
+}
+
+/*
  * CENTER PANE
  */
 
  /* The first visible note split */
 .vertical-layout #center-pane .note-split:not(.visible ~ .visible) {
-    border-radius: var(--center-pane-border-radius) 0 0 0;
+    border-start-start-radius: var(--center-pane-border-radius);
 }
 
 #center-pane .note-split {
