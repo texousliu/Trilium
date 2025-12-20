@@ -1025,7 +1025,7 @@ body.layout-vertical.electron.platform-darwin .tab-row-container {
 }
 
 .tab-row-widget > * {
-    margin-top: calc((var(--tab-bar-height) - var(--tab-height)) / 2);
+    margin-top: calc(var(--tab-bar-height) - var(--tab-height));
 }
 
 body.layout-horizontal .tab-row-container {
@@ -1069,8 +1069,9 @@ body.desktop:not(.background-effects.platform-win32) #root-widget.horizontal-lay
     border-bottom-color: transparent;
 }
 
-.tab-row-widget .note-tab .note-tab-wrapper {
+:root div.tab-row-widget div.note-tab div.note-tab-wrapper {
     height: var(--tab-height) !important;
+    border-radius: 8px 8px 0 0;
     transition:
         background 75ms ease-in,
         box-shadow 75ms ease-in;
