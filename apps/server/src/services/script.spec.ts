@@ -145,4 +145,25 @@ describe("JSX building", () => {
         `;
         expect(buildJsx(script).code).toStrictEqual(expected);
     });
+
+    it("rewrite React API imports", () => {
+        const script = trimIndentation`\
+            import { defineWidget, RightPanelWidget} from "trilium:preact";
+            defineWidget({
+                render() {
+                    return <RightPanelWidget />;
+                }
+            });
+        `;
+        const expected = trimIndentation`\
+            "use strict";const _jsxFileName = "";const _triliumpreact = api.preact;
+            _triliumpreact.defineWidget.call(void 0, {
+                render() {
+                    return api.preact.h(_triliumpreact.RightPanelWidget, {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}} );
+                }
+            });
+        `;
+        console.log(buildJsx(script).code);
+        expect(buildJsx(script).code).toStrictEqual(expected);
+    });
 });

@@ -226,10 +226,21 @@ export function buildJsx(contentRaw: string | Buffer) {
         jsxFragmentPragma: "api.preact.Fragment",
     });
 
-    output.code = output.code.replaceAll(
+    let code  = output.code;
+
+    // Rewrite ESM-like exports to `module.exports =`.
+    code = output.code.replaceAll(
         /\bexports\s*\.\s*default\s*=\s*/g,
         'module.exports = '
     );
+
+    // Rewrite ESM-like imports to Preact, to `const { foo } = api.preact`
+    code = code.replaceAll(
+        /var\s+(\w+)\s*=\s*require\(['"]trilium:preact['"]\);?/g,
+        'const $1 = api.preact;'
+    );
+
+    output.code = code;
     return output;
 }
 
