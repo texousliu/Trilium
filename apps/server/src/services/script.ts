@@ -220,11 +220,17 @@ return module.exports;
 
 export function buildJsx(contentRaw: string | Buffer) {
     const content = Buffer.isBuffer(contentRaw) ? contentRaw.toString("utf-8") : contentRaw;
-    return transform(content, {
-        transforms: ["jsx"],
+    const output = transform(content, {
+        transforms: ["jsx", "imports"],
         jsxPragma: "api.preact.h",
         jsxFragmentPragma: "api.preact.Fragment",
     });
+
+    output.code = output.code.replaceAll(
+        /\bexports\s*\.\s*default\s*=\s*/g,
+        'module.exports = '
+    );
+    return output;
 }
 
 function sanitizeVariableName(str: string) {

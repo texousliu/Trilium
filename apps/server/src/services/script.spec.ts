@@ -95,7 +95,7 @@ describe("JSX building", () => {
             }
         `;
         const expected = trimIndentation`\
-            const _jsxFileName = "";function MyComponent() {
+            "use strict";const _jsxFileName = "";function MyComponent() {
                 return api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 2}}, "Hello world." );
             }
         `;
@@ -112,12 +112,36 @@ describe("JSX building", () => {
             }
         `;
         const expected = trimIndentation`\
-            const _jsxFileName = "";function MyComponent() {
+            "use strict";const _jsxFileName = "";function MyComponent() {
                 return api.preact.h(api.preact.Fragment, null
                     , api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 3}}, "Hi")
                     , api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}}, "there")
                 );
             }
+        `;
+        expect(buildJsx(script).code).toStrictEqual(expected);
+    });
+
+    it("rewrites export", () => {
+        const script = trimIndentation`\
+            const { defineWidget } = api.preact;
+
+            export default defineWidget({
+                parent: "right-pane",
+                render() {
+                    return <></>;
+                }
+            });
+        `;
+        const expected = trimIndentation`\
+            "use strict";Object.defineProperty(exports, "__esModule", {value: true});const { defineWidget } = api.preact;
+
+            module.exports = defineWidget({
+                parent: "right-pane",
+                render() {
+                    return api.preact.h(api.preact.Fragment, null);
+                }
+            });
         `;
         expect(buildJsx(script).code).toStrictEqual(expected);
     });
