@@ -736,7 +736,7 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         this.logSpacedUpdates[noteId].scheduleUpdate();
     };
     this.defineWidget = (definition) => {
-        module.exports = definition;
+        return definition;
     };
 }
 
