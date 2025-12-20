@@ -162,7 +162,7 @@
     --protected-session-active-icon-color: #16b516;
     --sync-status-error-pulse-color: #ff5528;
 
-    --classic-toolbar-vert-layout-background-color: var(--main-background-color);
+    --classic-toolbar-vert-layout-background-color: #ffffffa1;
     --classic-toolbar-horiz-layout-background-color: var(--main-background-color);
 
     --center-pane-vert-layout-background-color-bgfx: #ffffff75;
