@@ -6,7 +6,7 @@ import { isValidElement, VNode } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 
 import appContext from "../../components/app_context";
-import { Widget } from "../../services/bundle";
+import { WidgetsByParent } from "../../services/bundle";
 import { t } from "../../services/i18n";
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
@@ -27,9 +27,9 @@ interface RightPanelWidgetDefinition {
     position: number;
 }
 
-export default function RightPanelContainer({ customWidgets }: { customWidgets: BasicWidget[] }) {
+export default function RightPanelContainer({ widgetsByParent }: { widgetsByParent: WidgetsByParent }) {
     const [ rightPaneVisible, setRightPaneVisible ] = useTriliumOptionBool("rightPaneVisible");
-    const items = useItems(rightPaneVisible, customWidgets);
+    const items = useItems(rightPaneVisible, widgetsByParent);
     useSplit(rightPaneVisible);
 
     return (
@@ -52,7 +52,7 @@ export default function RightPanelContainer({ customWidgets }: { customWidgets: 
     );
 }
 
-function useItems(rightPaneVisible: boolean, customWidgets: Widget[]) {
+function useItems(rightPaneVisible: boolean, widgetsByParent: WidgetsByParent) {
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const [ highlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
@@ -69,11 +69,18 @@ function useItems(rightPaneVisible: boolean, customWidgets: Widget[]) {
             enabled: noteType === "text" && highlightsList.length > 0,
             position: 20,
         },
-        ...customWidgets.map((w, i) => ({
-            el: isValidElement(w) ? w : <CustomLegacyWidget key={w._noteId} originalWidget={w as LegacyRightPanelWidget} />,
+        ...widgetsByParent.get("right-pane").map((widget, i) => ({
+            el: <CustomLegacyWidget key={widget._noteId} originalWidget={widget as LegacyRightPanelWidget} />,
             enabled: true,
-            position: w.position ?? 30 + i * 10
-        }))
+            position: widget.position ?? 30 + i * 10
+        })),
+        ...widgetsByParent.getPreactWidgets("right-pane").map((widget) => {
+            const El = widget.render;
+            return {
+                el: <El />,
+                enabled: true
+            };
+        })
     ];
 
     return definitions

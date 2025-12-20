@@ -5,7 +5,6 @@ import type { Entity, WidgetDefinition } from "./frontend_script_api.js";
 import { t } from "./i18n.js";
 import ScriptContext from "./script_context.js";
 import server from "./server.js";
-import toast from "./toast.js";
 import toastService from "./toast.js";
 import utils, { getErrorMessage } from "./utils.js";
 
@@ -66,50 +65,44 @@ async function executeStartupBundles() {
 }
 
 export class WidgetsByParent {
-    private byParent: Record<string, Widget[]>;
+    private legacyWidgets: Record<string, LegacyWidget[]>;
+    private preactWidgets: Record<string, WidgetDefinition[]>;
 
     constructor() {
-        this.byParent = {};
+        this.legacyWidgets = {};
+        this.preactWidgets = {};
     }
 
     add(widget: Widget) {
         if ("type" in widget && widget.type === "react-widget") {
             // React-based script.
             const reactWidget = widget as WidgetDefinition;
-            this.byParent[reactWidget.parent] = this.byParent[reactWidget.parent] || [];
-            this.byParent[reactWidget.parent].push(widget);
+            this.preactWidgets[reactWidget.parent] = this.preactWidgets[reactWidget.parent] || [];
+            this.preactWidgets[reactWidget.parent].push(reactWidget);
         } else if ("parentWidget" in widget && widget.parentWidget) {
-            this.byParent[widget.parentWidget] = this.byParent[widget.parentWidget] || [];
-            this.byParent[widget.parentWidget].push(widget);
+            this.legacyWidgets[widget.parentWidget] = this.legacyWidgets[widget.parentWidget] || [];
+            this.legacyWidgets[widget.parentWidget].push(widget);
         } else {
             console.log(`Custom widget does not have mandatory 'parentWidget' property defined`);
         }
     }
 
     get(parentName: string) {
-        if (!this.byParent[parentName]) {
+        if (!this.legacyWidgets[parentName]) {
             return [];
         }
 
         return (
-            this.byParent[parentName]
+            this.legacyWidgets[parentName]
                 // previously, custom widgets were provided as a single instance, but that has the disadvantage
                 // for splits where we actually need multiple instaces and thus having a class to instantiate is better
                 // https://github.com/zadam/trilium/issues/4274
-                .map((w: any) => {
-                    if ("type" in w && w.type === "react-widget") {
-                        try {
-                            return w.render();
-                        } catch (e: unknown) {
-                            toast.showErrorTitleAndMessage(t("toast.widget-render-error.title"), getErrorMessage(e));
-                            return null;
-                        }
-                    }
-
-                    return (w.prototype ? new w() : w);
-                })
-                .filter(Boolean)
+                .map((w: any) => (w.prototype ? new w() : w))
         );
+    }
+
+    getPreactWidgets(parentName: string) {
+        return this.preactWidgets[parentName] ?? [];
     }
 }
 
