@@ -15775,6 +15775,35 @@
                                             "format": "markdown",
                                             "dataFileName": "CSS.md",
                                             "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "gMkgcLJ6jBkg",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "CdNpE2pqjmI6",
+                                                "yIhgI5H7A2Sm",
+                                                "MgibgPcfeuGz",
+                                                "gMkgcLJ6jBkg"
+                                            ],
+                                            "title": "Troubleshooting",
+                                            "notePosition": 50,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "troubleshooting",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Troubleshooting.md",
+                                            "attachments": []
                                         }
                                     ]
                                 },
