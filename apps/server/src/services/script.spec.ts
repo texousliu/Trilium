@@ -101,4 +101,24 @@ describe("JSX building", () => {
         `;
         expect(buildJsx(script).code).toStrictEqual(expected);
     });
+
+    it("processes fragments", () => {
+        const script = trimIndentation`\
+            function MyComponent() {
+                return <>
+                    <p>Hi</p>
+                    <p>there</p>
+                </>;
+            }
+        `;
+        const expected = trimIndentation`\
+            const _jsxFileName = "";function MyComponent() {
+                return api.preact.h(api.preact.Fragment, null
+                    , api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 3}}, "Hi")
+                    , api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}}, "there")
+                );
+            }
+        `;
+        expect(buildJsx(script).code).toStrictEqual(expected);
+    });
 });
