@@ -67,7 +67,8 @@ function showErrorTitleAndMessage(title: string, message: string, timeout = 1000
 export async function showErrorForScriptNote(noteId: string, message: string) {
     const note = await froca.getNote(noteId, true);
 
-    addToast({
+    showPersistent({
+        id: `custom-widget-failure-${noteId}`,
         title: note?.title ?? "",
         icon: note?.getIcon() ?? "bx bx-error-circle",
         message,
