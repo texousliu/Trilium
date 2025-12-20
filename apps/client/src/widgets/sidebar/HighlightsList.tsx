@@ -39,6 +39,7 @@ export default function HighlightsList() {
                         handler: () => setShown(true)
                     }
                 ]}
+                grow
             >
                 {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
                 {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}

@@ -15,9 +15,10 @@ interface RightPanelWidgetProps {
     buttons?: ComponentChildren;
     containerRef?: RefObject<HTMLDivElement>;
     contextMenuItems?: MenuItem<unknown>[];
+    grow?: boolean;
 }
 
-export default function RightPanelWidget({ id, title, buttons, children, containerRef: externalContainerRef, contextMenuItems }: RightPanelWidgetProps) {
+export default function RightPanelWidget({ id, title, buttons, children, containerRef: externalContainerRef, contextMenuItems, grow }: RightPanelWidgetProps) {
     const [ rightPaneCollapsedItems, setRightPaneCollapsedItems ] = useTriliumOptionJson<string[]>("rightPaneCollapsedItems");
     const [ expanded, setExpanded ] = useState(!rightPaneCollapsedItems.includes(id));
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
@@ -30,7 +31,10 @@ export default function RightPanelWidget({ id, title, buttons, children, contain
     return (
         <div
             ref={containerRef}
-            class={clsx("card widget", !expanded && "collapsed")}
+            class={clsx("card widget", {
+                collapsed: !expanded,
+                grow
+            })}
         >
             <div
                 class="card-header"

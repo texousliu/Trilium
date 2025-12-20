@@ -33,7 +33,7 @@ body.experimental-feature-new-layout #right-pane {
         }
     }
 
-    .card:not(.collapsed) {
+    .card.grow:not(.collapsed) {
         flex-grow: 1;
     }
 
