@@ -3613,6 +3613,13 @@
                                             "value": "oPVyFC7WL2Lp",
                                             "isInheritable": false,
                                             "position": 180
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "new-layout",
+                                            "isInheritable": false,
+                                            "position": 190
                                         }
                                     ],
                                     "format": "markdown",
@@ -3699,6 +3706,13 @@
                                                     "value": "bx bx-chevron-right",
                                                     "isInheritable": false,
                                                     "position": 40
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "breadcrumb",
+                                                    "isInheritable": false,
+                                                    "position": 50
                                                 }
                                             ],
                                             "format": "markdown",
@@ -3744,6 +3758,13 @@
                                                     "value": "bx bx-dock-bottom",
                                                     "isInheritable": false,
                                                     "position": 40
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "status-bar",
+                                                    "isInheritable": false,
+                                                    "position": 50
                                                 }
                                             ],
                                             "format": "markdown",
@@ -9645,6 +9666,13 @@
                                             "value": "https://mermaid.js.org/intro/syntax-reference.html",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "syntax-reference",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "dataFileName": "Syntax reference.dat",
@@ -14864,7 +14892,15 @@
                                     "isExpanded": false,
                                     "type": "code",
                                     "mime": "application/json",
-                                    "attributes": [],
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "grafana-dashboard",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        }
+                                    ],
                                     "dataFileName": "grafana-dashboard.json",
                                     "attachments": []
                                 }
@@ -14925,6 +14961,13 @@
                                     "value": "bx bx-moon",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "nightly-release",
+                                    "isInheritable": false,
+                                    "position": 40
                                 }
                             ],
                             "format": "markdown",
