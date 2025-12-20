@@ -2,7 +2,7 @@
 import "./RightPanelContainer.css";
 
 import Split from "@triliumnext/split.js";
-import { useEffect } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 
 import { t } from "../../services/i18n";
 import options from "../../services/options";
@@ -11,7 +11,9 @@ import BasicWidget from "../basic_widget";
 import Button from "../react/Button";
 import { useActiveNoteContext, useLegacyWidget, useNoteProperty, useTriliumOptionBool, useTriliumOptionJson } from "../react/hooks";
 import Icon from "../react/Icon";
+import LegacyRightPanelWidget from "../right_panel_widget";
 import HighlightsList from "./HighlightsList";
+import RightPanelWidget from "./RightPanelWidget";
 import TableOfContents from "./TableOfContents";
 
 const MIN_WIDTH_PERCENT = 5;
@@ -67,7 +69,36 @@ function useSplit(visible: boolean) {
     }, [ visible ]);
 }
 
-function CustomWidget({ originalWidget }: { originalWidget: BasicWidget }) {
-    const [ el ] = useLegacyWidget(() => originalWidget);
-    return <>{el}</>;
+function CustomWidget({ originalWidget }: { originalWidget: LegacyRightPanelWidget }) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [ el ] = useLegacyWidget(() => {
+        // Monkey-patch the original widget by replacing the default initialization logic.
+        originalWidget.doRender = function doRender(this: LegacyRightPanelWidget) {
+            if (!containerRef.current) {
+                this.$widget = $("<div>");
+                return;
+            };
+            this.$widget = $(containerRef.current);
+            this.$body = this.$widget.find(".card-body");
+            const renderResult = this.doRenderBody();
+            if (typeof renderResult === "object" && "catch" in renderResult) {
+                this.initialized = renderResult.catch((e) => {
+                    this.logRenderingError(e);
+                });
+            } else {
+                this.initialized = Promise.resolve();
+            }
+        };
+
+        return originalWidget;
+    }, {
+        noAttach: true
+    });
+    return (
+        <RightPanelWidget
+            id={originalWidget._noteId}
+            title={originalWidget.widgetTitle}
+            containerRef={containerRef}
+        >{el}</RightPanelWidget>
+    );
 }

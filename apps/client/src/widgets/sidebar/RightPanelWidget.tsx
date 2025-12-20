@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import { ComponentChildren } from "preact";
-import { useContext, useRef, useState } from "preact/hooks";
+import { ComponentChildren, RefObject } from "preact";
+import { useContext, useState } from "preact/hooks";
 
-import { useTriliumOptionJson } from "../react/hooks";
+import { useSyncedRef, useTriliumOptionJson } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 
@@ -11,12 +11,13 @@ interface RightPanelWidgetProps {
     title: string;
     children: ComponentChildren;
     buttons?: ComponentChildren;
+    containerRef?: RefObject<HTMLDivElement>;
 }
 
-export default function RightPanelWidget({ id, title, buttons, children }: RightPanelWidgetProps) {
+export default function RightPanelWidget({ id, title, buttons, children, containerRef: externalContainerRef }: RightPanelWidgetProps) {
     const [ rightPaneCollapsedItems, setRightPaneCollapsedItems ] = useTriliumOptionJson<string[]>("rightPaneCollapsedItems");
     const [ expanded, setExpanded ] = useState(!rightPaneCollapsedItems.includes(id));
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const parentComponent = useContext(ParentComponent);
 
     if (parentComponent) {

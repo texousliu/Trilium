@@ -605,10 +605,11 @@ export function useNoteBlob(note: FNote | null | undefined, componentId?: string
     return blob;
 }
 
-export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, { noteContext, containerClassName, containerStyle }: {
+export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, { noteContext, containerClassName, containerStyle, noAttach }: {
     noteContext?: NoteContext;
     containerClassName?: string;
     containerStyle?: CSSProperties;
+    noAttach?: boolean;
 } = {}): [VNode, T] {
     const ref = useRef<HTMLDivElement>(null);
     const parentComponent = useContext(ParentComponent);
@@ -627,22 +628,24 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
 
         const renderedWidget = widget.render();
         return [ widget, renderedWidget ];
-    }, []);
+    }, [ noteContext, parentComponent, widgetFactory]);
 
     // Attach the widget to the parent.
     useEffect(() => {
-        if (ref.current) {
-            ref.current.innerHTML = "";
-            renderedWidget.appendTo(ref.current);
+        if (noAttach) return;
+        const parentContainer = ref.current;
+        if (parentContainer) {
+            parentContainer.replaceChildren();
+            renderedWidget.appendTo(parentContainer);
         }
-    }, [ renderedWidget ]);
+    }, [ renderedWidget, noAttach ]);
 
     // Inject the note context.
     useEffect(() => {
         if (noteContext && widget instanceof NoteContextAwareWidget) {
             widget.activeContextChangedEvent({ noteContext });
         }
-    }, [ noteContext ]);
+    }, [ noteContext, widget ]);
 
     useDebugValue(widget);
 
