@@ -106,6 +106,20 @@ Most of the buttons were relocated to the right of the note title, in the <a cl
 *   Relation map zoom buttons are now part of the relation map itself.
 *   Export image to PNG/SVG are now in the Note actions menu, in the _Export as image_ option.
 
+### Changes to the sidebar
+
+The sidebar (also known as the right pane) also received some important changes.
+
+The previous iteration of the sidebar would appear contextually, depending on whether there are any items to be displayed. This caused occasional content shifts when moving between two panes in a split view. In the new layout, the sidebar acts more like the <a class="reference-link" href="Note%20Tree.md">Note Tree</a> pane, remaining visible even if there is nothing to display.
+
+In order to toggle the sidebar, there is a new button on the top-right side of the screen, near the window buttons (on Windows and Linux).
+
+Now each section of the sidebar (e.g. “Table of Contents”, “Highlights list”) is individually collapsible and will remember whether it was collapsed.
+
+Some sidebar items also have a contextual menu, indicated by the three dots on the title. For example, the highlights filter can be adjusted directly from that menu. 
+
+Custom widgets are still supported. For custom scripts, the three dots menu allows quick navigation to the corresponding script note.
+
 ## How to toggle the new layout
 
 Starting with v0.101.0, this new layout is enabled by default. It is possible to fall back to the old layout by going to <a class="reference-link" href="Options.md">Options</a> → Appearance and selecting _Old layout_.
