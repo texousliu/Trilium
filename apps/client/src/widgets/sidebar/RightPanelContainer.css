@@ -8,9 +8,10 @@ body.experimental-feature-new-layout #right-pane {
         border-radius: 0;
 
         .card-header {
-            padding-block: 0.2em;
+            padding: 0;
             cursor: pointer;
             justify-content: flex-start;
+            --icon-button-size: 26px;
 
             .card-header-title {
                 padding-inline: 0.5em;
