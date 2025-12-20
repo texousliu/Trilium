@@ -5,7 +5,6 @@ import { useContext, useState } from "preact/hooks";
 import contextMenu, { MenuItem } from "../../menus/context_menu";
 import ActionButton from "../react/ActionButton";
 import { useSyncedRef, useTriliumOptionJson } from "../react/hooks";
-import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
 
 interface RightPanelWidgetProps {
@@ -47,9 +46,7 @@ export default function RightPanelWidget({ id, title, buttons, children, contain
                     } else {
                         rightPaneCollapsedItemsSet.add(id);
                     }
-                    if (rightPaneCollapsedItemsSet.size !== rightPaneCollapsedItems.length) {
-                        setRightPaneCollapsedItems(Array.from(rightPaneCollapsedItemsSet));
-                    }
+                    setRightPaneCollapsedItems(Array.from(rightPaneCollapsedItemsSet));
                 }}
             >
                 <ActionButton icon="bx bx-chevron-down" text="" />

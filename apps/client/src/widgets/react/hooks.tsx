@@ -22,7 +22,8 @@ import shortcuts, { Handler, removeIndividualBinding } from "../../services/shor
 import SpacedUpdate from "../../services/spaced_update";
 import toast, { ToastOptions } from "../../services/toast";
 import tree from "../../services/tree";
-import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../services/utils";
+import utils, { escapeRegExp, getErrorMessage, randomString, reloadFrontendApp } from "../../services/utils";
+import ws from "../../services/ws";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { DragData } from "../note_tree";
@@ -168,14 +169,20 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
 
     const wrappedSetValue = useMemo(() => {
         return async (newValue: OptionValue) => {
+            const originalValue = value;
             setValue(String(newValue));
-            await options.save(name, newValue);
+            try {
+                await options.save(name, newValue);
+            } catch (e: unknown) {
+                ws.logError(getErrorMessage(e));
+                setValue(originalValue);
+            }
 
             if (needsRefresh) {
                 reloadFrontendApp(`option change: ${name}`);
             }
         };
-    }, [ name, needsRefresh ]);
+    }, [ name, needsRefresh, value ]);
 
     useTriliumEvent("entitiesReloaded", useCallback(({ loadResults }) => {
         if (loadResults.getOptionNames().includes(name)) {

@@ -222,7 +222,7 @@ interface DomHighlight extends RawHighlight {
 function ReadOnlyTextHighlightsList() {
     const { noteContext } = useActiveNoteContext();
     const contentEl = useContentElement(noteContext);
-    const highlights = extractHeadingsFromStaticHtml(contentEl);
+    const highlights = extractHighlightsFromStaticHtml(contentEl);
 
     const scrollToHighlight = useCallback((highlight: DomHighlight) => {
         highlight.element.scrollIntoView();
@@ -234,7 +234,7 @@ function ReadOnlyTextHighlightsList() {
     />;
 }
 
-function extractHeadingsFromStaticHtml(el: HTMLElement | null) {
+function extractHighlightsFromStaticHtml(el: HTMLElement | null) {
     if (!el) return [];
 
     const { color: defaultColor, backgroundColor: defaultBackgroundColor } = getComputedStyle(el);
