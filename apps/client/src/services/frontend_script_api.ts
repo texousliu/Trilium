@@ -480,6 +480,10 @@ export interface WidgetDefinition {
     render: () => VNode
 }
 
+export interface WidgetDefinitionWithType extends WidgetDefinition {
+    type: "react-widget"
+}
+
 /**
  * <p>This is the main frontend API interface for scripts. All the properties and methods are published in the "api" object
  * available in the JS frontend notes. You can use e.g. <code>api.showMessage(api.startNote.title);</code></p>
@@ -736,7 +740,10 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
         this.logSpacedUpdates[noteId].scheduleUpdate();
     };
     this.defineWidget = (definition) => {
-        return definition;
+        return {
+            type: "react-widget",
+            ...definition
+        };
     };
 }
 

@@ -70,11 +70,12 @@ export class WidgetsByParent {
     }
 
     add(widget: Widget) {
-        if ("parent" in widget) {
+        if ("type" in widget && widget.type === "react-widget") {
             // React-based script.
-            this.byParent[widget.parent] = this.byParent[widget.parent] || [];
-            this.byParent[widget.parent].push(widget);
-        } else if (widget.parentWidget) {
+            const reactWidget = widget as WidgetDefinition;
+            this.byParent[reactWidget.parent] = this.byParent[reactWidget.parent] || [];
+            this.byParent[reactWidget.parent].push(widget);
+        } else if ("parentWidget" in widget && widget.parentWidget) {
             this.byParent[widget.parentWidget] = this.byParent[widget.parentWidget] || [];
             this.byParent[widget.parentWidget].push(widget);
         } else {
@@ -92,7 +93,13 @@ export class WidgetsByParent {
                 // previously, custom widgets were provided as a single instance, but that has the disadvantage
                 // for splits where we actually need multiple instaces and thus having a class to instantiate is better
                 // https://github.com/zadam/trilium/issues/4274
-                .map((w: any) => (w.prototype ? new w() : w))
+                .map((w: any) => {
+                    if ("type" in w && w.type === "react-widget") {
+                        return w.render();
+                    }
+
+                    return (w.prototype ? new w() : w);
+                })
         );
     }
 }
