@@ -1228,6 +1228,7 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
 
 #rest-pane > .classic-toolbar-widget {
     margin-bottom: 2px;
+    border-start-start-radius: var(--center-pane-border-radius);
 }
 
 body.layout-vertical #rest-pane > .classic-toolbar-widget {
@@ -1238,13 +1239,18 @@ body.layout-horizontal #rest-pane > .classic-toolbar-widget {
     background: var(--classic-toolbar-horiz-layout-background-color);
 }
 
+.classic-toolbar-widget:not(.hidden-ext) + #vertical-main-container {
+    /* Remove the center panel border radius when the toolbar is visible */
+    --center-pane-border-radius: 0;
+}
+
 /*
  * CENTER PANE
  */
 
  /* The first visible note split */
 .vertical-layout #center-pane .note-split:not(.visible ~ .visible) {
-    border-radius: var(--center-pane-border-radius) 0 0 0;
+    border-start-start-radius: var(--center-pane-border-radius);
 }
 
 #center-pane .note-split {
