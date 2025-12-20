@@ -11,11 +11,11 @@
     --badge-radius: 12px;
 
     .ext-badge {
-        &.temporarily-editable-badge { --color: #4fa52b; }
-        &.read-only-badge { --color: #e33f3b; }
-        &.share-badge { --color: #3b82f6; }
-        &.clipped-note-badge { --color: #57a2a5; }
-        &.execute-badge { --color: #f59e0b; }
+        &.temporarily-editable-badge {--color: var(--badge-temporaraily-editable-background-color)}
+        &.read-only-badge {--color: var(--badge-read-only-background-color);}
+        &.share-badge {--color: var(--badge-share-background-color);}
+        &.clipped-note-badge {--color: var(--badge-clipped-note-background-color);}
+        &.execute-badge {--color: var(--badge-execute-background-color);}
     }
 
     .dropdown-badge {

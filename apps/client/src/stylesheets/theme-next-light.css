@@ -194,6 +194,12 @@
     --badge-background-color: #00000011;
     --badge-text-color: var(--muted-text-color);
 
+    --badge-temporaraily-editable-background-color: #4fa52b;
+    --badge-read-only-background-color: #e33f3b;
+    --badge-share-background-color: #3b82f6;
+    --badge-clipped-note-background-color: #57a2a5;
+    --badge-execute-background-color: #f59e0b;
+
     --note-icon-background-color: #4f4f4f;
     --note-icon-color: white;
     --note-icon-hover-background-color: #737373;
