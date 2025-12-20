@@ -636,7 +636,7 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
             parentContainer.replaceChildren();
             renderedWidget.appendTo(parentContainer);
         }
-    });
+    }, [ renderedWidget ]);
 
     // Inject the note context.
     useEffect(() => {
