@@ -74,11 +74,12 @@
     --select-arrow-svg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='transparent' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
     --select-group-heading-text-color: gray;
 
-    --link-hover-background: #ffffff26;
-    --link-hover-color: white;
+    --link-color: #95c3d9;
+    --link-hover-background: #0874a33d;
+    --link-hover-color: var(--link-color);
 
     --hover-item-text-color: #efefef;
-    --hover-item-background-color: #ffffff24;
+    --hover-item-background-color: #ffffff16;
     --hover-item-border-color: transparent;
 
     --active-item-text-color: var(--left-pane-text-color);
@@ -239,8 +240,6 @@
     --scrollbar-border-color: unset; /* Deprecated */
 
     --selection-background-color: #3399FF70;
-
-    --link-color: #95c3d9;
 
     --mermaid-theme: dark;
 
