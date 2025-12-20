@@ -1723,6 +1723,8 @@
   },
   "highlights_list_2": {
     "title": "Highlights List",
+    "title_with_count_one": "{{count}} highlight",
+    "title_with_count_other": "{{count}} highlights",
     "options": "Options",
     "modal_title": "Configure Highlights List",
     "menu_configure": "Configure highlights list...",

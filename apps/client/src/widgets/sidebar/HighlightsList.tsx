@@ -3,7 +3,6 @@ import { createPortal } from "preact/compat";
 import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
-import ActionButton from "../react/ActionButton";
 import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor, useTriliumOptionJson } from "../react/hooks";
 import Modal from "../react/Modal";
 import { HighlightsListOptions } from "../type_widgets/options/text_notes";
@@ -25,26 +24,11 @@ export default function HighlightsList() {
     const { note, noteContext } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
-    const [ shown, setShown ] = useState(false);
 
     return (
         <>
-            <RightPanelWidget
-                id="highlights"
-                title={t("highlights_list_2.title")}
-                contextMenuItems={[
-                    {
-                        title: t("highlights_list_2.menu_configure"),
-                        uiIcon: "bx bx-cog",
-                        handler: () => setShown(true)
-                    }
-                ]}
-                grow
-            >
-                {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
-                {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}
-            </RightPanelWidget>
-            {createPortal(<HighlightListOptionsModal shown={shown} setShown={setShown} />, document.body)}
+            {noteType === "text" && isReadOnly && <ReadOnlyTextHighlightsList />}
+            {noteType === "text" && !isReadOnly && <EditableTextHighlightsList />}
         </>
     );
 }
@@ -80,33 +64,50 @@ function AbstractHighlightsList<T extends RawHighlight>({ highlights, scrollToHi
         );
     });
 
+    const [ shown, setShown ] = useState(false);
     return (
-        <span className="highlights-list">
-            {filteredHighlights.length > 0 ? (
-                <ol>
-                    {filteredHighlights.map(highlight => (
-                        <li
-                            key={highlight.id}
-                            onClick={() => scrollToHighlight(highlight)}
-                        >
-                            <span
-                                style={{
-                                    fontWeight: highlight.attrs.bold ? "700" : undefined,
-                                    fontStyle: highlight.attrs.italic ? "italic" : undefined,
-                                    textDecoration: highlight.attrs.underline ? "underline" : undefined,
-                                    color: highlight.attrs.color,
-                                    backgroundColor: highlight.attrs.background
-                                }}
-                            >{highlight.text}</span>
-                        </li>
-                    ))}
-                </ol>
-            ) : (
-                <div className="no-highlights">
-                    {t("highlights_list_2.no_highlights")}
-                </div>
-            )}
-        </span>
+        <>
+            <RightPanelWidget
+                id="highlights"
+                title={t("highlights_list_2.title_with_count", { count: filteredHighlights.length })}
+                contextMenuItems={[
+                    {
+                        title: t("highlights_list_2.menu_configure"),
+                        uiIcon: "bx bx-cog",
+                        handler: () => setShown(true)
+                    }
+                ]}
+                grow
+            >
+                <span className="highlights-list">
+                    {filteredHighlights.length > 0 ? (
+                        <ol>
+                            {filteredHighlights.map(highlight => (
+                                <li
+                                    key={highlight.id}
+                                    onClick={() => scrollToHighlight(highlight)}
+                                >
+                                    <span
+                                        style={{
+                                            fontWeight: highlight.attrs.bold ? "700" : undefined,
+                                            fontStyle: highlight.attrs.italic ? "italic" : undefined,
+                                            textDecoration: highlight.attrs.underline ? "underline" : undefined,
+                                            color: highlight.attrs.color,
+                                            backgroundColor: highlight.attrs.background
+                                        }}
+                                    >{highlight.text}</span>
+                                </li>
+                            ))}
+                        </ol>
+                    ) : (
+                        <div className="no-highlights">
+                            {t("highlights_list_2.no_highlights")}
+                        </div>
+                    )}
+                </span>
+            </RightPanelWidget>
+            {createPortal(<HighlightListOptionsModal shown={shown} setShown={setShown} />, document.body)}
+        </>
     );
 }
 
