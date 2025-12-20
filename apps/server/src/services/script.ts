@@ -224,8 +224,8 @@ function buildJsx(jsxNote: BNote) {
     const content = Buffer.isBuffer(contentRaw) ? contentRaw.toString("utf-8") : contentRaw;
     return transform(content, {
         transforms: ["jsx"],
-        jsxPragma: "h",           // for Preact
-        jsxFragmentPragma: "Fragment",
+        jsxPragma: "api.h",
+        jsxFragmentPragma: "api.Fragment",
     });
 }
 
