@@ -84,6 +84,7 @@ function CustomWidget({ originalWidget }: { originalWidget: LegacyRightPanelWidg
 }
 
 function CustomWidgetContent({ originalWidget }: { originalWidget: LegacyRightPanelWidget }) {
+    const { noteContext } = useActiveNoteContext();
     const [ el ] = useLegacyWidget(() => {
         originalWidget.contentSized();
 
@@ -102,6 +103,8 @@ function CustomWidgetContent({ originalWidget }: { originalWidget: LegacyRightPa
         };
 
         return originalWidget;
+    }, {
+        noteContext
     });
 
     return el;
