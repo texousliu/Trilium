@@ -4,6 +4,7 @@ import "./RightPanelContainer.css";
 import Split from "@triliumnext/split.js";
 import { useEffect, useRef } from "preact/hooks";
 
+import appContext from "../../components/app_context";
 import { t } from "../../services/i18n";
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
@@ -77,6 +78,13 @@ function CustomWidget({ originalWidget }: { originalWidget: LegacyRightPanelWidg
             id={originalWidget._noteId}
             title={originalWidget.widgetTitle}
             containerRef={containerRef}
+            contextMenuItems={[
+                {
+                    title: t("right_pane.custom_widget_go_to_source"),
+                    uiIcon: "bx bx-code-curly",
+                    handler: () => appContext.tabManager.openInNewTab(originalWidget._noteId, null, true)
+                }
+            ]}
         >
             <CustomWidgetContent originalWidget={originalWidget} />
         </RightPanelWidget>

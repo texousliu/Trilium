@@ -2,6 +2,8 @@ import clsx from "clsx";
 import { ComponentChildren, RefObject } from "preact";
 import { useContext, useState } from "preact/hooks";
 
+import contextMenu, { MenuItem } from "../../menus/context_menu";
+import ActionButton from "../react/ActionButton";
 import { useSyncedRef, useTriliumOptionJson } from "../react/hooks";
 import Icon from "../react/Icon";
 import { ParentComponent } from "../react/react_utils";
@@ -12,9 +14,10 @@ interface RightPanelWidgetProps {
     children: ComponentChildren;
     buttons?: ComponentChildren;
     containerRef?: RefObject<HTMLDivElement>;
+    contextMenuItems?: MenuItem<unknown>[];
 }
 
-export default function RightPanelWidget({ id, title, buttons, children, containerRef: externalContainerRef }: RightPanelWidgetProps) {
+export default function RightPanelWidget({ id, title, buttons, children, containerRef: externalContainerRef, contextMenuItems }: RightPanelWidgetProps) {
     const [ rightPaneCollapsedItems, setRightPaneCollapsedItems ] = useTriliumOptionJson<string[]>("rightPaneCollapsedItems");
     const [ expanded, setExpanded ] = useState(!rightPaneCollapsedItems.includes(id));
     const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
@@ -49,7 +52,24 @@ export default function RightPanelWidget({ id, title, buttons, children, contain
                     icon="bx bx-chevron-down"
                 />
                 <div class="card-header-title">{title}</div>
-                <div class="card-header-buttons">{buttons}</div>
+                <div class="card-header-buttons">
+                    {buttons}
+                    {contextMenuItems && (
+                        <ActionButton
+                            icon="bx bx-dots-vertical-rounded"
+                            text=""
+                            onClick={e => {
+                                e.stopPropagation();
+                                contextMenu.show({
+                                    x: e.pageX,
+                                    y: e.pageY,
+                                    items: contextMenuItems,
+                                    selectMenuItemHandler: () => {}
+                                });
+                            }}
+                        />
+                    )}
+                </div>
             </div>
 
             <div id={parentComponent?.componentId} class="body-wrapper">
