@@ -1,6 +1,8 @@
 import { signal } from "@preact/signals";
 
+import appContext from "../components/app_context.js";
 import froca from "./froca.js";
+import { t } from "./i18n.js";
 import utils from "./utils.js";
 
 export interface ToastOptions {
@@ -69,7 +71,13 @@ export async function showErrorForScriptNote(noteId: string, message: string) {
         title: note?.title ?? "",
         icon: note?.getIcon() ?? "bx bx-error-circle",
         message,
-        timeout: 15_000
+        timeout: 15_000,
+        buttons: [
+            {
+                text: t("toast.open-script-note"),
+                onClick: () => appContext.tabManager.openInNewTab(noteId, null, true)
+            }
+        ]
     });
 }
 
