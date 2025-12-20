@@ -1,9 +1,11 @@
-import ScriptContext from "./script_context.js";
-import cls from "./cls.js";
-import log from "./log.js";
+import { transform } from "sucrase";
+
 import becca from "../becca/becca.js";
 import type BNote from "../becca/entities/bnote.js";
 import type { ApiParams } from "./backend_script_api_interface.js";
+import cls from "./cls.js";
+import log from "./log.js";
+import ScriptContext from "./script_context.js";
 
 export interface Bundle {
     note?: BNote;
@@ -110,9 +112,9 @@ function getParams(params?: ScriptParams) {
         .map((p) => {
             if (typeof p === "string" && p.startsWith("!@#Function: ")) {
                 return p.substr(13);
-            } else {
-                return JSON.stringify(p);
             }
+            return JSON.stringify(p);
+
         })
         .join(",");
 }
@@ -145,7 +147,7 @@ export function getScriptBundle(note: BNote, root: boolean = true, scriptEnv: st
         return;
     }
 
-    if (!note.isJavaScript() && !note.isHtml()) {
+    if (!(note.isJavaScript() || note.isHtml() || note.isJsx())) {
         return;
     }
 
@@ -158,7 +160,7 @@ export function getScriptBundle(note: BNote, root: boolean = true, scriptEnv: st
     }
 
     const bundle: Bundle = {
-        note: note,
+        note,
         script: "",
         html: "",
         allNotes: [note]
@@ -192,12 +194,19 @@ export function getScriptBundle(note: BNote, root: boolean = true, scriptEnv: st
     // only frontend scripts are async. Backend cannot be async because of transaction management.
     const isFrontend = scriptEnv === "frontend";
 
-    if (note.isJavaScript()) {
+    if (note.isJsx() || note.isJavaScript()) {
+        let scriptContent = note.getContent();
+
+        if (note.isJsx()) {
+            console.log("GOT JSX!!!");
+            scriptContent = buildJsx(note).code;
+        }
+
         bundle.script += `
 apiContext.modules['${note.noteId}'] = { exports: {} };
 ${root ? "return " : ""}${isFrontend ? "await" : ""} ((${isFrontend ? "async" : ""} function(exports, module, require, api${modules.length > 0 ? ", " : ""}${modules.map((child) => sanitizeVariableName(child.title)).join(", ")}) {
 try {
-${overrideContent || note.getContent()};
+${overrideContent || scriptContent};
 } catch (e) { throw new Error("Load of script note \\"${note.title}\\" (${note.noteId}) failed with: " + e.message); }
 for (const exportKey in exports) module.exports[exportKey] = exports[exportKey];
 return module.exports;
@@ -208,6 +217,16 @@ return module.exports;
     }
 
     return bundle;
+}
+
+function buildJsx(jsxNote: BNote) {
+    const contentRaw = jsxNote.getContent();
+    const content = Buffer.isBuffer(contentRaw) ? contentRaw.toString("utf-8") : contentRaw;
+    return transform(content, {
+        transforms: ["jsx"],
+        jsxPragma: "h",           // for Preact
+        jsxFragmentPragma: "Fragment",
+    });
 }
 
 function sanitizeVariableName(str: string) {
