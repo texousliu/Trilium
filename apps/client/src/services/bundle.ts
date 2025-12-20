@@ -1,7 +1,7 @@
 import { h, VNode } from "preact";
 
 import Component from "../components/component.js";
-import BasicWidget from "../widgets/basic_widget.js";
+import BasicWidget, { ReactWrappedWidget } from "../widgets/basic_widget.js";
 import RightPanelWidget from "../widgets/right_panel_widget.js";
 import froca from "./froca.js";
 import type { Entity } from "./frontend_script_api.js";
@@ -106,8 +106,10 @@ export class WidgetsByParent {
         const widgets: (Component | VNode)[] = this.getLegacyWidgets(parentName);
         for (const preactWidget of this.getPreactWidgets(parentName)) {
             const el = h(preactWidget.render, {});
+            const widget = new ReactWrappedWidget(el);
+            widget.contentSized();
             // TODO: set position here.
-            widgets.push(el);
+            widgets.push(widget);
         }
 
         return widgets;
