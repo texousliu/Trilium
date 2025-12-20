@@ -1,3 +1,4 @@
+import { CKTextEditor } from "@triliumnext/ckeditor5";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
 import { Tooltip } from "bootstrap";
 import Mark from "mark.js";
@@ -21,7 +22,8 @@ import shortcuts, { Handler, removeIndividualBinding } from "../../services/shor
 import SpacedUpdate from "../../services/spaced_update";
 import toast, { ToastOptions } from "../../services/toast";
 import tree from "../../services/tree";
-import utils, { escapeRegExp, randomString, reloadFrontendApp } from "../../services/utils";
+import utils, { escapeRegExp, getErrorMessage, randomString, reloadFrontendApp } from "../../services/utils";
+import ws from "../../services/ws";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { DragData } from "../note_tree";
@@ -167,13 +169,20 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
 
     const wrappedSetValue = useMemo(() => {
         return async (newValue: OptionValue) => {
-            await options.save(name, newValue);
+            const originalValue = value;
+            setValue(String(newValue));
+            try {
+                await options.save(name, newValue);
+            } catch (e: unknown) {
+                ws.logError(getErrorMessage(e));
+                setValue(originalValue);
+            }
 
             if (needsRefresh) {
                 reloadFrontendApp(`option change: ${name}`);
             }
         };
-    }, [ name, needsRefresh ]);
+    }, [ name, needsRefresh, value ]);
 
     useTriliumEvent("entitiesReloaded", useCallback(({ loadResults }) => {
         if (loadResults.getOptionNames().includes(name)) {
@@ -625,13 +634,14 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
 
         const renderedWidget = widget.render();
         return [ widget, renderedWidget ];
-    }, []);
+    }, [ noteContext, parentComponent, widgetFactory]);
 
     // Attach the widget to the parent.
     useEffect(() => {
-        if (ref.current) {
-            ref.current.innerHTML = "";
-            renderedWidget.appendTo(ref.current);
+        const parentContainer = ref.current;
+        if (parentContainer) {
+            parentContainer.replaceChildren();
+            renderedWidget.appendTo(parentContainer);
         }
     }, [ renderedWidget ]);
 
@@ -640,7 +650,7 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
         if (noteContext && widget instanceof NoteContextAwareWidget) {
             widget.activeContextChangedEvent({ noteContext });
         }
-    }, [ noteContext ]);
+    }, [ noteContext, widget ]);
 
     useDebugValue(widget);
 
@@ -1073,4 +1083,57 @@ export function useNoteColorClass(note: FNote | null | undefined) {
         setColorClass(note?.getColorClass());
     }, [ color, note ]);
     return colorClass;
+}
+
+export function useTextEditor(noteContext: NoteContext | null | undefined) {
+    const [ textEditor, setTextEditor ] = useState<CKTextEditor | null>(null);
+    const requestIdRef = useRef(0);
+
+    // React to note context change and initial state.
+    useEffect(() => {
+        if (!noteContext) {
+            setTextEditor(null);
+            return;
+        }
+
+        const requestId = ++requestIdRef.current;
+        noteContext.getTextEditor((textEditor) => {
+            // Prevent stale async.
+            if (requestId !== requestIdRef.current) return;
+            setTextEditor(textEditor);
+        });
+    }, [ noteContext ]);
+
+    // React to editor initializing.
+    useTriliumEvent("textEditorRefreshed", ({ ntxId: eventNtxId, editor }) => {
+        if (eventNtxId !== noteContext?.ntxId) return;
+        setTextEditor(editor);
+    });
+
+    return textEditor;
+}
+
+export function useContentElement(noteContext: NoteContext | null | undefined) {
+    const [ contentElement, setContentElement ] = useState<HTMLElement | null>(null);
+    const requestIdRef = useRef(0);
+    const [, forceUpdate] = useState(0);
+
+    useEffect(() => {
+        const requestId = ++requestIdRef.current;
+        noteContext?.getContentElement().then(contentElement => {
+            // Prevent stale async.
+            if (requestId !== requestIdRef.current) return;
+            setContentElement(contentElement?.[0] ?? null);
+            forceUpdate(v => v + 1);
+        });
+    }, [ noteContext ]);
+
+    // React to content changes initializing.
+    useTriliumEvent("contentElRefreshed", ({ ntxId: eventNtxId, contentEl }) => {
+        if (eventNtxId !== noteContext?.ntxId) return;
+        setContentElement(contentEl);
+        forceUpdate(v => v + 1);
+    });
+
+    return contentElement;
 }

@@ -1723,7 +1723,12 @@
   },
   "highlights_list_2": {
     "title": "Highlights List",
-    "options": "Options"
+    "title_with_count_one": "{{count}} highlight",
+    "title_with_count_other": "{{count}} highlights",
+    "options": "Options",
+    "modal_title": "Configure Highlights List",
+    "menu_configure": "Configure highlights list...",
+    "no_highlights": "No highlights found."
   },
   "quick-search": {
     "placeholder": "Quick search",
@@ -1794,7 +1799,8 @@
   },
   "toc": {
     "table_of_contents": "Table of Contents",
-    "options": "Options"
+    "options": "Options",
+    "no_headings": "No headings."
   },
   "watched_file_update_status": {
     "file_last_modified": "File <code class=\"file-path\"></code> has been last modified on <span class=\"file-last-modified\"></span>.",
@@ -2196,5 +2202,11 @@
     "note_paths_other": "{{count}} paths",
     "note_paths_title": "Note paths",
     "code_note_switcher": "Change language mode"
+  },
+  "right_pane": {
+    "empty_message": "Nothing to show for this note",
+    "empty_button": "Hide the panel",
+    "toggle": "Toggle right panel",
+    "custom_widget_go_to_source": "Go to source code"
   }
 }

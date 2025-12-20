@@ -9,6 +9,7 @@ import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
 import GlobalMenu from "../widgets/buttons/global_menu.jsx";
 import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
+import RightPaneToggle from "../widgets/buttons/right_pane_toggle.jsx";
 import CloseZenModeButton from "../widgets/close_zen_button.jsx";
 import NoteList from "../widgets/collections/NoteList.jsx";
 import ContentHeader from "../widgets/containers/content_header.js";
@@ -44,6 +45,7 @@ import Ribbon from "../widgets/ribbon/Ribbon.jsx";
 import ScrollPadding from "../widgets/scroll_padding.js";
 import SearchResult from "../widgets/search_result.jsx";
 import SharedInfo from "../widgets/shared_info.jsx";
+import RightPanelContainer from "../widgets/sidebar/RightPanelContainer.jsx";
 import SqlResults from "../widgets/sql_result.js";
 import SqlTableSchemas from "../widgets/sql_table_schemas.js";
 import TabRowWidget from "../widgets/tab_row.js";
@@ -90,6 +92,7 @@ export default class DesktopLayout {
                     .optChild(launcherPaneIsHorizontal, <LeftPaneToggle isHorizontalLayout={true} />)
                     .child(<TabHistoryNavigationButtons />)
                     .child(new TabRowWidget().class("full-width"))
+                    .optChild(launcherPaneIsHorizontal && isNewLayout, <RightPaneToggle />)
                     .optChild(customTitleBarButtons, <TitleBarButtons />)
                     .css("height", "40px")
                     .css("background-color", "var(--launcher-pane-background-color)")
@@ -113,10 +116,14 @@ export default class DesktopLayout {
                             .css("flex-grow", "1")
                             .optChild(!fullWidthTabBar,
                                 new FlexContainer("row")
+                                    .class("tab-row-container")
                                     .child(<TabHistoryNavigationButtons />)
                                     .child(new TabRowWidget())
+                                    .optChild(isNewLayout, <RightPaneToggle />)
                                     .optChild(customTitleBarButtons, <TitleBarButtons />)
-                                    .css("height", "40px"))
+                                    .css("height", "40px")
+                                    .css("align-items", "center")
+                            )
                             .optChild(isNewLayout, <FixedFormattingToolbar />)
                             .child(
                                 new FlexContainer("row")
@@ -145,7 +152,7 @@ export default class DesktopLayout {
                                                             .optChild(isNewLayout, <NoteActions />))
                                                         .optChild(!isNewLayout, <Ribbon />)
                                                         .child(new WatchedFileUpdateStatusWidget())
-                                                        .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
+                                                        .optChild(!isNewLayout, <FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
@@ -165,21 +172,19 @@ export default class DesktopLayout {
                                                         )
                                                         .child(<ApiLog />)
                                                         .child(new FindWidget())
-                                                        .child(
-                                                            ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
-                                                            ...this.customWidgets.get("note-detail-pane")
-                                                        )
+                                                        .child(...this.customWidgets.get("note-detail-pane"))
                                                 )
                                             )
                                             .child(...this.customWidgets.get("center-pane"))
 
                                     )
-                                    .child(
+                                    .optChild(!isNewLayout,
                                         new RightPaneContainer()
                                             .child(new TocWidget())
                                             .child(new HighlightsListWidget())
                                             .child(...this.customWidgets.get("right-pane"))
                                     )
+                                    .optChild(isNewLayout, <RightPanelContainer customWidgets={this.customWidgets.get("right-pane")} />)
                             )
                             .optChild(!launcherPaneIsHorizontal && isNewLayout, <StatusBar />)
                     )

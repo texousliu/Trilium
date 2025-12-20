@@ -390,7 +390,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
      * If no content could be determined `null` is returned instead.
      */
     async getContentElement() {
-        return this.timeout<JQuery<HTMLElement>>(
+        return this.timeout<JQuery<HTMLElement> | null>(
             new Promise((resolve) =>
                 appContext.triggerCommand("executeWithContentElement", {
                     resolve,

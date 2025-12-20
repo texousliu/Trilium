@@ -78,10 +78,8 @@ export const POPUP_HIDDEN_FLOATING_BUTTONS: FloatingButtonsList = [
     ToggleReadOnlyButton
 ];
 
-const isNewLayout = isExperimentalFeatureEnabled("new-layout");
-
 function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = !isNewLayout && (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
+    const isEnabled = (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
     return isEnabled && <FloatingButton
         text={t("backend_log.refresh")}
         icon="bx bx-refresh"
@@ -90,7 +88,7 @@ function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefault
 }
 
 function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = !isNewLayout && note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
+    const isEnabled = note.type === "mermaid" && note.isContentAvailable() && !isReadOnly && isDefaultViewMode;
     const [ splitEditorOrientation, setSplitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
     const upcomingOrientation = splitEditorOrientation === "horizontal" ? "vertical" : "horizontal";
 
@@ -103,7 +101,7 @@ function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: F
 
 function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingButtonContext) {
     const [ isReadOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const isEnabled = !isNewLayout && ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
+    const isEnabled = ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
             && note.isContentAvailable() && isDefaultViewMode;
 
     return isEnabled && <FloatingButton
@@ -173,7 +171,7 @@ function ShowHighlightsListWidgetButton({ note, noteContext, isDefaultViewMode }
 }
 
 function RunActiveNoteButton({ note }: FloatingButtonContext) {
-    const isEnabled = !isNewLayout && (note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium");
+    const isEnabled = (note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium");
     return isEnabled && <FloatingButton
         icon="bx bx-play"
         text={t("code_buttons.execute_button_title")}
@@ -182,7 +180,7 @@ function RunActiveNoteButton({ note }: FloatingButtonContext) {
 }
 
 function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
-    const isEnabled = !isNewLayout && note.mime.startsWith("application/javascript;env=");
+    const isEnabled = note.mime.startsWith("application/javascript;env=");
     return isEnabled && <FloatingButton
         icon="bx bx-help-circle"
         text={t("code_buttons.trilium_api_docs_button_title")}
@@ -191,7 +189,7 @@ function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
 }
 
 function SaveToNoteButton({ note }: FloatingButtonContext) {
-    const isEnabled = !isNewLayout && note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
+    const isEnabled = note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely();
     return isEnabled && <FloatingButton
         icon="bx bx-save"
         text={t("code_buttons.save_to_note_button_title")}
@@ -213,7 +211,7 @@ export function buildSaveSqlToNoteHandler(note: FNote) {
 }
 
 function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingButtonContext) {
-    const isEnabled = (!isNewLayout && note.type === "relationMap" && isDefaultViewMode);
+    const isEnabled = (note.type === "relationMap" && isDefaultViewMode);
     return isEnabled && (
         <>
             <FloatingButton
@@ -246,7 +244,7 @@ function RelationMapButtons({ note, isDefaultViewMode, triggerEvent }: FloatingB
 }
 
 function GeoMapButtons({ triggerEvent, viewType, isReadOnly }: FloatingButtonContext) {
-    const isEnabled = !isNewLayout && viewType === "geoMap" && !isReadOnly;
+    const isEnabled = viewType === "geoMap" && !isReadOnly;
     return isEnabled && (
         <FloatingButton
             icon="bx bx-plus-circle"
@@ -259,8 +257,7 @@ function GeoMapButtons({ triggerEvent, viewType, isReadOnly }: FloatingButtonCon
 function CopyImageReferenceButton({ note, isDefaultViewMode }: FloatingButtonContext) {
     const hiddenImageCopyRef = useRef<HTMLDivElement>(null);
     const isEnabled = (
-        !isNewLayout
-        && ["mermaid", "canvas", "mindMap", "image"].includes(note?.type ?? "")
+        ["mermaid", "canvas", "mindMap", "image"].includes(note?.type ?? "")
         && note?.isContentAvailable() && isDefaultViewMode
     );
 
@@ -287,7 +284,7 @@ function CopyImageReferenceButton({ note, isDefaultViewMode }: FloatingButtonCon
 }
 
 function ExportImageButtons({ note, triggerEvent, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = !isNewLayout && ["mermaid", "mindMap"].includes(note?.type ?? "")
+    const isEnabled = ["mermaid", "mindMap"].includes(note?.type ?? "")
             && note?.isContentAvailable() && isDefaultViewMode;
     return isEnabled && (
         <>
@@ -308,7 +305,7 @@ function ExportImageButtons({ note, triggerEvent, isDefaultViewMode }: FloatingB
 
 function InAppHelpButton({ note }: FloatingButtonContext) {
     const helpUrl = getHelpUrlForNote(note);
-    const isEnabled = !!helpUrl && !isNewLayout;
+    const isEnabled = !!helpUrl;
 
     return isEnabled && (
         <FloatingButton
@@ -335,7 +332,7 @@ function Backlinks({ note, isDefaultViewMode }: FloatingButtonContext) {
         }
     }, [ popupOpen, windowHeight ]);
 
-    const isEnabled = !isNewLayout && isDefaultViewMode && backlinkCount > 0;
+    const isEnabled = isDefaultViewMode && backlinkCount > 0;
     return (isEnabled &&
         <div className="backlinks-widget has-overflow">
             <div
