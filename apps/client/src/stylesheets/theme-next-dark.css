@@ -335,3 +335,8 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
     --note-icon-custom-color: hsl(var(--custom-color-hue), 100%, 76.5%);
     --note-icon-hover-custom-background-color: hsl(var(--custom-color-hue), 28.3%, 36.7%);
 }
+
+.note-split.with-hue *::selection,
+.quick-edit-dialog-wrapper.with-hue *::selection {
+    background: hsl(var(--custom-color-hue), 49.2%, 35%);
+}
