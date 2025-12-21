@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import optionService from '../options.js';
 import sql from '../sql.js';
+import { constantTimeCompare } from '../utils.js';
 
 function isRecoveryCodeSet() {
     return optionService.getOptionBool('encryptedRecoveryCodes');
@@ -56,7 +57,7 @@ function verifyRecoveryCode(recoveryCodeGuess: string) {
     const recoveryCodes = getRecoveryCodes();
     let loginSuccess = false;
     recoveryCodes.forEach((recoveryCode) => {
-        if (recoveryCodeGuess === recoveryCode) {
+        if (constantTimeCompare(recoveryCodeGuess, recoveryCode)) {
             removeRecoveryCode(recoveryCode);
             loginSuccess = true;
             return;

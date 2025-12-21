@@ -74,6 +74,30 @@ export function hmac(secret: any, value: any) {
     return hmac.digest("base64");
 }
 
+/**
+ * Constant-time string comparison to prevent timing attacks.
+ * Uses crypto.timingSafeEqual to ensure comparison time is independent
+ * of how many characters match.
+ *
+ * @param a First string to compare
+ * @param b Second string to compare
+ * @returns true if strings are equal, false otherwise
+ */
+export function constantTimeCompare(a: string, b: string): boolean {
+    const bufA = Buffer.from(a, "utf-8");
+    const bufB = Buffer.from(b, "utf-8");
+
+    // If lengths differ, we still do a constant-time comparison
+    // to avoid leaking length information through timing
+    if (bufA.length !== bufB.length) {
+        // Compare bufA against itself to maintain constant time behavior
+        crypto.timingSafeEqual(bufA, bufA);
+        return false;
+    }
+
+    return crypto.timingSafeEqual(bufA, bufB);
+}
+
 export function hash(text: string) {
     text = text.normalize();
 
@@ -486,6 +510,7 @@ function slugify(text: string) {
 
 export default {
     compareVersions,
+    constantTimeCompare,
     crash,
     envToBoolean,
     escapeHtml,
