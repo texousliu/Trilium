@@ -103,7 +103,7 @@ export class WidgetsByParent {
     }
 
     get(parentName: ParentName) {
-        const widgets: (Component | VNode)[] = this.getLegacyWidgets(parentName);
+        const widgets: (BasicWidget | VNode)[] = this.getLegacyWidgets(parentName);
         for (const preactWidget of this.getPreactWidgets(parentName)) {
             const el = h(preactWidget.render, {});
             const widget = new ReactWrappedWidget(el);
@@ -169,6 +169,7 @@ async function getWidgetBundlesByParent() {
         }
     } catch (e) {
         toastService.showPersistent({
+            id: `custom-widget-list-failure`,
             title: t("toast.widget-list-error.title"),
             message: getErrorMessage(e),
             icon: "bx bx-error-circle"
