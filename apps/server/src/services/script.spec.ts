@@ -175,7 +175,6 @@ describe("JSX building", () => {
             "use strict";const _triliumapi = api;
             _triliumapi.log.call(void 0, "Hi");
         `;
-        console.log(buildJsx(script).code);
         expect(buildJsx(script).code).toStrictEqual(expected);
     });
 });

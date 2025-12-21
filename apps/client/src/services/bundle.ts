@@ -23,9 +23,10 @@ export interface Bundle {
 type LegacyWidget = (BasicWidget | RightPanelWidget) & {
     parentWidget?: string;
 };
-export type Widget = (LegacyWidget | WidgetDefinitionWithType) & {
+type WithNoteId<T> = T & {
     _noteId: string;
 };
+export type Widget = WithNoteId<(LegacyWidget | WidgetDefinitionWithType)>;
 
 async function getAndExecuteBundle(noteId: string, originEntity = null, script = null, params = null) {
     const bundle = await server.post<Bundle>(`script/bundle/${noteId}`, {
@@ -71,8 +72,8 @@ async function executeStartupBundles() {
 }
 
 export class WidgetsByParent {
-    private legacyWidgets: Record<string, LegacyWidget[]>;
-    private preactWidgets: Record<string, WidgetDefinitionWithType[]>;
+    private legacyWidgets: Record<string, WithNoteId<LegacyWidget>[]>;
+    private preactWidgets: Record<string, WithNoteId<WidgetDefinitionWithType>[]>;
 
     constructor() {
         this.legacyWidgets = {};
@@ -84,7 +85,7 @@ export class WidgetsByParent {
         let isPreact = false;
         if ("type" in widget && widget.type === "preact-widget") {
             // React-based script.
-            const reactWidget = widget as WidgetDefinitionWithType;
+            const reactWidget = widget as WithNoteId<WidgetDefinitionWithType>;
             this.preactWidgets[reactWidget.parent] = this.preactWidgets[reactWidget.parent] || [];
             this.preactWidgets[reactWidget.parent].push(reactWidget);
             isPreact = true;
