@@ -82,8 +82,14 @@ export function hmac(secret: any, value: any) {
  * @param a First string to compare
  * @param b Second string to compare
  * @returns true if strings are equal, false otherwise
+ * @note Returns false for null/undefined/non-string inputs. Empty strings are considered equal.
  */
-export function constantTimeCompare(a: string, b: string): boolean {
+export function constantTimeCompare(a: string | null | undefined, b: string | null | undefined): boolean {
+    // Handle null/undefined/non-string cases safely
+    if (typeof a !== "string" || typeof b !== "string") {
+        return false;
+    }
+
     const bufA = Buffer.from(a, "utf-8");
     const bufB = Buffer.from(b, "utf-8");
 

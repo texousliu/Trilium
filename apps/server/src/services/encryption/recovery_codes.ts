@@ -56,13 +56,22 @@ function verifyRecoveryCode(recoveryCodeGuess: string) {
 
     const recoveryCodes = getRecoveryCodes();
     let loginSuccess = false;
-    recoveryCodes.forEach((recoveryCode) => {
+    let matchedCode: string | null = null;
+
+    // Check ALL codes to prevent timing attacks - do not short-circuit
+    for (const recoveryCode of recoveryCodes) {
         if (constantTimeCompare(recoveryCodeGuess, recoveryCode)) {
-            removeRecoveryCode(recoveryCode);
+            matchedCode = recoveryCode;
             loginSuccess = true;
-            return;
+            // Continue checking all codes to maintain constant time
         }
-    });
+    }
+
+    // Remove the matched code only after checking all codes
+    if (matchedCode) {
+        removeRecoveryCode(matchedCode);
+    }
+
     return loginSuccess;
 }
 
