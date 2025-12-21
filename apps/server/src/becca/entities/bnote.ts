@@ -321,7 +321,7 @@ class BNote extends AbstractBeccaEntity<BNote> {
 
     /** @returns JS script environment - either "frontend" or "backend" */
     getScriptEnv() {
-        if (this.isHtml() || (this.isJavaScript() && this.mime.endsWith("env=frontend"))) {
+        if (this.isHtml() || (this.isJavaScript() && this.mime.endsWith("env=frontend")) || this.isJsx()) {
             return "frontend";
         }
 
