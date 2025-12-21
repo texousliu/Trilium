@@ -9,9 +9,9 @@ import Collapsible from "../widgets/react/Collapsible";
 import Dropdown from "../widgets/react/Dropdown";
 import FormCheckbox from "../widgets/react/FormCheckbox";
 import FormDropdownList from "../widgets/react/FormDropdownList";
-import * as formFileUpload from "../widgets/react/FormFileUpload";
+import { FormFileUploadActionButton,FormFileUploadButton } from "../widgets/react/FormFileUpload";
 import FormGroup from "../widgets/react/FormGroup";
-import * as formListItems from "../widgets/react/FormList";
+import { FormDropdownDivider, FormDropdownSubmenu,FormListItem } from "../widgets/react/FormList";
 import FormRadioGroup from "../widgets/react/FormRadioGroup";
 import FormText from "../widgets/react/FormText";
 import FormTextArea from "../widgets/react/FormTextArea";
@@ -76,9 +76,9 @@ export const preactAPI = Object.freeze({
     Dropdown,
     FormCheckbox,
     FormDropdownList,
-    ...formFileUpload,
+    FormFileUploadButton, FormFileUploadActionButton,
     FormGroup,
-    ...formListItems,
+    FormListItem, FormDropdownDivider, FormDropdownSubmenu,
     FormRadioGroup,
     FormText,
     FormTextArea,
