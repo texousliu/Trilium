@@ -85,13 +85,14 @@ function isValidAuthHeader(auth: string | undefined) {
 
         return constantTimeCompare(etapiToken.tokenHash, authTokenHash);
     } else {
+        // Check ALL tokens to prevent timing attacks - do not short-circuit
+        let isValid = false;
         for (const etapiToken of becca.getEtapiTokens()) {
             if (constantTimeCompare(etapiToken.tokenHash, authTokenHash)) {
-                return true;
+                isValid = true;
             }
         }
-
-        return false;
+        return isValid;
     }
 }
 
