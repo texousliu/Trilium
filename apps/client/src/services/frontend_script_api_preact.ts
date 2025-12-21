@@ -14,6 +14,11 @@ export interface WidgetDefinitionWithType extends WidgetDefinition {
     type: "preact-widget"
 }
 
+export interface LauncherWidgetDefinitionWithType {
+    type: "preact-launcher-widget"
+    render: () => VNode
+}
+
 export const preactAPI = Object.freeze({
     // Core
     h,
@@ -27,6 +32,13 @@ export const preactAPI = Object.freeze({
     defineWidget(definition: WidgetDefinition) {
         return {
             type: "preact-widget",
+            ...definition
+        };
+    },
+
+    defineLauncherWidget(definition: Omit<LauncherWidgetDefinitionWithType, "type">) {
+        return {
+            type: "preact-launcher-widget",
             ...definition
         };
     },

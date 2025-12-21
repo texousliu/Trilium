@@ -4,7 +4,7 @@ import appContext, { CommandNames } from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import date_notes from "../../services/date_notes";
 import dialog from "../../services/dialog";
-import { WidgetDefinition } from "../../services/frontend_script_api_preact";
+import { LauncherWidgetDefinitionWithType } from "../../services/frontend_script_api_preact";
 import { t } from "../../services/i18n";
 import toast from "../../services/toast";
 import { getErrorMessage, isMobile } from "../../services/utils";
@@ -122,7 +122,7 @@ export function QuickSearchLauncherWidget() {
 
 export function CustomWidget({ launcherNote }: LauncherNoteProps) {
     const [ widgetNote ] = useNoteRelationTarget(launcherNote, "widget");
-    const [ widget, setWidget ] = useState<BasicWidget | NoteContextAwareWidget | WidgetDefinition>();
+    const [ widget, setWidget ] = useState<BasicWidget | NoteContextAwareWidget | LauncherWidgetDefinitionWithType>();
 
     const parentComponent = useContext(ParentComponent) as BasicWidget | null;
     parentComponent?.contentSized();
@@ -151,8 +151,8 @@ export function CustomWidget({ launcherNote }: LauncherNoteProps) {
     return (
         <div>
             {widget && (
-                ("type" in widget && widget.type === "preact-widget")
-                    ? <ReactWidgetRenderer widget={widget as WidgetDefinition} />
+                ("type" in widget && widget.type === "preact-launcher-widget")
+                    ? <ReactWidgetRenderer widget={widget as LauncherWidgetDefinitionWithType} />
                     : <LegacyWidgetRenderer widget={widget as BasicWidget} />
             )}
         </div>
@@ -167,7 +167,7 @@ export function LegacyWidgetRenderer({ widget }: { widget: BasicWidget }) {
     return widgetEl;
 }
 
-function ReactWidgetRenderer({ widget }: { widget: WidgetDefinition }) {
+function ReactWidgetRenderer({ widget }: { widget: LauncherWidgetDefinitionWithType }) {
     const El = widget.render;
     return <El />;
 }
