@@ -24,7 +24,7 @@ const MIN_WIDTH_PERCENT = 5;
 interface RightPanelWidgetDefinition {
     el: VNode;
     enabled: boolean;
-    position: number;
+    position?: number;
 }
 
 export default function RightPanelContainer({ widgetsByParent }: { widgetsByParent: WidgetsByParent }) {
@@ -62,30 +62,38 @@ function useItems(rightPaneVisible: boolean, widgetsByParent: WidgetsByParent) {
         {
             el: <TableOfContents />,
             enabled: (noteType === "text" || noteType === "doc"),
-            position: 10,
         },
         {
             el: <HighlightsList />,
             enabled: noteType === "text" && highlightsList.length > 0,
-            position: 20,
         },
         ...widgetsByParent.getLegacyWidgets("right-pane").map((widget, i) => ({
             el: <CustomLegacyWidget key={widget._noteId} originalWidget={widget as LegacyRightPanelWidget} />,
             enabled: true,
-            position: widget.position ?? 30 + i * 10
+            position: widget.position
         })),
         ...widgetsByParent.getPreactWidgets("right-pane").map((widget) => {
             const El = widget.render;
             return {
                 el: <El />,
-                enabled: true
+                enabled: true,
+                position: widget.position
             };
         })
     ];
 
+    // Assign a position to items that don't have one yet.
+    let pos = 10;
+    for (const definition of definitions) {
+        if (!definition.position) {
+            definition.position = pos;
+            pos += 10;
+        }
+    }
+
     return definitions
         .filter(e => e.enabled)
-        .toSorted((a, b) => a.position - b.position)
+        .toSorted((a, b) => (a.position ?? 10) - (b.position ?? 10))
         .map(e => e.el);
 }
 

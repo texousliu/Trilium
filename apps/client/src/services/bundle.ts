@@ -108,7 +108,9 @@ export class WidgetsByParent {
             const el = h(preactWidget.render, {});
             const widget = new ReactWrappedWidget(el);
             widget.contentSized();
-            // TODO: set position here.
+            if (preactWidget.position) {
+                widget.position = preactWidget.position;
+            }
             widgets.push(widget);
         }
 

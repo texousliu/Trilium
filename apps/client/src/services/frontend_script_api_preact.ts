@@ -6,7 +6,8 @@ import RightPanelWidget from "../widgets/sidebar/RightPanelWidget";
 
 export interface WidgetDefinition {
     parent: "right-pane",
-    render: () => VNode
+    render: () => VNode,
+    position?: number,
 }
 
 export interface WidgetDefinitionWithType extends WidgetDefinition {
