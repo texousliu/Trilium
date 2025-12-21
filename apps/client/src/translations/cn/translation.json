@@ -1551,7 +1551,11 @@
   },
   "highlights_list_2": {
     "title": "高亮列表",
-    "options": "选项"
+    "options": "选项",
+    "title_with_count_other": "{{count}} 处高亮",
+    "modal_title": "配置高亮列表",
+    "menu_configure": "配置高亮列表...",
+    "no_highlights": "未找到高亮内容。"
   },
   "quick-search": {
     "placeholder": "快速搜索",
@@ -1622,7 +1626,8 @@
   },
   "toc": {
     "table_of_contents": "目录",
-    "options": "选项"
+    "options": "选项",
+    "no_headings": "无标题。"
   },
   "watched_file_update_status": {
     "file_last_modified": "文件 <code class=\"file-path\"></code> 最后修改时间为 <span class=\"file-last-modified\"></span>。",
@@ -2189,5 +2194,11 @@
     "hoisted_badge": "聚焦",
     "create_new_note": "新建子笔记",
     "empty_hide_archived_notes": "隐藏已存档的笔记"
+  },
+  "right_pane": {
+    "empty_button": "隐藏面板",
+    "toggle": "切换右侧面板",
+    "custom_widget_go_to_source": "跳转到源码",
+    "empty_message": "这篇笔记没有展示内容"
   }
 }

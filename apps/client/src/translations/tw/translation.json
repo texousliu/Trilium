@@ -690,7 +690,8 @@
     "convert_into_attachment_successful": "筆記 '{{title}}' 已成功轉換為附件。",
     "convert_into_attachment_prompt": "確定要將筆記 '{{title}}' 轉換為父級筆記的附件嗎？",
     "print_pdf": "匯出為 PDF…",
-    "open_note_on_server": "在伺服器上開啟筆記"
+    "open_note_on_server": "在伺服器上開啟筆記",
+    "view_revisions": "筆記歷史版本..."
   },
   "onclick_button": {
     "no_click_handler": "按鈕元件'{{componentId}}'沒有定義點擊時的處理方式"

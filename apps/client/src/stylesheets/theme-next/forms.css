@@ -637,8 +637,8 @@ body a.tn-link:visited,
     border-radius: 4px;
     background: var(--background);
     color: var(--link-color);
-    font-weight: normal;
-    text-decoration: underline;
+    font-weight: 500;
+    text-decoration: none;
 
     transition:
         background-color 200ms ease-out,
@@ -657,6 +657,7 @@ body a.tn-link:hover,
     box-shadow: 0 0 0 4px var(--link-hover-background);
     --background: var(--link-hover-background);
     color: var(--link-hover-color);
+    text-decoration: underline;
 
     transition:
         background-color 100ms ease-in,

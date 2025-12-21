@@ -387,7 +387,7 @@
     "show_toc": "目次を表示"
   },
   "show_highlights_list_widget_button": {
-    "show_highlights_list": "ハイライト一覧を表示"
+    "show_highlights_list": "ハイライトリストを表示"
   },
   "relation_map_buttons": {
     "zoom_out_title": "ズームアウト",
@@ -919,7 +919,7 @@
     "underline": "下線",
     "color": "カラーテキスト",
     "bg_color": "背景色付きテキスト",
-    "visibility_title": "ハイライトリスト表示",
+    "visibility_title": "ハイライトリストの表示",
     "visibility_description": "#hideHighlightWidget ラベルを追加することで、ノートごとにハイライトウィジェットを非表示にできます。",
     "shortcut_info": "設定 -> ショートカット（右ペイン切り替え）で、右ペイン（ハイライトを含む）を素早く切り替えるキーボードショートカットを設定できます。"
   },
@@ -932,7 +932,8 @@
   },
   "toc": {
     "table_of_contents": "目次",
-    "options": "オプション"
+    "options": "オプション",
+    "no_headings": "見出しはありません。"
   },
   "text_auto_read_only_size": {
     "title": "自動読み取り専用のサイズ",
@@ -1201,7 +1202,11 @@
   },
   "highlights_list_2": {
     "title": "ハイライトリスト",
-    "options": "オプション"
+    "options": "オプション",
+    "title_with_count_other": "{{count}} ハイライト",
+    "modal_title": "ハイライトリストの設定",
+    "menu_configure": "ハイライトリストの設定...",
+    "no_highlights": "ハイライトが見つかりません。"
   },
   "quick-search": {
     "placeholder": "クイック検索",
@@ -2189,5 +2194,11 @@
     "scroll_to_top_title": "ノートの先頭にジャンプ",
     "create_new_note": "新しい子ノートを作成",
     "empty_hide_archived_notes": "アーカイブされたノートを非表示"
+  },
+  "right_pane": {
+    "empty_message": "このノートには何も表示されません",
+    "empty_button": "パネルを非表示",
+    "toggle": "右パネルを切り替え",
+    "custom_widget_go_to_source": "ソースコードへ移動"
   }
 }
