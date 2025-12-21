@@ -224,6 +224,7 @@ export function buildJsx(contentRaw: string | Buffer) {
         transforms: ["jsx", "imports"],
         jsxPragma: "api.preact.h",
         jsxFragmentPragma: "api.preact.Fragment",
+        production: true
     });
 
     let code  = output.code;

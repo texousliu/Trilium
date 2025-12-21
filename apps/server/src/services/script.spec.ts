@@ -95,8 +95,8 @@ describe("JSX building", () => {
             }
         `;
         const expected = trimIndentation`\
-            "use strict";const _jsxFileName = "";function MyComponent() {
-                return api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 2}}, "Hello world." );
+            "use strict";function MyComponent() {
+                return api.preact.h('p', null, "Hello world." );
             }
         `;
         expect(buildJsx(script).code).toStrictEqual(expected);
@@ -112,10 +112,10 @@ describe("JSX building", () => {
             }
         `;
         const expected = trimIndentation`\
-            "use strict";const _jsxFileName = "";function MyComponent() {
+            "use strict";function MyComponent() {
                 return api.preact.h(api.preact.Fragment, null
-                    , api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 3}}, "Hi")
-                    , api.preact.h('p', {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}}, "there")
+                    , api.preact.h('p', null, "Hi")
+                    , api.preact.h('p', null, "there")
                 );
             }
         `;
@@ -156,10 +156,10 @@ describe("JSX building", () => {
             });
         `;
         const expected = trimIndentation`\
-            "use strict";const _jsxFileName = "";const _triliumpreact = api.preact;
+            "use strict";const _triliumpreact = api.preact;
             _triliumpreact.defineWidget.call(void 0, {
                 render() {
-                    return api.preact.h(_triliumpreact.RightPanelWidget, {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}} );
+                    return api.preact.h(_triliumpreact.RightPanelWidget, null );
                 }
             });
         `;
