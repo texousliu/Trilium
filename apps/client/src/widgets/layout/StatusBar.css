@@ -294,18 +294,18 @@
 
 }
 
-.status-bar-pane {
+.bottom-panel {
     margin: 0 !important;
     padding: 0;
 
-    .status-bar-pane-title-bar {
+    .bottom-panel-title-bar {
         display: flex;
         padding: 6px 12px;
         background: var(--bottom-panel-title-bar-background-color);
         justify-content: space-between;
         align-items: center;
 
-        .status-bar-pane-title-bar-caption {
+        .bottom-panel-title-bar-caption {
             text-transform: uppercase;
             letter-spacing: .3pt;
             font-weight: 600;
@@ -313,7 +313,7 @@
         }
     }
 
-    .status-bar-pane-content {
+    .bottom-panel-content {
         border-bottom: 1px solid var(--main-border-color);
         background: var(--bottom-panel-background-color);
         padding: 8px 12px;

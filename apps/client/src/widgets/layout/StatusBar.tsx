@@ -268,13 +268,13 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
 
 function SimilarNotesPane({ note, similarNotesShown, setSimilarNotesShown }: NoteInfoContext) {
     return (similarNotesShown &&
-        <StatusBarPane title={t("similar_notes.title")}
+        <BottomPanel title={t("similar_notes.title")}
                        className="similar-notes-pane"
                        visible={similarNotesShown}
                        setVisible={setSimilarNotesShown}
                        scrollable>
             <SimilarNotesTab note={note} />
-        </StatusBarPane>
+        </BottomPanel>
     );
 }
 //#endregion
@@ -371,7 +371,7 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
     }), [ api ]));
 
     return (context &&
-        <StatusBarPane title={t("attributes_panel.title")}
+        <BottomPanel title={t("attributes_panel.title")}
                        className="attribute-list"
                        visible={attributesShown}
                        setVisible={setAttributesShown}>
@@ -384,7 +384,7 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
                 api={api}
                 ntxId={noteContext.ntxId}
             />
-        </StatusBarPane>
+        </BottomPanel>
     );
 }
 //#endregion
@@ -449,9 +449,9 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
 }
 //#endregion
 
-//#region Status bar pane
+//#region Bottom panel
 
-interface StatusBarPaneParms {
+interface BottomPanelParams {
     children: ComponentChildren;
     title: string;
     visible: boolean;
@@ -459,13 +459,13 @@ interface StatusBarPaneParms {
     className?: string;
 }
 
-function StatusBarPane({ children, title, visible, setVisible, className }: StatusBarPaneParms) {
-    return <div className={clsx("status-bar-pane", className, {"hidden-ext": !visible})}>
-        <div className="status-bar-pane-title-bar">
-            <span className="status-bar-pane-title-bar-caption">{title}</span>
+function BottomPanel({ children, title, visible, setVisible, className }: BottomPanelParams) {
+    return <div className={clsx("bottom-panel", className, {"hidden-ext": !visible})}>
+        <div className="bottom-panel-title-bar">
+            <span className="bottom-panel-title-bar-caption">{title}</span>
             <button class="icon-action bx bx-x" onClick={() => setVisible?.(false)}></button>
         </div>
-        <div class={clsx("status-bar-pane-content")}>
+        <div class={clsx("bottom-panel-content")}>
             {children}
         </div>
     </div>
