@@ -301,7 +301,7 @@
     .status-bar-pane-title-bar {
         display: flex;
         padding: 6px 12px;
-        background: #272727;
+        background: var(--bottom-panel-title-bar-background-color);
         justify-content: space-between;
         align-items: center;
 
@@ -315,7 +315,7 @@
 
     .status-bar-pane-content {
         border-bottom: 1px solid var(--main-border-color);
-        background: #181818;
+        background: var(--bottom-panel-background-color);
         padding: 8px 12px;
         max-height: 40vh;
         overflow-y: auto;
