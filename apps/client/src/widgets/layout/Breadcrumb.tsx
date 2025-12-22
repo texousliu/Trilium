@@ -193,6 +193,7 @@ function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
             noSelectButtonStyle
             buttonClassName="icon-action"
             hideToggleArrow
+            dropdownContainerClassName="tn-dropdown-menu-scrollable"
             dropdownOptions={{  popperConfig: { strategy: "fixed", placement: "top" } }}
         >
             <BreadcrumbSeparatorDropdownContent {...props} />
