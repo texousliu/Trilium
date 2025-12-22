@@ -653,7 +653,8 @@ body a.tn-link:focus-visible,
 }
 
 body a.tn-link:hover,
-.use-tn-links a:hover {
+.use-tn-links a:hover,
+.use-tn-links a.ck-widget_selected {
     box-shadow: 0 0 0 4px var(--link-hover-background);
     --background: var(--link-hover-background);
     color: var(--link-hover-color);
