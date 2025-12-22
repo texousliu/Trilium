@@ -155,11 +155,6 @@
             }
         }
 
-        .dropdown-code-note-switcher {
-            max-height: 90vh;
-            overflow: scroll;
-        }
-
         .backlinks-widget > .dropdown-menu {
             --menu-padding-size: .9em;
 
