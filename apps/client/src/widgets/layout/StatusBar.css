@@ -244,20 +244,44 @@
     > .attribute-list {
         font-size: 0.9em;
 
-        .inherited-attributes-widget > div {
-            padding: 0;
-            font-size: 0.9em;
+        .attributes-panel-label {
+            opacity: .5;
+            margin-inline-end: 4px;
+            font-weight: 600;
         }
 
-        .attribute-list-editor {
-            padding-block: 0 !important;
-            padding-inline: 0 100px !important ;
-        }
+        .inherited-attributes-widget {
+            display: inline;
 
-        .ck.ck-editor__editable::after {
-            /* Remove a hidden spinner that causes overflow */
-            display: none;
-        }
+            > div {
+                display: inline;
+                padding: 0;
+            }
+         }
+
+         .attribute-list-editor-wrapper {
+            display: flex;
+            flex-direction: column-reverse;
+            padding-bottom: 0 !important;
+
+            .attribute-list-editor {
+                padding-block: 0 !important;
+                padding-inline: 0 100px !important ;
+            }
+
+            .attribute-errors {
+                padding: 4px 0;
+                color: var(--dropdown-item-icon-destructive-color);
+                font-style: italic;
+            }
+
+            .ck.ck-editor__editable::after {
+                /* Remove a hidden spinner that causes overflow */
+                display: none;
+            }
+         }
+
+
     }
 
     div.similar-notes-widget div.similar-notes-wrapper {

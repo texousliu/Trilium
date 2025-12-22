@@ -283,6 +283,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
     return (
         <>
             {!hidden && <div
+                className="attribute-list-editor-wrapper"
                 ref={wrapperRef}
                 style="position: relative; padding-top: 10px; padding-bottom: 10px"
                 onKeyDown={(e) => {
@@ -296,106 +297,107 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                         setTimeout(() => save(), 100);
                     }
                 }}
-            >
-                <CKEditor
-                    apiRef={editorRef}
-                    className="attribute-list-editor"
-                    tabIndex={200}
-                    editor={CKEditorAttributeEditor}
-                    currentValue={currentValue}
-                    config={{
-                        toolbar: { items: [] },
-                        placeholder: t("attribute_editor.placeholder"),
-                        mention: { feeds: mentionSetup },
-                        licenseKey: "GPL",
-                        language: "en"
-                    }}
-                    onChange={(currentValue) => {
-                        currentValueRef.current = currentValue ?? "";
-
-                        const oldValue = getPreprocessedData(lastSavedContent.current ?? "").trimEnd();
-                        const newValue = getPreprocessedData(currentValue ?? "").trimEnd();
-                        setNeedsSaving(oldValue !== newValue);
-                        setError(undefined);
-                    }}
-                    onClick={(e, pos) => {
-                        if (pos && pos.textNode && pos.textNode.data) {
-                            const clickIndex = getClickIndex(pos);
-
-                            let parsedAttrs: Attribute[];
-
-                            try {
-                                parsedAttrs = attribute_parser.lexAndParse(getPreprocessedData(currentValueRef.current), true);
-                            } catch (e: unknown) {
-                                // the input is incorrect because the user messed up with it and now needs to fix it manually
-                                console.log(e);
-                                return null;
-                            }
-
-                            let matchedAttr: Attribute | null = null;
-
-                            for (const attr of parsedAttrs) {
-                                if (attr.startIndex && clickIndex > attr.startIndex && attr.endIndex && clickIndex <= attr.endIndex) {
-                                    matchedAttr = attr;
-                                    break;
-                                }
-                            }
-
-                            setTimeout(() => {
-                                if (matchedAttr) {
-                                    attributeDetailWidget.showAttributeDetail({
-                                        allAttributes: parsedAttrs,
-                                        attribute: matchedAttr,
-                                        isOwned: true,
-                                        x: e.pageX,
-                                        y: e.pageY
-                                    });
-                                    setState("showAttributeDetail");
-                                } else {
-                                    setState("showHelpTooltip");
-                                }
-                            }, 100);
-                        } else {
-                            setState("showHelpTooltip");
-                        }
-                    }}
-                    onKeyDown={() => attributeDetailWidget.hide()}
-                    onBlur={() => save()}
-                    onInitialized={() => editorRef.current?.focus()}
-                    disableNewlines disableSpellcheck
-                />
-
-                <div className="attribute-editor-buttons">
-                    { needsSaving && <ActionButton
-                        icon="bx bx-save"
-                        className="save-attributes-button tn-tool-button"
-                        text={escapeQuotes(t("attribute_editor.save_attributes"))}
-                        onClick={save}
-                    /> }
-
-                    <ActionButton
-                        icon="bx bx-plus"
-                        className="add-new-attribute-button tn-tool-button"
-                        text={escapeQuotes(t("attribute_editor.add_a_new_attribute"))}
-                        onClick={(e) => {
-                            // Prevent automatic hiding of the context menu due to the button being clicked.
-                            e.stopPropagation();
-
-                            contextMenu.show<AttributeCommandNames>({
-                                x: e.pageX,
-                                y: e.pageY,
-                                orientation: "left",
-                                items: [
-                                    { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
-                                    { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
-                                    { kind: "separator" },
-                                    { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
-                                    { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
-                                ],
-                                selectMenuItemHandler: (item) => handleAddNewAttributeCommand(item.command)
-                            });
+            >   <div style="position: relative;">
+                    <CKEditor
+                        apiRef={editorRef}
+                        className="attribute-list-editor"
+                        tabIndex={200}
+                        editor={CKEditorAttributeEditor}
+                        currentValue={currentValue}
+                        config={{
+                            toolbar: { items: [] },
+                            placeholder: t("attribute_editor.placeholder"),
+                            mention: { feeds: mentionSetup },
+                            licenseKey: "GPL",
+                            language: "en"
                         }}
+                        onChange={(currentValue) => {
+                            currentValueRef.current = currentValue ?? "";
+
+                            const oldValue = getPreprocessedData(lastSavedContent.current ?? "").trimEnd();
+                            const newValue = getPreprocessedData(currentValue ?? "").trimEnd();
+                            setNeedsSaving(oldValue !== newValue);
+                            setError(undefined);
+                        }}
+                        onClick={(e, pos) => {
+                            if (pos && pos.textNode && pos.textNode.data) {
+                                const clickIndex = getClickIndex(pos);
+
+                                let parsedAttrs: Attribute[];
+
+                                try {
+                                    parsedAttrs = attribute_parser.lexAndParse(getPreprocessedData(currentValueRef.current), true);
+                                } catch (e: unknown) {
+                                    // the input is incorrect because the user messed up with it and now needs to fix it manually
+                                    console.log(e);
+                                    return null;
+                                }
+
+                                let matchedAttr: Attribute | null = null;
+
+                                for (const attr of parsedAttrs) {
+                                    if (attr.startIndex && clickIndex > attr.startIndex && attr.endIndex && clickIndex <= attr.endIndex) {
+                                        matchedAttr = attr;
+                                        break;
+                                    }
+                                }
+
+                                setTimeout(() => {
+                                    if (matchedAttr) {
+                                        attributeDetailWidget.showAttributeDetail({
+                                            allAttributes: parsedAttrs,
+                                            attribute: matchedAttr,
+                                            isOwned: true,
+                                            x: e.pageX,
+                                            y: e.pageY
+                                        });
+                                        setState("showAttributeDetail");
+                                    } else {
+                                        setState("showHelpTooltip");
+                                    }
+                                }, 100);
+                            } else {
+                                setState("showHelpTooltip");
+                            }
+                        }}
+                        onKeyDown={() => attributeDetailWidget.hide()}
+                        onBlur={() => save()}
+                        onInitialized={() => editorRef.current?.focus()}
+                        disableNewlines disableSpellcheck
                     />
+
+                    <div className="attribute-editor-buttons">
+                        { needsSaving && <ActionButton
+                            icon="bx bx-save"
+                            className="save-attributes-button tn-tool-button"
+                            text={escapeQuotes(t("attribute_editor.save_attributes"))}
+                            onClick={save}
+                        /> }
+
+                        <ActionButton
+                            icon="bx bx-plus"
+                            className="add-new-attribute-button tn-tool-button"
+                            text={escapeQuotes(t("attribute_editor.add_a_new_attribute"))}
+                            onClick={(e) => {
+                                // Prevent automatic hiding of the context menu due to the button being clicked.
+                                e.stopPropagation();
+
+                                contextMenu.show<AttributeCommandNames>({
+                                    x: e.pageX,
+                                    y: e.pageY,
+                                    orientation: "left",
+                                    items: [
+                                        { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
+                                        { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
+                                        { kind: "separator" },
+                                        { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
+                                        { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
+                                    ],
+                                    selectMenuItemHandler: (item) => handleAddNewAttributeCommand(item.command)
+                                });
+                            }}
+                        />
+                    </div>
                 </div>
 
                 { error && (

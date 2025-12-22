@@ -9,7 +9,11 @@ import RawHtml from "../react/RawHtml";
 import { joinElements } from "../react/react_utils";
 import AttributeDetailWidget from "../attribute_widgets/attribute_detail";
 
-export default function InheritedAttributesTab({ note, componentId }: Pick<TabContext, "note" | "componentId">) {
+type InheritedAttributesTabArgs = Pick<TabContext, "note" | "componentId"> & {
+    emptyListString?: string;
+}
+
+export default function InheritedAttributesTab({ note, componentId, emptyListString }: InheritedAttributesTabArgs) {
     const [ inheritedAttributes, setInheritedAttributes ] = useState<FAttribute[]>();
     const [ attributeDetailWidgetEl, attributeDetailWidget ] = useLegacyWidget(() => new AttributeDetailWidget());
 
@@ -63,7 +67,7 @@ export default function InheritedAttributesTab({ note, componentId }: Pick<TabCo
                         />
                     )), " ")
                 ) : (
-                    <>{t("inherited_attribute_list.no_inherited_attributes")}</>
+                    <>{t(emptyListString ?? "inherited_attribute_list.no_inherited_attributes")}</>
                 )}
             </div>
 

@@ -268,7 +268,7 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
 
 function SimilarNotesPane({ note, similarNotesShown, setSimilarNotesShown }: NoteInfoContext) {
     return (similarNotesShown &&
-        <StatusBarPane title="Similar notes"
+        <StatusBarPane title={t("similar_notes.title")}
                        className="similar-notes-pane"
                        visible={similarNotesShown}
                        setVisible={setSimilarNotesShown}
@@ -371,12 +371,13 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
     }), [ api ]));
 
     return (context &&
-        <StatusBarPane title="Attributes"
+        <StatusBarPane title={t("attributes_panel.title")}
                        className="attribute-list"
                        visible={attributesShown}
                        setVisible={setAttributesShown}>
-
-            <InheritedAttributesTab {...context} />
+            
+            <span class="attributes-panel-label">{t("inherited_attribute_list.title")}</span>
+            <InheritedAttributesTab {...context} emptyListString="inherited_attribute_list.none" />
 
             <AttributeEditor
                 {...context}
