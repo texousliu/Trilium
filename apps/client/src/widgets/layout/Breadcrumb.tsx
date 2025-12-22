@@ -189,7 +189,7 @@ interface BreadcrumbSeparatorProps {
 function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
     return (
         <Dropdown
-            text={<Icon icon="bx bx-chevron-right" />}
+            text={<Icon icon="bx bxs-chevron-right" />}
             noSelectButtonStyle
             buttonClassName="icon-action"
             hideToggleArrow
