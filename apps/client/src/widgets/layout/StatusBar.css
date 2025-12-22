@@ -1,15 +1,15 @@
 .component.status-bar {
     contain: none;
     border-top: 1px solid var(--main-border-color);
-    background-color: var(--left-pane-background-color);
 
     > .status-bar-main-row {
         min-height: 28px;
         display: flex;
         align-items: center;
+        background-color: var(--left-pane-background-color);
         padding-inline: 0.25em;
         font-size: 0.85em;
-
+        
         > .breadcrumb {
             flex-grow: 1;
             --icon-button-size: 23px;
