@@ -128,6 +128,12 @@ body.backdrop-effects-disabled {
     font-size: 0.9rem !important;
 }
 
+.dropdown-menu.tn-dropdown-menu-scrollable {
+    /* Note: scrollable dropdowns does not support submenus */
+    max-height: 90vh;
+    overflow: scroll;
+}
+
 body.desktop .dropdown-menu::before,
 :root .ck.ck-dropdown__panel::before,
 :root .excalidraw .popover::before,
