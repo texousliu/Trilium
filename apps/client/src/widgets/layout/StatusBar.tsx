@@ -455,17 +455,16 @@ interface StatusBarPaneParms {
     title: string;
     visible: boolean;
     setVisible?: (visible: boolean) => void;
-    scrollable?: boolean;
     className?: string;
 }
 
-function StatusBarPane({ children, title, visible, setVisible, className, scrollable }: StatusBarPaneParms) {
+function StatusBarPane({ children, title, visible, setVisible, className }: StatusBarPaneParms) {
     return <div className={clsx("status-bar-pane", className, {"hidden-ext": !visible})}>
         <div className="status-bar-pane-title-bar">
             <span className="status-bar-pane-title-bar-caption">{title}</span>
             <button class="icon-action bx bx-x" onClick={() => setVisible?.(false)}></button>
         </div>
-        <div class={clsx("status-bar-pane-content", { "status-bar-pane-scrollable": scrollable })}>
+        <div class={clsx("status-bar-pane-content")}>
             {children}
         </div>
     </div>

@@ -250,7 +250,13 @@
         }
 
         .attribute-list-editor {
-            padding: 0 !important;
+            padding-block: 0 !important;
+            padding-inline: 0 100px !important ;
+        }
+
+        .ck.ck-editor__editable::after {
+            /* Remove a hidden spinner that causes overflow */
+            display: none;
         }
     }
 
@@ -287,11 +293,8 @@
         border-bottom: 1px solid var(--main-border-color);
         background: #181818;
         padding: 8px 12px;
-        
-        &.status-bar-pane-scrollable {
-            max-height: 40vh;
-            overflow-y: auto;
-        }
+        max-height: 40vh;
+        overflow-y: auto;
     }
 }
 
