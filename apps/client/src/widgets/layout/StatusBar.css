@@ -254,6 +254,10 @@
         }
     }
 
+    div.similar-notes-widget div.similar-notes-wrapper {
+        max-height: unset;
+    }
+
     button.select-button:not(:focus-visible) {
         outline: none;
     }
@@ -267,7 +271,7 @@
     .status-bar-pane-title-bar {
         display: flex;
         padding: 6px 12px;
-        background: #2d2d2d;
+        background: #272727;
         justify-content: space-between;
         align-items: center;
 
@@ -280,8 +284,14 @@
     }
 
     .status-bar-pane-content {
-        background: #363636;
+        border-bottom: 1px solid var(--main-border-color);
+        background: #181818;
         padding: 8px 12px;
+        
+        &.status-bar-pane-scrollable {
+            max-height: 40vh;
+            overflow-y: auto;
+        }
     }
 }
 

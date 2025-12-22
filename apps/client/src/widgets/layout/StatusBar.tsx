@@ -271,7 +271,8 @@ function SimilarNotesPane({ note, similarNotesShown, setSimilarNotesShown }: Not
         <StatusBarPane title="Similar notes"
                        className="similar-notes-pane"
                        visible={similarNotesShown}
-                       setVisible={setSimilarNotesShown}>
+                       setVisible={setSimilarNotesShown}
+                       scrollable>
             <SimilarNotesTab note={note} />
         </StatusBarPane>
     );
@@ -454,16 +455,17 @@ interface StatusBarPaneParms {
     title: string;
     visible: boolean;
     setVisible?: (visible: boolean) => void;
+    scrollable?: boolean;
     className?: string;
 }
 
-function StatusBarPane({ children, title, visible, setVisible, className }: StatusBarPaneParms) {
+function StatusBarPane({ children, title, visible, setVisible, className, scrollable }: StatusBarPaneParms) {
     return <div className={clsx("status-bar-pane", className, {"hidden-ext": !visible})}>
         <div className="status-bar-pane-title-bar">
             <span className="status-bar-pane-title-bar-caption">{title}</span>
             <button class="icon-action bx bx-x" onClick={() => setVisible?.(false)}></button>
         </div>
-        <div class="status-bar-pane-content">
+        <div class={clsx("status-bar-pane-content", { "status-bar-pane-scrollable": scrollable })}>
             {children}
         </div>
     </div>
