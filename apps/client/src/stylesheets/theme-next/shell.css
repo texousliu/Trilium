@@ -1230,7 +1230,7 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
     margin-bottom: 2px;
 }
 
-body.vertical-layout #rest-pane > .classic-toolbar-widget {
+body.layout-vertical #rest-pane > .classic-toolbar-widget {
     border-start-start-radius: var(--center-pane-border-radius);
 }
 
