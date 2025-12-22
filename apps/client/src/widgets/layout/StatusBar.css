@@ -243,7 +243,6 @@
 
     > .attribute-list {
         font-size: 0.9em;
-        padding: 0.5em 0.75em;
 
         .inherited-attributes-widget > div {
             padding: 0;
@@ -260,3 +259,29 @@
     }
 
 }
+
+.status-bar-pane {
+    margin: 0 !important;
+    padding: 0;
+
+    .status-bar-pane-title-bar {
+        display: flex;
+        padding: 6px 12px;
+        background: #2d2d2d;
+        justify-content: space-between;
+        align-items: center;
+
+        .status-bar-pane-title-bar-caption {
+            text-transform: uppercase;
+            letter-spacing: .3pt;
+            font-weight: 600;
+            font-size: .85em;
+        }
+    }
+
+    .status-bar-pane-content {
+        background: #363636;
+        padding: 8px 12px;
+    }
+}
+

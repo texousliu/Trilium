@@ -266,11 +266,14 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
     );
 }
 
-function SimilarNotesPane({ note, similarNotesShown }: NoteInfoContext) {
+function SimilarNotesPane({ note, similarNotesShown, setSimilarNotesShown }: NoteInfoContext) {
     return (similarNotesShown &&
-        <div className="similar-notes-pane">
+        <StatusBarPane title="Similar notes"
+                       className="similar-notes-pane"
+                       visible={similarNotesShown}
+                       setVisible={setSimilarNotesShown}>
             <SimilarNotesTab note={note} />
-        </div>
+        </StatusBarPane>
     );
 }
 //#endregion
@@ -367,7 +370,11 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
     }), [ api ]));
 
     return (context &&
-        <div className={clsx("attribute-list", !attributesShown && "hidden-ext")}>
+        <StatusBarPane title="Attributes"
+                       className="attribute-list"
+                       visible={attributesShown}
+                       setVisible={setAttributesShown}>
+
             <InheritedAttributesTab {...context} />
 
             <AttributeEditor
@@ -375,7 +382,7 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
                 api={api}
                 ntxId={noteContext.ntxId}
             />
-        </div>
+        </StatusBarPane>
     );
 }
 //#endregion
@@ -437,5 +444,28 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
             )}
         </>
     );
+}
+//#endregion
+
+//#region Status bar pane
+
+interface StatusBarPaneParms {
+    children: ComponentChildren;
+    title: string;
+    visible: boolean;
+    setVisible?: (visible: boolean) => void;
+    className?: string;
+}
+
+function StatusBarPane({ children, title, visible, setVisible, className }: StatusBarPaneParms) {
+    return <div className={clsx("status-bar-pane", className, {"hidden-ext": !visible})}>
+        <div className="status-bar-pane-title-bar">
+            <span className="status-bar-pane-title-bar-caption">{title}</span>
+            <button class="icon-action bx bx-x" onClick={() => setVisible?.(false)}></button>
+        </div>
+        <div class="status-bar-pane-content">
+            {children}
+        </div>
+    </div>
 }
 //#endregion
