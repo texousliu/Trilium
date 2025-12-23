@@ -35,7 +35,7 @@ module.exports = new NoteTitleWidget();
 
 ## Preact widget (v0.101.0+)
 
-```jsx
+```
 import { defineLauncherWidget, useActiveNoteContext } from "trilium:preact";
 
 export default defineLauncherWidget({

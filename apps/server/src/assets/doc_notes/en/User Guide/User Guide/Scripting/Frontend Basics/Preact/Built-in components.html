@@ -4,11 +4,11 @@
   <figcaption>A partial screenshot from the Widget showcase example (see below).</figcaption>
 </figure>
 <p>Trilium comes with its own set of Preact components, some of which are
-  also available to&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/CdNpE2pqjmI6/yIhgI5H7A2Sm/_help_MgibgPcfeuGz">Custom Widgets</a>&nbsp;and&nbsp;
+  also available to&nbsp;<a class="reference-link" href="#root/_help_MgibgPcfeuGz">Custom Widgets</a>&nbsp;and&nbsp;
   <a
-  class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_HcABDtFCkbFN">Render Note</a>.</p>
-<p>To use these components, simply import them from <code spellcheck="false">trilium:preact</code>:</p><pre><code class="language-text-jsx">import { ActionButton, Button, LinkButton } from "trilium:preact";</code></pre>
-<p>and then use them:</p><pre><code class="language-text-jsx">export default function MyRenderNote() {
+  class="reference-link" href="#root/_help_HcABDtFCkbFN">Render Note</a>.</p>
+<p>To use these components, simply import them from <code>trilium:preact</code>:</p><pre><code class="language-text-x-trilium-auto">import { ActionButton, Button, LinkButton } from "trilium:preact";</code></pre>
+<p>and then use them:</p><pre><code class="language-text-x-trilium-auto">export default function MyRenderNote() {
     const onClick = () =&gt; showMessage("A button was pressed");
     
     return (
@@ -26,19 +26,19 @@
 <aside class="admonition tip">
   <p>Starting with v0.101.0, the widget showcase is also available in the&nbsp;
     <a
-    class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/wX4HbRucYSDD/_help_6tZeKvSHEUiB">Demo Notes</a>.</p>
+    class="reference-link" href="#root/_help_6tZeKvSHEUiB">Demo Notes</a>.</p>
 </aside>
-<p>This is a&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_HcABDtFCkbFN">Render Note</a>&nbsp;example
+<p>This is a&nbsp;<a class="reference-link" href="#root/_help_HcABDtFCkbFN">Render Note</a>&nbsp;example
   with JSX that shows most of the built-in components that are accessible
   to custom widgets and JSX render notes.</p>
 <p>To use it, simply:</p>
 <ol>
-  <li data-list-item-id="ef2da471f61429e4755fdfee1301299d8">Create a render note.</li>
-  <li data-list-item-id="e2e1475eb5099d3df20de96997712a9dc">Create a child code note of JSX type with the content of this file:&nbsp;
+  <li>Create a render note.</li>
+  <li>Create a child code note of JSX type with the content of this file:&nbsp;
     <a
-    class="reference-link" href="#root/pOsGYCXsbNQG/CdNpE2pqjmI6/yIhgI5H7A2Sm/KLsqhjaqh1QW/RSssb9S3xgSr/_help_i9B4IW7b6V6z">Widget showcase</a>
+    class="reference-link" href="#root/_help_i9B4IW7b6V6z">Widget showcase</a>
   </li>
-  <li data-list-item-id="ed0b442c37c1db5287d95d8d982f025d9">Set the <code spellcheck="false">~renderNote</code> relation of the parent
-    note to the child note.</li>
-  <li data-list-item-id="e62386a552bb441bcb830285f5487868b">Refresh the render note to see the results.</li>
+  <li>Set the <code>~renderNote</code> relation of the parent note to the child
+    note.</li>
+  <li>Refresh the render note to see the results.</li>
 </ol>
