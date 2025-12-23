@@ -12,7 +12,7 @@ import { PromotedAttributesContent, usePromotedAttributeData } from "../Promoted
 import SimpleBadge from "../react/Badge";
 import Collapsible, { ExternallyControlledCollapsible } from "../react/Collapsible";
 import { useNoteContext, useNoteLabel, useNoteProperty, useTriliumEvent, useTriliumOptionBool } from "../react/hooks";
-import NoteLink from "../react/NoteLink";
+import NoteLink, { NewNoteLink } from "../react/NoteLink";
 import { useEditedNotes } from "../ribbon/EditedNotesTab";
 import SearchDefinitionTab from "../ribbon/SearchDefinitionTab";
 import NoteTypeSwitcher from "./NoteTypeSwitcher";
@@ -96,14 +96,10 @@ function EditedNotesContent({ note }: { note: FNote }) {
 
     return (editedNotes !== undefined &&
         (editedNotes.length > 0 ? editedNotes?.map(editedNote => (
-            <SimpleBadge
-                key={editedNote.noteId}
-                title={(
-                    <NoteLink
-                        notePath={editedNote.noteId}
-                        showNoteIcon
-                    />
-                )}
+            <NewNoteLink
+                className="badge"
+                notePath={editedNote.noteId}
+                showNoteIcon
             />
         )) : (
             <div className="no-edited-notes-found">{t("edited_notes.no_edited_notes_found")}</div>

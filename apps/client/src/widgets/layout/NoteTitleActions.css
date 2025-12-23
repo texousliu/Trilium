@@ -20,11 +20,15 @@ body.experimental-feature-new-layout {
 
                 .badge {
                     margin: 0;
-                    a.tn-link {
-                        color: inherit;
-                        text-transform: none;
-                        text-decoration: none;
-                        display: inline-block;
+                    color: inherit;
+                    text-transform: none;
+                    text-decoration: none;
+                    display: inline-block;
+                    transition: background-color 250ms ease-in, color 250ms ease-in;
+
+                    &:hover {
+                        background-color: var(--link-hover-background);
+                        color: var(--link-hover-color);
                     }
                 }
             }
