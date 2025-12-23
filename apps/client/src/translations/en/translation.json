@@ -1779,7 +1779,8 @@
     "note_type_switcher_others": "Other note type",
     "note_type_switcher_templates": "Template",
     "note_type_switcher_collection": "Collection",
-    "edited_notes": "Edited notes"
+    "edited_notes": "Notes edited on this day",
+    "promoted_attributes": "Promoted attributes"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",

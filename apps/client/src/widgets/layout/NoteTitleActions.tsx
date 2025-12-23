@@ -66,7 +66,7 @@ function PromotedAttributes({ note, componentId, noteContext }: {
     return (note && (
         <ExternallyControlledCollapsible
             key={note.noteId}
-            title={t("promoted_attributes.promoted_attributes")}
+            title={t("note_title.promoted_attributes")}
             expanded={expanded} setExpanded={setExpanded}
         >
             <PromotedAttributesContent note={note} componentId={componentId} cells={cells} setCells={setCells} />
