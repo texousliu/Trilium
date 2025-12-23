@@ -3,6 +3,7 @@ import { trimIndentation } from "@triliumnext/commons";
 import becca from "../becca/becca.js";
 import BBranch from "../becca/entities/bbranch.js";
 import BNote from "../becca/entities/bnote.js";
+import { buildNote } from "../test/becca_easy_mocking.js";
 import { note, NoteBuilder } from "../test/becca_mocking.js";
 import cls from "./cls.js";
 import { buildJsx, executeBundle, getScriptBundle } from "./script.js";
@@ -62,14 +63,15 @@ describe("Script", () => {
     });
 
     describe("dayjs in backend scripts", () => {
-        const scriptNote = note("dayjs", {
+        const scriptNote = buildNote({
             type: "code",
             mime: "application/javascript;env=backend",
+            content: ""
         });
 
         it("dayjs is available", () => {
             cls.init(() => {
-                const bundle = getScriptBundle(scriptNote.note, true, "backend", [], `return api.dayjs().format("YYYY-MM-DD");`);
+                const bundle = getScriptBundle(scriptNote, true, "backend", [], `return api.dayjs().format("YYYY-MM-DD");`);
                 expect(bundle).toBeDefined();
                 const result = executeBundle(bundle!);
                 expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/);
@@ -78,7 +80,7 @@ describe("Script", () => {
 
         it("dayjs is-same-or-before plugin exists", () => {
             cls.init(() => {
-                const bundle = getScriptBundle(scriptNote.note, true, "backend", [], `return api.dayjs("2023-10-01").isSameOrBefore(api.dayjs("2023-10-02"));`);
+                const bundle = getScriptBundle(scriptNote, true, "backend", [], `return api.dayjs("2023-10-01").isSameOrBefore(api.dayjs("2023-10-02"));`);
                 expect(bundle).toBeDefined();
                 const result = executeBundle(bundle!);
                 expect(result).toBe(true);
