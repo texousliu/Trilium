@@ -1,6 +1,5 @@
 import { h, VNode } from "preact";
 
-import Component from "../components/component.js";
 import BasicWidget, { ReactWrappedWidget } from "../widgets/basic_widget.js";
 import RightPanelWidget from "../widgets/right_panel_widget.js";
 import froca from "./froca.js";

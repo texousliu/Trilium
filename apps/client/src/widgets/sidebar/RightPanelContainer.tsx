@@ -2,7 +2,7 @@
 import "./RightPanelContainer.css";
 
 import Split from "@triliumnext/split.js";
-import { isValidElement, VNode } from "preact";
+import { VNode } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 
 import appContext from "../../components/app_context";
@@ -10,7 +10,6 @@ import { WidgetsByParent } from "../../services/bundle";
 import { t } from "../../services/i18n";
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
-import BasicWidget from "../basic_widget";
 import Button from "../react/Button";
 import { useActiveNoteContext, useLegacyWidget, useNoteProperty, useTriliumOptionBool, useTriliumOptionJson } from "../react/hooks";
 import Icon from "../react/Icon";
@@ -67,7 +66,7 @@ function useItems(rightPaneVisible: boolean, widgetsByParent: WidgetsByParent) {
             el: <HighlightsList />,
             enabled: noteType === "text" && highlightsList.length > 0,
         },
-        ...widgetsByParent.getLegacyWidgets("right-pane").map((widget, i) => ({
+        ...widgetsByParent.getLegacyWidgets("right-pane").map((widget) => ({
             el: <CustomLegacyWidget key={widget._noteId} originalWidget={widget as LegacyRightPanelWidget} />,
             enabled: true,
             position: widget.position

@@ -538,7 +538,6 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
                 return `!@#Function: ${p.toString()}`;
             }
             return p;
-
         });
     }
 
@@ -567,7 +566,6 @@ function FrontendScriptApi(this: Api, startNote: FNote, currentNote: FNote, orig
             return ret.executionResult;
         }
         throw new Error(`server error: ${ret.error}`);
-
     };
 
     this.runOnBackend = async (func, params = []) => {

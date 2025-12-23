@@ -1,7 +1,6 @@
 import { Tooltip } from "bootstrap";
-import { ComponentChildren } from "preact";
-import { CSSProperties, memo } from "preact/compat";
-import { useCallback,useEffect, useMemo, useRef } from "preact/hooks";
+import { ComponentChildren, CSSProperties } from "preact";
+import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
 
 import { escapeQuotes } from "../../services/utils";
 import { useUniqueName } from "./hooks";

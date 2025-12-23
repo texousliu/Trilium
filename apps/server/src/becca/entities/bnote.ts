@@ -360,7 +360,6 @@ class BNote extends AbstractBeccaEntity<BNote> {
             return this.__attributeCache.filter((attr) => attr.name === name);
         }
         return this.__attributeCache;
-
     }
 
     private __ensureAttributeCacheIsAvailable() {
@@ -697,7 +696,6 @@ class BNote extends AbstractBeccaEntity<BNote> {
             return this.ownedAttributes.filter((attr) => attr.name === name);
         }
         return this.ownedAttributes;
-
     }
 
     /**
@@ -750,7 +748,6 @@ class BNote extends AbstractBeccaEntity<BNote> {
                 return 1;
             }
             return 0;
-
         });
 
         this.parents = this.parentBranches.map((branch) => branch.parentNote).filter((note) => !!note) as BNote[];
@@ -1183,7 +1180,6 @@ class BNote extends AbstractBeccaEntity<BNote> {
                 return a.isHidden ? 1 : -1;
             }
             return a.notePath.length - b.notePath.length;
-
         });
 
         return notePaths;
@@ -1722,7 +1718,6 @@ class BNote extends AbstractBeccaEntity<BNote> {
             return "bx bx-data";
         }
         return NOTE_TYPE_ICONS[this.type];
-
     }
 
     // TODO: Deduplicate with fnote

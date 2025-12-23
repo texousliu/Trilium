@@ -114,7 +114,6 @@ function getParams(params?: ScriptParams) {
                 return p.substr(13);
             }
             return JSON.stringify(p);
-
         })
         .join(",");
 }
@@ -227,10 +226,10 @@ export function buildJsx(contentRaw: string | Buffer) {
         production: true
     });
 
-    let code  = output.code;
+    let code = output.code;
 
     // Rewrite ESM-like exports to `module.exports =`.
-    code = output.code.replaceAll(
+    code = code.replaceAll(
         /\bexports\s*\.\s*default\s*=\s*/g,
         'module.exports = '
     );
@@ -241,7 +240,7 @@ export function buildJsx(contentRaw: string | Buffer) {
         'const $1 = api.preact;'
     );
 
-    // Rewrite ESM-like imports to internal API, to `const { foo } = api.preact`
+    // Rewrite ESM-like imports to internal API, to `const { foo } = api`
     code = code.replaceAll(
         /(?:var|let|const)\s+(\w+)\s*=\s*require\(['"]trilium:api['"]\);?/g,
         'const $1 = api;'

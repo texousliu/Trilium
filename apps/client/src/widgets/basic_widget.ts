@@ -57,9 +57,8 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
     optChild(condition: boolean, ...components: (T | VNode)[]) {
         if (condition) {
             return this.child(...components);
-        } 
+        }
         return this;
-        
     }
 
     id(id: string) {
@@ -246,9 +245,8 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
     getClosestNtxId() {
         if (this.$widget) {
             return this.$widget.closest("[data-ntx-id]").attr("data-ntx-id");
-        } 
+        }
         return null;
-        
     }
 
     cleanup() {}
