@@ -21,21 +21,17 @@ export default function NoteTitleActions() {
     const isHiddenNote = note && note.noteId !== "_search" && note.noteId.startsWith("_");
     const noteType = useNoteProperty(note, "type");
 
-    const items = [
-        note && <PromotedAttributes note={note} componentId={componentId} noteContext={noteContext} />,
-        note && noteType === "search" && <SearchProperties note={note} ntxId={ntxId} />,
-        note && !isHiddenNote && noteType === "book" && <CollectionProperties note={note} />
-    ].filter(Boolean);
-
     return (
-        <div className={clsx("title-actions", items.length > 0 && "visible")}>
-            {items}
+        <div className="title-actions">
+            <PromotedAttributes note={note} componentId={componentId} noteContext={noteContext} />
+            {noteType === "search" && <SearchProperties note={note} ntxId={ntxId} />}
+            {!isHiddenNote && note && noteType === "book" && <CollectionProperties note={note} />}
             <EditedNotes />
         </div>
     );
 }
 
-function SearchProperties({ note, ntxId }: { note: FNote, ntxId: string | null | undefined }) {
+function SearchProperties({ note, ntxId }: { note: FNote | null | undefined, ntxId: string | null | undefined }) {
     return (note &&
         <Collapsible
             title={t("search_definition.search_parameters")}
