@@ -32,7 +32,8 @@ export function Badge({ icon, className, text, tooltip, href, ...containerProps 
         fallbackPlacements: [ "bottom" ],
         animation: false,
         html: true,
-        title: tooltip
+        title: tooltip,
+        customClass: "pre-wrap-text"
     });
 
     const content = <>
