@@ -15,6 +15,7 @@ import { useNoteContext, useNoteLabel, useNoteProperty, useTriliumEvent, useTril
 import NoteLink from "../react/NoteLink";
 import { useEditedNotes } from "../ribbon/EditedNotesTab";
 import SearchDefinitionTab from "../ribbon/SearchDefinitionTab";
+import NoteTypeSwitcher from "./NoteTypeSwitcher";
 
 export default function NoteTitleActions() {
     const { note, ntxId, componentId, noteContext } = useNoteContext();
@@ -27,6 +28,7 @@ export default function NoteTitleActions() {
             {noteType === "search" && <SearchProperties note={note} ntxId={ntxId} />}
             {!isHiddenNote && note && noteType === "book" && <CollectionProperties note={note} />}
             <EditedNotes />
+            <NoteTypeSwitcher />
         </div>
     );
 }
