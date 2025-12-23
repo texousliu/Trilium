@@ -46,6 +46,19 @@
             overflow: hidden;
             display: block;
             flex-shrink: 2;
+            font-weight: normal;
+        }
+    }
+
+    .icon-action {
+        font-size: .9rem !important;
+
+        .bxs-chevron-right {
+            transform: translateY(8%);
+            
+            &::before {
+                opacity: .75;
+            }
         }
     }
 
