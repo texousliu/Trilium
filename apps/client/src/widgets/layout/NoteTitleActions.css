@@ -6,7 +6,7 @@ body.experimental-feature-new-layout {
     .title-actions {
         display: flex;
         flex-direction: column;
-        gap: 1em;
+        gap: 0.5em;
 
         &:not(:empty) {
             padding: 0.75em 15px;
@@ -31,6 +31,13 @@ body.experimental-feature-new-layout {
                         color: var(--link-hover-color);
                     }
                 }
+            }
+        }
+
+        .promoted-attributes-widget {
+            .promoted-attributes-container {
+                margin: 0;
+                padding: 0;
             }
         }
     }
