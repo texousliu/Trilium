@@ -203,10 +203,14 @@ export default class MathInputView extends View {
 			// Inline shortcut configuration is optional; ignore failures to avoid breaking the math field.
 		}
 		mf.addEventListener( 'keydown', ev => {
-			if ( ev.key === 'Tab' && !ev.shiftKey ) {
-				ev.preventDefault();
-				ev.stopImmediatePropagation();
-				this.latexTextAreaView.focus();
+			if ( ev.key === 'Tab' ) {
+				if ( ev.shiftKey ) {
+					ev.preventDefault();
+				} else {
+					ev.preventDefault();
+					ev.stopImmediatePropagation();
+					this.latexTextAreaView.focus();
+				}
 			}
 		}, { capture: true } );
 		mf.addEventListener( 'input', () => {
