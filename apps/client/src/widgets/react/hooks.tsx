@@ -369,7 +369,8 @@ export function useActiveNoteContext() {
 
     useEffect(() => {
         setNote(noteContext?.note);
-    }, [ notePath ]);
+        setNotePath(noteContext?.notePath);
+    }, [ notePath, noteContext?.note, noteContext?.notePath ]);
 
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], () => {
         const noteContext = appContext.tabManager.getActiveContext() ?? undefined;
