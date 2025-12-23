@@ -16,6 +16,8 @@
     }
 
     a.tn-link {
+        --link-hover-background: var(--icon-button-hover-background);
+
         color: var(--custom-color, inherit);
 
         &:hover {
