@@ -189,10 +189,11 @@ interface BreadcrumbSeparatorProps {
 function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
     return (
         <Dropdown
-            text={<Icon icon="bx bx-chevron-right" />}
+            text={<Icon icon="bx bxs-chevron-right" />}
             noSelectButtonStyle
             buttonClassName="icon-action"
             hideToggleArrow
+            dropdownContainerClassName="tn-dropdown-menu-scrollable"
             dropdownOptions={{  popperConfig: { strategy: "fixed", placement: "top" } }}
         >
             <BreadcrumbSeparatorDropdownContent {...props} />

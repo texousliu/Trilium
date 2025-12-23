@@ -1,15 +1,15 @@
 .component.status-bar {
     contain: none;
     border-top: 1px solid var(--main-border-color);
-    background-color: var(--left-pane-background-color);
 
     > .status-bar-main-row {
         min-height: 28px;
         display: flex;
         align-items: center;
+        background-color: var(--left-pane-background-color);
         padding-inline: 0.25em;
         font-size: 0.85em;
-
+        
         > .breadcrumb {
             flex-grow: 1;
             --icon-button-size: 23px;
@@ -155,11 +155,6 @@
             }
         }
 
-        .dropdown-code-note-switcher {
-            max-height: 90vh;
-            overflow: scroll;
-        }
-
         .backlinks-widget > .dropdown-menu {
             --menu-padding-size: .9em;
 
@@ -248,16 +243,82 @@
 
     > .attribute-list {
         font-size: 0.9em;
-        padding: 0.5em 0.75em;
 
-        .inherited-attributes-widget > div {
-            padding: 0;
-            font-size: 0.9em;
+        .attributes-panel-label {
+            opacity: .5;
+            margin-inline-end: 4px;
+            font-weight: 600;
         }
 
-        .attribute-list-editor {
-            padding: 0 !important;
-        }
+        .inherited-attributes-widget {
+            display: inline;
+
+            > div {
+                display: inline;
+                padding: 0;
+            }
+         }
+
+         .attribute-list-editor-wrapper {
+            display: flex;
+            flex-direction: column-reverse;
+            padding-bottom: 0 !important;
+
+            .attribute-list-editor {
+                padding-block: 0 !important;
+                padding-inline: 0 100px !important ;
+            }
+
+            .attribute-errors {
+                padding: 4px 0;
+                color: var(--dropdown-item-icon-destructive-color);
+                font-style: italic;
+            }
+
+            .ck.ck-editor__editable::after {
+                /* Remove a hidden spinner that causes overflow */
+                display: none;
+            }
+         }
+
+
+    }
+
+    div.similar-notes-widget div.similar-notes-wrapper {
+        max-height: unset;
+    }
+
+    button.select-button:not(:focus-visible) {
+        outline: none;
     }
 
 }
+
+.bottom-panel {
+    margin: 0 !important;
+    padding: 0;
+
+    .bottom-panel-title-bar {
+        display: flex;
+        padding: 6px 12px;
+        background: var(--bottom-panel-title-bar-background-color);
+        justify-content: space-between;
+        align-items: center;
+
+        .bottom-panel-title-bar-caption {
+            text-transform: uppercase;
+            letter-spacing: .3pt;
+            font-weight: 600;
+            font-size: .85em;
+        }
+    }
+
+    .bottom-panel-content {
+        border-bottom: 1px solid var(--main-border-color);
+        background: var(--bottom-panel-background-color);
+        padding: 8px 12px;
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+}
+

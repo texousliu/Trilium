@@ -826,7 +826,8 @@
   },
   "inherited_attribute_list": {
     "title": "Inherited Attributes",
-    "no_inherited_attributes": "No inherited attributes."
+    "no_inherited_attributes": "No inherited attributes.",
+    "none": "none"
   },
   "note_info_widget": {
     "note_id": "Note ID",
@@ -2210,6 +2211,9 @@
     "note_paths_other": "{{count}} paths",
     "note_paths_title": "Note paths",
     "code_note_switcher": "Change language mode"
+  },
+  "attributes_panel": {
+    "title": "Note Attributes"
   },
   "right_pane": {
     "empty_message": "Nothing to show for this note",

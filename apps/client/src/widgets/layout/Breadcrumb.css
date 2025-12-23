@@ -16,6 +16,8 @@
     }
 
     a.tn-link {
+        --link-hover-background: var(--icon-button-hover-background);
+
         color: var(--custom-color, inherit);
 
         &:hover {
@@ -46,6 +48,19 @@
             overflow: hidden;
             display: block;
             flex-shrink: 2;
+            font-weight: normal;
+        }
+    }
+
+    .icon-action {
+        font-size: .9rem !important;
+
+        .bxs-chevron-right {
+            transform: translateY(8%);
+            
+            &::before {
+                opacity: .75;
+            }
         }
     }
 
@@ -70,6 +85,15 @@
         display: block;
         max-width: 300px;
         color: var(--custom-color, inherit) !important;
+    }
+
+    .dropdown .breadcrumb-child-list {
+        /* Icon */
+        li > span:first-child {
+            opacity: .75;
+            padding-inline-end: 4px;
+            translate: none;
+        };
     }
 
     a.breadcrumb-last-item,

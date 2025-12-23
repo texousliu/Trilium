@@ -266,11 +266,15 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
     );
 }
 
-function SimilarNotesPane({ note, similarNotesShown }: NoteInfoContext) {
+function SimilarNotesPane({ note, similarNotesShown, setSimilarNotesShown }: NoteInfoContext) {
     return (similarNotesShown &&
-        <div className="similar-notes-pane">
+        <BottomPanel title={t("similar_notes.title")}
+            className="similar-notes-pane"
+            visible={similarNotesShown}
+            setVisible={setSimilarNotesShown}
+        >
             <SimilarNotesTab note={note} />
-        </div>
+        </BottomPanel>
     );
 }
 //#endregion
@@ -367,15 +371,20 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
     }), [ api ]));
 
     return (context &&
-        <div className={clsx("attribute-list", !attributesShown && "hidden-ext")}>
-            <InheritedAttributesTab {...context} />
+        <BottomPanel title={t("attributes_panel.title")}
+            className="attribute-list"
+            visible={attributesShown}
+            setVisible={setAttributesShown}>
+
+            <span class="attributes-panel-label">{t("inherited_attribute_list.title")}</span>
+            <InheritedAttributesTab {...context} emptyListString="inherited_attribute_list.none" />
 
             <AttributeEditor
                 {...context}
                 api={api}
                 ntxId={noteContext.ntxId}
             />
-        </div>
+        </BottomPanel>
     );
 }
 //#endregion
@@ -422,7 +431,7 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
                 icon="bx bx-code-curly"
                 text={correspondingMimeType?.title}
                 title={t("status_bar.code_note_switcher")}
-                dropdownContainerClassName="dropdown-code-note-switcher"
+                dropdownContainerClassName="dropdown-code-note-switcher tn-dropdown-menu-scrollable"
             >
                 <NoteTypeCodeNoteList
                     currentMimeType={currentNoteMime}
@@ -437,5 +446,28 @@ function CodeNoteSwitcher({ note }: StatusBarContext) {
             )}
         </>
     );
+}
+//#endregion
+
+//#region Bottom panel
+
+interface BottomPanelParams {
+    children: ComponentChildren;
+    title: string;
+    visible: boolean;
+    setVisible?: (visible: boolean) => void;
+    className?: string;
+}
+
+function BottomPanel({ children, title, visible, setVisible, className }: BottomPanelParams) {
+    return <div className={clsx("bottom-panel", className, {"hidden-ext": !visible})}>
+        <div className="bottom-panel-title-bar">
+            <span className="bottom-panel-title-bar-caption">{title}</span>
+            <button class="icon-action bx bx-x" onClick={() => setVisible?.(false)} />
+        </div>
+        <div class={clsx("bottom-panel-content")}>
+            {children}
+        </div>
+    </div>;
 }
 //#endregion

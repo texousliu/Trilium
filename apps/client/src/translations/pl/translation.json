@@ -1934,7 +1934,10 @@
   },
   "highlights_list_2": {
     "title": "Lista wyróżnień",
-    "options": "Opcje"
+    "options": "Opcje",
+    "modal_title": "Konfiguracja listy wyróżnień",
+    "menu_configure": "Konfiguracja listy wyróżnień...",
+    "no_highlights": "Nie znaleziono wyróżnień."
   },
   "quick-search": {
     "placeholder": "Szybkie wyszukiwanie",
