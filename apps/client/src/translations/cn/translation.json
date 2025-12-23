@@ -817,7 +817,8 @@
   },
   "inherited_attribute_list": {
     "title": "继承的属性",
-    "no_inherited_attributes": "没有继承的属性。"
+    "no_inherited_attributes": "没有继承的属性。",
+    "none": "无"
   },
   "note_info_widget": {
     "note_id": "笔记 ID",
@@ -2200,5 +2201,8 @@
     "toggle": "切换右侧面板",
     "custom_widget_go_to_source": "跳转到源码",
     "empty_message": "这篇笔记没有展示内容"
+  },
+  "attributes_panel": {
+    "title": "笔记属性"
   }
 }
