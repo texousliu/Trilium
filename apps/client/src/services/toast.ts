@@ -69,7 +69,7 @@ export async function showErrorForScriptNote(noteId: string, message: string) {
 
     showPersistent({
         id: `custom-widget-failure-${noteId}`,
-        title: note?.title ?? "",
+        title: t("toast.scripting-error", { title: note?.title ?? "" }),
         icon: note?.getIcon() ?? "bx bx-error-circle",
         message,
         timeout: 15_000,
