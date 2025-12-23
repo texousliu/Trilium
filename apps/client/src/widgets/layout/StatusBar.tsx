@@ -269,10 +269,10 @@ function NoteInfoValue({ text, title, value }: { text: string; title?: string, v
 function SimilarNotesPane({ note, similarNotesShown, setSimilarNotesShown }: NoteInfoContext) {
     return (similarNotesShown &&
         <BottomPanel title={t("similar_notes.title")}
-                       className="similar-notes-pane"
-                       visible={similarNotesShown}
-                       setVisible={setSimilarNotesShown}
-                       scrollable>
+            className="similar-notes-pane"
+            visible={similarNotesShown}
+            setVisible={setSimilarNotesShown}
+        >
             <SimilarNotesTab note={note} />
         </BottomPanel>
     );
@@ -372,10 +372,10 @@ function AttributesPane({ note, noteContext, attributesShown, setAttributesShown
 
     return (context &&
         <BottomPanel title={t("attributes_panel.title")}
-                       className="attribute-list"
-                       visible={attributesShown}
-                       setVisible={setAttributesShown}>
-            
+            className="attribute-list"
+            visible={attributesShown}
+            setVisible={setAttributesShown}>
+
             <span class="attributes-panel-label">{t("inherited_attribute_list.title")}</span>
             <InheritedAttributesTab {...context} emptyListString="inherited_attribute_list.none" />
 
@@ -463,11 +463,11 @@ function BottomPanel({ children, title, visible, setVisible, className }: Bottom
     return <div className={clsx("bottom-panel", className, {"hidden-ext": !visible})}>
         <div className="bottom-panel-title-bar">
             <span className="bottom-panel-title-bar-caption">{title}</span>
-            <button class="icon-action bx bx-x" onClick={() => setVisible?.(false)}></button>
+            <button class="icon-action bx bx-x" onClick={() => setVisible?.(false)} />
         </div>
         <div class={clsx("bottom-panel-content")}>
             {children}
         </div>
-    </div>
+    </div>;
 }
 //#endregion
