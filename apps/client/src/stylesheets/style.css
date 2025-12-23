@@ -2012,8 +2012,9 @@ body.zen .shared-info-widget,
 body.zen .ribbon-container:not(:has(.classic-toolbar-widget)),
 body.zen .ribbon-container:has(.classic-toolbar-widget) .ribbon-top-row,
 body.zen .ribbon-container .ribbon-body:not(:has(.classic-toolbar-widget)),
-body.zen .note-icon-widget,
 body.zen .title-row .icon-action,
+body.zen .note-badges,
+body.zen .inline-title,
 body.zen .promoted-attributes-widget,
 body.zen .floating-buttons-children > *:not(.bx-edit-alt),
 body.zen .action-button,
@@ -2036,11 +2037,11 @@ body.zen #launcher-pane {
 }
 
 body.zen .title-row {
-    display: block !important;
     height: unset !important;
     -webkit-app-region: drag;
     padding-inline-start: env(titlebar-area-x);
     padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw) + 2.5em);
+    border-bottom: none !important;
 }
 
 body.zen .floating-buttons {
@@ -2060,8 +2061,6 @@ body.zen .floating-buttons-children .button-widget {
 body.zen .note-title-widget,
 body.zen .note-title-widget input {
     font-size: 1rem !important;
-    background: transparent !important;
-    pointer-events: none;
 }
 
 body.zen #detail-container {
