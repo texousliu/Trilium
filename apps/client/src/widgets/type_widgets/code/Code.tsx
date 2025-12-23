@@ -1,6 +1,6 @@
 import "./code.css";
 
-import { default as VanillaCodeMirror,getThemeById } from "@triliumnext/codemirror";
+import { default as VanillaCodeMirror, getThemeById } from "@triliumnext/codemirror";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import appContext, { CommandListenerData } from "../../../components/app_context";

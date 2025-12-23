@@ -167,7 +167,7 @@ const MIME_TYPES_DICT_RAW = [
     { title: "Soy", mime: "text/x-soy" },
     { title: "SPARQL", mime: "application/sparql-query" },
     { title: "Spreadsheet", mime: "text/x-spreadsheet" },
-    { title: "SQL", mime: "text/x-sql", mdLanguageCode: "sql", default: true },
+    { title: "SQL", mime: "text/x-sql", mdLanguageCode: "sql", default: true, icon: "bx bx-data" },
     { title: "SQLite (Trilium)", mime: "text/x-sqlite;schema=trilium", mdLanguageCode: "sql", default: true, icon: "bx bx-data" },
     { title: "SQLite", mime: "text/x-sqlite", mdLanguageCode: "sql", icon: "bx bx-data" },
     { title: "Squirrel", mime: "text/x-squirrel" },
