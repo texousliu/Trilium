@@ -1621,7 +1621,8 @@
   },
   "inherited_attribute_list": {
     "title": "継承属性",
-    "no_inherited_attributes": "継承属性はありません。"
+    "no_inherited_attributes": "継承属性はありません。",
+    "none": "なし"
   },
   "note_map": {
     "open_full": "拡大表示",
@@ -2200,5 +2201,8 @@
     "empty_button": "パネルを非表示",
     "toggle": "右パネルを切り替え",
     "custom_widget_go_to_source": "ソースコードへ移動"
+  },
+  "attributes_panel": {
+    "title": "ノート属性"
   }
 }
