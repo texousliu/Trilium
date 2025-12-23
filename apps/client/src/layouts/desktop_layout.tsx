@@ -184,7 +184,7 @@ export default class DesktopLayout {
                                             .child(new HighlightsListWidget())
                                             .child(...this.customWidgets.get("right-pane"))
                                     )
-                                    .optChild(isNewLayout, <RightPanelContainer customWidgets={this.customWidgets.get("right-pane")} />)
+                                    .optChild(isNewLayout, <RightPanelContainer widgetsByParent={this.customWidgets} />)
                             )
                             .optChild(!launcherPaneIsHorizontal && isNewLayout, <StatusBar />)
                     )

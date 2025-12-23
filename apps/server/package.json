@@ -30,7 +30,8 @@
   "dependencies": {
     "better-sqlite3": "12.5.0",
     "html-to-text": "9.0.5",
-    "node-html-parser": "7.0.1"
+    "node-html-parser": "7.0.1",
+    "sucrase": "3.35.1"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "0.71.2",

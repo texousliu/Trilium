@@ -22,7 +22,15 @@
     "bundle-error": {
       "title": "Failed to load a custom script",
       "message": "Script from note with ID \"{{id}}\", titled \"{{title}}\" could not be executed due to:\n\n{{message}}"
-    }
+    },
+    "widget-list-error": {
+      "title": "Failed to obtain the list of widgets from the server"
+    },
+    "widget-render-error": {
+      "title": "Failed to render a custom React widget"
+    },
+    "widget-missing-parent": "Custom widget does not have mandatory '{{property}}' property defined.",
+    "open-script-note": "Open script note"
   },
   "add_link": {
     "add_link": "Add link",
