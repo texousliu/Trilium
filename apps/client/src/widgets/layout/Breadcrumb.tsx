@@ -32,7 +32,7 @@ import { ParentComponent } from "../react/react_utils";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
-const FINAL_ITEMS = 2;
+const FINAL_ITEMS = 3;
 
 export default function Breadcrumb() {
     const { note, notePath, notePaths, noteContext } = useNotePaths();
