@@ -72,6 +72,15 @@
         color: var(--custom-color, inherit) !important;
     }
 
+    .dropdown .breadcrumb-child-list {
+        /* Icon */
+        li > span:first-child {
+            opacity: .75;
+            padding-inline-end: 4px;
+            translate: none;
+        };
+    }
+
     a.breadcrumb-last-item,
     a.breadcrumb-last-item:visited {
         text-decoration: none;
