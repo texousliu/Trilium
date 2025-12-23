@@ -19,13 +19,13 @@ When using Preact with JSX, there is a special syntax which provides ES-like imp
 
 Instead of:
 
-```jsx
+```
 api.showMessage("Hello");
 ```
 
 the JSX version looks like this:
 
-```jsx
+```
 import { showMessage } from "trilium:api";
 showMessage("hello");
 ```
@@ -34,7 +34,7 @@ showMessage("hello");
 
 There's a new <a class="reference-link" href="../Script%20API.md">Script API</a> dedicated to Preact, which provides shared components that are also used by Trilium internally as well as hooks, for example.
 
-```jsx
+```
 import { useState } from "trilium:preact";
 const [ myState, setMyState ] = useState("Hi");
 ```
@@ -43,7 +43,7 @@ const [ myState, setMyState ] = useState("Hi");
 
 JSX notes can export a component for use in <a class="reference-link" href="../../Note%20Types/Render%20Note.md">Render Note</a> or for <a class="reference-link" href="Preact/Component%20libraries.md">Component libraries</a>: 
 
-```jsx
+```
 export default function() {
     return (
         <>

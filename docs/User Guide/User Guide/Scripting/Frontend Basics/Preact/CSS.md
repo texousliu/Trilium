@@ -1,7 +1,7 @@
 # CSS
 ## Inline styles
 
-```jsx
+```
 <div style={{
     display: "flex",
     height: "53px",

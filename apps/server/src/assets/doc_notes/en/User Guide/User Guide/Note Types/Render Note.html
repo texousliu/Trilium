@@ -7,13 +7,10 @@
   via an attribute.</p>
 <h2>Creating a render note</h2>
 <ol>
-  <li data-list-item-id="e6c172eb567596820dd7f444924e568b3">Create a&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;note
-    with the HTML language, with what needs to be displayed (for example
-    <code
-    spellcheck="false">&lt;p&gt;Hello world.&lt;/p&gt;</code>).</li>
-  <li data-list-item-id="e06560e53dd0ab195c0e89dc8db7aec1f">Create a&nbsp;<a class="reference-link" href="#root/_help_HcABDtFCkbFN">Render Note</a>.</li>
-  <li
-  data-list-item-id="e9db87d13293c732ac62d6f92d2997cb3">Assign the <code spellcheck="false">renderNote</code>  <a href="#root/_help_zEY4DaJG4YT5">relation</a> to
+  <li>Create a&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;note
+    with the HTML language, with what needs to be displayed (for example <code>&lt;p&gt;Hello world.&lt;/p&gt;</code>).</li>
+  <li>Create a&nbsp;<a class="reference-link" href="#root/_help_HcABDtFCkbFN">Render Note</a>.</li>
+  <li>Assign the <code>renderNote</code>  <a href="#root/_help_zEY4DaJG4YT5">relation</a> to
     point at the previously created code note.</li>
 </ol>
 <h2>Legacy scripting using jQuery</h2>
@@ -29,7 +26,7 @@ The current date &amp; time is &lt;span class="date"&gt;&lt;/span&gt;</code></pr
   language. Make sure the newly created note is a direct child of the HTML
   note created previously; with the following content:</p><pre><code class="language-text-x-trilium-auto">const $dateEl = api.$container.find(".date");
 $dateEl.text(new Date());</code></pre>
-<p>Now create a render note at any place and set its <code spellcheck="false">~renderNote</code> relation
+<p>Now create a render note at any place and set its <code>~renderNote</code> relation
   to point to the HTML note. When the render note is accessed it will display:</p>
 <blockquote>
   <p><strong>Current date &amp; time</strong>
@@ -42,33 +39,37 @@ $dateEl.text(new Date());</code></pre>
   need to provide a HTML anymore.</p>
 <p>Here are the steps to creating a simple render note:</p>
 <ol>
-  <li data-list-item-id="ee6c6868efde1b910dac6807580e2a8e2">Create a note of type&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_HcABDtFCkbFN">Render Note</a>.</li>
-  <li
-  data-list-item-id="eae9b5f496cba824738734828c11448d5">
-    <p>Create a child&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_6f9hih2hXXZk">Code</a>&nbsp;note
+  <li>
+    <p>Create a note of type&nbsp;<a class="reference-link" href="#root/_help_HcABDtFCkbFN">Render Note</a>.</p>
+  </li>
+  <li>
+    <p>Create a child&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;note
       with JSX as the language.
-      <br>As an example, use the following content:</p><pre><code class="language-text-jsx">export default function() {
+      <br>As an example, use the following content:</p><pre><code class="language-text-x-trilium-auto">export default function() {
     return (
         &lt;&gt;
             &lt;p&gt;Hello world.&lt;/p&gt;
         &lt;/&gt;
     );
 }</code></pre>
-    </li>
-    <li data-list-item-id="e28812b27d5227675943ef98ab9477e67">In the parent render note, define a <code spellcheck="false">~renderNote</code> relation
-      pointing to the newly created child.</li>
-    <li data-list-item-id="e24cc71d55c7c8ec61014ac0d800653da">Refresh the render note and it should display a “Hello world” message.</li>
+  </li>
+  <li>
+    <p>In the parent render note, define a <code>~renderNote</code> relation pointing
+      to the newly created child.</p>
+  </li>
+  <li>
+    <p>Refresh the render note and it should display a “Hello world” message.</p>
+  </li>
 </ol>
 <h2>Refreshing the note</h2>
 <p>It's possible to refresh the note via:</p>
 <ul>
-  <li data-list-item-id="e01c4ae9c0999b2879e914c5b641215e3">The corresponding button in&nbsp;<a class="reference-link" href="#root/_help_XpOYSgsLkTJy">Floating buttons</a>.</li>
-  <li
-  data-list-item-id="e871da2cff905b2daa180fcae27aee43b">The “Render active note” <a href="#root/_help_A9Oc6YKKc65v">keyboard shortcut</a> (not
+  <li>The corresponding button in&nbsp;<a class="reference-link" href="#root/_help_XpOYSgsLkTJy">Floating buttons</a>.</li>
+  <li>The “Render active note” <a href="#root/_help_A9Oc6YKKc65v">keyboard shortcut</a> (not
     assigned by default).</li>
 </ul>
 <h2>Examples</h2>
 <ul>
-  <li data-list-item-id="ec01930f20370b46f519bd844b67623ee"><a class="reference-link" href="#root/_help_R7abl2fc6Mxi">Weight Tracker</a>&nbsp;which
+  <li><a class="reference-link" href="#root/_help_R7abl2fc6Mxi">Weight Tracker</a>&nbsp;which
     is present in the&nbsp;<a class="reference-link" href="#root/_help_6tZeKvSHEUiB">Demo Notes</a>.</li>
 </ul>

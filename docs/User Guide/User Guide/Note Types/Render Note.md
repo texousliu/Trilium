@@ -44,7 +44,7 @@ Here are the steps to creating a simple render note:
 2.  Create a child <a class="reference-link" href="Code.md">Code</a> note with JSX as the language.  
     As an example, use the following content:
     
-    ```jsx
+    ```
     export default function() {
         return (
             <>

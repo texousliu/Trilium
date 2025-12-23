@@ -17,6 +17,8 @@ Depending on the <a class="reference-link" href="Vertical%20and%20horizontal%20
 *   For multitasking, tabs can be used alongside <a class="reference-link" href="Split%20View.md">Split View</a>. Each tab can have one or more notes, displayed horizontally.
 *   Tabs can be reordered by drag-and-dropping it into a new position.
 *   An existing tab can be displayed in a new window by dragging the tab upwards or downwards. It is not possible to combine tabs back into another window.
+*   On the left side of the tab bar there are two buttons to navigate through the note history backwards or forwards (see <a class="reference-link" href="../Navigation/Note%20Navigation.md">Note Navigation</a>).
+    *   This feature is only enabled if the <a class="reference-link" href="Launch%20Bar.md">Launch Bar</a> doesn't already contain the history navigation buttons.
 
 ## Keyboard interaction
 
