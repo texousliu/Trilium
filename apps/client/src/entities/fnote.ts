@@ -1,3 +1,5 @@
+import { MIME_TYPES_DICT } from "@triliumnext/commons";
+
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
 import noteAttributeCache from "../services/note_attribute_cache.js";
@@ -597,8 +599,9 @@ export default class FNote {
                 return "bx bx-folder";
             }
             return "bx bx-note";
-        } else if (this.type === "code" && this.mime.startsWith("text/x-sql")) {
-            return "bx bx-data";
+        } else if (this.type === "code") {
+            const correspondingMimeType = MIME_TYPES_DICT.find(m => m.mime === this.mime);
+            return correspondingMimeType?.icon ?? NOTE_TYPE_ICONS.code;
         }
         return NOTE_TYPE_ICONS[this.type];
     }
