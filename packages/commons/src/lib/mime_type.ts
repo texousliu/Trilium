@@ -102,7 +102,7 @@ const MIME_TYPES_DICT_RAW = [
     { title: "JS frontend", mime: "application/javascript;env=frontend", mdLanguageCode: "javascript", default: true },
     { title: "JSON-LD", mime: "application/ld+json", mdLanguageCode: "json" },
     { title: "JSON", mime: "application/json", mdLanguageCode: "json", default: true },
-    { title: "JSX", mime: "text/jsx", mdLanguageCode: "javascript" },
+    { title: "JSX", mime: "text/jsx", mdLanguageCode: "javascript", default: true },
     { title: "Julia", mime: "text/x-julia", mdLanguageCode: "julia" },
     { title: "Kotlin", mime: "text/x-kotlin", mdLanguageCode: "kotlin", default: true },
     { title: "KDL", mime: "application/vnd.kdl", mdLanguageCode: "kdl" },
