@@ -1,7 +1,7 @@
 import "./NoteTitleActions.css";
 
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
@@ -9,8 +9,11 @@ import { t } from "../../services/i18n";
 import CollectionProperties from "../note_bars/CollectionProperties";
 import { checkFullHeight, getExtendedWidgetType } from "../NoteDetail";
 import { PromotedAttributesContent, usePromotedAttributeData } from "../PromotedAttributes";
+import SimpleBadge from "../react/Badge";
 import Collapsible, { ExternallyControlledCollapsible } from "../react/Collapsible";
-import { useNoteContext, useNoteProperty, useTriliumEvent } from "../react/hooks";
+import { useNoteContext, useNoteLabel, useNoteProperty, useTriliumEvent, useTriliumOptionBool } from "../react/hooks";
+import NoteLink from "../react/NoteLink";
+import { useEditedNotes } from "../ribbon/EditedNotesTab";
 import SearchDefinitionTab from "../ribbon/SearchDefinitionTab";
 
 export default function NoteTitleActions() {
@@ -27,6 +30,7 @@ export default function NoteTitleActions() {
     return (
         <div className={clsx("title-actions", items.length > 0 && "visible")}>
             {items}
+            <EditedNotes />
         </div>
     );
 }
@@ -71,3 +75,40 @@ function PromotedAttributes({ note, componentId, noteContext }: {
         </ExternallyControlledCollapsible>
     ));
 }
+
+//#region Edited Notes
+function EditedNotes() {
+    const { note } = useNoteContext();
+    const [ dateNote ] = useNoteLabel(note, "dateNote");
+    const [ editedNotesOpenInRibbon ] = useTriliumOptionBool("editedNotesOpenInRibbon");
+
+    return (note && dateNote &&
+        <Collapsible
+            className="edited-notes"
+            title={t("note_title.edited_notes")}
+            initiallyExpanded={editedNotesOpenInRibbon}
+        >
+            <EditedNotesContent note={note} />
+        </Collapsible>
+    );
+}
+
+function EditedNotesContent({ note }: { note: FNote }) {
+    const editedNotes = useEditedNotes(note);
+
+    return (editedNotes !== undefined &&
+        (editedNotes.length > 0 ? editedNotes?.map(editedNote => (
+            <SimpleBadge
+                key={editedNote.noteId}
+                title={(
+                    <NoteLink
+                        notePath={editedNote.noteId}
+                        showNoteIcon
+                    />
+                )}
+            />
+        )) : (
+            <div className="no-edited-notes-found">{t("edited_notes.no_edited_notes_found")}</div>
+        )));
+}
+//#endregion
