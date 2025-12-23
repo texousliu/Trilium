@@ -75,10 +75,6 @@
     }
 }
 
-.note-split.type-code:not(.mime-text-x-sqlite) .inline-title {
-    background-color: var(--main-background-color);
-}
-
 body.prefers-centered-content .inline-title {
     margin-inline: auto;
 }
