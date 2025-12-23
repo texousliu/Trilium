@@ -17,14 +17,14 @@ For a simple example, we are going to create a render note that displays the cur
 
 To do so, first create an HTML code note with the following content:
 
-```
+```html
 <h1>Current date & time</h1>
 The current date & time is <span class="date"></span>
 ```
 
 Now we need to add the script. Create another <a class="reference-link" href="Code.md">Code</a>, but this time of JavaScript (frontend) language. Make sure the newly created note is a direct child of the HTML note created previously; with the following content:
 
-```
+```javascript
 const $dateEl = api.$container.find(".date");
 $dateEl.text(new Date());
 ```
@@ -44,7 +44,7 @@ Here are the steps to creating a simple render note:
 2.  Create a child <a class="reference-link" href="Code.md">Code</a> note with JSX as the language.  
     As an example, use the following content:
     
-    ```
+    ```jsx
     export default function() {
         return (
             <>
