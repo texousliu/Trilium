@@ -2677,20 +2677,6 @@
                                             "value": "tabs",
                                             "isInheritable": false,
                                             "position": 40
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "MMiBEQljMQh2",
-                                            "isInheritable": false,
-                                            "position": 50
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "xYmIYSP6wE3F",
-                                            "isInheritable": false,
-                                            "position": 60
                                         }
                                     ],
                                     "format": "markdown",
@@ -4800,25 +4786,20 @@
                                             "value": "bx bxs-navigation",
                                             "isInheritable": false,
                                             "position": 30
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "3seOhtN8uLIY",
-                                            "isInheritable": false,
-                                            "position": 40
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "xYmIYSP6wE3F",
-                                            "isInheritable": false,
-                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Note Navigation.md",
-                                    "attachments": []
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "jDuwVaU8bNtG",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/jpg",
+                                            "position": 10,
+                                            "dataFileName": "Note Navigation_image.png"
+                                        }
+                                    ]
                                 },
                                 {
                                     "isClone": false,

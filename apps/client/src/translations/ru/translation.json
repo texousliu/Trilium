@@ -1686,7 +1686,8 @@
   },
   "inherited_attribute_list": {
     "title": "Унаследованные атрибуты",
-    "no_inherited_attributes": "Нет унаследованных атрибутов."
+    "no_inherited_attributes": "Нет унаследованных атрибутов.",
+    "none": "нет"
   },
   "note_map": {
     "title": "Карта заметок",
@@ -2216,5 +2217,8 @@
     "toggle": "Переключить панель справа",
     "empty_button": "Скрыть панель",
     "empty_message": "Нечего отобразить для текущей заметки"
+  },
+  "attributes_panel": {
+    "title": "Атрибуты заметки"
   }
 }

@@ -35,9 +35,8 @@ get parentWidget() { return "center-pane" }
 doRender() {
     this.&lt;!--FORMULA_INLINE_1766517018225_0--&gt;("&amp;lt;span&amp;gt;Center pane&amp;lt;/span&amp;gt;");
 }</code></pre><p>}</p><p>module.exports = new HelloNoteDetail();</p></code></pre></td><td><pre><code class="language-text-x-trilium-auto">import { defineWidget } from "trilium:preact";<p></p><p>export default defineWidget({
-    parent: "center-pane",
-    render: () =&gt; &lt;span&gt;Center pane from Preact.&lt;/span&gt;
-});</p></code></pre></td></tr></tbody></table>
+</p><pre><code class="language-text-x-trilium-auto">parent: "center-pane",
+render: () =&amp;gt; &amp;lt;span&amp;gt;Center pane from Preact.&amp;lt;/span&amp;gt;</code></pre><p>});</p></code></pre></td></tr></tbody></table>
 
 [Refresh the application](../../Troubleshooting/Refreshing%20the%20application.md) and the widget should appear underneath the content area.
 
