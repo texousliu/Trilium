@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useState } from "preact/hooks";
-import froca from "../../../services/froca";
+
 import type FNote from "../../../entities/fnote";
 import content_renderer from "../../../services/content_renderer";
+import froca from "../../../services/froca";
 import type { ViewModeProps } from "../interface";
 import { filterChildNotes, useFilteredNoteIds } from "./utils";
 
@@ -22,6 +23,8 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady, onPro
             const notesWithContent: NotesWithContent[] = [];
 
             async function processNote(note: FNote, depth: number) {
+                if (!isNotePrintable(note)) return;
+
                 const content = await content_renderer.getRenderedContent(note, {
                     trim: false,
                     noChildrenList: true
@@ -76,6 +79,14 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady, onPro
             </div>
         </div>
     );
+}
+
+function isNotePrintable(note: FNote) {
+    if (!note.isContentAvailable()) {
+        return false;
+    }
+
+    return true;
 }
 
 function insertPageTitle(contentEl: HTMLElement, title: string) {
