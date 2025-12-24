@@ -46,17 +46,7 @@ export async function executeBundle(bundle: Bundle, originEntity?: Entity | null
             return eval(`const apiContext = this; (async function() { ${bundle.script}\r\n})()`);
         }.call(apiContext);
     } catch (e: any) {
-        const note = await froca.getNote(bundle.noteId);
-        toastService.showPersistent({
-            id: `custom-script-failure-${note?.noteId}`,
-            title: t("toast.bundle-error.title"),
-            icon: "bx bx-error-circle",
-            message: t("toast.bundle-error.message", {
-                id: note?.noteId,
-                title: note?.title,
-                message: e.message
-            })
-        });
+        showErrorForScriptNote(bundle.noteId, t("toast.bundle-error.message", { message: e.message }));
         logError("Widget initialization failed: ", e);
     }
 }
@@ -151,17 +141,7 @@ async function getWidgetBundlesByParent() {
                 }
             } catch (e: any) {
                 const noteId = bundle.noteId;
-                const note = await froca.getNote(noteId);
-                toastService.showPersistent({
-                    id: `custom-script-failure-${noteId}`,
-                    title: t("toast.bundle-error.title"),
-                    icon: "bx bx-error-circle",
-                    message: t("toast.bundle-error.message", {
-                        id: noteId,
-                        title: note?.title,
-                        message: e.message
-                    })
-                });
+                showErrorForScriptNote(noteId, t("toast.bundle-error.message", { message: e.message }));
 
                 logError("Widget initialization failed: ", e);
                 continue;

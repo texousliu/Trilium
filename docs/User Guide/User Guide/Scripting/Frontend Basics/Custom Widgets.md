@@ -23,21 +23,39 @@ Wherever possible, widget examples will be both in the legacy and Preact format.
 
 Let's start by creating a widget that shows a message near the content area. Follow the previous section to create a code note, and use the following content.
 
-<table><thead><tr><th>Legacy</th><th>Preact (v0.101.0+)</th></tr></thead><tbody><tr><td><pre><code class="language-text-x-trilium-auto">class HelloNoteDetail extends api.BasicWidget {
+### Legacy version (jQuery)
 
-<pre><code class="language-text-x-trilium-auto">constructor() {
-    super();
-    this.contentSized();
+```
+class HelloCenterPane extends api.BasicWidget {
+
+    constructor() {
+        super();
+        this.contentSized();
+    }
+
+    get parentWidget() { return "center-pane" }
+
+    doRender() {
+        this.$widget = $("<span>Center pane</span>");
+    }
+    
 }
 
-get parentWidget() { return "center-pane" }
+module.exports = new HelloCenterPane();
+```
 
-doRender() {
-    this.&lt;!--FORMULA_INLINE_1766526977514_0--&gt;("&amp;lt;span&amp;gt;Center pane&amp;lt;/span&amp;gt;");
-}</code></pre><p>}</p><p>module.exports = new HelloNoteDetail();</p></code></pre></td><td><pre><code class="language-text-x-trilium-auto">import { defineWidget } from "trilium:preact";<p></p><p>export default defineWidget({
+[Refresh the application](../../Troubleshooting/Refreshing%20the%20application.md) and the widget should appear underneath the content area.
+
+### Preact version
+
+```
+import { defineWidget } from "trilium:preact";
+
+export default defineWidget({
     parent: "center-pane",
-    render: () =&gt; &lt;span&gt;Center pane from Preact.&lt;/span&gt;
-});</p></code></pre></td></tr></tbody></table>
+    render: () => <span>Center pane from Preact.</span>
+});
+```
 
 [Refresh the application](../../Troubleshooting/Refreshing%20the%20application.md) and the widget should appear underneath the content area.
 

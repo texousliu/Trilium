@@ -32,7 +32,7 @@ import { ParentComponent } from "../react/react_utils";
 
 const COLLAPSE_THRESHOLD = 5;
 const INITIAL_ITEMS = 2;
-const FINAL_ITEMS = 2;
+const FINAL_ITEMS = 3;
 
 export default function Breadcrumb() {
     const { note, notePath, notePaths, noteContext } = useNotePaths();
@@ -65,8 +65,7 @@ export default function Breadcrumb() {
                             ? <BreadcrumbRoot noteContext={noteContext} />
                             : <BreadcrumbItem index={index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
                         }
-                        {(index < notePaths.length - 1 || note?.hasChildren()) &&
-                            <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} {...separatorProps} />}
+                        <BreadcrumbSeparator notePath={item} activeNotePath={notePaths[index + 1]} {...separatorProps} />
                     </Fragment>
                 ))
             )}
@@ -226,7 +225,7 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
                 </li>;
             })}
 
-            <FormDropdownDivider />
+            {childNotes.length > 0 && <FormDropdownDivider />}
             <FormListItem
                 icon="bx bx-plus"
                 onClick={() => note_create.createNote(notePath, { activate: true })}

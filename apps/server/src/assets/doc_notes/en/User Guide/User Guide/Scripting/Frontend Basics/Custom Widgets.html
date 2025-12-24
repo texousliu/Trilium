@@ -32,41 +32,30 @@
 <p>Let's start by creating a widget that shows a message near the content
   area. Follow the previous section to create a code note, and use the following
   content.</p>
-<table>
-  <thead>
-    <tr>
-      <th>Legacy</th>
-      <th>Preact (v0.101.0+)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><pre><code class="language-text-x-trilium-auto">class HelloNoteDetail extends api.BasicWidget {
+<h3>Legacy version (jQuery)</h3><pre><code class="language-text-x-trilium-auto">class HelloCenterPane extends api.BasicWidget {
 
-<pre><code class="language-text-x-trilium-auto">constructor() {
-    super();
-    this.contentSized();
+    constructor() {
+        super();
+        this.contentSized();
+    }
+
+    get parentWidget() { return "center-pane" }
+
+    doRender() {
+        this.$widget = $("&lt;span&gt;Center pane&lt;/span&gt;");
+    }
+    
 }
 
-get parentWidget() { return "center-pane" }
+module.exports = new HelloCenterPane();</code></pre>
+<p><a href="#root/_help_s8alTXmpFR61">Refresh the application</a> and the widget
+  should appear underneath the content area.</p>
+<h3>Preact version</h3><pre><code class="language-text-x-trilium-auto">import { defineWidget } from "trilium:preact";
 
-doRender() {
-    this.&lt;!--FORMULA_INLINE_1766526977514_0--&gt;("&amp;lt;span&amp;gt;Center pane&amp;lt;/span&amp;gt;");
-}</code></pre>
-        <p>}</p>
-        <p>module.exports = new HelloNoteDetail();</p>
-        </code>
-        </pre>
-      </td>
-      <td><pre><code class="language-text-x-trilium-auto">import { defineWidget } from "trilium:preact";<p></p><p>export default defineWidget({
+export default defineWidget({
     parent: "center-pane",
     render: () =&gt; &lt;span&gt;Center pane from Preact.&lt;/span&gt;
-});</p></code></pre>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<p></p>
+});</code></pre>
 <p><a href="#root/_help_s8alTXmpFR61">Refresh the application</a> and the widget
   should appear underneath the content area.</p>
 <h2>Widget location (parent widget)</h2>

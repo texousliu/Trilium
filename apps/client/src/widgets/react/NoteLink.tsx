@@ -105,22 +105,17 @@ export function NewNoteLink({ notePath, viewScope, noContextMenu, showNoteIcon, 
     const [ archived ] = useNoteLabelBoolean(note, "archived");
 
     return (
-        <span>
-            <span>
-                {icon && <Icon icon={icon} />}
-
-                <a
-                    className={clsx("tn-link", colorClass, {
-                        "no-tooltip-preview": noPreview,
-                        archived
-                    })}
-                    href={calculateHash({ notePath, viewScope })}
-                    data-no-context-menu={noContextMenu}
-                    {...linkProps}
-                >
-                    {title}
-                </a>
-            </span>
-        </span>
+        <a
+            className={clsx("tn-link", colorClass, {
+                "no-tooltip-preview": noPreview,
+                archived
+            })}
+            href={calculateHash({ notePath, viewScope })}
+            data-no-context-menu={noContextMenu}
+            {...linkProps}
+        >
+            {icon && <><Icon icon={icon} />&nbsp;</>}
+            {title}
+        </a>
     );
 }

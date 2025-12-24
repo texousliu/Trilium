@@ -5,13 +5,13 @@ Trilium comes with its own set of Preact components, some of which are also avai
 
 To use these components, simply import them from `trilium:preact`:
 
-```
+```jsx
 import { ActionButton, Button, LinkButton } from "trilium:preact";
 ```
 
 and then use them:
 
-```
+```jsx
 export default function MyRenderNote() {
     const onClick = () => showMessage("A button was pressed");
     

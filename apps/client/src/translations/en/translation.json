@@ -21,7 +21,7 @@
     },
     "bundle-error": {
       "title": "Failed to load a custom script",
-      "message": "Script from note with ID \"{{id}}\", titled \"{{title}}\" could not be executed due to:\n\n{{message}}"
+      "message": "Script could not be executed due to:\n\n{{message}}"
     },
     "widget-list-error": {
       "title": "Failed to obtain the list of widgets from the server"
@@ -30,7 +30,8 @@
       "title": "Failed to render a custom React widget"
     },
     "widget-missing-parent": "Custom widget does not have mandatory '{{property}}' property defined.",
-    "open-script-note": "Open script note"
+    "open-script-note": "Open script note",
+    "scripting-error": "Custom script error: {{title}}"
   },
   "add_link": {
     "add_link": "Add link",
@@ -1779,7 +1780,8 @@
     "note_type_switcher_others": "Other note type",
     "note_type_switcher_templates": "Template",
     "note_type_switcher_collection": "Collection",
-    "edited_notes": "Edited notes"
+    "edited_notes": "Notes edited on this day",
+    "promoted_attributes": "Promoted attributes"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",

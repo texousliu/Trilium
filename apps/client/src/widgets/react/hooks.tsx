@@ -369,7 +369,8 @@ export function useActiveNoteContext() {
 
     useEffect(() => {
         setNote(noteContext?.note);
-    }, [ notePath ]);
+        setNotePath(noteContext?.notePath);
+    }, [ notePath, noteContext?.note, noteContext?.notePath ]);
 
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], () => {
         const noteContext = appContext.tabManager.getActiveContext() ?? undefined;
@@ -634,7 +635,8 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
 
         const renderedWidget = widget.render();
         return [ widget, renderedWidget ];
-    }, [ noteContext, parentComponent, widgetFactory]);
+    }, [ noteContext, parentComponent ]); // eslint-disable-line react-hooks/exhaustive-deps
+    // widgetFactory() is intentionally left out
 
     // Attach the widget to the parent.
     useEffect(() => {

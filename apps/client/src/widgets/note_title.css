@@ -37,7 +37,7 @@ body.experimental-feature-new-layout {
     .title-row {
         container-type: size;
         transition: border 400ms ease-out;
-        
+
         &.note-split-title {
             border-bottom: 1px solid var(--main-border-color);
 
@@ -56,13 +56,13 @@ body.experimental-feature-new-layout {
             --note-icon-container-padding-size: 6px;
             margin-inline: 0;
         }
-        
+
         .note-title-widget {
             --note-title-size: 18px;
             --note-title-padding-inline: 0;
         }
 
-        @container (max-width: 700px) {
+        @container (max-width: 600px) {
             .note-title-widget {
                 --note-title-size: 1.25rem;
                 --note-title-padding-inline: 4px;
@@ -80,7 +80,7 @@ body.experimental-feature-new-layout {
             .ext-badge .text {
                 display: none;
             }
-        
+
             .ext-badge {
                 --size: 2em;
                 width: var(--size);

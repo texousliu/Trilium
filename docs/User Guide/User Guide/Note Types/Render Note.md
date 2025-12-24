@@ -24,7 +24,7 @@ The current date & time is <span class="date"></span>
 
 Now we need to add the script. Create another <a class="reference-link" href="Code.md">Code</a>, but this time of JavaScript (frontend) language. Make sure the newly created note is a direct child of the HTML note created previously; with the following content:
 
-```
+```javascript
 const $dateEl = api.$container.find(".date");
 $dateEl.text(new Date());
 ```
