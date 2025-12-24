@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 
 import NoteContext from "../components/note_context";
 import FNote from "../entities/fnote";
+import type { PrintReport } from "../print";
 import attributes from "../services/attributes";
 import { t } from "../services/i18n";
 import protected_session_holder from "../services/protected_session_holder";
@@ -179,8 +180,21 @@ export default function NoteDetail() {
                     showToast("printing", e.detail.progress);
                 });
 
-                iframe.contentWindow.addEventListener("note-ready", () => {
+                iframe.contentWindow.addEventListener("note-ready", (e) => {
                     toast.closePersistent("printing");
+
+                    if ("detail" in e) {
+                        const printReport = e.detail as PrintReport;
+                        if (printReport.type === "collection" && printReport.ignoredNoteIds.length > 0) {
+                            toast.showPersistent({
+                                id: "print-report",
+                                icon: "bx bx-collection",
+                                title: t("note_detail.print_report_title"),
+                                message: t("note_detail.print_report_collection_content", { count: printReport.ignoredNoteIds.length })
+                            });
+                        }
+                    }
+
                     iframe.contentWindow?.print();
                     document.body.removeChild(iframe);
                 });

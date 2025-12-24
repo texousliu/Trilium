@@ -9,9 +9,16 @@ import { CustomNoteList, useNoteViewType } from "./widgets/collections/NoteList"
 
 interface RendererProps {
     note: FNote;
-    onReady: () => void;
+    onReady: (data: PrintReport) => void;
     onProgressChanged?: (progress: number) => void;
 }
+
+export type PrintReport = {
+    type: "single-note";
+} | {
+    type: "collection";
+    ignoredNoteIds: string[];
+};
 
 async function main() {
     const notePath = window.location.hash.substring(1);
@@ -35,9 +42,11 @@ function App({ note, noteId }: { note: FNote | null | undefined, noteId: string 
             window.dispatchEvent(new CustomEvent("note-load-progress", { detail: { progress } }));
         }
     }, []);
-    const onReady = useCallback(() => {
+    const onReady = useCallback((detail: PrintReport) => {
         if (sentReadyEvent.current) return;
-        window.dispatchEvent(new Event("note-ready"));
+        window.dispatchEvent(new CustomEvent("note-ready", {
+            detail
+        }));
         window._noteReady = true;
         sentReadyEvent.current = true;
     }, []);
@@ -92,7 +101,7 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
             await loadCustomCss(note);
         }
 
-        load().then(() => requestAnimationFrame(onReady));
+        load().then(() => requestAnimationFrame(() => onReady({})));
     }, [ note ]);
 
     return <>
@@ -111,9 +120,9 @@ function CollectionRenderer({ note, onReady, onProgressChanged }: RendererProps)
         ntxId="print"
         highlightedTokens={null}
         media="print"
-        onReady={async () => {
+        onReady={async (data: PrintReport) => {
             await loadCustomCss(note);
-            onReady();
+            onReady(data);
         }}
         onProgressChanged={onProgressChanged}
     />;

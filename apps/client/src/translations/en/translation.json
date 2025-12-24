@@ -1770,7 +1770,10 @@
   "note_detail": {
     "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'",
     "printing": "Printing in progress...",
-    "printing_pdf": "Exporting to PDF in progress..."
+    "printing_pdf": "Exporting to PDF in progress...",
+    "print_report_title": "Print report",
+    "print_report_collection_content_one": "{{count}} note in the collection could not be printed because they are not supported or they are protected.",
+    "print_report_collection_content_other": "{{count}} notes in the collection could not be printed because they are not supported or they are protected."
   },
   "note_title": {
     "placeholder": "type note's title here...",
