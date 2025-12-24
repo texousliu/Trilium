@@ -101,7 +101,9 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
             await loadCustomCss(note);
         }
 
-        load().then(() => requestAnimationFrame(() => onReady({})));
+        load().then(() => requestAnimationFrame(() => onReady({
+            type: "single-note"
+        })));
     }, [ note ]);
 
     return <>
