@@ -1090,7 +1090,7 @@ export function useNoteTitle(noteId: string | undefined, parentNoteId: string | 
     const [ title, setTitle ] = useState<string>();
     const requestIdRef = useRef(0);
 
-    useEffect(() => {
+    const refresh = useCallback(() => {
         const requestId = ++requestIdRef.current;
         if (!noteId) return;
         tree.getNoteTitle(noteId, parentNoteId).then(title => {
@@ -1098,6 +1098,15 @@ export function useNoteTitle(noteId: string | undefined, parentNoteId: string | 
             setTitle(title);
         });
     }, [ noteId, parentNoteId ]);
+
+    useEffect(() => {
+        refresh();
+    }, [ refresh ]);
+
+    // React to changes in protected session.
+    useTriliumEvent("protectedSessionStarted", () => {
+        refresh();
+    });
 
     return title;
 }
