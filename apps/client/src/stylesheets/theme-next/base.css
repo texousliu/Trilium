@@ -131,7 +131,7 @@ body.backdrop-effects-disabled {
 .dropdown-menu.tn-dropdown-menu-scrollable {
     /* Note: scrollable dropdowns does not support submenus */
     max-height: 90vh;
-    overflow: scroll;
+    overflow: auto;
 }
 
 body.desktop .dropdown-menu::before,
