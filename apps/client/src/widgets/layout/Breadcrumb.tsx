@@ -35,7 +35,7 @@ const INITIAL_ITEMS = 2;
 const FINAL_ITEMS = 3;
 
 export default function Breadcrumb() {
-    const { note, notePath, notePaths, noteContext } = useNotePaths();
+    const { notePath, notePaths, noteContext } = useNotePaths();
     const parentComponent = useContext(ParentComponent);
     const [ hideArchivedNotes ] = useTriliumOptionBool("hideArchivedNotes_main");
     const separatorProps: Omit<BreadcrumbSeparatorProps, "notePath" | "activeNotePath"> = { noteContext, hideArchivedNotes };
@@ -57,6 +57,7 @@ export default function Breadcrumb() {
                             <BreadcrumbItem index={notePaths.length - FINAL_ITEMS + index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
                         </Fragment>
                     ))}
+                    <BreadcrumbSeparator notePath={notePaths.at(-1)} {...separatorProps} />
                 </>
             ) : (
                 notePaths.map((item, index) => (
@@ -179,8 +180,8 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength, parentCo
 }
 
 interface BreadcrumbSeparatorProps {
-    notePath: string,
-    activeNotePath: string,
+    notePath: string | undefined,
+    activeNotePath?: string,
     noteContext: NoteContext | undefined,
     hideArchivedNotes: boolean;
 }
@@ -201,7 +202,7 @@ function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
 }
 
 function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNotePath, hideArchivedNotes }: BreadcrumbSeparatorProps) {
-    const notePathComponents = notePath.split("/");
+    const notePathComponents = (notePath ?? "").split("/");
     const parentNoteId = notePathComponents.at(-1);
     const childNotes = useChildNotes(parentNoteId);
 
