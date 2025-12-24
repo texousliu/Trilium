@@ -772,6 +772,11 @@ export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Too
             // workaround for https://github.com/twbs/bootstrap/issues/37474
             (tooltip as any)._activeTrigger = {};
             (tooltip as any)._element = document.createElement('noscript'); // placeholder with no behavior
+
+            // Remove *all* tooltip elements from the DOM
+            document
+                .querySelectorAll('.tooltip')
+                .forEach(t => t.remove());
         };
     }, [ elRef, config ]);
 }
