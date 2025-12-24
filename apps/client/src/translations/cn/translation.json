@@ -22,7 +22,15 @@
     "bundle-error": {
       "title": "加载自定义脚本失败",
       "message": "来自 ID 为 \"{{id}}\"、标题为 \"{{title}}\" 的笔记的脚本因以下原因无法执行：\n\n{{message}}"
-    }
+    },
+    "widget-list-error": {
+      "title": "无法从服务器取得小部件清单"
+    },
+    "widget-render-error": {
+      "title": "渲染自定义 React 小部件失败"
+    },
+    "widget-missing-parent": "自定义小部件未定义强制性的 \"{{property}}\" 属性。",
+    "open-script-note": "打开脚本笔记"
   },
   "add_link": {
     "add_link": "添加链接",
