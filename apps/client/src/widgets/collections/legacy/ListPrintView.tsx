@@ -23,19 +23,19 @@ export function ListPrintView({ note, noteIds: unfilteredNoteIds, onReady, onPro
             const notesWithContent: NotesWithContent[] = [];
 
             async function processNote(note: FNote, depth: number) {
-                if (!isNotePrintable(note)) return;
+                if (isNotePrintable(note)) {
+                    const content = await content_renderer.getRenderedContent(note, {
+                        trim: false,
+                        noChildrenList: true
+                    });
 
-                const content = await content_renderer.getRenderedContent(note, {
-                    trim: false,
-                    noChildrenList: true
-                });
+                    const contentEl = content.$renderedContent[0];
 
-                const contentEl = content.$renderedContent[0];
-
-                insertPageTitle(contentEl, note.title);
-                rewriteHeadings(contentEl, depth);
-                noteIdsSet.add(note.noteId);
-                notesWithContent.push({ note, contentEl });
+                    insertPageTitle(contentEl, note.title);
+                    rewriteHeadings(contentEl, depth);
+                    noteIdsSet.add(note.noteId);
+                    notesWithContent.push({ note, contentEl });
+                }
 
                 if (onProgressChanged) {
                     onProgressChanged(notesWithContent.length / noteIdsWithChildren.length);
