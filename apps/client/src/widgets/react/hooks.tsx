@@ -27,7 +27,6 @@ import ws from "../../services/ws";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { DragData } from "../note_tree";
-import CKEditor from "./CKEditor";
 import { noteSavedDataStore } from "./NoteStore";
 import { NoteContextContext, ParentComponent, refToJQuerySelector } from "./react_utils";
 
