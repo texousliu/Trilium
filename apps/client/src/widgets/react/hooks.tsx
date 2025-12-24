@@ -1011,16 +1011,26 @@ async function isNoteReadOnly(note: FNote, noteContext: NoteContext) {
 
 export function useChildNotes(parentNoteId: string | undefined) {
     const [ childNotes, setChildNotes ] = useState<FNote[]>([]);
-    useEffect(() => {
-        (async function() {
-            let childNotes: FNote[] | undefined;
-            if (parentNoteId) {
-                const parentNote = await froca.getNote(parentNoteId);
-                childNotes = await parentNote?.getChildNotes();
-            }
-            setChildNotes(childNotes ?? []);
-        })();
+
+    const refresh = useCallback(async () => {
+        let childNotes: FNote[] | undefined;
+        if (parentNoteId) {
+            const parentNote = await froca.getNote(parentNoteId);
+            childNotes = await parentNote?.getChildNotes();
+        }
+        setChildNotes(childNotes ?? []);
     }, [ parentNoteId ]);
+
+    useEffect(() => {
+        refresh();
+    }, [ refresh ]);
+
+    // Refresh on branch changes.
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (parentNoteId && loadResults.getBranchRows().some(branch => branch.parentNoteId === parentNoteId)) {
+            refresh();
+        }
+    });
 
     return childNotes;
 }
