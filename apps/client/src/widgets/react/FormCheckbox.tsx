@@ -27,11 +27,11 @@ export default function FormCheckbox({ name, disabled, label, currentValue, onCh
 
         const tooltipInstance = Tooltip.getOrCreateInstance(labelRef.current, {
             html: true,
-            template: '<div class="tooltip tooltip-top" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+            customClass: "tooltip-top"
         });
 
         return () => tooltipInstance?.dispose();
-    }, [hint]); // Proper dependency
+    }, [hint]);
 
     const labelStyle = useMemo(() =>
         hint ? { textDecoration: "underline dotted var(--main-text-color)" } : undefined,
