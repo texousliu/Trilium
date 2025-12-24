@@ -77,6 +77,7 @@
     --link-color: #95c3d9;
     --link-hover-background: #75c2e324;
     --link-hover-color: var(--link-color);
+    --link-selection-outline-color: #75c2e385;
 
     --hover-item-text-color: #efefef;
     --hover-item-background-color: #ffffff16;

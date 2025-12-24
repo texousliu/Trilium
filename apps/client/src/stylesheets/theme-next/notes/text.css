@@ -678,8 +678,8 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 
 .ck-content a.ck-widget.ck-widget_selected,
 .ck-content a.ck-link_selected {
-    outline: 2px solid var(--input-focus-outline-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 2px var(--link-selection-outline-color);
     background: var(--link-hover-background);
 } 
 
