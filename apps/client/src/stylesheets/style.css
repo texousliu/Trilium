@@ -2182,7 +2182,7 @@ body.zen.experimental-feature-new-layout {
         display: none;
     }
 
-    .classic-toolbar-widget {
+    #rest-pane > div.classic-toolbar-widget {
         position: fixed;
         left: 50%;
         bottom: 20px;
@@ -2197,6 +2197,7 @@ body.zen.experimental-feature-new-layout {
         padding: 4px;
         background: var(--menu-background-color);
         transform: translateX(-50%);
+        backdrop-filter: blur(6px);
     }
 
     #root-widget:has(.note-split.type-text:focus-within) .classic-toolbar-widget,
