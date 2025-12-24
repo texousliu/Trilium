@@ -86,6 +86,10 @@ function isNotePrintable(note: FNote) {
         return false;
     }
 
+    if (note.type === "file") {
+        return false;
+    }
+
     return true;
 }
 
