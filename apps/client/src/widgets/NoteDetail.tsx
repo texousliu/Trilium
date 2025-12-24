@@ -14,7 +14,7 @@ import toast from "../services/toast.js";
 import { dynamicRequire, isElectron, isMobile } from "../services/utils";
 import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
 import { useNoteContext, useTriliumEvent } from "./react/hooks";
-import NoteList from "./react/NoteList";
+import { NoteListWithLinks } from "./react/NoteList";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
 
 /**
@@ -200,7 +200,7 @@ export default function NoteDetail() {
                                             api.dismissToast();
                                             dialog.info(<>
                                                 <h3>{t("note_detail.print_report_collection_details_ignored_notes")}</h3>
-                                                <NoteList noteIds={printReport.ignoredNoteIds} />
+                                                <NoteListWithLinks noteIds={printReport.ignoredNoteIds} />
                                             </>, {
                                                 title: t("note_detail.print_report_title"),
                                                 size: "md"
