@@ -190,6 +190,7 @@ function NoteChildren({ note, parentNote, highlightedTokens, currentLevel, expan
     }, [ note, includeArchived ]);
 
     return childNotes?.map(childNote => <ListNoteCard
+        key={childNote.noteId}
         note={childNote}
         parentNote={parentNote}
         highlightedTokens={highlightedTokens}
