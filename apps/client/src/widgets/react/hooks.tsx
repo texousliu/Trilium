@@ -1,5 +1,5 @@
 import { CKTextEditor } from "@triliumnext/ckeditor5";
-import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
+import { FilterLabelsByType, KeyboardActionNames, NoteType, OptionNames, RelationNames } from "@triliumnext/commons";
 import { Tooltip } from "bootstrap";
 import Mark from "mark.js";
 import { RefObject, VNode } from "preact";
@@ -94,7 +94,8 @@ export interface SavedData {
     }[];
 }
 
-export function useEditorSpacedUpdate({ note, noteContext, getData, onContentChange, dataSaved, updateInterval }: {
+export function useEditorSpacedUpdate({ note, noteType, noteContext, getData, onContentChange, dataSaved, updateInterval }: {
+    noteType: NoteType;
     note: FNote,
     noteContext: NoteContext | null | undefined,
     getData: () => Promise<SavedData | undefined> | SavedData | undefined,
@@ -110,15 +111,16 @@ export function useEditorSpacedUpdate({ note, noteContext, getData, onContentCha
             const data = await getData();
 
             // for read only notes
-            if (data === undefined) return;
+            if (data === undefined || note.type !== noteType) return;
 
             protected_session_holder.touchProtectedSessionIfNecessary(note);
+
             await server.put(`notes/${note.noteId}/data`, data, parentComponent?.componentId);
 
             noteSavedDataStore.set(note.noteId, data.content);
             dataSaved?.(data);
         };
-    }, [ note, getData, dataSaved ]);
+    }, [ note, getData, dataSaved, noteType, parentComponent ]);
     const spacedUpdate = useSpacedUpdate(callback);
 
     // React to note/blob changes.
