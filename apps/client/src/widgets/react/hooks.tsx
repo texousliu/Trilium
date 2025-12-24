@@ -1086,6 +1086,22 @@ export function useNote(noteId: string | null | undefined, silentNotFoundError =
     return undefined;
 }
 
+export function useNoteTitle(noteId: string | undefined, parentNoteId: string | undefined) {
+    const [ title, setTitle ] = useState<string>();
+    const requestIdRef = useRef(0);
+
+    useEffect(() => {
+        const requestId = ++requestIdRef.current;
+        if (!noteId) return;
+        tree.getNoteTitle(noteId, parentNoteId).then(title => {
+            if (requestId !== requestIdRef.current) return;
+            setTitle(title);
+        });
+    }, [ noteId, parentNoteId ]);
+
+    return title;
+}
+
 export function useNoteIcon(note: FNote | null | undefined) {
     const [ icon, setIcon ] = useState(note?.getIcon());
     const iconClass = useNoteLabel(note, "iconClass");

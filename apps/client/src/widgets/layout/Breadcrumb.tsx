@@ -25,7 +25,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip, useTriliumOptionBool } from "../react/hooks";
+import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTitle, useStaticTooltip, useTriliumOptionBool } from "../react/hooks";
 import Icon from "../react/Icon";
 import { NewNoteLink } from "../react/NoteLink";
 import { ParentComponent } from "../react/react_utils";
@@ -134,9 +134,9 @@ function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
 
 function BreadcrumbLastItem({ notePath, parentComponent }: { notePath: string, parentComponent: Component | null }) {
     const linkRef = useRef<HTMLAnchorElement>(null);
-    const noteId = notePath.split("/").at(-1);
+    const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
-    const title = useNoteProperty(note, "title");
+    const title = useNoteTitle(noteId, parentNoteId);
     const colorClass = useNoteColorClass(note);
     const [ archived ] = useNoteLabelBoolean(note, "archived");
     useStaticTooltip(linkRef, {
