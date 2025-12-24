@@ -1374,6 +1374,14 @@ body.mobile .note-title {
     border-bottom: 2px solid #0000001c !important;
 }
 
+body.experimental-feature-new-layout #center-pane .note-split > div.alert {
+    margin-top: 0;
+}
+
+body.experimental-feature-new-layout #center-pane .note-split > div.alert + .scrolling-container {
+    padding-top: 20px;
+}
+
 /*
  * Promoted attributes
  */
