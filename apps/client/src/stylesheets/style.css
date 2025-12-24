@@ -2182,7 +2182,7 @@ body.zen.experimental-feature-new-layout {
         display: none;
     }
 
-    #rest-pane > div.classic-toolbar-widget {
+    .classic-toolbar-widget {
         position: fixed;
         left: 50%;
         bottom: 20px;
@@ -2195,7 +2195,7 @@ body.zen.experimental-feature-new-layout {
         border-radius: 8px;
         border: 1px solid var(--main-border-color);
         padding: 4px;
-        background: var(--menu-background-color);
+        background: var(--menu-background-color) !important;
         transform: translateX(-50%);
         backdrop-filter: blur(6px);
     }

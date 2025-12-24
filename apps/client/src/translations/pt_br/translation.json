@@ -29,7 +29,15 @@
     "bundle-error": {
       "title": "Falha para carregar o script customizado",
       "message": "O script da nota com ID \"{{id}}\", intitulada \"{{title}}\", não pôde ser executado devido a:\n\n{{message}}"
-    }
+    },
+    "widget-list-error": {
+      "title": "Falha ao obter a lista de widgets do servidor"
+    },
+    "widget-render-error": {
+      "title": "Falha ao renderizar um widget React personalizado"
+    },
+    "widget-missing-parent": "O widget personalizado não possui a propriedade obrigatória '{{property}}' definida.",
+    "open-script-note": "Abrir nota de script"
   },
   "add_link": {
     "add_link": "Adicionar link",
