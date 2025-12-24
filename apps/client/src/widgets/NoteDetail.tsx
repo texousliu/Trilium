@@ -131,7 +131,10 @@ export default function NoteDetail() {
         if (!isElectron()) return;
         const { ipcRenderer } = dynamicRequire("electron");
         const onPrintProgress = (_e: any, { progress, action }: { progress: number, action: "printing" | "exporting_pdf" }) => showToast(action, progress);
-        const onPrintDone = () => toast.closePersistent("printing");
+        const onPrintDone = (_e, printReport: PrintReport) => {
+            toast.closePersistent("printing");
+            handlePrintReport(printReport);
+        };
         ipcRenderer.on("print-progress", onPrintProgress);
         ipcRenderer.on("print-done", onPrintDone);
         return () => {
@@ -186,30 +189,7 @@ export default function NoteDetail() {
                     toast.closePersistent("printing");
 
                     if ("detail" in e) {
-                        const printReport = e.detail as PrintReport;
-                        if (printReport.type === "collection" && printReport.ignoredNoteIds.length > 0) {
-                            toast.showPersistent({
-                                id: "print-report",
-                                icon: "bx bx-collection",
-                                title: t("note_detail.print_report_title"),
-                                message: t("note_detail.print_report_collection_content", { count: printReport.ignoredNoteIds.length }),
-                                buttons: [
-                                    {
-                                        text: t("note_detail.print_report_collection_details_button"),
-                                        onClick(api) {
-                                            api.dismissToast();
-                                            dialog.info(<>
-                                                <h3>{t("note_detail.print_report_collection_details_ignored_notes")}</h3>
-                                                <NoteListWithLinks noteIds={printReport.ignoredNoteIds} />
-                                            </>, {
-                                                title: t("note_detail.print_report_title"),
-                                                size: "md"
-                                            });
-                                        }
-                                    }
-                                ]
-                            });
-                        }
+                        handlePrintReport(e.detail as PrintReport);
                     }
 
                     iframe.contentWindow?.print();
@@ -376,4 +356,30 @@ function showToast(type: "printing" | "exporting_pdf", progress: number = 0) {
         id: "printing",
         progress
     });
+}
+
+function handlePrintReport(printReport: PrintReport) {
+    if (printReport.type === "collection" && printReport.ignoredNoteIds.length > 0) {
+        toast.showPersistent({
+            id: "print-report",
+            icon: "bx bx-collection",
+            title: t("note_detail.print_report_title"),
+            message: t("note_detail.print_report_collection_content", { count: printReport.ignoredNoteIds.length }),
+            buttons: [
+                {
+                    text: t("note_detail.print_report_collection_details_button"),
+                    onClick(api) {
+                        api.dismissToast();
+                        dialog.info(<>
+                            <h3>{t("note_detail.print_report_collection_details_ignored_notes")}</h3>
+                            <NoteListWithLinks noteIds={printReport.ignoredNoteIds} />
+                        </>, {
+                            title: t("note_detail.print_report_title"),
+                            size: "md"
+                        });
+                    }
+                }
+            ]
+        });
+    }
 }

@@ -42,12 +42,12 @@ function App({ note, noteId }: { note: FNote | null | undefined, noteId: string 
             window.dispatchEvent(new CustomEvent("note-load-progress", { detail: { progress } }));
         }
     }, []);
-    const onReady = useCallback((detail: PrintReport) => {
+    const onReady = useCallback((printReport: PrintReport) => {
         if (sentReadyEvent.current) return;
         window.dispatchEvent(new CustomEvent("note-ready", {
-            detail
+            detail: printReport
         }));
-        window._noteReady = true;
+        window._noteReady = printReport;
         sentReadyEvent.current = true;
     }, []);
     const props: RendererProps | undefined | null = note && { note, onReady, onProgressChanged };
