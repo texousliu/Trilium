@@ -7,12 +7,14 @@ import NoteContext from "../components/note_context";
 import FNote from "../entities/fnote";
 import type { PrintReport } from "../print";
 import attributes from "../services/attributes";
+import dialog from "../services/dialog";
 import { t } from "../services/i18n";
 import protected_session_holder from "../services/protected_session_holder";
 import toast from "../services/toast.js";
 import { dynamicRequire, isElectron, isMobile } from "../services/utils";
 import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
 import { useNoteContext, useTriliumEvent } from "./react/hooks";
+import NoteList from "./react/NoteList";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
 
 /**
@@ -190,7 +192,22 @@ export default function NoteDetail() {
                                 id: "print-report",
                                 icon: "bx bx-collection",
                                 title: t("note_detail.print_report_title"),
-                                message: t("note_detail.print_report_collection_content", { count: printReport.ignoredNoteIds.length })
+                                message: t("note_detail.print_report_collection_content", { count: printReport.ignoredNoteIds.length }),
+                                buttons: [
+                                    {
+                                        text: t("note_detail.print_report_collection_details_button"),
+                                        onClick(api) {
+                                            api.dismissToast();
+                                            dialog.info(<>
+                                                <h3>{t("note_detail.print_report_collection_details_ignored_notes")}</h3>
+                                                <NoteList noteIds={printReport.ignoredNoteIds} />
+                                            </>, {
+                                                title: t("note_detail.print_report_title"),
+                                                size: "md"
+                                            });
+                                        }
+                                    }
+                                ]
                             });
                         }
                     }
