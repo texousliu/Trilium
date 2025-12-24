@@ -57,7 +57,7 @@
 
         .bxs-chevron-right {
             transform: translateY(8%);
-            
+
             &::before {
                 opacity: .75;
             }
@@ -87,7 +87,7 @@
         color: var(--custom-color, inherit) !important;
     }
 
-    .dropdown .breadcrumb-child-list {
+    .dropdown.breadcrumb-child-list {
         /* Icon */
         li > span:first-child {
             opacity: .75;

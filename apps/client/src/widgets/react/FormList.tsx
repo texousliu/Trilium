@@ -205,7 +205,10 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
 }
 
 export function FormDropdownDivider() {
-    return <div className="dropdown-divider" />;
+    return <div
+        className="dropdown-divider"
+        onClick={e => e.stopPropagation()}
+    />;
 }
 
 export function FormDropdownSubmenu({ icon, title, children, dropStart, onDropdownToggleClicked }: {

@@ -193,7 +193,7 @@ function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
             noSelectButtonStyle
             buttonClassName="icon-action"
             hideToggleArrow
-            dropdownContainerClassName="tn-dropdown-menu-scrollable"
+            dropdownContainerClassName="tn-dropdown-menu-scrollable breadcrumb-child-list"
             dropdownOptions={{  popperConfig: { strategy: "fixed", placement: "top" } }}
         >
             <BreadcrumbSeparatorDropdownContent {...props} />
@@ -207,7 +207,7 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
     const childNotes = useChildNotes(parentNoteId);
 
     return (
-        <ul className="breadcrumb-child-list">
+        <>
             {childNotes.map((note) => {
                 if (note.noteId === "_hidden") return;
                 if (hideArchivedNotes && note.isArchived) return null;
@@ -231,7 +231,7 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
                 icon="bx bx-plus"
                 onClick={() => note_create.createNote(notePath, { activate: true })}
             >{t("breadcrumb.create_new_note")}</FormListItem>
-        </ul>
+        </>
     );
 }
 
@@ -244,26 +244,25 @@ function BreadcrumbCollapsed({ items, noteContext }: {
             text={<Icon icon="bx bx-dots-horizontal-rounded" />}
             noSelectButtonStyle
             buttonClassName="icon-action"
+            dropdownContainerClassName="breadcrumb-child-list"
             hideToggleArrow
             dropdownOptions={{ popperConfig: { strategy: "fixed" } }}
         >
-            <ul className="breadcrumb-child-list">
-                {items.map((notePath) => {
-                    const notePathComponents = notePath.split("/");
-                    const noteId = notePathComponents[notePathComponents.length - 1];
-                    const note = froca.getNoteFromCache(noteId);
-                    if (!note) return null;
+            {items.map((notePath) => {
+                const notePathComponents = notePath.split("/");
+                const noteId = notePathComponents[notePathComponents.length - 1];
+                const note = froca.getNoteFromCache(noteId);
+                if (!note) return null;
 
-                    return <li key={note.noteId}>
-                        <FormListItem
-                            icon={note.getIcon()}
-                            onClick={() => noteContext?.setNote(notePath)}
-                        >
-                            <span>{note.title}</span>
-                        </FormListItem>
-                    </li>;
-                })}
-            </ul>
+                return <li key={note.noteId}>
+                    <FormListItem
+                        icon={note.getIcon()}
+                        onClick={() => noteContext?.setNote(notePath)}
+                    >
+                        <span>{note.title}</span>
+                    </FormListItem>
+                </li>;
+            })}
         </Dropdown>
     );
 }
