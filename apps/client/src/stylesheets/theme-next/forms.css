@@ -353,6 +353,11 @@ label.input-group.tn-number-unit-pair input {
     padding-inline-end: 0;
 }
 
+:root .input-group > pre[aria-hidden="true"] {
+    margin: 0;
+    padding: 0;
+}
+
 /* Combo box-like dropdown buttons */
 
 .select-button.dropdown-toggle::after {

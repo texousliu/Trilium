@@ -18,6 +18,10 @@ div.note-title-widget {
     line-height: 1;
     padding-block: 0;
     padding-inline: var(--note-title-padding-inline);
+
+    &::selection {
+        color: var(--main-text-color);
+    }
 }
 
 .note-title-widget input.note-title[readonly] {
