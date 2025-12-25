@@ -1803,6 +1803,10 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
     background: var(--right-pane-background-color);
 }
 
+#right-pane > * {
+    animation: fade-in 200ms ease-in;
+}
+
 #right-pane div.card-header {
     align-items: center;
     border: 0;

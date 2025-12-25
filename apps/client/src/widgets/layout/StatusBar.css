@@ -324,6 +324,7 @@
         padding: 8px 12px;
         max-height: 40vh;
         overflow-y: auto;
+        animation: fade-in 200ms ease-in;
     }
 }
 
