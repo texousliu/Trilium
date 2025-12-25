@@ -1,5 +1,4 @@
-import type { App, BrowserWindow, BrowserWindowConstructorOptions, IpcMainEvent,WebContents } from "electron";
-import electron, { ipcMain } from "electron";
+import { type App, type BrowserWindow, type BrowserWindowConstructorOptions, default as electron, ipcMain, type IpcMainEvent, type WebContents } from "electron";
 import fs from "fs/promises";
 import { t } from "i18next";
 import path from "path";
@@ -12,7 +11,7 @@ import optionService from "./options.js";
 import port from "./port.js";
 import { RESOURCE_DIR } from "./resource_dir.js";
 import sqlInit from "./sql_init.js";
-import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
+import { formatDownloadTitle, isMac, isWindows } from "./utils.js";
 
 // Prevent the window being garbage collected
 let mainWindow: BrowserWindow | null;
@@ -121,14 +120,14 @@ electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pag
                     </div>
                 `
             });
-        } catch (e) {
+        } catch (_e) {
             electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
             return;
         }
 
         try {
             await fs.writeFile(filePath, buffer);
-        } catch (e) {
+        } catch (_e) {
             electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
             return;
         }

@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import { HTMLAttributes } from "preact";
-import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 import link, { calculateHash, ViewScope } from "../../services/link";
 import tree from "../../services/tree";
-import { useImperativeSearchHighlighlighting, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTitle, useTriliumEvent } from "./hooks";
+import { useImperativeSearchHighlighlighting, useNote, useNoteColorClass, useNoteIcon, useNoteLabelBoolean, useNoteTitle, useTriliumEvent } from "./hooks";
 import Icon from "./Icon";
 
 interface NoteLinkOpts {

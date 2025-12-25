@@ -8,7 +8,6 @@ import { t } from "../../services/i18n";
 import server from "../../services/server";
 import { formatSize } from "../../services/utils";
 import { formatDateTime } from "../../utils/formatters";
-import Button from "../react/Button";
 import { useTriliumEvent } from "../react/hooks";
 import LinkButton from "../react/LinkButton";
 import LoadingSpinner from "../react/LoadingSpinner";

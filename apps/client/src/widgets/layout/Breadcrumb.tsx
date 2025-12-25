@@ -25,7 +25,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTitle, useStaticTooltip, useTriliumOptionBool } from "../react/hooks";
+import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteTitle, useStaticTooltip, useTriliumOptionBool } from "../react/hooks";
 import Icon from "../react/Icon";
 import { NewNoteLink } from "../react/NoteLink";
 import { ParentComponent } from "../react/react_utils";
