@@ -117,5 +117,5 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
 }
 
 span.fancytree-active {
-    color: var(--custom-color, var(--active-item-text-color));
+    color: var(--dark-theme-custom-color, var(--active-item-text-color));
 }

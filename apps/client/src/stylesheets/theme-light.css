@@ -99,10 +99,7 @@ html {
 .use-note-color {
     --custom-color: var(--light-theme-custom-color);
 }
-<<<<<<< HEAD
 
 span.fancytree-active {
-    color: var(--custom-color, var(--active-item-text-color));
+    color: var(--light-theme-custom-color, var(--active-item-text-color));
 }
-=======
->>>>>>> a47ea0d653757e0336f693072bc1cd7df6772f9f
