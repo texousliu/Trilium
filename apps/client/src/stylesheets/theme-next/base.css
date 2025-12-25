@@ -163,6 +163,10 @@ body.desktop .dropdown-menu.tn-dropdown-list {
     backdrop-filter: var(--dropdown-backdrop-filter);
 }
 
+body.desktop .dropdown-submenu .dropdown-menu::before {
+    content: unset;
+}
+
 body.desktop .dropdown-menu.tn-dropdown-list::before {
     display: none;
 }
