@@ -97,8 +97,8 @@ Documentația este disponibilă în mai multe formate:
   autentificare mai sigură
 * [Sincronizare](https://docs.triliumnotes.org/user-guide/setup/synchronization)
   cu un server propriu
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * există [servicii terțe pentru găzduirea unui server de
+    sincronizare](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
 * [Partajarea](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
   (publicarea) notițelor pe Internet
 * [Criptare
@@ -106,10 +106,11 @@ Documentația este disponibilă în mai multe formate:
   la nivel de notițe
 * Desenare liberă, folosind [Excalidraw](https://excalidraw.com/) (notițe de tip
   „schiță”)
-* [Relation
-  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
-  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
-  for visualizing notes and their relations
+* [Hărți ale
+  relaților](https://docs.triliumnotes.org/user-guide/note-types/relation-map)
+  și [hărți ale
+  notițelor/legăturilor](https://docs.triliumnotes.org/user-guide/note-types/note-map)
+  pentru vizualizarea notițelor și relaților acestora
 * Hărți mentale, bazate pe [Mind Elixir](https://docs.mind-elixir.com/)
 * [Hărți
   geografice](https://docs.triliumnotes.org/user-guide/collections/geomap) cu
@@ -133,8 +134,8 @@ Documentația este disponibilă în mai multe formate:
   pentru salvarea rapidă a conținutului de pe Internet
 * Interfață grafică personalizabilă (butoane, widget-uri definite de utilizator,
   ...)
-* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
-  along with a Grafana Dashboard.
+* [Metrice](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
+  împreună cu un dashboard Grafana.
 
 ✨ Consultați următoarele resurse din partea comunității Trilium:
 

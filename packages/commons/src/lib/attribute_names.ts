@@ -4,7 +4,10 @@
 type Labels = {
     color: string;
     iconClass: string;
+    workspace: boolean;
+    workspaceTabBackgroundColor: string;
     workspaceIconClass: string;
+    executeButton: boolean;
     executeDescription: string;
     executeTitle: string;
     limit: string; // should be probably be number
@@ -17,6 +20,7 @@ type Labels = {
     language: string;
     originalFileName: string;
     pageUrl: string;
+    dateNote: string;
 
     // Search
     searchString: string;

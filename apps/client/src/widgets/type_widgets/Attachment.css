@@ -22,12 +22,17 @@
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+}
+
+.attachment-detail-wrapper.list-view {
+    overflow: visible;
 }
 
 .attachment-title {
     font-size: 1.1rem;
     margin: 0;
-    
+
     a {
         color: inherit !important;
     }
@@ -72,8 +77,8 @@
 
 .attachment-detail-wrapper.list-view {
     border-radius: 12px;
-    background-color: var(--card-background-color);    
-    padding: 0 6px;
+    background-color: var(--card-background-color);
+    padding: 6px 6px 0 6px;
     box-shadow: var(--card-box-shadow);
 }
 
@@ -126,15 +131,6 @@
 /* #endregion */
 
 /* #region Attachment actions */
-.attachment-actions {
-    width: 35px;
-    height: 35px;
-}
-
-.attachment-actions .select-button {
-    position: relative;
-    top: 3px;
-}
 
 .attachment-actions .dropdown-menu {
     width: 20em;

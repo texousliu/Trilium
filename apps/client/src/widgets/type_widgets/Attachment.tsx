@@ -26,11 +26,35 @@ import ws from "../../services/ws";
 import appContext from "../../components/app_context";
 import { ConvertAttachmentToNoteResponse } from "@triliumnext/commons";
 import options from "../../services/options";
+import FNote from "../../entities/fnote";
 
 /**
  * Displays the full list of attachments of a note and allows the user to interact with them.
  */
 export function AttachmentList({ note }: TypeWidgetProps) {
+    const attachments = useAttachments(note);
+
+    // TODO: Extract inline styles to CSS
+    return (
+        <div style={{display: "flex", flexDirection: "column", height: "100%"}}>
+            <AttachmentListHeader noteId={note.noteId} />
+            <div style={{overflow: "auto", flexGrow: 1}}>
+
+                <div className="attachment-list-wrapper">
+                    {attachments.length ? (
+                        attachments.map(attachment => <AttachmentInfo key={attachment.attachmentId} attachment={attachment} />)
+                    ) : (
+                        <Alert type="info">
+                            {t("attachment_list.no_attachments")}
+                        </Alert>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export function useAttachments(note: FNote) {
     const [ attachments, setAttachments ] = useState<FAttachment[]>([]);
 
     function refresh() {
@@ -45,21 +69,7 @@ export function AttachmentList({ note }: TypeWidgetProps) {
         }
     });
 
-    return (
-        <>
-            <AttachmentListHeader noteId={note.noteId} />
-
-            <div className="attachment-list-wrapper">
-                {attachments.length ? (
-                    attachments.map(attachment => <AttachmentInfo key={attachment.attachmentId} attachment={attachment} />)
-                ) : (
-                    <Alert type="info">
-                        {t("attachment_list.no_attachments")}
-                    </Alert>
-                )}
-            </div>
-        </>
-    )
+    return attachments;
 }
 
 function AttachmentListHeader({ noteId }: { noteId: string }) {

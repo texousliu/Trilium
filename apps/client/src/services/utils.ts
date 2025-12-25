@@ -1,5 +1,5 @@
 import { dayjs } from "@triliumnext/commons";
-import type { ViewScope } from "./link.js";
+import type { ViewMode, ViewScope } from "./link.js";
 import FNote from "../entities/fnote";
 import { snapdom } from "@zumer/snapdom";
 
@@ -439,7 +439,20 @@ async function openInAppHelp($button: JQuery<HTMLElement>) {
  * @param inAppHelpPage the ID of the help note (excluding the `_help_` prefix).
  * @returns a promise that resolves once the help has been opened.
  */
-export async function openInAppHelpFromUrl(inAppHelpPage: string) {
+export function openInAppHelpFromUrl(inAppHelpPage: string) {
+    return openInReusableSplit(`_help_${inAppHelpPage}`, "contextual-help");
+}
+
+/**
+ * Similar to opening a new note in a split, but re-uses an existing split if there is already one open with the same view mode.
+ *
+ * @param targetNoteId the note ID to open in the split.
+ * @param targetViewMode the view mode of the split to open the note in.
+ * @param openOpts additional options for opening the note.
+ */
+export async function openInReusableSplit(targetNoteId: string, targetViewMode: ViewMode, openOpts: {
+    hoistedNoteId?: string;
+} = {}) {
     // Dynamic import to avoid import issues in tests.
     const appContext = (await import("../components/app_context.js")).default;
     const activeContext = appContext.tabManager.getActiveContext();
@@ -447,23 +460,20 @@ export async function openInAppHelpFromUrl(inAppHelpPage: string) {
         return;
     }
     const subContexts = activeContext.getSubContexts();
-    const targetNote = `_help_${inAppHelpPage}`;
-    const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
-    const viewScope: ViewScope = {
-        viewMode: "contextual-help",
-    };
-    if (!helpSubcontext) {
-        // The help is not already open, open a new split with it.
+    const existingSubcontext = subContexts.find((s) => s.viewScope?.viewMode === targetViewMode);
+    const viewScope: ViewScope = { viewMode: targetViewMode };
+    if (!existingSubcontext) {
+        // The target split is not already open, open a new split with it.
         const { ntxId } = subContexts[subContexts.length - 1];
         appContext.triggerCommand("openNewNoteSplit", {
             ntxId,
-            notePath: targetNote,
-            hoistedNoteId: "_help",
+            notePath: targetNoteId,
+            hoistedNoteId: openOpts.hoistedNoteId,
             viewScope
-        })
+        });
     } else {
-        // There is already a help window open, make sure it opens on the right note.
-        helpSubcontext.setNote(targetNote, { viewScope });
+        // There is already a target split open, make sure it opens on the right note.
+        existingSubcontext.setNote(targetNoteId, { viewScope });
     }
 }
 

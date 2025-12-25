@@ -81,17 +81,13 @@ Trilium Notes
   [OpenIDとTOTPの統合](https://docs.triliumnotes.org/user-guide/setup/server/mfa)
 * セルフホスト同期サーバーとの
   [同期](https://docs.triliumnotes.org/user-guide/setup/synchronization)
-  * there are [3rd party services for hosting synchronisation
-    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+  * [同期サーバーをホストするためのサードパーティサービス](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)があります
 * インターネット上でノートの
   [共有](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)（公開）
 * ノートごとに調整可能で強力な
   [ノート暗号化](https://docs.triliumnotes.org/user-guide/concepts/notes/protected-notes)
 * [Excalidraw](https://excalidraw.com/) をベースにした図のスケッチ（ノートタイプ「キャンバス」）
-* [Relation
-  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
-  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
-  for visualizing notes and their relations
+* ノートとその関係を視覚化するための[リレーションマップ](https://docs.triliumnotes.org/user-guide/note-types/relation-map)と[ノート/リンクマップ](https://docs.triliumnotes.org/user-guide/note-types/note-map)
 * [Mind Elixir](https://docs.mind-elixir.com/) をベースとしたマインドマップ
 * 位置ピンと GPX トラック付きの
   [ジオマップ](https://docs.triliumnotes.org/user-guide/collections/geomap)
@@ -108,11 +104,11 @@ Trilium Notes
 * [Evernote](https://docs.triliumnotes.org/user-guide/concepts/import-export/evernote)
   と [Markdown
   のインポートとエクスポート](https://docs.triliumnotes.org/user-guide/concepts/import-export/markdown)
-* [Web Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper)
-  でWebコンテンツを簡単に保存
+* [Web Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper) で
+  web コンテンツを簡単に保存
 * カスタマイズ可能な UI (サイドバー ボタン、ユーザー定義のウィジェットなど)
-* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
-  along with a Grafana Dashboard.
+* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics) と
+  Grafana ダッシュボード。
 
 ✨ TriliumNext 関連のその他の情報については、次のサードパーティのリソース/コミュニティをご覧ください:
 
@@ -168,13 +164,13 @@ TriliumNext は Flatpak としても提供されていますが、FlatHub では
 
 ### ブラウザ（どのOSでも）
 
-サーバーインストール (下記参照) を使用する場合は、Web インターフェイス (デスクトップアプリとほぼ同じ) に直接アクセスできます。
+サーバーインストール (下記参照) を使用する場合は、web インターフェイス (デスクトップアプリとほぼ同じ) に直接アクセスできます。
 
 現在、Chrome と Firefox の最新バージョンのみがサポート (およびテスト) されています。
 
 ### モバイル
 
-モバイルデバイスで TriliumNext を使用するには、モバイル Web
+モバイルデバイスで TriliumNext を使用するには、モバイル web
 ブラウザーを使用して、サーバーインストールのモバイルインターフェイスにアクセスできます (以下を参照)。
 
 モバイルアプリのサポートの詳細については、issue https://github.com/TriliumNext/Trilium/issues/4962
