@@ -233,8 +233,10 @@
     --right-pane-item-hover-background: #00000013;
     --right-pane-item-hover-color: inherit;
 
-    --bottom-panel-background-color: #ffffff59;
-    --bottom-panel-title-bar-background-color: #0000000a;
+    --bottom-panel-background-color: #ffffff8c;
+    --bottom-panel-title-bar-background-color: #94949414;
+
+    --status-bar-border-color: #0000003a;
 
     --scrollbar-thumb-color: #0000005c;
     --scrollbar-thumb-hover-color: #00000066;
