@@ -128,6 +128,16 @@ body.backdrop-effects-disabled {
     font-size: 0.9rem !important;
 }
 
+/* Use this class for non-legacy menus */
+.dropdown-menu.tn-dropdown-menu {
+    --menu-item-icon-vert-offset: 0;
+    white-space-collapse: discard;
+}
+
+.dropdown-menu.tn-dropdown-menu .bx {
+    margin-inline-end: 6px;
+}
+
 .dropdown-menu.tn-dropdown-menu-scrollable {
     /* Note: scrollable dropdowns does not support submenus */
     max-height: 90vh;

@@ -412,13 +412,6 @@ body[dir=rtl] .attribute-list-editor {
     min-width: 15em;
 }
 
-.note-actions .dropdown-item .bx {
-    position: relative;
-    top: 3px;
-    font-size: 120%;
-    margin-inline-end: 5px;
-}
-
 .note-actions .dropdown-item[disabled], .note-actions .dropdown-item[disabled]:hover {
     color: var(--muted-text-color) !important;
     background-color: transparent !important;

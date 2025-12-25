@@ -91,8 +91,6 @@
         /* Icon */
         li > span:first-child {
             opacity: .75;
-            padding-inline-end: 4px;
-            translate: none;
         };
     }
 

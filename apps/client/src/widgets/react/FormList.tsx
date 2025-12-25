@@ -231,7 +231,8 @@ export function FormDropdownSubmenu({ icon, title, children, dropStart, onDropdo
                     }
                 }}
             >
-                <Icon icon={icon} />{" "}
+                <Icon icon={icon} />
+                &nbsp;
                 {title}
             </span>
 
