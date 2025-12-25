@@ -167,10 +167,6 @@ body.desktop .dropdown-menu.tn-dropdown-list::before {
     display: none;
 }
 
-body.desktop .dropdown-submenu .dropdown-menu::before {
-    content: unset;
-}
-
 body.desktop .dropdown-submenu .dropdown-menu {
     backdrop-filter: var(--dropdown-backdrop-filter);
     background: transparent;
