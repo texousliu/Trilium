@@ -234,6 +234,10 @@ html body .dropdown-item[disabled] {
     opacity: var(--menu-item-disabled-opacity);
 }
 
+.dropdown-item .destructive-action-icon,
+.dropdown-item .bx-trash {
+    --menu-item-icon-color: var(--dropdown-item-icon-destructive-color);
+}
 /* Badges */
 :root .badge {
     --bs-badge-color: var(--badge-text-color);
