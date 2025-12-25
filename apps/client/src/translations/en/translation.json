@@ -29,7 +29,7 @@
     "widget-render-error": {
       "title": "Failed to render a custom React widget"
     },
-    "widget-missing-parent": "Custom widget does not have mandatory '{{property}}' property defined.",
+    "widget-missing-parent": "Custom widget does not have mandatory '{{property}}' property defined.\n\nIf this script is meant to be run without a UI element, use '#run=frontendStartup' instead.",
     "open-script-note": "Open script note",
     "scripting-error": "Custom script error: {{title}}"
   },
@@ -1770,7 +1770,12 @@
   "note_detail": {
     "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'",
     "printing": "Printing in progress...",
-    "printing_pdf": "Exporting to PDF in progress..."
+    "printing_pdf": "Exporting to PDF in progress...",
+    "print_report_title": "Print report",
+    "print_report_collection_content_one": "{{count}} note in the collection could not be printed because they are not supported or they are protected.",
+    "print_report_collection_content_other": "{{count}} notes in the collection could not be printed because they are not supported or they are protected.",
+    "print_report_collection_details_button": "See details",
+    "print_report_collection_details_ignored_notes": "Ignored notes"
   },
   "note_title": {
     "placeholder": "type note's title here...",

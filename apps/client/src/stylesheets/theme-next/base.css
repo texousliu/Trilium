@@ -762,11 +762,6 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
     filter: contrast(105%);
 }
 
-.note-list.grid-view .note-book-card img {
-    object-fit: cover !important;
-    width: 100%;
-}
-
 .note-list.grid-view .ck-content {
     line-height: 1.3;
 }

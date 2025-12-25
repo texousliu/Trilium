@@ -79,6 +79,7 @@ export function EditableCode({ note, ntxId, noteContext, debounceUpdate, parentC
     const mime = useNoteProperty(note, "mime");
     const spacedUpdate = useEditorSpacedUpdate({
         note,
+        noteType: "code",
         noteContext,
         getData: () => ({ content: editorRef.current?.getText() ?? "" }),
         onContentChange: (content) => {

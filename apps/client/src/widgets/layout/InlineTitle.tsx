@@ -1,9 +1,10 @@
 import "./InlineTitle.css";
 
 import { NoteType } from "@triliumnext/commons";
+import { Tooltip } from "bootstrap";
 import clsx from "clsx";
 import { ComponentChild } from "preact";
-import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { Trans } from "react-i18next";
 
 import { ViewScope } from "../../services/link";
@@ -108,11 +109,13 @@ function TextWithValue({ i18nKey, value, valueTooltip }: {
     valueTooltip: string;
 }) {
     const listItemRef = useRef<HTMLLIElement>(null);
-    useStaticTooltip(listItemRef, {
+    const tooltipConfig: Partial<Tooltip.Options> = useMemo(() => ({
         selector: "span.value",
         title: valueTooltip,
-        popperConfig: { placement: "bottom" }
-    });
+        popperConfig: { placement: "bottom" },
+        animation: false
+    }), [ valueTooltip ]);
+    useStaticTooltip(listItemRef, tooltipConfig);
 
     return (
         <li ref={listItemRef}>

@@ -11,7 +11,7 @@ import { NOTE_TYPES, NoteTypeMapping } from "../../services/note_types";
 import server from "../../services/server";
 import { Badge, BadgeWithDropdown } from "../react/Badge";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useNoteBlob, useNoteContext, useNoteProperty, useTriliumEvent } from "../react/hooks";
+import { useNoteContext, useNoteProperty, useNoteSavedData, useTriliumEvent } from "../react/hooks";
 import { onWheelHorizontalScroll } from "../widget_utils";
 
 const SWITCHER_PINNED_NOTE_TYPES = new Set<NoteType>([ "text", "code", "book", "canvas" ]);
@@ -21,7 +21,7 @@ const supportedNoteTypes = new Set<NoteType>([
 
 export default function NoteTypeSwitcher() {
     const { note } = useNoteContext();
-    const blob = useNoteBlob(note);
+    const blob = useNoteSavedData(note?.noteId);
     const currentNoteType = useNoteProperty(note, "type");
     const { pinnedNoteTypes, restNoteTypes } = useMemo(() => {
         const pinnedNoteTypes: NoteTypeMapping[] = [];
@@ -44,7 +44,7 @@ export default function NoteTypeSwitcher() {
             className="note-type-switcher"
             onWheel={onWheelHorizontalScroll}
         >
-            {note && blob?.contentLength === 0 && (
+            {note && blob?.length === 0 && (
                 <>
                     <div className="intro">{t("note_title.note_type_switcher_label", { type: currentNoteTypeData?.title.toLocaleLowerCase() })}</div>
                     {pinnedNoteTypes.map(noteType => noteType.type !== currentNoteType && (

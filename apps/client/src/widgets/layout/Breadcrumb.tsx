@@ -25,7 +25,7 @@ import ActionButton from "../react/ActionButton";
 import { Badge } from "../react/Badge";
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useStaticTooltip, useTriliumOptionBool } from "../react/hooks";
+import { useActiveNoteContext, useChildNotes, useNote, useNoteColorClass, useNoteIcon, useNoteLabel, useNoteLabelBoolean, useNoteTitle, useStaticTooltip, useTriliumOptionBool } from "../react/hooks";
 import Icon from "../react/Icon";
 import { NewNoteLink } from "../react/NoteLink";
 import { ParentComponent } from "../react/react_utils";
@@ -35,7 +35,7 @@ const INITIAL_ITEMS = 2;
 const FINAL_ITEMS = 3;
 
 export default function Breadcrumb() {
-    const { note, notePath, notePaths, noteContext } = useNotePaths();
+    const { notePath, notePaths, noteContext } = useNotePaths();
     const parentComponent = useContext(ParentComponent);
     const [ hideArchivedNotes ] = useTriliumOptionBool("hideArchivedNotes_main");
     const separatorProps: Omit<BreadcrumbSeparatorProps, "notePath" | "activeNotePath"> = { noteContext, hideArchivedNotes };
@@ -57,6 +57,7 @@ export default function Breadcrumb() {
                             <BreadcrumbItem index={notePaths.length - FINAL_ITEMS + index} notePath={item} notePathLength={notePaths.length} noteContext={noteContext} parentComponent={parentComponent} />
                         </Fragment>
                     ))}
+                    <BreadcrumbSeparator notePath={notePaths.at(-1)} {...separatorProps} />
                 </>
             ) : (
                 notePaths.map((item, index) => (
@@ -133,9 +134,9 @@ function BreadcrumbHoistedNoteRoot({ noteId }: { noteId: string }) {
 
 function BreadcrumbLastItem({ notePath, parentComponent }: { notePath: string, parentComponent: Component | null }) {
     const linkRef = useRef<HTMLAnchorElement>(null);
-    const noteId = notePath.split("/").at(-1);
+    const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
     const [ note ] = useState(() => froca.getNoteFromCache(noteId!));
-    const title = useNoteProperty(note, "title");
+    const title = useNoteTitle(noteId, parentNoteId);
     const colorClass = useNoteColorClass(note);
     const [ archived ] = useNoteLabelBoolean(note, "archived");
     useStaticTooltip(linkRef, {
@@ -179,8 +180,8 @@ function BreadcrumbItem({ index, notePath, noteContext, notePathLength, parentCo
 }
 
 interface BreadcrumbSeparatorProps {
-    notePath: string,
-    activeNotePath: string,
+    notePath: string | undefined,
+    activeNotePath?: string,
     noteContext: NoteContext | undefined,
     hideArchivedNotes: boolean;
 }
@@ -192,7 +193,7 @@ function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
             noSelectButtonStyle
             buttonClassName="icon-action"
             hideToggleArrow
-            dropdownContainerClassName="tn-dropdown-menu-scrollable"
+            dropdownContainerClassName="tn-dropdown-menu-scrollable breadcrumb-child-list"
             dropdownOptions={{  popperConfig: { strategy: "fixed", placement: "top" } }}
         >
             <BreadcrumbSeparatorDropdownContent {...props} />
@@ -201,12 +202,12 @@ function BreadcrumbSeparator(props: BreadcrumbSeparatorProps) {
 }
 
 function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNotePath, hideArchivedNotes }: BreadcrumbSeparatorProps) {
-    const notePathComponents = notePath.split("/");
+    const notePathComponents = (notePath ?? "").split("/");
     const parentNoteId = notePathComponents.at(-1);
     const childNotes = useChildNotes(parentNoteId);
 
     return (
-        <ul className="breadcrumb-child-list">
+        <>
             {childNotes.map((note) => {
                 if (note.noteId === "_hidden") return;
                 if (hideArchivedNotes && note.isArchived) return null;
@@ -230,7 +231,7 @@ function BreadcrumbSeparatorDropdownContent({ notePath, noteContext, activeNoteP
                 icon="bx bx-plus"
                 onClick={() => note_create.createNote(notePath, { activate: true })}
             >{t("breadcrumb.create_new_note")}</FormListItem>
-        </ul>
+        </>
     );
 }
 
@@ -243,26 +244,25 @@ function BreadcrumbCollapsed({ items, noteContext }: {
             text={<Icon icon="bx bx-dots-horizontal-rounded" />}
             noSelectButtonStyle
             buttonClassName="icon-action"
+            dropdownContainerClassName="breadcrumb-child-list"
             hideToggleArrow
             dropdownOptions={{ popperConfig: { strategy: "fixed" } }}
         >
-            <ul className="breadcrumb-child-list">
-                {items.map((notePath) => {
-                    const notePathComponents = notePath.split("/");
-                    const noteId = notePathComponents[notePathComponents.length - 1];
-                    const note = froca.getNoteFromCache(noteId);
-                    if (!note) return null;
+            {items.map((notePath) => {
+                const notePathComponents = notePath.split("/");
+                const noteId = notePathComponents[notePathComponents.length - 1];
+                const note = froca.getNoteFromCache(noteId);
+                if (!note) return null;
 
-                    return <li key={note.noteId}>
-                        <FormListItem
-                            icon={note.getIcon()}
-                            onClick={() => noteContext?.setNote(notePath)}
-                        >
-                            <span>{note.title}</span>
-                        </FormListItem>
-                    </li>;
-                })}
-            </ul>
+                return <li key={note.noteId}>
+                    <FormListItem
+                        icon={note.getIcon()}
+                        onClick={() => noteContext?.setNote(notePath)}
+                    >
+                        <span>{note.title}</span>
+                    </FormListItem>
+                </li>;
+            })}
         </Dropdown>
     );
 }
