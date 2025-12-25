@@ -30,7 +30,7 @@ export function CustomNoteLauncher({ launcherNote, getTargetNoteId, getHoistedNo
             const activate = !!evt.shiftKey;
             await appContext.tabManager.openInNewTab(targetNoteId, hoistedNoteIdWithDefault, activate);
         } else {
-            await appContext.tabManager.openInSameTab(targetNoteId);
+            await appContext.tabManager.openInSameTab(targetNoteId, hoistedNoteIdWithDefault);
         }
     }, [ launcherNote, getTargetNoteId, getHoistedNoteId ]);
 
