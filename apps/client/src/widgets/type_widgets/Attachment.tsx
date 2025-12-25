@@ -210,7 +210,7 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
 function DeletionAlert({ utcDateScheduledForErasureSince }: { utcDateScheduledForErasureSince: string }) {
     const scheduledSinceTimestamp = utils.parseDate(utcDateScheduledForErasureSince)?.getTime();
     // use default value (30 days in seconds) from options_init as fallback, in case getInt returns null
-    const intervalMs = options.getInt("eraseUnusedAttachmentsAfterSeconds") || 2592000 * 1000;
+    const intervalMs = (options.getInt("eraseUnusedAttachmentsAfterSeconds") || 2592000) * 1000;
     const deletionTimestamp = scheduledSinceTimestamp + intervalMs;
     const willBeDeletedInMs = deletionTimestamp - Date.now();
 
