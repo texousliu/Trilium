@@ -11,7 +11,7 @@ import { t } from "../../services/i18n";
 import options from "../../services/options";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer";
 import Button from "../react/Button";
-import { useActiveNoteContext, useLegacyWidget, useNoteProperty, useTriliumOptionBool, useTriliumOptionJson } from "../react/hooks";
+import { useActiveNoteContext, useLegacyWidget, useNoteProperty, useTriliumEvent, useTriliumOptionBool, useTriliumOptionJson } from "../react/hooks";
 import Icon from "../react/Icon";
 import LegacyRightPanelWidget from "../right_panel_widget";
 import HighlightsList from "./HighlightsList";
@@ -30,6 +30,9 @@ export default function RightPanelContainer({ widgetsByParent }: { widgetsByPare
     const [ rightPaneVisible, setRightPaneVisible ] = useTriliumOptionBool("rightPaneVisible");
     const items = useItems(rightPaneVisible, widgetsByParent);
     useSplit(rightPaneVisible);
+    useTriliumEvent("toggleRightPane", () => {
+        setRightPaneVisible(!rightPaneVisible);
+    });
 
     return (
         <div id="right-pane">
