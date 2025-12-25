@@ -92,7 +92,7 @@ export default class DesktopLayout {
                     .optChild(launcherPaneIsHorizontal, <LeftPaneToggle isHorizontalLayout={true} />)
                     .child(<TabHistoryNavigationButtons />)
                     .child(new TabRowWidget().class("full-width"))
-                    .optChild(launcherPaneIsHorizontal && isNewLayout, <RightPaneToggle />)
+                    .optChild(isNewLayout, <RightPaneToggle />)
                     .optChild(customTitleBarButtons, <TitleBarButtons />)
                     .css("height", "40px")
                     .css("background-color", "var(--launcher-pane-background-color)")
