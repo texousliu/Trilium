@@ -21,8 +21,17 @@
     },
     "bundle-error": {
       "title": "カスタムスクリプトの読み込みに失敗しました",
-      "message": "ノートID”{{id}}”, ノートタイトル “{{title}}” のスクリプトを実行できませんでした。理由は以下の通りです:\n\n{{message}}"
-    }
+      "message": "次の理由によりスクリプトを実行できませんでした:\n\n{{message}}"
+    },
+    "widget-list-error": {
+      "title": "サーバーからウィジェットのリストを取得できませんでした"
+    },
+    "widget-render-error": {
+      "title": "カスタム React ウィジェットのレンダリングに失敗しました"
+    },
+    "widget-missing-parent": "カスタムウィジェットに必須の '{{property}}' プロパティが定義されていません。",
+    "open-script-note": "スクリプトノートを開く",
+    "scripting-error": "カスタムスクリプトエラー: {{title}}"
   },
   "add_link": {
     "add_link": "リンクを追加",
@@ -1254,7 +1263,8 @@
     "note_type_switcher_others": "その他のノートタイプ",
     "note_type_switcher_templates": "テンプレート",
     "note_type_switcher_collection": "コレクション",
-    "edited_notes": "編集済みノート"
+    "edited_notes": "この日に編集されたノート",
+    "promoted_attributes": "プロモート属性"
   },
   "search_result": {
     "no_notes_found": "指定された検索パラメータに該当するノートは見つかりませんでした。",

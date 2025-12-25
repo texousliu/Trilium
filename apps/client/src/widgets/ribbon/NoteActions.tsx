@@ -101,6 +101,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
             className="note-actions"
             hideToggleArrow
             noSelectButtonStyle
+            noDropdownListStyle
             iconAction
             onHidden={() => itemToFocusRef.current = null }
         >

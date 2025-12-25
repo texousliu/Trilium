@@ -25,6 +25,10 @@
     overflow: hidden;
 }
 
+.attachment-detail-wrapper.list-view {
+    overflow: visible;
+}
+
 .attachment-title {
     font-size: 1.1rem;
     margin: 0;

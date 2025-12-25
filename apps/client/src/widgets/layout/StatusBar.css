@@ -1,6 +1,6 @@
 .component.status-bar {
     contain: none;
-    border-top: 1px solid var(--main-border-color);
+    border-top: 1px solid var(--status-bar-border-color);
 
     > .status-bar-main-row {
         min-height: 28px;
@@ -298,6 +298,11 @@
     margin: 0 !important;
     padding: 0;
 
+    body.layout-horizontal.background-effects & {
+        /* Do not apply Mica over the bottom panel in the horizontal layout */
+        background: var(--right-pane-background-color);
+    }
+
     .bottom-panel-title-bar {
         display: flex;
         padding: 6px 12px;
@@ -319,6 +324,7 @@
         padding: 8px 12px;
         max-height: 40vh;
         overflow-y: auto;
+        animation: fade-in 200ms ease-in;
     }
 }
 

@@ -34,20 +34,23 @@ import FNote from "../../entities/fnote";
 export function AttachmentList({ note }: TypeWidgetProps) {
     const attachments = useAttachments(note);
 
+    // TODO: Extract inline styles to CSS
     return (
-        <>
+        <div style={{display: "flex", flexDirection: "column", height: "100%"}}>
             <AttachmentListHeader noteId={note.noteId} />
+            <div style={{overflow: "auto", flexGrow: 1}}>
 
-            <div className="attachment-list-wrapper">
-                {attachments.length ? (
-                    attachments.map(attachment => <AttachmentInfo key={attachment.attachmentId} attachment={attachment} />)
-                ) : (
-                    <Alert type="info">
-                        {t("attachment_list.no_attachments")}
-                    </Alert>
-                )}
+                <div className="attachment-list-wrapper">
+                    {attachments.length ? (
+                        attachments.map(attachment => <AttachmentInfo key={attachment.attachmentId} attachment={attachment} />)
+                    ) : (
+                        <Alert type="info">
+                            {t("attachment_list.no_attachments")}
+                        </Alert>
+                    )}
+                </div>
             </div>
-        </>
+        </div>
     );
 }
 

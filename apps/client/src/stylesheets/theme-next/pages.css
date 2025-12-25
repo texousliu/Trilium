@@ -172,6 +172,10 @@
     height: 0;
 }
 
+body.experimental-feature-new-layout .note-detail-content-widget-content.options {
+    padding-inline: 25px;
+}
+
 .options-section:not(.tn-no-card) {
     margin-bottom: calc(var(--options-title-offset) + 26px) !important;
     box-shadow: var(--card-box-shadow);

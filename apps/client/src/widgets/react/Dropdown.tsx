@@ -127,7 +127,7 @@ export default function Dropdown({ id, className, buttonClassName, isStatic, chi
             </button>
 
             <ul
-                class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} ${!noDropdownListStyle ? "tn-dropdown-list" : ""}`}
+                class={`dropdown-menu tn-dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} ${!noDropdownListStyle ? "tn-dropdown-list" : ""}`}
                 style={dropdownContainerStyle}
                 aria-labelledby={ariaId}
                 ref={dropdownContainerRef}
