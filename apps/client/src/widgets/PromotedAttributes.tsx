@@ -116,7 +116,7 @@ export function usePromotedAttributeData(note: FNote | null | undefined, compone
                     valueAttr.attributeId = "";
                 }
 
-                const uniqueId = `${note.noteId}-${valueAttr.name}-${i}`;
+                const uniqueId = crypto.randomUUID();
                 cells.push({  definitionAttr, definition, valueAttr, valueName, uniqueId });
             }
         }
@@ -319,6 +319,7 @@ function MultiplicityCell({ cell, cells, setCells, setCellToFocus, note, compone
                     const index = cells.indexOf(cell);
                     const newCell: Cell = {
                         ...cell,
+                        uniqueId: crypto.randomUUID(),
                         valueAttr: {
                             attributeId: "",
                             type: cell.valueAttr.type,
