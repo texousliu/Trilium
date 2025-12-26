@@ -138,6 +138,10 @@ function NoteIconList({ note }: { note: FNote }) {
                         checked={filterByPrefix === null}
                         onClick={() => setFilterByIconPack(null)}
                     >{t("note_icon.filter-none")}</FormListItem>
+                    <FormListItem
+                        checked={filterByPrefix === "bx"}
+                        onClick={() => setFilterByIconPack("bx")}
+                    >{t("note_icon.filter-default")}</FormListItem>
                     <FormDropdownDivider />
 
                     {glob.iconRegistry.sources.map(({ prefix, name }) => (

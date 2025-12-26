@@ -767,7 +767,8 @@
     "change_note_icon": "Change note icon",
     "search": "Search:",
     "reset-default": "Reset to default icon",
-    "filter-none": "All icons"
+    "filter-none": "All icons",
+    "filter-default": "Default icons"
   },
   "basic_properties": {
     "note_type": "Note type",
