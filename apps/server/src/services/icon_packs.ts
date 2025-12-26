@@ -70,5 +70,18 @@ export function generateCss(processedIconPack: ProcessResult) {
             font-style: normal;
             src: url('/api/attachments/${processedIconPack.fontAttachmentId}/download') format('${MIME_TO_CSS_FORMAT_MAPPINGS[processedIconPack.fontMime]}');
         }
+
+        .${processedIconPack.manifest.prefix} {
+            font-family: 'trilium-icon-pack-${processedIconPack.manifest.prefix}' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-variant: normal;
+            line-height: 1;
+            text-rendering: auto;
+            display: inline-block;
+            text-transform: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
     `;
 }
