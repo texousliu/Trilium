@@ -1,6 +1,7 @@
 import type BAttachment from "../becca/entities/battachment";
 import type BNote from "../becca/entities/bnote";
 import log from "./log";
+import search from "./search/services/search";
 
 const PREFERRED_MIME_TYPE = [
     "font/woff2",
@@ -24,6 +25,12 @@ interface ProcessResult {
     manifest: IconPackManifest;
     fontMime: string;
     fontAttachmentId: string;
+}
+
+export function getIconPacks() {
+    return search.searchNotes("#iconPack")
+        .map(iconPackNote => processIconPack(iconPackNote))
+        .filter(Boolean) as ProcessResult[];
 }
 
 export function processIconPack(iconPackNote: BNote): ProcessResult | undefined {
@@ -65,7 +72,7 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
 export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessResult) {
     const iconDeclarations: string[] = [];
     for (const [ key, mapping ] of Object.entries(manifest.icons)) {
-        iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.charCodeAt(0).toString(16)}' }`);
+        iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.charCodeAt(0).toString(16)}'; }`);
     }
 
     return `\
