@@ -60,4 +60,44 @@ describe("Mapping attachments", () => {
         const attachment = determineBestFontAttachment(iconPackNote);
         expect(attachment?.mime).toStrictEqual("font/woff");
     });
+
+    it("handles ttf", () => {
+        const iconPackNote = buildNote({
+            type: "text",
+            attachments: [
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/ttf"
+                }
+            ]
+        });
+        const attachment = determineBestFontAttachment(iconPackNote);
+        expect(attachment?.mime).toStrictEqual("font/ttf");
+    });
+
+    it("prefers woff2", () => {
+        const iconPackNote = buildNote({
+            type: "text",
+            attachments: [
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/woff"
+                },
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/ttf"
+                },
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/woff2"
+                }
+            ]
+        });
+        const attachment = determineBestFontAttachment(iconPackNote);
+        expect(attachment?.mime).toStrictEqual("font/woff2");
+    });
 });

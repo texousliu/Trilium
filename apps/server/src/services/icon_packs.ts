@@ -4,7 +4,8 @@ import log from "./log";
 
 const PREFERRED_MIME_TYPE = [
     "font/woff2",
-    "font/woff"
+    "font/woff",
+    "font/ttf"
 ];
 
 export interface IconPackManifest {
