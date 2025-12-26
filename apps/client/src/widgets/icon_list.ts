@@ -10256,12 +10256,11 @@ const icons: Icon[] = [
 
 function getIconClass(icon: Icon) {
     if (icon.type_of_icon === "LOGO") {
-        return `bxl-${icon.name}`;
+        return `bx bxl-${icon.name}`;
     } else if (icon.type_of_icon === "SOLID") {
-        return `bxs-${icon.name}`;
-    } 
-    return `bx-${icon.name}`;
-    
+        return `bx bxs-${icon.name}`;
+    }
+    return `bx bx-${icon.name}`;
 }
 
 for (const icon of icons) {

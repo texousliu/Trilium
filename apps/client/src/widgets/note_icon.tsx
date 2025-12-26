@@ -1,15 +1,17 @@
-import Dropdown from "./react/Dropdown";
 import "./note_icon.css";
+
 import { t } from "i18next";
-import { useNoteContext, useNoteLabel } from "./react/hooks";
 import { useEffect, useRef, useState } from "preact/hooks";
-import server from "../services/server";
-import type { Category, Icon } from "./icon_list";
-import FormTextBox from "./react/FormTextBox";
-import FormSelect from "./react/FormSelect";
+
 import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
+import server from "../services/server";
+import type { Category, Icon } from "./icon_list";
 import Button from "./react/Button";
+import Dropdown from "./react/Dropdown";
+import FormSelect from "./react/FormSelect";
+import FormTextBox from "./react/FormTextBox";
+import { useNoteContext, useNoteLabel } from "./react/hooks";
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
@@ -48,7 +50,7 @@ export default function NoteIcon() {
         >
             { note && <NoteIconList note={note} /> }
         </Dropdown>
-    )
+    );
 }
 
 function NoteIconList({ note }: { note: FNote }) {
@@ -64,7 +66,14 @@ function NoteIconList({ note }: { note: FNote }) {
             }
 
             // Filter by text and/or category.
-            let icons: Icon[] = fullIconData.icons;
+            let icons: Pick<Icon, "name" | "term" | "className">[] = [
+                ...fullIconData.icons,
+                ...glob.iconRegistry.sources.map(s => s.icons.map(icon => ({
+                    name: icon.terms.at(0) ?? "",
+                    term: icon.terms.slice(1),
+                    className: icon.id
+                }))).flat()
+            ];
             const processedSearch = search?.trim()?.toLowerCase();
             if (processedSearch || categoryId) {
                 icons = icons.filter((icon) => {
@@ -98,7 +107,7 @@ function NoteIconList({ note }: { note: FNote }) {
                 iconToCount,
                 icons,
                 categories: fullIconData.categories
-            })
+            });
         }
 
         loadIcons();
@@ -128,11 +137,9 @@ function NoteIconList({ note }: { note: FNote }) {
             <div
                 class="icon-list"
                 onClick={(e) => {
+                    // Make sure we are not clicking on something else than a button.
                     const clickedTarget = e.target as HTMLElement;
-
-                    if (!clickedTarget.classList.contains("bx")) {
-                        return;
-                    }
+                    if (clickedTarget.tagName !== "SPAN" || clickedTarget.classList.length !== 2) return;
 
                     const iconClass = Array.from(clickedTarget.classList.values()).join(" ");
                     if (note) {
@@ -158,7 +165,7 @@ function NoteIconList({ note }: { note: FNote }) {
                 )}
 
                 {(iconData?.icons ?? []).map(({className, name}) => (
-                    <span class={`bx ${className}`} title={name} />
+                    <span class={className} title={name} />
                 ))}
             </div>
         </>
@@ -180,5 +187,5 @@ function getIconLabels(note: FNote) {
     }
     return note.getOwnedLabels()
         .filter((label) => ["workspaceIconClass", "iconClass"]
-        .includes(label.name));
+            .includes(label.name));
 }

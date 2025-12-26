@@ -164,11 +164,11 @@ describe("Icon registery", () => {
             prefix: "bx",
             icons: [
                 {
-                    id: "bx-ball",
+                    id: "bx bx-ball",
                     terms: [ "ball" ]
                 },
                 {
-                    id: "bxs-party",
+                    id: "bx bxs-party",
                     terms: [ "party" ]
                 }
             ]

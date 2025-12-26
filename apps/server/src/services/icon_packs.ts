@@ -46,7 +46,7 @@ export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
         const icons: IconRegistry["sources"][number]["icons"] = Object.entries(manifest.icons)
             .map(( [id, { terms }] ) => {
                 if (!id || !terms) return null;
-                return { id, terms };
+                return { id: `${manifest.prefix} ${id}`, terms };
             })
             .filter(Boolean) as IconRegistry["sources"][number]["icons"];
         if (!icons.length) continue;
