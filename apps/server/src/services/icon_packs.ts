@@ -43,13 +43,18 @@ export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
     const sources: IconRegistry["sources"] = [];
 
     for (const { manifest } of iconPacks) {
+        const icons: IconRegistry["sources"][number]["icons"] = Object.entries(manifest.icons)
+            .map(( [id, { terms }] ) => {
+                if (!id || !terms) return null;
+                return { id, terms };
+            })
+            .filter(Boolean) as IconRegistry["sources"][number]["icons"];
+        if (!icons.length) continue;
+
         sources.push({
             prefix: manifest.prefix,
             name: manifest.name,
-            icons: Object.entries(manifest.icons).map(( [id, { terms }] ) => ({
-                id,
-                terms
-            }))
+            icons
         });
     }
 

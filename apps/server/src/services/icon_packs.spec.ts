@@ -174,4 +174,21 @@ describe("Icon registery", () => {
             ]
         });
     });
+
+    it("ignores incorrect manifest", () => {
+        const iconPack = processIconPack(buildNote({
+            type: "text",
+            content: JSON.stringify({
+                name: "Boxicons v2",
+                prefix: "bx",
+                icons: {
+                    "bx-ball": "\ue9c2",
+                    "bxs-party": "\uec92"
+                }
+            }),
+            attachments: [ defaultAttachment ]
+        }));
+        const registry = generateIconRegistry([ iconPack! ]);
+        expect(registry.sources).toHaveLength(0);
+    });
 });
