@@ -2,7 +2,6 @@ import { buildNote } from "../test/becca_easy_mocking";
 import { determineBestFontAttachment, generateCss, generateIconRegistry, IconPackManifest, processIconPack } from "./icon_packs";
 
 const manifest: IconPackManifest = {
-    name: "Boxicons v2",
     prefix: "bx",
     icons: {
         "bx-ball": {
@@ -33,6 +32,7 @@ describe("Processing icon packs", () => {
 
     it("processes manifest", () => {
         const iconPack = processIconPack(buildNote({
+            title: "Boxicons v2",
             type: "text",
             content: JSON.stringify(manifest),
             attachments: [ defaultAttachment ]
@@ -111,7 +111,6 @@ describe("Mapping attachments", () => {
 describe("CSS generation", () => {
     it("generates the CSS", () => {
         const manifest: IconPackManifest = {
-            name: "Boxicons v2",
             prefix: "bx",
             icons: {
                 "bx-ball": {
@@ -126,6 +125,7 @@ describe("CSS generation", () => {
         };
         const processedResult = processIconPack(buildNote({
             type: "text",
+            title: "Boxicons v2",
             content: JSON.stringify(manifest),
             attachments: [
                 {
@@ -153,6 +153,7 @@ describe("CSS generation", () => {
 describe("Icon registery", () => {
     it("generates the registry", () => {
         const iconPack = processIconPack(buildNote({
+            title: "Boxicons v2",
             type: "text",
             content: JSON.stringify(manifest),
             attachments: [ defaultAttachment ]

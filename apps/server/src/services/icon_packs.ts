@@ -19,7 +19,6 @@ const MIME_TO_CSS_FORMAT_MAPPINGS: Record<typeof PREFERRED_MIME_TYPE[number], st
 };
 
 export interface IconPackManifest {
-    name: string;
     prefix: string;
     icons: Record<string, {
         glyph: string,
@@ -31,6 +30,7 @@ interface ProcessResult {
     manifest: IconPackManifest;
     fontMime: string;
     fontAttachmentId: string;
+    manifestNote: BNote;
 }
 
 export function getIconPacks() {
@@ -42,7 +42,7 @@ export function getIconPacks() {
 export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
     const sources: IconRegistry["sources"] = [];
 
-    for (const { manifest } of iconPacks) {
+    for (const { manifest, manifestNote } of iconPacks) {
         const icons: IconRegistry["sources"][number]["icons"] = Object.entries(manifest.icons)
             .map(( [id, { terms }] ) => {
                 if (!id || !terms) return null;
@@ -53,7 +53,7 @@ export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
 
         sources.push({
             prefix: manifest.prefix,
-            name: manifest.name,
+            name: manifestNote.title,
             icons
         });
     }
@@ -77,7 +77,8 @@ export function processIconPack(iconPackNote: BNote): ProcessResult | undefined 
     return {
         manifest,
         fontMime: attachment.mime,
-        fontAttachmentId: attachment.attachmentId
+        fontAttachmentId: attachment.attachmentId,
+        manifestNote: iconPackNote
     };
 }
 
