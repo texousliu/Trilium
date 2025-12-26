@@ -58,7 +58,7 @@ function NoteIconList({ note }: { note: FNote }) {
     const searchBoxRef = useRef<HTMLInputElement>(null);
     const [ search, setSearch ] = useState<string>();
     const [ iconData, setIconData ] = useState<IconData>();
-    const [ filterByPrefix, setFilterByIconPack ] = useState<string | null>(null);
+    const [ filterByPrefix, setFilterByPrefix ] = useState<string | null>(null);
 
     useEffect(() => {
         async function loadIcons() {
@@ -134,23 +134,7 @@ function NoteIconList({ note }: { note: FNote }) {
                     noDropdownListStyle
                     iconAction
                 >
-                    <FormListItem
-                        checked={filterByPrefix === null}
-                        onClick={() => setFilterByIconPack(null)}
-                    >{t("note_icon.filter-none")}</FormListItem>
-                    <FormListItem
-                        checked={filterByPrefix === "bx"}
-                        onClick={() => setFilterByIconPack("bx")}
-                    >{t("note_icon.filter-default")}</FormListItem>
-                    <FormDropdownDivider />
-
-                    {glob.iconRegistry.sources.map(({ prefix, name }) => (
-                        <FormListItem
-                            key={prefix}
-                            onClick={() => setFilterByIconPack(prefix)}
-                            checked={filterByPrefix === prefix}
-                        >{name}</FormListItem>
-                    ))}
+                    <IconFilterContent filterByPrefix={filterByPrefix} setFilterByPrefix={setFilterByPrefix} />
                 </Dropdown>
             </div>
 
@@ -188,6 +172,33 @@ function NoteIconList({ note }: { note: FNote }) {
                     <span class={className} title={name} />
                 ))}
             </div>
+        </>
+    );
+}
+
+function IconFilterContent({ filterByPrefix, setFilterByPrefix }: {
+    filterByPrefix: string | null;
+    setFilterByPrefix: (value: string | null) => void;
+}) {
+    return (
+        <>
+            <FormListItem
+                checked={filterByPrefix === null}
+                onClick={() => setFilterByPrefix(null)}
+            >{t("note_icon.filter-none")}</FormListItem>
+            <FormListItem
+                checked={filterByPrefix === "bx"}
+                onClick={() => setFilterByPrefix("bx")}
+            >{t("note_icon.filter-default")}</FormListItem>
+            <FormDropdownDivider />
+
+            {glob.iconRegistry.sources.map(({ prefix, name }) => (
+                <FormListItem
+                    key={prefix}
+                    onClick={() => setFilterByPrefix(prefix)}
+                    checked={filterByPrefix === prefix}
+                >{name}</FormListItem>
+            ))}
         </>
     );
 }
