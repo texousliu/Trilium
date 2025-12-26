@@ -6,7 +6,13 @@ const PREFERRED_MIME_TYPE = [
     "font/woff2",
     "font/woff",
     "font/ttf"
-];
+] as const;
+
+const MIME_TO_CSS_FORMAT_MAPPINGS: Record<typeof PREFERRED_MIME_TYPE[number], string> = {
+    "font/ttf": "truetype",
+    "font/woff": "woff",
+    "font/woff2": "woff2"
+};
 
 export interface IconPackManifest {
     name: string;
@@ -16,6 +22,8 @@ export interface IconPackManifest {
 
 interface ProcessResult {
     manifest: IconPackManifest;
+    fontMime: string;
+    fontAttachmentId: string;
 }
 
 export function processIconPack(iconPackNote: BNote): ProcessResult | undefined {
@@ -25,8 +33,16 @@ export function processIconPack(iconPackNote: BNote): ProcessResult | undefined 
         return;
     }
 
+    const attachment = determineBestFontAttachment(iconPackNote);
+    if (!attachment || !attachment.attachmentId) {
+        log.error(`Icon pack is missing WOFF/WOFF2/TTF attachment: ${iconPackNote.title} (${iconPackNote.noteId})`);
+        return;
+    }
+
     return {
-        manifest
+        manifest,
+        fontMime: attachment.mime,
+        fontAttachmentId: attachment.attachmentId
     };
 }
 
@@ -46,12 +62,13 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
     return null;
 }
 
-export function generateCss(processedIconPack: ProcessResult, iconPackNote: BNote) {
+export function generateCss(processedIconPack: ProcessResult) {
     return `\
         @font-face {
             font-family: 'trilium-icon-pack-${processedIconPack.manifest.prefix}';
             font-weight: normal;
             font-style: normal;
+            src: url('/api/attachments/${processedIconPack.fontAttachmentId}/download') format('${MIME_TO_CSS_FORMAT_MAPPINGS[processedIconPack.fontMime]}');
         }
     `;
 }

@@ -1,6 +1,21 @@
 import { buildNote } from "../test/becca_easy_mocking";
 import { determineBestFontAttachment, generateCss, IconPackManifest, processIconPack } from "./icon_packs";
 
+const manifest: IconPackManifest = {
+    name: "Boxicons v2",
+    prefix: "bx",
+    icons: {
+        "bx-ball": "\ue9c2",
+        "bxs-party": "\uec92"
+    }
+};
+
+const defaultAttachment = {
+    role: "file",
+    title: "Font",
+    mime: "font/woff2"
+};
+
 describe("Processing icon packs", () => {
     it("doesn't crash if icon pack is incorrect type", () => {
         const iconPack = processIconPack(buildNote({
@@ -11,18 +26,12 @@ describe("Processing icon packs", () => {
     });
 
     it("processes manifest", () => {
-        const manifest: IconPackManifest = {
-            name: "Boxicons v2",
-            prefix: "bx",
-            icons: {
-                "bx-ball": "\ue9c2",
-                "bxs-party": "\uec92"
-            }
-        };
         const iconPack = processIconPack(buildNote({
             type: "text",
-            content: JSON.stringify(manifest)
+            content: JSON.stringify(manifest),
+            attachments: [ defaultAttachment ]
         }));
+        expect(iconPack).toBeTruthy();
         expect(iconPack?.manifest).toMatchObject(manifest);
     });
 });
@@ -31,13 +40,7 @@ describe("Mapping attachments", () => {
     it("handles woff2", () => {
         const iconPackNote = buildNote({
             type: "text",
-            attachments: [
-                {
-                    role: "file",
-                    title: "Font",
-                    mime: "font/woff2"
-                }
-            ]
+            attachments: [ defaultAttachment ]
         });
         const attachment = determineBestFontAttachment(iconPackNote);
         expect(attachment?.mime).toStrictEqual("font/woff2");
@@ -109,7 +112,7 @@ describe("CSS generation", () => {
                 "bxs-party": "\uec92"
             }
         };
-        const iconPackNote = buildNote({
+        const processedResult = processIconPack(buildNote({
             type: "text",
             content: JSON.stringify(manifest),
             attachments: [
@@ -119,13 +122,12 @@ describe("CSS generation", () => {
                     mime: "font/woff2"
                 }
             ]
-        });
-        const processedResult = processIconPack(iconPackNote);
+        }));
         expect(processedResult).toBeTruthy();
-        const css = generateCss(processedResult!, iconPackNote);
+        const css = generateCss(processedResult!);
 
-        console.log(css);
         expect(css).toContain("@font-face");
         expect(css).toContain("font-family: 'trilium-icon-pack-bx'");
+        expect(css).toContain(`src: url('/api/attachments/${processedResult?.fontAttachmentId}/download') format('woff2');`);
     });
 });
