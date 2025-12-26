@@ -1,5 +1,5 @@
 import { buildNote } from "../test/becca_easy_mocking";
-import { IconPackManifest, processIconPack } from "./icon_packs";
+import { determineBestFontAttachment, IconPackManifest, processIconPack } from "./icon_packs";
 
 describe("Processing icon packs", () => {
     it("doesn't crash if icon pack is incorrect type", () => {
@@ -27,5 +27,22 @@ describe("Processing icon packs", () => {
             "bx-ball": "\ue9c2",
             "bxs-party": "\uec92"
         });
+    });
+});
+
+describe("Mapping attachments", () => {
+    it("handles woff2", () => {
+        const iconPackNote = buildNote({
+            type: "text",
+            attachments: [
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/woff2"
+                }
+            ]
+        });
+        const attachment = determineBestFontAttachment(iconPackNote);
+        expect(attachment?.mime).toStrictEqual("font/woff2");
     });
 });
