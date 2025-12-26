@@ -16,8 +16,13 @@
         // should go to the end of the previous tree
         let candidate = children[index - 1];
         while (candidate?.hasVisibleChildren()) {
-            const children = candidate.getVisibleChildNotes();
-            candidate = children[children.length - 1];
+            const visibleChildren = candidate.getVisibleChildNotes();
+
+            if (visibleChildren.length === 0) {
+                break;
+            }
+
+            candidate = visibleChildren[visibleChildren.length - 1];
         }
 
         return candidate ?? null;
