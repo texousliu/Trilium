@@ -20,7 +20,10 @@ const MIME_TO_CSS_FORMAT_MAPPINGS: Record<typeof PREFERRED_MIME_TYPE[number], st
 export interface IconPackManifest {
     name: string;
     prefix: string;
-    icons: Record<string, string>;
+    icons: Record<string, {
+        glyph: string,
+        terms: string[];
+    }>;
 }
 
 interface ProcessResult {
@@ -42,9 +45,9 @@ export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
         sources.push({
             prefix: manifest.prefix,
             name: manifest.name,
-            icons: Object.keys(manifest.icons).map(id => ({
+            icons: Object.entries(manifest.icons).map(( [id, { terms }] ) => ({
                 id,
-                label: id.split("-").at(-1) ?? id
+                terms
             }))
         });
     }
@@ -91,7 +94,7 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
 export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessResult) {
     const iconDeclarations: string[] = [];
     for (const [ key, mapping ] of Object.entries(manifest.icons)) {
-        iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.charCodeAt(0).toString(16)}'; }`);
+        iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
     }
 
     return `\

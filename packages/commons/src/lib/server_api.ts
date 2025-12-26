@@ -292,7 +292,7 @@ export interface IconRegistry {
         name: string;
         icons: {
             id: string;
-            label: string;
+            terms: string[];
         }[]
     }[];
 }

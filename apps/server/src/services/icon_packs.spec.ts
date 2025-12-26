@@ -5,8 +5,14 @@ const manifest: IconPackManifest = {
     name: "Boxicons v2",
     prefix: "bx",
     icons: {
-        "bx-ball": "\ue9c2",
-        "bxs-party": "\uec92"
+        "bx-ball": {
+            glyph: "\ue9c2",
+            terms: [ "ball" ]
+        },
+        "bxs-party": {
+            glyph: "\uec92",
+            terms: [ "party" ]
+        }
     }
 };
 
@@ -108,8 +114,14 @@ describe("CSS generation", () => {
             name: "Boxicons v2",
             prefix: "bx",
             icons: {
-                "bx-ball": "\ue9c2",
-                "bxs-party": "\uec92"
+                "bx-ball": {
+                    "glyph": "\ue9c2",
+                    "terms": [ "ball" ]
+                },
+                "bxs-party": {
+                    "glyph": "\uec92",
+                    "terms": [ "party" ]
+                }
             }
         };
         const processedResult = processIconPack(buildNote({
@@ -153,11 +165,11 @@ describe("Icon registery", () => {
             icons: [
                 {
                     id: "bx-ball",
-                    label: "ball"
+                    terms: [ "ball" ]
                 },
                 {
                     id: "bxs-party",
-                    label: "party"
+                    terms: [ "party" ]
                 }
             ]
         });
