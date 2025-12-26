@@ -7,10 +7,13 @@ import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
 import server from "../services/server";
 import type { Icon } from "./icon_list";
+import ActionButton from "./react/ActionButton";
 import Button from "./react/Button";
 import Dropdown from "./react/Dropdown";
+import { FormDropdownDivider, FormListItem } from "./react/FormList";
 import FormTextBox from "./react/FormTextBox";
 import { useNoteContext, useNoteLabel } from "./react/hooks";
+import Icon from "./react/Icon";
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
@@ -44,6 +47,7 @@ export default function NoteIcon() {
             buttonClassName={`note-icon tn-focusable-button ${icon ?? "bx bx-empty"}`}
             hideToggleArrow
             disabled={viewScope?.viewMode !== "default"}
+            dropdownOptions={{ autoClose: "outside" }}
         >
             { note && <NoteIconList note={note} /> }
         </Dropdown>
@@ -54,6 +58,7 @@ function NoteIconList({ note }: { note: FNote }) {
     const searchBoxRef = useRef<HTMLInputElement>(null);
     const [ search, setSearch ] = useState<string>();
     const [ iconData, setIconData ] = useState<IconData>();
+    const [ filterByPrefix, setFilterByIconPack ] = useState<string | null>(null);
 
     useEffect(() => {
         async function loadIcons() {
@@ -71,8 +76,14 @@ function NoteIconList({ note }: { note: FNote }) {
                 }))).flat()
             ];
             const processedSearch = search?.trim()?.toLowerCase();
-            if (processedSearch) {
+            if (processedSearch || filterByPrefix !== null) {
                 icons = icons.filter((icon) => {
+                    if (filterByPrefix) {
+                        if (!icon.className?.startsWith(`${filterByPrefix} `)) {
+                            return false;
+                        }
+                    }
+
                     if (processedSearch) {
                         if (!icon.name.includes(processedSearch) &&
                             !icon.term?.find((t) => t.includes(processedSearch))) {
@@ -102,7 +113,7 @@ function NoteIconList({ note }: { note: FNote }) {
         }
 
         loadIcons();
-    }, [ search ]);
+    }, [ search, filterByPrefix ]);
 
     return (
         <>
@@ -115,6 +126,28 @@ function NoteIconList({ note }: { note: FNote }) {
                     currentValue={search} onChange={setSearch}
                     autoFocus
                 />
+
+                <Dropdown
+                    buttonClassName="bx bx-filter-alt"
+                    hideToggleArrow
+                    noSelectButtonStyle
+                    noDropdownListStyle
+                    iconAction
+                >
+                    <FormListItem
+                        checked={filterByPrefix === null}
+                        onClick={() => setFilterByIconPack(null)}
+                    >{t("note_icon.filter-none")}</FormListItem>
+                    <FormDropdownDivider />
+
+                    {glob.iconRegistry.sources.map(({ prefix, name }) => (
+                        <FormListItem
+                            key={prefix}
+                            onClick={() => setFilterByIconPack(prefix)}
+                            checked={filterByPrefix === prefix}
+                        >{name}</FormListItem>
+                    ))}
+                </Dropdown>
             </div>
 
             <div

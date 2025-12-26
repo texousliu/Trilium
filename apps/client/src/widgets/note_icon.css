@@ -32,17 +32,14 @@ div.note-icon-widget {
 }
 
 .note-icon-widget .filter-row {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-inline-end: 20px;
+    padding: 10px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    gap: 1em;
 }
 
 .note-icon-widget .filter-row span {
     display: block;
-    padding-inline-start: 15px;
-    padding-inline-end: 15px;
     font-weight: bold;
 }
 
