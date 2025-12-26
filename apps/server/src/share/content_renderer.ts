@@ -149,6 +149,15 @@ interface RenderArgs {
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
+    if (renderArgs.isStatic && note.type == "code" && note.mime === "application/javascript;env=frontend") {
+        if (note.isProtected) {
+            // TODO: how to handle this case here?
+            throw new Error(`note ${note.noteId} is protected and cannot be exported`);
+        }
+
+        return note.getContent();
+    }
+
     const { header, content, isEmpty } = getContent(note);
     const showLoginInShareTheme = options.getOption("showLoginInShareTheme");
     const opts = {
