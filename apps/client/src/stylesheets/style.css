@@ -1952,6 +1952,10 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     padding-inline-start: 1em;
 }
 
+.tab-row-widget {
+    contain: inline-size;
+}
+
 #tab-row-left-spacer {
     width: env(titlebar-area-x);
     -webkit-app-region: drag;
