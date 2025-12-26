@@ -62,7 +62,10 @@ function index(req: Request, res: Response) {
         appPath,
         baseApiUrl: 'api/',
         currentLocale: getCurrentLocale(),
-        iconPackCss: iconPacks.map(p => generateCss(p)).join("\n\n"),
+        iconPackCss: iconPacks
+            .map(p => generateCss(p))
+            .filter(Boolean)
+            .join("\n\n"),
         iconRegistry: generateIconRegistry(iconPacks)
     });
 }

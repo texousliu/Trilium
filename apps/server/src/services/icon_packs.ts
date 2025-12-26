@@ -4,6 +4,7 @@ import type BAttachment from "../becca/entities/battachment";
 import type BNote from "../becca/entities/bnote";
 import log from "./log";
 import search from "./search/services/search";
+import { safeExtractMessageAndStackFromError } from "./utils";
 
 const PREFERRED_MIME_TYPE = [
     "font/woff2",
@@ -92,32 +93,37 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
 }
 
 export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessResult) {
-    const iconDeclarations: string[] = [];
-    for (const [ key, mapping ] of Object.entries(manifest.icons)) {
-        iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
+    try {
+        const iconDeclarations: string[] = [];
+        for (const [ key, mapping ] of Object.entries(manifest.icons)) {
+            iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
+        }
+
+        return `\
+            @font-face {
+                font-family: 'trilium-icon-pack-${manifest.prefix}';
+                font-weight: normal;
+                font-style: normal;
+                src: url('/api/attachments/${fontAttachmentId}/download') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
+            }
+
+            .${manifest.prefix} {
+                font-family: 'trilium-icon-pack-${manifest.prefix}' !important;
+                font-weight: normal;
+                font-style: normal;
+                font-variant: normal;
+                line-height: 1;
+                text-rendering: auto;
+                display: inline-block;
+                text-transform: none;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            ${iconDeclarations.join("\n")}
+        `;
+    } catch (e) {
+        log.error(safeExtractMessageAndStackFromError(e));
+        return null;
     }
-
-    return `\
-        @font-face {
-            font-family: 'trilium-icon-pack-${manifest.prefix}';
-            font-weight: normal;
-            font-style: normal;
-            src: url('/api/attachments/${fontAttachmentId}/download') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
-        }
-
-        .${manifest.prefix} {
-            font-family: 'trilium-icon-pack-${manifest.prefix}' !important;
-            font-weight: normal;
-            font-style: normal;
-            font-variant: normal;
-            line-height: 1;
-            text-rendering: auto;
-            display: inline-block;
-            text-transform: none;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        ${iconDeclarations.join("\n")}
-    `;
 }
