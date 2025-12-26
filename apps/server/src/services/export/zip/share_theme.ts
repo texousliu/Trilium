@@ -116,8 +116,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             return null;
         }
 
-        // TODO: Should we allow mime to also include backend, i.e loosely check that it starts with application/javascript and ignore the rest?
-        if (type === "code" && mime === "application/javascript;env=frontend"){
+        if (mime.startsWith("application/javascript")) {
             return "js";
         }
 

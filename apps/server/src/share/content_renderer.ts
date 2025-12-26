@@ -155,7 +155,7 @@ interface RenderArgs {
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
-    if (renderArgs.isStatic && note.type == "code" && note.mime === "application/javascript;env=frontend") {
+    if (renderArgs.isStatic && note.mime.startsWith("application/javascript")) {
         if (note.isProtected) {
             // TODO: how to handle this case here?
             throw new Error(`note ${note.noteId} is protected and cannot be exported`);
