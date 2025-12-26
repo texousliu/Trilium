@@ -127,7 +127,7 @@ function NoteIconList({ note }: { note: FNote }) {
                     autoFocus
                 />
 
-                <Dropdown
+                {glob.iconRegistry.sources.length > 0 && <Dropdown
                     buttonClassName="bx bx-filter-alt"
                     hideToggleArrow
                     noSelectButtonStyle
@@ -135,7 +135,7 @@ function NoteIconList({ note }: { note: FNote }) {
                     iconAction
                 >
                     <IconFilterContent filterByPrefix={filterByPrefix} setFilterByPrefix={setFilterByPrefix} />
-                </Dropdown>
+                </Dropdown>}
             </div>
 
             <div
