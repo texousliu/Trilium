@@ -3,7 +3,8 @@ import type BNote from "../becca/entities/bnote";
 import log from "./log";
 
 const PREFERRED_MIME_TYPE = [
-    "font/woff2"
+    "font/woff2",
+    "font/woff"
 ];
 
 export interface IconPackManifest {

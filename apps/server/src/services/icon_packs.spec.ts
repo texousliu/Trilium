@@ -45,4 +45,19 @@ describe("Mapping attachments", () => {
         const attachment = determineBestFontAttachment(iconPackNote);
         expect(attachment?.mime).toStrictEqual("font/woff2");
     });
+
+    it("handles woff", () => {
+        const iconPackNote = buildNote({
+            type: "text",
+            attachments: [
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/woff"
+                }
+            ]
+        });
+        const attachment = determineBestFontAttachment(iconPackNote);
+        expect(attachment?.mime).toStrictEqual("font/woff");
+    });
 });
