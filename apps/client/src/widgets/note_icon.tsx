@@ -6,10 +6,9 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
 import server from "../services/server";
-import type { Category, Icon } from "./icon_list";
+import type { Icon } from "./icon_list";
 import Button from "./react/Button";
 import Dropdown from "./react/Dropdown";
-import FormSelect from "./react/FormSelect";
 import FormTextBox from "./react/FormTextBox";
 import { useNoteContext, useNoteLabel } from "./react/hooks";
 
@@ -19,12 +18,10 @@ interface IconToCountCache {
 
 interface IconData {
     iconToCount: Record<string, number>;
-    categories: Category[];
     icons: Icon[];
 }
 
 let fullIconData: {
-    categories: Category[];
     icons: Icon[];
 };
 let iconToCountCache!: Promise<IconToCountCache> | null;
@@ -56,7 +53,6 @@ export default function NoteIcon() {
 function NoteIconList({ note }: { note: FNote }) {
     const searchBoxRef = useRef<HTMLInputElement>(null);
     const [ search, setSearch ] = useState<string>();
-    const [ categoryId, setCategoryId ] = useState<string>("0");
     const [ iconData, setIconData ] = useState<IconData>();
 
     useEffect(() => {
@@ -75,12 +71,8 @@ function NoteIconList({ note }: { note: FNote }) {
                 }))).flat()
             ];
             const processedSearch = search?.trim()?.toLowerCase();
-            if (processedSearch || categoryId) {
+            if (processedSearch) {
                 icons = icons.filter((icon) => {
-                    if (categoryId !== "0" && String(icon.category_id) !== categoryId) {
-                        return false;
-                    }
-
                     if (processedSearch) {
                         if (!icon.name.includes(processedSearch) &&
                             !icon.term?.find((t) => t.includes(processedSearch))) {
@@ -105,25 +97,16 @@ function NoteIconList({ note }: { note: FNote }) {
 
             setIconData({
                 iconToCount,
-                icons,
-                categories: fullIconData.categories
+                icons
             });
         }
 
         loadIcons();
-    }, [ search, categoryId ]);
+    }, [ search ]);
 
     return (
         <>
             <div class="filter-row">
-                <span>{t("note_icon.category")}</span>
-                <FormSelect
-                    name="icon-category"
-                    values={fullIconData?.categories ?? []}
-                    currentValue={categoryId} onChange={setCategoryId}
-                    keyProperty="id" titleProperty="name"
-                />
-
                 <span>{t("note_icon.search")}</span>
                 <FormTextBox
                     inputRef={searchBoxRef}
