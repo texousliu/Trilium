@@ -54,6 +54,7 @@ export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
         sources.push({
             prefix: manifest.prefix,
             name: manifestNote.title,
+            icon: manifestNote.getIcon(),
             icons
         });
     }

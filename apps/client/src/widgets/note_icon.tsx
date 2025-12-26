@@ -192,10 +192,11 @@ function IconFilterContent({ filterByPrefix, setFilterByPrefix }: {
             >{t("note_icon.filter-default")}</FormListItem>
             <FormDropdownDivider />
 
-            {glob.iconRegistry.sources.map(({ prefix, name }) => (
+            {glob.iconRegistry.sources.map(({ prefix, name, icon }) => (
                 <FormListItem
                     key={prefix}
                     onClick={() => setFilterByPrefix(prefix)}
+                    icon={icon}
                     checked={filterByPrefix === prefix}
                 >{name}</FormListItem>
             ))}
