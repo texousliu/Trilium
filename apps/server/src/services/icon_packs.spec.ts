@@ -1,5 +1,5 @@
 import { buildNote } from "../test/becca_easy_mocking";
-import { determineBestFontAttachment, IconPackManifest, processIconPack } from "./icon_packs";
+import { determineBestFontAttachment, generateCss, IconPackManifest, processIconPack } from "./icon_packs";
 
 describe("Processing icon packs", () => {
     it("doesn't crash if icon pack is incorrect type", () => {
@@ -23,10 +23,7 @@ describe("Processing icon packs", () => {
             type: "text",
             content: JSON.stringify(manifest)
         }));
-        expect(iconPack?.iconMappings).toMatchObject({
-            "bx-ball": "\ue9c2",
-            "bxs-party": "\uec92"
-        });
+        expect(iconPack?.manifest).toMatchObject(manifest);
     });
 });
 
@@ -99,5 +96,36 @@ describe("Mapping attachments", () => {
         });
         const attachment = determineBestFontAttachment(iconPackNote);
         expect(attachment?.mime).toStrictEqual("font/woff2");
+    });
+});
+
+describe("CSS generation", () => {
+    it("generates the CSS", () => {
+        const manifest: IconPackManifest = {
+            name: "Boxicons v2",
+            prefix: "bx",
+            icons: {
+                "bx-ball": "\ue9c2",
+                "bxs-party": "\uec92"
+            }
+        };
+        const iconPackNote = buildNote({
+            type: "text",
+            content: JSON.stringify(manifest),
+            attachments: [
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/woff2"
+                }
+            ]
+        });
+        const processedResult = processIconPack(iconPackNote);
+        expect(processedResult).toBeTruthy();
+        const css = generateCss(processedResult!, iconPackNote);
+
+        console.log(css);
+        expect(css).toContain("@font-face");
+        expect(css).toContain("font-family: 'trilium-icon-pack-bx'");
     });
 });

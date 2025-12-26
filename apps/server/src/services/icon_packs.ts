@@ -15,7 +15,7 @@ export interface IconPackManifest {
 }
 
 interface ProcessResult {
-    iconMappings: Record<string, string>;
+    manifest: IconPackManifest;
 }
 
 export function processIconPack(iconPackNote: BNote): ProcessResult | undefined {
@@ -26,7 +26,7 @@ export function processIconPack(iconPackNote: BNote): ProcessResult | undefined 
     }
 
     return {
-        iconMappings: manifest.icons
+        manifest
     };
 }
 
@@ -44,4 +44,14 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
     }
 
     return null;
+}
+
+export function generateCss(processedIconPack: ProcessResult, iconPackNote: BNote) {
+    return `\
+        @font-face {
+            font-family: 'trilium-icon-pack-${processedIconPack.manifest.prefix}';
+            font-weight: normal;
+            font-style: normal;
+        }
+    `;
 }
