@@ -634,6 +634,10 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
     font-weight: 300;
 }
 
+.ck-content strong {
+    font-weight: 600;
+}
+
 .ck-content hr {
     margin: 5px 0;
     height: 1px;
