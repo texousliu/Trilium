@@ -7,7 +7,7 @@ import assetPath from "../services/asset_path.js";
 import attributeService from "../services/attributes.js";
 import config from "../services/config.js";
 import { getCurrentLocale } from "../services/i18n.js";
-import { generateCss, getIconPacks } from "../services/icon_packs.js";
+import { generateCss, generateIconRegistry, getIconPacks } from "../services/icon_packs.js";
 import log from "../services/log.js";
 import optionService from "../services/options.js";
 import protectedSessionService from "../services/protected_session.js";
@@ -62,7 +62,8 @@ function index(req: Request, res: Response) {
         appPath,
         baseApiUrl: 'api/',
         currentLocale: getCurrentLocale(),
-        iconPackCss: iconPacks.map(p => generateCss(p)).join("\n\n")
+        iconPackCss: iconPacks.map(p => generateCss(p)).join("\n\n"),
+        iconRegistry: generateIconRegistry(iconPacks)
     });
 }
 

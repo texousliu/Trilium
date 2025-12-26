@@ -1,3 +1,5 @@
+import { IconRegistry } from "@triliumnext/commons";
+
 import type BAttachment from "../becca/entities/battachment";
 import type BNote from "../becca/entities/bnote";
 import log from "./log";
@@ -31,6 +33,23 @@ export function getIconPacks() {
     return search.searchNotes("#iconPack")
         .map(iconPackNote => processIconPack(iconPackNote))
         .filter(Boolean) as ProcessResult[];
+}
+
+export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
+    const sources: IconRegistry["sources"] = [];
+
+    for (const { manifest } of iconPacks) {
+        sources.push({
+            prefix: manifest.prefix,
+            name: manifest.name,
+            icons: Object.keys(manifest.icons).map(id => ({
+                id,
+                label: id.split("-").at(-1) ?? id
+            }))
+        });
+    }
+
+    return { sources };
 }
 
 export function processIconPack(iconPackNote: BNote): ProcessResult | undefined {

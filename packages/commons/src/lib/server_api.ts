@@ -285,3 +285,14 @@ export interface RenderMarkdownResponse {
 export interface ToMarkdownResponse {
     markdownContent: string;
 }
+
+export interface IconRegistry {
+    sources: {
+        prefix: string;
+        name: string;
+        icons: {
+            id: string;
+            label: string;
+        }[]
+    }[];
+}

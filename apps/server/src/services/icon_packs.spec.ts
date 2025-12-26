@@ -1,5 +1,5 @@
 import { buildNote } from "../test/becca_easy_mocking";
-import { determineBestFontAttachment, generateCss, IconPackManifest, processIconPack } from "./icon_packs";
+import { determineBestFontAttachment, generateCss, generateIconRegistry, IconPackManifest, processIconPack } from "./icon_packs";
 
 const manifest: IconPackManifest = {
     name: "Boxicons v2",
@@ -135,5 +135,31 @@ describe("CSS generation", () => {
         expect(css).toContain("font-family: 'trilium-icon-pack-bx' !important;");
         expect(css).toContain(".bx.bx-ball::before { content: '\\e9c2'; }");
         expect(css).toContain(".bx.bxs-party::before { content: '\\ec92'; }");
+    });
+});
+
+describe("Icon registery", () => {
+    it("generates the registry", () => {
+        const iconPack = processIconPack(buildNote({
+            type: "text",
+            content: JSON.stringify(manifest),
+            attachments: [ defaultAttachment ]
+        }));
+        const registry = generateIconRegistry([ iconPack! ]);
+        expect(registry.sources).toHaveLength(1);
+        expect(registry.sources[0]).toMatchObject({
+            name: "Boxicons v2",
+            prefix: "bx",
+            icons: [
+                {
+                    id: "bx-ball",
+                    label: "ball"
+                },
+                {
+                    id: "bxs-party",
+                    label: "party"
+                }
+            ]
+        });
     });
 });
