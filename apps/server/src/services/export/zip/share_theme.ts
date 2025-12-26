@@ -115,6 +115,10 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             return null;
         }
 
+        if (type === "code" && mime === "application/javascript;env=frontend"){
+            return "js";
+        }
+
         return "html";
     }
 
