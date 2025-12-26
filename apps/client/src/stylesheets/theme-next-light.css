@@ -320,5 +320,5 @@
 
 .note-split.with-hue *::selection,
 .quick-edit-dialog-wrapper.with-hue *::selection {
-    background: hsl(var(--custom-color-hue), 60%, 90%);
+    --selection-background-color: hsl(var(--custom-color-hue), 60%, 90%);
 }
