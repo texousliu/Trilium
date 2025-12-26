@@ -155,11 +155,11 @@ interface RenderArgs {
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
+    // When rendering static share, non-protected JavaScript notes should be rendered as-is.
     if (renderArgs.isStatic && note.mime.startsWith("application/javascript")) {
         if (note.isProtected) {
-            // TODO: how to handle this case here?
-            throw new Error(`note ${note.noteId} is protected and cannot be exported`);
-        }
+            return `console.log("Protected note cannot be exported.");`
+        };
 
         return note.getContent();
     }
