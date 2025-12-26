@@ -3,7 +3,7 @@ import { signal } from "@preact/signals";
 import appContext from "../components/app_context.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
-import utils from "./utils.js";
+import utils, { randomString } from "./utils.js";
 
 export interface ToastOptions {
     id?: string;
@@ -86,7 +86,7 @@ export async function showErrorForScriptNote(noteId: string, message: string) {
 export const toasts = signal<ToastOptionsWithRequiredId[]>([]);
 
 function addToast(opts: ToastOptions) {
-    const id = opts.id ?? crypto.randomUUID();
+    const id = opts.id ?? randomString();
     const toast = { ...opts, id };
     toasts.value = [ ...toasts.value, toast ];
     return id;
