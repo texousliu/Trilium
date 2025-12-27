@@ -769,7 +769,8 @@
     "reset-default": "Reset to default icon",
     "filter": "Filter",
     "filter-none": "All icons",
-    "filter-default": "Default icons"
+    "filter-default": "Default icons",
+    "icon_tooltip": "{{name}}\nIcon pack: {{iconPack}}"
   },
   "basic_properties": {
     "note_type": "Note type",

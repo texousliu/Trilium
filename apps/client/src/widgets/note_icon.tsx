@@ -21,7 +21,7 @@ interface IconToCountCache {
 
 interface IconData {
     iconToCount: Record<string, number>;
-    icons: IconRegistry["sources"][number]["icons"];
+    icons: (IconRegistry["sources"][number]["icons"][number] & { iconPack: string })[];
 }
 
 let iconToCountCache!: Promise<IconToCountCache> | null;
@@ -65,8 +65,11 @@ function NoteIconList({ note, dropdownRef }: {
     useEffect(() => {
         async function loadIcons() {
             // Filter by text and/or category.
-            let icons: IconRegistry["sources"][number]["icons"] = [
-                ...glob.iconRegistry.sources.map(s => s.icons).flat()
+            let icons: IconData["icons"] = [
+                ...glob.iconRegistry.sources.map(s => s.icons.map((i) => ({
+                    ...i,
+                    iconPack: s.name,
+                }))).flat()
             ];
             const processedSearch = search?.trim()?.toLowerCase();
             if (processedSearch || filterByPrefix !== null) {
@@ -162,8 +165,12 @@ function NoteIconList({ note, dropdownRef }: {
                     dropdownRef?.current?.hide();
                 }}
             >
-                {(iconData?.icons ?? []).map(({ id, terms }) => (
-                    <span key={id} class={id} title={terms[0]} />
+                {(iconData?.icons ?? []).map(({ id, terms, iconPack }) => (
+                    <span
+                        key={id}
+                        class={id}
+                        title={t("note_icon.icon_tooltip", { name: terms?.[0] ?? id, iconPack })}
+                    />
                 ))}
             </div>
         </>
