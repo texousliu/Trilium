@@ -40,16 +40,19 @@ export interface ProcessedIconPack {
     fontAttachmentId: string;
     title: string;
     icon: string;
+    /** Indicates whether this icon pack is built-in (shipped with Trilium) or user-defined. */
+    builtin: boolean;
 }
 
 export function getIconPacks() {
     const defaultIconPack: ProcessedIconPack = {
         manifest: boxiconsManifest,
-        manifestNoteId: "builtin-boxicons-v2",
+        manifestNoteId: "boxicons",
         fontMime: "font/woff2",
-        fontAttachmentId: "builtin-boxicons-v2",
+        fontAttachmentId: "boxicons",
         title: "Boxicons",
-        icon: "bx bx-package"
+        icon: "bx bx-package",
+        builtin: true
     };
     const customIconPacks = search.searchNotes("#iconPack")
         .filter(note => !note.isProtected)
@@ -104,7 +107,8 @@ export function processIconPack(iconPackNote: BNote): ProcessedIconPack | undefi
         fontAttachmentId: attachment.attachmentId,
         title: iconPackNote.title,
         manifestNoteId: iconPackNote.noteId,
-        icon: iconPackNote.getIcon()
+        icon: iconPackNote.getIcon(),
+        builtin: false
     };
 }
 

@@ -7,7 +7,7 @@ import assetPath from "../services/asset_path.js";
 import attributeService from "../services/attributes.js";
 import config from "../services/config.js";
 import { getCurrentLocale } from "../services/i18n.js";
-import { generateCss, generateIconRegistry, getIconPacks } from "../services/icon_packs.js";
+import { generateCss, generateIconRegistry, getIconPacks, MIME_TO_EXTENSION_MAPPINGS } from "../services/icon_packs.js";
 import log from "../services/log.js";
 import optionService from "../services/options.js";
 import protectedSessionService from "../services/protected_session.js";
@@ -63,7 +63,9 @@ function index(req: Request, res: Response) {
         baseApiUrl: 'api/',
         currentLocale: getCurrentLocale(),
         iconPackCss: iconPacks
-            .map(p => generateCss(p, `/api/attachments/${p.fontAttachmentId}/download`))
+            .map(p => generateCss(p, p.builtin
+                ? `${assetPath}/fonts/${p.fontAttachmentId}.${MIME_TO_EXTENSION_MAPPINGS[p.fontMime]}`
+                : `api/notes/download/${p.manifestNoteId}`))
             .filter(Boolean)
             .join("\n\n"),
         iconRegistry: generateIconRegistry(iconPacks)
