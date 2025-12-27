@@ -125,6 +125,7 @@ function NoteIconList({ note, dropdownRef }: {
                     noSelectButtonStyle
                     noDropdownListStyle
                     iconAction
+                    title={t("note_icon.filter")}
                 >
                     <IconFilterContent filterByPrefix={filterByPrefix} setFilterByPrefix={setFilterByPrefix} />
                 </Dropdown>}
