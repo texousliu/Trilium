@@ -65,7 +65,7 @@ function index(req: Request, res: Response) {
         iconPackCss: iconPacks
             .map(p => generateCss(p, p.builtin
                 ? `${assetPath}/fonts/${p.fontAttachmentId}.${MIME_TO_EXTENSION_MAPPINGS[p.fontMime]}`
-                : `api/notes/download/${p.manifestNoteId}`))
+                : `api/attachments/download/${p.fontAttachmentId}`))
             .filter(Boolean)
             .join("\n\n"),
         iconRegistry: generateIconRegistry(iconPacks)

@@ -128,23 +128,24 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
     return null;
 }
 
-export function generateCss({ manifest, fontMime }: ProcessedIconPack, fontUrl: string) {
+export function generateCss({ manifest, fontMime, builtin, fontAttachmentId }: ProcessedIconPack, fontUrl: string) {
     try {
         const iconDeclarations: string[] = [];
         for (const [ key, mapping ] of Object.entries(manifest.icons)) {
             iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
         }
 
+        const fontFamily = builtin ? fontAttachmentId : `trilium-icon-pack-${manifest.prefix}`;
         return `\
             @font-face {
-                font-family: 'trilium-icon-pack-${manifest.prefix}';
+                font-family: '${fontFamily}';
                 font-weight: normal;
                 font-style: normal;
                 src: url('${fontUrl}') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
             }
 
             .${manifest.prefix} {
-                font-family: 'trilium-icon-pack-${manifest.prefix}' !important;
+                font-family: '${fontFamily}' !important;
                 font-weight: normal;
                 font-style: normal;
                 font-variant: normal;
