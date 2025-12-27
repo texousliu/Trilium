@@ -1618,7 +1618,7 @@
     "will_be_deleted_in": "This attachment will be automatically deleted in {{time}}",
     "will_be_deleted_soon": "This attachment will be automatically deleted soon",
     "deletion_reason": ", because the attachment is not linked in the note's content. To prevent deletion, add the attachment link back into the content or convert the attachment into note.",
-    "role_and_size": "Role: {{role}}, Size: {{size}}",
+    "role_and_size": "Role: {{role}}, size: {{size}}, MIME: {{- mimeType}}",
     "link_copied": "Attachment link copied to clipboard.",
     "unrecognized_role": "Unrecognized attachment role '{{role}}'."
   },
