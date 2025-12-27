@@ -72,6 +72,14 @@ div.note-icon-widget {
     height: 1em;
 }
 
+.note-icon-widget {
+    .no-results {
+        padding: 20px;
+        text-align: center;
+        color: var(--muted-text-color);
+    }
+}
+
 body.experimental-feature-new-layout {
     .note-icon-widget button.note-icon {
         --input-focus-outline-color: var(--note-icon-hover-background-color);

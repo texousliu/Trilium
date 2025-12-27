@@ -174,13 +174,17 @@ function NoteIconList({ note, dropdownRef }: {
                     dropdownRef?.current?.hide();
                 }}
             >
-                {(iconData?.icons ?? []).map(({ id, terms, iconPack }) => (
-                    <span
-                        key={id}
-                        class={id}
-                        title={t("note_icon.icon_tooltip", { name: terms?.[0] ?? id, iconPack })}
-                    />
-                ))}
+                {iconData?.icons?.length ? (
+                    (iconData?.icons ?? []).map(({ id, terms, iconPack }) => (
+                        <span
+                            key={id}
+                            class={id}
+                            title={t("note_icon.icon_tooltip", { name: terms?.[0] ?? id, iconPack })}
+                        />
+                    ))
+                ) : (
+                    <div class="no-results">{t("note_icon.no_results")}</div>
+                )}
             </div>
         </>
     );

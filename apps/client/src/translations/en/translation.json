@@ -771,7 +771,8 @@
     "filter": "Filter",
     "filter-none": "All icons",
     "filter-default": "Default icons",
-    "icon_tooltip": "{{name}}\nIcon pack: {{iconPack}}"
+    "icon_tooltip": "{{name}}\nIcon pack: {{iconPack}}",
+    "no_results": "No icons found."
   },
   "basic_properties": {
     "note_type": "Note type",
