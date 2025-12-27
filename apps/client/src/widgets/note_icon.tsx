@@ -1,7 +1,9 @@
 import "./note_icon.css";
 
 import { IconRegistry } from "@triliumnext/commons";
+import { Dropdown as BootstrapDropdown } from "bootstrap";
 import { t } from "i18next";
+import { RefObject } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import FNote from "../entities/fnote";
@@ -29,6 +31,7 @@ export default function NoteIcon() {
     const [ icon, setIcon ] = useState<string | null | undefined>();
     const [ iconClass ] = useNoteLabel(note, "iconClass");
     const [ workspaceIconClass ] = useNoteLabel(note, "workspaceIconClass");
+    const dropdownRef = useRef<BootstrapDropdown>(null);
 
     useEffect(() => {
         setIcon(note?.getIcon());
@@ -38,18 +41,22 @@ export default function NoteIcon() {
         <Dropdown
             className="note-icon-widget"
             title={t("note_icon.change_note_icon")}
+            dropdownRef={dropdownRef}
             dropdownContainerStyle={{ width: "610px" }}
+            dropdownOptions={{ autoClose: "outside" }}
             buttonClassName={`note-icon tn-focusable-button ${icon ?? "bx bx-empty"}`}
             hideToggleArrow
             disabled={viewScope?.viewMode !== "default"}
-            dropdownOptions={{ autoClose: "outside" }}
         >
-            { note && <NoteIconList note={note} /> }
+            { note && <NoteIconList note={note} dropdownRef={dropdownRef} /> }
         </Dropdown>
     );
 }
 
-function NoteIconList({ note }: { note: FNote }) {
+function NoteIconList({ note, dropdownRef }: {
+    note: FNote,
+    dropdownRef: RefObject<BootstrapDropdown>;
+}) {
     const searchBoxRef = useRef<HTMLInputElement>(null);
     const [ search, setSearch ] = useState<string>();
     const [ iconData, setIconData ] = useState<IconData>();
@@ -135,6 +142,7 @@ function NoteIconList({ note }: { note: FNote }) {
                         const attributeToSet = note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass";
                         attributes.setLabel(note.noteId, attributeToSet, iconClass);
                     }
+                    dropdownRef?.current?.hide();
                 }}
             >
                 {getIconLabels(note).length > 0 && (
@@ -148,6 +156,7 @@ function NoteIconList({ note }: { note: FNote }) {
                                 for (const label of getIconLabels(note)) {
                                     attributes.removeAttributeById(note.noteId, label.attributeId);
                                 }
+                                dropdownRef?.current?.hide();
                             }}
                         />
                     </div>
