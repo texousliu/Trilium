@@ -9,6 +9,7 @@ import type BBranch from "../../../becca/entities/bbranch.js";
 import type BNote from "../../../becca/entities/bnote.js";
 import { getShareThemeAssetDir } from "../../../routes/assets";
 import { getDefaultTemplatePath, readTemplate, renderNoteForExport } from "../../../share/content_renderer";
+import { getIconPacks, MIME_TO_EXTENSION_MAPPINGS, ProcessedIconPack } from "../../icon_packs";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
 import { RESOURCE_DIR } from "../../resource_dir";
 import { getResourceDir, isDev } from "../../utils";
@@ -29,6 +30,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     private indexMeta: NoteMeta | null = null;
     private searchIndex: Map<string, SearchIndexEntry> = new Map();
     private rootMeta: NoteMeta | null = null;
+    private iconPacks: ProcessedIconPack[] = [];
 
     prepareMeta(metaFile: NoteMetaFile): void {
         const assets = [
@@ -53,6 +55,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             dataFileName: "index.html"
         };
         this.rootMeta = metaFile.files[0];
+        this.iconPacks = getIconPacks();
 
         metaFile.files.push(this.indexMeta);
     }
@@ -70,7 +73,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
                 whitespaceCharacters: "\t\r\n\f\u200b\u00a0\u2002"
             }) : "";
 
-            content = renderNoteForExport(note, branch, basePath, noteMeta.notePath.slice(0, -1));
+            content = renderNoteForExport(note, branch, basePath, noteMeta.notePath.slice(0, -1), this.iconPacks);
             if (typeof content === "string") {
                 content = content.replace(/href="[^"]*\.\/([a-zA-Z0-9_\/]{12})[^"]*"/g, (match, id) => {
                     if (match.includes("/assets/")) return match;
@@ -137,6 +140,18 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
 
             const cssContent = getShareThemeAssets(assetMeta.dataFileName);
             this.archive.append(cssContent, { name: assetMeta.dataFileName });
+        }
+
+        // Inject the custom fonts.
+        for (const iconPack of this.iconPacks) {
+            const attachment = becca.getAttachment(iconPack.fontAttachmentId);
+            if (!attachment) {
+                continue;
+            }
+
+            const fontData = attachment.getContent();
+            const fontFileName = `assets/icon-pack-${iconPack.manifest.prefix.toLowerCase()}.${MIME_TO_EXTENSION_MAPPINGS[attachment.mime]}`;
+            this.archive.append(fontData, { name: fontFileName });
         }
     }
 

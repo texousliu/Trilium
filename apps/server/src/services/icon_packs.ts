@@ -20,6 +20,12 @@ const MIME_TO_CSS_FORMAT_MAPPINGS: Record<typeof PREFERRED_MIME_TYPE[number], st
     "font/woff2": "woff2"
 };
 
+export const MIME_TO_EXTENSION_MAPPINGS: Record<string, string> = {
+    "font/ttf": "ttf",
+    "font/woff": "woff",
+    "font/woff2": "woff2"
+};
+
 export interface IconPackManifest {
     prefix: string;
     icons: Record<string, {
@@ -28,7 +34,7 @@ export interface IconPackManifest {
     }>;
 }
 
-interface ProcessResult {
+export interface ProcessedIconPack {
     manifest: IconPackManifest;
     manifestNoteId: string;
     fontMime: string;
@@ -38,7 +44,7 @@ interface ProcessResult {
 }
 
 export function getIconPacks() {
-    const defaultIconPack: ProcessResult = {
+    const defaultIconPack: ProcessedIconPack = {
         manifest: boxiconsManifest,
         manifestNoteId: "builtin-boxicons-v2",
         fontMime: "font/woff2",
@@ -49,7 +55,7 @@ export function getIconPacks() {
     const customIconPacks = search.searchNotes("#iconPack")
         .filter(note => !note.isProtected)
         .map(iconPackNote => processIconPack(iconPackNote))
-        .filter(Boolean) as ProcessResult[];
+        .filter(Boolean) as ProcessedIconPack[];
 
     return [
         defaultIconPack,
@@ -57,7 +63,7 @@ export function getIconPacks() {
     ];
 }
 
-export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
+export function generateIconRegistry(iconPacks: ProcessedIconPack[]): IconRegistry {
     const sources: IconRegistry["sources"] = [];
 
     for (const { manifest, title, icon } of iconPacks) {
@@ -80,7 +86,7 @@ export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
     return { sources };
 }
 
-export function processIconPack(iconPackNote: BNote): ProcessResult | undefined {
+export function processIconPack(iconPackNote: BNote): ProcessedIconPack | undefined {
     const manifest = iconPackNote.getJsonContentSafely() as IconPackManifest;
     if (!manifest) {
         log.error(`Icon pack is missing JSON manifest (or has syntax errors): ${iconPackNote.title} (${iconPackNote.noteId})`);
@@ -119,7 +125,7 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
     return null;
 }
 
-export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessResult, isShare = false) {
+export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessedIconPack, isShare = false) {
     try {
         const iconDeclarations: string[] = [];
         for (const [ key, mapping ] of Object.entries(manifest.icons)) {

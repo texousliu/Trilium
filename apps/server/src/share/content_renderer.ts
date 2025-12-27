@@ -12,7 +12,7 @@ import BAttachment from '../becca/entities/battachment.js';
 import type BBranch from "../becca/entities/bbranch.js";
 import BNote from "../becca/entities/bnote.js";
 import assetPath, { assetUrlFragment } from "../services/asset_path.js";
-import { generateCss, getIconPacks } from "../services/icon_packs.js";
+import { generateCss, getIconPacks, ProcessedIconPack } from "../services/icon_packs.js";
 import log from "../services/log.js";
 import options from "../services/options.js";
 import utils, { getResourceDir, isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
@@ -69,13 +69,11 @@ function getSharedSubTreeRoot(note: SNote | BNote | undefined): Subroot {
     return getSharedSubTreeRoot(parentBranch.getParentNote());
 }
 
-export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath: string, ancestors: string[]) {
+export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath: string, ancestors: string[], iconPacks: ProcessedIconPack[]) {
     const subRoot: Subroot = {
         branch: parentBranch,
         note: parentBranch.getNote()
     };
-
-    const iconPacks = getIconPacks();
 
     return renderNoteContentInternal(note, {
         subRoot,
