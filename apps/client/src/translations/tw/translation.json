@@ -21,7 +21,7 @@
     },
     "bundle-error": {
       "title": "載入自訂腳本失敗",
-      "message": "來自 ID 為 \"{{id}}\"、標題為 \"{{title}}\" 的筆記的腳本因以下原因無法執行：\n\n{{message}}"
+      "message": "腳本因以下原因無法執行：\n\n{{message}}"
     },
     "widget-list-error": {
       "title": "無法從伺服器取得元件清單"
