@@ -2,7 +2,6 @@ import { IconRegistry } from "@triliumnext/commons";
 
 import type BAttachment from "../becca/entities/battachment";
 import type BNote from "../becca/entities/bnote";
-import { note } from "../test/becca_mocking";
 import boxiconsManifest from "./icon_pack_boxicons-v2.json";
 import log from "./log";
 import search from "./search/services/search";
@@ -125,20 +124,19 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
     return null;
 }
 
-export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessedIconPack, isShare = false) {
+export function generateCss({ manifest, fontMime }: ProcessedIconPack, fontUrl: string) {
     try {
         const iconDeclarations: string[] = [];
         for (const [ key, mapping ] of Object.entries(manifest.icons)) {
             iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
         }
 
-        const downloadBaseUrl = isShare ? '/share' : '';
         return `\
             @font-face {
                 font-family: 'trilium-icon-pack-${manifest.prefix}';
                 font-weight: normal;
                 font-style: normal;
-                src: url('${downloadBaseUrl}/api/attachments/${fontAttachmentId}/download') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
+                src: url('${fontUrl}') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
             }
 
             .${manifest.prefix} {

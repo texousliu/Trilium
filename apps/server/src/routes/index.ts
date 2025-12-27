@@ -63,7 +63,7 @@ function index(req: Request, res: Response) {
         baseApiUrl: 'api/',
         currentLocale: getCurrentLocale(),
         iconPackCss: iconPacks
-            .map(p => generateCss(p))
+            .map(p => generateCss(p, `/api/attachments/${p.fontAttachmentId}/download`))
             .filter(Boolean)
             .join("\n\n"),
         iconRegistry: generateIconRegistry(iconPacks)

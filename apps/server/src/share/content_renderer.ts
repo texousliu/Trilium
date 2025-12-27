@@ -12,7 +12,7 @@ import BAttachment from '../becca/entities/battachment.js';
 import type BBranch from "../becca/entities/bbranch.js";
 import BNote from "../becca/entities/bnote.js";
 import assetPath, { assetUrlFragment } from "../services/asset_path.js";
-import { generateCss, getIconPacks, ProcessedIconPack } from "../services/icon_packs.js";
+import { generateCss, getIconPacks, MIME_TO_EXTENSION_MAPPINGS, ProcessedIconPack } from "../services/icon_packs.js";
 import log from "../services/log.js";
 import options from "../services/options.js";
 import utils, { getResourceDir, isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
@@ -89,7 +89,7 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         faviconUrl: `${basePath}favicon.ico`,
         ancestors,
         isStatic: true,
-        iconPackCss: iconPacks.map(p => generateCss(p, true))
+        iconPackCss: iconPacks.map(p => generateCss(p, `${basePath}assets/icon-pack-${p.manifest.prefix.toLowerCase()}.${MIME_TO_EXTENSION_MAPPINGS[p.fontMime]}`))
             .filter(Boolean)
             .join("\n\n"),
         iconPackSupportedPrefixes: iconPacks.map(p => p.manifest.prefix)
@@ -141,7 +141,7 @@ export function renderNoteContent(note: SNote) {
         ancestors,
         isStatic: false,
         faviconUrl: note.hasRelation("shareFavicon") ? `api/notes/${note.getRelationValue("shareFavicon")}/download` : `../favicon.ico`,
-        iconPackCss: iconPacks.map(p => generateCss(p, true))
+        iconPackCss: iconPacks.map(p => generateCss(p, `/share/api/attachments/${p.fontAttachmentId}/download`))
             .filter(Boolean)
             .join("\n\n"),
         iconPackSupportedPrefixes: iconPacks.map(p => p.manifest.prefix)
