@@ -42,7 +42,7 @@ export default function NoteIcon() {
             className="note-icon-widget"
             title={t("note_icon.change_note_icon")}
             dropdownRef={dropdownRef}
-            dropdownContainerStyle={{ width: "610px" }}
+            dropdownContainerStyle={{ width: "620px" }}
             dropdownOptions={{ autoClose: "outside" }}
             buttonClassName={`note-icon tn-focusable-button ${icon ?? "bx bx-empty"}`}
             hideToggleArrow
