@@ -1,24 +1,26 @@
-import { parse, HTMLElement, TextNode, Options } from "node-html-parser";
-import shaca from "./shaca/shaca.js";
-import assetPath, { assetUrlFragment } from "../services/asset_path.js";
-import shareRoot from "./share_root.js";
-import escapeHtml from "escape-html";
-import type SNote from "./shaca/entities/snote.js";
-import BNote from "../becca/entities/bnote.js";
-import type BBranch from "../becca/entities/bbranch.js";
-import { t } from "i18next";
-import SBranch from "./shaca/entities/sbranch.js";
-import options from "../services/options.js";
-import utils, { getResourceDir, isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
-import ejs from "ejs";
-import log from "../services/log.js";
-import { join } from "path";
-import { readFileSync } from "fs";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { highlightAuto } from "@triliumnext/highlightjs";
+import ejs from "ejs";
+import escapeHtml from "escape-html";
+import { readFileSync } from "fs";
+import { t } from "i18next";
+import { HTMLElement, Options,parse, TextNode } from "node-html-parser";
+import { join } from "path";
+
 import becca from "../becca/becca.js";
 import BAttachment from '../becca/entities/battachment.js';
+import type BBranch from "../becca/entities/bbranch.js";
+import BNote from "../becca/entities/bnote.js";
+import assetPath, { assetUrlFragment } from "../services/asset_path.js";
+import { generateCss, getIconPacks } from "../services/icon_packs.js";
+import log from "../services/log.js";
+import options from "../services/options.js";
+import utils, { getResourceDir, isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import SAttachment from "./shaca/entities/sattachment.js";
-import { sanitizeUrl } from "@braintree/sanitize-url";
+import SBranch from "./shaca/entities/sbranch.js";
+import type SNote from "./shaca/entities/snote.js";
+import shaca from "./shaca/shaca.js";
+import shareRoot from "./share_root.js";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const templateCache: Map<string, string> = new Map();
@@ -54,7 +56,7 @@ function getSharedSubTreeRoot(note: SNote | BNote | undefined): Subroot {
         return {
             note,
             branch: parentBranch
-        }
+        };
     }
 
     if (parentBranch.parentNoteId === shareRoot.SHARE_ROOT_NOTE_ID) {
@@ -124,6 +126,7 @@ export function renderNoteContent(note: SNote) {
 
     const customLogoId = note.getRelation("shareLogo")?.value;
     const logoUrl = customLogoId ? `api/images/${customLogoId}/image.png` : `../${assetUrlFragment}/images/icon-color.svg`;
+    const iconPacks = getIconPacks().filter(p => !!shaca.notes[p.manifestNoteId]);
 
     return renderNoteContentInternal(note, {
         subRoot,
@@ -133,7 +136,10 @@ export function renderNoteContent(note: SNote) {
         logoUrl,
         ancestors,
         isStatic: false,
-        faviconUrl: note.hasRelation("shareFavicon") ? `api/notes/${note.getRelationValue("shareFavicon")}/download` : `../favicon.ico`
+        faviconUrl: note.hasRelation("shareFavicon") ? `api/notes/${note.getRelationValue("shareFavicon")}/download` : `../favicon.ico`,
+        iconPackCss: iconPacks.map(p => generateCss(p, true))
+            .filter(Boolean)
+            .join("\n\n"),
     });
 }
 
@@ -146,6 +152,7 @@ interface RenderArgs {
     ancestors: string[];
     isStatic: boolean;
     faviconUrl: string;
+    iconPackCss: string;
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
@@ -281,7 +288,7 @@ function renderText(result: Result, note: SNote | BNote) {
     if (typeof result.content !== "string") return;
     const parseOpts: Partial<Options> = {
         blockTextElements: {}
-    }
+    };
     const document = parse(result.content || "", parseOpts);
 
     // Process include notes.

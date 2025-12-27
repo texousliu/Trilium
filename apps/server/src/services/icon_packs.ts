@@ -29,6 +29,7 @@ export interface IconPackManifest {
 
 interface ProcessResult {
     manifest: IconPackManifest;
+    manifestNoteId: string;
     fontMime: string;
     fontAttachmentId: string;
     title: string;
@@ -38,6 +39,7 @@ interface ProcessResult {
 export function getIconPacks() {
     const defaultIconPack: ProcessResult = {
         manifest: boxiconsManifest,
+        manifestNoteId: "builtin-boxicons-v2",
         fontMime: "font/woff2",
         fontAttachmentId: "builtin-boxicons-v2",
         title: "Boxicons",
@@ -94,6 +96,7 @@ export function processIconPack(iconPackNote: BNote): ProcessResult | undefined 
         fontMime: attachment.mime,
         fontAttachmentId: attachment.attachmentId,
         title: iconPackNote.title,
+        manifestNoteId: iconPackNote.noteId,
         icon: iconPackNote.getIcon()
     };
 }
@@ -114,19 +117,20 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
     return null;
 }
 
-export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessResult) {
+export function generateCss({ manifest, fontAttachmentId, fontMime }: ProcessResult, isShare = false) {
     try {
         const iconDeclarations: string[] = [];
         for (const [ key, mapping ] of Object.entries(manifest.icons)) {
             iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
         }
 
+        const downloadBaseUrl = isShare ? '/share' : '';
         return `\
             @font-face {
                 font-family: 'trilium-icon-pack-${manifest.prefix}';
                 font-weight: normal;
                 font-style: normal;
-                src: url('/api/attachments/${fontAttachmentId}/download') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
+                src: url('${downloadBaseUrl}/api/attachments/${fontAttachmentId}/download') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
             }
 
             .${manifest.prefix} {
