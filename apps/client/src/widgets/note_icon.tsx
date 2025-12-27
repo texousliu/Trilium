@@ -125,6 +125,7 @@ function NoteIconList({ note, dropdownRef }: {
                     inputRef={searchBoxRef}
                     type="text"
                     name="icon-search"
+                    placeholder={t("note_icon.search_placeholder")}
                     currentValue={search} onChange={setSearch}
                     autoFocus
                 />

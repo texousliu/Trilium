@@ -766,6 +766,7 @@
   "note_icon": {
     "change_note_icon": "Change note icon",
     "search": "Search:",
+    "search_placeholder": "Type to filter icons...",
     "reset-default": "Reset to default icon",
     "filter": "Filter",
     "filter-none": "All icons",
