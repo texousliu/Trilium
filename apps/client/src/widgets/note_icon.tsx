@@ -13,7 +13,7 @@ import ActionButton from "./react/ActionButton";
 import Dropdown from "./react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "./react/FormList";
 import FormTextBox from "./react/FormTextBox";
-import { useNoteContext, useNoteLabel } from "./react/hooks";
+import { useNoteContext, useNoteLabel, useStaticTooltip } from "./react/hooks";
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
@@ -58,9 +58,16 @@ function NoteIconList({ note, dropdownRef }: {
     dropdownRef: RefObject<BootstrapDropdown>;
 }) {
     const searchBoxRef = useRef<HTMLInputElement>(null);
+    const iconListRef = useRef<HTMLDivElement>(null);
     const [ search, setSearch ] = useState<string>();
     const [ iconData, setIconData ] = useState<IconData>();
     const [ filterByPrefix, setFilterByPrefix ] = useState<string | null>(null);
+    useStaticTooltip(iconListRef, {
+        selector: "span",
+        customClass: "pre-wrap-text",
+        animation: false,
+        title() { return this.getAttribute("title") || ""; },
+    });
 
     useEffect(() => {
         async function loadIcons() {
@@ -152,6 +159,7 @@ function NoteIconList({ note, dropdownRef }: {
 
             <div
                 class="icon-list"
+                ref={iconListRef}
                 onClick={(e) => {
                     // Make sure we are not clicking on something else than a button.
                     const clickedTarget = e.target as HTMLElement;
