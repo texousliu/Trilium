@@ -2,6 +2,7 @@ import { IconRegistry } from "@triliumnext/commons";
 
 import type BAttachment from "../becca/entities/battachment";
 import type BNote from "../becca/entities/bnote";
+import boxiconsManifest from "./icon_pack_boxicons-v2.json";
 import log from "./log";
 import search from "./search/services/search";
 import { safeExtractMessageAndStackFromError } from "./utils";
@@ -30,19 +31,32 @@ interface ProcessResult {
     manifest: IconPackManifest;
     fontMime: string;
     fontAttachmentId: string;
-    manifestNote: BNote;
+    title: string;
+    icon: string;
 }
 
 export function getIconPacks() {
-    return search.searchNotes("#iconPack")
+    const defaultIconPack: ProcessResult = {
+        manifest: boxiconsManifest,
+        fontMime: "font/woff2",
+        fontAttachmentId: "builtin-boxicons-v2",
+        title: "Boxicons",
+        icon: "bx bx-package"
+    };
+    const customIconPacks = search.searchNotes("#iconPack")
         .map(iconPackNote => processIconPack(iconPackNote))
         .filter(Boolean) as ProcessResult[];
+
+    return [
+        defaultIconPack,
+        ...customIconPacks
+    ];
 }
 
 export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
     const sources: IconRegistry["sources"] = [];
 
-    for (const { manifest, manifestNote } of iconPacks) {
+    for (const { manifest, title, icon } of iconPacks) {
         const icons: IconRegistry["sources"][number]["icons"] = Object.entries(manifest.icons)
             .map(( [id, { terms }] ) => {
                 if (!id || !terms) return null;
@@ -53,8 +67,8 @@ export function generateIconRegistry(iconPacks: ProcessResult[]): IconRegistry {
 
         sources.push({
             prefix: manifest.prefix,
-            name: manifestNote.title,
-            icon: manifestNote.getIcon(),
+            name: title,
+            icon,
             icons
         });
     }
@@ -79,7 +93,8 @@ export function processIconPack(iconPackNote: BNote): ProcessResult | undefined 
         manifest,
         fontMime: attachment.mime,
         fontAttachmentId: attachment.attachmentId,
-        manifestNote: iconPackNote
+        title: iconPackNote.title,
+        icon: iconPackNote.getIcon()
     };
 }
 

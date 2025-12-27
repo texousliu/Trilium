@@ -1,19 +1,17 @@
 import "./note_icon.css";
 
+import { IconRegistry } from "@triliumnext/commons";
 import { t } from "i18next";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
 import server from "../services/server";
-import type { Icon } from "./icon_list";
-import ActionButton from "./react/ActionButton";
 import Button from "./react/Button";
 import Dropdown from "./react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "./react/FormList";
 import FormTextBox from "./react/FormTextBox";
 import { useNoteContext, useNoteLabel } from "./react/hooks";
-import Icon from "./react/Icon";
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
@@ -21,12 +19,9 @@ interface IconToCountCache {
 
 interface IconData {
     iconToCount: Record<string, number>;
-    icons: Icon[];
+    icons: IconRegistry["sources"][number]["icons"];
 }
 
-let fullIconData: {
-    icons: Icon[];
-};
 let iconToCountCache!: Promise<IconToCountCache> | null;
 
 export default function NoteIcon() {
@@ -62,31 +57,21 @@ function NoteIconList({ note }: { note: FNote }) {
 
     useEffect(() => {
         async function loadIcons() {
-            if (!fullIconData) {
-                fullIconData = (await import("./icon_list.js")).default;
-            }
-
             // Filter by text and/or category.
-            let icons: Pick<Icon, "name" | "term" | "className">[] = [
-                ...fullIconData.icons,
-                ...glob.iconRegistry.sources.map(s => s.icons.map(icon => ({
-                    name: icon.terms.at(0) ?? "",
-                    term: icon.terms.slice(1),
-                    className: icon.id
-                }))).flat()
+            let icons: IconRegistry["sources"][number]["icons"] = [
+                ...glob.iconRegistry.sources.map(s => s.icons).flat()
             ];
             const processedSearch = search?.trim()?.toLowerCase();
             if (processedSearch || filterByPrefix !== null) {
                 icons = icons.filter((icon) => {
                     if (filterByPrefix) {
-                        if (!icon.className?.startsWith(`${filterByPrefix} `)) {
+                        if (!icon.id?.startsWith(`${filterByPrefix} `)) {
                             return false;
                         }
                     }
 
                     if (processedSearch) {
-                        if (!icon.name.includes(processedSearch) &&
-                            !icon.term?.find((t) => t.includes(processedSearch))) {
+                        if (!icon.terms?.some((t) => t.includes(processedSearch))) {
                             return false;
                         }
                     }
@@ -99,8 +84,8 @@ function NoteIconList({ note }: { note: FNote }) {
             const iconToCount = await getIconToCountMap();
             if (iconToCount) {
                 icons.sort((a, b) => {
-                    const countA = iconToCount[a.className ?? ""] || 0;
-                    const countB = iconToCount[b.className ?? ""] || 0;
+                    const countA = iconToCount[a.id ?? ""] || 0;
+                    const countB = iconToCount[b.id ?? ""] || 0;
 
                     return countB - countA;
                 });
@@ -168,8 +153,8 @@ function NoteIconList({ note }: { note: FNote }) {
                     </div>
                 )}
 
-                {(iconData?.icons ?? []).map(({className, name}) => (
-                    <span class={className} title={name} />
+                {(iconData?.icons ?? []).map(({ id, terms }) => (
+                    <span key={id} class={id} title={terms[0]} />
                 ))}
             </div>
         </>
@@ -193,7 +178,7 @@ function IconFilterContent({ filterByPrefix, setFilterByPrefix }: {
             <FormDropdownDivider />
 
             {glob.iconRegistry.sources.map(({ prefix, name, icon }) => (
-                <FormListItem
+                prefix !== "bx" && <FormListItem
                     key={prefix}
                     onClick={() => setFilterByPrefix(prefix)}
                     icon={icon}
