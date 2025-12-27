@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
 import server from "../services/server";
-import Button from "./react/Button";
+import ActionButton from "./react/ActionButton";
 import Dropdown from "./react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "./react/FormList";
 import FormTextBox from "./react/FormTextBox";
@@ -119,6 +119,22 @@ function NoteIconList({ note, dropdownRef }: {
                     autoFocus
                 />
 
+                {getIconLabels(note).length > 0 && (
+                    <div style={{ textAlign: "center" }}>
+                        <ActionButton
+                            icon="bx bx-reset"
+                            text={t("note_icon.reset-default")}
+                            onClick={() => {
+                                if (!note) return;
+                                for (const label of getIconLabels(note)) {
+                                    attributes.removeAttributeById(note.noteId, label.attributeId);
+                                }
+                                dropdownRef?.current?.hide();
+                            }}
+                        />
+                    </div>
+                )}
+
                 {glob.iconRegistry.sources.length > 0 && <Dropdown
                     buttonClassName="bx bx-filter-alt"
                     hideToggleArrow
@@ -146,23 +162,6 @@ function NoteIconList({ note, dropdownRef }: {
                     dropdownRef?.current?.hide();
                 }}
             >
-                {getIconLabels(note).length > 0 && (
-                    <div style={{ textAlign: "center" }}>
-                        <Button
-                            text={t("note_icon.reset-default")}
-                            onClick={() => {
-                                if (!note) {
-                                    return;
-                                }
-                                for (const label of getIconLabels(note)) {
-                                    attributes.removeAttributeById(note.noteId, label.attributeId);
-                                }
-                                dropdownRef?.current?.hide();
-                            }}
-                        />
-                    </div>
-                )}
-
                 {(iconData?.icons ?? []).map(({ id, terms }) => (
                     <span key={id} class={id} title={terms[0]} />
                 ))}
