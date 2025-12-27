@@ -1,17 +1,18 @@
+import ejs from "ejs";
+import fs, { readdirSync } from "fs";
+import { convert as convertToText } from "html-to-text";
+import { t } from "i18next";
 import { join } from "path";
+
+import becca from "../../../becca/becca";
+import type BBranch from "../../../becca/entities/bbranch.js";
+import type BNote from "../../../becca/entities/bnote.js";
+import { getShareThemeAssetDir } from "../../../routes/assets";
+import { getDefaultTemplatePath, readTemplate, renderNoteForExport } from "../../../share/content_renderer";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
-import { ExportFormat, ZipExportProvider } from "./abstract_provider.js";
 import { RESOURCE_DIR } from "../../resource_dir";
 import { getResourceDir, isDev } from "../../utils";
-import fs, { readdirSync } from "fs";
-import { getDefaultTemplatePath, readTemplate, renderNoteForExport } from "../../../share/content_renderer";
-import type BNote from "../../../becca/entities/bnote.js";
-import type BBranch from "../../../becca/entities/bbranch.js";
-import { getShareThemeAssetDir } from "../../../routes/assets";
-import { convert as convertToText } from "html-to-text";
-import becca from "../../../becca/becca";
-import ejs from "ejs";
-import { t } from "i18next";
+import { ExportFormat, ZipExportProvider } from "./abstract_provider.js";
 
 const shareThemeAssetDir = getShareThemeAssetDir();
 
@@ -134,7 +135,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
                 continue;
             }
 
-            let cssContent = getShareThemeAssets(assetMeta.dataFileName);
+            const cssContent = getShareThemeAssets(assetMeta.dataFileName);
             this.archive.append(cssContent, { name: assetMeta.dataFileName });
         }
     }

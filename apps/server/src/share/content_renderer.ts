@@ -75,6 +75,8 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         note: parentBranch.getNote()
     };
 
+    const iconPacks = getIconPacks();
+
     return renderNoteContentInternal(note, {
         subRoot,
         rootNoteId: parentBranch.noteId,
@@ -88,7 +90,11 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         logoUrl: `${basePath}icon-color.svg`,
         faviconUrl: `${basePath}favicon.ico`,
         ancestors,
-        isStatic: true
+        isStatic: true,
+        iconPackCss: iconPacks.map(p => generateCss(p, true))
+            .filter(Boolean)
+            .join("\n\n"),
+        iconPackSupportedPrefixes: iconPacks.map(p => p.manifest.prefix)
     });
 }
 
