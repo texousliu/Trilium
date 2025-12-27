@@ -140,6 +140,7 @@ export function renderNoteContent(note: SNote) {
         iconPackCss: iconPacks.map(p => generateCss(p, true))
             .filter(Boolean)
             .join("\n\n"),
+        iconPackSupportedPrefixes: iconPacks.map(p => p.manifest.prefix)
     });
 }
 
@@ -153,6 +154,7 @@ interface RenderArgs {
     isStatic: boolean;
     faviconUrl: string;
     iconPackCss: string;
+    iconPackSupportedPrefixes: string[];
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
