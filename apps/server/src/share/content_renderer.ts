@@ -130,7 +130,7 @@ export function renderNoteContent(note: SNote) {
 
     const customLogoId = note.getRelation("shareLogo")?.value;
     const logoUrl = customLogoId ? `api/images/${customLogoId}/image.png` : `../${assetUrlFragment}/images/icon-color.svg`;
-    const iconPacks = getIconPacks().filter(p => !!shaca.notes[p.manifestNoteId]);
+    const iconPacks = getIconPacks().filter(p => p.builtin || !!shaca.notes[p.manifestNoteId]);
 
     return renderNoteContentInternal(note, {
         subRoot,
@@ -141,7 +141,10 @@ export function renderNoteContent(note: SNote) {
         ancestors,
         isStatic: false,
         faviconUrl: note.hasRelation("shareFavicon") ? `api/notes/${note.getRelationValue("shareFavicon")}/download` : `../favicon.ico`,
-        iconPackCss: iconPacks.map(p => generateCss(p, `/share/api/attachments/${p.fontAttachmentId}/download`))
+        iconPackCss: iconPacks.map(p => generateCss(p, p.builtin
+            ? `/share/assets/fonts/${p.fontAttachmentId}.${MIME_TO_EXTENSION_MAPPINGS[p.fontMime]}`
+            : `/share/api/attachments/${p.fontAttachmentId}/download`
+        ))
             .filter(Boolean)
             .join("\n\n"),
         iconPackSupportedPrefixes: iconPacks.map(p => p.manifest.prefix)
