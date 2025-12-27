@@ -2,6 +2,7 @@ import { IconRegistry } from "@triliumnext/commons";
 
 import type BAttachment from "../becca/entities/battachment";
 import type BNote from "../becca/entities/bnote";
+import { note } from "../test/becca_mocking";
 import boxiconsManifest from "./icon_pack_boxicons-v2.json";
 import log from "./log";
 import search from "./search/services/search";
@@ -46,6 +47,7 @@ export function getIconPacks() {
         icon: "bx bx-package"
     };
     const customIconPacks = search.searchNotes("#iconPack")
+        .filter(note => !note.isProtected)
         .map(iconPackNote => processIconPack(iconPackNote))
         .filter(Boolean) as ProcessResult[];
 
