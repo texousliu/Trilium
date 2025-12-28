@@ -5,5 +5,25 @@
         "architecture": "Arquitetura:",
         "older_releases": "Veja os lançamentos anteriores",
         "server_title": "Configure um servidor para acessar em múltiplos dispositivos"
+    },
+    "hero_section": {
+        "title": "Organize seus pensamentos. Construa sua base de conhecimento pessoal.",
+        "subtitle": "O Trilium é uma solução de código aberto para anotações e organização de uma base de conhecimento pessoal. Use-o localmente no seu computador ou sincronize-o com seu servidor auto-hospedado para manter suas notas disponíveis onde quer que você vá.",
+        "get_started": "Começar",
+        "github": "GitHub",
+        "dockerhub": "Docker Hub",
+        "screenshot_alt": "Captura de tela do aplicativo de desktop Trilium Notes"
+    },
+    "organization_benefits": {
+        "title": "Organização",
+        "note_structure_title": "Estrutura de notas",
+        "note_structure_description": "As notas podem ser organizadas de forma hierárquica. Não há necessidade de pastas, pois cada nota pode conter subnotas. Uma única nota pode ser adicionada em vários locais da hierarquia.",
+        "attributes_title": "Rótulos e relacionamentos de notas",
+        "attributes_description": "Use relacionamentos entre notas ou adicione rótulos para facilitar a categorização. Use atributos promovidos para inserir informações estruturadas que podem ser usadas em tabelas e quadros.",
+        "hoisting_title": "Espaços de trabalho e hoisting",
+        "hoisting_description": "Separe facilmente suas notas pessoais e de trabalho agrupando-as em um espaço de trabalho, que foca a árvore de notas para exibir apenas um conjunto específico de notas."
+    },
+    "productivity_benefits": {
+        "title": "Produtividade e segurança"
     }
 }
