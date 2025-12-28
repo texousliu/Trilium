@@ -582,6 +582,10 @@ export default class FNote {
     }
 
     getIcon() {
+        return `tn-icon ${this.#getIconInternal()}`;
+    }
+
+    #getIconInternal() {
         const iconClassLabels = this.getLabels("iconClass");
         const workspaceIconClass = this.getWorkspaceIconClass();
 
