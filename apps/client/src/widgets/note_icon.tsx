@@ -3,9 +3,10 @@ import "./note_icon.css";
 import { IconRegistry } from "@triliumnext/commons";
 import { Dropdown as BootstrapDropdown } from "bootstrap";
 import clsx from "clsx";
-import { t, use } from "i18next";
-import { RefObject } from "preact";
+import { t } from "i18next";
+import { CSSProperties, RefObject } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { CellComponentProps, Grid } from "react-window";
 
 import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
@@ -132,18 +133,37 @@ function NoteIconList({ note, dropdownRef }: {
                 }}
             >
                 {filteredIcons.length ? (
-                    (filteredIcons ?? []).map(({ id, terms, iconPack }) => (
-                        <span
-                            key={id}
-                            class={clsx(id, "tn-icon")}
-                            title={t("note_icon.icon_tooltip", { name: terms?.[0] ?? id, iconPack })}
-                        />
-                    ))
+                    <Grid
+                        columnCount={12}
+                        columnWidth={48}
+                        rowCount={Math.ceil(filteredIcons.length / 12)}
+                        rowHeight={48}
+                        cellComponent={IconItemCell}
+                        cellProps={{
+                            filteredIcons
+                        }}
+                    />
                 ) : (
                     <div class="no-results">{t("note_icon.no_results")}</div>
                 )}
             </div>
         </>
+    );
+}
+
+function IconItemCell({ rowIndex, columnIndex, style, filteredIcons }: CellComponentProps<{
+    filteredIcons: IconWithName[];
+}>): React.JSX.Element {
+    const iconIndex = rowIndex * 12 + columnIndex;
+    const iconData = filteredIcons[iconIndex];
+    const { id, terms, iconPack } = iconData;
+    return (
+        <span
+            key={id}
+            class={clsx(id, "tn-icon")}
+            title={t("note_icon.icon_tooltip", { name: terms?.[0] ?? id, iconPack })}
+            style={style as CSSProperties}
+        />
     );
 }
 
@@ -212,7 +232,7 @@ function useFilteredIcons(allIcons: IconWithName[] | undefined, search: string |
         if (processedSearch || filterByPrefix !== null) {
             icons = icons.filter((icon) => {
                 if (filterByPrefix) {
-                    if (!icon.id?.startsWith(`${filterByPrefix}-`)) {
+                    if (!icon.id?.startsWith(`${filterByPrefix} `)) {
                         return false;
                     }
                 }
