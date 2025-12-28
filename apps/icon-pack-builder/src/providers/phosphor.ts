@@ -10,16 +10,21 @@ export default function buildIcons(): IconPackData {
     const iconIndex = JSON.parse(readFileSync(join(baseDir, "selection.json"), "utf-8"));
     const icons: IconPackData["manifest"]["icons"] = {};
 
-    for (const icon of iconIndex.icons) {
-        let name = icon.properties.name;
+    function removeSuffix(name: string) {
         if (name.endsWith(`-${packName}`)) {
             name = name.split("-").slice(0, -1).join("-");
         }
+        return name;
+    }
+
+    for (const icon of iconIndex.icons) {
+        const terms = icon.properties.name.split(", ").map((t: string) => removeSuffix(t));
+        const name = removeSuffix(icon.icon.tags[0]);
 
         const id = `ph-${name}`;
         icons[id] = {
             glyph: `${String.fromCharCode(icon.properties.code)}`,
-            terms: [ name ]
+            terms
         };
     }
 
