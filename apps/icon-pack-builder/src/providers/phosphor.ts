@@ -28,10 +28,12 @@ export default function buildIcons(packName: "regular" | "fill"): IconPackData {
     }
 
     const fontFile = readdirSync(baseDir).find(f => f.endsWith(".woff2"));
+    const prefix = packName === "regular" ? "ph" : `ph-${packName}`;
 
     return {
         name: `Phosphor Icons (${packName.charAt(0).toUpperCase() + packName.slice(1)})`,
-        prefix: packName === "regular" ? "ph" : `ph-${packName}`,
+        prefix,
+        icon: `${prefix} ph-phosphor-logo`,
         manifest: {
             icons
         },

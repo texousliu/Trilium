@@ -33,6 +33,7 @@ async function main() {
             content: JSON.stringify(iconPack.manifest)
         });
         note.setLabel("iconPack", iconPack.prefix);
+        note.setLabel("iconClass", iconPack.icon);
 
         // Add the attachment.
         note.saveAttachment({
