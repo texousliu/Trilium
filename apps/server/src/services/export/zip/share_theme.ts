@@ -76,6 +76,16 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
 
             content = renderNoteForExport(note, branch, basePath, noteMeta.notePath.slice(0, -1), this.iconPacks);
             if (typeof content === "string") {
+                // Rewrite attachment download links
+                content = content.replace(/href="api\/attachments\/([a-zA-Z0-9_]+)\/download"/g, (match, attachmentId) => {
+                    const attachmentMeta = (noteMeta.attachments || []).find((attMeta) => attMeta.attachmentId === attachmentId);
+                    if (attachmentMeta?.dataFileName) {
+                        return `href="${attachmentMeta.dataFileName}"`;
+                    }
+                    return match;
+                });
+
+                // Rewrite note links
                 content = content.replace(/href="[^"]*\.\/([a-zA-Z0-9_\/]{12})[^"]*"/g, (match, id) => {
                     if (match.includes("/assets/")) return match;
                     if (id === this.rootMeta?.noteId) {
