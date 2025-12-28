@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { readFileSync } from "node:fs";
 
-function processIconPack(packName, prefix) {
+function processIconPack(packName) {
     const path = join(packName);
     const selectionMeta = JSON.parse(readFileSync(join(path, "selection.json"), "utf-8"));
     const icons = {};
@@ -20,9 +20,8 @@ function processIconPack(packName, prefix) {
     }
 
     return JSON.stringify({
-        prefix,
         icons
     }, null, 2);
 }
 
-console.log(processIconPack("light", "ph-light"));
+console.log(processIconPack("light"));
