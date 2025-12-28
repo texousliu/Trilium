@@ -1,3 +1,5 @@
+@import "./boxicons-compat.css";
+
 @font-face {
     font-family: Montserrat;
     src: url(../fonts/Montserrat-Light.ttf);
