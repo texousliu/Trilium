@@ -130,6 +130,11 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             return null;
         }
 
+        // Don't add .html if the file already has .zip extension (for attachments).
+        if (existingExtension === ".zip") {
+            return null;
+        }
+
         return "html";
     }
 
