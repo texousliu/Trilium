@@ -413,7 +413,13 @@ function handleAttachmentLink(linkEl: HTMLElement, href: string, getNote: GetNot
 function cleanUpReferenceLinks(linkEl: HTMLElement, getNote: GetNoteFunction) {
     // Note: this method is basically a reimplementation of getReferenceLinkTitleSync from the link service of the client.
     const href = linkEl.getAttribute("href") ?? "";
-    if (linkEl.classList.contains("attachment-link")) return;
+
+    // Handle attachment reference links
+    if (linkEl.classList.contains("attachment-link")) {
+        const title = linkEl.innerText;
+        linkEl.innerHTML = `<span><span class="tn-icon bx bx-download"></span>${utils.escapeHtml(title)}</span>`;
+        return;
+    }
 
     const noteId = href.split("/").at(-1);
     const note = noteId ? getNote(noteId) : undefined;
