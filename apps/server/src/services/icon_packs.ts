@@ -157,7 +157,7 @@ export function generateCss({ manifest, fontMime, builtin, fontAttachmentId, pre
     try {
         const iconDeclarations: string[] = [];
         for (const [ key, mapping ] of Object.entries(manifest.icons)) {
-            iconDeclarations.push(`.${prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
+            iconDeclarations.push(`.${prefix}.${key}::before { content: "${mapping.glyph}"; }`);
         }
 
         const fontFamily = builtin ? fontAttachmentId : `trilium-icon-pack-${prefix}`;

@@ -7,14 +7,14 @@ export function extractClassNamesFromCss(css: string, prefix: string): IconPackM
 
     while ((match = regex.exec(css)) !== null) {
         let name = match[1];
-        if (prefix && name.startsWith(prefix + "-")) {
+        if (prefix && name.startsWith(`${prefix}-`)) {
             name = name.substring(prefix.length + 1);
         }
 
         icons[match[1]] = {
-            glyph: String.fromCharCode(parseInt(match[2], 16)),
+            glyph: String.fromCodePoint(parseInt(match[2], 16)),
             terms: [ name ]
-        }
+        };
     }
     return icons;
 }
