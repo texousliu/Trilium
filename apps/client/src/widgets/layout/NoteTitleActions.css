@@ -8,13 +8,14 @@ body.experimental-feature-new-layout {
         max-width: var(--max-content-width);
         flex-direction: column;
         gap: 0.5em;
+        padding-inline: 12px 8px;
 
         body.prefers-centered-content & {
             margin-inline: auto;
         }
 
         &:not(:empty) {
-            padding: 0.75em 15px;
+            padding-block: 0.75em;
         }
 
         .edited-notes {
@@ -44,6 +45,11 @@ body.experimental-feature-new-layout {
                 margin: 0;
                 padding: 0;
             }
+        }
+
+        > .collapsible,
+        > .note-type-switcher {
+            margin-inline: 12px;
         }
     }
 }
