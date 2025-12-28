@@ -1130,11 +1130,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     border-color: var(--main-border-color) !important;
 }
 
-.bx-empty {
-    width: 1em;
-    display: inline-block;
-}
-
 .modal-header {
     padding: 0.5rem 1rem 0.5rem 1rem !important; /* make modal header padding slightly smaller */
 }
