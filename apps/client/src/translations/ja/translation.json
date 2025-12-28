@@ -152,7 +152,6 @@
   },
   "note_icon": {
     "change_note_icon": "ノートアイコンの変更",
-    "category": "カテゴリー:",
     "search": "検索:",
     "reset-default": "アイコンをデフォルトに戻す"
   },
@@ -161,7 +160,7 @@
     "editable": "編集可能",
     "basic_properties": "基本プロパティ",
     "language": "言語",
-    "configure_code_notes": "コードノートを設定しています..."
+    "configure_code_notes": "コードノートを設定..."
   },
   "i18n": {
     "title": "ローカライゼーション",
