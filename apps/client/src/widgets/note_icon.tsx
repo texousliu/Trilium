@@ -156,7 +156,7 @@ function IconItemCell({ rowIndex, columnIndex, style, filteredIcons }: CellCompo
 }>): React.JSX.Element {
     const iconIndex = rowIndex * 12 + columnIndex;
     const iconData = filteredIcons[iconIndex] as IconWithName | undefined;
-    if (!iconData) return <span style={style as CSSProperties} />;
+    if (!iconData) return <></>;
 
     const { id, terms, iconPack } = iconData;
     return (
