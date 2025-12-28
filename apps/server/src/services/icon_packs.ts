@@ -2,7 +2,7 @@ import { IconRegistry } from "@triliumnext/commons";
 
 import type BAttachment from "../becca/entities/battachment";
 import type BNote from "../becca/entities/bnote";
-import boxiconsManifest from "./icon_pack_boxicons-v2.json";
+import boxiconsManifest from "./icon_pack_boxicons-v2.json" with { type: "json" };
 import log from "./log";
 import search from "./search/services/search";
 import { safeExtractMessageAndStackFromError } from "./utils";
