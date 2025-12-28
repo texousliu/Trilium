@@ -34,7 +34,8 @@ describe("Processing icon packs", () => {
             title: "Boxicons v2",
             type: "text",
             content: JSON.stringify(manifest),
-            attachments: [ defaultAttachment ]
+            attachments: [ defaultAttachment ],
+            "#iconPack": "bx"
         }));
         expect(iconPack).toBeTruthy();
         expect(iconPack?.manifest).toMatchObject(manifest);
@@ -131,7 +132,8 @@ describe("CSS generation", () => {
                     title: "Font",
                     mime: "font/woff2"
                 }
-            ]
+            ],
+            "#iconPack": "bx"
         }));
         expect(processedResult).toBeTruthy();
         const css = generateCss(processedResult!, `/api/attachments/${processedResult?.fontAttachmentId}/download`);
@@ -154,8 +156,10 @@ describe("Icon registery", () => {
             title: "Boxicons v2",
             type: "text",
             content: JSON.stringify(manifest),
-            attachments: [ defaultAttachment ]
+            attachments: [ defaultAttachment ],
+            "#iconPack": "bx"
         }));
+        expect(iconPack).toBeTruthy();
         const registry = generateIconRegistry([ iconPack! ]);
         expect(registry.sources).toHaveLength(1);
         expect(registry.sources[0]).toMatchObject({
@@ -185,8 +189,10 @@ describe("Icon registery", () => {
                     "bxs-party": "\uec92"
                 }
             }),
-            attachments: [ defaultAttachment ]
+            attachments: [ defaultAttachment ],
+            "#iconPack": "bx"
         }));
+        expect(iconPack).toBeTruthy();
         const registry = generateIconRegistry([ iconPack! ]);
         expect(registry.sources).toHaveLength(0);
     });
