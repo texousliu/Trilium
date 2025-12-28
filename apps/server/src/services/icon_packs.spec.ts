@@ -2,7 +2,6 @@ import { buildNote } from "../test/becca_easy_mocking";
 import { determineBestFontAttachment, generateCss, generateIconRegistry, IconPackManifest, processIconPack } from "./icon_packs";
 
 const manifest: IconPackManifest = {
-    prefix: "bx",
     icons: {
         "bx-ball": {
             glyph: "\ue9c2",
@@ -111,7 +110,6 @@ describe("Mapping attachments", () => {
 describe("CSS generation", () => {
     it("generates the CSS", () => {
         const manifest: IconPackManifest = {
-            prefix: "bx",
             icons: {
                 "bx-ball": {
                     "glyph": "\ue9c2",
@@ -136,7 +134,7 @@ describe("CSS generation", () => {
             ]
         }));
         expect(processedResult).toBeTruthy();
-        const css = generateCss(processedResult!);
+        const css = generateCss(processedResult!, `/api/attachments/${processedResult?.fontAttachmentId}/download`);
 
         console.log(css);
         expect(css).toContain("@font-face");
