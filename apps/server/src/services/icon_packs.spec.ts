@@ -138,7 +138,6 @@ describe("CSS generation", () => {
         expect(processedResult).toBeTruthy();
         const css = generateCss(processedResult!, `/api/attachments/${processedResult?.fontAttachmentId}/download`);
 
-        console.log(css);
         expect(css).toContain("@font-face");
         expect(css).toContain("font-family: 'trilium-icon-pack-bx'");
         expect(css).toContain(`src: url('/api/attachments/${processedResult?.fontAttachmentId}/download') format('woff2');`);

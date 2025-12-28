@@ -39,7 +39,7 @@ async function register(app: express.Application) {
     } else {
         const publicDir = path.join(resourceDir, "public");
         if (!existsSync(publicDir)) {
-            throw new Error(`Public directory is missing at: ${  path.resolve(publicDir)}`);
+            throw new Error(`Public directory is missing at: ${path.resolve(publicDir)}`);
         }
 
         app.use(`/${assetUrlFragment}/src`, persistentCacheStatic(path.join(publicDir, "src")));
