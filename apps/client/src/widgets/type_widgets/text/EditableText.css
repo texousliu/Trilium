@@ -50,6 +50,6 @@ body.heading-style-underline .note-detail-editable-text h6 { border-bottom: 1px 
     height: 100%;
 }
 
-:root .ck.ck-editor__editable_inline {
+.note-detail-editable-text .ck.ck-editor__editable_inline {
     padding: 0;
 }
