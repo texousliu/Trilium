@@ -119,6 +119,12 @@ export function processIconPack(iconPackNote: BNote): ProcessedIconPack | undefi
         return;
     }
 
+    // Ensure prefix is alphanumeric only, dashes and underscores.
+    if (!/^[a-zA-Z0-9-_]+$/.test(prefix)) {
+        log.error(`Icon pack has invalid 'iconPack' prefix (only alphanumeric characters, dashes and underscores are allowed): ${iconPackNote.title} (${iconPackNote.noteId})`);
+        return;
+    }
+
     return {
         prefix,
         manifest,

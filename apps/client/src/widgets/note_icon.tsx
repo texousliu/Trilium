@@ -73,10 +73,10 @@ function NoteIconList({ note, dropdownRef }: {
         async function loadIcons() {
             // Filter by text and/or category.
             let icons: IconData["icons"] = [
-                ...glob.iconRegistry.sources.map(s => s.icons.map((i) => ({
+                ...glob.iconRegistry.sources.flatMap(s => s.icons.map((i) => ({
                     ...i,
                     iconPack: s.name,
-                }))).flat()
+                })))
             ];
             const processedSearch = search?.trim()?.toLowerCase();
             if (processedSearch || filterByPrefix !== null) {

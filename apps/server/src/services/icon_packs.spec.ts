@@ -82,6 +82,21 @@ describe("Mapping attachments", () => {
         expect(attachment?.mime).toStrictEqual("font/ttf");
     });
 
+    it("ignores when no right attachment is found", () => {
+        const iconPackNote = buildNote({
+            type: "text",
+            attachments: [
+                {
+                    role: "file",
+                    title: "Font",
+                    mime: "font/otf"
+                }
+            ]
+        });
+        const attachment = determineBestFontAttachment(iconPackNote);
+        expect(attachment).toBeNull();
+    });
+
     it("prefers woff2", () => {
         const iconPackNote = buildNote({
             type: "text",
@@ -149,7 +164,7 @@ describe("CSS generation", () => {
     });
 });
 
-describe("Icon registery", () => {
+describe("Icon registry", () => {
     it("generates the registry", () => {
         const iconPack = processIconPack(buildNote({
             title: "Boxicons v2",
@@ -177,7 +192,7 @@ describe("Icon registery", () => {
         });
     });
 
-    it("ignores incorrect manifest", () => {
+    it("ignores manifest with wrong icon structure", () => {
         const iconPack = processIconPack(buildNote({
             type: "text",
             content: JSON.stringify({
@@ -194,5 +209,15 @@ describe("Icon registery", () => {
         expect(iconPack).toBeTruthy();
         const registry = generateIconRegistry([ iconPack! ]);
         expect(registry.sources).toHaveLength(0);
+    });
+
+    it("ignores manifest with corrupt JSON", () => {
+        const iconPack = processIconPack(buildNote({
+            type: "text",
+            content: "{ this is not valid JSON }",
+            attachments: [ defaultAttachment ],
+            "#iconPack": "bx"
+        }));
+        expect(iconPack).toBeFalsy();
     });
 });
