@@ -1,5 +1,5 @@
 import ejs from "ejs";
-import fs, { readdirSync } from "fs";
+import fs, { readdirSync, readFileSync } from "fs";
 import { convert as convertToText } from "html-to-text";
 import { t } from "i18next";
 import { join } from "path";
@@ -7,7 +7,7 @@ import { join } from "path";
 import becca from "../../../becca/becca";
 import type BBranch from "../../../becca/entities/bbranch.js";
 import type BNote from "../../../becca/entities/bnote.js";
-import { getShareThemeAssetDir } from "../../../routes/assets";
+import { getClientDir, getShareThemeAssetDir } from "../../../routes/assets";
 import { getDefaultTemplatePath, readTemplate, renderNoteForExport } from "../../../share/content_renderer";
 import { getIconPacks, MIME_TO_EXTENSION_MAPPINGS, ProcessedIconPack } from "../../icon_packs";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
@@ -144,13 +144,16 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
 
         // Inject the custom fonts.
         for (const iconPack of this.iconPacks) {
-            const attachment = becca.getAttachment(iconPack.fontAttachmentId);
-            if (!attachment) {
-                continue;
+            const extension = MIME_TO_EXTENSION_MAPPINGS[iconPack.fontMime];
+            let fontData: Buffer | undefined;
+            if (iconPack.builtin) {
+                fontData = readFileSync(join(getClientDir(), "fonts", `${iconPack.fontAttachmentId}.${extension}`));
+            } else {
+                fontData = becca.getAttachment(iconPack.fontAttachmentId)?.getContent();
             }
 
-            const fontData = attachment.getContent();
-            const fontFileName = `assets/icon-pack-${iconPack.manifest.prefix.toLowerCase()}.${MIME_TO_EXTENSION_MAPPINGS[attachment.mime]}`;
+            if (!fontData) continue;
+            const fontFileName = `assets/icon-pack-${iconPack.manifest.prefix.toLowerCase()}.${extension}`;
             this.archive.append(fontData, { name: fontFileName });
         }
     }

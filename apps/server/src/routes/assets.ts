@@ -35,10 +35,6 @@ async function register(app: express.Application) {
             req.url = `/${assetUrlFragment}${req.url}`;
             vite.middlewares(req, res, next);
         });
-        app.use(`/share/assets/fonts/`, (req, res, next) => {
-            req.url = `/${assetUrlFragment}/src/fonts${req.url}`;
-            vite.middlewares(req, res, next);
-        });
         app.use(`/node_modules/@excalidraw/excalidraw/dist/prod`, persistentCacheStatic(path.join(srcRoot, "../../node_modules/@excalidraw/excalidraw/dist/prod")));
     } else {
         const publicDir = path.join(resourceDir, "public");
@@ -49,10 +45,10 @@ async function register(app: express.Application) {
         app.use(`/${assetUrlFragment}/src`, persistentCacheStatic(path.join(publicDir, "src")));
         app.use(`/${assetUrlFragment}/stylesheets`, persistentCacheStatic(path.join(publicDir, "stylesheets")));
         app.use(`/${assetUrlFragment}/fonts`, persistentCacheStatic(path.join(publicDir, "fonts")));
-        app.use(`/share/assets/fonts/`, express.static(path.join(publicDir, "fonts")));
         app.use(`/${assetUrlFragment}/translations/`, persistentCacheStatic(path.join(publicDir, "translations")));
         app.use(`/node_modules/`, persistentCacheStatic(path.join(publicDir, "node_modules")));
     }
+    app.use(`/share/assets/fonts/`, express.static(path.join(getClientDir(), "fonts")));
     app.use(`/share/assets/`, express.static(getShareThemeAssetDir()));
     app.use(`/${assetUrlFragment}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
     app.use(`/${assetUrlFragment}/doc_notes`, persistentCacheStatic(path.join(resourceDir, "assets", "doc_notes")));
@@ -68,6 +64,15 @@ export function getShareThemeAssetDir() {
     }
     const resourceDir = getResourceDir();
     return path.join(resourceDir, "share-theme/assets");
+}
+
+export function getClientDir() {
+    if (process.env.NODE_ENV === "development") {
+        const srcRoot = path.join(__dirname, "..", "..");
+        return path.join(srcRoot, "../client/src");
+    }
+    const resourceDir = getResourceDir();
+    return path.join(resourceDir, "public");
 }
 
 export default {
