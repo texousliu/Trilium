@@ -155,6 +155,9 @@ In order for an icon pack to be recognized, the prefix must be specified in the 
 
 For our example with Phosphor Icons, we can use the `ph` prefix since it also matches the prefix set in the original CSS. So in this case it would be `#iconPack=ph`.
 
+> [!IMPORTANT]
+> The prefix must consist of only alphanumeric characters, hyphens and underscore. If the prefix doesn't match these constraints, the icon pack will be ignored and an error will be logged in <a class="reference-link" href="../Troubleshooting/Error%20logs/Backend%20(server)%20logs.md">Backend (server) logs</a>.
+
 ### Final steps
 
 *   [Refresh the client](../Troubleshooting/Refreshing%20the%20application.md)
@@ -172,3 +175,4 @@ If the icon pack doesn't show up, look through the <a class="reference-link" hr
 
 *   One example is if the font could not be retrieved: `ERROR: Icon pack is missing WOFF/WOFF2/TTF attachment: Boxicons v3 400 (dup) (XRzqDQ67fHEK)`.
 *   Make sure the prefix is unique and not already taken by some other icon pack. When there are two icon packs with the same prefix, only one is used. The server logs will indicate if this situation occurs.
+*   Make sure the prefix consists only of alphanumeric characters, hyphens and underscore.
