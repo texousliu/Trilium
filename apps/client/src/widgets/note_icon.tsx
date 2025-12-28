@@ -126,7 +126,12 @@ function NoteIconList({ note, dropdownRef }: {
                     inputRef={searchBoxRef}
                     type="text"
                     name="icon-search"
-                    placeholder={t("note_icon.search_placeholder")}
+                    placeholder={ filterByPrefix
+                        ? t("note_icon.search_placeholder_filtered", {
+                            number: iconData?.icons.length ?? 0,
+                            name: glob.iconRegistry.sources.find(s => s.prefix === filterByPrefix)?.name ?? ""
+                        })
+                        : t("note_icon.search_placeholder", { number: iconData?.icons.length ?? 0, count: glob.iconRegistry.sources.length })}
                     currentValue={search} onChange={setSearch}
                     autoFocus
                 />
