@@ -2,10 +2,10 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import type { IconPackData } from "../provider";
-import { extractClassNamesFromCss } from "../utils";
+import { extractClassNamesFromCss, getModulePath } from "../utils";
 
 export default function buildIcons(): IconPackData {
-    const baseDir = join(__dirname, "../../../../node_modules/@mdi/font");
+    const baseDir = getModulePath("@mdi/font");
 
     const cssFilePath = join(baseDir, "css", "materialdesignicons.min.css");
     const cssFileContent = readFileSync(cssFilePath, "utf-8");

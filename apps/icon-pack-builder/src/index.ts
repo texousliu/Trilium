@@ -4,6 +4,7 @@ import cls from "@triliumnext/server/src/services/cls.js";
 
 import type { IconPackData } from "./provider";
 import mdi from "./providers/mdi";
+import phosphor from "./providers/phosphor";
 
 process.env.TRILIUM_INTEGRATION_TEST = "memory-no-store";
 process.env.TRILIUM_RESOURCE_DIR = "../server/src";
@@ -55,7 +56,8 @@ async function main() {
     }
 
     const builtIconPacks = [
-        mdi()
+        // mdi()
+        phosphor()
     ];
     await Promise.all(builtIconPacks.map(buildIconPack));
 }

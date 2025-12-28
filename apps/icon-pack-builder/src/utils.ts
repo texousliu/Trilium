@@ -1,3 +1,5 @@
+import { join } from "path";
+
 import { IconPackManifest } from "../../server/src/services/icon_packs";
 
 export function extractClassNamesFromCss(css: string, prefix: string): IconPackManifest["icons"] {
@@ -17,4 +19,8 @@ export function extractClassNamesFromCss(css: string, prefix: string): IconPackM
         };
     }
     return icons;
+}
+
+export function getModulePath(moduleName: string): string {
+    return join(__dirname, "../../../node_modules", moduleName);
 }

@@ -72,6 +72,7 @@ function NoteIconList({ note, dropdownRef }: {
 
     useEffect(() => {
         async function loadIcons() {
+            console.time("Load icons for note icon picker");
             // Filter by text and/or category.
             let icons: IconData["icons"] = [
                 ...glob.iconRegistry.sources.flatMap(s => s.icons.map((i) => ({
@@ -113,6 +114,7 @@ function NoteIconList({ note, dropdownRef }: {
                 iconToCount,
                 icons
             });
+            console.timeEnd("Load icons for note icon picker");
         }
 
         loadIcons();
