@@ -1,11 +1,10 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { IconPackData } from "../provider";
 import { getModulePath } from "../utils";
 
-export default function buildIcons(): IconPackData {
-    const packName = "regular";
+export default function buildIcons(packName: "regular" | "fill"): IconPackData {
     const baseDir = join(getModulePath("@phosphor-icons/web"), "src", packName);
     const iconIndex = JSON.parse(readFileSync(join(baseDir, "selection.json"), "utf-8"));
     const icons: IconPackData["manifest"]["icons"] = {};
@@ -28,16 +27,18 @@ export default function buildIcons(): IconPackData {
         };
     }
 
+    const fontFile = readdirSync(baseDir).find(f => f.endsWith(".woff2"));
+
     return {
-        name: "Phosphor Icons",
-        prefix: "ph",
+        name: `Phosphor Icons (${packName.charAt(0).toUpperCase() + packName.slice(1)})`,
+        prefix: packName === "regular" ? "ph" : `ph-${packName}`,
         manifest: {
             icons
         },
         fontFile: {
-            name: "phosphor-webfont.woff2",
+            name: fontFile!,
             mime: "font/woff2",
-            content: readFileSync(join(baseDir, "Phosphor.woff2"))
+            content: readFileSync(join(baseDir, fontFile!))
         }
     };
 }

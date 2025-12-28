@@ -56,8 +56,9 @@ async function main() {
     }
 
     const builtIconPacks = [
-        // mdi()
-        phosphor()
+        mdi(),
+        phosphor("regular"),
+        phosphor("fill")
     ];
     await Promise.all(builtIconPacks.map(buildIconPack));
 }
