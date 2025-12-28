@@ -159,8 +159,8 @@ describe("CSS generation", () => {
 
         expect(css).toContain("@font-face");
         expect(css).toContain("font-family: 'trilium-icon-pack-bx' !important;");
-        expect(css).toContain(".bx.bx-ball::before { content: '\\e9c2'; }");
-        expect(css).toContain(".bx.bxs-party::before { content: '\\ec92'; }");
+        expect(css).toContain(`.bx.bx-ball::before { content: "\ue9c2"; }`);
+        expect(css).toContain(`.bx.bxs-party::before { content: "\uec92"; }`);
     });
 });
 
