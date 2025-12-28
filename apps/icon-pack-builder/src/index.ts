@@ -1,4 +1,5 @@
-import { createWriteStream } from "node:fs";
+import { createWriteStream, mkdirSync } from "node:fs";
+import { join } from "node:path";
 
 import cls from "@triliumnext/server/src/services/cls.js";
 
@@ -12,6 +13,9 @@ process.env.TRILIUM_RESOURCE_DIR = "../server/src";
 process.env.NODE_ENV = "development";
 
 async function main() {
+    const outputDir = join(__dirname, "output");
+    mkdirSync(outputDir, { recursive: true });
+
     const i18n = await import("@triliumnext/server/src/services/i18n.js");
     await i18n.initializeTranslations();
 
@@ -45,7 +49,7 @@ async function main() {
         });
 
         // Export to zip.
-        const zipFilePath = `icon-pack-${iconPack.prefix}.zip`;
+        const zipFilePath = join(outputDir, `${iconPack.name}.zip`);
         const fileOutputStream = createWriteStream(zipFilePath);
         const { exportToZip } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
         const taskContext = new (await import("@triliumnext/server/src/services/task_context.js")).default(
