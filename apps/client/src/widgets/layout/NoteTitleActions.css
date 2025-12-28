@@ -10,7 +10,7 @@ body.experimental-feature-new-layout {
         gap: 0.5em;
         padding-inline: 12px 8px;
 
-        body.prefers-centered-content & {
+        body.prefers-centered-content .note-split:not(.full-content-width) & {
             margin-inline: auto;
         }
 
