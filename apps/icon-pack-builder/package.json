@@ -6,5 +6,9 @@
   "scripts": {
     "start": "tsx ."
   },
-  "keywords": []
+  "keywords": [],
+  "devDependencies": {
+    "@mdi/font": "7.4.47",
+    "@phosphor-icons/web": "2.1.2"
+  }
 }

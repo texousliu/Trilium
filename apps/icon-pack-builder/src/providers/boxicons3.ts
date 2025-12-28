@@ -1,13 +1,10 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
 import { join } from "path";
 
-const inputDir = process.argv[2];
-if (!inputDir) {
-    console.error('Please provide the input directory as the first argument.');
-    process.exit(1);
-}
+import { IconPackData } from "../provider";
 
-for (const pack of [ "basic", "brands" ]) {
+export default function buildIcons(pack: "basic" | "brands"): IconPackData {
+    const inputDir = join(__dirname, "../../boxicons-free/fonts");
     const fileName = pack === "basic" ? "boxicons" : `boxicons-${pack}`;
     const jsonPath = `${inputDir}/${pack}/${fileName}.json`;
     const inputData = JSON.parse(readFileSync(jsonPath, "utf-8"));
@@ -29,9 +26,17 @@ for (const pack of [ "basic", "brands" ]) {
         };
     }
 
-    const manifest = {
-        icons
+    return {
+        name: pack === "basic" ? "Boxicons 3 (Basic)" : "Boxicons 3 (Brands)",
+        prefix: pack === "basic" ? "bx3" : "bxl3",
+        icon: pack === "basic" ? "bx3 bx-cube" : "bxl3 bxl-boxicons",
+        fontFile: {
+            name: `${fileName}.woff2`,
+            mime: "font/woff2",
+            content: readFileSync(join(inputDir, pack, `${fileName}.woff2`))
+        },
+        manifest: {
+            icons
+        }
     };
-    const outputPath = join(`${inputDir}/${pack}/generated-manifest.json`);
-    writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
 }

@@ -3,6 +3,7 @@ import { createWriteStream } from "node:fs";
 import cls from "@triliumnext/server/src/services/cls.js";
 
 import type { IconPackData } from "./provider";
+import boxicons3 from "./providers/boxicons3";
 import mdi from "./providers/mdi";
 import phosphor from "./providers/phosphor";
 
@@ -57,6 +58,8 @@ async function main() {
     }
 
     const builtIconPacks = [
+        boxicons3("basic"),
+        boxicons3("brands"),
         mdi(),
         phosphor("regular"),
         phosphor("fill")
