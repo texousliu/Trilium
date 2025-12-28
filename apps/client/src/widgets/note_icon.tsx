@@ -2,6 +2,7 @@ import "./note_icon.css";
 
 import { IconRegistry } from "@triliumnext/commons";
 import { Dropdown as BootstrapDropdown } from "bootstrap";
+import clsx from "clsx";
 import { t } from "i18next";
 import { RefObject } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
@@ -164,9 +165,9 @@ function NoteIconList({ note, dropdownRef }: {
                 onClick={(e) => {
                     // Make sure we are not clicking on something else than a button.
                     const clickedTarget = e.target as HTMLElement;
-                    if (clickedTarget.tagName !== "SPAN" || clickedTarget.classList.length !== 2) return;
+                    if (!clickedTarget.classList.contains("tn-icon")) return;
 
-                    const iconClass = Array.from(clickedTarget.classList.values()).join(" ");
+                    const iconClass = Array.from(clickedTarget.classList.values()).filter(c => c !== "tn-icon").join(" ");
                     if (note) {
                         const attributeToSet = note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass";
                         attributes.setLabel(note.noteId, attributeToSet, iconClass);
@@ -178,7 +179,7 @@ function NoteIconList({ note, dropdownRef }: {
                     (iconData?.icons ?? []).map(({ id, terms, iconPack }) => (
                         <span
                             key={id}
-                            class={id}
+                            class={clsx(id, "tn-icon")}
                             title={t("note_icon.icon_tooltip", { name: terms?.[0] ?? id, iconPack })}
                         />
                     ))

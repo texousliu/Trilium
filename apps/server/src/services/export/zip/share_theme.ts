@@ -10,6 +10,7 @@ import type BNote from "../../../becca/entities/bnote.js";
 import { getClientDir, getShareThemeAssetDir } from "../../../routes/assets";
 import { getDefaultTemplatePath, readTemplate, renderNoteForExport } from "../../../share/content_renderer";
 import { getIconPacks, MIME_TO_EXTENSION_MAPPINGS, ProcessedIconPack } from "../../icon_packs";
+import log from "../../log";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
 import { RESOURCE_DIR } from "../../resource_dir";
 import { getResourceDir, isDev } from "../../utils";
@@ -152,7 +153,10 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
                 fontData = becca.getAttachment(iconPack.fontAttachmentId)?.getContent();
             }
 
-            if (!fontData) continue;
+            if (!fontData) {
+                log.error(`Failed to find font data for icon pack ${iconPack.prefix} with attachment ID ${iconPack.fontAttachmentId}`);
+                continue;
+            };
             const fontFileName = `assets/icon-pack-${iconPack.prefix.toLowerCase()}.${extension}`;
             this.archive.append(fontData, { name: fontFileName });
         }
