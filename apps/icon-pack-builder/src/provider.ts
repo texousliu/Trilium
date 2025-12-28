@@ -4,4 +4,9 @@ export interface IconPackData {
     name: string;
     prefix: string;
     manifest: IconPackManifest;
+    fontFile: {
+        name: string;
+        mime: string;
+        content: Buffer;
+    }
 }

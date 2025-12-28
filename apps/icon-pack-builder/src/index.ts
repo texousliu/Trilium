@@ -33,6 +33,14 @@ async function main() {
         });
         note.setLabel("iconPack", iconPack.prefix);
 
+        // Add the attachment.
+        note.saveAttachment({
+            role: "file",
+            title: iconPack.fontFile.name,
+            mime: iconPack.fontFile.mime,
+            content: iconPack.fontFile.content
+        });
+
         // Export to zip.
         const zipFilePath = `icon-pack-${iconPack.prefix}.zip`;
         const fileOutputStream = createWriteStream(zipFilePath);

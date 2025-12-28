@@ -1,7 +1,8 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import { extractClassNamesFromCss } from "../utils";
+
 import type { IconPackData } from "../provider";
+import { extractClassNamesFromCss } from "../utils";
 
 export default function buildIcons(): IconPackData {
     const baseDir = join(__dirname, "../../../../node_modules/@mdi/font");
@@ -15,5 +16,10 @@ export default function buildIcons(): IconPackData {
         manifest: {
             icons: extractClassNamesFromCss(cssFileContent, "mdi"),
         },
+        fontFile: {
+            name: "materialdesignicons-webfont.woff2",
+            mime: "font/woff2",
+            content: readFileSync(join(baseDir, "fonts", "materialdesignicons-webfont.woff2"))
+        }
     };
 }
