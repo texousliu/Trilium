@@ -528,6 +528,10 @@ class SNote extends AbstractShacaEntity {
     }
 
     getIcon(filterByPrefix: string[] = []) {
+        return `tn-icon ${this.#getIconInternal(filterByPrefix)}`;
+    }
+
+    #getIconInternal(filterByPrefix: string[] = []) {
         const iconClassLabels = this.getLabels("iconClass").filter(label => {
             if (filterByPrefix.length === 0) {
                 return true;

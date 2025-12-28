@@ -1796,7 +1796,7 @@ button.close:hover {
     display: none;
 }
 
-.reference-link .bx {
+.reference-link .tn-icon {
     position: relative;
     top: 1px;
     margin-inline-end: 3px;
@@ -2415,7 +2415,7 @@ footer.webview-footer button {
     gap: 5px;
 }
 
-.right-pane-tab .tab-title .bx {
+.right-pane-tab .tab-title .tn-icon {
     font-size: 1.1em;
 }
 
@@ -2543,16 +2543,9 @@ footer.webview-footer button {
     inset-inline-end: 10px;
 }
 
-.content-floating-buttons button.bx {
+.content-floating-buttons button.tn-icon {
     font-size: 130%;
     padding: 1px 10px 1px 10px;
-}
-
-/* Customized icons */
-
-.bx-tn-toc::before {
-    content: "\ec24";
-    transform: rotate(180deg);
 }
 
 /* CK Editor */

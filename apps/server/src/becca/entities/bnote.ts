@@ -1697,8 +1697,12 @@ class BNote extends AbstractBeccaEntity<BNote> {
         return pojo;
     }
 
-    // TODO: Deduplicate with fnote
     getIcon() {
+        return `tn-icon ${this.#getIconInternal()}`;
+    }
+
+    // TODO: Deduplicate with fnote
+    #getIconInternal() {
         const iconClassLabels = this.getLabels("iconClass");
 
         if (iconClassLabels && iconClassLabels.length > 0) {

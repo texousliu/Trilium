@@ -497,7 +497,7 @@ div.bookmark-folder-widget .note-link:hover a {
 }
 
 /* The item's icon */
-div.bookmark-folder-widget .note-link .bx {
+div.bookmark-folder-widget .note-link .tn-icon {
     color: var(--menu-item-icon-color);
     font-size: 1.2em;
 }
