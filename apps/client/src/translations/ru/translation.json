@@ -1010,7 +1010,6 @@
     "backlink_many": "{{count}} обратных ссылок"
   },
   "note_icon": {
-    "category": "Категория:",
     "search": "Поиск:",
     "change_note_icon": "Изменить иконку заметки",
     "reset-default": "Сбросить к значку по умолчанию"

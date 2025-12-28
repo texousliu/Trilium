@@ -764,7 +764,6 @@
   },
   "note_icon": {
     "change_note_icon": "更改笔记图标",
-    "category": "类别:",
     "search": "搜索:",
     "reset-default": "重置为默认图标"
   },

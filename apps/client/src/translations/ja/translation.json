@@ -152,7 +152,6 @@
   },
   "note_icon": {
     "change_note_icon": "ノートアイコンの変更",
-    "category": "カテゴリー:",
     "search": "検索:",
     "reset-default": "アイコンをデフォルトに戻す"
   },
