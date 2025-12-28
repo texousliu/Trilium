@@ -3,9 +3,9 @@ import "./note_icon.css";
 import { IconRegistry } from "@triliumnext/commons";
 import { Dropdown as BootstrapDropdown } from "bootstrap";
 import clsx from "clsx";
-import { t } from "i18next";
+import { t, use } from "i18next";
 import { RefObject } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
@@ -20,12 +20,9 @@ interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
 }
 
-interface IconData {
-    iconToCount: Record<string, number>;
-    icons: (IconRegistry["sources"][number]["icons"][number] & { iconPack: string })[];
-}
-
 let iconToCountCache!: Promise<IconToCountCache> | null;
+
+type IconWithName = (IconRegistry["sources"][number]["icons"][number] & { iconPack: string });
 
 export default function NoteIcon() {
     const { note, viewScope } = useNoteContext();
@@ -61,7 +58,6 @@ function NoteIconList({ note, dropdownRef }: {
     const searchBoxRef = useRef<HTMLInputElement>(null);
     const iconListRef = useRef<HTMLDivElement>(null);
     const [ search, setSearch ] = useState<string>();
-    const [ iconData, setIconData ] = useState<IconData>();
     const [ filterByPrefix, setFilterByPrefix ] = useState<string | null>(null);
     useStaticTooltip(iconListRef, {
         selector: "span",
@@ -70,55 +66,8 @@ function NoteIconList({ note, dropdownRef }: {
         title() { return this.getAttribute("title") || ""; },
     });
 
-    useEffect(() => {
-        async function loadIcons() {
-            console.time("Load icons for note icon picker");
-            // Filter by text and/or category.
-            let icons: IconData["icons"] = [
-                ...glob.iconRegistry.sources.flatMap(s => s.icons.map((i) => ({
-                    ...i,
-                    iconPack: s.name,
-                })))
-            ];
-            const processedSearch = search?.trim()?.toLowerCase();
-            if (processedSearch || filterByPrefix !== null) {
-                icons = icons.filter((icon) => {
-                    if (filterByPrefix) {
-                        if (!icon.id?.startsWith(`${filterByPrefix} `)) {
-                            return false;
-                        }
-                    }
-
-                    if (processedSearch) {
-                        if (!icon.terms?.some((t) => t.includes(processedSearch))) {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                });
-            }
-
-            // Sort by count.
-            const iconToCount = await getIconToCountMap();
-            if (iconToCount) {
-                icons.sort((a, b) => {
-                    const countA = iconToCount[a.id ?? ""] || 0;
-                    const countB = iconToCount[b.id ?? ""] || 0;
-
-                    return countB - countA;
-                });
-            }
-
-            setIconData({
-                iconToCount,
-                icons
-            });
-            console.timeEnd("Load icons for note icon picker");
-        }
-
-        loadIcons();
-    }, [ search, filterByPrefix ]);
+    const allIcons = useAllIcons();
+    const filteredIcons = useFilteredIcons(allIcons, search, filterByPrefix);
 
     return (
         <>
@@ -130,10 +79,10 @@ function NoteIconList({ note, dropdownRef }: {
                     name="icon-search"
                     placeholder={ filterByPrefix
                         ? t("note_icon.search_placeholder_filtered", {
-                            number: iconData?.icons.length ?? 0,
+                            number: filteredIcons.length ?? 0,
                             name: glob.iconRegistry.sources.find(s => s.prefix === filterByPrefix)?.name ?? ""
                         })
-                        : t("note_icon.search_placeholder", { number: iconData?.icons.length ?? 0, count: glob.iconRegistry.sources.length })}
+                        : t("note_icon.search_placeholder", { number: filteredIcons.length ?? 0, count: glob.iconRegistry.sources.length })}
                     currentValue={search} onChange={setSearch}
                     autoFocus
                 />
@@ -182,8 +131,8 @@ function NoteIconList({ note, dropdownRef }: {
                     dropdownRef?.current?.hide();
                 }}
             >
-                {iconData?.icons?.length ? (
-                    (iconData?.icons ?? []).map(({ id, terms, iconPack }) => (
+                {filteredIcons.length ? (
+                    (filteredIcons ?? []).map(({ id, terms, iconPack }) => (
                         <span
                             key={id}
                             class={clsx(id, "tn-icon")}
@@ -224,6 +173,62 @@ function IconFilterContent({ filterByPrefix, setFilterByPrefix }: {
             ))}
         </>
     );
+}
+
+function useAllIcons() {
+    const [ allIcons, setAllIcons ] = useState<IconWithName[]>();
+
+    useEffect(() => {
+        getIconToCountMap().then((iconsToCount) => {
+            const allIcons = [
+                ...glob.iconRegistry.sources.flatMap(s => s.icons.map((i) => ({
+                    ...i,
+                    iconPack: s.name,
+                })))
+            ];
+
+            // Sort by count.
+            if (iconsToCount) {
+                allIcons.sort((a, b) => {
+                    const countA = iconsToCount[a.id ?? ""] || 0;
+                    const countB = iconsToCount[b.id ?? ""] || 0;
+
+                    return countB - countA;
+                });
+            }
+
+            setAllIcons(allIcons);
+        });
+    }, []);
+
+    return allIcons;
+}
+
+function useFilteredIcons(allIcons: IconWithName[] | undefined, search: string | undefined, filterByPrefix: string | null) {
+    // Filter by text and/or icon pack.
+    const filteredIcons = useMemo(() => {
+        let icons: IconWithName[] = allIcons ?? [];
+        const processedSearch = search?.trim()?.toLowerCase();
+        if (processedSearch || filterByPrefix !== null) {
+            icons = icons.filter((icon) => {
+                if (filterByPrefix) {
+                    if (!icon.id?.startsWith(`${filterByPrefix}-`)) {
+                        return false;
+                    }
+                }
+
+                if (processedSearch) {
+                    if (!icon.terms?.some((t) => t.includes(processedSearch))) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
+        return icons;
+    }, [ allIcons, search, filterByPrefix ]);
+    return filteredIcons;
 }
 
 async function getIconToCountMap() {
