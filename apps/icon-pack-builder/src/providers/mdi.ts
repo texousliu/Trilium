@@ -12,8 +12,8 @@ export default function buildIcons(): IconPackData {
     return {
         name: "Material Design Icons",
         prefix: "mdi",
-        // manifest: {
-        //     icons: extractClassNamesFromCss(cssFileContent, "mdi"),
-        // },
+        manifest: {
+            icons: extractClassNamesFromCss(cssFileContent, "mdi"),
+        },
     };
 }

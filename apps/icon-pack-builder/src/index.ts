@@ -1,7 +1,9 @@
 import { createWriteStream } from "node:fs";
+
+import cls from "@triliumnext/server/src/services/cls.js";
+
 import type { IconPackData } from "./provider";
 import mdi from "./providers/mdi";
-import cls from "@triliumnext/server/src/services/cls.js";
 
 process.env.TRILIUM_INTEGRATION_TEST = "memory-no-store";
 process.env.TRILIUM_RESOURCE_DIR = "../server/src";
@@ -18,46 +20,35 @@ async function main() {
     const beccaLoader = await import("../../server/src/becca/becca_loader.js");
     await beccaLoader.beccaLoaded;
 
-    const becca = (await import("../../server/src/becca/becca.js")).default;
-    const rootNote = becca.getNote("root");
     const notesService = (await import("../../server/src/services/notes.js")).default;
+
+    async function buildIconPack(iconPack: IconPackData) {
+        // Create the icon pack note.
+        const { note, branch } = notesService.createNewNote({
+            parentNoteId: "root",
+            type: "file",
+            title: iconPack.name,
+            mime: "application/json",
+            content: JSON.stringify(iconPack.manifest)
+        });
+        note.setLabel("iconPack", iconPack.prefix);
+
+        // Export to zip.
+        const zipFilePath = `icon-pack-${iconPack.prefix}.zip`;
+        const fileOutputStream = createWriteStream(zipFilePath);
+        const { exportToZip } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
+        const taskContext = new (await import("@triliumnext/server/src/services/task_context.js")).default(
+            "no-progress-reporting", "export", null
+        );
+        await exportToZip(taskContext, branch, "html", fileOutputStream, false, { skipExtraFiles: true });
+        await new Promise<void>((resolve) => { fileOutputStream.on("finish", resolve); });
+
+        console.log(`Built icon pack: ${iconPack.name} (${zipFilePath})`);
+    }
 
     const builtIconPacks = [
         mdi()
     ];
-
-    function buildIconPack(iconPack: IconPackData) {
-        return new Promise(async (res, rej) => {
-            // Create the icon pack note.
-            const { note, branch } = notesService.createNewNote({
-                parentNoteId: "root",
-                type: "file",
-                title: iconPack.name,
-                mime: "application/json",
-                content: "Hello"
-            });
-            note.setLabel("iconPack", iconPack.prefix);
-
-            // Export to zip.
-            const zipFilePath = `icon-pack-${iconPack.prefix}.zip`;
-            const fileOutputStream = createWriteStream(zipFilePath);
-            const { exportToZip } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
-            const taskContext = new (await import("@triliumnext/server/src/services/task_context.js")).default(
-                "no-progress-reporting",
-                "export",
-                null
-            );
-            await exportToZip(taskContext, branch, "html", fileOutputStream, false, {
-                skipExtraFiles: true
-            });
-            await new Promise<void>((resolve) => {
-                fileOutputStream.on("finish", resolve);
-            });
-
-            console.log(`Built icon pack: ${iconPack.name} (${zipFilePath})`);
-        });
-    }
-
     await Promise.all(builtIconPacks.map(buildIconPack));
 }
 
