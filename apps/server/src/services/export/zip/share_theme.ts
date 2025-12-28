@@ -153,7 +153,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             }
 
             if (!fontData) continue;
-            const fontFileName = `assets/icon-pack-${iconPack.manifest.prefix.toLowerCase()}.${extension}`;
+            const fontFileName = `assets/icon-pack-${iconPack.prefix.toLowerCase()}.${extension}`;
             this.archive.append(fontData, { name: fontFileName });
         }
     }

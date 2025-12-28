@@ -89,10 +89,10 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         faviconUrl: `${basePath}favicon.ico`,
         ancestors,
         isStatic: true,
-        iconPackCss: iconPacks.map(p => generateCss(p, `${basePath}assets/icon-pack-${p.manifest.prefix.toLowerCase()}.${MIME_TO_EXTENSION_MAPPINGS[p.fontMime]}`))
+        iconPackCss: iconPacks.map(p => generateCss(p, `${basePath}assets/icon-pack-${p.prefix.toLowerCase()}.${MIME_TO_EXTENSION_MAPPINGS[p.fontMime]}`))
             .filter(Boolean)
             .join("\n\n"),
-        iconPackSupportedPrefixes: iconPacks.map(p => p.manifest.prefix)
+        iconPackSupportedPrefixes: iconPacks.map(p => p.prefix)
     });
 }
 
@@ -147,7 +147,7 @@ export function renderNoteContent(note: SNote) {
         ))
             .filter(Boolean)
             .join("\n\n"),
-        iconPackSupportedPrefixes: iconPacks.map(p => p.manifest.prefix)
+        iconPackSupportedPrefixes: iconPacks.map(p => p.prefix)
     });
 }
 

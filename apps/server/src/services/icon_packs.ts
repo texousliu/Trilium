@@ -26,7 +26,6 @@ export const MIME_TO_EXTENSION_MAPPINGS: Record<string, string> = {
 };
 
 export interface IconPackManifest {
-    prefix: string;
     icons: Record<string, {
         glyph: string,
         terms: string[];
@@ -34,6 +33,7 @@ export interface IconPackManifest {
 }
 
 export interface ProcessedIconPack {
+    prefix: string;
     manifest: IconPackManifest;
     manifestNoteId: string;
     fontMime: string;
@@ -46,6 +46,7 @@ export interface ProcessedIconPack {
 
 export function getIconPacks() {
     const defaultIconPack: ProcessedIconPack = {
+        prefix: "bx",
         manifest: boxiconsManifest,
         manifestNoteId: "boxicons",
         fontMime: "font/woff2",
@@ -55,18 +56,18 @@ export function getIconPacks() {
         builtin: true
     };
 
-    const usedPrefixes = new Set<string>([defaultIconPack.manifest.prefix]);
+    const usedPrefixes = new Set<string>([defaultIconPack.prefix]);
     const customIconPacks = search.searchNotes("#iconPack")
         .filter(note => !note.isProtected)
         .map(iconPackNote => processIconPack(iconPackNote))
         .filter(iconPack => {
             if (!iconPack) return false;
 
-            if (iconPack.manifest.prefix === "bx" || usedPrefixes.has(iconPack.manifest.prefix)) {
-                log.info(`Skipping icon pack with duplicate prefix '${iconPack.manifest.prefix}': ${iconPack.title} (${iconPack.manifestNoteId})`);
+            if (iconPack.prefix === "bx" || usedPrefixes.has(iconPack.prefix)) {
+                log.info(`Skipping icon pack with duplicate prefix '${iconPack.prefix}': ${iconPack.title} (${iconPack.manifestNoteId})`);
                 return false;
             }
-            usedPrefixes.add(iconPack.manifest.prefix);
+            usedPrefixes.add(iconPack.prefix);
             return true;
         }) as ProcessedIconPack[];
 
@@ -79,17 +80,17 @@ export function getIconPacks() {
 export function generateIconRegistry(iconPacks: ProcessedIconPack[]): IconRegistry {
     const sources: IconRegistry["sources"] = [];
 
-    for (const { manifest, title, icon } of iconPacks) {
+    for (const { manifest, title, icon, prefix } of iconPacks) {
         const icons: IconRegistry["sources"][number]["icons"] = Object.entries(manifest.icons)
             .map(( [id, { terms }] ) => {
                 if (!id || !terms) return null;
-                return { id: `${manifest.prefix} ${id}`, terms };
+                return { id: `${prefix} ${id}`, terms };
             })
             .filter(Boolean) as IconRegistry["sources"][number]["icons"];
         if (!icons.length) continue;
 
         sources.push({
-            prefix: manifest.prefix,
+            prefix,
             name: title,
             icon,
             icons
@@ -112,7 +113,14 @@ export function processIconPack(iconPackNote: BNote): ProcessedIconPack | undefi
         return;
     }
 
+    const prefix = iconPackNote.getLabelValue("iconPack");
+    if (!prefix) {
+        log.error(`Icon pack is missing 'iconPack' label defining its prefix: ${iconPackNote.title} (${iconPackNote.noteId})`);
+        return;
+    }
+
     return {
+        prefix,
         manifest,
         fontMime: attachment.mime,
         fontAttachmentId: attachment.attachmentId,
@@ -139,14 +147,14 @@ export function determineBestFontAttachment(iconPackNote: BNote) {
     return null;
 }
 
-export function generateCss({ manifest, fontMime, builtin, fontAttachmentId }: ProcessedIconPack, fontUrl: string) {
+export function generateCss({ manifest, fontMime, builtin, fontAttachmentId, prefix }: ProcessedIconPack, fontUrl: string) {
     try {
         const iconDeclarations: string[] = [];
         for (const [ key, mapping ] of Object.entries(manifest.icons)) {
-            iconDeclarations.push(`.${manifest.prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
+            iconDeclarations.push(`.${prefix}.${key}::before { content: '\\${mapping.glyph.charCodeAt(0).toString(16)}'; }`);
         }
 
-        const fontFamily = builtin ? fontAttachmentId : `trilium-icon-pack-${manifest.prefix}`;
+        const fontFamily = builtin ? fontAttachmentId : `trilium-icon-pack-${prefix}`;
         return `\
             @font-face {
                 font-family: '${fontFamily}';
@@ -155,7 +163,7 @@ export function generateCss({ manifest, fontMime, builtin, fontAttachmentId }: P
                 src: url('${fontUrl}') format('${MIME_TO_CSS_FORMAT_MAPPINGS[fontMime]}');
             }
 
-            .${manifest.prefix} {
+            .${prefix} {
                 font-family: '${fontFamily}' !important;
                 font-weight: normal;
                 font-style: normal;
