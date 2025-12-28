@@ -54,10 +54,21 @@ export function getIconPacks() {
         icon: "bx bx-package",
         builtin: true
     };
+
+    const usedPrefixes = new Set<string>([defaultIconPack.manifest.prefix]);
     const customIconPacks = search.searchNotes("#iconPack")
         .filter(note => !note.isProtected)
         .map(iconPackNote => processIconPack(iconPackNote))
-        .filter(Boolean) as ProcessedIconPack[];
+        .filter(iconPack => {
+            if (!iconPack) return false;
+
+            if (iconPack.manifest.prefix === "bx" || usedPrefixes.has(iconPack.manifest.prefix)) {
+                log.info(`Skipping icon pack with duplicate prefix '${iconPack.manifest.prefix}': ${iconPack.title} (${iconPack.manifestNoteId})`);
+                return false;
+            }
+            usedPrefixes.add(iconPack.manifest.prefix);
+            return true;
+        }) as ProcessedIconPack[];
 
     return [
         defaultIconPack,
