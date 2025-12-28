@@ -1,3 +1,66 @@
+import { createWriteStream } from "node:fs";
+import type { IconPackData } from "./provider";
 import mdi from "./providers/mdi";
+import cls from "@triliumnext/server/src/services/cls.js";
 
-mdi();
+process.env.TRILIUM_INTEGRATION_TEST = "memory-no-store";
+process.env.TRILIUM_RESOURCE_DIR = "../server/src";
+process.env.NODE_ENV = "development";
+
+async function main() {
+    const i18n = await import("@triliumnext/server/src/services/i18n.js");
+    await i18n.initializeTranslations();
+
+    const sqlInit = (await import("../../server/src/services/sql_init.js")).default;
+    await sqlInit.createInitialDatabase(true);
+
+    // Wait for becca to be loaded before importing data
+    const beccaLoader = await import("../../server/src/becca/becca_loader.js");
+    await beccaLoader.beccaLoaded;
+
+    const becca = (await import("../../server/src/becca/becca.js")).default;
+    const rootNote = becca.getNote("root");
+    const notesService = (await import("../../server/src/services/notes.js")).default;
+
+    const builtIconPacks = [
+        mdi()
+    ];
+
+    function buildIconPack(iconPack: IconPackData) {
+        return new Promise(async (res, rej) => {
+            // Create the icon pack note.
+            const { note, branch } = notesService.createNewNote({
+                parentNoteId: "root",
+                type: "file",
+                title: iconPack.name,
+                mime: "application/json",
+                content: "Hello"
+            });
+            note.setLabel("iconPack", iconPack.prefix);
+
+            // Export to zip.
+            const zipFilePath = `icon-pack-${iconPack.prefix}.zip`;
+            const fileOutputStream = createWriteStream(zipFilePath);
+            const { exportToZip } = (await import("@triliumnext/server/src/services/export/zip.js")).default;
+            const taskContext = new (await import("@triliumnext/server/src/services/task_context.js")).default(
+                "no-progress-reporting",
+                "export",
+                null
+            );
+            await exportToZip(taskContext, branch, "html", fileOutputStream, false, {
+                skipExtraFiles: true
+            });
+            await new Promise<void>((resolve) => {
+                fileOutputStream.on("finish", resolve);
+            });
+
+            console.log(`Built icon pack: ${iconPack.name} (${zipFilePath})`);
+        });
+    }
+
+    await Promise.all(builtIconPacks.map(buildIconPack));
+}
+
+cls.init(() => {
+    main();
+});
