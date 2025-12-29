@@ -29,7 +29,7 @@
     "widget-render-error": {
       "title": "Не удалось отобразить пользовательский React виджет"
     },
-    "widget-missing-parent": "В пользовательском виджете не определено обязательное свойство '{{property}}'.",
+    "widget-missing-parent": "В пользовательском виджете не определено обязательное свойство '{{property}}'.\n\nЕсли этот скрипт предназначен для запуска без элемента пользовательского интерфейса, используйте '#run=frontendStartup'.",
     "open-script-note": "Открыть заметку со скриптом",
     "scripting-error": "Ошибка пользовательского скрипта: {{title}}"
   },
@@ -1010,7 +1010,6 @@
     "backlink_many": "{{count}} обратных ссылок"
   },
   "note_icon": {
-    "category": "Категория:",
     "search": "Поиск:",
     "change_note_icon": "Изменить иконку заметки",
     "reset-default": "Сбросить к значку по умолчанию"
@@ -2112,7 +2111,13 @@
   "note_detail": {
     "could_not_find_typewidget": "Не удалось найти typeWidget для типа '{{type}}'",
     "printing_pdf": "Выполняется экспорт PDF...",
-    "printing": "Выполняется печать..."
+    "printing": "Выполняется печать...",
+    "print_report_title": "Отчет по печати",
+    "print_report_collection_content_one": "{{count}} заметка в коллекции не удалось распечатать, поскольку она не поддерживается или защищена.",
+    "print_report_collection_content_few": "{{count}} заметки в коллекции не удалось распечатать, поскольку они не поддерживаются или защищены.",
+    "print_report_collection_content_many": "{{count}} заметок в коллекции не удалось распечатать, поскольку они не поддерживаются или защищены.",
+    "print_report_collection_details_button": "Подробнее",
+    "print_report_collection_details_ignored_notes": "Пропущенные заметки"
   },
   "book": {
     "no_children_help": "В этой коллекции нет дочерних заметок, поэтому отображать нечего. Подробности см. в <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a>.",

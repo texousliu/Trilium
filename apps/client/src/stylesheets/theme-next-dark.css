@@ -349,5 +349,5 @@ body .todo-list input[type="checkbox"]:not(:checked):before {
 
 .note-split.with-hue *::selection,
 .quick-edit-dialog-wrapper.with-hue *::selection {
-    background: hsl(var(--custom-color-hue), 49.2%, 35%);
+    --selection-background-color: hsl(var(--custom-color-hue), 49.2%, 35%);
 }

@@ -29,7 +29,7 @@
     "widget-render-error": {
       "title": "カスタム React ウィジェットのレンダリングに失敗しました"
     },
-    "widget-missing-parent": "カスタムウィジェットに必須の '{{property}}' プロパティが定義されていません。",
+    "widget-missing-parent": "カスタムウィジェットに必須の '{{property}}' プロパティが定義されていません。\n\nこのスクリプトを UI 要素なしで実行する場合は、代わりに '#run=frontendStartup' を使用してください。",
     "open-script-note": "スクリプトノートを開く",
     "scripting-error": "カスタムスクリプトエラー: {{title}}"
   },
@@ -152,7 +152,6 @@
   },
   "note_icon": {
     "change_note_icon": "ノートアイコンの変更",
-    "category": "カテゴリー:",
     "search": "検索:",
     "reset-default": "アイコンをデフォルトに戻す"
   },
@@ -161,7 +160,7 @@
     "editable": "編集可能",
     "basic_properties": "基本プロパティ",
     "language": "言語",
-    "configure_code_notes": "コードノートを設定しています..."
+    "configure_code_notes": "コードノートを設定..."
   },
   "i18n": {
     "title": "ローカライゼーション",
@@ -1930,7 +1929,11 @@
   "note_detail": {
     "could_not_find_typewidget": "タイプ {{type}} の typeWidget が見つかりませんでした",
     "printing": "印刷中です...",
-    "printing_pdf": "PDF へのエクスポート中です..."
+    "printing_pdf": "PDF へのエクスポート中です...",
+    "print_report_title": "レポートを印刷",
+    "print_report_collection_content_other": "コレクション内の {{count}} 件のノートは、サポートされていないか保護されているため、印刷できませんでした。",
+    "print_report_collection_details_button": "詳細を見る",
+    "print_report_collection_details_ignored_notes": "無視されたノート"
   },
   "watched_file_update_status": {
     "ignore_this_change": "この変更を無視する",

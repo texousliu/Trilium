@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.100.0",
+    "appVersion": "0.101.1",
     "files": [
         {
             "isClone": false,
@@ -4418,37 +4418,51 @@
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "2FvYrpmOXm29",
+                                            "value": "grjYqerjn243",
                                             "isInheritable": false,
                                             "position": 100
                                         },
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "AlhDUqhENtH7",
+                                            "value": "gBbsAeiuUxI5",
                                             "isInheritable": false,
                                             "position": 110
                                         },
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "bwZpz2ajCEwO",
+                                            "value": "2FvYrpmOXm29",
                                             "isInheritable": false,
                                             "position": 120
                                         },
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "KC1HB96bqqHX",
+                                            "value": "AlhDUqhENtH7",
                                             "isInheritable": false,
                                             "position": 130
                                         },
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "0ESUbbAxVnoK",
+                                            "value": "bwZpz2ajCEwO",
                                             "isInheritable": false,
                                             "position": 140
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "KC1HB96bqqHX",
+                                            "isInheritable": false,
+                                            "position": 150
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "0ESUbbAxVnoK",
+                                            "isInheritable": false,
+                                            "position": 160
                                         },
                                         {
                                             "type": "label",
@@ -4463,20 +4477,6 @@
                                             "value": "printing-and-pdf-export",
                                             "isInheritable": false,
                                             "position": 110
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "grjYqerjn243",
-                                            "isInheritable": false,
-                                            "position": 150
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "gBbsAeiuUxI5",
-                                            "isInheritable": false,
-                                            "position": 160
                                         }
                                     ],
                                     "format": "markdown",
@@ -5743,6 +5743,104 @@
                                     ],
                                     "format": "markdown",
                                     "dataFileName": "Theme Gallery.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "gOKqSJgXLcIj",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "gh7bpGYxajRS",
+                                        "Wy267RK4M69c",
+                                        "gOKqSJgXLcIj"
+                                    ],
+                                    "title": "Icon Packs",
+                                    "notePosition": 20,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "s8alTXmpFR61",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "g1mlRoU8CsqC",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "bnyigUA2UK7s",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "HI6GBBIduIgv",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "bwg0e8ewQMak",
+                                            "isInheritable": false,
+                                            "position": 50
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "R9pX4DGra2Vt",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "ycBFjKrrwE9p",
+                                            "isInheritable": false,
+                                            "position": 70
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "oPVyFC7WL2Lp",
+                                            "isInheritable": false,
+                                            "position": 80
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "eIg8jdvaoNNd",
+                                            "isInheritable": false,
+                                            "position": 90
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-package",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "icon-packs",
+                                            "isInheritable": false,
+                                            "position": 100
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Icon Packs.md",
                                     "attachments": []
                                 }
                             ]
@@ -11801,6 +11899,75 @@
                                     "dataFileName": "3_Custom app-wide CSS_image.png"
                                 }
                             ]
+                        },
+                        {
+                            "isClone": false,
+                            "noteId": "g1mlRoU8CsqC",
+                            "notePath": [
+                                "pOsGYCXsbNQG",
+                                "pKK96zzmvBGf",
+                                "g1mlRoU8CsqC"
+                            ],
+                            "title": "Creating an icon pack",
+                            "notePosition": 50,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "gOKqSJgXLcIj",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "0vhv7lsOLy82",
+                                    "isInheritable": false,
+                                    "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "bnyigUA2UK7s",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "s8alTXmpFR61",
+                                    "isInheritable": false,
+                                    "position": 40
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "mHbBMPDPkVV5",
+                                    "isInheritable": false,
+                                    "position": 50
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "iconClass",
+                                    "value": "bx bx-package",
+                                    "isInheritable": false,
+                                    "position": 30
+                                },
+                                {
+                                    "type": "label",
+                                    "name": "shareAlias",
+                                    "value": "creating-icon-pack",
+                                    "isInheritable": false,
+                                    "position": 60
+                                }
+                            ],
+                            "format": "markdown",
+                            "dataFileName": "Creating an icon pack.md",
+                            "attachments": []
                         }
                     ]
                 },
@@ -15809,7 +15976,15 @@
                                             "isExpanded": false,
                                             "type": "text",
                                             "mime": "text/html",
-                                            "attributes": [],
+                                            "attributes": [
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "note-context-aware-widget",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                }
+                                            ],
                                             "format": "markdown",
                                             "dataFileName": "Note context aware widget.md",
                                             "attachments": []
@@ -16401,6 +16576,20 @@
                                             "value": "bx bxl-react",
                                             "isInheritable": false,
                                             "position": 30
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "preac",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "shareAlias",
+                                            "value": "preact",
+                                            "isInheritable": false,
+                                            "position": 70
                                         }
                                     ],
                                     "format": "markdown",
@@ -16445,6 +16634,13 @@
                                                     "value": "bx bxs-component",
                                                     "isInheritable": false,
                                                     "position": 50
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "component-libraries",
+                                                    "isInheritable": false,
+                                                    "position": 60
                                                 }
                                             ],
                                             "format": "markdown",
@@ -16488,6 +16684,13 @@
                                                     "value": "bx bx-question-mark",
                                                     "isInheritable": false,
                                                     "position": 60
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "hooks",
+                                                    "isInheritable": false,
+                                                    "position": 70
                                                 }
                                             ],
                                             "format": "markdown",
@@ -16524,6 +16727,13 @@
                                                     "value": "bx bxs-file-css",
                                                     "isInheritable": false,
                                                     "position": 40
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "css",
+                                                    "isInheritable": false,
+                                                    "position": 50
                                                 }
                                             ],
                                             "format": "markdown",
@@ -16581,6 +16791,13 @@
                                                     "value": "bx bxs-component",
                                                     "isInheritable": false,
                                                     "position": 30
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "shareAlias",
+                                                    "value": "builtin-components",
+                                                    "isInheritable": false,
+                                                    "position": 50
                                                 }
                                             ],
                                             "format": "markdown",
