@@ -1,21 +1,26 @@
-document.addEventListener("webviewerloaded", async () => {
+async function main() {
+    // Wait for the PDF viewer application to be available.
+    while (!window.PDFViewerApplication) {
+        await new Promise(r => setTimeout(r, 50));
+    }
+
     const app = PDFViewerApplication;
     await app.initializedPromise;
     
     app.eventBus.on("documentloaded", () => {
         const storage = app.pdfDocument.annotationStorage;
         
-        storage.onSetModified = (data) => {
-            console.log("Annotations modified: ", all);
+        storage.onSetModified = async () => {
+            console.log("Document modified");
+            const data = await app.pdfDocument.saveDocument();
+            window.parent.postMessage({
+                type: "pdfjs-viewer-document-modified",
+                data: data 
+            }, "*");
             storage.resetModified();
         };
-
-        const oldSetValue = storage.setValue;
-        storage.setValue = (key, value) => {
-            console.log("Setting annotation: ", key, value);
-            oldSetValue.call(storage, key, value);
-        }        
     });
-});
+};
 
+main();
 console.log("Custom script loaded");

@@ -1,15 +1,18 @@
 import "./File.css";
 
+import { useEffect } from "preact/hooks";
+
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { getUrlForDownload } from "../../services/open";
+import server from "../../services/server";
 import Alert from "../react/Alert";
 import { useNoteBlob } from "../react/hooks";
 import { TypeWidgetProps } from "./type_widget";
 
 const TEXT_MAX_NUM_CHARS = 5000;
 
-export default function File({ note }: TypeWidgetProps) {
+export default function FileTypeWidget({ note }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
 
     if (blob?.content) {
@@ -42,6 +45,20 @@ function TextPreview({ content }: { content: string }) {
 }
 
 function PdfPreview({ note }: { note: FNote }) {
+    useEffect(() => {
+        function handleMessage(event: MessageEvent) {
+            if (event.data?.type === "pdfjs-viewer-document-modified" && event.data?.data) {
+                const blob = new Blob([event.data.data], { type: note.mime });
+                server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }));
+            }
+        }
+
+        window.addEventListener("message", handleMessage);
+        return () => {
+            window.removeEventListener("message", handleMessage);
+        };
+    }, [ note ]);
+
     return (
         <iframe
             class="pdf-preview"
