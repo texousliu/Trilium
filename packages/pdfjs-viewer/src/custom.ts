@@ -1,9 +1,6 @@
 import interceptPersistence from "./persistence";
 
-const LOG_EVENT_BUS = false;
-
 async function main() {
-    console.log("Hi");
     interceptPersistence(getCustomAppOptions());
 
     // Wait for the PDF viewer application to be available.
@@ -66,15 +63,4 @@ function manageSave() {
     });
 }
 
-function patchEventBus() {
-    const eventBus = window.PDFViewerApplication.eventBus;
-    const originalDispatch = eventBus.dispatch.bind(eventBus);
-
-    eventBus.dispatch = (type: string, data?: any) => {
-        console.log("PDF.js event:", type, data);
-        return originalDispatch(type, data);
-    };
-}
-
 main();
-console.log("Custom script loaded");

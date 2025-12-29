@@ -99,7 +99,7 @@ function useStyleInjection(iframeRef: RefObject<HTMLIFrameElement>) {
 
 function getRootCssVariables() {
     const styles = getComputedStyle(document.documentElement);
-    const vars = {};
+    const vars: Record<string, string> = {};
 
     for (let i = 0; i < styles.length; i++) {
         const prop = styles[i];
@@ -111,7 +111,7 @@ function getRootCssVariables() {
     return vars;
 }
 
-function cssVarsToString(vars) {
+function cssVarsToString(vars: Record<string, string>) {
     return `:root {\n${Object.entries(vars)
         .map(([k, v]) => `  ${k}: ${v};`)
         .join('\n')}\n}`;

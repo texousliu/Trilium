@@ -1,4 +1,6 @@
 export default function interceptViewHistory(customOptions?: object) {
+    // We need to monkey-patch the localStorage used by PDF.js to store view history.
+    // Other attempts to intercept the history saving/loading (like overriding methods on PDFViewerApplication) have failed.
     const originalSetItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key: string, value: string) {
         if (key === "pdfjs.history") {
