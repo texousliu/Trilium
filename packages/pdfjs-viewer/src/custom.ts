@@ -36,9 +36,10 @@ function manageSave(app: typeof window.PDFViewerApplication) {
         }, 2_000);
     }
 
+    app.pdfDocument.annotationStorage.onSetModified = debouncedSave;  // works great for most cases, including forms.
     app.eventBus.on("annotationeditorcommit", debouncedSave);
     app.eventBus.on("annotationeditorparamschanged", debouncedSave);
-    app.eventBus.on("annotationeditorstateschanged", evt => {
+    app.eventBus.on("annotationeditorstateschanged", evt => {   // needed for detecting when annotations are moved around.
         const { activeEditorId } = evt;
 
         // When activeEditorId becomes null, an editor was just committed
