@@ -1,5 +1,6 @@
 import "./PdfAttachments.css";
 
+import { formatSize } from "../../services/utils";
 import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
 import RightPanelWidget from "./RightPanelWidget";
@@ -52,7 +53,7 @@ function PdfAttachmentItem({
     attachment: AttachmentInfo;
     onDownload: (filename: string) => void;
 }) {
-    const sizeText = formatFileSize(attachment.size);
+    const sizeText = formatSize(attachment.size);
 
     return (
         <div className="pdf-attachment-item" onClick={() => onDownload(attachment.filename)}>
@@ -64,12 +65,4 @@ function PdfAttachmentItem({
             <Icon icon="bx bx-download" />
         </div>
     );
-}
-
-function formatFileSize(bytes: number): string {
-    if (bytes === 0) return "0 B";
-    const k = 1024;
-    const sizes = ["B", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100  } ${  sizes[i]}`;
 }
