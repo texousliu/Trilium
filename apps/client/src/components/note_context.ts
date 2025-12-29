@@ -32,6 +32,13 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     parentNoteId?: string | null;
     viewScope?: ViewScope;
 
+    /**
+     * Metadata storage for UI components (e.g., table of contents, PDF page list, code outline).
+     * This allows type widgets to publish data that sidebar/toolbar components can consume.
+     * Data is automatically cleared when navigating to a different note.
+     */
+    private contextData: Map<string, unknown> = new Map();
+
     constructor(ntxId: string | null = null, hoistedNoteId: string = "root", mainNtxId: string | null = null) {
         super();
 
@@ -90,6 +97,17 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         this.notePath = resolvedNotePath;
         this.viewScope = opts.viewScope;
         ({ noteId: this.noteId, parentNoteId: this.parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(resolvedNotePath));
+
+        // Clear context data when switching notes and notify subscribers
+        const oldKeys = Array.from(this.contextData.keys());
+        this.contextData.clear();
+        for (const key of oldKeys) {
+            this.triggerEvent("contextDataChanged", {
+                noteContext: this,
+                key,
+                value: undefined
+            });
+        }
 
         this.saveToRecentNotes(resolvedNotePath);
 
@@ -442,6 +460,52 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         }
 
         return title;
+    }
+
+    /**
+     * Set metadata for this note context (e.g., table of contents, PDF pages, code outline).
+     * This data can be consumed by sidebar/toolbar components.
+     *
+     * @param key - Unique identifier for the data type (e.g., "toc", "pdfPages", "codeOutline")
+     * @param value - The data to store (will be cleared when switching notes)
+     */
+    setContextData<T>(key: string, value: T): void {
+        this.contextData.set(key, value);
+        // Trigger event so subscribers can react
+        this.triggerEvent("contextDataChanged", {
+            noteContext: this,
+            key,
+            value
+        });
+    }
+
+    /**
+     * Get metadata for this note context.
+     *
+     * @param key - The data key to retrieve
+     * @returns The stored data, or undefined if not found
+     */
+    getContextData<T>(key: string): T | undefined {
+        return this.contextData.get(key) as T | undefined;
+    }
+
+    /**
+     * Check if context data exists for a given key.
+     */
+    hasContextData(key: string): boolean {
+        return this.contextData.has(key);
+    }
+
+    /**
+     * Clear specific context data.
+     */
+    clearContextData(key: string): void {
+        this.contextData.delete(key);
+        this.triggerEvent("contextDataChanged", {
+            noteContext: this,
+            key,
+            value: undefined
+        });
     }
 }
 

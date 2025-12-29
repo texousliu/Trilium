@@ -1192,3 +1192,113 @@ export function useContentElement(noteContext: NoteContext | null | undefined) {
 
     return contentElement;
 }
+
+/**
+ * Set context data on the current note context.
+ * This allows type widgets to publish data (e.g., table of contents, PDF pages)
+ * that can be consumed by sidebar/toolbar components.
+ *
+ * Data is automatically cleared when navigating to a different note.
+ *
+ * @param key - Unique identifier for the data type (e.g., "toc", "pdfPages")
+ * @param value - The data to publish
+ *
+ * @example
+ * // In a PDF viewer widget:
+ * const { noteContext } = useActiveNoteContext();
+ * useSetContextData(noteContext, "pdfPages", pages);
+ */
+export function useSetContextData<T>(
+    noteContext: NoteContext | null | undefined,
+    key: string,
+    value: T | undefined
+) {
+    const valueRef = useRef<T | undefined>(value);
+    valueRef.current = value;
+
+    useEffect(() => {
+        if (!noteContext) return;
+
+        noteContext.setContextData(key, valueRef.current);
+
+        return () => {
+            noteContext.clearContextData(key);
+        };
+    }, [noteContext, key]);
+
+    // Update when value changes
+    useEffect(() => {
+        if (!noteContext) return;
+        noteContext.setContextData(key, value);
+    }, [noteContext, key, value]);
+}
+
+/**
+ * Get context data from the active note context.
+ * This is typically used in sidebar/toolbar components that need to display
+ * data published by type widgets.
+ *
+ * The component will automatically re-render when the data changes.
+ *
+ * @param key - The data key to retrieve (e.g., "toc", "pdfPages")
+ * @returns The current data, or undefined if not available
+ *
+ * @example
+ * // In a Table of Contents sidebar widget:
+ * function TableOfContents() {
+ *   const headings = useGetContextData<Heading[]>("toc");
+ *   if (!headings) return <div>No headings available</div>;
+ *   return <ul>{headings.map(h => <li>{h.text}</li>)}</ul>;
+ * }
+ */
+export function useGetContextData<T = unknown>(key: string): T | undefined {
+    const { noteContext } = useActiveNoteContext();
+    const [data, setData] = useState<T | undefined>(() =>
+        noteContext?.getContextData<T>(key)
+    );
+
+    // Update initial value when noteContext changes
+    useEffect(() => {
+        setData(noteContext?.getContextData<T>(key));
+    }, [noteContext, key]);
+
+    // Subscribe to changes via Trilium event system
+    useTriliumEvent("contextDataChanged", ({ noteContext: eventNoteContext, key: changedKey, value }) => {
+        if (eventNoteContext === noteContext && changedKey === key) {
+            setData(value as T);
+        }
+    });
+
+    return data;
+}
+
+/**
+ * Get context data from a specific note context (not necessarily the active one).
+ *
+ * @param noteContext - The specific note context to get data from
+ * @param key - The data key to retrieve
+ * @returns The current data, or undefined if not available
+ */
+export function useGetContextDataFrom<T = unknown>(
+    noteContext: NoteContext | null | undefined,
+    key: string
+): T | undefined {
+    const [data, setData] = useState<T | undefined>(() =>
+        noteContext?.getContextData<T>(key)
+    );
+
+    // Update initial value when noteContext changes
+    useEffect(() => {
+        setData(noteContext?.getContextData<T>(key));
+    }, [noteContext, key]);
+
+    // Subscribe to changes via Trilium event system
+    useTriliumEvent("contextDataChanged", ({ noteContext: eventNoteContext, key: changedKey, value }) => {
+        if (eventNoteContext === noteContext && changedKey === key) {
+            setData(value as T);
+        }
+    });
+
+    return data;
+}
+
