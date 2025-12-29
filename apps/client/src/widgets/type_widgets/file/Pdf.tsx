@@ -12,7 +12,10 @@ const VARIABLE_WHITELIST = new Set([
     "main-text-color"
 ]);
 
-export default function PdfPreview({ note }: { note: FNote }) {
+export default function PdfPreview({ note, componentId }: {
+    note: FNote,
+    componentId: string | undefined;
+}) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const { onLoad } = useStyleInjection(iframeRef);
     const historyConfig = useViewModeConfig(note, "pdfHistory");
@@ -21,7 +24,7 @@ export default function PdfPreview({ note }: { note: FNote }) {
         function handleMessage(event: MessageEvent) {
             if (event.data?.type === "pdfjs-viewer-document-modified" && event.data?.data) {
                 const blob = new Blob([event.data.data], { type: note.mime });
-                server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }));
+                server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }), componentId);
             }
 
             if (event.data.type === "pdfjs-viewer-save-view-history" && event.data?.data) {
