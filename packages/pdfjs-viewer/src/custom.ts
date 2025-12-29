@@ -1,3 +1,5 @@
+const LOG_EVENT_BUS = true;
+
 async function main() {
     // Wait for the PDF viewer application to be available.
     while (!window.PDFViewerApplication) {
@@ -5,40 +7,56 @@ async function main() {
     }
 
     const app = window.PDFViewerApplication;
-    await app.initializedPromise;
-
+    if (LOG_EVENT_BUS) {
+        patchEventBus();
+    }
     app.eventBus.on("documentloaded", () => {
-        const storage = app.pdfDocument.annotationStorage;
-        let timeout = null;
-
-        function debouncedSave() {
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(async () => {
-                if (!storage) return;
-                const data = await app.pdfDocument.saveDocument();
-                window.parent.postMessage({
-                    type: "pdfjs-viewer-document-modified",
-                    data: data
-                }, "*");
-                storage.resetModified();
-                timeout = null;
-            }, 2_000);
-        }
-
-        app.eventBus.on("annotationeditorcommit", debouncedSave);
-        app.eventBus.on("annotationeditorparamschanged", debouncedSave);
-        app.eventBus.on("annotationeditorstateschanged", evt => {
-            const { activeEditorId } = evt;
-
-            // When activeEditorId becomes null, an editor was just committed
-            if (activeEditorId === null) {
-                debouncedSave();
-            }
-        });
+        manageSave(app);
     });
+    await app.initializedPromise;
 };
+
+function manageSave(app: typeof window.PDFViewerApplication) {
+    const storage = app.pdfDocument.annotationStorage;
+    let timeout = null;
+
+    function debouncedSave() {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(async () => {
+            if (!storage) return;
+            const data = await app.pdfDocument.saveDocument();
+            window.parent.postMessage({
+                type: "pdfjs-viewer-document-modified",
+                data: data
+            }, "*");
+            storage.resetModified();
+            timeout = null;
+        }, 2_000);
+    }
+
+    app.eventBus.on("annotationeditorcommit", debouncedSave);
+    app.eventBus.on("annotationeditorparamschanged", debouncedSave);
+    app.eventBus.on("annotationeditorstateschanged", evt => {
+        const { activeEditorId } = evt;
+
+        // When activeEditorId becomes null, an editor was just committed
+        if (activeEditorId === null) {
+            debouncedSave();
+        }
+    });
+}
+
+function patchEventBus() {
+    const eventBus = window.PDFViewerApplication.eventBus;
+    const originalDispatch = eventBus.dispatch.bind(eventBus);
+
+    eventBus.dispatch = (type: string, data?: any) => {
+        console.log("PDF.js event:", type, data);
+        return originalDispatch(type, data);
+    };
+}
 
 main();
 console.log("Custom script loaded");
