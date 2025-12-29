@@ -17,6 +17,20 @@
     border: 2px solid transparent;
     transition: border-color 0.2s;
     box-sizing: border-box;
+    position: relative;
+
+    .pdf-page-number {
+        font-size: 12px;
+        margin-bottom: 4px;
+        color: var(--main-text-color);
+        position: absolute;
+        bottom: 1em;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--accented-background-color);
+        padding: 0.2em 0.5em;
+        border-radius: 4px;
+    }
 }
 
 .pdf-page-item:hover {
@@ -26,12 +40,6 @@
 .pdf-page-item.active {
     border-color: var(--main-border-color);
     background-color: var(--active-item-background-color);
-}
-
-.pdf-page-number {
-    font-size: 12px;
-    margin-bottom: 4px;
-    color: var(--main-text-color);
 }
 
 .pdf-page-thumbnail {
