@@ -18,8 +18,12 @@ async function extractAndSendLayers() {
     const app = window.PDFViewerApplication;
 
     try {
-        const optionalContentConfig = await app.pdfDocument.getOptionalContentConfig();
-        
+        // Get the config from the viewer if available (has updated state), otherwise from document
+        const pdfViewer = app.pdfViewer;
+        const optionalContentConfig = pdfViewer?.optionalContentConfigPromise
+            ? await pdfViewer.optionalContentConfigPromise
+            : await app.pdfDocument.getOptionalContentConfig();
+
         if (!optionalContentConfig) {
             window.parent.postMessage({
                 type: "pdfjs-viewer-layers",
@@ -53,15 +57,22 @@ async function extractAndSendLayers() {
         };
         flattenOrder(order);
 
-        // Get group details for each ID
+        // Get group details for each ID and only include valid, toggleable layers
         const layers = groupIds.map(id => {
             const group = optionalContentConfig.getGroup(id);
+
+            // Only include groups that have a name and usage property (actual layers)
+            if (!group || !group.name || !group.usage) {
+                return null;
+            }
+
+            // Use group.visible property like PDF.js viewer does
             return {
                 id,
-                name: group?.name || `Layer ${id}`,
-                visible: optionalContentConfig.isVisible(id)
+                name: group.name,
+                visible: group.visible
             };
-        }).filter(layer => layer.name); // Filter out invalid layers
+        }).filter(layer => layer !== null); // Filter out invalid layers
 
         window.parent.postMessage({
             type: "pdfjs-viewer-layers",
@@ -80,17 +91,24 @@ async function toggleLayer(layerId: string, visible: boolean) {
     const app = window.PDFViewerApplication;
 
     try {
-        const optionalContentConfig = await app.pdfDocument.getOptionalContentConfig();
-        
+        const pdfViewer = app.pdfViewer;
+        if (!pdfViewer) {
+            return;
+        }
+
+        const optionalContentConfig = await pdfViewer.optionalContentConfigPromise;
         if (!optionalContentConfig) {
             return;
         }
 
-        // Set visibility
+        // Set visibility on the config (like PDF.js viewer does)
         optionalContentConfig.setVisibility(layerId, visible);
 
-        // Trigger re-render
-        app.eventBus.dispatch("optionalcontentconfigchanged");
+        // Dispatch optionalcontentconfig event with the existing config
+        app.eventBus.dispatch("optionalcontentconfig", {
+            source: app,
+            promise: Promise.resolve(optionalContentConfig)
+        });
 
         // Send updated layer state back
         await extractAndSendLayers();
