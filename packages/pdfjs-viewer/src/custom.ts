@@ -1,5 +1,5 @@
 import interceptPersistence from "./persistence";
-import { extractAndSendToc, setupScrollToHeading } from "./toc";
+import { extractAndSendToc, setupScrollToHeading, setupActiveHeadingTracking } from "./toc";
 
 const LOG_EVENT_BUS = false;
 
@@ -20,6 +20,7 @@ async function main() {
         manageSave();
         extractAndSendToc();
         setupScrollToHeading();
+        setupActiveHeadingTracking();
     });
     await app.initializedPromise;
 };

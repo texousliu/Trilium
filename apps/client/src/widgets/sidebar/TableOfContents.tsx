@@ -24,6 +24,7 @@ interface HeadingsWithNesting extends RawHeading {
 export interface HeadingContext {
     scrollToHeading(heading: RawHeading): void;
     headings: RawHeading[];
+    activeHeadingId?: string | null;
 }
 
 export default function TableOfContents() {
@@ -48,20 +49,22 @@ function PdfTableOfContents() {
         <AbstractTableOfContents
             headings={data?.headings || []}
             scrollToHeading={data?.scrollToHeading || (() => {})}
+            activeHeadingId={data?.activeHeadingId}
         />
     );
 }
 
-function AbstractTableOfContents<T extends RawHeading>({ headings, scrollToHeading }: {
+function AbstractTableOfContents<T extends RawHeading>({ headings, scrollToHeading, activeHeadingId }: {
     headings: T[];
     scrollToHeading(heading: T): void;
+    activeHeadingId?: string | null;
 }) {
     const nestedHeadings = buildHeadingTree(headings);
     return (
         <span className="toc">
             {nestedHeadings.length > 0 ? (
                 <ol>
-                    {nestedHeadings.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} />)}
+                    {nestedHeadings.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} activeHeadingId={activeHeadingId} />)}
                 </ol>
             ) : (
                 <div className="no-headings">{t("toc.no_headings")}</div>
@@ -70,14 +73,16 @@ function AbstractTableOfContents<T extends RawHeading>({ headings, scrollToHeadi
     );
 }
 
-function TableOfContentsHeading({ heading, scrollToHeading }: {
+function TableOfContentsHeading({ heading, scrollToHeading, activeHeadingId }: {
     heading: HeadingsWithNesting;
     scrollToHeading(heading: RawHeading): void;
+    activeHeadingId?: string | null;
 }) {
     const [ collapsed, setCollapsed ] = useState(false);
+    const isActive = heading.id === activeHeadingId;
     return (
         <>
-            <li className={clsx(collapsed && "collapsed")}>
+            <li className={clsx(collapsed && "collapsed", isActive && "active")}>
                 {heading.children.length > 0 && (
                     <Icon
                         className="collapse-button"
@@ -92,7 +97,7 @@ function TableOfContentsHeading({ heading, scrollToHeading }: {
             </li>
             {heading.children && (
                 <ol>
-                    {heading.children.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} />)}
+                    {heading.children.map(heading => <TableOfContentsHeading key={heading.id} heading={heading} scrollToHeading={scrollToHeading} activeHeadingId={activeHeadingId} />)}
                 </ol>
             )}
         </>

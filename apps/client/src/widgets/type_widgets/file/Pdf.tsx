@@ -43,6 +43,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     const headings = convertPdfOutlineToHeadings(event.data.data);
                     noteContext.setContextData("toc", {
                         headings,
+                        activeHeadingId: null,
                         scrollToHeading: (heading) => {
                             iframeRef.current?.contentWindow?.postMessage({
                                 type: "trilium-scroll-to-heading",
@@ -54,7 +55,18 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     // No ToC available, use empty headings
                     noteContext.setContextData("toc", {
                         headings: [],
+                        activeHeadingId: null,
                         scrollToHeading: () => {}
+                    });
+                }
+            }
+
+            if (event.data.type === "pdfjs-viewer-active-heading") {
+                const currentToc = noteContext.getContextData("toc");
+                if (currentToc) {
+                    noteContext.setContextData("toc", {
+                        ...currentToc,
+                        activeHeadingId: event.data.headingId
                     });
                 }
             }
