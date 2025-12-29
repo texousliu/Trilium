@@ -8,7 +8,7 @@ import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayou
 
 import appContext, { EventData, EventNames } from "../../components/app_context";
 import Component from "../../components/component";
-import NoteContext from "../../components/note_context";
+import NoteContext, { NoteContextDataMap } from "../../components/note_context";
 import FBlob from "../../entities/fblob";
 import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
@@ -1208,16 +1208,16 @@ export function useContentElement(noteContext: NoteContext | null | undefined) {
  * const { noteContext } = useActiveNoteContext();
  * useSetContextData(noteContext, "pdfPages", pages);
  */
-export function useSetContextData<T>(
+export function useSetContextData<K extends keyof NoteContextDataMap>(
     noteContext: NoteContext | null | undefined,
-    key: string,
-    value: T | undefined
+    key: K,
+    value: NoteContextDataMap[K] | undefined
 ) {
-    const valueRef = useRef<T | undefined>(value);
+    const valueRef = useRef<NoteContextDataMap[K] | undefined>(value);
     valueRef.current = value;
 
     useEffect(() => {
-        if (!noteContext) return;
+        if (!noteContext || valueRef.current === undefined) return;
 
         noteContext.setContextData(key, valueRef.current);
 
@@ -1228,7 +1228,7 @@ export function useSetContextData<T>(
 
     // Update when value changes
     useEffect(() => {
-        if (!noteContext) return;
+        if (!noteContext || value === undefined) return;
         noteContext.setContextData(key, value);
     }, [noteContext, key, value]);
 }
@@ -1251,21 +1251,21 @@ export function useSetContextData<T>(
  *   return <ul>{headings.map(h => <li>{h.text}</li>)}</ul>;
  * }
  */
-export function useGetContextData<T = unknown>(key: string): T | undefined {
+export function useGetContextData<K extends keyof NoteContextDataMap>(key: K): NoteContextDataMap[K] | undefined {
     const { noteContext } = useActiveNoteContext();
-    const [data, setData] = useState<T | undefined>(() =>
-        noteContext?.getContextData<T>(key)
+    const [data, setData] = useState<NoteContextDataMap[K] | undefined>(() =>
+        noteContext?.getContextData(key)
     );
 
     // Update initial value when noteContext changes
     useEffect(() => {
-        setData(noteContext?.getContextData<T>(key));
+        setData(noteContext?.getContextData(key));
     }, [noteContext, key]);
 
     // Subscribe to changes via Trilium event system
     useTriliumEvent("contextDataChanged", ({ noteContext: eventNoteContext, key: changedKey, value }) => {
         if (eventNoteContext === noteContext && changedKey === key) {
-            setData(value as T);
+            setData(value as NoteContextDataMap[K]);
         }
     });
 
@@ -1279,23 +1279,23 @@ export function useGetContextData<T = unknown>(key: string): T | undefined {
  * @param key - The data key to retrieve
  * @returns The current data, or undefined if not available
  */
-export function useGetContextDataFrom<T = unknown>(
+export function useGetContextDataFrom<K extends keyof NoteContextDataMap>(
     noteContext: NoteContext | null | undefined,
-    key: string
-): T | undefined {
-    const [data, setData] = useState<T | undefined>(() =>
-        noteContext?.getContextData<T>(key)
+    key: K
+): NoteContextDataMap[K] | undefined {
+    const [data, setData] = useState<NoteContextDataMap[K] | undefined>(() =>
+        noteContext?.getContextData(key)
     );
 
     // Update initial value when noteContext changes
     useEffect(() => {
-        setData(noteContext?.getContextData<T>(key));
+        setData(noteContext?.getContextData(key));
     }, [noteContext, key]);
 
     // Subscribe to changes via Trilium event system
     useTriliumEvent("contextDataChanged", ({ noteContext: eventNoteContext, key: changedKey, value }) => {
         if (eventNoteContext === noteContext && changedKey === key) {
-            setData(value as T);
+            setData(value as NoteContextDataMap[K]);
         }
     });
 

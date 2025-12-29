@@ -46,7 +46,12 @@ function PdfTableOfContents() {
     console.log("Rendering with data", data);
 
     return (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <AbstractTableOfContents
+            headings={data?.headings || []}
+            scrollToHeading={heading => {
+
+            }}
+        />
     );
 }
 
