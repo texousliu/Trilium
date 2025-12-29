@@ -22,7 +22,7 @@ interface HeadingsWithNesting extends RawHeading {
 }
 
 export interface HeadingContext {
-    // scrollToHeading(heading: RawHeading): void;
+    scrollToHeading(heading: RawHeading): void;
     headings: RawHeading[];
 }
 
@@ -43,14 +43,11 @@ export default function TableOfContents() {
 
 function PdfTableOfContents() {
     const data = useGetContextData("toc");
-    console.log("Rendering with data", data);
 
     return (
         <AbstractTableOfContents
             headings={data?.headings || []}
-            scrollToHeading={heading => {
-
-            }}
+            scrollToHeading={data?.scrollToHeading || (() => {})}
         />
     );
 }

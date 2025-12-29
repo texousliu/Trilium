@@ -6,7 +6,7 @@ import FBlob from "../../../entities/fblob";
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
 import { useViewModeConfig } from "../../collections/NoteList";
-import { useSetContextData, useTriliumOption } from "../../react/hooks";
+import { useTriliumOption } from "../../react/hooks";
 
 const VARIABLE_WHITELIST = new Set([
     "root-background",
@@ -40,12 +40,22 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
             if (event.data.type === "pdfjs-viewer-toc") {
                 if (event.data.data) {
                     // Convert PDF outline to HeadingContext format
+                    const headings = convertPdfOutlineToHeadings(event.data.data);
                     noteContext.setContextData("toc", {
-                        headings: convertPdfOutlineToHeadings(event.data.data)
+                        headings,
+                        scrollToHeading: (heading) => {
+                            iframeRef.current?.contentWindow?.postMessage({
+                                type: "trilium-scroll-to-heading",
+                                headingId: heading.id
+                            }, "*");
+                        }
                     });
                 } else {
                     // No ToC available, use empty headings
-                    noteContext.setContextData("toc", { headings: [] });
+                    noteContext.setContextData("toc", {
+                        headings: [],
+                        scrollToHeading: () => {}
+                    });
                 }
             }
         }
@@ -135,25 +145,36 @@ function cssVarsToString(vars) {
 interface PdfOutlineItem {
     title: string;
     level: number;
-    dest: any;
+    dest: unknown;
+    id: string;
     items: PdfOutlineItem[];
 }
 
-function convertPdfOutlineToHeadings(outline: PdfOutlineItem[], parentLevel = 0) {
-    const headings: any[] = [];
+interface PdfHeading {
+    level: number;
+    text: string;
+    id: string;
+    element: null;
+}
 
-    for (const item of outline) {
-        headings.push({
-            level: parentLevel + 1,
-            text: item.title,
-            id: `pdf-outline-${headings.length}`,
-            element: null // PDFs don't have DOM elements
-        });
+function convertPdfOutlineToHeadings(outline: PdfOutlineItem[]): PdfHeading[] {
+    const headings: PdfHeading[] = [];
 
-        if (item.items && item.items.length > 0) {
-            headings.push(...convertPdfOutlineToHeadings(item.items, parentLevel + 1));
+    function flatten(items: PdfOutlineItem[]) {
+        for (const item of items) {
+            headings.push({
+                level: item.level + 1,
+                text: item.title,
+                id: item.id,
+                element: null // PDFs don't have DOM elements
+            });
+
+            if (item.items && item.items.length > 0) {
+                flatten(item.items);
+            }
         }
     }
 
+    flatten(outline);
     return headings;
 }
