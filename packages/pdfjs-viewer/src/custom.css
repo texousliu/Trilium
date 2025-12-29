@@ -1,10 +1,9 @@
 :root {
+    --main-color: var(--tn-main-text-color);
+    --body-bg-color: var(--tn-main-background);
     --toolbar-bg-color: var(--tn-main-background);
     --toolbar-border-color: var(--tn-main-border-color);
-}
-
-body {
-    --body-bg-color: var(--tn-main-background);
+    --toolbar-icon-opacity: 1;
 }
 
 .page .canvasWrapper {
