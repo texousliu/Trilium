@@ -4,5 +4,8 @@
   "private": true,
   "scripts": {
     "build": "tsx scripts/build.ts"
+  },
+  "dependencies": {
+    "pdfjs-dist": "5.4.530"
   }
 }
