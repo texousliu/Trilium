@@ -1,9 +1,9 @@
 import "./PdfLayers.css";
 
-import { t } from "../../services/i18n";
-import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
-import Icon from "../react/Icon";
-import RightPanelWidget from "./RightPanelWidget";
+import { t } from "../../../services/i18n";
+import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../../react/hooks";
+import Icon from "../../react/Icon";
+import RightPanelWidget from "../RightPanelWidget";
 
 interface LayerInfo {
     id: string;

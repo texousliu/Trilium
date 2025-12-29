@@ -1,10 +1,10 @@
 import "./PdfAttachments.css";
 
-import { t } from "../../services/i18n";
-import { formatSize } from "../../services/utils";
-import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
-import Icon from "../react/Icon";
-import RightPanelWidget from "./RightPanelWidget";
+import { t } from "../../../services/i18n";
+import { formatSize } from "../../../services/utils";
+import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../../react/hooks";
+import Icon from "../../react/Icon";
+import RightPanelWidget from "../RightPanelWidget";
 
 interface AttachmentInfo {
     filename: string;

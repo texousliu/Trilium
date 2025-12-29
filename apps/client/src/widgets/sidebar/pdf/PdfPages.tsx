@@ -2,10 +2,10 @@ import "./PdfPages.css";
 
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
-import { NoteContextDataMap } from "../../components/note_context";
-import { t } from "../../services/i18n";
-import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
-import RightPanelWidget from "./RightPanelWidget";
+import { NoteContextDataMap } from "../../../components/note_context";
+import { t } from "../../../services/i18n";
+import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../../react/hooks";
+import RightPanelWidget from "../RightPanelWidget";
 
 export default function PdfPages() {
     const { note } = useActiveNoteContext();
