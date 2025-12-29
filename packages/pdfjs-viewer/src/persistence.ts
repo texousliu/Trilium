@@ -1,4 +1,4 @@
-export default function interceptViewHistory() {
+export default function interceptViewHistory(customOptions?: object) {
     const originalSetItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key: string, value: string) {
         if (key === "pdfjs.history") {
@@ -11,6 +11,10 @@ export default function interceptViewHistory() {
 
     const originalGetItem = Storage.prototype.getItem;
     Storage.prototype.getItem = function (key: string) {
+        if (key === "pdfjs.preferences") {
+            return JSON.stringify(customOptions);
+        }
+
         if (key === "pdfjs.history") {
             return JSON.stringify(window.TRILIUM_VIEW_HISTORY_STORE || {});
         }

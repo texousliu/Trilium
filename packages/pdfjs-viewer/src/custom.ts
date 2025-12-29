@@ -1,15 +1,15 @@
-import interceptViewHistory from "./history";
+import interceptPersistence from "./persistence";
 
 const LOG_EVENT_BUS = false;
 
 async function main() {
+    interceptPersistence(getCustomAppOptions());
+
     // Wait for the PDF viewer application to be available.
     while (!window.PDFViewerApplication) {
         await new Promise(r => setTimeout(r, 50));
     }
-
     const app = window.PDFViewerApplication;
-    interceptViewHistory();
 
     if (LOG_EVENT_BUS) {
         patchEventBus();
@@ -19,6 +19,17 @@ async function main() {
     });
     await app.initializedPromise;
 };
+
+function getCustomAppOptions() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    return {
+        localeProperties: {
+            // Read from URL query
+            lang: urlParams.get("lang") || "en"
+        }
+    };
+}
 
 function manageSave() {
     const app = window.PDFViewerApplication;
