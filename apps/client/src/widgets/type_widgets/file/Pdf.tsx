@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "preact/hooks";
+import { RefObject } from "preact";
+import { useCallback, useEffect, useRef } from "preact/hooks";
 
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
@@ -11,7 +12,8 @@ const VARIABLE_WHITELIST = new Set([
 ]);
 
 export default function PdfPreview({ note }: { note: FNote }) {
-    const iframeRef =  useRef<HTMLIFrameElement>(null);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    const { onLoad } = useStyleInjection(iframeRef);
 
     useEffect(() => {
         function handleMessage(event: MessageEvent) {
@@ -32,18 +34,41 @@ export default function PdfPreview({ note }: { note: FNote }) {
             ref={iframeRef}
             class="pdf-preview"
             src={`pdfjs/web/viewer.html?file=../../api/notes/${note.noteId}/open`}
-            onLoad={() => {
-                const doc = iframeRef.current?.contentDocument;
-                if (!doc) return;
-
-                const style = doc.createElement('style');
-                style.id = 'client-root-vars';
-                style.textContent = cssVarsToString(getRootCssVariables());
-
-                doc.head.appendChild(style);
-            }}
+            onLoad={onLoad}
         />
     );
+}
+
+function useStyleInjection(iframeRef: RefObject<HTMLIFrameElement>) {
+    const styleRef = useRef<HTMLStyleElement | null>(null);
+
+    // First load.
+    const onLoad = useCallback(() => {
+        const doc = iframeRef.current?.contentDocument;
+        if (!doc) return;
+
+        const style = doc.createElement('style');
+        style.id = 'client-root-vars';
+        style.textContent = cssVarsToString(getRootCssVariables());
+        styleRef.current = style;
+
+        doc.head.appendChild(style);
+    }, [ iframeRef ]);
+
+    // React to changes.
+    useEffect(() => {
+        const listener = () => {
+            styleRef.current!.textContent = cssVarsToString(getRootCssVariables());
+        };
+
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        media.addEventListener("change", listener);
+        return () => media.removeEventListener("change", listener);
+    }, [ iframeRef ]);
+
+    return {
+        onLoad
+    };
 }
 
 function getRootCssVariables() {
