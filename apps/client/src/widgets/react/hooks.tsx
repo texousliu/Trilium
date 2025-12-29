@@ -1177,7 +1177,7 @@ export function useContentElement(noteContext: NoteContext | null | undefined) {
         const requestId = ++requestIdRef.current;
         noteContext?.getContentElement().then(contentElement => {
             // Prevent stale async.
-            if (requestId !== requestIdRef.current) return;
+            if (!contentElement || requestId !== requestIdRef.current) return;
             setContentElement(contentElement?.[0] ?? null);
             forceUpdate(v => v + 1);
         });

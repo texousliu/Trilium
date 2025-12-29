@@ -4,6 +4,7 @@ import Component, { TypedComponent } from "../components/component.js";
 import froca from "../services/froca.js";
 import { t } from "../services/i18n.js";
 import toastService, { showErrorForScriptNote } from "../services/toast.js";
+import { randomString } from "../services/utils.js";
 import { renderReactWidget } from "./react/react_utils.jsx";
 
 export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedComponent<T> {
@@ -180,7 +181,7 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
             });
         } else {
             toastService.showPersistent({
-                id: `custom-widget-failure-unknown-${crypto.randomUUID()}`,
+                id: `custom-widget-failure-unknown-${randomString()}`,
                 title: t("toast.widget-error.title"),
                 icon: "bx bx-error-circle",
                 message: t("toast.widget-error.message-unknown", {

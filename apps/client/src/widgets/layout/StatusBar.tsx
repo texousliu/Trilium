@@ -340,7 +340,7 @@ function AttributesButton({ note, attributesShown, setAttributesShown }: Attribu
 
     // React to note changes.
     useEffect(() => {
-        setCount(note.attributes.length);
+        setCount(note.getAttributes().filter(a => !a.isAutoLink).length);
     }, [ note ]);
 
     // React to changes in count.

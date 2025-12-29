@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/client",
-  "version": "0.101.0",
+  "version": "0.101.1",
   "description": "JQuery-based client for TriliumNext, used for both web and desktop (via Electron)",
   "private": true,
   "license": "AGPL-3.0-only",
@@ -61,6 +61,7 @@
     "panzoom": "9.4.3",
     "preact": "10.28.1",
     "react-i18next": "16.5.0",
+    "react-window": "2.2.3",
     "reveal.js": "5.2.1",
     "svg-pan-zoom": "3.6.2",
     "tabulator-tables": "6.3.1",
