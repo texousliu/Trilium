@@ -14,35 +14,28 @@ export default function PdfAttachments() {
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const noteMime = useNoteProperty(note, "mime");
+    const attachmentsData = useGetContextData("pdfAttachments");
 
     if (noteType !== "file" || noteMime !== "application/pdf") {
         return null;
     }
 
-    return (
-        <RightPanelWidget id="pdf-attachments" title="Attachments">
-            <PdfAttachmentsList key={note?.noteId} />
-        </RightPanelWidget>
-    );
-}
-
-function PdfAttachmentsList() {
-    const attachmentsData = useGetContextData("pdfAttachments");
-
     if (!attachmentsData || attachmentsData.attachments.length === 0) {
-        return <div className="no-attachments">No attachments</div>;
+        return null;
     }
 
     return (
-        <div className="pdf-attachments-list">
-            {attachmentsData.attachments.map((attachment) => (
-                <PdfAttachmentItem
-                    key={attachment.filename}
-                    attachment={attachment}
-                    onDownload={attachmentsData.downloadAttachment}
-                />
-            ))}
-        </div>
+        <RightPanelWidget id="pdf-attachments" title="Attachments">
+            <div className="pdf-attachments-list">
+                {attachmentsData.attachments.map((attachment) => (
+                    <PdfAttachmentItem
+                        key={attachment.filename}
+                        attachment={attachment}
+                        onDownload={attachmentsData.downloadAttachment}
+                    />
+                ))}
+            </div>
+        </RightPanelWidget>
     );
 }
 
