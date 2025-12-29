@@ -1,6 +1,7 @@
 import { RefObject } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 
+import FBlob from "../../../entities/fblob";
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
 import { useViewModeConfig } from "../../collections/NoteList";
@@ -12,8 +13,9 @@ const VARIABLE_WHITELIST = new Set([
     "main-text-color"
 ]);
 
-export default function PdfPreview({ note, componentId }: {
+export default function PdfPreview({ note, blob, componentId }: {
     note: FNote,
+    blob: FBlob | null | undefined,
     componentId: string | undefined;
 }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -36,7 +38,14 @@ export default function PdfPreview({ note, componentId }: {
         return () => {
             window.removeEventListener("message", handleMessage);
         };
-    }, [ note, historyConfig ]);
+    }, [ note, historyConfig, componentId, blob ]);
+
+    // Refresh when blob changes.
+    useEffect(() => {
+        if (iframeRef.current?.contentWindow) {
+            iframeRef.current.contentWindow.location.reload();
+        }
+    }, [ blob ]);
 
     return (historyConfig &&
         <iframe
