@@ -2,6 +2,7 @@ import interceptPersistence from "./persistence";
 import { extractAndSendToc, setupScrollToHeading, setupActiveHeadingTracking } from "./toc";
 import { setupPdfPages } from "./pages";
 import { setupPdfAttachments } from "./attachments";
+import { setupPdfLayers } from "./layers";
 
 const LOG_EVENT_BUS = false;
 
@@ -25,6 +26,7 @@ async function main() {
         setupActiveHeadingTracking();
         setupPdfPages();
         setupPdfAttachments();
+        setupPdfLayers();
     });
     await app.initializedPromise;
 };

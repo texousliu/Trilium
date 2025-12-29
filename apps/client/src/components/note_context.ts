@@ -35,6 +35,10 @@ export interface NoteContextDataMap {
         attachments: Array<{ filename: string; size: number }>;
         downloadAttachment(filename: string): void;
     };
+    pdfLayers: {
+        layers: Array<{ id: string; name: string; visible: boolean }>;
+        toggleLayer(layerId: string, visible: boolean): void;
+    };
 }
 
 type ContextDataKey = keyof NoteContextDataMap;

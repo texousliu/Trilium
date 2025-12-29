@@ -121,6 +121,19 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     }
                 });
             }
+
+            if (event.data.type === "pdfjs-viewer-layers") {
+                noteContext.setContextData("pdfLayers", {
+                    layers: event.data.layers,
+                    toggleLayer: (layerId: string, visible: boolean) => {
+                        iframeRef.current?.contentWindow?.postMessage({
+                            type: "trilium-toggle-layer",
+                            layerId,
+                            visible
+                        }, "*");
+                    }
+                });
+            }
         }
 
         window.addEventListener("message", handleMessage);
