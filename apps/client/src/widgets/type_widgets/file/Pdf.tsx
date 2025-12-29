@@ -109,6 +109,18 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     }
                 }));
             }
+
+            if (event.data.type === "pdfjs-viewer-attachments") {
+                noteContext.setContextData("pdfAttachments", {
+                    attachments: event.data.attachments,
+                    downloadAttachment: (filename: string) => {
+                        iframeRef.current?.contentWindow?.postMessage({
+                            type: "trilium-download-attachment",
+                            filename
+                        }, "*");
+                    }
+                });
+            }
         }
 
         window.addEventListener("message", handleMessage);

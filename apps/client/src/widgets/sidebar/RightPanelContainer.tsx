@@ -15,6 +15,7 @@ import { useActiveNoteContext, useLegacyWidget, useNoteProperty, useTriliumEvent
 import Icon from "../react/Icon";
 import LegacyRightPanelWidget from "../right_panel_widget";
 import HighlightsList from "./HighlightsList";
+import PdfAttachments from "./PdfAttachments";
 import PdfPages from "./PdfPages";
 import RightPanelWidget from "./RightPanelWidget";
 import TableOfContents from "./TableOfContents";
@@ -70,6 +71,10 @@ function useItems(rightPaneVisible: boolean, widgetsByParent: WidgetsByParent) {
         },
         {
             el: <PdfPages />,
+            enabled: isPdf,
+        },
+        {
+            el: <PdfAttachments />,
             enabled: isPdf,
         },
         {

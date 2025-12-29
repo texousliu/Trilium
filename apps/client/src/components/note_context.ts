@@ -31,6 +31,10 @@ export interface NoteContextDataMap {
         scrollToPage(page: number): void;
         requestThumbnail(page: number): void;
     };
+    pdfAttachments: {
+        attachments: Array<{ filename: string; size: number }>;
+        downloadAttachment(filename: string): void;
+    };
 }
 
 type ContextDataKey = keyof NoteContextDataMap;

@@ -1,0 +1,75 @@
+import "./PdfAttachments.css";
+
+import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
+import Icon from "../react/Icon";
+import RightPanelWidget from "./RightPanelWidget";
+
+interface AttachmentInfo {
+    filename: string;
+    size: number;
+}
+
+export default function PdfAttachments() {
+    const { note } = useActiveNoteContext();
+    const noteType = useNoteProperty(note, "type");
+    const noteMime = useNoteProperty(note, "mime");
+
+    if (noteType !== "file" || noteMime !== "application/pdf") {
+        return null;
+    }
+
+    return (
+        <RightPanelWidget id="pdf-attachments" title="Attachments">
+            <PdfAttachmentsList key={note?.noteId} />
+        </RightPanelWidget>
+    );
+}
+
+function PdfAttachmentsList() {
+    const attachmentsData = useGetContextData("pdfAttachments");
+
+    if (!attachmentsData || attachmentsData.attachments.length === 0) {
+        return <div className="no-attachments">No attachments</div>;
+    }
+
+    return (
+        <div className="pdf-attachments-list">
+            {attachmentsData.attachments.map((attachment) => (
+                <PdfAttachmentItem
+                    key={attachment.filename}
+                    attachment={attachment}
+                    onDownload={attachmentsData.downloadAttachment}
+                />
+            ))}
+        </div>
+    );
+}
+
+function PdfAttachmentItem({
+    attachment,
+    onDownload
+}: {
+    attachment: AttachmentInfo;
+    onDownload: (filename: string) => void;
+}) {
+    const sizeText = formatFileSize(attachment.size);
+
+    return (
+        <div className="pdf-attachment-item" onClick={() => onDownload(attachment.filename)}>
+            <Icon icon="bx bx-paperclip" />
+            <div className="pdf-attachment-info">
+                <div className="pdf-attachment-filename">{attachment.filename}</div>
+                <div className="pdf-attachment-size">{sizeText}</div>
+            </div>
+            <Icon icon="bx bx-download" />
+        </div>
+    );
+}
+
+function formatFileSize(bytes: number): string {
+    if (bytes === 0) return "0 B";
+    const k = 1024;
+    const sizes = ["B", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100  } ${  sizes[i]}`;
+}
