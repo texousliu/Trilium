@@ -14,7 +14,8 @@
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "../../apps/client/src/types-pdfjs.d.ts"
   ],
   "exclude": [
     "eslint.config.js",
@@ -23,7 +24,7 @@
   ],
   "references": [
     {
-      "path": "../commons/tsconfig.app.json"
+      "path": "../commons/tsconfig.lib.json"
     }
   ]
 }
