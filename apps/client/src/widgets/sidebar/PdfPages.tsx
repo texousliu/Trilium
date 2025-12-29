@@ -16,7 +16,7 @@ export default function PdfPages() {
 
     return (
         <RightPanelWidget id="pdf-pages" title="Pages" grow>
-            <PdfPagesList key={note.noteId} />
+            <PdfPagesList key={note?.noteId} />
         </RightPanelWidget>
     );
 }
@@ -80,6 +80,8 @@ function PdfPageItem({
     pageNumber: number;
     isActive: boolean;
     thumbnail?: string;
+    onRequestThumbnail(page: number): void;
+    onPageClick(): void;
 }) {
     const hasRequested = useRef(false);
 
