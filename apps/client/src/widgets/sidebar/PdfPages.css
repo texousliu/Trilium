@@ -1,0 +1,56 @@
+.pdf-pages-list {
+    width: 100%;
+    height: 100%;
+}
+
+.pdf-page-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.pdf-page-item:hover {
+    background-color: var(--hover-item-background-color);
+}
+
+.pdf-page-item.active {
+    border-color: var(--main-border-color);
+    background-color: var(--active-item-background-color);
+}
+
+.pdf-page-number {
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: var(--main-text-color);
+}
+
+.pdf-page-thumbnail {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accented-background-color);
+    border: 1px solid var(--main-border-color);
+}
+
+.pdf-page-thumbnail img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.pdf-page-loading {
+    color: var(--muted-text-color);
+    font-size: 11px;
+}
+
+.no-pages {
+    padding: 16px;
+    text-align: center;
+    color: var(--muted-text-color);
+}

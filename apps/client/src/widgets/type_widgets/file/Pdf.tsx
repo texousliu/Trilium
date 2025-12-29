@@ -70,6 +70,46 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     });
                 }
             }
+
+            if (event.data.type === "pdfjs-viewer-page-info") {
+                console.log("[Pdf.tsx] Received page info:", event.data);
+                noteContext.setContextData("pdfPages", {
+                    totalPages: event.data.totalPages,
+                    currentPage: event.data.currentPage,
+                    scrollToPage: (page: number) => {
+                        iframeRef.current?.contentWindow?.postMessage({
+                            type: "trilium-scroll-to-page",
+                            pageNumber: page
+                        }, "*");
+                    },
+                    requestThumbnail: (page: number) => {
+                        iframeRef.current?.contentWindow?.postMessage({
+                            type: "trilium-request-thumbnail",
+                            pageNumber: page
+                        }, "*");
+                    }
+                });
+            }
+
+            if (event.data.type === "pdfjs-viewer-current-page") {
+                const currentPages = noteContext.getContextData("pdfPages");
+                if (currentPages) {
+                    noteContext.setContextData("pdfPages", {
+                        ...currentPages,
+                        currentPage: event.data.currentPage
+                    });
+                }
+            }
+
+            if (event.data.type === "pdfjs-viewer-thumbnail") {
+                // Forward thumbnail to any listeners
+                window.dispatchEvent(new CustomEvent("pdf-thumbnail", {
+                    detail: {
+                        pageNumber: event.data.pageNumber,
+                        dataUrl: event.data.dataUrl
+                    }
+                }));
+            }
         }
 
         window.addEventListener("message", handleMessage);

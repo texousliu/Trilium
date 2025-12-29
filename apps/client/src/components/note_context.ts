@@ -25,6 +25,12 @@ export type GetTextEditorCallback = (editor: CKTextEditor) => void;
 
 export interface NoteContextDataMap {
     toc: HeadingContext;
+    pdfPages: {
+        totalPages: number;
+        currentPage: number;
+        scrollToPage(page: number): void;
+        requestThumbnail(page: number): void;
+    };
 }
 
 type ContextDataKey = keyof NoteContextDataMap;

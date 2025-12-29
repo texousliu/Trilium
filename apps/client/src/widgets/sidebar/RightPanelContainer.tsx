@@ -15,6 +15,7 @@ import { useActiveNoteContext, useLegacyWidget, useNoteProperty, useTriliumEvent
 import Icon from "../react/Icon";
 import LegacyRightPanelWidget from "../right_panel_widget";
 import HighlightsList from "./HighlightsList";
+import PdfPages from "./PdfPages";
 import RightPanelWidget from "./RightPanelWidget";
 import TableOfContents from "./TableOfContents";
 
@@ -59,14 +60,17 @@ function useItems(rightPaneVisible: boolean, widgetsByParent: WidgetsByParent) {
     const noteType = useNoteProperty(note, "type");
     const noteMime = useNoteProperty(note, "mime");
     const [ highlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
+    const isPdf = noteType === "file" && noteMime === "application/pdf";
 
     if (!rightPaneVisible) return [];
     const definitions: RightPanelWidgetDefinition[] = [
         {
             el: <TableOfContents />,
-            enabled: (noteType === "text"
-                || noteType === "doc"
-                || (noteType === "file" && noteMime === "application/pdf")),
+            enabled: (noteType === "text" || noteType === "doc" || isPdf),
+        },
+        {
+            el: <PdfPages />,
+            enabled: isPdf,
         },
         {
             el: <HighlightsList />,
