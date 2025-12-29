@@ -1,3 +1,5 @@
+import interceptViewHistory from "./history";
+
 const LOG_EVENT_BUS = false;
 
 async function main() {
@@ -7,11 +9,12 @@ async function main() {
     }
 
     const app = window.PDFViewerApplication;
+    interceptViewHistory();
+
     if (LOG_EVENT_BUS) {
         patchEventBus();
     }
     app.eventBus.on("documentloaded", () => {
-        interceptViewHistory();
         manageSave();
     });
     await app.initializedPromise;
@@ -49,22 +52,6 @@ function manageSave() {
             debouncedSave();
         }
     });
-}
-
-function interceptViewHistory() {
-    const app = window.PDFViewerApplication;
-    let activeFingerprint: string = app.pdfDocument.fingerprints[0];
-
-    const store = app.store;
-    store._writeToStorage = async function() {
-        const fileEntry = store.database.files?.find(f => f.fingerprint === activeFingerprint);
-        const databaseStr = JSON.stringify(fileEntry);
-        console.log("Write attempt.", databaseStr);
-    }
-    store._readFromStorage = async function() {
-        console.log("Read attempt", activeFingerprint);
-        return "{}";
-    }
 }
 
 function patchEventBus() {

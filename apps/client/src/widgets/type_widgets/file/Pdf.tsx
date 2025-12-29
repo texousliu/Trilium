@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from "preact/hooks";
 
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
+import { useViewModeConfig } from "../../collections/NoteList";
 
 const VARIABLE_WHITELIST = new Set([
     "root-background",
@@ -14,6 +15,7 @@ const VARIABLE_WHITELIST = new Set([
 export default function PdfPreview({ note }: { note: FNote }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const { onLoad } = useStyleInjection(iframeRef);
+    const historyConfig = useViewModeConfig(note, "pdfHistory");
 
     useEffect(() => {
         function handleMessage(event: MessageEvent) {
@@ -21,20 +23,29 @@ export default function PdfPreview({ note }: { note: FNote }) {
                 const blob = new Blob([event.data.data], { type: note.mime });
                 server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }));
             }
+
+            if (event.data.type === "pdfjs-viewer-save-view-history" && event.data?.data) {
+                historyConfig?.storeFn(JSON.parse(event.data.data));
+            }
         }
 
         window.addEventListener("message", handleMessage);
         return () => {
             window.removeEventListener("message", handleMessage);
         };
-    }, [ note ]);
+    }, [ note, historyConfig ]);
 
-    return (
+    return (historyConfig &&
         <iframe
             ref={iframeRef}
             class="pdf-preview"
             src={`pdfjs/web/viewer.html?file=../../api/notes/${note.noteId}/open`}
-            onLoad={onLoad}
+            onLoad={() => {
+                if (iframeRef.current?.contentWindow) {
+                    iframeRef.current.contentWindow.TRILIUM_VIEW_HISTORY_STORE = historyConfig.config;
+                }
+                onLoad();
+            }}
         />
     );
 }
