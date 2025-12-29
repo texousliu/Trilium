@@ -4,8 +4,8 @@ async function main() {
         await new Promise(r => setTimeout(r, 50));
     }
 
-    const app = PDFViewerApplication;
-    await app.initializedPromise;    
+    const app = window.PDFViewerApplication;
+    await app.initializedPromise;
 
     app.eventBus.on("documentloaded", () => {
         const storage = app.pdfDocument.annotationStorage;
@@ -17,16 +17,16 @@ async function main() {
             }
             timeout = setTimeout(async () => {
                 if (!storage) return;
-                const data = await app.pdfDocument.saveDocument(storage);
+                const data = await app.pdfDocument.saveDocument();
                 window.parent.postMessage({
                     type: "pdfjs-viewer-document-modified",
-                    data: data 
+                    data: data
                 }, "*");
                 storage.resetModified();
                 timeout = null;
             }, 2_000);
         }
-        
+
         app.eventBus.on("annotationeditorcommit", debouncedSave);
         app.eventBus.on("annotationeditorparamschanged", debouncedSave);
         app.eventBus.on("annotationeditorstateschanged", evt => {
