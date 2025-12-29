@@ -2,10 +2,16 @@ export default function interceptViewHistory() {
     const originalSetItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key: string, value: string) {
         if (key === "pdfjs.history") {
-            console.log(`Intercepted setting view history: ${key} = ${value}`);
+            // Parse the history and remove entries that are not relevant.
+            const history = JSON.parse(value);
+            const fingerprint = window.PDFViewerApplication?.pdfDocument?.fingerprints?.[0];
+            if (fingerprint) {
+                history.files = history.files.filter((file: any) => file.fingerprint === fingerprint);
+            }
+
             window.parent.postMessage({
                 type: "pdfjs-viewer-save-view-history",
-                data: value
+                data: JSON.stringify(history)
             }, "*");
             return;
         }
