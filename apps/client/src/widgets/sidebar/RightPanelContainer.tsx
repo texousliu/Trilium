@@ -57,13 +57,16 @@ export default function RightPanelContainer({ widgetsByParent }: { widgetsByPare
 function useItems(rightPaneVisible: boolean, widgetsByParent: WidgetsByParent) {
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
+    const noteMime = useNoteProperty(note, "mime");
     const [ highlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
 
     if (!rightPaneVisible) return [];
     const definitions: RightPanelWidgetDefinition[] = [
         {
             el: <TableOfContents />,
-            enabled: (noteType === "text" || noteType === "doc"),
+            enabled: (noteType === "text"
+                || noteType === "doc"
+                || (noteType === "file" && noteMime === "application/pdf")),
         },
         {
             el: <HighlightsList />,

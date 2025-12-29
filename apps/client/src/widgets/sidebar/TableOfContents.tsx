@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { t } from "../../services/i18n";
 import { randomString } from "../../services/utils";
-import { useActiveNoteContext, useContentElement, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
+import { useActiveNoteContext, useContentElement, useGetContextData, useIsNoteReadOnly, useNoteProperty, useTextEditor } from "../react/hooks";
 import Icon from "../react/Icon";
 import RightPanelWidget from "./RightPanelWidget";
 
@@ -24,13 +24,23 @@ interface HeadingsWithNesting extends RawHeading {
 export default function TableOfContents() {
     const { note, noteContext } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
+    const noteMime = useNoteProperty(note, "mime");
     const { isReadOnly } = useIsNoteReadOnly(note, noteContext);
 
     return (
         <RightPanelWidget id="toc" title={t("toc.table_of_contents")} grow>
             {((noteType === "text" && isReadOnly) || (noteType === "doc")) && <ReadOnlyTextTableOfContents />}
             {noteType === "text" && !isReadOnly && <EditableTextTableOfContents />}
+            {noteType === "file" && noteMime === "application/pdf" && <PdfTableOfContents />}
         </RightPanelWidget>
+    );
+}
+
+function PdfTableOfContents() {
+    const data = useGetContextData("toc");
+
+    return (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
     );
 }
 

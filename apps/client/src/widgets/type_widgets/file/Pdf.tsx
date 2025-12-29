@@ -1,11 +1,12 @@
 import { RefObject } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 
+import type NoteContext from "../../../components/note_context";
 import FBlob from "../../../entities/fblob";
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
 import { useViewModeConfig } from "../../collections/NoteList";
-import { useTriliumOption } from "../../react/hooks";
+import { useSetContextData, useTriliumOption } from "../../react/hooks";
 
 const VARIABLE_WHITELIST = new Set([
     "root-background",
@@ -14,8 +15,9 @@ const VARIABLE_WHITELIST = new Set([
     "main-text-color"
 ]);
 
-export default function PdfPreview({ note, blob, componentId }: {
+export default function PdfPreview({ note, blob, componentId, noteContext }: {
     note: FNote,
+    noteContext: NoteContext
     blob: FBlob | null | undefined,
     componentId: string | undefined;
 }) {
@@ -48,6 +50,8 @@ export default function PdfPreview({ note, blob, componentId }: {
             iframeRef.current.contentWindow.location.reload();
         }
     }, [ blob ]);
+
+    useSetContextData(noteContext, "toc", note.title);
 
     return (historyConfig &&
         <iframe
