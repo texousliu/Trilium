@@ -1,0 +1,13 @@
+:root {
+    --toolbar-bg-color: var(--tn-main-background);
+    --toolbar-border-color: var(--tn-main-border-color);
+}
+
+body {
+    --body-bg-color: var(--tn-main-background);
+}
+
+.page .canvasWrapper {
+    border: 1px solid var(--tn-main-border-color);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
