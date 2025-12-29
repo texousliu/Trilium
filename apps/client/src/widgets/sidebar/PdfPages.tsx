@@ -81,18 +81,43 @@ function PdfPageItem({
     pageNumber: number;
     isActive: boolean;
     thumbnail?: string;
+    onRequestThumbnail: (pageNumber: number) => void;
+    onPageClick: () => void;
 }) {
+    const itemRef = useRef<HTMLDivElement>(null);
     const hasRequested = useRef(false);
 
     useEffect(() => {
-        if (!thumbnail && !hasRequested.current) {
-            hasRequested.current = true;
-            onRequestThumbnail(pageNumber);
-        }
+        const element = itemRef.current;
+        if (!element) return;
+
+        // Create intersection observer to detect when item enters viewport
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !thumbnail && !hasRequested.current) {
+                        hasRequested.current = true;
+                        onRequestThumbnail(pageNumber);
+                    }
+                });
+            },
+            {
+                root: null, // viewport
+                rootMargin: '100px', // Load thumbnails slightly before they enter viewport
+                threshold: 0.01
+            }
+        );
+
+        observer.observe(element);
+
+        return () => {
+            observer.disconnect();
+        };
     }, [pageNumber, thumbnail, onRequestThumbnail]);
 
     return (
         <div
+            ref={itemRef}
             className={`pdf-page-item ${isActive ? 'active' : ''}`}
             onClick={onPageClick}
         >
