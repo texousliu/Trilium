@@ -1,4 +1,5 @@
 import interceptPersistence from "./persistence";
+import { extractAndSendToc, setupScrollToHeading } from "./toc";
 
 const LOG_EVENT_BUS = false;
 
@@ -78,85 +79,5 @@ function patchEventBus() {
     };
 }
 
-async function extractAndSendToc() {
-    const app = window.PDFViewerApplication;
-
-    try {
-        const outline = await app.pdfDocument.getOutline();
-
-        if (!outline || outline.length === 0) {
-            window.parent.postMessage({
-                type: "pdfjs-viewer-toc",
-                data: null
-            }, "*");
-            return;
-        }
-
-        // Store outline items with their destinations for later scrolling
-        const outlineMap = new Map();
-        const toc = convertOutlineToToc(outline, 0, outlineMap);
-
-        // Store the map globally so setupScrollToHeading can access it
-        (window as any).TRILIUM_OUTLINE_MAP = outlineMap;
-
-        window.parent.postMessage({
-            type: "pdfjs-viewer-toc",
-            data: toc
-        }, "*");
-    } catch (error) {
-        window.parent.postMessage({
-            type: "pdfjs-viewer-toc",
-            data: null
-        }, "*");
-    }
-}
-
-function convertOutlineToToc(outline: any[], level = 0, outlineMap?: Map<string, any>, parentId = ""): any[] {
-    return outline.map((item, index) => {
-        const id = parentId ? `${parentId}-${index}` : `pdf-outline-${index}`;
-
-        if (outlineMap) {
-            outlineMap.set(id, item);
-        }
-
-        return {
-            title: item.title,
-            level: level,
-            dest: item.dest,
-            id: id,
-            items: item.items && item.items.length > 0 ? convertOutlineToToc(item.items, level + 1, outlineMap, id) : []
-        };
-    });
-}
-
 main();
 console.log("Custom script loaded");
-
-function setupScrollToHeading() {
-    window.addEventListener("message", async (event) => {
-        if (event.data?.type === "trilium-scroll-to-heading") {
-            const headingId = event.data.headingId;
-            const outlineMap = (window as any).TRILIUM_OUTLINE_MAP as Map<string, any>;
-
-            if (!outlineMap) return;
-
-            const outlineItem = outlineMap.get(headingId);
-            if (!outlineItem || !outlineItem.dest) return;
-
-            const app = window.PDFViewerApplication;
-
-            // Navigate to the destination
-            try {
-                const dest = typeof outlineItem.dest === 'string'
-                    ? await app.pdfDocument.getDestination(outlineItem.dest)
-                    : outlineItem.dest;
-
-                if (dest) {
-                    app.pdfLinkService.goToDestination(dest);
-                }
-            } catch (error) {
-                console.error("Error navigating to heading:", error);
-            }
-        }
-    });
-}
