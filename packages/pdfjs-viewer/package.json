@@ -6,6 +6,9 @@
     "build": "tsx scripts/build.ts"
   },
   "dependencies": {
+    "@triliumnext/commons": "workspace:*"
+  },
+  "devDependencies": {
     "pdfjs-dist": "5.4.530"
   }
 }

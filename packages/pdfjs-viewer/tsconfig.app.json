@@ -22,5 +22,8 @@
     "eslint.config.mjs"
   ],
   "references": [
+    {
+      "path": "../commons/tsconfig.app.json"
+    }
   ]
 }

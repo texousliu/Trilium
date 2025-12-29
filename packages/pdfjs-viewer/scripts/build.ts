@@ -1,13 +1,37 @@
 import { join } from "path";
 import BuildHelper from "../../../scripts/build-utils";
 import { build as esbuild } from "esbuild";
+import { LOCALES } from "@triliumnext/commons";
 
 const build = new BuildHelper("packages/pdfjs-viewer");
 
+const LOCALE_MAPPINGS: Record<string, string> = {
+    "es": "es-ES"
+};
+
 async function main() {
-    build.copy("viewer", "web");
+    // Copy the viewer files.
+    for (const file of [ "viewer.css", "viewer.html", "viewer.mjs" ]) {
+        build.copy(`viewer/${file}`, `web/${file}`);
+    }
+    build.copy(`viewer/images`, `web/images`);
+
+    // Copy the custom files.
     await buildScript("web/custom.mjs");
     build.copy("src/custom.css", "web/custom.css");
+
+    // Copy locales.
+    const localeMappings = {};
+    for (const locale of LOCALES) {
+        if (locale.id === "en" || locale.contentOnly || locale.devOnly) continue;
+        const mappedLocale = LOCALE_MAPPINGS[locale.electronLocale] || locale.electronLocale.replace("_", "-");
+        const localePath = `${locale.id}/viewer.ftl`;
+        build.copy(`viewer/locale/${mappedLocale}/viewer.ftl`, `web/locale/${localePath}`);
+        localeMappings[locale.id] = localePath;
+    }
+    build.writeJson("web/locale/locale.json", localeMappings);
+
+    // Copy pdfjs-dist files.
     build.copy("/node_modules/pdfjs-dist/build/pdf.mjs", "build/pdf.mjs");
     build.copy("/node_modules/pdfjs-dist/build/pdf.worker.mjs", "build/pdf.worker.mjs");
 }

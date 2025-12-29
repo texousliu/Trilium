@@ -1375,6 +1375,10 @@ importers:
 
   packages/pdfjs-viewer:
     dependencies:
+      '@triliumnext/commons':
+        specifier: workspace:*
+        version: link:../commons
+    devDependencies:
       pdfjs-dist:
         specifier: 5.4.530
         version: 5.4.530
@@ -16044,8 +16048,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.3.0
       '@ckeditor/ckeditor5-utils': 47.3.0
       ckeditor5: 47.3.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@47.3.0':
     dependencies:
