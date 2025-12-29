@@ -36,13 +36,22 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
             if (event.data.type === "pdfjs-viewer-save-view-history" && event.data?.data) {
                 historyConfig?.storeFn(JSON.parse(event.data.data));
             }
+
+            if (event.data.type === "pdfjs-viewer-toc") {
+                if (event.data.data) {
+                    noteContext.setContextData("toc", event.data.data);
+                } else {
+                    // No ToC available, fallback to note title
+                    noteContext.setContextData("toc", note.title);
+                }
+            }
         }
 
         window.addEventListener("message", handleMessage);
         return () => {
             window.removeEventListener("message", handleMessage);
         };
-    }, [ note, historyConfig, componentId, blob ]);
+    }, [ note, historyConfig, componentId, blob, noteContext ]);
 
     // Refresh when blob changes.
     useEffect(() => {
@@ -51,6 +60,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
         }
     }, [ blob ]);
 
+    // Initial ToC is set to note.title, will be replaced by actual ToC when received
     useSetContextData(noteContext, "toc", note.title);
 
     return (historyConfig &&

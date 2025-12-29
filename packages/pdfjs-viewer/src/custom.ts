@@ -17,6 +17,7 @@ async function main() {
     }
     app.eventBus.on("documentloaded", () => {
         manageSave();
+        extractAndSendToc();
     });
     await app.initializedPromise;
 };
@@ -74,6 +75,42 @@ function patchEventBus() {
         console.log("PDF.js event:", type, data);
         return originalDispatch(type, data);
     };
+}
+
+async function extractAndSendToc() {
+    const app = window.PDFViewerApplication;
+
+    try {
+        const outline = await app.pdfDocument.getOutline();
+
+        if (!outline || outline.length === 0) {
+            window.parent.postMessage({
+                type: "pdfjs-viewer-toc",
+                data: null
+            }, "*");
+            return;
+        }
+
+        // Convert PDF.js outline format to a simpler structure
+        const toc = convertOutlineToToc(outline);
+
+        window.parent.postMessage({
+            type: "pdfjs-viewer-toc",
+            data: toc
+        }, "*");
+    } catch (error) {
+            data: null
+        }, "*");
+    }
+}
+
+function convertOutlineToToc(outline: any[], level = 0): any[] {
+    return outline.map(item => ({
+        title: item.title,
+        level: level,
+        dest: item.dest,
+        items: item.items && item.items.length > 0 ? convertOutlineToToc(item.items, level + 1) : []
+    }));
 }
 
 main();
