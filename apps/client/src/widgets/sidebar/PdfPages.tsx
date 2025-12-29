@@ -16,7 +16,7 @@ export default function PdfPages() {
 
     return (
         <RightPanelWidget id="pdf-pages" title="Pages" grow>
-            <PdfPagesList />
+            <PdfPagesList key={note.noteId} />
         </RightPanelWidget>
     );
 }
@@ -42,6 +42,7 @@ function PdfPagesList() {
     const requestThumbnail = useCallback((pageNumber: number) => {
         // Only request if we haven't already requested it and don't have it
         if (!requestedThumbnails.current.has(pageNumber) && !thumbnails.has(pageNumber) && pagesData) {
+            console.log("[PdfPages] Requesting thumbnail for page:", pageNumber);
             requestedThumbnails.current.add(pageNumber);
             pagesData.requestThumbnail(pageNumber);
         }
@@ -79,43 +80,18 @@ function PdfPageItem({
     pageNumber: number;
     isActive: boolean;
     thumbnail?: string;
-    onRequestThumbnail: (pageNumber: number) => void;
-    onPageClick: () => void;
 }) {
-    const itemRef = useRef<HTMLDivElement>(null);
     const hasRequested = useRef(false);
 
     useEffect(() => {
-        const element = itemRef.current;
-        if (!element) return;
-
-        // Create intersection observer to detect when item enters viewport
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !thumbnail && !hasRequested.current) {
-                        hasRequested.current = true;
-                        onRequestThumbnail(pageNumber);
-                    }
-                });
-            },
-            {
-                root: null, // viewport
-                rootMargin: '100px', // Load thumbnails slightly before they enter viewport
-                threshold: 0.01
-            }
-        );
-
-        observer.observe(element);
-
-        return () => {
-            observer.disconnect();
-        };
+        if (!thumbnail && !hasRequested.current) {
+            hasRequested.current = true;
+            onRequestThumbnail(pageNumber);
+        }
     }, [pageNumber, thumbnail, onRequestThumbnail]);
 
     return (
         <div
-            ref={itemRef}
             className={`pdf-page-item ${isActive ? 'active' : ''}`}
             onClick={onPageClick}
         >
