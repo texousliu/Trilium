@@ -1,13 +1,11 @@
 import "./File.css";
 
-import { useEffect } from "preact/hooks";
-
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { getUrlForDownload } from "../../services/open";
-import server from "../../services/server";
 import Alert from "../react/Alert";
 import { useNoteBlob } from "../react/hooks";
+import PdfPreview from "./file/Pdf";
 import { TypeWidgetProps } from "./type_widget";
 
 const TEXT_MAX_NUM_CHARS = 5000;
@@ -41,28 +39,6 @@ function TextPreview({ content }: { content: string }) {
             )}
             <pre class="file-preview-content">{trimmedContent}</pre>
         </>
-    );
-}
-
-function PdfPreview({ note }: { note: FNote }) {
-    useEffect(() => {
-        function handleMessage(event: MessageEvent) {
-            if (event.data?.type === "pdfjs-viewer-document-modified" && event.data?.data) {
-                const blob = new Blob([event.data.data], { type: note.mime });
-                server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }));
-            }
-        }
-
-        window.addEventListener("message", handleMessage);
-        return () => {
-            window.removeEventListener("message", handleMessage);
-        };
-    }, [ note ]);
-
-    return (
-        <iframe
-            class="pdf-preview"
-            src={`pdfjs/web/viewer.html?file=../../api/notes/${note.noteId}/open`} />
     );
 }
 
