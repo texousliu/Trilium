@@ -72,7 +72,6 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
             }
 
             if (event.data.type === "pdfjs-viewer-page-info") {
-                console.log("[Pdf.tsx] Received page info:", event.data);
                 noteContext.setContextData("pdfPages", {
                     totalPages: event.data.totalPages,
                     currentPage: event.data.currentPage,

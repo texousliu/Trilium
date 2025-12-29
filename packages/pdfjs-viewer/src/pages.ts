@@ -31,7 +31,6 @@ export function setupPdfPages() {
     window.addEventListener("message", async (event) => {
         if (event.data?.type === "trilium-request-thumbnail") {
             const pageNumber = event.data.pageNumber;
-            console.log("[PDF Pages] Received thumbnail request for page:", pageNumber);
             await generateThumbnail(pageNumber);
         }
     });
@@ -39,11 +38,6 @@ export function setupPdfPages() {
 
 function sendPageInfo() {
     const app = window.PDFViewerApplication;
-
-    console.log("[PDF Pages] Sending page info:", {
-        totalPages: app.pdfDocument?.numPages,
-        currentPage: app.pdfViewer?.currentPageNumber
-    });
 
     window.parent.postMessage({
         type: "pdfjs-viewer-page-info",
@@ -54,8 +48,6 @@ function sendPageInfo() {
 
 async function generateThumbnail(pageNumber: number) {
     const app = window.PDFViewerApplication;
-
-    console.log("[PDF Pages] Generating thumbnail for page:", pageNumber);
 
     try {
         const page = await app.pdfDocument.getPage(pageNumber);
@@ -78,8 +70,6 @@ async function generateThumbnail(pageNumber: number) {
 
         // Convert to data URL
         const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-
-        console.log("[PDF Pages] Sending thumbnail for page:", pageNumber, "size:", dataUrl.length);
 
         // Send thumbnail to parent
         window.parent.postMessage({

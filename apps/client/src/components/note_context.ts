@@ -484,7 +484,6 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
      */
     setContextData<K extends ContextDataKey>(key: K, value: NoteContextDataMap[K]): void {
         this.contextData.set(key, value);
-        console.trace("Set context data", key, value);
         // Trigger event so subscribers can react
         this.triggerEvent("contextDataChanged", {
             noteContext: this,

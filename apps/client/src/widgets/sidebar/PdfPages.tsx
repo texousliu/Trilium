@@ -30,7 +30,6 @@ function PdfPagesList() {
         // Listen for thumbnail responses via custom event
         function handleThumbnail(event: CustomEvent) {
             const { pageNumber, dataUrl } = event.detail;
-            console.log("[PdfPages] Received thumbnail for page:", pageNumber);
             setThumbnails(prev => new Map(prev).set(pageNumber, dataUrl));
         }
 
@@ -43,7 +42,6 @@ function PdfPagesList() {
     const requestThumbnail = useCallback((pageNumber: number) => {
         // Only request if we haven't already requested it and don't have it
         if (!requestedThumbnails.current.has(pageNumber) && !thumbnails.has(pageNumber) && pagesData) {
-            console.log("[PdfPages] Requesting thumbnail for page:", pageNumber);
             requestedThumbnails.current.add(pageNumber);
             pagesData.requestThumbnail(pageNumber);
         }
