@@ -9,9 +9,6 @@ async function main() {
     }
     const app = window.PDFViewerApplication;
 
-    if (LOG_EVENT_BUS) {
-        patchEventBus();
-    }
     app.eventBus.on("documentloaded", () => {
         manageSave();
     });
