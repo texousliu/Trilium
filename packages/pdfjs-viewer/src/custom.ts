@@ -1,4 +1,4 @@
-const LOG_EVENT_BUS = true;
+const LOG_EVENT_BUS = false;
 
 async function main() {
     // Wait for the PDF viewer application to be available.
@@ -11,12 +11,14 @@ async function main() {
         patchEventBus();
     }
     app.eventBus.on("documentloaded", () => {
-        manageSave(app);
+        interceptViewHistory();
+        manageSave();
     });
     await app.initializedPromise;
 };
 
-function manageSave(app: typeof window.PDFViewerApplication) {
+function manageSave() {
+    const app = window.PDFViewerApplication;
     const storage = app.pdfDocument.annotationStorage;
     let timeout = null;
 
@@ -47,6 +49,22 @@ function manageSave(app: typeof window.PDFViewerApplication) {
             debouncedSave();
         }
     });
+}
+
+function interceptViewHistory() {
+    const app = window.PDFViewerApplication;
+    let activeFingerprint: string = app.pdfDocument.fingerprints[0];
+
+    const store = app.store;
+    store._writeToStorage = async function() {
+        const fileEntry = store.database.files?.find(f => f.fingerprint === activeFingerprint);
+        const databaseStr = JSON.stringify(fileEntry);
+        console.log("Write attempt.", databaseStr);
+    }
+    store._readFromStorage = async function() {
+        console.log("Read attempt", activeFingerprint);
+        return "{}";
+    }
 }
 
 function patchEventBus() {
