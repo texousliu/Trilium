@@ -47,7 +47,7 @@ function manageSave() {
             window.parent.postMessage({
                 type: "pdfjs-viewer-document-modified",
                 data: data
-            }, "*");
+            }, window.location.origin);
             storage.resetModified();
             timeout = null;
         }, 2_000);

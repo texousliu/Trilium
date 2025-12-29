@@ -40,7 +40,7 @@ function saveHistory(value: string) {
         window.parent.postMessage({
             type: "pdfjs-viewer-save-view-history",
             data: JSON.stringify(history)
-        }, "*");
+        }, window.location.origin);
         saveTimeout = null;
     }, 2_000);
 }
