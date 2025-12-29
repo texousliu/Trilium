@@ -2,8 +2,10 @@ import { join } from "path";
 import BuildHelper from "../../../scripts/build-utils";
 import { build as esbuild } from "esbuild";
 import { LOCALES } from "@triliumnext/commons";
+import { watch } from "chokidar";
 
 const build = new BuildHelper("packages/pdfjs-viewer");
+const watchMode = process.argv.includes("--watch");
 
 const LOCALE_MAPPINGS: Record<string, string> = {
     "es": "es-ES"
@@ -34,6 +36,10 @@ async function main() {
     // Copy pdfjs-dist files.
     build.copy("/node_modules/pdfjs-dist/build/pdf.mjs", "build/pdf.mjs");
     build.copy("/node_modules/pdfjs-dist/build/pdf.worker.mjs", "build/pdf.worker.mjs");
+
+    if (watchMode) {
+        watchForChanges();
+    }
 }
 
 async function buildScript(outPath: string) {
@@ -45,6 +51,30 @@ async function buildScript(outPath: string) {
         format: "esm",
         platform: "browser",
         minify: true,
+    });
+}
+
+async function rebuildCustomFiles() {
+    await buildScript("web/custom.mjs");
+    build.copy("src/custom.css", "web/custom.css");
+}
+
+function watchForChanges() {
+    console.log("Watching for changes in src directory...");
+    const watcher = watch(join(build.projectDir, "src"), {
+        persistent: true,
+        ignoreInitial: true,
+    });
+
+    watcher.on("all", async (event, path) => {
+        console.log(`File ${event}: ${path}`);
+        console.log("Rebuilding...");
+        try {
+            await rebuildCustomFiles();
+            console.log("Rebuild complete!");
+        } catch (error) {
+            console.error("Build failed:", error);
+        }
     });
 }
 

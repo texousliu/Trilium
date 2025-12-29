@@ -3,6 +3,7 @@ import interceptPersistence from "./persistence";
 const LOG_EVENT_BUS = false;
 
 async function main() {
+    console.log("Hi");
     interceptPersistence(getCustomAppOptions());
 
     // Wait for the PDF viewer application to be available.

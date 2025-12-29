@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsx scripts/build.ts"
+    "build": "tsx scripts/build.ts",
+    "watch": "tsx scripts/build.ts --watch"
   },
   "dependencies": {
     "@triliumnext/commons": "workspace:*"
