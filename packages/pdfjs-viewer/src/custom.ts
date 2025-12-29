@@ -7,8 +7,12 @@ import { setupPdfLayers } from "./layers";
 const LOG_EVENT_BUS = false;
 
 async function main() {
-    console.log("Hi");
-    interceptPersistence(getCustomAppOptions());
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("sidebar") === "0") {
+        hideSidebar();
+    }
+
+    interceptPersistence(getCustomAppOptions(urlParams));
 
     // Wait for the PDF viewer application to be available.
     while (!window.PDFViewerApplication) {
@@ -31,14 +35,27 @@ async function main() {
     await app.initializedPromise;
 };
 
-function getCustomAppOptions() {
-    const urlParams = new URLSearchParams(window.location.search);
+function hideSidebar() {
+    window.TRILIUM_HIDE_SIDEBAR = true;
+    const toggleButtonEl = document.getElementById("viewsManagerToggleButton");
+    if (toggleButtonEl) {
+        const spacer = toggleButtonEl.nextElementSibling.nextElementSibling;
+        if (spacer.classList.contains("toolbarButtonSpacer")) {
+            spacer.remove();
+        }
+        toggleButtonEl.remove();
+    }
+}
 
+function getCustomAppOptions(urlParams: URLSearchParams) {
     return {
         localeProperties: {
             // Read from URL query
             lang: urlParams.get("lang") || "en"
-        }
+        },
+        // Control sidebar visibility via query parameter
+        // sidebarViewOnLoad: -1 disables sidebar, 0 = NONE (default)
+        viewsManager: null
     };
 }
 

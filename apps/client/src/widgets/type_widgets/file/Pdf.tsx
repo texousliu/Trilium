@@ -6,7 +6,7 @@ import FBlob from "../../../entities/fblob";
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
 import { useViewModeConfig } from "../../collections/NoteList";
-import { useTriliumOption } from "../../react/hooks";
+import { useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 
 const VARIABLE_WHITELIST = new Set([
     "root-background",
@@ -25,6 +25,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
     const { onLoad } = useStyleInjection(iframeRef);
     const historyConfig = useViewModeConfig(note, "pdfHistory");
     const [ locale ] = useTriliumOption("locale");
+    const [ newLayout ] = useTriliumOptionBool("newLayout");
 
     useEffect(() => {
         function handleMessage(event: MessageEvent) {
@@ -154,7 +155,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
         <iframe
             ref={iframeRef}
             class="pdf-preview"
-            src={`pdfjs/web/viewer.html?file=../../api/notes/${note.noteId}/open&lang=${locale}`}
+            src={`pdfjs/web/viewer.html?file=../../api/notes/${note.noteId}/open&lang=${locale}&sidebar=${newLayout ? "0" : "1"}`}
             onLoad={() => {
                 const win = iframeRef.current?.contentWindow;
                 if (win) {
