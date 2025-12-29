@@ -1,6 +1,11 @@
 .pdf-pages-list {
     width: 100%;
     height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+    padding: 8px;
+    align-content: flex-start;
 }
 
 .pdf-page-item {
@@ -11,6 +16,7 @@
     cursor: pointer;
     border: 2px solid transparent;
     transition: border-color 0.2s;
+    box-sizing: border-box;
 }
 
 .pdf-page-item:hover {
@@ -30,7 +36,7 @@
 
 .pdf-page-thumbnail {
     width: 100%;
-    height: 100px;
+    aspect-ratio: 8.5 / 11; /* Standard page ratio */
     display: flex;
     align-items: center;
     justify-content: center;
