@@ -16,8 +16,8 @@ async function main() {
                 clearTimeout(timeout);
             }
             timeout = setTimeout(async () => {
-                console.log("Triggered debounce save");
-                const data = await app.pdfDocument.saveDocument();
+                if (!storage) return;
+                const data = await app.pdfDocument.saveDocument(storage);
                 window.parent.postMessage({
                     type: "pdfjs-viewer-document-modified",
                     data: data 
@@ -27,9 +27,16 @@ async function main() {
             }, 2_000);
         }
         
-        storage.onSetModified = async () => {
-            debouncedSave();
-        };
+        app.eventBus.on("annotationeditorcommit", debouncedSave);
+        app.eventBus.on("annotationeditorparamschanged", debouncedSave);
+        app.eventBus.on("annotationeditorstateschanged", evt => {
+            const { activeEditorId } = evt;
+
+            // When activeEditorId becomes null, an editor was just committed
+            if (activeEditorId === null) {
+                debouncedSave();
+            }
+        });
     });
 };
 
