@@ -21,6 +21,11 @@ interface HeadingsWithNesting extends RawHeading {
     children: HeadingsWithNesting[];
 }
 
+export interface HeadingContext {
+    // scrollToHeading(heading: RawHeading): void;
+    headings: RawHeading[];
+}
+
 export default function TableOfContents() {
     const { note, noteContext } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
@@ -38,6 +43,7 @@ export default function TableOfContents() {
 
 function PdfTableOfContents() {
     const data = useGetContextData("toc");
+    console.log("Rendering with data", data);
 
     return (
         <pre>{JSON.stringify(data, null, 2)}</pre>

@@ -12,6 +12,7 @@ import server from "../services/server.js";
 import treeService from "../services/tree.js";
 import utils from "../services/utils.js";
 import { ReactWrappedWidget } from "../widgets/basic_widget.js";
+import type { HeadingContext } from "../widgets/sidebar/TableOfContents.js";
 import appContext, { type EventData, type EventListener } from "./app_context.js";
 import Component from "./component.js";
 
@@ -21,6 +22,12 @@ export interface SetNoteOpts {
 }
 
 export type GetTextEditorCallback = (editor: CKTextEditor) => void;
+
+export interface NoteContextDataMap {
+    toc: HeadingContext;
+}
+
+type ContextDataKey = keyof NoteContextDataMap;
 
 class NoteContext extends Component implements EventListener<"entitiesReloaded"> {
     ntxId: string | null;
@@ -469,8 +476,9 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
      * @param key - Unique identifier for the data type (e.g., "toc", "pdfPages", "codeOutline")
      * @param value - The data to store (will be cleared when switching notes)
      */
-    setContextData<T>(key: string, value: T): void {
+    setContextData<K extends ContextDataKey>(key: K, value: NoteContextDataMap[K]): void {
         this.contextData.set(key, value);
+        console.trace("Set context data", key, value);
         // Trigger event so subscribers can react
         this.triggerEvent("contextDataChanged", {
             noteContext: this,
@@ -485,21 +493,21 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
      * @param key - The data key to retrieve
      * @returns The stored data, or undefined if not found
      */
-    getContextData<T>(key: string): T | undefined {
-        return this.contextData.get(key) as T | undefined;
+    getContextData<K extends ContextDataKey>(key: K): NoteContextDataMap[K] | undefined {
+        return this.contextData.get(key) as NoteContextDataMap[K] | undefined;
     }
 
     /**
      * Check if context data exists for a given key.
      */
-    hasContextData(key: string): boolean {
+    hasContextData(key: ContextDataKey): boolean {
         return this.contextData.has(key);
     }
 
     /**
      * Clear specific context data.
      */
-    clearContextData(key: string): void {
+    clearContextData(key: ContextDataKey): void {
         this.contextData.delete(key);
         this.triggerEvent("contextDataChanged", {
             noteContext: this,

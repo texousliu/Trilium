@@ -39,10 +39,13 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
 
             if (event.data.type === "pdfjs-viewer-toc") {
                 if (event.data.data) {
-                    noteContext.setContextData("toc", event.data.data);
+                    // Convert PDF outline to HeadingContext format
+                    noteContext.setContextData("toc", {
+                        headings: convertPdfOutlineToHeadings(event.data.data)
+                    });
                 } else {
-                    // No ToC available, fallback to note title
-                    noteContext.setContextData("toc", note.title);
+                    // No ToC available, use empty headings
+                    noteContext.setContextData("toc", { headings: [] });
                 }
             }
         }
@@ -60,8 +63,6 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
         }
     }, [ blob ]);
 
-    // Initial ToC is set to note.title, will be replaced by actual ToC when received
-    useSetContextData(noteContext, "toc", note.title);
 
     return (historyConfig &&
         <iframe
@@ -129,4 +130,30 @@ function cssVarsToString(vars) {
     return `:root {\n${Object.entries(vars)
         .map(([k, v]) => `  ${k}: ${v};`)
         .join('\n')}\n}`;
+}
+
+interface PdfOutlineItem {
+    title: string;
+    level: number;
+    dest: any;
+    items: PdfOutlineItem[];
+}
+
+function convertPdfOutlineToHeadings(outline: PdfOutlineItem[], parentLevel = 0) {
+    const headings: any[] = [];
+
+    for (const item of outline) {
+        headings.push({
+            level: parentLevel + 1,
+            text: item.title,
+            id: `pdf-outline-${headings.length}`,
+            element: null // PDFs don't have DOM elements
+        });
+
+        if (item.items && item.items.length > 0) {
+            headings.push(...convertPdfOutlineToHeadings(item.items, parentLevel + 1));
+        }
+    }
+
+    return headings;
 }
