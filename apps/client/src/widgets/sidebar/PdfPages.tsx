@@ -2,6 +2,8 @@ import "./PdfPages.css";
 
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
+import { NoteContextDataMap } from "../../components/note_context";
+import { t } from "../../services/i18n";
 import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
 import RightPanelWidget from "./RightPanelWidget";
 
@@ -9,20 +11,20 @@ export default function PdfPages() {
     const { note } = useActiveNoteContext();
     const noteType = useNoteProperty(note, "type");
     const noteMime = useNoteProperty(note, "mime");
+    const pagesData = useGetContextData("pdfPages");
 
     if (noteType !== "file" || noteMime !== "application/pdf") {
         return null;
     }
 
-    return (
-        <RightPanelWidget id="pdf-pages" title="Pages" grow>
-            <PdfPagesList key={note?.noteId} />
+    return (pagesData &&
+        <RightPanelWidget id="pdf-pages" title={t("pdf.pages", { count: pagesData?.totalPages || 0 })} grow>
+            <PdfPagesList key={note?.noteId} pagesData={pagesData} />
         </RightPanelWidget>
     );
 }
 
-function PdfPagesList() {
-    const pagesData = useGetContextData("pdfPages");
+function PdfPagesList({ pagesData }: { pagesData: NoteContextDataMap["pdfPages"] }) {
     const [thumbnails, setThumbnails] = useState<Map<number, string>>(new Map());
     const requestedThumbnails = useRef<Set<number>>(new Set());
 
@@ -42,7 +44,6 @@ function PdfPagesList() {
     const requestThumbnail = useCallback((pageNumber: number) => {
         // Only request if we haven't already requested it and don't have it
         if (!requestedThumbnails.current.has(pageNumber) && !thumbnails.has(pageNumber) && pagesData) {
-            console.log("[PdfPages] Requesting thumbnail for page:", pageNumber);
             requestedThumbnails.current.add(pageNumber);
             pagesData.requestThumbnail(pageNumber);
         }

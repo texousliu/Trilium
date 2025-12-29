@@ -1,5 +1,6 @@
 import "./PdfAttachments.css";
 
+import { t } from "../../services/i18n";
 import { formatSize } from "../../services/utils";
 import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
@@ -25,7 +26,7 @@ export default function PdfAttachments() {
     }
 
     return (
-        <RightPanelWidget id="pdf-attachments" title="Attachments">
+        <RightPanelWidget id="pdf-attachments" title={t("pdf.attachments", { count: attachmentsData.attachments.length })}>
             <div className="pdf-attachments-list">
                 {attachmentsData.attachments.map((attachment) => (
                     <PdfAttachmentItem

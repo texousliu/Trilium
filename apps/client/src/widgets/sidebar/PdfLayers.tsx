@@ -1,5 +1,6 @@
 import "./PdfLayers.css";
 
+import { t } from "../../services/i18n";
 import { useActiveNoteContext, useGetContextData, useNoteProperty } from "../react/hooks";
 import Icon from "../react/Icon";
 import RightPanelWidget from "./RightPanelWidget";
@@ -21,7 +22,7 @@ export default function PdfLayers() {
     }
 
     return (layersData?.layers && layersData.layers.length > 0 &&
-        <RightPanelWidget id="pdf-layers" title="Layers">
+        <RightPanelWidget id="pdf-layers" title={t("pdf.layers", { count: layersData.layers.length })}>
             <div className="pdf-layers-list">
                 {layersData.layers.map((layer) => (
                     <PdfLayerItem
