@@ -4,8 +4,6 @@ import { setupPdfPages } from "./pages";
 import { setupPdfAttachments } from "./attachments";
 import { setupPdfLayers } from "./layers";
 
-const LOG_EVENT_BUS = false;
-
 async function main() {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("sidebar") === "0") {
@@ -20,9 +18,6 @@ async function main() {
     }
     const app = window.PDFViewerApplication;
 
-    if (LOG_EVENT_BUS) {
-        patchEventBus();
-    }
     app.eventBus.on("documentloaded", () => {
         manageSave();
         extractAndSendToc();
@@ -74,7 +69,7 @@ function manageSave() {
             window.parent.postMessage({
                 type: "pdfjs-viewer-document-modified",
                 data: data
-            }, "*");
+            }, window.location.origin);
             storage.resetModified();
             timeout = null;
         }, 2_000);
@@ -93,15 +88,4 @@ function manageSave() {
     });
 }
 
-function patchEventBus() {
-    const eventBus = window.PDFViewerApplication.eventBus;
-    const originalDispatch = eventBus.dispatch.bind(eventBus);
-
-    eventBus.dispatch = (type: string, data?: any) => {
-        console.log("PDF.js event:", type, data);
-        return originalDispatch(type, data);
-    };
-}
-
 main();
-console.log("Custom script loaded");

@@ -1,6 +1,7 @@
 import { RefObject } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 
+import appContext from "../../../components/app_context";
 import type NoteContext from "../../../components/note_context";
 import FBlob from "../../../entities/fblob";
 import FNote from "../../../entities/fnote";
@@ -16,9 +17,9 @@ const VARIABLE_WHITELIST = new Set([
 ]);
 
 export default function PdfPreview({ note, blob, componentId, noteContext }: {
-    note: FNote,
-    noteContext: NoteContext
-    blob: FBlob | null | undefined,
+    note: FNote;
+    noteContext: NoteContext;
+    blob: FBlob | null | undefined;
     componentId: string | undefined;
 }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -150,9 +151,28 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
         }
     }, [ blob ]);
 
+    // Trigger focus when iframe content is clicked (iframe focus doesn't bubble)
+    useEffect(() => {
+        const iframe = iframeRef.current;
+        if (!iframe) return;
+
+        const handleIframeClick = () => {
+            if (noteContext.ntxId) {
+                appContext.tabManager.activateNoteContext(noteContext.ntxId);
+            }
+        };
+
+        // Listen for clicks on the iframe's content window
+        const iframeDoc = iframe.contentWindow?.document;
+        if (iframeDoc) {
+            iframeDoc.addEventListener('click', handleIframeClick);
+            return () => iframeDoc.removeEventListener('click', handleIframeClick);
+        }
+    }, [ iframeRef.current?.contentWindow, noteContext ]);
 
     return (historyConfig &&
         <iframe
+            tabIndex={300}
             ref={iframeRef}
             class="pdf-preview"
             src={`pdfjs/web/viewer.html?file=../../api/notes/${note.noteId}/open&lang=${locale}&sidebar=${newLayout ? "0" : "1"}`}
@@ -201,7 +221,7 @@ function useStyleInjection(iframeRef: RefObject<HTMLIFrameElement>) {
 
 function getRootCssVariables() {
     const styles = getComputedStyle(document.documentElement);
-    const vars = {};
+    const vars: Record<string, string> = {};
 
     for (let i = 0; i < styles.length; i++) {
         const prop = styles[i];
@@ -213,7 +233,7 @@ function getRootCssVariables() {
     return vars;
 }
 
-function cssVarsToString(vars) {
+function cssVarsToString(vars: Record<string, string>) {
     return `:root {\n${Object.entries(vars)
         .map(([k, v]) => `  ${k}: ${v};`)
         .join('\n')}\n}`;
