@@ -77,7 +77,7 @@ export default function SvgSplitEditor({ ntxId, note, attachmentName, renderSvg,
             if (!attachments.find((a) => a.title === `${attachmentName}.svg`)) {
                 onSave();
             }
-        });
+        }).catch(e => console.error("Failed to get attachments for SVGSplitEditor", e));
     }, [ note, svg, attachmentName, onSave ]);
 
     // Import/export
