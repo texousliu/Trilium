@@ -1259,10 +1259,11 @@ body.layout-horizontal #rest-pane > .classic-toolbar-widget {
 #center-pane .note-split {
     padding-top: 2px;
     background-color: var(--note-split-background-color, var(--main-background-color));
-    transition: box-shadow 250ms ease-in;
+    transition: border-color 250ms ease-in;
+    border: 1px solid transparent;
 
     &.active {
-        box-shadow: 0 0 0 2px var(--link-selection-outline-color) inset;
+        border-color: var(--link-selection-outline-color);
     }
 }
 
