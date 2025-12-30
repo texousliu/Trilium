@@ -676,7 +676,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                     const parentTitles = realParents.map((p) => p.title).join(", ");
                     const tooltipText = realParents.length === 2
                         ? t("note_tree.clone-indicator-tooltip-single", { parent: realParents[1].title })
-                        : t("note_tree.clone-indicator-tooltip", { count: String(realParents.length), parents: parentTitles });
+                        : t("note_tree.clone-indicator-tooltip", { count: realParents.length, parents: parentTitles });
 
                     const $cloneIndicator = $(`<span class="note-indicator-icon clone-indicator"></span>`);
                     $cloneIndicator.attr("title", tooltipText);
