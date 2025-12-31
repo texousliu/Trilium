@@ -28,7 +28,7 @@ async function extractAndSendLayers() {
             window.parent.postMessage({
                 type: "pdfjs-viewer-layers",
                 layers: []
-            }, "*");
+            }, window.location.origin);
             return;
         }
 
@@ -38,7 +38,7 @@ async function extractAndSendLayers() {
             window.parent.postMessage({
                 type: "pdfjs-viewer-layers",
                 layers: []
-            }, "*");
+            }, window.location.origin);
             return;
         }
 
@@ -77,13 +77,13 @@ async function extractAndSendLayers() {
         window.parent.postMessage({
             type: "pdfjs-viewer-layers",
             layers
-        }, "*");
+        }, window.location.origin);
     } catch (error) {
         console.error("Error extracting layers:", error);
         window.parent.postMessage({
             type: "pdfjs-viewer-layers",
             layers: []
-        }, "*");
+        }, window.location.origin);
     }
 }
 

@@ -50,7 +50,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                             iframeRef.current?.contentWindow?.postMessage({
                                 type: "trilium-scroll-to-heading",
                                 headingId: heading.id
-                            }, "*");
+                            }, window.location.origin);
                         }
                     });
                 } else {
@@ -81,13 +81,13 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                         iframeRef.current?.contentWindow?.postMessage({
                             type: "trilium-scroll-to-page",
                             pageNumber: page
-                        }, "*");
+                        }, window.location.origin);
                     },
                     requestThumbnail: (page: number) => {
                         iframeRef.current?.contentWindow?.postMessage({
                             type: "trilium-request-thumbnail",
                             pageNumber: page
-                        }, "*");
+                        }, window.location.origin);
                     }
                 });
             }
@@ -119,7 +119,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                         iframeRef.current?.contentWindow?.postMessage({
                             type: "trilium-download-attachment",
                             filename
-                        }, "*");
+                        }, window.location.origin);
                     }
                 });
             }
@@ -132,7 +132,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                             type: "trilium-toggle-layer",
                             layerId,
                             visible
-                        }, "*");
+                        }, window.location.origin);
                     }
                 });
             }
