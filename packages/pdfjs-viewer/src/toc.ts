@@ -126,7 +126,6 @@ export function setupActiveHeadingTracking() {
     function updateActiveHeading() {
         if (!headingPositions || headingPositions.length === 0) return;
 
-        const currentPage = app.page - 1; // PDF.js uses 1-based, we need 0-based
         const viewer = app.pdfViewer;
         const container = viewer.container;
         const scrollTop = container.scrollTop;

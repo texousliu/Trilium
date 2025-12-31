@@ -64,7 +64,7 @@ async function generateThumbnail(pageNumber: number) {
 
         // Render page to canvas
         await page.render({
-            canvasContext: context,
+            canvas: canvas,
             viewport: viewport
         }).promise;
 
