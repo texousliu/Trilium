@@ -3,7 +3,7 @@ import "./RightPanelContainer.css";
 
 import Split from "@triliumnext/split.js";
 import { VNode } from "preact";
-import { useEffect, useRef } from "preact/hooks";
+import { useState, useEffect, useRef } from "preact/hooks";
 
 import appContext from "../../components/app_context";
 import { WidgetsByParent } from "../../services/bundle";
@@ -27,10 +27,12 @@ interface RightPanelWidgetDefinition {
 }
 
 export default function RightPanelContainer({ widgetsByParent }: { widgetsByParent: WidgetsByParent }) {
-    const [ rightPaneVisible, setRightPaneVisible ] = useTriliumOptionBool("rightPaneVisible");
+    const [rightPaneVisibleOption, setRightPaneVisibleOption] = useTriliumOptionBool("rightPaneVisible");
+    const [rightPaneVisible, setRightPaneVisible] = useState(rightPaneVisibleOption);
     const items = useItems(rightPaneVisible, widgetsByParent);
     useSplit(rightPaneVisible);
     useTriliumEvent("toggleRightPane", () => {
+        setRightPaneVisibleOption(!rightPaneVisible);
         setRightPaneVisible(!rightPaneVisible);
     });
 
@@ -45,7 +47,10 @@ export default function RightPanelContainer({ widgetsByParent }: { widgetsByPare
                         {t("right_pane.empty_message")}
                         <Button
                             text={t("right_pane.empty_button")}
-                            onClick={() => setRightPaneVisible(!rightPaneVisible)}
+                                onClick={() => {
+                                    setRightPaneVisibleOption(!rightPaneVisible);
+                                    setRightPaneVisible(!rightPaneVisible);
+                                }}
                         />
                     </div>
                 )
