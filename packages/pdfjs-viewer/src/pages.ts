@@ -78,6 +78,6 @@ async function generateThumbnail(pageNumber: number) {
             dataUrl
         }, window.location.origin);
     } catch (error) {
-        console.error(`Error generating thumbnail for page ${pageNumber}:`, error);
+        console.error(`Error generating thumbnail for page %d:`, pageNumber, error);
     }
 }
