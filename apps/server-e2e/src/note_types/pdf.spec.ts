@@ -1,6 +1,7 @@
 import { describe } from "node:test";
 
 import test, { BrowserContext, expect, Page } from "@playwright/test";
+import { statSync } from "fs";
 
 import App from "../support/app";
 
@@ -42,6 +43,25 @@ describe("PDF sidebar", () => {
 
         const pdfHelper = new PdfHelper(app);
         await pdfHelper.expectPageToBe(3);
+    });
+
+    test("Attachments listing works", async ({ page, context }) => {
+        const app = new App(page, context);
+        await app.goto();
+        await app.goToNoteInNewTab("Dacia Logan.pdf");
+
+        const attachmentsList = app.sidebar.locator(".pdf-attachments-list");
+        await expect(attachmentsList.locator(".pdf-attachment-item")).toHaveCount(2);
+
+        const attachmentInfo = attachmentsList.locator(".pdf-attachment-item", { hasText: "Note.trilium" });
+        await expect(attachmentInfo).toContainText("3.36 MB");
+
+        // Download the attachment and check its size.
+        const [ download ] = await Promise.all([
+            page.waitForEvent("download"),
+            attachmentInfo.locator(".bx-download").click()
+        ]);
+        expect(download).toBeDefined();
     });
 });
 
