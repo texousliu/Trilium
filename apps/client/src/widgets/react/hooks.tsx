@@ -669,10 +669,17 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
     }, [ renderedWidget ]);
 
     // Inject the note context - this updates the existing widget without recreating it.
+    // We check if the context actually changed to avoid double refresh when the event system
+    // also delivers activeContextChanged to the widget through component tree propagation.
     useEffect(() => {
         if (noteContext && widget instanceof NoteContextAwareWidget) {
-            widget.setNoteContextEvent({ noteContext });
-            widget.activeContextChangedEvent({ noteContext });
+            // Only trigger refresh if the context actually changed.
+            // The event system may have already updated the widget, in which case
+            // widget.noteContext will already equal noteContext.
+            if (widget.noteContext !== noteContext) {
+                widget.setNoteContextEvent({ noteContext });
+                widget.activeContextChangedEvent({ noteContext });
+            }
         }
     }, [ noteContext, widget ]);
 
