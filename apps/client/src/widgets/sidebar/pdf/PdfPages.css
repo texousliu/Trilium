@@ -44,12 +44,9 @@
 
 .pdf-page-thumbnail {
     width: 100%;
-    aspect-ratio: 8.5 / 11; /* Standard page ratio */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--accented-background-color);
-    border: 1px solid var(--main-border-color);
 }
 
 .pdf-page-thumbnail img {
