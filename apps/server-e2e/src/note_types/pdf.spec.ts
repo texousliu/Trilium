@@ -4,12 +4,13 @@ import test, { BrowserContext, expect, Page } from "@playwright/test";
 
 import App from "../support/app";
 
+test.beforeAll(async ({ page, context }) => {
+    const app = await setLayout({ page, context }, true);
+    await app.setOption("rightPaneCollapsedItems", "[]");
+});
+test.beforeAll(async ({ page, context }) => await setLayout({ page, context }, true));
+
 describe("PDF sidebar", () => {
-    test.beforeAll(async ({ page, context }) => {
-        const app = await setLayout({ page, context }, true);
-        await app.setOption("rightPaneCollapsedItems", "[]");
-    });
-    // test.beforeAll(async ({ page, context }) => await setLayout({ page, context }, true));
 
     test("Table of contents works", async ({ page, context }) => {
         const app = new App(page, context);
