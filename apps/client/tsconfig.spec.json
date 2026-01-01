@@ -4,7 +4,6 @@
     "outDir": "./out-tsc/vitest",
     "types": [
       "vitest/importMeta",
-      "vite/client",
       "node",
       "vitest"
     ],
