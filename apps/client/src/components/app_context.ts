@@ -473,6 +473,11 @@ type EventMappings = {
     noteContextRemoved: {
         ntxIds: string[];
     };
+    contextDataChanged: {
+        noteContext: NoteContext;
+        key: string;
+        value: unknown;
+    };
     exportSvg: { ntxId: string | null | undefined; };
     exportPng: { ntxId: string | null | undefined; };
     geoMapCreateChildNote: {

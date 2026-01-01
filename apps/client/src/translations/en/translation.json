@@ -2238,5 +2238,15 @@
     "empty_button": "Hide the panel",
     "toggle": "Toggle right panel",
     "custom_widget_go_to_source": "Go to source code"
+  },
+  "pdf": {
+    "attachments_one": "{{count}} attachment",
+    "attachments_other": "{{count}} attachments",
+    "layers_one": "{{count}} layer",
+    "layers_other": "{{count}} layers",
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "pages_alt": "Page {{pageNumber}}",
+    "pages_loading": "Loading..."
   }
 }
