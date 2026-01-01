@@ -75,6 +75,14 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         note: parentBranch.getNote()
     };
 
+    // Determine JS to load.
+    const jsToLoad: string[] = [
+        `${basePath}assets/scripts.js`
+    ];
+    for (const jsRelation of note.getRelations("shareJs")) {
+        jsToLoad.push(`api/notes/${jsRelation.value}/download`);
+    }
+
     return renderNoteContentInternal(note, {
         subRoot,
         rootNoteId: parentBranch.noteId,
@@ -82,9 +90,7 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
             `${basePath}assets/styles.css`,
             `${basePath}assets/scripts.css`,
         ],
-        jsToLoad: [
-            `${basePath}assets/scripts.js`
-        ],
+        jsToLoad,
         logoUrl: `${basePath}icon-color.svg`,
         faviconUrl: `${basePath}favicon.ico`,
         ancestors,
