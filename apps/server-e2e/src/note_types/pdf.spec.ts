@@ -1,6 +1,5 @@
-import { describe } from "node:test";
-
 import test, { BrowserContext, expect, Page } from "@playwright/test";
+import { describe } from "vitest";
 
 import App from "../support/app";
 

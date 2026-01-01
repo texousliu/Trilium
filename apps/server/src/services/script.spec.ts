@@ -1,7 +1,5 @@
-import { beforeEach } from "node:test";
-
 import { trimIndentation } from "@triliumnext/commons";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach,describe, expect, it, vi } from "vitest";
 
 import becca from "../becca/becca.js";
 import BBranch from "../becca/entities/bbranch.js";
@@ -12,8 +10,6 @@ import cls from "./cls.js";
 import { buildJsx, executeBundle, getScriptBundle } from "./script.js";
 
 describe("Script", () => {
-    let rootNote!: NoteBuilder;
-
     beforeEach(() => {
 
         becca.reset();

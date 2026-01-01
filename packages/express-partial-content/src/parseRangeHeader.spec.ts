@@ -1,8 +1,7 @@
 import { parseRangeHeader } from "./parseRangeHeader.js";
 import type { Logger } from "./Logger.js";
 import { RangeParserError } from "./RangeParserError.js";
-import { describe, expect, it, vi } from "vitest";
-import { afterEach, beforeEach } from "node:test";
+import { describe, expect, it, vi, afterEach, beforeEach } from "vitest";
 
 describe("parseRangeHeader tests", () => {
   let logger: Logger;
