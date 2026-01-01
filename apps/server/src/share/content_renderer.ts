@@ -4,7 +4,7 @@ import ejs from "ejs";
 import escapeHtml from "escape-html";
 import { readFileSync } from "fs";
 import { t } from "i18next";
-import { HTMLElement, Options,parse, TextNode } from "node-html-parser";
+import { HTMLElement, Options, parse, TextNode } from "node-html-parser";
 import { join } from "path";
 
 import becca from "../becca/becca.js";
