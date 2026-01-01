@@ -1,13 +1,15 @@
+import { beforeEach } from "node:test";
+
 import { trimIndentation } from "@triliumnext/commons";
+import { describe, expect, it, vi } from "vitest";
 
 import becca from "../becca/becca.js";
 import BBranch from "../becca/entities/bbranch.js";
 import BNote from "../becca/entities/bnote.js";
 import { buildNote } from "../test/becca_easy_mocking.js";
-import { note, NoteBuilder } from "../test/becca_mocking.js";
+import { NoteBuilder } from "../test/becca_mocking.js";
 import cls from "./cls.js";
 import { buildJsx, executeBundle, getScriptBundle } from "./script.js";
-
 
 describe("Script", () => {
     let rootNote!: NoteBuilder;
