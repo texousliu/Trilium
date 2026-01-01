@@ -4,11 +4,11 @@ import test, { BrowserContext, expect, Page } from "@playwright/test";
 
 import App from "../support/app";
 
-test.beforeAll(async ({ page, context }) => {
+test.beforeEach(async ({ page, context }) => {
     const app = await setLayout({ page, context }, true);
     await app.setOption("rightPaneCollapsedItems", "[]");
 });
-test.beforeAll(async ({ page, context }) => await setLayout({ page, context }, true));
+test.afterEach(async ({ page, context }) => await setLayout({ page, context }, false));
 
 describe("PDF sidebar", () => {
 
