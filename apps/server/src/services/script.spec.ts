@@ -1,5 +1,5 @@
 import { trimIndentation } from "@triliumnext/commons";
-import { beforeEach,describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import becca from "../becca/becca.js";
 import BBranch from "../becca/entities/bbranch.js";

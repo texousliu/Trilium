@@ -1,5 +1,5 @@
 import { deferred, LOCALES } from "@triliumnext/commons";
-import { beforeAll,describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import becca from "../becca/becca.js";
 import branches from "./branches.js";

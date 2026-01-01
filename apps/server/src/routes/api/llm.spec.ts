@@ -1,7 +1,7 @@
 import { sleepFor } from "@triliumnext/commons";
 import { Application } from "express";
 import supertest from "supertest";
-import { afterAll,afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { refreshAuth } from "../../services/auth.js";
 import config from "../../services/config.js";
