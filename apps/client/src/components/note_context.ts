@@ -122,12 +122,17 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         // Clear context data when switching notes and notify subscribers
         const oldKeys = Array.from(this.contextData.keys());
         this.contextData.clear();
-        for (const key of oldKeys) {
-            this.triggerEvent("contextDataChanged", {
-                noteContext: this,
-                key,
-                value: undefined
-            });
+        if (oldKeys.length > 0) {
+            // Notify subscribers asynchronously to avoid blocking navigation
+            window.setTimeout(() => {
+                for (const key of oldKeys) {
+                    this.triggerEvent("contextDataChanged", {
+                        noteContext: this,
+                        key,
+                        value: undefined
+                    });
+                }
+            }, 0);
         }
 
         this.saveToRecentNotes(resolvedNotePath);

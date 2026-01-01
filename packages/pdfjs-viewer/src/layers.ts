@@ -1,11 +1,12 @@
 export async function setupPdfLayers() {
-    const app = window.PDFViewerApplication;
-
     // Extract immediately since we're called after documentloaded
     await extractAndSendLayers();
 
     // Listen for layer visibility toggle requests
     window.addEventListener("message", async (event) => {
+        // Only accept messages from the same origin to prevent malicious iframes
+        if (event.origin !== window.location.origin) return;
+
         if (event.data?.type === "trilium-toggle-layer") {
             const layerId = event.data.layerId;
             const visible = event.data.visible;

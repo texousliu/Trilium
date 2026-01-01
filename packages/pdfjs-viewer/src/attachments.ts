@@ -1,11 +1,12 @@
 export async function setupPdfAttachments() {
-    const app = window.PDFViewerApplication;
-
     // Extract immediately since we're called after documentloaded
     await extractAndSendAttachments();
 
     // Listen for download requests
     window.addEventListener("message", async (event) => {
+        // Only accept messages from the same origin to prevent malicious iframes
+        if (event.origin !== window.location.origin) return;
+
         if (event.data?.type === "trilium-download-attachment") {
             const filename = event.data.filename;
             await downloadAttachment(filename);
@@ -18,7 +19,6 @@ async function extractAndSendAttachments() {
 
     try {
         const attachments = await app.pdfDocument.getAttachments();
-        console.log("Got attachments:", attachments);
 
         if (!attachments) {
             window.parent.postMessage({

@@ -19,16 +19,15 @@ export function setupPdfPages() {
         }, window.location.origin);
     });
 
-    // Listen for scroll-to-page requests
-    window.addEventListener("message", (event) => {
+    window.addEventListener("message", async(event) => {
+        // Only accept messages from the same origin to prevent malicious iframes
+        if (event.origin !== window.location.origin) return;
+
         if (event.data?.type === "trilium-scroll-to-page") {
             const pageNumber = event.data.pageNumber;
             app.pdfViewer.currentPageNumber = pageNumber;
         }
-    });
 
-    // Listen for thumbnail requests
-    window.addEventListener("message", async (event) => {
         if (event.data?.type === "trilium-request-thumbnail") {
             const pageNumber = event.data.pageNumber;
             await generateThumbnail(pageNumber);

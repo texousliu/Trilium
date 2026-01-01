@@ -55,6 +55,9 @@ function convertOutlineToToc(outline: any[], level = 0, outlineMap?: Map<string,
 
 export function setupScrollToHeading() {
     window.addEventListener("message", async (event) => {
+        // Only accept messages from the same origin to prevent malicious iframes
+        if (event.origin !== window.location.origin) return;
+
         if (event.data?.type === "trilium-scroll-to-heading") {
             const headingId = event.data.headingId;
 

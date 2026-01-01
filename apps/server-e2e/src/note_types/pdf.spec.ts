@@ -61,7 +61,7 @@ describe("PDF sidebar", () => {
         await expect(attachmentsList.locator(".pdf-attachment-item")).toHaveCount(2);
 
         const attachmentInfo = attachmentsList.locator(".pdf-attachment-item", { hasText: "Note.trilium" });
-        await expect(attachmentInfo).toContainText("3.36 MB");
+        await expect(attachmentInfo).toContainText("3.36 MiB");
 
         // Download the attachment and check its size.
         const [ download ] = await Promise.all([

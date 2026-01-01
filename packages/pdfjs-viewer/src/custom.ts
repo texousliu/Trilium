@@ -35,7 +35,7 @@ function hideSidebar() {
     const toggleButtonEl = document.getElementById("viewsManagerToggleButton");
     if (toggleButtonEl) {
         const spacer = toggleButtonEl.nextElementSibling.nextElementSibling;
-        if (spacer.classList.contains("toolbarButtonSpacer")) {
+        if (spacer instanceof HTMLElement && spacer.classList.contains("toolbarButtonSpacer")) {
             spacer.remove();
         }
         toggleButtonEl.remove();
@@ -47,10 +47,7 @@ function getCustomAppOptions(urlParams: URLSearchParams) {
         localeProperties: {
             // Read from URL query
             lang: urlParams.get("lang") || "en"
-        },
-        // Control sidebar visibility via query parameter
-        // sidebarViewOnLoad: -1 disables sidebar, 0 = NONE (default)
-        viewsManager: null
+        }
     };
 }
 

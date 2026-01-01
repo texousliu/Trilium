@@ -1213,23 +1213,18 @@ export function useSetContextData<K extends keyof NoteContextDataMap>(
     key: K,
     value: NoteContextDataMap[K] | undefined
 ) {
-    const valueRef = useRef<NoteContextDataMap[K] | undefined>(value);
-    valueRef.current = value;
-
     useEffect(() => {
-        if (!noteContext || valueRef.current === undefined) return;
+        if (!noteContext) return;
 
-        noteContext.setContextData(key, valueRef.current);
+        if (value !== undefined) {
+            noteContext.setContextData(key, value);
+        } else {
+            noteContext.clearContextData(key);
+        }
 
         return () => {
             noteContext.clearContextData(key);
         };
-    }, [noteContext, key]);
-
-    // Update when value changes
-    useEffect(() => {
-        if (!noteContext || value === undefined) return;
-        noteContext.setContextData(key, value);
     }, [noteContext, key, value]);
 }
 
@@ -1253,23 +1248,7 @@ export function useSetContextData<K extends keyof NoteContextDataMap>(
  */
 export function useGetContextData<K extends keyof NoteContextDataMap>(key: K): NoteContextDataMap[K] | undefined {
     const { noteContext } = useActiveNoteContext();
-    const [data, setData] = useState<NoteContextDataMap[K] | undefined>(() =>
-        noteContext?.getContextData(key)
-    );
-
-    // Update initial value when noteContext changes
-    useEffect(() => {
-        setData(noteContext?.getContextData(key));
-    }, [noteContext, key]);
-
-    // Subscribe to changes via Trilium event system
-    useTriliumEvent("contextDataChanged", ({ noteContext: eventNoteContext, key: changedKey, value }) => {
-        if (eventNoteContext === noteContext && changedKey === key) {
-            setData(value as NoteContextDataMap[K]);
-        }
-    });
-
-    return data;
+    return useGetContextDataFrom(noteContext, key);
 }
 
 /**

@@ -4,7 +4,7 @@
  */
 
 import { NoteType } from "@triliumnext/commons";
-import { type JSX,VNode } from "preact";
+import { type JSX, VNode } from "preact";
 
 import { TypeWidgetProps } from "./type_widgets/type_widget";
 

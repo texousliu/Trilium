@@ -192,7 +192,7 @@ export function formatSize(size: number | null | undefined) {
     }
 
     const k = 1024;
-    const sizes = ["B", "KB", "MB", "GB"];
+    const sizes = ["B", "KiB", "MiB", "GiB"];
     const i = Math.floor(Math.log(size) / Math.log(k));
 
     return `${Math.round((size / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`;
