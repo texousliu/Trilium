@@ -1,7 +1,6 @@
 import { describe } from "node:test";
 
 import test, { BrowserContext, expect, Page } from "@playwright/test";
-import { statSync } from "fs";
 
 import App from "../support/app";
 
@@ -51,6 +50,7 @@ describe("PDF sidebar", () => {
         await app.goToNoteInNewTab("Dacia Logan.pdf");
 
         const attachmentsList = app.sidebar.locator(".pdf-attachments-list");
+        await expect(app.sidebar).toContainText("2 attachments");
         await expect(attachmentsList.locator(".pdf-attachment-item")).toHaveCount(2);
 
         const attachmentInfo = attachmentsList.locator(".pdf-attachment-item", { hasText: "Note.trilium" });
@@ -62,6 +62,24 @@ describe("PDF sidebar", () => {
             attachmentInfo.locator(".bx-download").click()
         ]);
         expect(download).toBeDefined();
+    });
+
+    test("Layers listing works", async ({ page, context }) => {
+        const app = new App(page, context);
+        await app.goto();
+        await app.goToNoteInNewTab("Layers test.pdf");
+
+        // Check count is correct.
+        await expect(app.sidebar).toContainText("2 layers");
+        const layersList = app.sidebar.locator(".pdf-layers-list");
+        await expect(layersList.locator(".pdf-layer-item")).toHaveCount(2);
+
+        // Toggle visibility of the first layer.
+        const firstLayer = layersList.locator(".pdf-layer-item").first();
+        await expect(firstLayer).toContainText("Tongue out");
+        await expect(firstLayer).toContainClass("hidden");
+        await firstLayer.click();
+        await expect(firstLayer).not.toContainClass("visible");
     });
 });
 
