@@ -7,7 +7,6 @@
     "outDir": "./out-tsc/vitest",
     "types": [
       "vitest/globals",
-      "vitest/importMeta",
       "node",
       "vitest"
     ]
