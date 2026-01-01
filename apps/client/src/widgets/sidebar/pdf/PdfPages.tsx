@@ -101,9 +101,9 @@ function PdfPageItem({
             <div className="pdf-page-number">{pageNumber}</div>
             <div className="pdf-page-thumbnail">
                 {thumbnail ? (
-                    <img src={thumbnail} alt={`Page ${pageNumber}`} />
+                    <img src={thumbnail} alt={t("pdf.pages_alt", { pageNumber })} />
                 ) : (
-                    <div className="pdf-page-loading">Loading...</div>
+                    <div className="pdf-page-loading">{t("pdf.pages_loading")}</div>
                 )}
             </div>
         </div>
