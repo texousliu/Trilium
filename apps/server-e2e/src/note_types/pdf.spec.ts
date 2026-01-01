@@ -24,6 +24,9 @@ describe("PDF sidebar", () => {
         const pdfHelper = new PdfHelper(app);
         await toc.locator("li", { hasText: "Logan Pick-Up" }).click();
         await pdfHelper.expectPageToBe(13);
+
+        await app.clickNoteOnNoteTreeByTitle("Layers test.pdf");
+        await expect(toc.locator("li")).toHaveCount(0);
     });
 
     test("Page navigation works", async ({ page, context }) => {
@@ -42,6 +45,9 @@ describe("PDF sidebar", () => {
 
         const pdfHelper = new PdfHelper(app);
         await pdfHelper.expectPageToBe(3);
+
+        await app.clickNoteOnNoteTreeByTitle("Layers test.pdf");
+        await expect(pagesList.locator(".pdf-page-item")).toHaveCount(1);
     });
 
     test("Attachments listing works", async ({ page, context }) => {
@@ -62,6 +68,9 @@ describe("PDF sidebar", () => {
             attachmentInfo.locator(".bx-download").click()
         ]);
         expect(download).toBeDefined();
+
+        await app.clickNoteOnNoteTreeByTitle("Layers test.pdf");
+        await expect(attachmentsList.locator(".pdf-attachment-item")).toHaveCount(0);
     });
 
     test("Layers listing works", async ({ page, context }) => {
@@ -80,6 +89,9 @@ describe("PDF sidebar", () => {
         await expect(firstLayer).toContainClass("hidden");
         await firstLayer.click();
         await expect(firstLayer).not.toContainClass("visible");
+
+        await app.clickNoteOnNoteTreeByTitle("Dacia Logan.pdf");
+        await expect(layersList.locator(".pdf-layer-item")).toHaveCount(0);
     });
 });
 
