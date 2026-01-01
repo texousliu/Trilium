@@ -634,7 +634,8 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
     const ref = useRef<HTMLDivElement>(null);
     const parentComponent = useContext(ParentComponent);
 
-    // Render the widget once.
+    // Render the widget once - note that noteContext is intentionally NOT a dependency
+    // to prevent creating new widget instances on every note switch.
     const [ widget, renderedWidget ] = useMemo(() => {
         const widget = widgetFactory();
 
@@ -642,14 +643,21 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
             parentComponent.child(widget);
         }
 
-        if (noteContext && widget instanceof NoteContextAwareWidget) {
-            widget.setNoteContextEvent({ noteContext });
-        }
-
         const renderedWidget = widget.render();
         return [ widget, renderedWidget ];
-    }, [ noteContext, parentComponent ]); // eslint-disable-line react-hooks/exhaustive-deps
-    // widgetFactory() is intentionally left out
+    }, [ parentComponent ]); // eslint-disable-line react-hooks/exhaustive-deps
+    // widgetFactory() and noteContext are intentionally left out - widget should be created once
+    // and updated via activeContextChangedEvent when noteContext changes.
+
+    // Cleanup: remove widget from parent's children when unmounted
+    useEffect(() => {
+        return () => {
+            if (parentComponent) {
+                parentComponent.removeChild(widget);
+            }
+            widget.cleanup();
+        };
+    }, [ parentComponent, widget ]);
 
     // Attach the widget to the parent.
     useEffect(() => {
@@ -660,10 +668,17 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
         }
     }, [ renderedWidget ]);
 
-    // Inject the note context.
+    // Inject the note context - this updates the existing widget without recreating it.
+    // We check if the context actually changed to avoid double refresh when the event system
+    // also delivers activeContextChanged to the widget through component tree propagation.
     useEffect(() => {
         if (noteContext && widget instanceof NoteContextAwareWidget) {
-            widget.activeContextChangedEvent({ noteContext });
+            // Only trigger refresh if the context actually changed.
+            // The event system may have already updated the widget, in which case
+            // widget.noteContext will already equal noteContext.
+            if (widget.noteContext !== noteContext) {
+                widget.activeContextChangedEvent({ noteContext });
+            }
         }
     }, [ noteContext, widget ]);
 
