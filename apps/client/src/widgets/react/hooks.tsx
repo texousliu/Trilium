@@ -677,7 +677,6 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
             // The event system may have already updated the widget, in which case
             // widget.noteContext will already equal noteContext.
             if (widget.noteContext !== noteContext) {
-                widget.setNoteContextEvent({ noteContext });
                 widget.activeContextChangedEvent({ noteContext });
             }
         }
