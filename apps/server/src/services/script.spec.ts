@@ -14,7 +14,7 @@ describe("Script", () => {
 
         becca.reset();
 
-        rootNote = new NoteBuilder(
+        new NoteBuilder(
             new BNote({
                 noteId: "root",
                 title: "root",
