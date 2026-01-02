@@ -6,6 +6,54 @@
         "older_releases": "Se tidligere versjoner"
     },
     "hero_section": {
-        "title": "Organiser tankene dine. Bygg din personlige kunnskapsbase."
+        "title": "Organiser tankene dine. Bygg din personlige kunnskapsbase.",
+        "github": "GitHub",
+        "get_started": "Kom i gang",
+        "dockerhub": "Docker Hub"
+    },
+    "organization_benefits": {
+        "title": "Organisering",
+        "note_structure_title": "Notatstruktur"
+    },
+    "productivity_benefits": {
+        "sync_title": "Synkronisering"
+    },
+    "note_types": {
+        "canvas_title": "Kanvas",
+        "mindmap_title": "Tankekart"
+    },
+    "extensibility_benefits": {
+        "import_export_title": "Import/eksport"
+    },
+    "collections": {
+        "title": "Samlinger",
+        "calendar_title": "Kalender",
+        "table_title": "Tabell",
+        "geomap_title": "Geokart",
+        "presentation_title": "Presentasjon"
+    },
+    "header": {
+        "documentation": "Dokumentasjon"
+    },
+    "social_buttons": {
+        "github": "GitHub",
+        "matrix": "Matrix",
+        "reddit": "Reddit"
+    },
+    "support_us": {
+        "paypal": "PayPal"
+    },
+    "download_helper_desktop_windows": {
+        "download_scoop": "Scoop"
+    },
+    "download_helper_desktop_linux": {
+        "download_deb": ".deb",
+        "download_rpm": ".rpm",
+        "download_flatpak": ".flatpak",
+        "download_nixpkgs": "nixpkgs",
+        "download_aur": "AUR"
+    },
+    "download_helper_server_docker": {
+        "download_ghcr": "ghcr.io"
     }
 }
