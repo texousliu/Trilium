@@ -17,3 +17,7 @@
 #secondaryDownload {
     display: none !important;
 }
+
+#secondaryOpenFile {
+    display: none !important;
+}
