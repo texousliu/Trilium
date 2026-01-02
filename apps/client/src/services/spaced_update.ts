@@ -1,4 +1,8 @@
+import type { SaveState } from "../components/note_context";
+
 type Callback = () => Promise<void> | void;
+
+export type StateCallback = (state: SaveState) => void;
 
 export default class SpacedUpdate {
     private updater: Callback;
@@ -6,17 +10,20 @@ export default class SpacedUpdate {
     private changed: boolean;
     private updateInterval: number;
     private changeForbidden?: boolean;
+    private stateCallback?: StateCallback;
 
-    constructor(updater: Callback, updateInterval = 1000) {
+    constructor(updater: Callback, updateInterval = 1000, stateCallback?: StateCallback) {
         this.updater = updater;
         this.lastUpdated = Date.now();
         this.changed = false;
         this.updateInterval = updateInterval;
+        this.stateCallback = stateCallback;
     }
 
     scheduleUpdate() {
         if (!this.changeForbidden) {
             this.changed = true;
+            this.stateCallback?.("unsaved");
             setTimeout(() => this.triggerUpdate());
         }
     }

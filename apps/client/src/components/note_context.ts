@@ -23,6 +23,8 @@ export interface SetNoteOpts {
 
 export type GetTextEditorCallback = (editor: CKTextEditor) => void;
 
+export type SaveState = "saved" | "saving" | "unsaved" | "error";
+
 export interface NoteContextDataMap {
     toc: HeadingContext;
     pdfPages: {
@@ -39,6 +41,9 @@ export interface NoteContextDataMap {
         layers: Array<{ id: string; name: string; visible: boolean }>;
         toggleLayer(layerId: string, visible: boolean): void;
     };
+    saveState: {
+        state: SaveState;
+    }
 }
 
 type ContextDataKey = keyof NoteContextDataMap;

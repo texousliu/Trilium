@@ -7,7 +7,7 @@ import { t } from "../../services/i18n";
 import { goToLinkExt } from "../../services/link";
 import { Badge, BadgeWithDropdown } from "../react/Badge";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
+import { useGetContextData, useIsNoteReadOnly, useNoteContext, useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
 import { useShareState } from "../ribbon/BasicPropertiesTab";
 import { useShareInfo } from "../shared_info";
 
@@ -110,12 +110,13 @@ function ExecuteBadge() {
 }
 
 function SaveStatusBadge() {
-    const state: "saved" | "saving" | "unsaved" | "error" = "error"; // TODO: implement save state tracking
+    const saveState = useGetContextData("saveState");
+    if (!saveState) return;
 
     let icon: string;
     let title: string;
     let tooltip: string;
-    switch (state) {
+    switch (saveState?.state) {
         case "saved":
             icon = "bx bx-check";
             title = t("breadcrumb_badges.save_status_saved");
@@ -140,7 +141,7 @@ function SaveStatusBadge() {
 
     return (
         <Badge
-            className={clsx("save-status-badge", state)}
+            className={clsx("save-status-badge", saveState)}
             icon={icon}
             text={title}
             tooltip={tooltip}
