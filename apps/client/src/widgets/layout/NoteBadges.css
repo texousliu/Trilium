@@ -16,7 +16,15 @@
         &.share-badge {--color: var(--badge-share-background-color);}
         &.clipped-note-badge {--color: var(--badge-clipped-note-background-color);}
         &.execute-badge {--color: var(--badge-execute-background-color);}
-        &.save-status-badge { opacity: 0.4; }
+        &.save-status-badge {
+            opacity: 0.4;
+            transition: opacity 250ms ease-in;
+
+            &.error {
+                color: var(--dropdown-item-icon-destructive-color);
+                opacity: 1;
+            }
+        }
 
         min-width: 0;
 

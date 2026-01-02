@@ -1,5 +1,7 @@
 import "./NoteBadges.css";
 
+import { clsx } from "clsx";
+
 import { copyTextWithToast } from "../../services/clipboard_ext";
 import { t } from "../../services/i18n";
 import { goToLinkExt } from "../../services/link";
@@ -108,7 +110,7 @@ function ExecuteBadge() {
 }
 
 function SaveStatusBadge() {
-    const state: "saved" | "saving" | "unsaved" | "error" = "saved"; // TODO: implement save state tracking
+    const state: "saved" | "saving" | "unsaved" | "error" = "error"; // TODO: implement save state tracking
 
     let icon: string;
     let title: string;
@@ -122,18 +124,18 @@ function SaveStatusBadge() {
             title = t("breadcrumb_badges.save_status_saving");
             break;
         case "unsaved":
-            icon = "bx bx-cloud-upload";
+            icon = "bx bx-pencil";
             title = t("breadcrumb_badges.save_status_unsaved");
             break;
         case "error":
-            icon = "bx bx-error-circle";
+            icon = "bx bxs-error";
             title = t("breadcrumb_badges.save_status_error");
             break;
     }
 
     return (
         <Badge
-            className="save-status-badge"
+            className={clsx("save-status-badge", state)}
             icon={icon}
             text={title}
         />
