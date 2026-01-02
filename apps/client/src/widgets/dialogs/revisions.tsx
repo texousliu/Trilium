@@ -285,7 +285,7 @@ function RevisionContentText({ content }: { content: string | Buffer<ArrayBuffer
             renderMathInElement(contentRef.current, { trust: true });
         }
     }, [content]);
-    return <RawHtmlBlock containerRef={contentRef} className="ck-content" html={content as string} />;;
+    return <RawHtmlBlock containerRef={contentRef} className="ck-content" html={content as string} />;
 }
 
 function RevisionContentDiff({ noteContent, itemContent, itemType }: {
@@ -372,14 +372,31 @@ function FilePreview({ revisionItem, fullRevision }: { revisionItem: RevisionIte
                 <tr>
                     <td colspan={2}>
                         <strong>{t("revisions.preview")}</strong>
-                        {fullRevision.content
-                            ? <pre className="file-preview-content" style={CODE_STYLE}>{fullRevision.content}</pre>
-                            : <div>{t("revisions.preview_not_available")}</div>}
+                        <div>
+                            <FilePreviewInner revisionItem={revisionItem} fullRevision={fullRevision} />
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     );
+}
+
+function FilePreviewInner({ revisionItem, fullRevision }: { revisionItem: RevisionItem, fullRevision: RevisionPojo }) {
+    if (revisionItem.mime.startsWith("audio/")) {
+        return (
+            <audio
+                src={`api/revisions/${revisionItem.revisionId}/download`}
+                controls
+            />
+        );
+    }
+
+    if (fullRevision.content) {
+        return <pre className="file-preview-content" style={CODE_STYLE}>{fullRevision.content}</pre>;
+    }
+
+    return t("revisions.preview_not_available");
 }
 
 async function getNote(noteId?: string | null) {
