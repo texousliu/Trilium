@@ -264,24 +264,7 @@ function RevisionContent({ noteContent, revisionItem, fullRevision, showDiff }: 
                 }
             }
         case "file":
-            return <table cellPadding="10">
-                <tr>
-                    <th>{t("revisions.mime")}</th>
-                    <td>{revisionItem.mime}</td>
-                </tr>
-                <tr>
-                    <th>{t("revisions.file_size")}</th>
-                    <td>{revisionItem.contentLength && utils.formatSize(revisionItem.contentLength)}</td>
-                </tr>
-                {fullRevision.content &&
-                    <tr>
-                        <td colspan={2}>
-                            <strong>{t("revisions.preview")}</strong>
-                            <pre className="file-preview-content" style={CODE_STYLE}>{fullRevision.content}</pre>
-                        </td>
-                    </tr>
-                }
-            </table>;
+            return <FilePreview fullRevision={fullRevision} revisionItem={revisionItem} />;
         case "canvas":
         case "mindMap":
         case "mermaid": {
@@ -372,6 +355,31 @@ function RevisionFooter({ note }: { note?: FNote }) {
             onClick={() => appContext.tabManager.openContextWithNote("_optionsOther", { activate: true })}
         />
     </>;
+}
+
+function FilePreview({ revisionItem, fullRevision }: { revisionItem: RevisionItem, fullRevision: RevisionPojo }) {
+    return (
+        <table cellPadding="10">
+            <tbody>
+                <tr>
+                    <th>{t("revisions.mime")}</th>
+                    <td>{revisionItem.mime}</td>
+                </tr>
+                <tr>
+                    <th>{t("revisions.file_size")}</th>
+                    <td>{revisionItem.contentLength && utils.formatSize(revisionItem.contentLength)}</td>
+                </tr>
+                <tr>
+                    <td colspan={2}>
+                        <strong>{t("revisions.preview")}</strong>
+                        {fullRevision.content
+                            ? <pre className="file-preview-content" style={CODE_STYLE}>{fullRevision.content}</pre>
+                            : <div>{t("revisions.preview_not_available")}</div>}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    );
 }
 
 async function getNote(noteId?: string | null) {
