@@ -359,7 +359,7 @@ function RevisionFooter({ note }: { note?: FNote }) {
 
 function FilePreview({ revisionItem, fullRevision }: { revisionItem: RevisionItem, fullRevision: RevisionPojo }) {
     return (
-        <table cellPadding="10">
+        <table className="file-preview-table">
             <tbody>
                 <tr>
                     <th>{t("revisions.mime")}</th>
