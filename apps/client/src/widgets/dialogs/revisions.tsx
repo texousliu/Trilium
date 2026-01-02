@@ -1,26 +1,28 @@
-import type { RevisionPojo, RevisionItem } from "@triliumnext/commons";
+import "./revisions.css";
+
+import type { RevisionItem,RevisionPojo } from "@triliumnext/commons";
+import { diffWords } from "diff";
+import type { CSSProperties } from "preact/compat";
+import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
+
 import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import dialog from "../../services/dialog";
 import froca from "../../services/froca";
 import { t } from "../../services/i18n";
+import { renderMathInElement } from "../../services/math";
+import open from "../../services/open";
+import options from "../../services/options";
+import protected_session_holder from "../../services/protected_session_holder";
 import server from "../../services/server";
 import toast from "../../services/toast";
-import Button from "../react/Button";
-import FormToggle from "../react/FormToggle";
-import Modal from "../react/Modal";
-import FormList, { FormListItem } from "../react/FormList";
 import utils from "../../services/utils";
-import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
-import protected_session_holder from "../../services/protected_session_holder";
-import { renderMathInElement } from "../../services/math";
-import type { CSSProperties } from "preact/compat";
-import open from "../../services/open";
 import ActionButton from "../react/ActionButton";
-import options from "../../services/options";
+import Button from "../react/Button";
+import FormList, { FormListItem } from "../react/FormList";
+import FormToggle from "../react/FormToggle";
 import { useTriliumEvent } from "../react/hooks";
-import { diffWords } from "diff";
-import "./revisions.css";
+import Modal from "../react/Modal";
 
 export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();
@@ -102,38 +104,38 @@ export default function RevisionsDialog() {
                 setRevisions(undefined);
             }}
             show={shown}
-            >
-                <RevisionsList
-                    revisions={revisions ?? []}
-                    onSelect={(revisionId) => {
-                        const correspondingRevision = (revisions ?? []).find((r) => r.revisionId === revisionId);
-                        if (correspondingRevision) {
-                            setCurrentRevision(correspondingRevision);
-                        }
-                    }}
-                    currentRevision={currentRevision}
-                />
+        >
+            <RevisionsList
+                revisions={revisions ?? []}
+                onSelect={(revisionId) => {
+                    const correspondingRevision = (revisions ?? []).find((r) => r.revisionId === revisionId);
+                    if (correspondingRevision) {
+                        setCurrentRevision(correspondingRevision);
+                    }
+                }}
+                currentRevision={currentRevision}
+            />
 
-                <div className="revision-content-wrapper" style={{
-                    flexGrow: "1",
-                    marginInlineStart: "20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    maxWidth: "calc(100% - 150px)",
-                    minWidth: 0
-                }}>
-                    <RevisionPreview
-                        noteContent={noteContent}
-                        revisionItem={currentRevision}
-                        showDiff={showDiff}
-                        setShown={setShown}
-                        onRevisionDeleted={() => {
-                            setRefreshCounter(c => c + 1);
-                            setCurrentRevision(undefined);
-                        }} />
-                </div>
+            <div className="revision-content-wrapper" style={{
+                flexGrow: "1",
+                marginInlineStart: "20px",
+                display: "flex",
+                flexDirection: "column",
+                maxWidth: "calc(100% - 150px)",
+                minWidth: 0
+            }}>
+                <RevisionPreview
+                    noteContent={noteContent}
+                    revisionItem={currentRevision}
+                    showDiff={showDiff}
+                    setShown={setShown}
+                    onRevisionDeleted={() => {
+                        setRefreshCounter(c => c + 1);
+                        setCurrentRevision(undefined);
+                    }} />
+            </div>
         </Modal>
-    )
+    );
 }
 
 function RevisionsList({ revisions, onSelect, currentRevision }: { revisions: RevisionItem[], onSelect: (val: string) => void, currentRevision?: RevisionItem }) {
@@ -202,8 +204,8 @@ function RevisionPreview({noteContent, revisionItem, showDiff, setShown, onRevis
                                 text={t("revisions.download_button")}
                                 onClick={() => {
                                     if (revisionItem.revisionId) {
-                                        open.downloadRevision(revisionItem.noteId, revisionItem.revisionId)}
-                                    }
+                                        open.downloadRevision(revisionItem.noteId, revisionItem.revisionId);}
+                                }
                                 }/>
                         </>
                     }
@@ -235,11 +237,11 @@ function RevisionContent({ noteContent, revisionItem, fullRevision, showDiff }: 
     }
 
     if (showDiff) {
-        return <RevisionContentDiff noteContent={noteContent} itemContent={content} itemType={revisionItem.type}/>
+        return <RevisionContentDiff noteContent={noteContent} itemContent={content} itemType={revisionItem.type}/>;
     }
     switch (revisionItem.type) {
         case "text":
-            return <RevisionContentText content={content} />
+            return <RevisionContentText content={content} />;
         case "code":
             return <pre style={CODE_STYLE}>{content}</pre>;
         case "image":
@@ -256,7 +258,7 @@ function RevisionContent({ noteContent, revisionItem, fullRevision, showDiff }: 
                     // as a URL to be used in a note. Instead, if they copy and paste it into a note, it will be uploaded as a new note
                     return <img
                         src={`data:${fullRevision.mime};base64,${fullRevision.content}`}
-                        style={IMAGE_STYLE} />
+                        style={IMAGE_STYLE} />;
                 }
             }
         case "file":
@@ -287,7 +289,7 @@ function RevisionContent({ noteContent, revisionItem, fullRevision, showDiff }: 
                 style={IMAGE_STYLE} />;
         }
         default:
-            return <>{t("revisions.preview_not_available")}</>
+            return <>{t("revisions.preview_not_available")}</>;
     }
 }
 
@@ -298,7 +300,7 @@ function RevisionContentText({ content }: { content: string | Buffer<ArrayBuffer
             renderMathInElement(contentRef.current, { trust: true });
         }
     }, [content]);
-    return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }}></div>
+    return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }} />;
 }
 
 function RevisionContentDiff({ noteContent, itemContent, itemType }: {
@@ -330,9 +332,9 @@ function RevisionContentDiff({ noteContent, itemContent, itemType }: {
                 return `<span class="revision-diff-added">${utils.escapeHtml(part.value)}</span>`;
             } else if (part.removed) {
                 return `<span class="revision-diff-removed">${utils.escapeHtml(part.value)}</span>`;
-            } else {
-                return utils.escapeHtml(part.value);
-            }
+            } 
+            return utils.escapeHtml(part.value);
+            
         }).join("");
 
         if (contentRef.current) {
@@ -340,7 +342,7 @@ function RevisionContentDiff({ noteContent, itemContent, itemType }: {
         }
     }, [noteContent, itemContent, itemType]);
 
-    return <div ref={contentRef} className="ck-content" style={{ whiteSpace: "pre-wrap" }}></div>;
+    return <div ref={contentRef} className="ck-content" style={{ whiteSpace: "pre-wrap" }} />;
 }
 
 function RevisionFooter({ note }: { note?: FNote }) {
@@ -373,7 +375,7 @@ function RevisionFooter({ note }: { note?: FNote }) {
 async function getNote(noteId?: string | null) {
     if (noteId) {
         return await froca.getNote(noteId);
-    } else {
-        return appContext.tabManager.getActiveContextNote();
-    }
+    } 
+    return appContext.tabManager.getActiveContextNote();
+    
 }
