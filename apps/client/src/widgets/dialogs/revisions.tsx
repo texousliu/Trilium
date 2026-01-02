@@ -408,6 +408,14 @@ function FilePreviewInner({ revisionItem, fullRevision }: { revisionItem: Revisi
         );
     }
 
+    if (revisionItem.mime === "application/pdf") {
+        return (
+            <iframe
+                src={`pdfjs/web/viewer.html?file=../../api/revisions/${revisionItem.revisionId}/download&lang=${options.get("locale")}`}
+            />
+        );
+    }
+
     if (fullRevision.content) {
         return <pre className="file-preview-content" style={CODE_STYLE}>{fullRevision.content}</pre>;
     }
