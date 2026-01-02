@@ -41,7 +41,9 @@ function saveHistory(value: string) {
 
         window.parent.postMessage({
             type: "pdfjs-viewer-save-view-history",
-            data: JSON.stringify(history)
+            data: JSON.stringify(history),
+            ntxId: window.TRILIUM_NTX_ID,
+            noteId: window.TRILIUM_NOTE_ID
         } satisfies PdfSaveViewHistoryMessage, window.location.origin);
         saveTimeout = null;
     }, 2_000);

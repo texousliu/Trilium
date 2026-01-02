@@ -38,7 +38,9 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
             }
 
             if (event.data.type === "pdfjs-viewer-save-view-history" && event.data?.data) {
-                historyConfig?.storeFn(JSON.parse(event.data.data));
+                if (event.data.noteId === note.noteId && event.data.ntxId === noteContext.ntxId) {
+                    historyConfig?.storeFn(JSON.parse(event.data.data));
+                }
             }
 
             if (event.data.type === "pdfjs-viewer-toc") {

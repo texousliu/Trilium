@@ -38,14 +38,17 @@ interface PdfOutlineItem {
     items: PdfOutlineItem[];
 }
 
-interface PdfDocumentModifiedMessage {
-    type: "pdfjs-viewer-document-modified";
-    data: Uint8Array<ArrayBufferLike>;
+interface WithContext {
     ntxId: string;
     noteId: string | null | undefined;
 }
 
-interface PdfSaveViewHistoryMessage {
+interface PdfDocumentModifiedMessage extends WithContext {
+    type: "pdfjs-viewer-document-modified";
+    data: Uint8Array<ArrayBufferLike>;
+}
+
+interface PdfSaveViewHistoryMessage extends WithContext {
     type: "pdfjs-viewer-save-view-history";
     data: string;
 }
