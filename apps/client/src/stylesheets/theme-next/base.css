@@ -17,6 +17,8 @@
  */
 
 :root {
+    color-scheme: light dark;
+
     --main-font-family: "Inter", sans-serif;
 
     --main-font-size: normal;

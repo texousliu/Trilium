@@ -1,7 +1,9 @@
 :root {
+    color-scheme: light dark;
+    
+    --body-bg-color: transparent;
+    --toolbar-bg-color: transparent;
     --main-color: var(--tn-main-text-color);
-    --body-bg-color: var(--tn-main-background-color);
-    --toolbar-bg-color: var(--tn-main-background-color);
     --toolbar-border-color: var(--tn-main-border-color);
     --toolbar-icon-opacity: 1;
 }
