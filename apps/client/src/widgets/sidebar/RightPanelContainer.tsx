@@ -27,7 +27,7 @@ interface RightPanelWidgetDefinition {
 }
 
 export default function RightPanelContainer({ widgetsByParent }: { widgetsByParent: WidgetsByParent }) {
-    const [rightPaneVisible, setRightPaneVisible] = useState(options.is("rightPaneVisible"));
+    const [ rightPaneVisible, setRightPaneVisible ] = useState(options.is("rightPaneVisible"));
     const items = useItems(rightPaneVisible, widgetsByParent);
     useSplit(rightPaneVisible);
     useTriliumEvent("toggleRightPane", () => {

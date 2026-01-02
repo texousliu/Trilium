@@ -1,15 +1,13 @@
 import clsx from "clsx";
 
 import { t } from "../../services/i18n";
-import ActionButton from "../react/ActionButton";
-import { useTriliumOptionBool } from "../react/hooks";
-import { useState } from "preact/hooks";
-import appContext from "../../components/app_context";
-import { useTriliumEvent } from "../react/hooks";
 import options from "../../services/options";
+import ActionButton from "../react/ActionButton";
+import { useState } from "preact/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function RightPaneToggle() {
-    const [rightPaneVisible, setRightPaneVisible] = useState(options.is("rightPaneVisible"));
+    const [ rightPaneVisible, setRightPaneVisible ] = useState(options.is("rightPaneVisible"));
 
     useTriliumEvent("toggleRightPane", () => {
         setRightPaneVisible(!rightPaneVisible);
