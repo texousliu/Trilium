@@ -23,6 +23,7 @@ import FormList, { FormListItem } from "../react/FormList";
 import FormToggle from "../react/FormToggle";
 import { useTriliumEvent } from "../react/hooks";
 import Modal from "../react/Modal";
+import { RawHtmlBlock } from "../react/RawHtml";
 
 export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();
@@ -49,7 +50,7 @@ export default function RevisionsDialog() {
             setRevisions(undefined);
             setNoteContent(undefined);
         }
-    }, [ note?.noteId, refreshCounter ]);
+    }, [ note, refreshCounter ]);
 
     if (revisions?.length && !currentRevision) {
         setCurrentRevision(revisions[0]);
@@ -143,6 +144,7 @@ function RevisionsList({ revisions, onSelect, currentRevision }: { revisions: Re
         <FormList onSelect={onSelect} fullHeight wrapperClassName="revision-list">
             {revisions.map((item) =>
                 <FormListItem
+                    key={item.revisionId}
                     value={item.revisionId}
                     active={currentRevision && item.revisionId === currentRevision.revisionId}
                 >
@@ -300,7 +302,7 @@ function RevisionContentText({ content }: { content: string | Buffer<ArrayBuffer
             renderMathInElement(contentRef.current, { trust: true });
         }
     }, [content]);
-    return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }} />;
+    return <RawHtmlBlock containerRef={contentRef} className="ck-content" html={content as string} />;;
 }
 
 function RevisionContentDiff({ noteContent, itemContent, itemType }: {
@@ -332,9 +334,9 @@ function RevisionContentDiff({ noteContent, itemContent, itemType }: {
                 return `<span class="revision-diff-added">${utils.escapeHtml(part.value)}</span>`;
             } else if (part.removed) {
                 return `<span class="revision-diff-removed">${utils.escapeHtml(part.value)}</span>`;
-            } 
+            }
             return utils.escapeHtml(part.value);
-            
+
         }).join("");
 
         if (contentRef.current) {
@@ -350,7 +352,7 @@ function RevisionFooter({ note }: { note?: FNote }) {
         return <></>;
     }
 
-    let revisionsNumberLimit: number | string = parseInt(note?.getLabelValue("versioningLimit") ?? "");
+    let revisionsNumberLimit: number | string = parseInt(note?.getLabelValue("versioningLimit") ?? "", 10);
     if (!Number.isInteger(revisionsNumberLimit)) {
         revisionsNumberLimit = options.getInt("revisionSnapshotNumberLimit") ?? 0;
     }
@@ -375,7 +377,7 @@ function RevisionFooter({ note }: { note?: FNote }) {
 async function getNote(noteId?: string | null) {
     if (noteId) {
         return await froca.getNote(noteId);
-    } 
+    }
     return appContext.tabManager.getActiveContextNote();
-    
+
 }
