@@ -33,7 +33,9 @@ export default class SpacedUpdate {
             this.changed = false; // optimistic...
 
             try {
+                this.stateCallback?.("saving");
                 await this.updater();
+                this.stateCallback?.("saved");
             } catch (e) {
                 this.changed = true;
 
@@ -72,7 +74,9 @@ export default class SpacedUpdate {
         }
 
         if (Date.now() - this.lastUpdated > this.updateInterval) {
+            this.stateCallback?.("saving");
             this.updater();
+            this.stateCallback?.("saved");
             this.lastUpdated = Date.now();
             this.changed = false;
         } else {
