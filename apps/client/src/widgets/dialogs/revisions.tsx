@@ -1,6 +1,7 @@
 import "./revisions.css";
 
 import type { RevisionItem,RevisionPojo } from "@triliumnext/commons";
+import clsx from "clsx";
 import { diffWords } from "diff";
 import type { CSSProperties } from "preact/compat";
 import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
@@ -213,7 +214,10 @@ function RevisionPreview({noteContent, revisionItem, showDiff, setShown, onRevis
                     }
                 </div>)}
             </div>
-            <div className="revision-content use-tn-links selectable-text" style={{ overflow: "auto", wordBreak: "break-word" }}>
+            <div
+                className={clsx("revision-content use-tn-links selectable-text", `type-${revisionItem?.type}`)}
+                style={{ overflow: "auto", wordBreak: "break-word" }}
+            >
                 <RevisionContent noteContent={noteContent} revisionItem={revisionItem} fullRevision={fullRevision} showDiff={showDiff}/>
             </div>
         </>
@@ -359,26 +363,29 @@ function RevisionFooter({ note }: { note?: FNote }) {
 
 function FilePreview({ revisionItem, fullRevision }: { revisionItem: RevisionItem, fullRevision: RevisionPojo }) {
     return (
-        <table className="file-preview-table">
-            <tbody>
-                <tr>
-                    <th>{t("revisions.mime")}</th>
-                    <td>{revisionItem.mime}</td>
-                </tr>
-                <tr>
-                    <th>{t("revisions.file_size")}</th>
-                    <td>{revisionItem.contentLength && utils.formatSize(revisionItem.contentLength)}</td>
-                </tr>
-                <tr>
-                    <td colspan={2}>
-                        <strong>{t("revisions.preview")}</strong>
-                        <div>
-                            <FilePreviewInner revisionItem={revisionItem} fullRevision={fullRevision} />
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div className="revision-file-preview">
+            <table className="file-preview-table">
+                <tbody>
+                    <tr>
+                        <th>{t("revisions.mime")}</th>
+                        <td>{revisionItem.mime}</td>
+                    </tr>
+                    <tr>
+                        <th>{t("revisions.file_size")}</th>
+                        <td>{revisionItem.contentLength && utils.formatSize(revisionItem.contentLength)}</td>
+                    </tr>
+                    <tr>
+                        <td colspan={2}>
+                            <strong>{t("revisions.preview")}</strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="revision-file-preview-content">
+                <FilePreviewInner revisionItem={revisionItem} fullRevision={fullRevision} />
+            </div>
+        </div>
     );
 }
 
@@ -386,6 +393,15 @@ function FilePreviewInner({ revisionItem, fullRevision }: { revisionItem: Revisi
     if (revisionItem.mime.startsWith("audio/")) {
         return (
             <audio
+                src={`api/revisions/${revisionItem.revisionId}/download`}
+                controls
+            />
+        );
+    }
+
+    if (revisionItem.mime.startsWith("video/")) {
+        return (
+            <video
                 src={`api/revisions/${revisionItem.revisionId}/download`}
                 controls
             />
