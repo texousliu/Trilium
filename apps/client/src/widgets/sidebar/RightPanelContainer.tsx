@@ -31,8 +31,11 @@ export default function RightPanelContainer({ widgetsByParent }: { widgetsByPare
     const items = useItems(rightPaneVisible, widgetsByParent);
     useSplit(rightPaneVisible);
     useTriliumEvent("toggleRightPane", () => {
-        options.save("rightPaneVisible",(!rightPaneVisible).toString());
-        setRightPaneVisible(!rightPaneVisible);
+        setRightPaneVisible(current => {
+            const newValue = !current;
+            options.save("rightPaneVisible", newValue.toString());
+            return newValue;
+        });
     });
 
     return (

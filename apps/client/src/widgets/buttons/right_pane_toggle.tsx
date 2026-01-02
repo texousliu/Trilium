@@ -10,7 +10,7 @@ export default function RightPaneToggle() {
     const [ rightPaneVisible, setRightPaneVisible ] = useState(options.is("rightPaneVisible"));
 
     useTriliumEvent("toggleRightPane", () => {
-        setRightPaneVisible(!rightPaneVisible);
+        setRightPaneVisible(current => !current);
     });
 
     return (
