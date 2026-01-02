@@ -120,7 +120,6 @@ function SaveStatusBadge() {
         case "saved":
             icon = "bx bx-check";
             title = t("breadcrumb_badges.save_status_saved");
-            tooltip = t("breadcrumb_badges.save_status_saved_tooltip");
             break;
         case "saving":
             icon = "bx bx-loader bx-spin";
