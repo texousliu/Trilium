@@ -24,7 +24,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
 }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const { onLoad } = useStyleInjection(iframeRef);
-    const historyConfig = useViewModeConfig(note, "pdfHistory");
+    const historyConfig = useViewModeConfig<HistoryData>(note, "pdfHistory");
     const [ locale ] = useTriliumOption("locale");
     const [ newLayout ] = useTriliumOptionBool("newLayout");
 
@@ -32,7 +32,9 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
         function handleMessage(event: PdfMessageEvent) {
             if (event.data?.type === "pdfjs-viewer-document-modified") {
                 const blob = new Blob([event.data.data as Uint8Array<ArrayBuffer>], { type: note.mime });
-                server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }), componentId);
+                if (event.data.noteId === note.noteId && event.data.ntxId === noteContext.ntxId) {
+                    server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }), componentId);
+                }
             }
 
             if (event.data.type === "pdfjs-viewer-save-view-history" && event.data?.data) {
@@ -187,6 +189,8 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                 const win = iframeRef.current?.contentWindow;
                 if (win) {
                     win.TRILIUM_VIEW_HISTORY_STORE = historyConfig.config;
+                    win.TRILIUM_NOTE_ID = note.noteId;
+                    win.TRILIUM_NTX_ID = noteContext.ntxId;
                 }
                 onLoad();
             }}
