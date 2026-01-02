@@ -374,11 +374,6 @@ function FilePreview({ revisionItem, fullRevision }: { revisionItem: RevisionIte
                         <th>{t("revisions.file_size")}</th>
                         <td>{revisionItem.contentLength && utils.formatSize(revisionItem.contentLength)}</td>
                     </tr>
-                    <tr>
-                        <td colspan={2}>
-                            <strong>{t("revisions.preview")}</strong>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
 
