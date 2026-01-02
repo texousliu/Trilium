@@ -1,4 +1,5 @@
 import type { SaveState } from "../components/note_context";
+import { getErrorMessage } from "./utils";
 
 type Callback = () => Promise<void> | void;
 
@@ -38,7 +39,8 @@ export default class SpacedUpdate {
                 this.stateCallback?.("saved");
             } catch (e) {
                 this.changed = true;
-
+                this.stateCallback?.("error");
+                logError(getErrorMessage(e));
                 throw e;
             }
         }
@@ -68,15 +70,20 @@ export default class SpacedUpdate {
         this.updateInterval = interval;
     }
 
-    triggerUpdate() {
+    async triggerUpdate() {
         if (!this.changed) {
             return;
         }
 
         if (Date.now() - this.lastUpdated > this.updateInterval) {
             this.stateCallback?.("saving");
-            this.updater();
-            this.stateCallback?.("saved");
+            try {
+                await this.updater();
+                this.stateCallback?.("saved");
+            } catch (e) {
+                this.stateCallback?.("error");
+                logError(getErrorMessage(e));
+            }
             this.lastUpdated = Date.now();
             this.changed = false;
         } else {

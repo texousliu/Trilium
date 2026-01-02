@@ -141,7 +141,7 @@ function SaveStatusBadge() {
 
     return (
         <Badge
-            className={clsx("save-status-badge", saveState)}
+            className={clsx("save-status-badge", saveState.state)}
             icon={icon}
             text={title}
             tooltip={tooltip}
