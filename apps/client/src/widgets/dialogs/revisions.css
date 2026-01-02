@@ -67,6 +67,10 @@ body.mobile .revisions-dialog {
         flex-shrink: 0;
     }
 
+    .revision-list {
+        flex-shrink: 0;
+    }
+
     .revision-content.type-file {
         display: flex;
         min-width: 0;
