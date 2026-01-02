@@ -114,22 +114,27 @@ function SaveStatusBadge() {
 
     let icon: string;
     let title: string;
+    let tooltip: string;
     switch (state) {
         case "saved":
             icon = "bx bx-check";
             title = t("breadcrumb_badges.save_status_saved");
+            tooltip = t("breadcrumb_badges.save_status_saved_tooltip");
             break;
         case "saving":
             icon = "bx bx-loader bx-spin";
             title = t("breadcrumb_badges.save_status_saving");
+            tooltip = t("breadcrumb_badges.save_status_saving_tooltip");
             break;
         case "unsaved":
             icon = "bx bx-pencil";
             title = t("breadcrumb_badges.save_status_unsaved");
+            tooltip = t("breadcrumb_badges.save_status_unsaved_tooltip");
             break;
         case "error":
             icon = "bx bxs-error";
             title = t("breadcrumb_badges.save_status_error");
+            tooltip = t("breadcrumb_badges.save_status_error_tooltip");
             break;
     }
 
@@ -138,6 +143,7 @@ function SaveStatusBadge() {
             className={clsx("save-status-badge", state)}
             icon={icon}
             text={title}
+            tooltip={tooltip}
         />
     );
 }
