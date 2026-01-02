@@ -29,9 +29,9 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
     const [ newLayout ] = useTriliumOptionBool("newLayout");
 
     useEffect(() => {
-        function handleMessage(event: MessageEvent) {
-            if (event.data?.type === "pdfjs-viewer-document-modified" && event.data?.data) {
-                const blob = new Blob([event.data.data], { type: note.mime });
+        function handleMessage(event: PdfMessageEvent) {
+            if (event.data?.type === "pdfjs-viewer-document-modified") {
+                const blob = new Blob([event.data.data as Uint8Array<ArrayBuffer>], { type: note.mime });
                 server.upload(`notes/${note.noteId}/file`, new File([blob], note.title, { type: note.mime }), componentId);
             }
 
@@ -244,14 +244,6 @@ function cssVarsToString(vars: Record<string, string>) {
     return `:root {\n${Object.entries(vars)
         .map(([k, v]) => `  ${k}: ${v};`)
         .join('\n')}\n}`;
-}
-
-interface PdfOutlineItem {
-    title: string;
-    level: number;
-    dest: unknown;
-    id: string;
-    items: PdfOutlineItem[];
 }
 
 interface PdfHeading {
