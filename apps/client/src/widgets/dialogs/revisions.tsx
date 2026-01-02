@@ -234,7 +234,7 @@ const CODE_STYLE: CSSProperties = {
 
 function RevisionContent({ noteContent, revisionItem, fullRevision, showDiff }: { noteContent?:string, revisionItem?: RevisionItem, fullRevision?: RevisionPojo, showDiff: boolean}) {
     const content = fullRevision?.content;
-    if (!revisionItem || !content) {
+    if (!revisionItem || !fullRevision) {
         return <></>;
     }
 
