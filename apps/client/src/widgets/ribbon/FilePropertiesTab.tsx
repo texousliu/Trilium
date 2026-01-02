@@ -13,7 +13,7 @@ import { useNoteBlob, useNoteLabel } from "../react/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { TabContext } from "./ribbon-interface";
 
-export default function FilePropertiesTab({ note, ntxId }: TabContext) {
+export default function FilePropertiesTab({ note, ntxId }: Pick<TabContext, "note" | "ntxId">) {
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
     const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
     const blob = useNoteBlob(note);
