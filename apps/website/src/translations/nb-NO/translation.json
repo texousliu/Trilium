@@ -1,1 +1,11 @@
-{}
+{
+    "get-started": {
+        "title": "Kom i gang",
+        "architecture": "Arkitektur:",
+        "desktop_title": "Last ned skrivebordsprogram (v{{version}})",
+        "older_releases": "Se tidligere versjoner"
+    },
+    "hero_section": {
+        "title": "Organiser tankene dine. Bygg din personlige kunnskapsbase."
+    }
+}
