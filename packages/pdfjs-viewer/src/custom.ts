@@ -20,6 +20,7 @@ async function main() {
 
     app.eventBus.on("documentloaded", () => {
         manageSave();
+        manageDownload();
         extractAndSendToc();
         setupScrollToHeading();
         setupActiveHeadingTracking();
@@ -81,6 +82,17 @@ function manageSave() {
         // When activeEditorId becomes null, an editor was just committed
         if (activeEditorId === null) {
             debouncedSave();
+        }
+    });
+}
+
+function manageDownload() {
+    window.addEventListener("message", event => {
+        if (event.origin !== window.location.origin) return;
+
+        if (event.data?.type === "trilium-request-download") {
+            const app = window.PDFViewerApplication;
+            app.eventBus.dispatch("download", { source: window });
         }
     });
 }

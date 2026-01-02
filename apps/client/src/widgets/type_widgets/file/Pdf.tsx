@@ -7,7 +7,7 @@ import FBlob from "../../../entities/fblob";
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
 import { useViewModeConfig } from "../../collections/NoteList";
-import { useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
+import { useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 
 const VARIABLE_WHITELIST = new Set([
     "root-background",
@@ -169,6 +169,13 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
             return () => iframeDoc.removeEventListener('click', handleIframeClick);
         }
     }, [ iframeRef.current?.contentWindow, noteContext ]);
+
+    useTriliumEvent("customDownload", ({ ntxId }) => {
+        if (ntxId !== noteContext.ntxId) return;
+        iframeRef.current?.contentWindow?.postMessage({
+            type: "trilium-request-download"
+        });
+    });
 
     return (historyConfig &&
         <iframe
