@@ -27,12 +27,11 @@ interface RightPanelWidgetDefinition {
 }
 
 export default function RightPanelContainer({ widgetsByParent }: { widgetsByParent: WidgetsByParent }) {
-    const [rightPaneVisibleOption, setRightPaneVisibleOption] = useTriliumOptionBool("rightPaneVisible");
-    const [rightPaneVisible, setRightPaneVisible] = useState(rightPaneVisibleOption);
+    const [rightPaneVisible, setRightPaneVisible] = useState(options.is("rightPaneVisible"));
     const items = useItems(rightPaneVisible, widgetsByParent);
     useSplit(rightPaneVisible);
     useTriliumEvent("toggleRightPane", () => {
-        setRightPaneVisibleOption(!rightPaneVisible);
+        options.save("rightPaneVisible",(!rightPaneVisible).toString());
         setRightPaneVisible(!rightPaneVisible);
     });
 
@@ -47,10 +46,7 @@ export default function RightPanelContainer({ widgetsByParent }: { widgetsByPare
                         {t("right_pane.empty_message")}
                         <Button
                             text={t("right_pane.empty_button")}
-                                onClick={() => {
-                                    setRightPaneVisibleOption(!rightPaneVisible);
-                                    setRightPaneVisible(!rightPaneVisible);
-                                }}
+                            triggerCommand="toggleRightPane"
                         />
                     </div>
                 )

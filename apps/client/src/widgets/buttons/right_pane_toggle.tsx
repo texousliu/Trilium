@@ -5,10 +5,15 @@ import ActionButton from "../react/ActionButton";
 import { useTriliumOptionBool } from "../react/hooks";
 import { useState } from "preact/hooks";
 import appContext from "../../components/app_context";
+import { useTriliumEvent } from "../react/hooks";
+import options from "../../services/options";
 
 export default function RightPaneToggle() {
-    const [rightPaneVisibleOption, setRightPaneVisibleOption] = useTriliumOptionBool("rightPaneVisible");
-    const [rightPaneVisible, setRightPaneVisible] = useState(rightPaneVisibleOption);
+    const [rightPaneVisible, setRightPaneVisible] = useState(options.is("rightPaneVisible"));
+
+    useTriliumEvent("toggleRightPane", () => {
+        setRightPaneVisible(!rightPaneVisible);
+    });
 
     return (
         <ActionButton
@@ -18,11 +23,7 @@ export default function RightPaneToggle() {
             )}
             text={t("right_pane.toggle")}
             icon="bx bx-sidebar"
-            onClick={() => {
-                setRightPaneVisible(!rightPaneVisible);
-                setRightPaneVisibleOption(!rightPaneVisible);
-                appContext.triggerEvent("toggleRightPane", {});
-            }}
+            triggerCommand="toggleRightPane"
         />
     );
 }
