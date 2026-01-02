@@ -25,6 +25,7 @@ import FormToggle from "../react/FormToggle";
 import { useTriliumEvent } from "../react/hooks";
 import Modal from "../react/Modal";
 import { RawHtmlBlock } from "../react/RawHtml";
+import PdfViewer from "../type_widgets/file/PdfViewer";
 
 export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();
@@ -405,8 +406,8 @@ function FilePreviewInner({ revisionItem, fullRevision }: { revisionItem: Revisi
 
     if (revisionItem.mime === "application/pdf") {
         return (
-            <iframe
-                src={`pdfjs/web/viewer.html?file=../../api/revisions/${revisionItem.revisionId}/download&lang=${options.get("locale")}`}
+            <PdfViewer
+                pdfUrl={`../../api/revisions/${revisionItem.revisionId}/download`}
             />
         );
     }

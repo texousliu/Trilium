@@ -1,5 +1,4 @@
-import { RefObject } from "preact";
-import { useCallback, useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 
 import appContext from "../../../components/app_context";
 import type NoteContext from "../../../components/note_context";
@@ -7,14 +6,8 @@ import FBlob from "../../../entities/fblob";
 import FNote from "../../../entities/fnote";
 import server from "../../../services/server";
 import { useViewModeConfig } from "../../collections/NoteList";
-import { useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
-
-const VARIABLE_WHITELIST = new Set([
-    "root-background",
-    "main-background-color",
-    "main-border-color",
-    "main-text-color"
-]);
+import { useTriliumEvent } from "../../react/hooks";
+import PdfViewer from "./PdfViewer";
 
 export default function PdfPreview({ note, blob, componentId, noteContext }: {
     note: FNote;
@@ -23,10 +16,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
     componentId: string | undefined;
 }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    const { onLoad } = useStyleInjection(iframeRef);
     const historyConfig = useViewModeConfig<HistoryData>(note, "pdfHistory");
-    const [ locale ] = useTriliumOption("locale");
-    const [ newLayout ] = useTriliumOptionBool("newLayout");
 
     useEffect(() => {
         function handleMessage(event: PdfMessageEvent) {
@@ -182,11 +172,10 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
     });
 
     return (historyConfig &&
-        <iframe
+        <PdfViewer
+            iframeRef={iframeRef}
             tabIndex={300}
-            ref={iframeRef}
-            class="pdf-preview"
-            src={`pdfjs/web/viewer.html?file=../../api/notes/${note.noteId}/open&lang=${locale}&sidebar=${newLayout ? "0" : "1"}`}
+            pdfUrl={`../../api/notes/${note.noteId}/open`}
             onLoad={() => {
                 const win = iframeRef.current?.contentWindow;
                 if (win) {
@@ -194,62 +183,9 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     win.TRILIUM_NOTE_ID = note.noteId;
                     win.TRILIUM_NTX_ID = noteContext.ntxId;
                 }
-                onLoad();
             }}
         />
     );
-}
-
-function useStyleInjection(iframeRef: RefObject<HTMLIFrameElement>) {
-    const styleRef = useRef<HTMLStyleElement | null>(null);
-
-    // First load.
-    const onLoad = useCallback(() => {
-        const doc = iframeRef.current?.contentDocument;
-        if (!doc) return;
-
-        const style = doc.createElement('style');
-        style.id = 'client-root-vars';
-        style.textContent = cssVarsToString(getRootCssVariables());
-        styleRef.current = style;
-
-        doc.head.appendChild(style);
-    }, [ iframeRef ]);
-
-    // React to changes.
-    useEffect(() => {
-        const listener = () => {
-            styleRef.current!.textContent = cssVarsToString(getRootCssVariables());
-        };
-
-        const media = window.matchMedia("(prefers-color-scheme: dark)");
-        media.addEventListener("change", listener);
-        return () => media.removeEventListener("change", listener);
-    }, [ iframeRef ]);
-
-    return {
-        onLoad
-    };
-}
-
-function getRootCssVariables() {
-    const styles = getComputedStyle(document.documentElement);
-    const vars: Record<string, string> = {};
-
-    for (let i = 0; i < styles.length; i++) {
-        const prop = styles[i];
-        if (prop.startsWith('--') && VARIABLE_WHITELIST.has(prop.substring(2))) {
-            vars[`--tn-${prop.substring(2)}`] = styles.getPropertyValue(prop).trim();
-        }
-    }
-
-    return vars;
-}
-
-function cssVarsToString(vars: Record<string, string>) {
-    return `:root {\n${Object.entries(vars)
-        .map(([k, v]) => `  ${k}: ${v};`)
-        .join('\n')}\n}`;
 }
 
 interface PdfHeading {
