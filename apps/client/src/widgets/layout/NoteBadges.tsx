@@ -12,6 +12,7 @@ import { useShareInfo } from "../shared_info";
 export default function NoteBadges() {
     return (
         <div className="note-badges">
+            <SaveStatusBadge />
             <ReadOnlyBadge />
             <ShareBadge />
             <ClippedNoteBadge />
@@ -102,6 +103,39 @@ function ExecuteBadge() {
             text={isScript ? t("breadcrumb_badges.execute_script") : t("breadcrumb_badges.execute_sql")}
             tooltip={executeDescription || (isScript ? t("breadcrumb_badges.execute_script_description") : t("breadcrumb_badges.execute_sql_description"))}
             onClick={() => parentComponent.triggerCommand("runActiveNote")}
+        />
+    );
+}
+
+function SaveStatusBadge() {
+    const state: "saved" | "saving" | "unsaved" | "error" = "saved"; // TODO: implement save state tracking
+
+    let icon: string;
+    let title: string;
+    switch (state) {
+        case "saved":
+            icon = "bx bx-check";
+            title = t("breadcrumb_badges.save_status_saved");
+            break;
+        case "saving":
+            icon = "bx bx-loader bx-spin";
+            title = t("breadcrumb_badges.save_status_saving");
+            break;
+        case "unsaved":
+            icon = "bx bx-cloud-upload";
+            title = t("breadcrumb_badges.save_status_unsaved");
+            break;
+        case "error":
+            icon = "bx bx-error-circle";
+            title = t("breadcrumb_badges.save_status_error");
+            break;
+    }
+
+    return (
+        <Badge
+            className="save-status-badge"
+            icon={icon}
+            text={title}
         />
     );
 }

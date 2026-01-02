@@ -2209,7 +2209,11 @@
     "execute_script": "Run script",
     "execute_script_description": "This note is a script note. Click to execute the script.",
     "execute_sql": "Run SQL",
-    "execute_sql_description": "This note is a SQL note. Click to execute the SQL query."
+    "execute_sql_description": "This note is a SQL note. Click to execute the SQL query.",
+    "save_status_saved": "Saved",
+    "save_status_saving": "Saving...",
+    "save_status_unsaved": "Unsaved",
+    "save_status_error": "Save failed"
   },
   "status_bar": {
     "language_title": "Change content language",
