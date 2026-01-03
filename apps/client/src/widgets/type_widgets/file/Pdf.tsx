@@ -145,25 +145,6 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
         }
     }, [ blob ]);
 
-    // Trigger focus when iframe content is clicked (iframe focus doesn't bubble)
-    useEffect(() => {
-        const iframe = iframeRef.current;
-        if (!iframe) return;
-
-        const handleIframeClick = () => {
-            if (noteContext.ntxId) {
-                appContext.tabManager.activateNoteContext(noteContext.ntxId);
-            }
-        };
-
-        // Listen for clicks on the iframe's content window
-        const iframeDoc = iframe.contentWindow?.document;
-        if (iframeDoc) {
-            iframeDoc.addEventListener('click', handleIframeClick);
-            return () => iframeDoc.removeEventListener('click', handleIframeClick);
-        }
-    }, [ iframeRef.current?.contentWindow, noteContext ]);
-
     useTriliumEvent("customDownload", ({ ntxId }) => {
         if (ntxId !== noteContext.ntxId) return;
         iframeRef.current?.contentWindow?.postMessage({
@@ -182,6 +163,12 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     win.TRILIUM_VIEW_HISTORY_STORE = historyConfig.config;
                     win.TRILIUM_NOTE_ID = note.noteId;
                     win.TRILIUM_NTX_ID = noteContext.ntxId;
+                }
+
+                if (iframeRef.current?.contentWindow) {
+                    iframeRef.current.contentWindow.addEventListener('click', () => {
+                        appContext.tabManager.activateNoteContext(noteContext.ntxId);
+                    });
                 }
             }}
         />

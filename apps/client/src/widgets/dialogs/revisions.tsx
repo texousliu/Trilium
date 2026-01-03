@@ -1,6 +1,6 @@
 import "./revisions.css";
 
-import type { RevisionItem,RevisionPojo } from "@triliumnext/commons";
+import type { RevisionItem, RevisionPojo } from "@triliumnext/commons";
 import clsx from "clsx";
 import { diffWords } from "diff";
 import type { CSSProperties } from "preact/compat";
