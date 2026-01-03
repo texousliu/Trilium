@@ -2231,6 +2231,7 @@
     "attachments_other": "{{count}} 个附件",
     "pages_other": "共{{count}}页",
     "pages_alt": "第{{pageNumber}}页",
-    "pages_loading": "加载中..."
+    "pages_loading": "加载中...",
+    "layers_other": "{{count}} 层"
   }
 }
