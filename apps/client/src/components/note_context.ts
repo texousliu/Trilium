@@ -34,11 +34,11 @@ export interface NoteContextDataMap {
         requestThumbnail(page: number): void;
     };
     pdfAttachments: {
-        attachments: Array<{ filename: string; size: number }>;
+        attachments: PdfAttachment[];
         downloadAttachment(filename: string): void;
     };
     pdfLayers: {
-        layers: Array<{ id: string; name: string; visible: boolean }>;
+        layers: PdfLayer[];
         toggleLayer(layerId: string, visible: boolean): void;
     };
     saveState: {
