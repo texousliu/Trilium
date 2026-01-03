@@ -11,15 +11,9 @@
 <h2>Storing last position and settings</h2>
 <p>For every PDF, Trilium will remember the following information:</p>
 <ul>
-  <li data-list-item-id="e800292c222a870700c853355e8f323a3">
-    <p>The current page.</p>
-  </li>
-  <li data-list-item-id="eafe1af464be4b531cc88170014c92cb9">
-    <p>The scroll position, within the current page.</p>
-  </li>
-  <li data-list-item-id="ed9b5e35df1c612b69742ff970c95a25b">
-    <p>The rotation of the page.</p>
-  </li>
+  <li>The current page.</li>
+  <li>The scroll position, within the current page.</li>
+  <li>The rotation of the page.</li>
 </ul>
 <p>This makes it useful when reading large documents since the position is
   remembered automatically. This happens in the background, however it's
@@ -27,8 +21,8 @@
 <aside
 class="admonition tip">
   <p>Technically, the information about the scroll position and rotation is
-    stored in the&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/BFs8mudNFgCS/_help_0vhv7lsOLy82">Attachments</a>&nbsp;section,
-    in a dedicated attachment called <code spellcheck="false">pdfHistory.json</code>.</p>
+    stored in the&nbsp;<a class="reference-link" href="#root/_help_0vhv7lsOLy82">Attachments</a>&nbsp;section,
+    in a dedicated attachment called <code>pdfHistory.json</code>.</p>
   </aside>
   <h2>Annotations</h2>
   <p>Since v0.102.0 it's possible to annotate PDFs. To do so, look for the
@@ -38,20 +32,20 @@ class="admonition tip">
   <h3>Supported annotations</h3>
   <p>The following annotation methods are supported:</p>
   <ul>
-    <li data-list-item-id="e22b0fd64079f222a6edf716d1e287fcd"><strong>Highlight</strong>
+    <li><strong>Highlight</strong>
       <br>Allows highlighting text with one of the predefined colors.
       <ul>
-        <li data-list-item-id="ed5816cda369a50d35356545b2e639106">The thickness is also adjustable.</li>
-        <li data-list-item-id="eacd49e75a9b3c6ca88dcc3aecb6e7780">It's also possible to highlight the blank space, turning the feature more
+        <li>The thickness is also adjustable.</li>
+        <li>It's also possible to highlight the blank space, turning the feature more
           into a thicker pen.</li>
       </ul>
     </li>
-    <li data-list-item-id="ed150361858da21a3a043fe273f3a8082"><strong>Text</strong>
+    <li><strong>Text</strong>
       <br>Allows adding arbitrary text, with a custom color and size.</li>
-    <li data-list-item-id="e1684364a9a848f88610727d8d903113d"><strong>Pen</strong>
+    <li><strong>Pen</strong>
       <br>Allows free drawing on the document, with variable color, thickness and
       opacity.</li>
-    <li data-list-item-id="ebff3cc863fa39a4bf69ca9a3a25ed289"><strong>Image</strong>
+    <li><strong>Image</strong>
       <br>Allows inserting images from outside Trilium directly into the document.</li>
   </ul>
   <h3>Editing existing annotations</h3>
@@ -69,7 +63,7 @@ class="admonition tip">
     if downloading (for external use outside Trilium) or sharing the note.</p>
   <p>The downside is that the entire PDF needs to be sent back to the server,
     which can slow down performance for larger documents. If you encounter
-    any issues from this system, feel free to <a href="#root/pOsGYCXsbNQG/BgmBlOIl72jZ/_help_wy8So3yZZlH9">report it</a>.</p>
+    any issues from this system, feel free to <a href="#root/_help_wy8So3yZZlH9">report it</a>.</p>
   <h2>Filling out forms</h2>
   <p>Similar to annotations, forms are also supported by Trilium since v0.102.0.
     If the document has fields that can be filled-in, they will be indicated
@@ -77,52 +71,49 @@ class="admonition tip">
   <p>Simply type text in the forms and they will be automatically saved.</p>
   <h2>Sidebar navigation</h2>
   <aside class="admonition note">
-    <p>This feature is only available if&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/Vc8PjrjAGuOp/_help_IjZS7iK5EXtb">New Layout</a>&nbsp;is
+    <p>This feature is only available if&nbsp;<a class="reference-link" href="#root/_help_IjZS7iK5EXtb">New Layout</a>&nbsp;is
       enabled. If you are using the old layout, these features are still available
       by looking for a sidebar button in the PDF viewer toolbar.</p>
   </aside>
   <p>When a PDF file is opened in Trilium the&nbsp;<a class="reference-link"
-    href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/Vc8PjrjAGuOp/_help_RnaPdbciOfeq">Right Sidebar</a>&nbsp;is
-    augmented with PDF-specific navigation, with the following features:</p>
+    href="#root/_help_RnaPdbciOfeq">Right Sidebar</a>&nbsp;is augmented with PDF-specific
+    navigation, with the following features:</p>
   <ul>
-    <li data-list-item-id="ec98e84135caf286b8c34b65403a7c36b">Table of contents/outline
+    <li>Table of contents/outline
       <ul>
-        <li data-list-item-id="e3d034433ea04b042c9425d0d183174f0">All the headings and “bookmarks” will be displayed hierarchially.</li>
-        <li
-        data-list-item-id="e6113a5ba02d24a74d858d8b9e5cd529d">The heading on the current page is also highlighted (note that it can
+        <li>All the headings and “bookmarks” will be displayed hierarchially.</li>
+        <li>The heading on the current page is also highlighted (note that it can
           be slightly offset depending on how many headings are on the same page).</li>
-    <li
-    data-list-item-id="e650d1274d9fcc67a61ed531be41664ba">Clicking on a heading will jump to the corresponding position in the PDF.</li>
+        <li>Clicking on a heading will jump to the corresponding position in the PDF.</li>
       </ul>
-      </li>
-      <li data-list-item-id="e7596d0db46b52000147e8c58035a9080">Pages
-        <ul>
-          <li data-list-item-id="e878951e72b24d63a5f427c09dbd5b43d">A preview of all the pages with a small thumbnail.</li>
-          <li data-list-item-id="ee2a88c436e666ad03396e16afc5e820d">Clicking on a page will automatically navigate to that page.</li>
-        </ul>
-      </li>
-      <li data-list-item-id="e69b90e09bec99dd22e1d51b3fd47ad30">Attachments
-        <ul>
-          <li data-list-item-id="e32d2f3ca07155778516311955aad6bc1">If the PDF has its own attachments (not to be confused with Trilium's&nbsp;
-            <a
-            class="reference-link" href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/BFs8mudNFgCS/_help_0vhv7lsOLy82">Attachments</a>), they will be displayed in a list.</li>
-          <li data-list-item-id="e51eac1ae4ee919989c95a28940f77d1b">Some information such as the name and size of the attachment are displayed.</li>
-          <li
-          data-list-item-id="ee296a4cf55b2d4372496ab8e70691236">It's possible to download the attachment by clicking on the download button.</li>
+    </li>
+    <li>Pages
+      <ul>
+        <li>A preview of all the pages with a small thumbnail.</li>
+        <li>Clicking on a page will automatically navigate to that page.</li>
       </ul>
-      </li>
-      <li data-list-item-id="ef51c3a38777e3a1a11b7691de57c3eab">Layers
-        <ul>
-          <li data-list-item-id="e09e2c2c5f8fdd0f5756ca6345a275e5d">A less common feature, if the PDF has toggle-able layers, these layers
-            will be displayed in a list here.</li>
-          <li data-list-item-id="e35568c33af1e6bf80f9e5d9c66fa903a">It's possible to toggle the visibility for each individual layer.</li>
-        </ul>
-      </li>
+    </li>
+    <li>Attachments
+      <ul>
+        <li>If the PDF has its own attachments (not to be confused with Trilium's&nbsp;
+          <a
+          class="reference-link" href="#root/_help_0vhv7lsOLy82">Attachments</a>), they will be displayed in a list.</li>
+        <li>Some information such as the name and size of the attachment are displayed.</li>
+        <li>It's possible to download the attachment by clicking on the download button.</li>
+      </ul>
+    </li>
+    <li>Layers
+      <ul>
+        <li>A less common feature, if the PDF has toggle-able layers, these layers
+          will be displayed in a list here.</li>
+        <li>It's possible to toggle the visibility for each individual layer.</li>
+      </ul>
+    </li>
   </ul>
   <h2>Share functionality</h2>
-  <p>PDFs can also be shared using the&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_R9pX4DGra2Vt">Sharing</a>&nbsp;feature.
+  <p>PDFs can also be shared using the&nbsp;<a class="reference-link" href="#root/_help_R9pX4DGra2Vt">Sharing</a>&nbsp;feature.
     This will also use Trilium's customized PDF viewer.</p>
   <p>If you are using a reverse proxy on your server with strict access limitations
-    for the share functionality, make sure that <code spellcheck="false">[host].com/pdfjs</code> directory
-    is accessible. Note that this directory is outside the <code spellcheck="false">/share</code> route
+    for the share functionality, make sure that <code>[host].com/pdfjs</code> directory
+    is accessible. Note that this directory is outside the <code>/share</code> route
     as it's common with the rest of the application.</p>
