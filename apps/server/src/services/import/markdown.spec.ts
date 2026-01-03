@@ -308,4 +308,10 @@ $$`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("adds spellcheck=false to inline code", () => {
+        const input = `This is some inline code: \`const x = 10;\``;
+        const expected = /*html*/`<p>This is some inline code: <code spellcheck="false">const x = 10;</code></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
