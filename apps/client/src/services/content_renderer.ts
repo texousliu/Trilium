@@ -153,7 +153,7 @@ function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLE
 
     const $img = $("<img>")
         .attr("src", url || "")
-        .attr("id", `attachment-image-${  idCounter++}`)
+        .attr("id", `attachment-image-${idCounter++}`)
         .css("max-width", "100%");
 
     $renderedContent.append($img);
@@ -267,7 +267,7 @@ async function renderMermaid(note: FNote | FAttachment, $renderedContent: JQuery
 
     try {
         await loadElkIfNeeded(mermaid, content);
-        const { svg } = await mermaid.mermaidAPI.render(`in-mermaid-graph-${  idCounter++}`, content);
+        const { svg } = await mermaid.mermaidAPI.render(`in-mermaid-graph-${idCounter++}`, content);
 
         $renderedContent.append($(postprocessMermaidSvg(svg)));
     } catch (e) {

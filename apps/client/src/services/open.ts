@@ -104,7 +104,7 @@ async function openCustom(type: string, entityId: string, mime: string) {
             // Note that the path separator must be \ instead of /
             filePath = filePath.replace(/\//g, "\\");
         }
-        const command = `rundll32.exe shell32.dll,OpenAs_RunDLL ${  filePath}`;
+        const command = `rundll32.exe shell32.dll,OpenAs_RunDLL ${filePath}`;
         exec(command, (err, stdout, stderr) => {
             if (err) {
                 console.error("Open Note custom: ", err);
