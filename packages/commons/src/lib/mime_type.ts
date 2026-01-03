@@ -157,7 +157,7 @@ const MIME_TYPES_DICT_RAW = [
     { title: "Scala", mime: "text/x-scala" },
     { title: "Scheme", mime: "text/x-scheme" },
     { title: "SCSS", mime: "text/x-scss", mdLanguageCode: "scss" },
-    { title: "Shell (bash)", mime: "text/x-sh", mdLanguageCode: "bash", default: true, icon: "bx bx-terminal" },
+    { title: "Shell (bash)", mime: "text/x-sh", mdLanguageCode: "sh", default: true, icon: "bx bx-terminal" },
     { title: "Sieve", mime: "application/sieve" },
     { title: "Slim", mime: "text/x-slim" },
     { title: "Smalltalk", mime: "text/x-stsrc", mdLanguageCode: "smalltalk" },
