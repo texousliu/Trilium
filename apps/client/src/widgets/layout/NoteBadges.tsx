@@ -113,30 +113,30 @@ export function SaveStatusBadge() {
     const saveState = useGetContextData("saveState");
     if (!saveState) return;
 
-    let icon: string;
-    let title: string;
-    let tooltip: string | undefined;
-    switch (saveState?.state) {
-        case "saved":
-            icon = "bx bx-check";
-            title = t("breadcrumb_badges.save_status_saved");
-            break;
-        case "saving":
-            icon = "bx bx-loader bx-spin";
-            title = t("breadcrumb_badges.save_status_saving");
-            tooltip = t("breadcrumb_badges.save_status_saving_tooltip");
-            break;
-        case "unsaved":
-            icon = "bx bx-pencil";
-            title = t("breadcrumb_badges.save_status_unsaved");
-            tooltip = t("breadcrumb_badges.save_status_unsaved_tooltip");
-            break;
-        case "error":
-            icon = "bx bxs-error";
-            title = t("breadcrumb_badges.save_status_error");
-            tooltip = t("breadcrumb_badges.save_status_error_tooltip");
-            break;
-    }
+    const stateConfig = {
+        saved: {
+            icon: "bx bx-check",
+            title: t("breadcrumb_badges.save_status_saved"),
+            tooltip: undefined
+        },
+        saving: {
+            icon: "bx bx-loader bx-spin",
+            title: t("breadcrumb_badges.save_status_saving"),
+            tooltip: t("breadcrumb_badges.save_status_saving_tooltip")
+        },
+        unsaved: {
+            icon: "bx bx-pencil",
+            title: t("breadcrumb_badges.save_status_unsaved"),
+            tooltip: t("breadcrumb_badges.save_status_unsaved_tooltip")
+        },
+        error: {
+            icon: "bx bxs-error",
+            title: t("breadcrumb_badges.save_status_error"),
+            tooltip: t("breadcrumb_badges.save_status_error_tooltip")
+        }
+    };
+
+    const { icon, title, tooltip } = stateConfig[saveState.state];
 
     return (
         <Badge

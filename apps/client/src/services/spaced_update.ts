@@ -80,12 +80,12 @@ export default class SpacedUpdate {
             try {
                 await this.updater();
                 this.stateCallback?.("saved");
+                this.changed = false;
             } catch (e) {
                 this.stateCallback?.("error");
                 logError(getErrorMessage(e));
             }
             this.lastUpdated = Date.now();
-            this.changed = false;
         } else {
             // update isn't triggered but changes are still pending, so we need to schedule another check
             this.scheduleUpdate();

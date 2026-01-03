@@ -65,16 +65,22 @@ export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler:
 
 export function useSpacedUpdate(callback: () => void | Promise<void>, interval = 1000, stateCallback?: StateCallback) {
     const callbackRef = useRef(callback);
+    const stateCallbackRef = useRef(stateCallback);
     const spacedUpdateRef = useRef<SpacedUpdate>(new SpacedUpdate(
         () => callbackRef.current(),
         interval,
-        stateCallback
+        (state) => stateCallbackRef.current?.(state)
     ));
 
     // Update callback ref when it changes
     useEffect(() => {
         callbackRef.current = callback;
     }, [callback]);
+
+    // Update state callback when it changes.
+    useEffect(() => {
+        stateCallbackRef.current = stateCallback;
+    }, [ stateCallback ]);
 
     // Update interval if it changes
     useEffect(() => {
