@@ -174,7 +174,7 @@ export function useBlobEditorSpacedUpdate({ note, noteType, noteContext, getData
     noteType: NoteType;
     note: FNote,
     noteContext: NoteContext | null | undefined,
-    getData: () => Promise<Blob> | Blob | undefined,
+    getData: () => Promise<Blob | undefined> | Blob | undefined,
     onContentChange: (newBlob: FBlob) => void,
     dataSaved?: (savedData: Blob) => void,
     updateInterval?: number;

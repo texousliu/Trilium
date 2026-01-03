@@ -16,14 +16,28 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
 }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const historyConfig = useViewModeConfig<HistoryData>(note, "pdfHistory");
-    const dataRef = useRef<Blob>(new Blob());
 
     const spacedUpdate = useBlobEditorSpacedUpdate({
         note,
         noteType: "file",
         noteContext,
         getData() {
-            return dataRef.current;
+            if (!iframeRef.current?.contentWindow) return undefined;
+
+            return new Promise<Blob>((resolve) => {
+                const onMessageReceived = (event: PdfMessageEvent) => {
+                    if (event.data.type !== "pdfjs-viewer-blob") return;
+                    if (event.data.noteId !== note.noteId || event.data.ntxId !== noteContext.ntxId) return;
+                    const blob = new Blob([event.data.data as Uint8Array<ArrayBuffer>], { type: note.mime });
+                    window.removeEventListener("message", onMessageReceived);
+                    resolve(blob);
+                };
+
+                window.addEventListener("message", onMessageReceived);
+                iframeRef.current?.contentWindow?.postMessage({
+                    type: "trilium-request-blob",
+                });
+            });
         },
         onContentChange() {
             if (iframeRef.current?.contentWindow) {
@@ -35,9 +49,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
     useEffect(() => {
         function handleMessage(event: PdfMessageEvent) {
             if (event.data?.type === "pdfjs-viewer-document-modified") {
-                const blob = new Blob([event.data.data as Uint8Array<ArrayBuffer>], { type: note.mime });
                 if (event.data.noteId === note.noteId && event.data.ntxId === noteContext.ntxId) {
-                    dataRef.current = blob;
                     spacedUpdate.resetUpdateTimer();
                     spacedUpdate.scheduleUpdate();
                 }
