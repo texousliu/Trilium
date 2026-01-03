@@ -43,7 +43,7 @@ export interface NoteContextDataMap {
     };
     saveState: {
         state: SaveState;
-    }
+    };
 }
 
 type ContextDataKey = keyof NoteContextDataMap;

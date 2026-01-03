@@ -75,7 +75,7 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     // Update callback ref when it changes
     useEffect(() => {
         callbackRef.current = callback;
-    }, [callback]);
+    }, [ callback ]);
 
     // Update state callback when it changes.
     useEffect(() => {
@@ -85,7 +85,7 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     // Update interval if it changes
     useEffect(() => {
         spacedUpdateRef.current?.setUpdateInterval(interval);
-    }, [interval]);
+    }, [ interval ]);
 
     return spacedUpdateRef.current;
 }
