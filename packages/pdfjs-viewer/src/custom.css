@@ -1,17 +1,26 @@
 :root {
-    color-scheme: light dark;
-    
+    color-scheme: var(--tn-theme-style);
+
     --body-bg-color: transparent;
     --toolbar-bg-color: transparent;
     --main-color: var(--tn-main-text-color);
     --toolbar-border-color: var(--tn-main-border-color);
     --toolbar-icon-opacity: 1;
+
+    --page-margin: 12px auto;
+    --spreadHorizontalWrapped-margin-LR: 4px;
 }
 
 .pdfViewer {
-    .page .canvasWrapper {
+    .page,
+    .page > .canvasWrapper,
+    .page > .canvasWrapper > canvas {
+        border-radius: 6px;
+    }
+
+    .page {
         border: 1px solid var(--tn-main-border-color);
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        box-shadow: 7px 7px 15px #00000010;
     }
 }
 

@@ -13,7 +13,8 @@ const VARIABLE_WHITELIST = new Set([
     "root-background",
     "main-background-color",
     "main-border-color",
-    "main-text-color"
+    "main-text-color",
+    "theme-style"
 ]);
 
 export default function PdfPreview({ note, blob, componentId, noteContext }: {
