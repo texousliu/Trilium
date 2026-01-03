@@ -25,6 +25,7 @@
             --default-opacity: 0.4;
             opacity: var(--default-opacity);
             transition: opacity 250ms ease-in;
+            color: var(--main-text-color);
 
             &.error {
                 color: var(--dropdown-item-icon-destructive-color);
