@@ -25,14 +25,14 @@
 <p>Common request is to allow multiple users collaborate, share notes etc.
   So far I'm resisting this because of these reasons:</p>
 <ul>
-  <li data-list-item-id="e43d78c1f5b229189a5900c5ad1ad21d0">it's a huge feature, or rather a Pandora's box of collaboration features
+  <li>it's a huge feature, or rather a Pandora's box of collaboration features
     like user management, permissions, conflict resolution, real-time editing
     of a note by multiple people etc. This would be a huge amount of work.
     Trilium Notes is project made mostly by one person in free time and that's
     unlikely to change in the future.</li>
-  <li data-list-item-id="e8531a103221f9c2ae39866f1c1cb4b8b">given its size it would probably pivot the attention away from my main
+  <li>given its size it would probably pivot the attention away from my main
     focus which is a personal note-taking</li>
-  <li data-list-item-id="e9bb4f196b1b7ac0f0dfa7965927fdc4f">the assumption that only single person has access to the app simplifies
+  <li>the assumption that only single person has access to the app simplifies
     many things, or just outright makes them possible. In multi-user app, our
     <a
     href="#root/_help_CdNpE2pqjmI6">scripting</a>support would be a XSS security hole, while with the single
@@ -47,7 +47,7 @@
   href="#root/_help_tAassRL4RSQL">data directory</a>in the <code spellcheck="false">TRILIUM_DATA_DIR</code> environment
     variable and separate port on <code spellcheck="false">TRILIUM_PORT</code> environment
     variable. How to do that depends on the platform, in Unix-based systems
-    you can achieve that by running command such as this:</p><pre><code class="language-text-x-sh">TRILIUM_DATA_DIR=/home/me/path/to/data/dir TRILIUM_PORT=12345 trilium </code></pre>
+    you can achieve that by running command such as this:</p><pre><code class="language-text-x-trilium-auto">TRILIUM_DATA_DIR=/home/me/path/to/data/dir TRILIUM_PORT=12345 trilium </code></pre>
 <p>You can save this command into a <code spellcheck="false">.sh</code> script
   file or make an alias. Do this similarly for a second instance with different
   data directory and port.</p>
@@ -56,7 +56,7 @@
 <p>These general purpose sync apps are not suitable to sync database files
   which are open and being worked on by another application. The result is
   that they will corrupt the database file, resulting in data loss and this
-  message in the Trilium logs:</p><pre><code class="language-text-plain">SqliteError: database disk image is malformed</code></pre>
+  message in the Trilium logs:</p><pre><code class="language-text-x-trilium-auto">SqliteError: database disk image is malformed</code></pre>
 <p>The only supported way to sync Trilium's data across the network is to
   use a <a href="#root/_help_cbkrhQjrkKrh">sync/web server</a>.</p>
 <h2>Why database instead of flat files?</h2>
@@ -69,23 +69,21 @@
   with probably more problems.</p>
 <p>More detailed answer:</p>
 <ul>
-  <li data-list-item-id="ea3cf8a951b321053b3def23e65b1a612"><a href="#root/_help_IakOLONlIfGI">clones</a> are what you might call "hard directory
+  <li><a href="#root/_help_IakOLONlIfGI">clones</a> are what you might call "hard directory
     link" in filesystem lingo, but this concept is not implemented in any filesystem</li>
-  <li
-  data-list-item-id="eb0fcfc88860786c2b886fcc93ad1b738">filesystems make a distinction between directory and file while there's
+  <li>filesystems make a distinction between directory and file while there's
     intentionally no such difference in Trilium</li>
-    <li data-list-item-id="ec97e7cc69164f29f8d7919ef791a1631">files are stored in no particular order and user can't change this</li>
-    <li
-    data-list-item-id="e01ea1889d242bd2fadbeca1b1c315fcb">Trilium allows storing note <a href="#root/_help_zEY4DaJG4YT5">attributes</a> which
-      could be represented in extended user attributes but their support differs
-      greatly among different filesystems / operating systems</li>
-      <li data-list-item-id="e0f4f8ea6d6f0e01fdeacdd900c8b6831">Trilium makes links / relations between different notes which can be quickly
-        retrieved / navigated (e.g. for <a href="#root/_help_BCkXAVs63Ttv">note map</a>).
-        There's no such support in file systems which means these would have to
-        be stored in some kind of side-car files (mini-databases).</li>
-      <li data-list-item-id="e9288104330d48d5fadc0f051febec972">Filesystems are generally not transactional. While this is not completely
-        required for a note-taking application, having transactions make it way
-        easier to keep notes and their metadata in predictable and consistent state.</li>
+  <li>files are stored in no particular order and user can't change this</li>
+  <li>Trilium allows storing note <a href="#root/_help_zEY4DaJG4YT5">attributes</a> which
+    could be represented in extended user attributes but their support differs
+    greatly among different filesystems / operating systems</li>
+  <li>Trilium makes links / relations between different notes which can be quickly
+    retrieved / navigated (e.g. for <a href="#root/_help_BCkXAVs63Ttv">note map</a>).
+    There's no such support in file systems which means these would have to
+    be stored in some kind of side-car files (mini-databases).</li>
+  <li>Filesystems are generally not transactional. While this is not completely
+    required for a note-taking application, having transactions make it way
+    easier to keep notes and their metadata in predictable and consistent state.</li>
 </ul>
 <h2>Search-related Questions</h2>
 <h3>Why does search sometimes find results with typos?</h3>
@@ -99,9 +97,9 @@
 <h3>How can I search for notes when I'm not sure of the exact spelling?</h3>
 <p>Use the fuzzy search operators:</p>
 <ul>
-  <li data-list-item-id="e86fd90b78ff844273439cc79a7225854"><code spellcheck="false">#title ~= "projct"</code> - finds notes with titles
+  <li><code spellcheck="false">#title ~= "projct"</code> - finds notes with titles
     like "project" despite the typo</li>
-  <li data-list-item-id="e1c157f6b78a6e67d1d5c8ddfd75fa462"><code spellcheck="false">note.content ~* "algoritm"</code> - finds content
+  <li><code spellcheck="false">note.content ~* "algoritm"</code> - finds content
     containing "algorithm" or similar words</li>
 </ul>
 <h3>Why do some search results appear before others with lower scores?</h3>
@@ -111,9 +109,9 @@
   factors.</p>
 <h3>How can I make my searches faster?</h3>
 <ol>
-  <li data-list-item-id="e175aefc215fa8f275ce736bac67d0669">Use the "Fast search" option to search only titles and attributes (not
+  <li>Use the "Fast search" option to search only titles and attributes (not
     content)</li>
-  <li data-list-item-id="eb22ee033ebaa78eb9b42268bd482a47d">Limit search scope using the "Ancestor" field</li>
-  <li data-list-item-id="ef92336bcda198825a3a5b60aee2b7afe">Set a result limit to prevent loading too many results</li>
-  <li data-list-item-id="e464f8a3aa32d3cb76e4cdf26b16cc797">For large databases, consider archiving old notes to reduce search scope</li>
+  <li>Limit search scope using the "Ancestor" field</li>
+  <li>Set a result limit to prevent loading too many results</li>
+  <li>For large databases, consider archiving old notes to reduce search scope</li>
 </ol>

@@ -53,7 +53,7 @@ class="admonition note">
     the default application might seem incorrect (such as opening in GIMP).
     This is because it uses Gnome's “Recommended applications” list.</p>
   <p>To solve this, you can change the recommended application for PDFs via
-    this command line. First, list the available applications via <code>gio mime application/pdf</code> and
+    this command line. First, list the available applications via <code spellcheck="false">gio mime application/pdf</code> and
     then set the desired one. For example to use GNOME's Evince:</p><pre><code class="language-text-x-trilium-auto">gio mime application/pdf</code></pre>
   <h3>Customizing exporting as PDF</h3>
   <p>When exporting to PDF, there are no customizable settings such as page
@@ -61,10 +61,18 @@ class="admonition note">
     href="#root/_help_zEY4DaJG4YT5">Attributes</a>&nbsp;to adjust some of the settings:</p>
   <ul>
     <li>To print in landscape mode instead of portrait (useful for big diagrams
-      or slides), add <code>#printLandscape</code>.</li>
+      or slides), add <code spellcheck="false">#printLandscape</code>.</li>
     <li>By default, the resulting PDF will be in Letter format. It is possible
-      to adjust it to another page size via the <code>#printPageSize</code> attribute,
-      with one of the following values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.</li>
+      to adjust it to another page size via the <code spellcheck="false">#printPageSize</code> attribute,
+      with one of the following values: <code spellcheck="false">A0</code>,
+      <code
+      spellcheck="false">A1</code>, <code spellcheck="false">A2</code>, <code spellcheck="false">A3</code>,
+        <code
+        spellcheck="false">A4</code>, <code spellcheck="false">A5</code>, <code spellcheck="false">A6</code>,
+          <code
+          spellcheck="false">Legal</code>, <code spellcheck="false">Letter</code>, <code spellcheck="false">Tabloid</code>,
+            <code
+            spellcheck="false">Ledger</code>.</li>
   </ul>
   <aside class="admonition note">
     <p>These options have no effect when used with the printing feature, since
@@ -131,7 +139,7 @@ class="admonition note">
             <li>Tables that are too complex (especially if they have multiple columns)
               might not fit properly, however tables with a large number of rows are
               supported thanks to pagination.</li>
-            <li>Consider printing in landscape mode, or using <code>#printLandscape</code> if
+            <li>Consider printing in landscape mode, or using <code spellcheck="false">#printLandscape</code> if
               exporting to PDF.</li>
           </ul>
         </li>
@@ -140,7 +148,7 @@ class="admonition note">
       </ul>
     </li>
     <li>Using&nbsp;<a class="reference-link" href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
-      printing is no longer supported, instead a custom <code>printCss</code> relation
+      printing is no longer supported, instead a custom <code spellcheck="false">printCss</code> relation
       needs to be used (see below).</li>
   </ul>
   <h2>Customizing the print CSS</h2>
@@ -151,8 +159,8 @@ class="admonition note">
   <p>To do so:</p>
   <ul>
     <li>Create a CSS <a href="#root/_help_6f9hih2hXXZk">code note</a>.</li>
-    <li>On the note being printed, apply the <code>~printCss</code> relation to
-      point to the newly created CSS code note.</li>
+    <li>On the note being printed, apply the <code spellcheck="false">~printCss</code> relation
+      to point to the newly created CSS code note.</li>
     <li>To apply the CSS to multiple notes, consider using <a href="#root/_help_bwZpz2ajCEwO">inheritable attributes</a> or&nbsp;
       <a
       class="reference-link" href="#root/_help_KC1HB96bqqHX">Templates</a>.</li>
@@ -164,19 +172,22 @@ class="admonition note">
 }</code></pre>
   <p>To remark:</p>
   <ul>
-    <li>Multiple CSS notes can be add by using multiple <code>~printCss</code> relations.</li>
-    <li>If the note pointing to the <code>printCss</code> doesn't have the right
-      note type or mime type, it will be ignored.</li>
+    <li>Multiple CSS notes can be add by using multiple <code spellcheck="false">~printCss</code> relations.</li>
+    <li>If the note pointing to the <code spellcheck="false">printCss</code> doesn't
+      have the right note type or mime type, it will be ignored.</li>
     <li>If migrating from a previous version where&nbsp;<a class="reference-link"
-      href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>, there's no need for <code>@media print {</code>  since
-      the style-sheet is used only for printing.</li>
+      href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>, there's no need for
+      <code
+      spellcheck="false">@media print {</code> since the style-sheet is used only for printing.</li>
   </ul>
   <h2>Under the hood</h2>
   <p>Both printing and exporting as PDF use the same mechanism: a note is rendered
     individually in a separate webpage that is then sent to the browser or
     the Electron application either for printing or exporting as PDF.</p>
   <p>The webpage that renders a single note can actually be accessed in a web
-    browser. For example <code>http://localhost:8080/#root/WWRGzqHUfRln/RRZsE9Al8AIZ?ntxId=0o4fzk</code> becomes <code>http://localhost:8080/?print#root/WWRGzqHUfRln/RRZsE9Al8AIZ</code>.</p>
+    browser. For example <code spellcheck="false">http://localhost:8080/#root/WWRGzqHUfRln/RRZsE9Al8AIZ?ntxId=0o4fzk</code> becomes
+    <code
+    spellcheck="false">http://localhost:8080/?print#root/WWRGzqHUfRln/RRZsE9Al8AIZ</code>.</p>
   <p>Accessing the print note in a web browser allows for easy debugging to
     understand why a particular note doesn't render well. The mechanism for
     rendering is similar to the one used in&nbsp;<a class="reference-link"
