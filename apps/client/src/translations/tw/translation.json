@@ -288,7 +288,6 @@
     "download_button": "下載",
     "mime": "MIME類型： ",
     "file_size": "檔案大小：",
-    "preview": "預覽：",
     "preview_not_available": "無法預覽此類型的筆記。",
     "restore_button": "還原",
     "delete_button": "刪除",
@@ -765,6 +764,7 @@
     "search": "搜尋：",
     "reset-default": "重置為預設圖標",
     "search_placeholder_one": "在 {{count}} 個圖示包中搜尋 {{number}} 個圖示",
+    "search_placeholder_other": "",
     "search_placeholder_filtered": "在 {{name}} 中搜尋 {{number}} 個圖示",
     "filter": "篩選",
     "filter-none": "所有圖示",
@@ -1571,6 +1571,7 @@
     "printing_pdf": "正在匯出為 PDF…",
     "print_report_title": "列印報告",
     "print_report_collection_content_one": "集合中的 {{count}} 篇筆記無法列印，因為它們不被支援或受到保護。",
+    "print_report_collection_content_other": "",
     "print_report_collection_details_button": "查看詳情",
     "print_report_collection_details_ignored_notes": "忽略的筆記"
   },
@@ -2239,8 +2240,11 @@
   },
   "pdf": {
     "attachments_one": "{{count}} 個附件",
+    "attachments_other": "",
     "layers_one": "{{count}} 層",
+    "layers_other": "",
     "pages_one": "共 {{count}} 頁",
+    "pages_other": "",
     "pages_alt": "第 {{pageNumber}} 頁",
     "pages_loading": "載入中…"
   }
