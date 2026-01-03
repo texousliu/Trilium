@@ -109,13 +109,13 @@ function ExecuteBadge() {
     );
 }
 
-function SaveStatusBadge() {
+export function SaveStatusBadge() {
     const saveState = useGetContextData("saveState");
     if (!saveState) return;
 
     let icon: string;
     let title: string;
-    let tooltip: string;
+    let tooltip: string | undefined;
     switch (saveState?.state) {
         case "saved":
             icon = "bx bx-check";
