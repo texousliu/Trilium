@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
 import { trimIndentation } from "@triliumnext/commons";
+import { describe, expect, it } from "vitest";
+
 import markdownService from "./markdown.js";
 
 describe("markdown", () => {
@@ -9,7 +10,9 @@ describe("markdown", () => {
             "diff": "language-text-x-diff",
             "javascript": "language-application-javascript-env-backend",
             "css": "language-text-css",
-            "mips": "language-text-x-asm-mips"
+            "mips": "language-text-x-asm-mips",
+            "jsx": "language-text-jsx",
+            "html": "language-text-html"
         };
 
         for (const [ input, output ] of Object.entries(conversionTable)) {
@@ -53,7 +56,7 @@ describe("markdown", () => {
             const result = markdownService.renderToHtml(trimIndentation`\
                 # ${title}
                 Hi there
-            `, title)
+            `, title);
             expect(result).toBe(`<p>Hi there</p>`);
         }
     });
