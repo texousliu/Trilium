@@ -34,8 +34,9 @@ async function main() {
     build.writeJson("web/locale/locale.json", localeMappings);
 
     // Copy pdfjs-dist files.
-    build.copy("/node_modules/pdfjs-dist/build/pdf.mjs", "build/pdf.mjs");
-    build.copy("/node_modules/pdfjs-dist/build/pdf.worker.mjs", "build/pdf.worker.mjs");
+    for (const file of [ "pdf.mjs", "pdf.worker.mjs", "pdf.sandbox.mjs" ]) {
+        build.copy(join("/node_modules/pdfjs-dist/build", file), join("build", file));
+    }
 
     if (watchMode) {
         watchForChanges();
