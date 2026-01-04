@@ -194,7 +194,7 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
 
     if (type === "pdf") {
         const $pdfPreview = $('<iframe class="pdf-preview" style="width: 100%; flex-grow: 100;"></iframe>');
-        $pdfPreview.attr("src", openService.getUrlForDownload(`api/${entityType}/${entityId}/open`));
+        $pdfPreview.attr("src", openService.getUrlForDownload(`pdfjs/web/viewer.html?file=../../api/${entityType}/${entityId}/open`));
 
         $content.append($pdfPreview);
     } else if (type === "audio") {
