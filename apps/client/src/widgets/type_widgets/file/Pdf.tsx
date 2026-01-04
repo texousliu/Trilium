@@ -192,6 +192,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                     });
                 }
             }}
+            editable
         />
     );
 }

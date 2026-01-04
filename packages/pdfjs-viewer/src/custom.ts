@@ -6,11 +6,14 @@ import { setupPdfLayers } from "./layers";
 
 async function main() {
     const urlParams = new URLSearchParams(window.location.search);
+    const isEditable = urlParams.get("editable") === "1";
     if (urlParams.get("sidebar") === "0") {
         hideSidebar();
     }
 
-    interceptPersistence(getCustomAppOptions(urlParams));
+    if (isEditable) {
+        interceptPersistence(getCustomAppOptions(urlParams));
+    }
 
     // Wait for the PDF viewer application to be available.
     while (!window.PDFViewerApplication) {
@@ -18,16 +21,18 @@ async function main() {
     }
     const app = window.PDFViewerApplication;
 
-    app.eventBus.on("documentloaded", () => {
-        manageSave();
-        manageDownload();
-        extractAndSendToc();
-        setupScrollToHeading();
-        setupActiveHeadingTracking();
-        setupPdfPages();
-        setupPdfAttachments();
-        setupPdfLayers();
-    });
+    if (isEditable) {
+        app.eventBus.on("documentloaded", () => {
+            manageSave();
+            manageDownload();
+            extractAndSendToc();
+            setupScrollToHeading();
+            setupActiveHeadingTracking();
+            setupPdfPages();
+            setupPdfAttachments();
+            setupPdfLayers();
+        });
+    }
     await app.initializedPromise;
 };
 
