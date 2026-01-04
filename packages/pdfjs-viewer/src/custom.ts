@@ -82,7 +82,7 @@ function manageSave() {
                 data,
                 ntxId: window.TRILIUM_NTX_ID,
                 noteId: window.TRILIUM_NOTE_ID
-            } satisfies PdfDocumentBlobResultMessage, window.location.origin)
+            } satisfies PdfDocumentBlobResultMessage, window.location.origin);
         }
     });
 

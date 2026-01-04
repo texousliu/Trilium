@@ -24,11 +24,17 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
         getData() {
             if (!iframeRef.current?.contentWindow) return undefined;
 
-            return new Promise<Blob>((resolve) => {
+            return new Promise<Blob>((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error("Timeout while waiting for blob response"));
+                }, 10_000);
+
                 const onMessageReceived = (event: PdfMessageEvent) => {
                     if (event.data.type !== "pdfjs-viewer-blob") return;
                     if (event.data.noteId !== note.noteId || event.data.ntxId !== noteContext.ntxId) return;
                     const blob = new Blob([event.data.data as Uint8Array<ArrayBuffer>], { type: note.mime });
+
+                    clearTimeout(timeout);
                     window.removeEventListener("message", onMessageReceived);
                     resolve(blob);
                 };
@@ -36,7 +42,7 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
                 window.addEventListener("message", onMessageReceived);
                 iframeRef.current?.contentWindow?.postMessage({
                     type: "trilium-request-blob",
-                });
+                }, window.location.origin);
             });
         },
         onContentChange() {

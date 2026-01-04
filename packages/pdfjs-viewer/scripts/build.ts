@@ -4,7 +4,7 @@ import { build as esbuild } from "esbuild";
 import { LOCALES } from "@triliumnext/commons";
 import { watch } from "chokidar";
 import { readFileSync, writeFileSync } from "fs";
-import packageJson from "../package.json" with { type: "json "};
+import packageJson from "../package.json" with { type: "json " };
 
 const build = new BuildHelper("packages/pdfjs-viewer");
 const watchMode = process.argv.includes("--watch");
@@ -71,7 +71,7 @@ function patchCacheBuster(htmlFilePath: string) {
         `<link rel="stylesheet" href="custom.css" />`,
         `<link rel="stylesheet" href="custom.css?v=${version}" />`);
     html = html.replace(
-        `<script src="custom.mjs" type="module"></script>`   ,
+        `<script src="custom.mjs" type="module"></script>`,
         `<script src="custom.mjs?v=${version}" type="module"></script>`
     );
 
