@@ -7,7 +7,6 @@ import attribute_renderer from "../../../services/attribute_renderer";
 import content_renderer from "../../../services/content_renderer";
 import { t } from "../../../services/i18n";
 import link from "../../../services/link";
-import tree from "../../../services/tree";
 import { useImperativeSearchHighlighlighting, useNoteLabel, useNoteLabelBoolean } from "../../react/hooks";
 import Icon from "../../react/Icon";
 import NoteLink from "../../react/NoteLink";
