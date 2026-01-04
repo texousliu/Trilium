@@ -43,7 +43,8 @@ export default function PdfPreview({ note, blob, componentId, noteContext }: {
             if (iframeRef.current?.contentWindow) {
                 iframeRef.current.contentWindow.location.reload();
             }
-        }
+        },
+        replaceWithoutRevision: true
     });
 
     useEffect(() => {

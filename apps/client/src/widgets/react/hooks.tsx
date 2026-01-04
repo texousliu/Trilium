@@ -170,7 +170,7 @@ export function useEditorSpacedUpdate({ note, noteType, noteContext, getData, on
     return spacedUpdate;
 }
 
-export function useBlobEditorSpacedUpdate({ note, noteType, noteContext, getData, onContentChange, dataSaved, updateInterval }: {
+export function useBlobEditorSpacedUpdate({ note, noteType, noteContext, getData, onContentChange, dataSaved, updateInterval, replaceWithoutRevision }: {
     noteType: NoteType;
     note: FNote,
     noteContext: NoteContext | null | undefined,
@@ -178,6 +178,8 @@ export function useBlobEditorSpacedUpdate({ note, noteType, noteContext, getData
     onContentChange: (newBlob: FBlob) => void,
     dataSaved?: (savedData: Blob) => void,
     updateInterval?: number;
+    /** If set to true, then the blob is replaced directly without saving a revision before. */
+    replaceWithoutRevision?: boolean;
 }) {
     const parentComponent = useContext(ParentComponent);
     const blob = useNoteBlob(note, parentComponent?.componentId);
@@ -190,10 +192,10 @@ export function useBlobEditorSpacedUpdate({ note, noteType, noteContext, getData
             if (data === undefined || note.type !== noteType) return;
 
             protected_session_holder.touchProtectedSessionIfNecessary(note);
-            await server.upload(`notes/${note.noteId}/file`, new File([ data ], note.title, { type: note.mime }), parentComponent?.componentId);
+            await server.upload(`notes/${note.noteId}/file?replace=${replaceWithoutRevision ? "1" : "0"}`, new File([ data ], note.title, { type: note.mime }), parentComponent?.componentId);
             dataSaved?.(data);
         };
-    }, [ note, getData, dataSaved, noteType, parentComponent ]);
+    }, [ note, getData, dataSaved, noteType, parentComponent, replaceWithoutRevision ]);
     const stateCallback = useCallback<StateCallback>((state) => {
         noteContext?.setContextData("saveState", {
             state
