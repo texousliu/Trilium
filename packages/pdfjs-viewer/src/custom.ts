@@ -81,16 +81,11 @@ function manageSave() {
         }
     });
 
-    app.pdfDocument.annotationStorage.onSetModified = onChange;  // works great for most cases, including forms.
-    app.eventBus.on("annotationeditorcommit", onChange);
-    app.eventBus.on("annotationeditorparamschanged", onChange);
-    app.eventBus.on("annotationeditorstateschanged", evt => {   // needed for detecting when annotations are moved around.
-        const { activeEditorId } = evt;
-
-        // When activeEditorId becomes null, an editor was just committed
-        if (activeEditorId === null) {
-            onChange();
-        }
+    app.pdfDocument.annotationStorage.onSetModified = () => {
+        onChange();
+    };  // works great for most cases, including forms.
+    app.eventBus.on("switchannotationeditorparams", () => {
+        onChange();
     });
 }
 
