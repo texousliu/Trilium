@@ -1,19 +1,22 @@
-import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
 import "./PromotedAttributes.css";
-import { useNoteContext, useNoteLabel, useTriliumEvent, useUniqueName } from "./react/hooks";
-import { Attribute } from "../services/attribute_parser";
-import FAttribute from "../entities/fattribute";
+
+import { UpdateAttributeResponse } from "@triliumnext/commons";
 import clsx from "clsx";
+import { ComponentChild, HTMLInputTypeAttribute, InputHTMLAttributes, MouseEventHandler, TargetedEvent, TargetedInputEvent } from "preact";
+import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
+
+import FAttribute from "../entities/fattribute";
+import FNote from "../entities/fnote";
+import { Attribute } from "../services/attribute_parser";
+import attributes from "../services/attributes";
+import debounce from "../services/debounce";
 import { t } from "../services/i18n";
 import { DefinitionObject, extractAttributeDefinitionTypeAndName, LabelType } from "../services/promoted_attribute_definition_parser";
 import server from "../services/server";
-import FNote from "../entities/fnote";
-import { ComponentChild, HTMLInputTypeAttribute, InputHTMLAttributes, MouseEventHandler, TargetedEvent, TargetedInputEvent } from "preact";
-import NoteAutocomplete from "./react/NoteAutocomplete";
+import { randomString } from "../services/utils";
 import ws from "../services/ws";
-import { UpdateAttributeResponse } from "@triliumnext/commons";
-import attributes from "../services/attributes";
-import debounce from "../services/debounce";
+import { useNoteContext, useNoteLabel, useTriliumEvent, useUniqueName } from "./react/hooks";
+import NoteAutocomplete from "./react/NoteAutocomplete";
 
 interface Cell {
     uniqueId: string;
@@ -39,6 +42,15 @@ type OnChangeListener = (e: OnChangeEventData) => Promise<void>;
 export default function PromotedAttributes() {
     const { note, componentId } = useNoteContext();
     const [ cells, setCells ] = usePromotedAttributeData(note, componentId);
+    return <PromotedAttributesContent note={note} componentId={componentId} cells={cells} setCells={setCells} />;
+}
+
+export function PromotedAttributesContent({ note, componentId, cells, setCells }: {
+    note: FNote | null | undefined;
+    componentId: string;
+    cells: Cell[] | undefined;
+    setCells: Dispatch<StateUpdater<Cell[] | undefined>>;
+}) {
     const [ cellToFocus, setCellToFocus ] = useState<Cell>();
 
     return (
@@ -62,7 +74,7 @@ export default function PromotedAttributes() {
  *
  * The cells are returned as a state since they can also be altered internally if needed, for example to add a new empty cell.
  */
-function usePromotedAttributeData(note: FNote | null | undefined, componentId: string): [ Cell[] | undefined, Dispatch<StateUpdater<Cell[] | undefined>> ] {
+export function usePromotedAttributeData(note: FNote | null | undefined, componentId: string): [ Cell[] | undefined, Dispatch<StateUpdater<Cell[] | undefined>> ] {
     const [ viewType ] = useNoteLabel(note, "viewType");
     const [ cells, setCells ] = useState<Cell[]>();
 
@@ -105,7 +117,7 @@ function usePromotedAttributeData(note: FNote | null | undefined, componentId: s
                     valueAttr.attributeId = "";
                 }
 
-                const uniqueId = `${note.noteId}-${valueAttr.name}-${i}`;
+                const uniqueId = randomString();
                 cells.push({  definitionAttr, definition, valueAttr, valueName, uniqueId });
             }
         }
@@ -156,7 +168,7 @@ function PromotedAttributeCell(props: CellProps) {
             {correspondingInput}
             <MultiplicityCell {...props} />
         </div>
-    )
+    );
 }
 
 const LABEL_MAPPINGS: Record<LabelType, HTMLInputTypeAttribute> = {
@@ -219,29 +231,29 @@ function LabelInput({ inputId, ...props }: CellProps & { inputId: string }) {
                 <label className="tn-checkbox">{inputNode}</label>
             </div>
             <label for={inputId}>{definition.promotedAlias ?? valueName}</label>
-        </>
-    } else {
-        return (
-            <div className="input-group">
-                {inputNode}
-                { definition.labelType === "color" && <ColorPicker {...props} onChange={onChangeListener} inputId={inputId} />}
-                { definition.labelType === "url" && (
-                    <InputButton
-                        className="open-external-link-button"
-                        icon="bx bx-window-open"
-                        title={t("promoted_attributes.open_external_link")}
-                        onClick={(e) => {
-                            const inputEl = document.getElementById(inputId) as HTMLInputElement | null;
-                            const url = inputEl?.value;
-                            if (url) {
-                                window.open(url, "_blank");
-                            }
-                        }}
-                    />
-                )}
-            </div>
-        );
+        </>;
     }
+    return (
+        <div className="input-group">
+            {inputNode}
+            { definition.labelType === "color" && <ColorPicker {...props} onChange={onChangeListener} inputId={inputId} />}
+            { definition.labelType === "url" && (
+                <InputButton
+                    className="open-external-link-button"
+                    icon="bx bx-window-open"
+                    title={t("promoted_attributes.open_external_link")}
+                    onClick={(e) => {
+                        const inputEl = document.getElementById(inputId) as HTMLInputElement | null;
+                        const url = inputEl?.value;
+                        if (url) {
+                            window.open(url, "_blank");
+                        }
+                    }}
+                />
+            )}
+        </div>
+    );
+
 }
 
 
@@ -282,7 +294,7 @@ function ColorPicker({ cell, onChange, inputId }: CellProps & {
                 }}
             />
         </>
-    )
+    );
 }
 
 function RelationInput({ inputId, ...props }: CellProps & { inputId: string }) {
@@ -295,7 +307,7 @@ function RelationInput({ inputId, ...props }: CellProps & { inputId: string }) {
                 await updateAttribute(note, cell, componentId, value, setCells);
             }}
         />
-    )
+    );
 }
 
 function MultiplicityCell({ cell, cells, setCells, setCellToFocus, note, componentId }: CellProps) {
@@ -308,6 +320,7 @@ function MultiplicityCell({ cell, cells, setCells, setCellToFocus, note, compone
                     const index = cells.indexOf(cell);
                     const newCell: Cell = {
                         ...cell,
+                        uniqueId: randomString(),
                         valueAttr: {
                             attributeId: "",
                             type: cell.valueAttr.type,
@@ -346,13 +359,13 @@ function MultiplicityCell({ cell, cells, setCells, setCellToFocus, note, compone
                                 name: cell.valueName,
                                 value: ""
                             }
-                        })
+                        });
                     }
                     setCells(cells.toSpliced(index, 1, ...newOnesToInsert));
                 }}
             />
         </td>
-    )
+    );
 }
 
 function PromotedActionButton({ icon, title, onClick }: {
@@ -366,7 +379,7 @@ function PromotedActionButton({ icon, title, onClick }: {
             title={title}
             onClick={onClick}
         />
-    )
+    );
 }
 
 function InputButton({ icon, className, title, onClick }: {
@@ -381,7 +394,7 @@ function InputButton({ icon, className, title, onClick }: {
             title={title}
             onClick={onClick}
         />
-    )
+    );
 }
 
 function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, onChangeListener: OnChangeListener) {
@@ -406,7 +419,7 @@ function setupTextLabelAutocomplete(el: HTMLInputElement, valueAttr: Attribute, 
             [
                 {
                     displayKey: "value",
-                    source: function (term, cb) {
+                    source (term, cb) {
                         term = term.toLowerCase();
 
                         const filtered = attributeValues.filter((attr) => attr.value.toLowerCase().includes(term));

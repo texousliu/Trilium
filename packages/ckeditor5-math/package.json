@@ -24,15 +24,15 @@
     "ckeditor5-metadata.json"
   ],
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-build-tools": "43.1.0",
+    "@ckeditor/ckeditor5-dev-build-tools": "54.2.3",
     "@ckeditor/ckeditor5-inspector": ">=4.1.0",
     "@ckeditor/ckeditor5-package-tools": "5.0.1",
-    "@typescript-eslint/eslint-plugin": "~8.48.0",
-    "@typescript-eslint/parser": "8.48.1",
-    "@vitest/browser": "4.0.15",
-    "@vitest/coverage-istanbul": "4.0.15",
+    "@typescript-eslint/eslint-plugin": "~8.51.0",
+    "@typescript-eslint/parser": "8.51.0",
+    "@vitest/browser": "4.0.16",
+    "@vitest/coverage-istanbul": "4.0.16",
     "ckeditor5": "47.3.0",
-    "eslint": "9.39.1",
+    "eslint": "9.39.2",
     "eslint-config-ckeditor5": ">=9.1.0",
     "http-server": "14.1.1",
     "lint-staged": "16.2.7",
@@ -41,8 +41,8 @@
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
     "vite-plugin-svgo": "~2.0.0",
-    "vitest": "4.0.15",
-    "webdriverio": "9.21.0"
+    "vitest": "4.0.16",
+    "webdriverio": "9.23.0"
   },
   "peerDependencies": {
     "ckeditor5": "47.3.0"

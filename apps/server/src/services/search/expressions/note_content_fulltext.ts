@@ -315,13 +315,18 @@ class NoteContentFulltextExp extends Expression {
                 [key: string]: any; // Other properties that may exist
             }
 
-            let canvasContent = JSON.parse(content);
-            const elements: Element[] = canvasContent.elements;
-            const texts = elements
-                .filter((element: Element) => element.type === "text" && element.text) // Filter for 'text' type elements with a 'text' property
-                .map((element: Element) => element.text!); // Use `!` to assert `text` is defined after filtering
+            const canvasContent = JSON.parse(content);
+            const elements = canvasContent.elements;
 
-            content = normalize(texts.toString());
+            if (Array.isArray(elements)) {
+                const texts = elements
+                    .filter((element: Element) => element.type === "text" && element.text) // Filter for 'text' type elements with a 'text' property
+                    .map((element: Element) => element.text!); // Use `!` to assert `text` is defined after filtering
+
+                content = normalize(texts.join(" "));
+            } else {
+                content = "";
+            }
         }
 
         return content.trim();

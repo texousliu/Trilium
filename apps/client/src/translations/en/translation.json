@@ -21,8 +21,17 @@
     },
     "bundle-error": {
       "title": "Failed to load a custom script",
-      "message": "Script from note with ID \"{{id}}\", titled \"{{title}}\" could not be executed due to:\n\n{{message}}"
-    }
+      "message": "Script could not be executed due to:\n\n{{message}}"
+    },
+    "widget-list-error": {
+      "title": "Failed to obtain the list of widgets from the server"
+    },
+    "widget-render-error": {
+      "title": "Failed to render a custom React widget"
+    },
+    "widget-missing-parent": "Custom widget does not have mandatory '{{property}}' property defined.\n\nIf this script is meant to be run without a UI element, use '#run=frontendStartup' instead.",
+    "open-script-note": "Open script note",
+    "scripting-error": "Custom script error: {{title}}"
   },
   "add_link": {
     "add_link": "Add link",
@@ -286,7 +295,6 @@
     "download_button": "Download",
     "mime": "MIME: ",
     "file_size": "File size:",
-    "preview": "Preview:",
     "preview_not_available": "Preview isn't available for this note type."
   },
   "sort_child_notes": {
@@ -689,11 +697,17 @@
     "export_note": "Export note",
     "delete_note": "Delete note",
     "print_note": "Print note",
+    "view_revisions": "Note revisions...",
     "save_revision": "Save revision",
+    "advanced": "Advanced",
     "convert_into_attachment_failed": "Converting note '{{title}}' failed.",
     "convert_into_attachment_successful": "Note '{{title}}' has been converted to attachment.",
     "convert_into_attachment_prompt": "Are you sure you want to convert note '{{title}}' into an attachment of the parent note?",
-    "print_pdf": "Export as PDF..."
+    "print_pdf": "Export as PDF...",
+    "export_as_image": "Export as image",
+    "export_as_image_png": "PNG (raster)",
+    "export_as_image_svg": "SVG (vector)",
+    "note_map": "Note map"
   },
   "onclick_button": {
     "no_click_handler": "Button widget '{{componentId}}' has no defined click handler"
@@ -750,9 +764,16 @@
   },
   "note_icon": {
     "change_note_icon": "Change note icon",
-    "category": "Category:",
     "search": "Search:",
-    "reset-default": "Reset to default icon"
+    "search_placeholder_one": "Search {{number}} icons across {{count}} packs",
+    "search_placeholder_other": "Search {{number}} icons across {{count}} packs",
+    "search_placeholder_filtered": "Search {{number}} icons in {{name}}",
+    "reset-default": "Reset to default icon",
+    "filter": "Filter",
+    "filter-none": "All icons",
+    "filter-default": "Default icons",
+    "icon_tooltip": "{{name}}\nIcon pack: {{iconPack}}",
+    "no_results": "No icons found."
   },
   "basic_properties": {
     "note_type": "Note type",
@@ -792,7 +813,7 @@
     "file_type": "File type",
     "file_size": "File size",
     "download": "Download",
-    "open": "Open",
+    "open": "Open externally",
     "upload_new_revision": "Upload new revision",
     "upload_success": "New file revision has been uploaded.",
     "upload_failed": "Upload of a new file revision failed.",
@@ -812,18 +833,21 @@
   },
   "inherited_attribute_list": {
     "title": "Inherited Attributes",
-    "no_inherited_attributes": "No inherited attributes."
+    "no_inherited_attributes": "No inherited attributes.",
+    "none": "none"
   },
   "note_info_widget": {
     "note_id": "Note ID",
     "created": "Created",
     "modified": "Modified",
     "type": "Type",
+    "mime": "MIME type",
     "note_size": "Note size",
     "note_size_info": "Note size provides rough estimate of storage requirements for this note. It takes into account note's content and content of its note revisions.",
     "calculate": "calculate",
     "subtree_size": "(subtree size: {{size}} in {{count}} notes)",
-    "title": "Note Info"
+    "title": "Note Info",
+    "show_similar_notes": "Show similar notes"
   },
   "note_map": {
     "open_full": "Expand to full",
@@ -886,7 +910,8 @@
     "search_parameters": "Search Parameters",
     "unknown_search_option": "Unknown search option {{searchOptionName}}",
     "search_note_saved": "Search note has been saved into {{- notePathTitle}}",
-    "actions_executed": "Actions have been executed."
+    "actions_executed": "Actions have been executed.",
+    "view_options": "View options:"
   },
   "similar_notes": {
     "title": "Similar Notes",
@@ -1095,6 +1120,12 @@
     "button_text": "Vacuum database",
     "vacuuming_database": "Vacuuming database...",
     "database_vacuumed": "Database has been vacuumed"
+  },
+  "experimental_features": {
+    "title": "Experimental Options",
+    "disclaimer": "These options are experimental and may cause instability. Use with caution.",
+    "new_layout_name": "New Layout",
+    "new_layout_description": "Try out the new layout for a more modern look and improved usability. Subject to heavy change in the upcoming releases."
   },
   "fonts": {
     "theme_defined": "Theme defined",
@@ -1588,7 +1619,7 @@
     "will_be_deleted_in": "This attachment will be automatically deleted in {{time}}",
     "will_be_deleted_soon": "This attachment will be automatically deleted soon",
     "deletion_reason": ", because the attachment is not linked in the note's content. To prevent deletion, add the attachment link back into the content or convert the attachment into note.",
-    "role_and_size": "Role: {{role}}, Size: {{size}}",
+    "role_and_size": "Role: {{role}}, size: {{size}}, MIME: {{- mimeType}}",
     "link_copied": "Attachment link copied to clipboard.",
     "unrecognized_role": "Unrecognized attachment role '{{role}}'."
   },
@@ -1708,7 +1739,12 @@
   },
   "highlights_list_2": {
     "title": "Highlights List",
-    "options": "Options"
+    "title_with_count_one": "{{count}} highlight",
+    "title_with_count_other": "{{count}} highlights",
+    "options": "Options",
+    "modal_title": "Configure Highlights List",
+    "menu_configure": "Configure highlights list...",
+    "no_highlights": "No highlights found."
   },
   "quick-search": {
     "placeholder": "Quick search",
@@ -1732,7 +1768,11 @@
     "create-child-note": "Create child note",
     "unhoist": "Unhoist",
     "toggle-sidebar": "Toggle sidebar",
-    "dropping-not-allowed": "Dropping notes into this location is not allowed."
+    "dropping-not-allowed": "Dropping notes into this location is not allowed.",
+    "clone-indicator-tooltip": "This note has {{- count}} parents: {{- parents}}",
+    "clone-indicator-tooltip-single": "This note is cloned (1 additional parent: {{- parent}})",
+    "shared-indicator-tooltip": "This note is shared publicly",
+    "shared-indicator-tooltip-with-url": "This note is shared publicly at: {{- url}}"
   },
   "title_bar_buttons": {
     "window-on-top": "Keep Window on Top"
@@ -1740,10 +1780,23 @@
   "note_detail": {
     "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'",
     "printing": "Printing in progress...",
-    "printing_pdf": "Exporting to PDF in progress..."
+    "printing_pdf": "Exporting to PDF in progress...",
+    "print_report_title": "Print report",
+    "print_report_collection_content_one": "{{count}} note in the collection could not be printed because they are not supported or they are protected.",
+    "print_report_collection_content_other": "{{count}} notes in the collection could not be printed because they are not supported or they are protected.",
+    "print_report_collection_details_button": "See details",
+    "print_report_collection_details_ignored_notes": "Ignored notes"
   },
   "note_title": {
-    "placeholder": "type note's title here..."
+    "placeholder": "type note's title here...",
+    "created_on": "Created on <Value />",
+    "last_modified": "Modified on <Value />",
+    "note_type_switcher_label": "Switch from {{type}} to:",
+    "note_type_switcher_others": "Other note type",
+    "note_type_switcher_templates": "Template",
+    "note_type_switcher_collection": "Collection",
+    "edited_notes": "Notes edited on this day",
+    "promoted_attributes": "Promoted attributes"
   },
   "search_result": {
     "no_notes_found": "No notes have been found for given search parameters.",
@@ -1772,7 +1825,8 @@
   },
   "toc": {
     "table_of_contents": "Table of Contents",
-    "options": "Options"
+    "options": "Options",
+    "no_headings": "No headings."
   },
   "watched_file_update_status": {
     "file_last_modified": "File <code class=\"file-path\"></code> has been last modified on <span class=\"file-last-modified\"></span>.",
@@ -1953,8 +2007,9 @@
     "unknown_widget": "Unknown widget for \"{{id}}\"."
   },
   "note_language": {
-    "not_set": "Not set",
-    "configure-languages": "Configure languages..."
+    "not_set": "No language set",
+    "configure-languages": "Configure languages...",
+    "help-on-languages": "Help on content languages..."
   },
   "content_language": {
     "title": "Content languages",
@@ -2021,7 +2076,7 @@
   "book_properties_config": {
     "hide-weekends": "Hide weekends",
     "display-week-numbers": "Display week numbers",
-    "map-style": "Map style:",
+    "map-style": "Map style",
     "max-nesting-depth": "Max nesting depth:",
     "raster": "Raster",
     "vector_light": "Vector (Light)",
@@ -2086,6 +2141,9 @@
     "background_effects_title": "Background effects are now stable",
     "background_effects_message": "On Windows devices, background effects are now fully stable. The background effects adds a touch of color to the user interface by blurring the background behind it. This technique is also used in other applications such as Windows Explorer.",
     "background_effects_button": "Enable background effects",
+    "new_layout_title": "New layout",
+    "new_layout_message": "We’ve introduced a modernized layout for Trilium. The ribbon has been removed and seamlessly integrated into the main interface, with a new status bar and expandable sections (such as promoted attributes) taking over key functions.\n\nThe new layout is enabled by default, and can be temporarily disabled via Options → Appearance.",
+    "new_layout_button": "More info",
     "dismiss": "Dismiss"
   },
   "settings": {
@@ -2093,7 +2151,10 @@
   },
   "settings_appearance": {
     "related_code_blocks": "Color scheme for code blocks in text notes",
-    "related_code_notes": "Color scheme for code notes"
+    "related_code_notes": "Color scheme for code notes",
+    "ui": "User interface",
+    "ui_old_layout": "Old layout",
+    "ui_new_layout": "New layout"
   },
   "units": {
     "percentage": "%"
@@ -2117,5 +2178,81 @@
     "unknown_http_error_title": "Communication error with the server",
     "unknown_http_error_content": "Status code: {{statusCode}}\nURL: {{method}} {{url}}\nMessage: {{message}}",
     "traefik_blocks_requests": "If you are using the Traefik reverse proxy, it introduced a breaking change which affects the communication with the server."
+  },
+  "tab_history_navigation_buttons": {
+    "go-back": "Go back to previous note",
+    "go-forward": "Go forward to next note"
+  },
+  "breadcrumb": {
+    "hoisted_badge": "Hoisted",
+    "hoisted_badge_title": "Unhoist",
+    "workspace_badge": "Workspace",
+    "scroll_to_top_title": "Jump to the beginning of the note",
+    "create_new_note": "Create new child note",
+    "empty_hide_archived_notes": "Hide archived notes"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "Read-only",
+    "read_only_explicit_description": "This note has been manually set to read-only.\nClick to edit it temporarily.",
+    "read_only_auto": "Auto read-only",
+    "read_only_auto_description": "This note was set automatically to read-only mode for performance reasons. This automatic limit is adjustable from settings.\n\nClick to edit it temporarily.",
+    "read_only_temporarily_disabled": "Temporarily editable",
+    "read_only_temporarily_disabled_description": "This note is currently editable, but it is normally read-only. The note will go back to being read-only as soon as you navigate to another note.\n\nClick to re-enable read-only mode.",
+    "shared_publicly": "Shared publicly",
+    "shared_locally": "Shared locally",
+    "shared_copy_to_clipboard": "Copy link to clipboard",
+    "shared_open_in_browser": "Open link in browser",
+    "shared_unshare": "Remove share",
+    "clipped_note": "Web clip",
+    "clipped_note_description": "This note was originally taken from {{url}}.\n\nClick to navigate to the source webpage.",
+    "execute_script": "Run script",
+    "execute_script_description": "This note is a script note. Click to execute the script.",
+    "execute_sql": "Run SQL",
+    "execute_sql_description": "This note is a SQL note. Click to execute the SQL query.",
+    "save_status_saved": "Saved",
+    "save_status_saving": "Saving...",
+    "save_status_unsaved": "Unsaved",
+    "save_status_error": "Save failed",
+    "save_status_saving_tooltip": "Changes are being saved.",
+    "save_status_unsaved_tooltip": "There are unsaved changes. They will be saved automatically in a moment.",
+    "save_status_error_tooltip": "An error occurred while saving the note. If possible, try copying the note content elsewhere and reloading the application."
+  },
+  "status_bar": {
+    "language_title": "Change content language",
+    "note_info_title": "View note info (e.g., dates, note size)",
+    "backlinks_one": "{{count}} backlink",
+    "backlinks_other": "{{count}} backlinks",
+    "backlinks_title_one": "View backlink",
+    "backlinks_title_other": "View backlinks",
+    "attachments_one": "{{count}} attachment",
+    "attachments_other": "{{count}} attachments",
+    "attachments_title_one": "View attachment in a new tab",
+    "attachments_title_other": "View attachments in a new tab",
+    "attributes_one": "{{count}} attribute",
+    "attributes_other": "{{count}} attributes",
+    "attributes_title": "Owned attributes and inherited attributes",
+    "note_paths_one": "{{count}} path",
+    "note_paths_other": "{{count}} paths",
+    "note_paths_title": "Note paths",
+    "code_note_switcher": "Change language mode"
+  },
+  "attributes_panel": {
+    "title": "Note Attributes"
+  },
+  "right_pane": {
+    "empty_message": "Nothing to show for this note",
+    "empty_button": "Hide the panel",
+    "toggle": "Toggle right panel",
+    "custom_widget_go_to_source": "Go to source code"
+  },
+  "pdf": {
+    "attachments_one": "{{count}} attachment",
+    "attachments_other": "{{count}} attachments",
+    "layers_one": "{{count}} layer",
+    "layers_other": "{{count}} layers",
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "pages_alt": "Page {{pageNumber}}",
+    "pages_loading": "Loading..."
   }
 }

@@ -57,6 +57,18 @@ export class TypedComponent<ChildT extends TypedComponent<ChildT>> {
         return this;
     }
 
+    /**
+     * Removes a child component from this component's children array.
+     * This is used for cleanup when a widget is unmounted to prevent event listener accumulation.
+     */
+    removeChild(component: ChildT) {
+        const index = this.children.indexOf(component);
+        if (index !== -1) {
+            this.children.splice(index, 1);
+            component.parent = undefined;
+        }
+    }
+
     handleEvent<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null | undefined {
         try {
             const callMethodPromise = this.initialized ? this.initialized.then(() => this.callMethod((this as any)[`${name}Event`], data)) : this.callMethod((this as any)[`${name}Event`], data);
@@ -65,8 +77,8 @@ export class TypedComponent<ChildT extends TypedComponent<ChildT>> {
 
             // don't create promises if not needed (optimization)
             return callMethodPromise && childrenPromise ? Promise.all([callMethodPromise, childrenPromise]) : callMethodPromise || childrenPromise;
-        } catch (e: any) {
-            console.error(`Handling of event '${name}' failed in ${this.constructor.name} with error ${e.message} ${e.stack}`);
+        } catch (e: unknown) {
+            console.error(`Handling of event '${name}' failed in ${this.constructor.name} with error`, e);
 
             return null;
         }

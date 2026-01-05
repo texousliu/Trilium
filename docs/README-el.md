@@ -20,19 +20,20 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+<!-- translate:off -->
+<!-- LANGUAGE SWITCHER -->
+[Chinese (Simplified Han script)](./README-ZH_CN.md) | [Chinese (Traditional Han
+script)](./README-ZH_TW.md) | [English](../README.md) | [French](./README-fr.md)
+| [German](./README-de.md) | [Greek](./README-el.md) | [Italian](./README-it.md)
+| [Japanese](./README-ja.md) | [Romanian](./README-ro.md) |
+[Spanish](./README-es.md)
+<!-- translate:on -->
 
 Το Trilium Notes είναι μια δωρεάν και ανοιχτού κώδικα, ιεραρχική εφαρμογή
 σημειώσεων πολλαπλών πλατφορμών με έμφαση στη δημιουργία μεγάλων προσωπικών
 βάσεων γνώσεων.
 
-Δείτε [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) για
-γρήγορη επισκόπηση:
-
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+<img src="./app.png" alt="Trilium Screenshot" width="1000">
 
 ## ⏬ Λήψη
 - [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) -
@@ -51,87 +52,90 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
   [docs.triliumnotes.org]
 - ** In-App Help **: Πατήστε `F1 ` εντός Trilium για την πρόσβαση στην ίδια
   τεκμηρίωση απευθείας στην εφαρμογή
-- **GitHub**: Περιηγηθείτε στον [Οδηγό
-  χρήσης](./docs/User%20Guide/User%20Guide/) σε αυτό το αποθετήριο
+- **GitHub**: Περιηγηθείτε στον [Οδηγό χρήσης](./User%20Guide/User%20Guide/) σε
+  αυτό το αποθετήριο
 
 ### Γρήγοροι Σύνδεσμοι
 - [Οδηγός για να ξεκινήσετε](https://docs.triliumnotes.org/)
-- [Οδηγίες
-  Εγκατάστασης](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Οδηγίες Εγκατάστασης](https://docs.triliumnotes.org/user-guide/setup)
 - [Ρύθμιση
-  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+  Docker](https://docs.triliumnotes.org/user-guide/setup/server/installation/docker)
 - [Αναβάθμιση
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+  TriliumNext](https://docs.triliumnotes.org/user-guide/setup/upgrading)
 - [Βασικές έννοιες και
-  Χαρακτηριστικά](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+  Χαρακτηριστικά](https://docs.triliumnotes.org/user-guide/concepts/notes)
 - [Μοτίβα Προσωπικής Βάσης
-  Γνώσεων](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+  Γνώσεων](https://docs.triliumnotes.org/user-guide/misc/patterns-of-personal-knowledge)
 
 ## 🎁 Χαρακτηριστικά
 
 * Οι σημειώσεις μπορούν να κανονιστούν σε αυθαίρετα βαθύ δέντρο. Μία σημείωση
   μπορεί να τοποθετηθεί σε πολλαπλά μέρη του δέντρου (βλέπε
-  [αντιγραφή](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
+  [αντιγραφή](https://docs.triliumnotes.org/user-guide/concepts/notes/cloning))
 * Πλούσιος επεξεργαστής σημειώσεων WYSIWYG που περιλαμβάνει π.χ. πίνακες,
-  εικόνες και [μαθηματικά](https://triliumnext.github.io/Docs/Wiki/text-notes)
-  με σήμανση [αυτόματη
-  μορφοποίηση](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
+  εικόνες και
+  [μαθηματικά](https://docs.triliumnotes.org/user-guide/note-types/text) με
+  σήμανση [αυτόματη
+  μορφοποίηση](https://docs.triliumnotes.org/user-guide/note-types/text/markdown-formatting)
 * Υποστήριξη για επεξεργασία [σημειώσεις με πηγαίο
-  κώδικα](https://triliumnext.github.io/Docs/Wiki/code-notes),
+  κώδικα](https://docs.triliumnotes.org/user-guide/note-types/code),
   συμπεριλαμβανομένης της επισήμανσης σύνταξης
 * Γρήγορη και εύκολη [πλοήγηση μεταξύ
-  σημειώσεων](https://triliumnext.github.io/Docs/Wiki/note-navigation),
+  σημειώσεων](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-navigation),
   αναζήτηση πλήρους κειμένου και [ανύψωση
-  σημειώσεων](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+  σημειώσεων](https://docs.triliumnotes.org/user-guide/concepts/navigation/note-hoisting)
 * Απρόσκοπτη [έκδοση
-  σημειώσεων](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Σημείωση [χαρακτηριστικά](https://triliumnext.github.io/Docs/Wiki/attributes)
+  σημειώσεων](https://docs.triliumnotes.org/user-guide/concepts/notes/note-revisions)
+* Σημείωση
+  [χαρακτηριστικά](https://docs.triliumnotes.org/user-guide/advanced-usage/attributes)
   μπορεί να χρησιμοποιηθούν για οργάνωση σημειώσεων, ερωτήματα και advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
+  [scripting](https://docs.triliumnotes.org/user-guide/scripts)
 * Η UI είναι διαθέσιμη στα Αγγλικά, Γερμανικά, Ισπανικά, Γαλλικά, Ρουμανικά και
   Κινεζικά (απλοποιημένα και παραδοσιακά)
 * Άμεση [ενσωμάτωση OpenID και
-  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  για πιο ασφαλή σύνδεση
-* [Συγχρονισμός](https://triliumnext.github.io/Docs/Wiki/synchronization) με
-  self-hosted διακομιστή συγχρονισμού
-  * υπάρχει μια [υπηρεσία 3ου μέρους για τη φιλοξενία διακομιστή
-    συγχρονισμού](https://trilium.cc/paid-hosting)
-* [Κοινή χρήση](https://triliumnext.github.io/Docs/Wiki/sharing) (δημοσίευση)
-  σημειώσεων στο δημόσιο διαδίκτυο
+  TOTP](https://docs.triliumnotes.org/user-guide/setup/server/mfa) για πιο
+  ασφαλή σύνδεση
+* [Συγχρονισμός](https://docs.triliumnotes.org/user-guide/setup/synchronization)
+  με self-hosted διακομιστή συγχρονισμού
+  * there are [3rd party services for hosting synchronisation
+    server](https://docs.triliumnotes.org/user-guide/setup/server/cloud-hosting)
+* [Κοινή χρήση](https://docs.triliumnotes.org/user-guide/advanced-usage/sharing)
+  (δημοσίευση) σημειώσεων στο δημόσιο διαδίκτυο
 * Ισχυρή [κρυπτογράφηση
-  σημειώσεων](https://triliumnext.github.io/Docs/Wiki/protected-notes) με
-  υποδιαίρεση ανά σημείωση
+  σημειώσεων](https://docs.triliumnotes.org/user-guide/concepts/notes/protected-notes)
+  με υποδιαίρεση ανά σημείωση
 * Σχεδίαση διαγραμμάτων, με βάση το [Excalidraw](https://excalidraw.com/) (τύπος
   σημείωσης "καμβάς")
-* [Χάρτες σχέσεων](https://triliumnext.github.io/Docs/Wiki/relation-map) και
-  [χάρτες συνδέσμων](https://triliumnext.github.io/Docs/Wiki/link-map) για την
-  οπτικοποίηση των σημειώσεων και των σχέσεών τους
+* [Relation
+  maps](https://docs.triliumnotes.org/user-guide/note-types/relation-map) and
+  [note/link maps](https://docs.triliumnotes.org/user-guide/note-types/note-map)
+  for visualizing notes and their relations
 * Νοητικοί χάρτες, βασισμένοι στο [Mind Elixir](https://docs.mind-elixir.com/)
 * [Γεωγραφικοί
-  χάρτες](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) με
+  χάρτες](https://docs.triliumnotes.org/user-guide/collections/geomap) με
   καρφίτσες τοποθεσίας και κομμάτια GPX
-* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - ανατρέξτε στην
+* [Scripting](https://docs.triliumnotes.org/user-guide/scripts) - ανατρέξτε στην
   ενότητα [Προθήκες για
-  προχωρημένους](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) για αυτοματοποίηση
+  προχωρημένους](https://docs.triliumnotes.org/user-guide/advanced-usage/advanced-showcases)
+* [REST API](https://docs.triliumnotes.org/user-guide/advanced-usage/etapi) για
+  αυτοματοποίηση
 * Κλιμακώνεται καλά τόσο στη χρηστικότητα όσο και στην απόδοση πάνω από 100.000
   σημειώσεις
 * Βελτιστοποιημένη αφή [mobile
-  frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) για
+  frontend](https://docs.triliumnotes.org/user-guide/setup/mobile-frontend) για
   smartphones και tablets
-* Ενσωματωμένο [σκούρο θέμα](https://triliumnext.github.io/Docs/Wiki/themes),
-  υποστήριξη για θέματα χρήστη
-* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) and
-  [Markdown εισαγωγή &
-  εξαγωγή](https://triliumnext.github.io/Docs/Wiki/markdown)
-* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) για εύκολη
-  αποθήκευση περιεχομένου ιστού
+* Ενσωματωμένο [σκούρο
+  θέμα](https://docs.triliumnotes.org/user-guide/concepts/themes), υποστήριξη
+  για θέματα χρήστη
+* [Evernote](https://docs.triliumnotes.org/user-guide/concepts/import-export/evernote)
+  and [Markdown εισαγωγή &
+  εξαγωγή](https://docs.triliumnotes.org/user-guide/concepts/import-export/markdown)
+* [Web Clipper](https://docs.triliumnotes.org/user-guide/setup/web-clipper) για
+  εύκολη αποθήκευση περιεχομένου ιστού
 * Προσαρμόσιμο UI (κουμπιά πλαϊνής γραμμής, γραφικά στοιχεία που ορίζονται από
   το χρήστη,...)
-* [Μετρήσεις](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md),
-  μαζί με ένα [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Metrics](https://docs.triliumnotes.org/user-guide/advanced-usage/metrics),
+  along with a Grafana Dashboard.
 
 ✨ Ρίξτε μια ματιά στους ακόλουθους πόρους/κοινότητες τρίτων για περισσότερες
 δυνατότητες που σχετίζονται με το TriliumNext:
@@ -228,7 +232,7 @@ FlatHub.
 Για να εγκαταστήσετε το TriliumNext στο δικό σας διακομιστή (συμπεριλαμβανομένου
 μέσω Docker από το [Dockerhub](https://hub.docker.com/r/triliumnext/trilium))
 ακολουθήστε [τις οδηγίες εγκατάστασης
-διακομιστή](https://triliumnext.github.io/Docs/Wiki/server-installation).
+διακομιστή](https://docs.triliumnotes.org/user-guide/setup/server).
 
 
 ## 💻 Συνεισφέρετε
@@ -323,9 +327,9 @@ development](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20G
   χωρίς πραγματικό ανταγωνισμό.
 * [jsPlumb](https://github.com/jsplumb/jsplumb) - βιβλιοθήκη οπτικής σύνδεσης.
   Χρησιμοποιείται σε [χάρτες
-  σχέσεων](https://triliumnext.github.io/Docs/Wiki/relation-map.html) και
+  σχέσεων](https://docs.triliumnotes.org/user-guide/note-types/relation-map) και
   [χάρτες
-  συνδέσμων](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+  συνδέσμων](https://docs.triliumnotes.org/user-guide/advanced-usage/note-map#link-map)
 
 ## 🤝 Υποστήριξη
 

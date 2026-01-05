@@ -1,22 +1,24 @@
-import { useEffect, useRef, useState } from "preact/hooks";
-import FNote from "../../../entities/fnote";
-import Icon from "../../react/Icon";
-import { ViewModeProps } from "../interface";
-import {  useImperativeSearchHighlighlighting, useNoteLabel } from "../../react/hooks";
-import NoteLink from "../../react/NoteLink";
 import "./ListOrGridView.css";
-import content_renderer from "../../../services/content_renderer";
-import { Pager, usePagination } from "../Pagination";
-import tree from "../../../services/tree";
-import link from "../../../services/link";
-import { t } from "../../../services/i18n";
+
+import { useEffect, useRef, useState } from "preact/hooks";
+
+import FNote from "../../../entities/fnote";
 import attribute_renderer from "../../../services/attribute_renderer";
+import content_renderer from "../../../services/content_renderer";
+import { t } from "../../../services/i18n";
+import link from "../../../services/link";
+import { useImperativeSearchHighlighlighting, useNoteLabel, useNoteLabelBoolean } from "../../react/hooks";
+import Icon from "../../react/Icon";
+import NoteLink from "../../react/NoteLink";
+import { ViewModeProps } from "../interface";
+import { Pager, usePagination } from "../Pagination";
 import { filterChildNotes, useFilteredNoteIds } from "./utils";
 
 export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
     const expandDepth = useExpansionDepth(note);
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const { pageNotes, ...pagination } = usePagination(note, noteIds);
+    const [ includeArchived ] = useNoteLabelBoolean(note, "includeArchived");
 
     return (
         <div class="note-list list-view">
@@ -25,7 +27,11 @@ export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
 
                 <div class="note-list-container use-tn-links">
                     {pageNotes?.map(childNote => (
-                        <ListNoteCard note={childNote} parentNote={note} expandDepth={expandDepth} highlightedTokens={highlightedTokens} currentLevel={1} />
+                        <ListNoteCard
+                            key={childNote.noteId}
+                            note={childNote} parentNote={note}
+                            expandDepth={expandDepth} highlightedTokens={highlightedTokens}
+                            currentLevel={1} includeArchived={includeArchived} />
                     ))}
                 </div>
 
@@ -56,12 +62,13 @@ export function GridView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
     );
 }
 
-function ListNoteCard({ note, parentNote, highlightedTokens, currentLevel, expandDepth }: {
+function ListNoteCard({ note, parentNote, highlightedTokens, currentLevel, expandDepth, includeArchived }: {
     note: FNote,
     parentNote: FNote,
     currentLevel: number,
     expandDepth: number,
-    highlightedTokens: string[] | null | undefined
+    highlightedTokens: string[] | null | undefined;
+    includeArchived: boolean;
 }) {
 
     const [ isExpanded, setExpanded ] = useState(currentLevel <= expandDepth);
@@ -88,23 +95,14 @@ function ListNoteCard({ note, parentNote, highlightedTokens, currentLevel, expan
 
             {isExpanded && <>
                 <NoteContent note={note} highlightedTokens={highlightedTokens} noChildrenList />
-                <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} currentLevel={currentLevel} expandDepth={expandDepth} />
+                <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} currentLevel={currentLevel} expandDepth={expandDepth} includeArchived={includeArchived} />
             </>}
         </div>
-    )
+    );
 }
 
 function GridNoteCard({ note, parentNote, highlightedTokens }: { note: FNote, parentNote: FNote, highlightedTokens: string[] | null | undefined }) {
-    const titleRef = useRef<HTMLSpanElement>(null);
-    const [ noteTitle, setNoteTitle ] = useState<string>();
     const notePath = getNotePath(parentNote, note);
-    const highlightSearch = useImperativeSearchHighlighlighting(highlightedTokens);
-
-    useEffect(() => {
-        tree.getNoteTitle(note.noteId, parentNote.noteId).then(setNoteTitle);
-    }, [ note ]);
-
-    useEffect(() => highlightSearch(titleRef.current), [ noteTitle, highlightedTokens ]);
 
     return (
         <div
@@ -115,7 +113,7 @@ function GridNoteCard({ note, parentNote, highlightedTokens }: { note: FNote, pa
         >
             <h5 className="note-book-header">
                 <Icon className="note-icon" icon={note.getIcon()} />
-                <span ref={titleRef} className="note-book-title">{noteTitle}</span>
+                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={parentNote.type === "search"} highlightedTokens={highlightedTokens} />
                 <NoteAttributes note={note} />
             </h5>
             <NoteContent
@@ -124,7 +122,7 @@ function GridNoteCard({ note, parentNote, highlightedTokens }: { note: FNote, pa
                 highlightedTokens={highlightedTokens}
             />
         </div>
-    )
+    );
 }
 
 function NoteAttributes({ note }: { note: FNote }) {
@@ -135,7 +133,7 @@ function NoteAttributes({ note }: { note: FNote }) {
         });
     }, [ note ]);
 
-    return <span className="note-list-attributes" ref={ref} />
+    return <span className="note-list-attributes" ref={ref} />;
 }
 
 function NoteContent({ note, trim, noChildrenList, highlightedTokens }: { note: FNote, trim?: boolean, noChildrenList?: boolean, highlightedTokens: string[] | null | undefined }) {
@@ -161,40 +159,43 @@ function NoteContent({ note, trim, noChildrenList, highlightedTokens }: { note: 
                 console.warn(`Caught error while rendering note '${note.noteId}' of type '${note.type}'`);
                 console.error(e);
                 contentRef.current?.replaceChildren(t("collections.rendering_error"));
-            })
+            });
     }, [ note, highlightedTokens ]);
 
     return <div ref={contentRef} className="note-book-content" />;
 }
 
-function NoteChildren({ note, parentNote, highlightedTokens, currentLevel, expandDepth }: {
+function NoteChildren({ note, parentNote, highlightedTokens, currentLevel, expandDepth, includeArchived }: {
     note: FNote,
     parentNote: FNote,
     currentLevel: number,
     expandDepth: number,
     highlightedTokens: string[] | null | undefined
+    includeArchived: boolean;
 }) {
     const [ childNotes, setChildNotes ] = useState<FNote[]>();
 
     useEffect(() => {
-        filterChildNotes(note).then(setChildNotes);
-    }, [ note ]);
+        filterChildNotes(note, includeArchived).then(setChildNotes);
+    }, [ note, includeArchived ]);
 
     return childNotes?.map(childNote => <ListNoteCard
+        key={childNote.noteId}
         note={childNote}
         parentNote={parentNote}
         highlightedTokens={highlightedTokens}
         currentLevel={currentLevel + 1} expandDepth={expandDepth}
-    />)
+        includeArchived={includeArchived}
+    />);
 }
 
 function getNotePath(parentNote: FNote, childNote: FNote) {
     if (parentNote.type === "search") {
         // for search note parent, we want to display a non-search path
         return childNote.noteId;
-    } else {
-        return `${parentNote.noteId}/${childNote.noteId}`
     }
+    return `${parentNote.noteId}/${childNote.noteId}`;
+
 }
 
 function useExpansionDepth(note: FNote) {
@@ -206,7 +207,7 @@ function useExpansionDepth(note: FNote) {
         return 1;
     } else if (expandDepth === "all") {
         return Number.MAX_SAFE_INTEGER;
-    } else {
-        return parseInt(expandDepth, 10);
     }
+    return parseInt(expandDepth, 10);
+
 }

@@ -95,19 +95,21 @@ function useSyncStatus() {
             // Determine if all changes were pushed.
             const allChangesPushed = lastSyncedPush === ws.getMaxKnownEntityChangeSyncId();
 
-            let syncState: SyncState = "unknown";
-            if (message.type === "sync-pull-in-progress") {
-                syncState = "in-progress";
-            } else if (message.type === "sync-push-in-progress") {
-                syncState = "in-progress";
-            } else if (message.type === "sync-finished") {
-                syncState = allChangesPushed ? "connected-no-changes" : "connected-with-changes";
-            } else if (message.type === "sync-failed") {
-                syncState = allChangesPushed ? "disconnected-no-changes" : "disconnected-with-changes";
-            } else if (message.type === "frontend-update") {
-                lastSyncedPush = message.data.lastSyncedPush;
+            switch (message.type) {
+                case "sync-pull-in-progress":
+                case "sync-push-in-progress":
+                    setSyncState("in-progress");
+                    break;
+                case "sync-finished":
+                    setSyncState(allChangesPushed ? "connected-no-changes" : "connected-with-changes");
+                    break;
+                case "sync-failed":
+                    setSyncState(allChangesPushed ? "disconnected-no-changes" : "disconnected-with-changes");
+                    break;
+                case "frontend-update":
+                    lastSyncedPush = message.data.lastSyncedPush;
+                    break;
             }
-            setSyncState(syncState);
         }
 
         subscribeToMessages(onMessage);

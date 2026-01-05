@@ -1,18 +1,23 @@
+import { useContext } from "preact/hooks";
+
+import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
+import { downloadFileNote, openNoteExternally } from "../../services/open";
+import protected_session_holder from "../../services/protected_session_holder";
+import server from "../../services/server";
+import toast from "../../services/toast";
 import { formatSize } from "../../services/utils";
+import Button from "../react/Button";
 import { FormFileUploadButton } from "../react/FormFileUpload";
 import { useNoteBlob, useNoteLabel } from "../react/hooks";
-import Button from "../react/Button";
-import protected_session_holder from "../../services/protected_session_holder";
-import { downloadFileNote, openNoteExternally } from "../../services/open";
-import toast from "../../services/toast";
-import server from "../../services/server";
-import FNote from "../../entities/fnote";
+import { ParentComponent } from "../react/react_utils";
+import { TabContext } from "./ribbon-interface";
 
-export default function FilePropertiesTab({ note }: { note?: FNote | null }) {
+export default function FilePropertiesTab({ note, ntxId }: Pick<TabContext, "note" | "ntxId">) {
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
     const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
     const blob = useNoteBlob(note);
+    const parentComponent = useContext(ParentComponent);
 
     return (
         <div className="file-properties-widget">
@@ -40,7 +45,7 @@ export default function FilePropertiesTab({ note }: { note?: FNote | null }) {
                                         text={t("file_properties.download")}
                                         primary
                                         disabled={!canAccessProtectedNote}
-                                        onClick={() => downloadFileNote(note.noteId)}
+                                        onClick={() => downloadFileNote(note, parentComponent, ntxId)}
                                     />
 
                                     <Button
@@ -54,19 +59,7 @@ export default function FilePropertiesTab({ note }: { note?: FNote | null }) {
                                         icon="bx bx-folder-open"
                                         text={t("file_properties.upload_new_revision")}
                                         disabled={!canAccessProtectedNote}
-                                        onChange={(fileToUpload) => {
-                                            if (!fileToUpload) {
-                                                return;
-                                            }
-
-                                            server.upload(`notes/${note.noteId}/file`, fileToUpload[0]).then((result) => {
-                                                if (result.uploaded) {
-                                                    toast.showMessage(t("file_properties.upload_success"));
-                                                } else {
-                                                    toast.showError(t("file_properties.upload_failed"));
-                                                }
-                                            });
-                                        }}
+                                        onChange={buildUploadNewFileRevisionListener(note)}
                                     />
                                 </div>
                             </td>
@@ -76,4 +69,20 @@ export default function FilePropertiesTab({ note }: { note?: FNote | null }) {
             )}
         </div>
     );
+}
+
+export function buildUploadNewFileRevisionListener(note: FNote) {
+    return (fileToUpload: FileList | null) => {
+        if (!fileToUpload) {
+            return;
+        }
+
+        server.upload(`notes/${note.noteId}/file`, fileToUpload[0]).then((result) => {
+            if (result.uploaded) {
+                toast.showMessage(t("file_properties.upload_success"));
+            } else {
+                toast.showError(t("file_properties.upload_failed"));
+            }
+        });
+    };
 }

@@ -493,7 +493,12 @@
   "editable_text": {
     "placeholder": "Scrieți conținutul notiței aici...",
     "auto-detect-language": "Automat",
-    "keeps-crashing": "Componenta de editare se blochează în continuu. Încercați să reporniți Trilium. Dacă problema persistă, luați în considerare să raportați această problemă."
+    "keeps-crashing": "Componenta de editare se blochează în continuu. Încercați să reporniți Trilium. Dacă problema persistă, luați în considerare să raportați această problemă.",
+    "editor_crashed_title": "Editorul text a avut o eroare",
+    "editor_crashed_content": "Conținutul a fost recuperat cu succes, dar este posibil ca o parte din cele mai recente modificări ale dvs. să nu se fi salvat.",
+    "editor_crashed_details_button": "Mai multe detalii...",
+    "editor_crashed_details_intro": "Dacă întâmpinați frecvent această eroare, considerați să o raportați pe GitHub copiând informația de mai jos.",
+    "editor_crashed_details_title": "Informații tehnice"
   },
   "edited_notes": {
     "deleted": "(șters)",
@@ -785,7 +790,8 @@
   "info": {
     "closeButton": "Închide",
     "modalTitle": "Mesaj informativ",
-    "okButton": "OK"
+    "okButton": "OK",
+    "copy_to_clipboard": "Copiază în clipboard"
   },
   "inherited_attribute_list": {
     "no_inherited_attributes": "Niciun atribut moștenit.",
@@ -867,12 +873,14 @@
     "print_note": "Imprimare notiță",
     "re_render_note": "Reinterpretare notiță",
     "save_revision": "Salvează o nouă revizie",
+    "advanced": "Advansat",
     "search_in_note": "Caută în notiță",
     "convert_into_attachment_failed": "Nu s-a putut converti notița „{{title}}”.",
     "convert_into_attachment_successful": "Notița „{{title}}” a fost convertită în atașament.",
     "convert_into_attachment_prompt": "Doriți convertirea notiței „{{title}}” într-un atașament al notiței părinte?",
     "print_pdf": "Exportare ca PDF...",
-    "open_note_on_server": "Deschide notița pe server"
+    "open_note_on_server": "Deschide notița pe server",
+    "view_revisions": "Revizii ale notițelor..."
   },
   "note_erasure_timeout": {
     "deleted_notes_erased": "Notițele șterse au fost eliminate permanent.",
@@ -1095,7 +1103,6 @@
     "mime": "MIME: ",
     "no_revisions": "Nu există încă nicio revizie pentru această notiță...",
     "note_revisions": "Revizii ale notiței",
-    "preview": "Previzualizare:",
     "preview_not_available": "Nu este disponibilă o previzualizare pentru acest tip de notiță.",
     "restore_button": "Restaurează",
     "revision_deleted": "Revizia notiței a fost ștearsă.",
@@ -1407,7 +1414,7 @@
     "hoist-note": "Focalizează notița",
     "unhoist-note": "Defocalizează notița",
     "converted-to-attachments": "{{count}} notițe au fost convertite în atașamente.",
-    "convert-to-attachment-confirm": "Doriți convertirea notițelor selectate în atașamente ale notiței părinte?",
+    "convert-to-attachment-confirm": "Doriți convertirea notițelor selectate în atașamente ale notiței părinte? Această operațiune se aplică doar notițelor de tip imagine, celelalte vor fi ignorate.",
     "open-in-popup": "Editare rapidă",
     "archive": "Arhivează",
     "unarchive": "Dezarhivează"
@@ -1475,7 +1482,6 @@
   },
   "note_icon": {
     "change_note_icon": "Schimbă iconița notiței",
-    "category": "Categorie:",
     "reset-default": "Resetează la iconița implicită",
     "search": "Căutare:"
   },
@@ -1526,7 +1532,9 @@
     "printing_pdf": "Exportare ca PDF în curs..."
   },
   "note_title": {
-    "placeholder": "introduceți titlul notiței aici..."
+    "placeholder": "introduceți titlul notiței aici...",
+    "created_on": "Creată la <Value />",
+    "last_modified": "Modificată la <Value />"
   },
   "revisions_snapshot_limit": {
     "erase_excess_revision_snapshots": "Șterge acum reviziile excesive",
@@ -1758,7 +1766,8 @@
   },
   "note_language": {
     "configure-languages": "Configurează limbile...",
-    "not_set": "Nedefinită"
+    "not_set": "Nicio limbă setată",
+    "help-on-languages": "Informații despre limba conținutului..."
   },
   "png_export_button": {
     "button_title": "Exportă diagrama ca PNG"
@@ -1954,7 +1963,8 @@
     "oauth_user_not_logged_in": "Neautentificat!"
   },
   "svg": {
-    "export_to_png": "Diagrama nu a putut fi exportată în PNG."
+    "export_to_png": "Diagrama nu a putut fi exportată în PNG.",
+    "export_to_svg": "Diagrama nu a putut fi exportată în SVG."
   },
   "code_theme": {
     "title": "Afișare",
@@ -2106,5 +2116,30 @@
   },
   "popup-editor": {
     "maximize": "Comută la editorul principal"
+  },
+  "experimental_features": {
+    "title": "Opțiuni experimentale",
+    "disclaimer": "Aceste opțiuni sunt experimentale și pot cauza instabilitate. Folosiți cu prudență.",
+    "new_layout_name": "Aspect nou",
+    "new_layout_description": "Încercați noul aspect pentru un design mai modern și mai ușor de utilizat. Poate surveni modificări semnificative în următoarele release-uri."
+  },
+  "server": {
+    "unknown_http_error_title": "Eroare de comunicare cu server-ul",
+    "unknown_http_error_content": "Cod: {{statusCode}}\nURL: {{method}} {{url}}\nMesaj: {{message}}",
+    "traefik_blocks_requests": "Dacă utilizați reverse proxy-ul Traefik, acesta a introdus o schimbare majoră ce afectează comunicarea cu server-ul."
+  },
+  "tab_history_navigation_buttons": {
+    "go-back": "Înapoi la notița anterioară",
+    "go-forward": "Înainte către notița următoare"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "Mod citire",
+    "read_only_explicit_description": "Această notiță a fost setată explicit să fie doar în citire.\nClick pentru a o edita temporar.",
+    "read_only_auto": "Mod citire auto",
+    "read_only_auto_description": "Această notița a fost setată automată să fie în mod doar de citire din motive de performanță. Această limită automată este ajustabilă din setări.\n\nClick pentru a o edita temporar.",
+    "read_only_temporarily_disabled": "Editabilă temporar",
+    "read_only_temporarily_disabled_description": "Această notiță se poate modifica, deși în mod normal ea este doar în citire. Notița va reveni la modul doar în citire imediat ce navigați către altă notiță.\n\nClick pentru a re-activa modul doar în citire.",
+    "shared_publicly": "Partajată public",
+    "shared_locally": "Partajată local"
   }
 }

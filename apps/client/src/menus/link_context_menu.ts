@@ -1,10 +1,11 @@
-import { t } from "../services/i18n.js";
-import contextMenu, { type ContextMenuEvent, type MenuItem } from "./context_menu.js";
+import type { LeafletMouseEvent } from "leaflet";
+
 import appContext, { type CommandNames } from "../components/app_context.js";
+import { t } from "../services/i18n.js";
 import type { ViewScope } from "../services/link.js";
 import utils, { isMobile } from "../services/utils.js";
 import { getClosestNtxId } from "../widgets/widget_utils.js";
-import type { LeafletMouseEvent } from "leaflet";
+import contextMenu, { type ContextMenuEvent, type MenuItem } from "./context_menu.js";
 
 function openContextMenu(notePath: string, e: ContextMenuEvent, viewScope: ViewScope = {}, hoistedNoteId: string | null = null) {
     contextMenu.show({
@@ -34,15 +35,21 @@ function handleLinkContextMenuItem(command: string | undefined, e: ContextMenuEv
 
     if (command === "openNoteInNewTab") {
         appContext.tabManager.openContextWithNote(notePath, { hoistedNoteId, viewScope });
+        return true;
     } else if (command === "openNoteInNewSplit") {
         const ntxId = getNtxId(e);
-        if (!ntxId) return;
+        if (!ntxId) return false;
         appContext.triggerCommand("openNewNoteSplit", { ntxId, notePath, hoistedNoteId, viewScope });
+        return true;
     } else if (command === "openNoteInNewWindow") {
         appContext.triggerCommand("openInWindow", { notePath, hoistedNoteId, viewScope });
+        return true;
     } else if (command === "openNoteInPopup") {
-        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath })
+        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+        return true;
     }
+
+    return false;
 }
 
 function getNtxId(e: ContextMenuEvent | LeafletMouseEvent) {
@@ -52,9 +59,9 @@ function getNtxId(e: ContextMenuEvent | LeafletMouseEvent) {
         return subContexts[subContexts.length - 1].ntxId;
     } else if (e.target instanceof HTMLElement) {
         return getClosestNtxId(e.target);
-    } else {
-        return null;
     }
+    return null;
+
 }
 
 export default {

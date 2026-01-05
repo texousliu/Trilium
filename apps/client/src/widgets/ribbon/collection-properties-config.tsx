@@ -18,7 +18,8 @@ interface BookConfig {
 export interface CheckBoxProperty {
     type: "checkbox",
     label: string;
-    bindToLabel: FilterLabelsByType<boolean>
+    bindToLabel: FilterLabelsByType<boolean>;
+    icon?: string;
 }
 
 export interface ButtonProperty {
@@ -40,10 +41,11 @@ export interface NumberProperty {
     bindToLabel: FilterLabelsByType<number>;
     width?: number;
     min?: number;
+    icon?: string;
     disabled?: (note: FNote) => boolean;
 }
 
-interface ComboBoxItem {
+export interface ComboBoxItem {
     value: string;
     label: string;
 }
@@ -56,6 +58,7 @@ interface ComboBoxGroup {
 export interface ComboBoxProperty {
     type: "combobox",
     label: string;
+    icon?: string;
     bindToLabel: FilterLabelsByType<string>;
     /**
      * The default value is used when the label is not set.
@@ -107,11 +110,13 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: [
             {
                 label: t("book_properties_config.hide-weekends"),
+                icon: "bx bx-calendar-week",
                 type: "checkbox",
                 bindToLabel: "calendar:hideWeekends"
             },
             {
                 label: t("book_properties_config.display-week-numbers"),
+                icon: "bx bx-hash",
                 type: "checkbox",
                 bindToLabel: "calendar:weekNumbers"
             }
@@ -121,6 +126,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: [
             {
                 label: t("book_properties_config.map-style"),
+                icon: "bx bx-palette",
                 type: "combobox",
                 bindToLabel: "map:style",
                 defaultValue: DEFAULT_MAP_LAYER_NAME,
@@ -147,6 +153,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
             },
             {
                 label: t("book_properties_config.show-scale"),
+                icon: "bx bx-ruler",
                 type: "checkbox",
                 bindToLabel: "map:scale"
             }
@@ -156,6 +163,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: [
             {
                 label: t("book_properties_config.max-nesting-depth"),
+                icon: "bx bx-subdirectory-right",
                 type: "number",
                 bindToLabel: "maxNestingDepth",
                 width: 65,
@@ -171,6 +179,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
             {
                 label: "Theme",
                 type: "combobox",
+                icon: "bx bx-palette",
                 bindToLabel: "presentation:theme",
                 defaultValue: DEFAULT_THEME,
                 options: getPresentationThemes().map(theme => ({

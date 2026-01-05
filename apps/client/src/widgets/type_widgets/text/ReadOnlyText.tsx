@@ -1,23 +1,24 @@
-import { useEffect, useMemo, useRef } from "preact/hooks";
-import { TypeWidgetProps } from "../type_widget";
 import "./ReadOnlyText.css";
-import { useNoteBlob, useNoteLabel, useTriliumEvent, useTriliumOptionBool } from "../../react/hooks";
-import { RawHtmlBlock } from "../../react/RawHtml";
-
 // we load CKEditor also for read only notes because they contain content styles required for correct rendering of even read only notes
 // we could load just ckeditor-content.css but that causes CSS conflicts when both build CSS and this content CSS is loaded at the same time
 // (see https://github.com/zadam/trilium/issues/1590 for example of such conflict)
 import "@triliumnext/ckeditor5";
+
+import clsx from "clsx";
+import { useEffect, useMemo, useRef } from "preact/hooks";
+
+import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
+import { applyInlineMermaid, rewriteMermaidDiagramsInContainer } from "../../../services/content_renderer_text";
 import { getLocaleById } from "../../../services/i18n";
-import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./utils";
 import { renderMathInElement } from "../../../services/math";
 import { formatCodeBlocks } from "../../../services/syntax_highlight";
+import { useNoteBlob, useNoteLabel, useTriliumEvent, useTriliumOptionBool } from "../../react/hooks";
+import { RawHtmlBlock } from "../../react/RawHtml";
 import TouchBar, { TouchBarButton, TouchBarSpacer } from "../../react/TouchBar";
-import appContext from "../../../components/app_context";
+import { TypeWidgetProps } from "../type_widget";
 import { applyReferenceLinks } from "./read_only_helper";
-import { applyInlineMermaid, rewriteMermaidDiagramsInContainer } from "../../../services/content_renderer_text";
-import clsx from "clsx";
+import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./utils";
 
 export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
@@ -29,6 +30,8 @@ export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetPro
     useEffect(() => {
         const container = contentRef.current;
         if (!container) return;
+
+        appContext.triggerEvent("contentElRefreshed", { ntxId, contentEl: container });
 
         rewriteMermaidDiagramsInContainer(container);
         applyInlineMermaid(container);
@@ -74,7 +77,7 @@ export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetPro
                 />
             </TouchBar>
         </>
-    )
+    );
 }
 
 function useNoteLanguage(note: FNote) {

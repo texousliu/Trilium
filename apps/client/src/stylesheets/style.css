@@ -1,3 +1,5 @@
+@import "./boxicons-compat.css";
+
 @font-face {
     font-family: Montserrat;
     src: url(../fonts/Montserrat-Light.ttf);
@@ -24,8 +26,8 @@
     --bs-body-font-family: var(--main-font-family) !important;
     --bs-body-font-weight: var(--main-font-weight) !important;
     --bs-body-color: var(--main-text-color) !important;
-    --bs-body-bg: var(--main-background-color) !important;    
-    --ck-mention-list-max-height: 500px;    
+    --bs-body-bg: var(--main-background-color) !important;
+    --ck-mention-list-max-height: 500px;
     --tn-modal-max-height: 90vh;
 
     --tree-item-light-theme-max-color-lightness: 50;
@@ -423,20 +425,19 @@ body.desktop .tabulator-popup-container,
     pointer-events: none;
 }
 
-.dropdown-menu .disabled .disabled-tooltip {
+.dropdown-menu .disabled .contextual-help {
     pointer-events: all;
     margin-inline-start: 8px;
     font-size: 0.75rem;
-    color: var(--disabled-tooltip-icon-color);
+    color: var(--contextual-help-icon-color);
     cursor: help;
     opacity: 0.75;
 }
 
-.dropdown-menu .disabled .disabled-tooltip:hover {
+.dropdown-menu .disabled .contextual-help:hover {
     opacity: 1;
 }
 
-.dropdown-menu a:hover:not(.disabled),
 .dropdown-item:hover:not(.disabled, .dropdown-container-item),
 .tabulator-menu-item:hover,
 :root .excalidraw .context-menu .context-menu-item:hover {
@@ -458,6 +459,7 @@ body.desktop .tabulator-popup-container,
 }
 
 body.desktop .dropdown-menu:not(#context-menu-container) .dropdown-item,
+body.desktop .dropdown-menu .dropdown-toggle,
 body #context-menu-container .dropdown-item > span,
 body.mobile .dropdown .dropdown-submenu > span {
     display: flex;
@@ -471,7 +473,7 @@ body.mobile .dropdown .dropdown-submenu > span {
     padding-inline-start: 12px;
 }
 
-.dropdown-menu kbd {    
+.dropdown-menu kbd {
     color: var(--muted-text-color);
     border: none;
     background-color: transparent;
@@ -487,7 +489,7 @@ body.mobile .dropdown .dropdown-submenu > span {
     border: 1px solid transparent !important;
 }
 
-/*  This is a workaround for Firefox not supporting break-before / break-after: avoid on columns. 
+/*  This is a workaround for Firefox not supporting break-before / break-after: avoid on columns.
  *  It usually wraps a menu item followed by a separator / header and another menu item. */
 .dropdown-no-break {
     break-inside: avoid;
@@ -521,9 +523,7 @@ body.mobile .dropdown .dropdown-submenu > span {
 .cm-editor {
     height: 100%;
     outline: none !important;
-    border-radius: 6px;
     overflow: hidden;
-    margin: 4px;
     font-size: var(--monospace-font-size);
 }
 
@@ -629,6 +629,11 @@ pre:not(.hljs) {
     padding: var(--padding-size);
 }
 
+pre:has(> .cm-editor) {
+    padding: 0;
+    margin: 0;
+}
+
 pre > button.copy-button {
     position: absolute;
     top: var(--copy-button-margin-size);
@@ -718,6 +723,10 @@ table.promoted-attributes-in-tooltip th {
 
 .tooltip.tooltip-top {
     z-index: 32767 !important;
+}
+
+.pre-wrap-text {
+    white-space: pre-wrap;
 }
 
 .bs-tooltip-bottom .tooltip-arrow::before {
@@ -1121,11 +1130,6 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     border-color: var(--main-border-color) !important;
 }
 
-.bx-empty {
-    width: 1em;
-    display: inline-block;
-}
-
 .modal-header {
     padding: 0.5rem 1rem 0.5rem 1rem !important; /* make modal header padding slightly smaller */
 }
@@ -1315,10 +1319,19 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
     top: 0;
     inset-inline-start: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
     margin-top: -10px;
-    min-width: 15rem;
     /* to make submenu scrollable https://github.com/zadam/trilium/issues/3136 */
     max-height: 600px;
     overflow: auto;
+}
+
+body.desktop .dropdown-submenu > .dropdown-menu {
+    min-width: max-content;
+    max-width: 300px;
+}
+
+.dropdown-submenu.dropstart > .dropdown-menu {
+    inset-inline-start: auto;
+    inset-inline-end: calc(100% - 2px);
 }
 
 body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
@@ -1365,6 +1378,10 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     border-radius: 5px;
     border: 1px solid var(--scrollbar-border-color);
     background-color: var(--scrollbar-background-color);
+}
+
+::-webkit-scrollbar-button {
+    display: none;
 }
 
 ::-webkit-scrollbar-corner {
@@ -1591,7 +1608,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         inset-inline-start: 0;
         inset-inline-end: 0;
         margin: 0 !important;
-        max-height: 85vh;        
+        max-height: 85vh;
         display: flex;
     }
 
@@ -1779,7 +1796,7 @@ button.close:hover {
     display: none;
 }
 
-.reference-link .bx {
+.reference-link .tn-icon {
     position: relative;
     top: 1px;
     margin-inline-end: 3px;
@@ -1931,6 +1948,10 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     padding-inline-start: 1em;
 }
 
+.tab-row-widget {
+    contain: inline-size;
+}
+
 #tab-row-left-spacer {
     width: env(titlebar-area-x);
     -webkit-app-region: drag;
@@ -1940,7 +1961,7 @@ body.electron.platform-darwin:not(.native-titlebar):not(.full-screen) #tab-row-l
     width: 80px;
 }
 
-.tab-row-widget {
+body.electron:not(.platform-darwin) .tab-row-container {
     padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw));
 }
 
@@ -1991,8 +2012,10 @@ body.zen .shared-info-widget,
 body.zen .ribbon-container:not(:has(.classic-toolbar-widget)),
 body.zen .ribbon-container:has(.classic-toolbar-widget) .ribbon-top-row,
 body.zen .ribbon-container .ribbon-body:not(:has(.classic-toolbar-widget)),
-body.zen .note-icon-widget,
 body.zen .title-row .icon-action,
+body.zen .note-badges > *:not(.read-only-badge),
+body.zen .ribbon-button-container,
+body.zen .inline-title,
 body.zen .promoted-attributes-widget,
 body.zen .floating-buttons-children > *:not(.bx-edit-alt),
 body.zen .action-button,
@@ -2015,11 +2038,11 @@ body.zen #launcher-pane {
 }
 
 body.zen .title-row {
-    display: block !important;
     height: unset !important;
     -webkit-app-region: drag;
     padding-inline-start: env(titlebar-area-x);
     padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw) + 2.5em);
+    border-bottom: none !important;
 }
 
 body.zen .floating-buttons {
@@ -2039,8 +2062,6 @@ body.zen .floating-buttons-children .button-widget {
 body.zen .note-title-widget,
 body.zen .note-title-widget input {
     font-size: 1rem !important;
-    background: transparent !important;
-    pointer-events: none;
 }
 
 body.zen #detail-container {
@@ -2093,65 +2114,114 @@ body.zen .note-split.type-text .scrolling-container {
 
 body.zen:not(.backdrop-effects-disabled) .note-split.type-text .scrolling-container {
     --padding-top: 50px; /* Should be enough to cover the title row */
-    
+
     padding-top: var(--padding-top);
     scroll-padding-top: var(--padding-top);
 }
 
 /* Fixed formatting toolbar */
 
-body.zen .note-split .ribbon-container {
-    position: fixed;
-    left: 0;
-    bottom: 20px;
-    width: 100%;
-    z-index: 1000;
-    opacity: 0; /* Hidden unless the current note split is focused */
-    pointer-events: none;
-    transition: opacity 100ms linear;
-}
-
-body.zen .note-split:focus-within .ribbon-container {
-    opacity: 1; /* Show when the note split is focused */
-}
-
-body.zen .note-split .ribbon-container .ribbon-body {
-    border: 0;
-}
-
-body.zen .note-split .ribbon-container .classic-toolbar-widget {
-    margin: auto;
-    width: fit-content;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, .1);
-    border-radius: 8px;
-    border: 1px solid var(--main-border-color);
-    padding: 4px;
-    background: var(--menu-background-color);
-}
-
-body.zen .note-split .ribbon-container .classic-toolbar-widget:not(:has(> .ck-toolbar)) {
-    /* Hide the toolbar wrapper if the toolbar is missing */
-    display: none;
-}
-
-body.zen .note-split:focus-within .ribbon-container .classic-toolbar-widget {
-    pointer-events: all;
-}
-
-@media (max-width: 1300px) {
-    body.zen .note-split .ribbon-container .classic-toolbar-widget {
-        /* Set the toolbar to full with */
+body.zen:not(.experimental-feature-new-layout) {
+    .note-split .ribbon-container {
+        position: fixed;
+        left: 0;
+        bottom: 20px;
         width: 100%;
+        z-index: 1000;
+        opacity: 0; /* Hidden unless the current note split is focused */
+        pointer-events: none;
+        transition: opacity 100ms linear;
     }
 
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sw,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_smw,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sme,
-    body.zen .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_s {
-        /* Force toolbar items overflow dropdowns open upwards */
-        top: auto;
-        bottom: 100%;
+    .note-split:focus-within .ribbon-container {
+        opacity: 1; /* Show when the note split is focused */
+    }
+
+    .note-split .ribbon-container .ribbon-body {
+        border: 0;
+    }
+
+    .note-split .ribbon-container .classic-toolbar-widget {
+        margin: auto;
+        width: fit-content;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, .1);
+        border-radius: 8px;
+        border: 1px solid var(--main-border-color);
+        padding: 4px;
+        background: var(--menu-background-color);
+    }
+
+    .note-split .ribbon-container .classic-toolbar-widget:not(:has(> .ck-toolbar)) {
+        /* Hide the toolbar wrapper if the toolbar is missing */
+        display: none;
+    }
+
+    .note-split:focus-within .ribbon-container .classic-toolbar-widget {
+        pointer-events: all;
+    }
+
+    @media (max-width: 1300px) {
+        .note-split .ribbon-container .classic-toolbar-widget {
+            /* Set the toolbar to full with */
+            width: 100%;
+        }
+
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_smw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sme,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_s {
+            /* Force toolbar items overflow dropdowns open upwards */
+            top: auto;
+            bottom: 100%;
+        }
+    }
+}
+
+body.zen.experimental-feature-new-layout {
+    .status-bar {
+        display: none;
+    }
+
+    .classic-toolbar-widget {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        z-index: 1000;
+        opacity: 0; /* Hidden unless the current note split is focused */
+        pointer-events: none;
+        transition: opacity 100ms linear;
+        width: fit-content;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, .1);
+        border-radius: 8px;
+        border: 1px solid var(--main-border-color);
+        padding: 4px;
+        background: var(--menu-background-color) !important;
+        transform: translateX(-50%);
+        backdrop-filter: blur(6px);
+    }
+
+    #root-widget:has(.note-split.type-text:focus-within) .classic-toolbar-widget,
+    .classic-toolbar-widget:focus-within {
+        opacity: 1; /* Show when the note split is focused */
+        pointer-events: all;
+    }
+
+    @media (max-width: 1300px) {
+        .classic-toolbar-widget {
+            /* Set the toolbar to full with */
+            width: 100%;
+        }
+
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_smw,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_sme,
+        .classic-toolbar-widget .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_s {
+            /* Force toolbar items overflow dropdowns open upwards */
+            top: auto;
+            bottom: 100%;
+        }
     }
 }
 
@@ -2345,7 +2415,7 @@ footer.webview-footer button {
     gap: 5px;
 }
 
-.right-pane-tab .tab-title .bx {
+.right-pane-tab .tab-title .tn-icon {
     font-size: 1.1em;
 }
 
@@ -2365,7 +2435,7 @@ footer.webview-footer button {
     margin-bottom: 0;
 }
 
-.admonition::before {  
+.admonition::before {
     color: var(--accent-color);
     font-family: boxicons !important;
     position: absolute;
@@ -2391,7 +2461,7 @@ footer.webview-footer button {
 
 .ck-content ul.todo-list li:has(> span.todo-list__label input[type="checkbox"]:checked) > span.todo-list__label span.todo-list__label__description {
     text-decoration: line-through;
-    opacity: 0.6;    
+    opacity: 0.6;
 }
 
 .chat-options-container {
@@ -2458,6 +2528,11 @@ footer.webview-footer button {
     inset-inline-start: 10px;
 }
 
+.content-floating-buttons.top-right {
+    top: 10px;
+    inset-inline-end: 10px;
+}
+
 .content-floating-buttons.bottom-left {
     bottom: 10px;
     inset-inline-start: 10px;
@@ -2468,16 +2543,9 @@ footer.webview-footer button {
     inset-inline-end: 10px;
 }
 
-.content-floating-buttons button.bx {
+.content-floating-buttons button.tn-icon {
     font-size: 130%;
     padding: 1px 10px 1px 10px;
-}
-
-/* Customized icons */
-
-.bx-tn-toc::before {
-    content: "\ec24";
-    transform: rotate(180deg);
 }
 
 /* CK Editor */
@@ -2524,6 +2592,7 @@ iframe.print-iframe {
     position: relative;
     flex-grow: 1;
     width: 100%;
+    overflow: hidden;
 }
 
 /* Calendar collection */
@@ -2538,7 +2607,7 @@ iframe.print-iframe {
     body.mobile {
         .split-note-container-widget {
             flex-direction: column !important;
-            
+
             .note-split {
                 width: 100%;
             }
@@ -2553,4 +2622,10 @@ iframe.print-iframe {
             opacity: 0.4;
         }
     }
+}
+
+body.desktop .title-row {
+    height: 50px;
+    min-height: 50px;
+    align-items: center;
 }

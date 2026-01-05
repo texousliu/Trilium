@@ -1,16 +1,21 @@
-import { useNoteContext, useTriliumEvent } from "./react/hooks"
-import FNote from "../entities/fnote";
-import protected_session_holder from "../services/protected_session_holder";
-import { useEffect, useRef, useState } from "preact/hooks";
-import NoteContext from "../components/note_context";
-import { isValidElement, VNode } from "preact";
-import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
+
+import { isValidElement, VNode } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
+
+import NoteContext from "../components/note_context";
+import FNote from "../entities/fnote";
+import type { PrintReport } from "../print";
 import attributes from "../services/attributes";
-import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
-import { dynamicRequire, isElectron, isMobile } from "../services/utils";
-import toast from "../services/toast.js";
+import dialog from "../services/dialog";
 import { t } from "../services/i18n";
+import protected_session_holder from "../services/protected_session_holder";
+import toast from "../services/toast.js";
+import { dynamicRequire, isElectron, isMobile } from "../services/utils";
+import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
+import { useNoteContext, useTriliumEvent } from "./react/hooks";
+import { NoteListWithLinks } from "./react/NoteList";
+import { TypeWidgetProps } from "./type_widgets/type_widget";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -80,7 +85,7 @@ export default function NoteDetail() {
             parentComponent.handleEvent("noteTypeMimeChanged", { noteId: note.noteId });
         } else if (note.noteId
             && loadResults.isNoteReloaded(note.noteId, parentComponent.componentId)
-            && (type !== (await getWidgetType(note, noteContext)) || mime !== note?.mime)) {
+            && (type !== (await getExtendedWidgetType(note, noteContext)) || mime !== note?.mime)) {
             // this needs to have a triggerEvent so that e.g., note type (not in the component subtree) is updated
             parentComponent.triggerEvent("noteTypeMimeChanged", { noteId: note.noteId });
         } else {
@@ -126,7 +131,10 @@ export default function NoteDetail() {
         if (!isElectron()) return;
         const { ipcRenderer } = dynamicRequire("electron");
         const onPrintProgress = (_e: any, { progress, action }: { progress: number, action: "printing" | "exporting_pdf" }) => showToast(action, progress);
-        const onPrintDone = () => toast.closePersistent("printing");
+        const onPrintDone = (_e, printReport: PrintReport) => {
+            toast.closePersistent("printing");
+            handlePrintReport(printReport);
+        };
         ipcRenderer.on("print-progress", onPrintProgress);
         ipcRenderer.on("print-done", onPrintDone);
         return () => {
@@ -177,8 +185,13 @@ export default function NoteDetail() {
                     showToast("printing", e.detail.progress);
                 });
 
-                iframe.contentWindow.addEventListener("note-ready", () => {
+                iframe.contentWindow.addEventListener("note-ready", (e) => {
                     toast.closePersistent("printing");
+
+                    if ("detail" in e) {
+                        handlePrintReport(e.detail as PrintReport);
+                    }
+
                     iframe.contentWindow?.print();
                     document.body.removeChild(iframe);
                 });
@@ -212,7 +225,7 @@ export default function NoteDetail() {
                     isVisible={type === itemType}
                     isFullHeight={isFullHeight}
                     props={props}
-                />
+                />;
             })}
         </div>
     );
@@ -254,7 +267,7 @@ function useNoteInfo() {
     const [ mime, setMime ] = useState<string>();
 
     function refresh() {
-        getWidgetType(actualNote, noteContext).then(type => {
+        getExtendedWidgetType(actualNote, noteContext).then(type => {
             setNote(actualNote);
             setType(type);
             setMime(actualNote?.mime);
@@ -282,12 +295,12 @@ async function getCorrespondingWidget(type: ExtendedNoteType): Promise<null | Ty
     } else if (isValidElement(result)) {
         // Direct VNode provided.
         return result;
-    } else {
-        return result;
     }
+    return result;
+
 }
 
-async function getWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType | undefined> {
+export async function getExtendedWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType | undefined> {
     if (!noteContext) return undefined;
     if (!note) {
         // If the note is null, then it's a new tab. If it's undefined, then it's not loaded yet.
@@ -299,8 +312,10 @@ async function getWidgetType(note: FNote | null | undefined, noteContext: NoteCo
 
     if (noteContext?.viewScope?.viewMode === "source") {
         resultingType = "readOnlyCode";
-    } else if (noteContext?.viewScope && noteContext.viewScope.viewMode === "attachments") {
+    } else if (noteContext.viewScope?.viewMode === "attachments") {
         resultingType = noteContext.viewScope.attachmentId ? "attachmentDetail" : "attachmentList";
+    } else if (noteContext.viewScope?.viewMode === "note-map") {
+        resultingType = "noteMap";
     } else if (type === "text" && (await noteContext?.isReadOnly())) {
         resultingType = "readOnlyText";
     } else if ((type === "code" || type === "mermaid") && (await noteContext?.isReadOnly())) {
@@ -322,7 +337,7 @@ async function getWidgetType(note: FNote | null | undefined, noteContext: NoteCo
     return resultingType;
 }
 
-function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNoteType | undefined) {
+export function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNoteType | undefined) {
     if (!noteContext) return false;
 
     // https://github.com/zadam/trilium/issues/2522
@@ -341,4 +356,30 @@ function showToast(type: "printing" | "exporting_pdf", progress: number = 0) {
         id: "printing",
         progress
     });
+}
+
+function handlePrintReport(printReport: PrintReport) {
+    if (printReport.type === "collection" && printReport.ignoredNoteIds.length > 0) {
+        toast.showPersistent({
+            id: "print-report",
+            icon: "bx bx-collection",
+            title: t("note_detail.print_report_title"),
+            message: t("note_detail.print_report_collection_content", { count: printReport.ignoredNoteIds.length }),
+            buttons: [
+                {
+                    text: t("note_detail.print_report_collection_details_button"),
+                    onClick(api) {
+                        api.dismissToast();
+                        dialog.info(<>
+                            <h3>{t("note_detail.print_report_collection_details_ignored_notes")}</h3>
+                            <NoteListWithLinks noteIds={printReport.ignoredNoteIds} />
+                        </>, {
+                            title: t("note_detail.print_report_title"),
+                            size: "md"
+                        });
+                    }
+                }
+            ]
+        });
+    }
 }

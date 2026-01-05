@@ -16,13 +16,22 @@
     },
     "bundle-error": {
       "title": "Non si è riusciti a caricare uno script personalizzato",
-      "message": "Lo script della nota con ID \"{{id}}\", dal titolo \"{{title}}\" non è stato inizializzato a causa di:\n\n{{message}}"
+      "message": "Impossibile eseguire lo script a causa di:\n\n{{message}}"
     },
     "widget-error": {
       "title": "Impossibile inizializzare un widget",
       "message-custom": "Il widget personalizzato dalla nota con ID “{{id}}”, intitolato “{{title}}”, non è stato possibile inizializzare a causa di:\n\n{{message}}",
       "message-unknown": "Un widget sconosciuto non è stato inizializzato a causa di:\n\n{{message}}"
-    }
+    },
+    "widget-list-error": {
+      "title": "Impossibile ottenere l'elenco dei widget dal server"
+    },
+    "widget-render-error": {
+      "title": "Impossibile eseguire il rendering di un widget React personalizzato"
+    },
+    "widget-missing-parent": "Il widget personalizzato non ha la proprietà obbligatoria '{{property}}' definita.\n\nSe questo script deve essere eseguito senza un elemento dell'interfaccia utente, utilizzare invece '#run=frontendStartup'.",
+    "open-script-note": "Apri script note",
+    "scripting-error": "Errore script personalizzato: {{title}}"
   },
   "add_link": {
     "add_link": "Aggiungi un collegamento",
@@ -94,7 +103,8 @@
   "info": {
     "okButton": "OK",
     "closeButton": "Chiudi",
-    "modalTitle": "Messaggio informativo"
+    "modalTitle": "Messaggio informativo",
+    "copy_to_clipboard": "Copia negli appunti"
   },
   "export": {
     "close": "Chiudi",
@@ -314,7 +324,7 @@
     "import-into-note": "Importa nella nota",
     "apply-bulk-actions": "Applica azioni in blocco",
     "converted-to-attachments": "{{count}} note sono state convertite in allegati.",
-    "convert-to-attachment-confirm": "Sei sicuro di voler convertire le note selezionate in allegati delle note padre?",
+    "convert-to-attachment-confirm": "Sei sicuro di voler convertire le note selezionate in allegati delle note principali? Questa operazione si applica solo alle note immagine, le altre note verranno ignorate.",
     "open-in-popup": "Modifica rapida"
   },
   "electron_context_menu": {
@@ -408,7 +418,8 @@
     "search_parameters": "Parametri di ricerca",
     "unknown_search_option": "Opzione di ricerca sconosciuta {{searchOptionName}}",
     "search_note_saved": "La nota di ricerca è stata salvata in {{- notePathTitle}}",
-    "actions_executed": "Le azioni sono state eseguite."
+    "actions_executed": "Le azioni sono state eseguite.",
+    "view_options": "Opzioni di visualizzazione:"
   },
   "modal": {
     "close": "Chiudi",
@@ -521,7 +532,8 @@
   },
   "toc": {
     "table_of_contents": "Sommario",
-    "options": "Opzioni"
+    "options": "Opzioni",
+    "no_headings": "Nessun titolo."
   },
   "table_of_contents": {
     "title": "Sommario",
@@ -554,7 +566,13 @@
   },
   "highlights_list_2": {
     "title": "Punti salienti",
-    "options": "Opzioni"
+    "options": "Opzioni",
+    "title_with_count_one": "{{count}} evidenza",
+    "title_with_count_many": "{{count}} evidenze",
+    "title_with_count_other": "{{count}} evidenze",
+    "modal_title": "Configura elenco dei punti salienti",
+    "menu_configure": "Configura elenco dei punti salienti...",
+    "no_highlights": "Nessun punto saliente trovato."
   },
   "quick-search": {
     "placeholder": "Ricerca rapida",
@@ -884,7 +902,6 @@
     "download_button": "Scarica",
     "mime": "MIME: ",
     "file_size": "Dimensione del file:",
-    "preview": "Anteprima:",
     "preview_not_available": "L'anteprima non è disponibile per questo tipo di nota."
   },
   "sort_child_notes": {
@@ -1260,7 +1277,13 @@
     "convert_into_attachment_successful": "Nota '{{title}}' è stato convertito in allegato.",
     "convert_into_attachment_prompt": "Sei sicuro di voler convertire la nota '{{title}}' in un allegato della nota padre?",
     "print_pdf": "Esporta come PDF...",
-    "open_note_on_server": "Apri una nota sul server"
+    "open_note_on_server": "Apri una nota sul server",
+    "view_revisions": "Revisioni...",
+    "advanced": "Avanzato",
+    "export_as_image": "Esporta come immagine",
+    "export_as_image_png": "PNG (raster)",
+    "export_as_image_svg": "SVG (vector)",
+    "note_map": "Mappa"
   },
   "onclick_button": {
     "no_click_handler": "Il widget pulsante '{{componentId}}' non ha un gestore di clic definito"
@@ -1318,9 +1341,17 @@
   },
   "note_icon": {
     "change_note_icon": "Cambia icona nota",
-    "category": "Categoria:",
     "search": "Ricerca:",
-    "reset-default": "Ripristina l'icona predefinita"
+    "reset-default": "Ripristina l'icona predefinita",
+    "search_placeholder_one": "Cerca {{number}} icona in {{count}} pacchetto",
+    "search_placeholder_many": "Cerca {{number}} icone in {{count}} pacchetti",
+    "search_placeholder_other": "Cerca {{number}} icone in {{count}} pacchetti",
+    "search_placeholder_filtered": "Cerca {{number}} icone in {{name}}",
+    "filter": "Filtro",
+    "filter-none": "Tutte le icone",
+    "filter-default": "Icone predefinite",
+    "icon_tooltip": "{{name}}\nPacchetto icone: {{iconPack}}",
+    "no_results": "Nessuna icona trovata."
   },
   "basic_properties": {
     "note_type": "Tipo di nota",
@@ -1360,7 +1391,7 @@
     "file_type": "Tipo di file",
     "file_size": "Dimensione del file",
     "download": "Scaricamento",
-    "open": "Aprire",
+    "open": "Aprire esternamente",
     "upload_new_revision": "Carica nuova revisione",
     "upload_success": "È stata caricata una nuova revisione del file.",
     "upload_failed": "Caricamento di una nuova revisione del file non riuscito.",
@@ -1380,7 +1411,8 @@
   },
   "inherited_attribute_list": {
     "title": "Attributi ereditati",
-    "no_inherited_attributes": "Nessun attributo ereditato."
+    "no_inherited_attributes": "Nessun attributo ereditato.",
+    "none": "nessuno"
   },
   "note_info_widget": {
     "note_id": "ID nota",
@@ -1391,7 +1423,9 @@
     "note_size_info": "La dimensione della nota fornisce una stima approssimativa dei requisiti di archiviazione per questa nota. Tiene conto del contenuto della nota e del contenuto delle sue revisioni.",
     "calculate": "calcolare",
     "subtree_size": "(dimensione del sottoalbero: {{size}} in {{count}} note)",
-    "title": "Nota informativa"
+    "title": "Nota informativa",
+    "show_similar_notes": "Mostra note simili",
+    "mime": "Tipo MIME"
   },
   "note_map": {
     "open_full": "Espandi completamente",
@@ -1493,7 +1527,12 @@
   "editable_text": {
     "placeholder": "Digita qui il contenuto della tua nota...",
     "auto-detect-language": "Rilevato automaticamente",
-    "keeps-crashing": "Il componente di modifica continua a bloccarsi. Prova a riavviare Trilium. Se il problema persiste, valuta la possibilità di creare una segnalazione di bug."
+    "keeps-crashing": "Il componente di modifica continua a bloccarsi. Prova a riavviare Trilium. Se il problema persiste, valuta la possibilità di creare una segnalazione di bug.",
+    "editor_crashed_title": "L'editor di testo si è bloccato",
+    "editor_crashed_content": "I tuoi contenuti sono stati recuperati con successo, ma alcune delle modifiche più recenti potrebbero non essere state salvate.",
+    "editor_crashed_details_button": "Visualizza ulteriori dettagli...",
+    "editor_crashed_details_intro": "Se questo errore si verifica più volte, valuta la possibilità di segnalarlo su GitHub incollando le informazioni riportate di seguito.",
+    "editor_crashed_details_title": "Informazioni tecniche"
   },
   "empty": {
     "open_note_instruction": "Apri una nota digitandone il titolo nel campo sottostante oppure scegli una nota nell'albero.",
@@ -1770,7 +1809,7 @@
     "will_be_deleted_in": "Questo allegato verrà eliminato automaticamente tra {{time}}",
     "will_be_deleted_soon": "Questo allegato verrà eliminato automaticamente a breve",
     "deletion_reason": ", perché l'allegato non è collegato al contenuto della nota. Per impedirne l'eliminazione, aggiungi nuovamente il collegamento all'allegato nel contenuto o converti l'allegato in nota.",
-    "role_and_size": "Ruolo: {{role}}, Dimensione: {{size}}",
+    "role_and_size": "Ruolo: {{role}}, dimensione: {{size}}, MIME: {{- mimeType}}",
     "link_copied": "Link all'allegato copiato negli appunti.",
     "unrecognized_role": "Ruolo di allegato non riconosciuto '{{role}}'."
   },
@@ -1864,10 +1903,24 @@
   "note_detail": {
     "could_not_find_typewidget": "Impossibile trovare typeWidget per il tipo '{{type}}'",
     "printing": "Stampa in corso...",
-    "printing_pdf": "Esportazione in PDF in corso..."
+    "printing_pdf": "Esportazione in PDF in corso...",
+    "print_report_title": "Stampa rapporto",
+    "print_report_collection_content_one": "{{count}} la note nella raccolta non può essere stampata perché non è supportata o è protetta.",
+    "print_report_collection_content_many": "{{count}} le note nella raccolta non possono essere stampate perché non sono supportate o sono protette.",
+    "print_report_collection_content_other": "{{count}} le note nella raccolta non possono essere stampate perché non sono supportate o sono protette.",
+    "print_report_collection_details_button": "Vedi dettagli",
+    "print_report_collection_details_ignored_notes": "Note ignorate"
   },
   "note_title": {
-    "placeholder": "scrivi qui il titolo della nota..."
+    "placeholder": "scrivi qui il titolo della nota...",
+    "created_on": "Creato il <Value />",
+    "last_modified": "Modificato il <Value />",
+    "note_type_switcher_label": "Passa da {{type}} a:",
+    "note_type_switcher_others": "Altro tipo di nota",
+    "note_type_switcher_templates": "Modello",
+    "note_type_switcher_collection": "Collezione",
+    "edited_notes": "Note modificate in questo giorno",
+    "promoted_attributes": "Attributi promossi"
   },
   "search_result": {
     "no_notes_found": "Non sono state trovate note per i parametri di ricerca specificati.",
@@ -2003,8 +2056,9 @@
     "unknown_widget": "Widget sconosciuto per \"{{id}}\"."
   },
   "note_language": {
-    "not_set": "Non impostato",
-    "configure-languages": "Configura le lingue..."
+    "not_set": "Nessuna lingua impostata",
+    "configure-languages": "Configura le lingue...",
+    "help-on-languages": "Aiuto sulle lingue dei contenuti..."
   },
   "content_language": {
     "title": "Lingue dei contenuti",
@@ -2022,7 +2076,8 @@
     "button_title": "Esporta diagramma come PNG"
   },
   "svg": {
-    "export_to_png": "Non è stato possibile esportare il diagramma in formato PNG."
+    "export_to_png": "Non è stato possibile esportare il diagramma in formato PNG.",
+    "export_to_svg": "Il diagramma non può essere esportato in formato SVG."
   },
   "code_theme": {
     "title": "Aspetto",
@@ -2032,7 +2087,7 @@
   "book_properties_config": {
     "hide-weekends": "Nascondi i fine settimana",
     "display-week-numbers": "Visualizza i numeri delle settimane",
-    "map-style": "Stile mappa:",
+    "map-style": "Stile mappa",
     "max-nesting-depth": "Profondità massima di nidificazione:",
     "raster": "Trama",
     "vector_light": "Vettore (Luce)",
@@ -2072,14 +2127,20 @@
     "background_effects_title": "Gli effetti di sfondo sono ora stabili",
     "background_effects_message": "Sui dispositivi Windows, gli effetti di sfondo sono ora completamente stabili. Gli effetti di sfondo aggiungono un tocco di colore all'interfaccia utente sfocando lo sfondo retrostante. Questa tecnica è utilizzata anche in altre applicazioni come Esplora risorse di Windows.",
     "background_effects_button": "Abilita gli effetti di sfondo",
-    "dismiss": "Congedare"
+    "dismiss": "Congedare",
+    "new_layout_title": "Nuovo layout",
+    "new_layout_message": "Abbiamo introdotto un layout modernizzato per Trilium. La barra multifunzione è stata rimossa e integrata perfettamente nell'interfaccia principale, con una nuova barra di stato e sezioni espandibili (come gli attributi promossi) che assumono le funzioni chiave.\n\nIl nuovo layout è abilitato di default e può essere temporaneamente disabilitato tramite Opzioni → Aspetto.",
+    "new_layout_button": "Maggiori informazioni"
   },
   "settings": {
     "related_settings": "Impostazioni correlate"
   },
   "settings_appearance": {
     "related_code_blocks": "Schema di colori per i blocchi di codice nelle note di testo",
-    "related_code_notes": "Schema di colori per le note del codice"
+    "related_code_notes": "Schema di colori per le note del codice",
+    "ui": "Interfaccia utente",
+    "ui_old_layout": "Vecchio layout",
+    "ui_new_layout": "Nuovo layout"
   },
   "units": {
     "percentage": "%"
@@ -2106,5 +2167,81 @@
   },
   "popup-editor": {
     "maximize": "Passa all'editor completo"
+  },
+  "experimental_features": {
+    "title": "Opzioni sperimentali",
+    "disclaimer": "Queste opzioni sono sperimentali e potrebbero causare instabilità. Usare con cautela.",
+    "new_layout_name": "Nuovo layout",
+    "new_layout_description": "Prova il nuovo layout per un look più moderno e una maggiore usabilità. Soggetto a modifiche significative nelle prossime versioni."
+  },
+  "server": {
+    "unknown_http_error_title": "Errore di comunicazione con il server",
+    "unknown_http_error_content": "Codice di stato: {{statusCode}}\nURL: {{method}} {{url}}\nMessaggio: {{message}}",
+    "traefik_blocks_requests": "Se si utilizza il proxy inverso Traefik, è stata introdotta una modifica sostanziale che influisce sulla comunicazione con il server."
+  },
+  "tab_history_navigation_buttons": {
+    "go-back": "Torna alla nota precedente",
+    "go-forward": "Passa alla nota successiva"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "Sola lettura",
+    "read_only_explicit_description": "Questa nota è stata impostata manualmente come di sola lettura.\nClicca per modificarla temporaneamente.",
+    "read_only_auto": "Solo lettura automatica",
+    "read_only_auto_description": "Questa nota è stata impostata automaticamente in modalità di sola lettura per motivi di prestazioni. Questo limite automatico è modificabile dalle impostazioni.\n\nClicca per modificarla temporaneamente.",
+    "read_only_temporarily_disabled": "Modificabile temporaneamente",
+    "read_only_temporarily_disabled_description": "Questa nota è attualmente modificabile, ma normalmente è di sola lettura. La nota tornerà ad essere di sola lettura non appena passerai a un'altra nota.\n\nClicca per riattivare la modalità di sola lettura.",
+    "shared_publicly": "Condiviso pubblicamente",
+    "shared_locally": "Condiviso localmente",
+    "clipped_note": "Clip web",
+    "clipped_note_description": "Questa nota è stata originariamente presa da {{url}}.\n\nClicca per andare alla pagina web di origine.",
+    "execute_script": "Esegui script",
+    "execute_script_description": "Questa nota è una nota di script. Clicca per eseguire lo script.",
+    "execute_sql": "Esegui SQL",
+    "execute_sql_description": "Questa nota è una nota SQL. Clicca per eseguire la query SQL.",
+    "shared_copy_to_clipboard": "Copia link negli appunti",
+    "shared_open_in_browser": "Apri il link nel browser",
+    "shared_unshare": "Rimuovi condivisione"
+  },
+  "breadcrumb": {
+    "workspace_badge": "Area di lavoro",
+    "scroll_to_top_title": "Vai all'inizio della nota",
+    "hoisted_badge": "Sollevato",
+    "hoisted_badge_title": "Abbassato",
+    "create_new_note": "Crea nuova nota secondaria",
+    "empty_hide_archived_notes": "Nascondi note archiviate"
+  },
+  "status_bar": {
+    "language_title": "Cambia lingua dei contenuti",
+    "note_info_title": "Visualizza informazioni sulla nota (ad es. date, dimensioni della nota)",
+    "backlinks_one": "{{count}} backlink",
+    "backlinks_many": "{{count}} backlinks",
+    "backlinks_other": "{{count}} backlinks",
+    "backlinks_title_one": "Visualizza backlink",
+    "backlinks_title_many": "Visualizza backlinks",
+    "backlinks_title_other": "Visualizza backlinks",
+    "attachments_one": "{{count}} allegato",
+    "attachments_many": "{{count}} allegati",
+    "attachments_other": "{{count}} allegati",
+    "attachments_title_one": "Visualizza allegato in una nuova scheda",
+    "attachments_title_many": "Visualizza allegati in una nuova scheda",
+    "attachments_title_other": "Visualizza allegati in una nuova scheda",
+    "attributes_one": "{{count}} attributo",
+    "attributes_many": "{{count}} attributi",
+    "attributes_other": "{{count}} attributi",
+    "attributes_title": "Attributi posseduti e attributi ereditati",
+    "note_paths_one": "{{count}} percorso",
+    "note_paths_many": "{{count}} percorsi",
+    "note_paths_other": "{{count}} percorsi",
+    "note_paths_title": "Nota percorsi",
+    "code_note_switcher": "Cambia modalità lingua"
+  },
+  "attributes_panel": {
+    "title": "Attributi delle note"
+  },
+  "right_pane": {
+    "empty_message": "Nulla da segnalare per questa nota",
+    "empty_button": "Nascondi il pannello",
+    "toggle": "Attiva/disattiva pannello destro",
+    "custom_widget_go_to_source": "Vai al codice sorgente"
   }
 }

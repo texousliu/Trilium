@@ -65,7 +65,7 @@ async function getFirstPageResults(context: BrowserContext) {
     for (const link of allDiscussionLinks) {
         const url = await link.getAttribute('href');
         const number = url?.match(/\/discussions\/(\d+)/)?.[1];
-        ids.push(number);
+        if (number) ids.push(number);
     }
     console.log(`Found ${ids.length} discussions.`);
     await page.close();

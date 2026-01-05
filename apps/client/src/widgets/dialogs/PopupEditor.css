@@ -31,10 +31,12 @@ body.mobile .modal.popup-editor-dialog .modal-dialog {
     flex-grow: 1;
     display: flex;
     align-items: center;
+    margin-block: 0;
 }
 
 .modal.popup-editor-dialog .modal-header .note-title-widget {
-    margin-top: 8px;
+    display: flex;
+    align-items: center;
 }
 
 .modal.popup-editor-dialog .modal-body {
@@ -42,19 +44,18 @@ body.mobile .modal.popup-editor-dialog .modal-dialog {
     height: 75vh;
     overflow: auto;
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
 }
 
 .modal.popup-editor-dialog .title-row,
 .modal.popup-editor-dialog .modal-title,
 .modal.popup-editor-dialog .note-icon-widget {
     height: 32px;
+    min-height: unset;
 }
 
-.modal.popup-editor-dialog .note-icon-widget {
-    width: 32px;
-    margin: 0;
-    padding: 0;
+:root div.modal.popup-editor-dialog div.note-title-widget {
+    --note-title-padding-inline: 8px;
 }
 
 .modal.popup-editor-dialog .note-icon-widget button.note-icon,
@@ -99,7 +100,7 @@ body.mobile .modal.popup-editor-dialog .modal-dialog {
 }
 
 .modal.popup-editor-dialog .note-detail-code-editor {
-    padding: 0;    
+    padding: 0;
 
     & .cm-editor {
         margin: 0;

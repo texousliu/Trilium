@@ -1,7 +1,8 @@
 import { dayjs } from "@triliumnext/commons";
-import type { ViewScope } from "./link.js";
-import FNote from "../entities/fnote";
 import { snapdom } from "@zumer/snapdom";
+
+import FNote from "../entities/fnote";
+import type { ViewMode, ViewScope } from "./link.js";
 
 const SVG_MIME = "image/svg+xml";
 
@@ -113,9 +114,8 @@ function formatDateISO(date: Date) {
 export function formatDateTime(date: Date, userSuppliedFormat?: string): string {
     if (userSuppliedFormat?.trim()) {
         return dayjs(date).format(userSuppliedFormat);
-    } else {
-        return `${formatDate(date)} ${formatTime(date)}`;
     }
+    return `${formatDate(date)} ${formatTime(date)}`;
 }
 
 function localNowDateTime() {
@@ -187,13 +187,15 @@ export function formatSize(size: number | null | undefined) {
         return "";
     }
 
-    size = Math.max(Math.round(size / 1024), 1);
-
-    if (size < 1024) {
-        return `${size} KiB`;
-    } else {
-        return `${Math.round(size / 102.4) / 10} MiB`;
+    if (size === 0) {
+        return "0 B";
     }
+
+    const k = 1024;
+    const sizes = ["B", "KiB", "MiB", "GiB"];
+    const i = Math.floor(Math.log(size) / Math.log(k));
+
+    return `${Math.round((size / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`;
 }
 
 function toObject<T, R>(array: T[], fn: (arg0: T) => [key: string, value: R]) {
@@ -208,7 +210,7 @@ function toObject<T, R>(array: T[], fn: (arg0: T) => [key: string, value: R]) {
     return obj;
 }
 
-export function randomString(len: number) {
+export function randomString(len: number = 16) {
     let text = "";
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -297,18 +299,18 @@ function formatHtml(html: string) {
     let indent = "\n";
     const tab = "\t";
     let i = 0;
-    let pre: { indent: string; tag: string }[] = [];
+    const pre: { indent: string; tag: string }[] = [];
 
     html = html
-        .replace(new RegExp("<pre>([\\s\\S]+?)?</pre>"), function (x) {
+        .replace(new RegExp("<pre>([\\s\\S]+?)?</pre>"), (x) => {
             pre.push({ indent: "", tag: x });
-            return "<--TEMPPRE" + i++ + "/-->";
+            return `<--TEMPPRE${i++}/-->`;
         })
-        .replace(new RegExp("<[^<>]+>[^<]?", "g"), function (x) {
+        .replace(new RegExp("<[^<>]+>[^<]?", "g"), (x) => {
             let ret;
             const tagRegEx = /<\/?([^\s/>]+)/.exec(x);
-            let tag = tagRegEx ? tagRegEx[1] : "";
-            let p = new RegExp("<--TEMPPRE(\\d+)/-->").exec(x);
+            const tag = tagRegEx ? tagRegEx[1] : "";
+            const p = new RegExp("<--TEMPPRE(\\d+)/-->").exec(x);
 
             if (p) {
                 const pInd = parseInt(p[1]);
@@ -318,24 +320,22 @@ function formatHtml(html: string) {
             if (["area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "menuitem", "meta", "param", "source", "track", "wbr"].indexOf(tag) >= 0) {
                 // self closing tag
                 ret = indent + x;
+            } else if (x.indexOf("</") < 0) {
+                //open tag
+                if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + tab + x.substr(x.length - 1, x.length);
+                else ret = indent + x;
+                !p && (indent += tab);
             } else {
-                if (x.indexOf("</") < 0) {
-                    //open tag
-                    if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + tab + x.substr(x.length - 1, x.length);
-                    else ret = indent + x;
-                    !p && (indent += tab);
-                } else {
-                    //close tag
-                    indent = indent.substr(0, indent.length - 1);
-                    if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + x.substr(x.length - 1, x.length);
-                    else ret = indent + x;
-                }
+                //close tag
+                indent = indent.substr(0, indent.length - 1);
+                if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + x.substr(x.length - 1, x.length);
+                else ret = indent + x;
             }
             return ret;
         });
 
     for (i = pre.length; i--;) {
-        html = html.replace("<--TEMPPRE" + i + "/-->", pre[i].tag.replace("<pre>", "<pre>\n").replace("</pre>", pre[i].indent + "</pre>"));
+        html = html.replace(`<--TEMPPRE${i}/-->`, pre[i].tag.replace("<pre>", "<pre>\n").replace("</pre>", `${pre[i].indent}</pre>`));
     }
 
     return html.charAt(0) === "\n" ? html.substr(1, html.length - 1) : html;
@@ -364,11 +364,11 @@ type dynamicRequireMappings = {
 export function dynamicRequire<T extends keyof dynamicRequireMappings>(moduleName: T): Awaited<dynamicRequireMappings[T]>{
     if (typeof __non_webpack_require__ !== "undefined") {
         return __non_webpack_require__(moduleName);
-    } else {
-        // explicitly pass as string and not as expression to suppress webpack warning
-        // 'Critical dependency: the request of a dependency is an expression'
-        return require(`${moduleName}`);
     }
+    // explicitly pass as string and not as expression to suppress webpack warning
+    // 'Critical dependency: the request of a dependency is an expression'
+    return require(`${moduleName}`);
+
 }
 
 function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?: string) {
@@ -439,7 +439,20 @@ async function openInAppHelp($button: JQuery<HTMLElement>) {
  * @param inAppHelpPage the ID of the help note (excluding the `_help_` prefix).
  * @returns a promise that resolves once the help has been opened.
  */
-export async function openInAppHelpFromUrl(inAppHelpPage: string) {
+export function openInAppHelpFromUrl(inAppHelpPage: string) {
+    return openInReusableSplit(`_help_${inAppHelpPage}`, "contextual-help");
+}
+
+/**
+ * Similar to opening a new note in a split, but re-uses an existing split if there is already one open with the same view mode.
+ *
+ * @param targetNoteId the note ID to open in the split.
+ * @param targetViewMode the view mode of the split to open the note in.
+ * @param openOpts additional options for opening the note.
+ */
+export async function openInReusableSplit(targetNoteId: string, targetViewMode: ViewMode, openOpts: {
+    hoistedNoteId?: string;
+} = {}) {
     // Dynamic import to avoid import issues in tests.
     const appContext = (await import("../components/app_context.js")).default;
     const activeContext = appContext.tabManager.getActiveContext();
@@ -447,23 +460,20 @@ export async function openInAppHelpFromUrl(inAppHelpPage: string) {
         return;
     }
     const subContexts = activeContext.getSubContexts();
-    const targetNote = `_help_${inAppHelpPage}`;
-    const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
-    const viewScope: ViewScope = {
-        viewMode: "contextual-help",
-    };
-    if (!helpSubcontext) {
-        // The help is not already open, open a new split with it.
+    const existingSubcontext = subContexts.find((s) => s.viewScope?.viewMode === targetViewMode);
+    const viewScope: ViewScope = { viewMode: targetViewMode };
+    if (!existingSubcontext) {
+        // The target split is not already open, open a new split with it.
         const { ntxId } = subContexts[subContexts.length - 1];
         appContext.triggerCommand("openNewNoteSplit", {
             ntxId,
-            notePath: targetNote,
-            hoistedNoteId: "_help",
+            notePath: targetNoteId,
+            hoistedNoteId: openOpts.hoistedNoteId,
             viewScope
-        })
+        });
     } else {
-        // There is already a help window open, make sure it opens on the right note.
-        helpSubcontext.setNote(targetNote, { viewScope });
+        // There is already a target split open, make sure it opens on the right note.
+        existingSubcontext.setNote(targetNoteId, { viewScope });
     }
 }
 
@@ -499,8 +509,8 @@ export function escapeRegExp(str: string) {
 function areObjectsEqual(...args: unknown[]) {
     let i;
     let l;
-    let leftChain: Object[];
-    let rightChain: Object[];
+    let leftChain: object[];
+    let rightChain: object[];
 
     function compare2Objects(x: unknown, y: unknown) {
         let p;
@@ -685,9 +695,9 @@ async function downloadAsSvg(nameWithoutExtension: string, svgSource: string | S
 
     try {
         const result = await snapdom(element, {
-                backgroundColor: "transparent",
-                scale: 2
-            });
+            backgroundColor: "transparent",
+            scale: 2
+        });
         triggerDownload(`${nameWithoutExtension}.svg`, result.url);
     } finally {
         cleanup();
@@ -723,9 +733,9 @@ async function downloadAsPng(nameWithoutExtension: string, svgSource: string | S
 
     try {
         const result = await snapdom(element, {
-                backgroundColor: "transparent",
-                scale: 2
-            });
+            backgroundColor: "transparent",
+            scale: 2
+        });
         const pngImg = await result.toPng();
         await triggerDownload(`${nameWithoutExtension}.png`, pngImg.src);
     } finally {
@@ -753,11 +763,11 @@ export function getSizeFromSvg(svgContent: string) {
         return {
             width: parseFloat(width),
             height: parseFloat(height)
-        }
-    } else {
-        console.warn("SVG export error", svgDocument.documentElement);
-        return null;
+        };
     }
+    console.warn("SVG export error", svgDocument.documentElement);
+    return null;
+
 }
 
 /**
@@ -886,9 +896,9 @@ export function mapToKeyValueArray<K extends string | number | symbol, V>(map: R
 export function getErrorMessage(e: unknown) {
     if (e && typeof e === "object" && "message" in e && typeof e.message === "string") {
         return e.message;
-    } else {
-        return "Unknown error";
     }
+    return "Unknown error";
+
 }
 
 /**

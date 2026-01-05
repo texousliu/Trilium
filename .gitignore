@@ -44,9 +44,11 @@ upload
 .rollup.cache
 *.tsbuildinfo
 
+/.direnv
 /result
 .svelte-kit
 
 # docs
 site/
 apps/*/coverage
+scripts/translation/.language*.json

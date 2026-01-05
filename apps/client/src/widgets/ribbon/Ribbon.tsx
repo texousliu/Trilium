@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 
-import { Indexed, numberObjectsInPlace } from "../../services/utils";
-import { EventNames } from "../../components/app_context";
-import NoteActions from "./NoteActions";
 import { KeyboardActionNames } from "@triliumnext/commons";
-import { RIBBON_TAB_DEFINITIONS } from "./RibbonDefinition";
-import { TabConfiguration, TitleContext } from "./ribbon-interface";
 import clsx from "clsx";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+
+import { EventNames } from "../../components/app_context";
+import { Indexed, numberObjectsInPlace } from "../../services/utils";
+import { useNoteContext, useNoteProperty, useStaticTooltipWithKeyboardShortcut, useTriliumEvents } from "../react/hooks";
+import NoteActions from "./NoteActions";
+import { TabConfiguration, TitleContext } from "./ribbon-interface";
+import { RIBBON_TAB_DEFINITIONS } from "./RibbonDefinition";
 
 const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>(RIBBON_TAB_DEFINITIONS);
 
@@ -54,7 +55,7 @@ export default function Ribbon() {
     useTriliumEvents(eventsToListenTo, useCallback((e, toggleCommand) => {
         if (!computedTabs) return;
         const correspondingTab = computedTabs.find(tab => tab.toggleCommand === toggleCommand);
-        if (correspondingTab) {
+        if (correspondingTab?.shouldShow) {
             if (activeTabIndex !== correspondingTab.index) {
                 setActiveTabIndex(correspondingTab.index);
             } else {
@@ -63,9 +64,10 @@ export default function Ribbon() {
         }
     }, [ computedTabs, activeTabIndex ]));
 
+    const shouldShowRibbon = (noteContext?.viewScope?.viewMode === "default" && !noteContext.noteId?.startsWith("_options"));
     return (
         <div
-            className={clsx("ribbon-container", noteContext?.viewScope?.viewMode !== "default" && "hidden-ext")}
+            className={clsx("ribbon-container", !shouldShowRibbon && "hidden-ext")}
             style={{ contain: "none" }}
         >
             <div className="ribbon-top-row">
@@ -87,9 +89,7 @@ export default function Ribbon() {
                         />
                     ))}
                 </div>
-                <div className="ribbon-button-container">
-                    { note && <NoteActions note={note} noteContext={noteContext} /> }
-                </div>
+                <NoteActions />
             </div>
 
             <div className="ribbon-body-container">
@@ -112,7 +112,7 @@ export default function Ribbon() {
                                 noteContext={noteContext}
                                 componentId={componentId}
                                 activate={useCallback(() => {
-                                    setActiveTabIndex(tab.index)
+                                    setActiveTabIndex(tab.index);
                                 }, [setActiveTabIndex])}
                             />
                         </div>
@@ -120,7 +120,7 @@ export default function Ribbon() {
                 })}
             </div>
         </div>
-    )
+    );
 }
 
 function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: string; title: string; active: boolean, onClick: () => void, toggleCommand?: KeyboardActionNames }) {
@@ -135,7 +135,7 @@ function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: stri
             >
                 <span
                     ref={iconRef}
-                    className={`ribbon-tab-title-icon ${icon}`}
+                    className={`ribbon-tab-title-icon tn-icon ${icon}`}
                 />
                 &nbsp;
                 { active && <span class="ribbon-tab-title-label">{title}</span> }
@@ -143,7 +143,7 @@ function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: stri
 
             <div class="ribbon-tab-spacer" />
         </>
-    )
+    );
 }
 
 export async function shouldShowTab(showConfig: boolean | ((context: TitleContext) => Promise<boolean | null | undefined> | boolean | null | undefined), context: TitleContext) {

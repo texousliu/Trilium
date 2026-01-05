@@ -1,12 +1,15 @@
-import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
-import { ComponentChildren } from "preact";
-import Icon from "./Icon";
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "preact/compat";
 import "./FormList.css";
-import { CommandNames } from "../../components/app_context";
-import { useStaticTooltip } from "./hooks";
-import { handleRightToLeftPlacement, isMobile } from "../../services/utils";
+
+import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import clsx from "clsx";
+import { ComponentChildren, RefObject } from "preact";
+import { type CSSProperties,useEffect, useMemo, useRef, useState } from "preact/compat";
+
+import { CommandNames } from "../../components/app_context";
+import { handleRightToLeftPlacement, isMobile, openInAppHelpFromUrl } from "../../services/utils";
+import FormToggle from "./FormToggle";
+import { useStaticTooltip, useSyncedRef } from "./hooks";
+import Icon from "./Icon";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -32,7 +35,7 @@ export default function FormList({ children, onSelect, style, fullHeight, wrappe
         return () => {
             $wrapperRef.off("hide.bs.dropdown");
             dropdown.dispose();
-        }
+        };
     }, [ triggerRef, wrapperRef ]);
 
     const builtinStyles = useMemo(() => {
@@ -50,8 +53,7 @@ export default function FormList({ children, onSelect, style, fullHeight, wrappe
                 <button
                     ref={triggerRef}
                     type="button" style="display: none;"
-                    data-bs-toggle="dropdown" data-bs-display="static">
-                </button>
+                    data-bs-toggle="dropdown" data-bs-display="static" />
 
                 <div class="dropdown-menu static show" style={{
                     ...style ?? {},
@@ -94,15 +96,17 @@ interface FormListItemOpts {
     description?: string;
     className?: string;
     rtl?: boolean;
+    postContent?: ComponentChildren;
+    itemRef?: RefObject<HTMLLIElement>;
 }
 
 const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
     placement: handleRightToLeftPlacement("right"),
     fallbackPlacements: [ handleRightToLeftPlacement("right") ]
-}
+};
 
-export function FormListItem({ className, icon, value, title, active, disabled, checked, container, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
-    const itemRef = useRef<HTMLLIElement>(null);
+export function FormListItem({ className, icon, value, title, active, disabled, checked, container, onClick, selected, rtl, triggerCommand, description, itemRef: externalItemRef, ...contentProps }: FormListItemOpts) {
+    const itemRef = useSyncedRef<HTMLLIElement>(externalItemRef, null);
 
     if (checked) {
         icon = "bx bx-check";
@@ -132,6 +136,49 @@ export function FormListItem({ className, icon, value, title, active, disabled, 
     );
 }
 
+export function FormListToggleableItem({ title, currentValue, onChange, disabled, helpPage, ...props }: Omit<FormListItemOpts, "onClick" | "children"> & {
+    title: string;
+    currentValue: boolean;
+    helpPage?: string;
+    onChange(newValue: boolean): void | Promise<void>;
+}) {
+    const isWaiting = useRef(false);
+
+    return (
+        <FormListItem
+            {...props}
+            disabled={disabled}
+            onClick={async (e) => {
+                if ((e.target as HTMLElement | null)?.classList.contains("contextual-help")) {
+                    return;
+                }
+
+                e.stopPropagation();
+                if (!disabled && !isWaiting.current) {
+                    isWaiting.current = true;
+                    await onChange(!currentValue);
+                    isWaiting.current = false;
+                }
+            }}>
+            <FormToggle
+                switchOnName={title}
+                switchOffName={title}
+                currentValue={currentValue}
+                onChange={() => {}}
+                afterName={<>
+                    {helpPage && (
+                        <span
+                            class="bx bx-help-circle contextual-help"
+                            onClick={() => openInAppHelpFromUrl(helpPage)}
+                        />
+                    )}
+                    <span class="switch-spacer" />
+                </>}
+            />
+        </FormListItem>
+    );
+}
+
 function FormListContent({ children, badges, description, disabled, disabledTooltip }: Pick<FormListItemOpts, "children" | "badges" | "description" | "disabled" | "disabledTooltip">) {
     return <>
         {children}
@@ -139,7 +186,7 @@ function FormListContent({ children, badges, description, disabled, disabledTool
             <span className={`badge ${className ?? ""}`}>{text}</span>
         ))}
         {disabled && disabledTooltip && (
-            <span class="bx bx-info-circle disabled-tooltip" title={disabledTooltip} />
+            <span class="bx bx-info-circle contextual-help" title={disabledTooltip} />
         )}
         {description && <div className="description">{description}</div>}
     </>;
@@ -154,18 +201,27 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
         <li>
             <h6 className="dropdown-header">{text}</h6>
         </li>
-    )
+    );
 }
 
 export function FormDropdownDivider() {
-    return <div className="dropdown-divider" />;
+    return <div
+        className="dropdown-divider"
+        onClick={e => e.stopPropagation()}
+    />;
 }
 
-export function FormDropdownSubmenu({ icon, title, children }: { icon: string, title: ComponentChildren, children: ComponentChildren }) {
+export function FormDropdownSubmenu({ icon, title, children, dropStart, onDropdownToggleClicked }: {
+    icon: string,
+    title: ComponentChildren,
+    children: ComponentChildren,
+    onDropdownToggleClicked?: () => void,
+    dropStart?: boolean
+}) {
     const [ openOnMobile, setOpenOnMobile ] = useState(false);
 
     return (
-        <li className={`dropdown-item dropdown-submenu ${openOnMobile ? "submenu-open" : ""}`}>
+        <li className={clsx("dropdown-item dropdown-submenu", { "submenu-open": openOnMobile, "dropstart": dropStart })}>
             <span
                 className="dropdown-toggle"
                 onClick={(e) => {
@@ -173,10 +229,13 @@ export function FormDropdownSubmenu({ icon, title, children }: { icon: string, t
 
                     if (isMobile()) {
                         setOpenOnMobile(!openOnMobile);
+                    } else if (onDropdownToggleClicked) {
+                        onDropdownToggleClicked();
                     }
                 }}
             >
-                <Icon icon={icon} />{" "}
+                <Icon icon={icon} />
+                &nbsp;
                 {title}
             </span>
 
@@ -184,5 +243,5 @@ export function FormDropdownSubmenu({ icon, title, children }: { icon: string, t
                 {children}
             </ul>
         </li>
-    )
+    );
 }
