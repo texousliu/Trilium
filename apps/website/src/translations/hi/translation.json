@@ -15,5 +15,16 @@
     "productivity_benefits": {
         "protected_notes_title": "संरक्षित नोट्स",
         "web_clipper_title": "वेब क्लिपर"
+    },
+    "note_types": {
+        "canvas_title": "कैनवास",
+        "mindmap_title": "माइंडमैप"
+    },
+    "extensibility_benefits": {
+        "share_title": "वेब पर नोट्स शेयर करें"
+    },
+    "collections": {
+        "calendar_title": "कैलेंडर",
+        "table_title": "टेबल"
     }
 }
