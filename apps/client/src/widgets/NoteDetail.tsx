@@ -320,10 +320,14 @@ export async function getExtendedWidgetType(note: FNote | null | undefined, note
         resultingType = "readOnlyText";
     } else if ((type === "code" || type === "mermaid") && (await noteContext?.isReadOnly())) {
         resultingType = "readOnlyCode";
+    } else if (type === "markdown" && (await noteContext?.isReadOnly())) {
+        resultingType = "readOnlyMarkdown";
     } else if (type === "text") {
         resultingType = "editableText";
     } else if (type === "code") {
         resultingType = "editableCode";
+    } else if (type === "markdown") {
+        resultingType = "markdown";
     } else if (type === "launcher") {
         resultingType = "doc";
     } else {

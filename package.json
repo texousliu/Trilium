@@ -127,7 +127,9 @@
       "electron-winstaller",
       "esbuild",
       "fs-xattr",
+      "geckodriver",
       "macos-alias",
+      "msw",
       "utf-8-validate"
     ]
   }

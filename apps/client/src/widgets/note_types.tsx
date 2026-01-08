@@ -12,7 +12,7 @@ import { TypeWidgetProps } from "./type_widgets/type_widget";
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
  * for protected session or attachment information.
  */
-export type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" |  "protectedSession" | "aiChat";
+export type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" |  "protectedSession" | "aiChat" | "markdown" | "readOnlyMarkdown";
 
 export type TypeWidget = ((props: TypeWidgetProps) => VNode | JSX.Element | undefined);
 type NoteTypeView = () => (Promise<{ default: TypeWidget } | TypeWidget> | TypeWidget);
@@ -139,6 +139,18 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
     aiChat: {
         view: () => import("./type_widgets/AiChat"),
         className: "ai-chat-widget-container",
+        isFullHeight: true
+    },
+    markdown: {
+        view: () => import("./type_widgets/markdown.tsx"),
+        className: "note-detail-markdown",
+        printable: true,
+        isFullHeight: true
+    },
+    readOnlyMarkdown: {
+        view: () => import("./type_widgets/read_only_markdown.tsx"),
+        className: "note-detail-readonly-markdown",
+        printable: true,
         isFullHeight: true
     }
 };
