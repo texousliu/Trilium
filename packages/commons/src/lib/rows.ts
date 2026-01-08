@@ -3,7 +3,7 @@
 
 export interface AttachmentRow {
     attachmentId?: string;
-    ownerId?: string;
+    ownerId: string;
     role: string;
     mime: string;
     title: string;
@@ -12,7 +12,7 @@ export interface AttachmentRow {
     isProtected?: boolean;
     dateModified?: string;
     utcDateModified?: string;
-    utcDateScheduledForErasureSince?: string;
+    utcDateScheduledForErasureSince?: string | null;
     isDeleted?: boolean;
     deleteId?: string;
     contentLength?: number;

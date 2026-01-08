@@ -74,6 +74,36 @@ export function hmac(secret: any, value: any) {
     return hmac.digest("base64");
 }
 
+/**
+ * Constant-time string comparison to prevent timing attacks.
+ * Uses crypto.timingSafeEqual to ensure comparison time is independent
+ * of how many characters match.
+ *
+ * @param a First string to compare
+ * @param b Second string to compare
+ * @returns true if strings are equal, false otherwise
+ * @note Returns false for null/undefined/non-string inputs. Empty strings are considered equal.
+ */
+export function constantTimeCompare(a: string | null | undefined, b: string | null | undefined): boolean {
+    // Handle null/undefined/non-string cases safely
+    if (typeof a !== "string" || typeof b !== "string") {
+        return false;
+    }
+
+    const bufA = Buffer.from(a, "utf-8");
+    const bufB = Buffer.from(b, "utf-8");
+
+    // If lengths differ, we still do a constant-time comparison
+    // to avoid leaking length information through timing
+    if (bufA.length !== bufB.length) {
+        // Compare bufA against itself to maintain constant time behavior
+        crypto.timingSafeEqual(bufA, bufA);
+        return false;
+    }
+
+    return crypto.timingSafeEqual(bufA, bufB);
+}
+
 export function hash(text: string) {
     text = text.normalize();
 
@@ -131,7 +161,7 @@ export function getContentDisposition(filename: string) {
 }
 
 // render and book are string note in the sense that they are expected to contain empty string
-const STRING_NOTE_TYPES = new Set(["text", "code", "relationMap", "search", "render", "book", "mermaid", "canvas"]);
+const STRING_NOTE_TYPES = new Set(["text", "code", "relationMap", "search", "render", "book", "mermaid", "canvas", "webView"]);
 const STRING_MIME_TYPES = new Set(["application/javascript", "application/x-javascript", "application/json", "application/x-sql", "image/svg+xml"]);
 
 export function isStringNote(type: string | undefined, mime: string) {
@@ -227,27 +257,6 @@ export function timeLimit<T>(promise: Promise<T>, limitMs: number, errorMessage?
             }
         }, limitMs);
     });
-}
-
-export interface DeferredPromise<T> extends Promise<T> {
-    resolve: (value: T | PromiseLike<T>) => void;
-    reject: (reason?: any) => void;
-}
-
-export function deferred<T>(): DeferredPromise<T> {
-    return (() => {
-        let resolve!: (value: T | PromiseLike<T>) => void;
-        let reject!: (reason?: any) => void;
-
-        let promise = new Promise<T>((res, rej) => {
-            resolve = res;
-            reject = rej;
-        }) as DeferredPromise<T>;
-
-        promise.resolve = resolve;
-        promise.reject = reject;
-        return promise as DeferredPromise<T>;
-    })();
 }
 
 export function removeDiacritic(str: string) {
@@ -507,8 +516,8 @@ function slugify(text: string) {
 
 export default {
     compareVersions,
+    constantTimeCompare,
     crash,
-    deferred,
     envToBoolean,
     escapeHtml,
     escapeRegExp,

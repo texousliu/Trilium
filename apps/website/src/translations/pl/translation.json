@@ -1,6 +1,6 @@
 {
     "get-started": {
-        "desktop_title": "Pobierz wersję desktopową (v{{version}})",
+        "desktop_title": "Pobierz aplikację na komputer (v{{version}})",
         "architecture": "Architektura:",
         "older_releases": "Sprawdź poprzednie wydania",
         "server_title": "Skonfiguruj serwer, aby mieć dostęp z wielu urządzeń",
@@ -20,7 +20,7 @@
         "note_structure_description": "Notatki mogą być ułożone w hierarchię. Każda notatka może zawierać w sobie inne, co pozwala umieścić tą samą notatkę w wielu miejscach w hierarchii i nie wymusza to tworzenia dodatkowych folderów.",
         "attributes_title": "Etykiety i korelacje",
         "attributes_description": "Porządkuj łatwiej swoje notatki przy użyciu relacji i etykiet, używaj ich jako odnośników w tabelach i tablicach.",
-        "hoisting_title": "Przestrzenie robocze i windowanie notatek",
+        "hoisting_title": "Przestrzenie robocze i tryb skupienia",
         "hoisting_description": "Łatwo oddziel swoje personalne notatki od tych z pracy przez grupowanie ich w przestrzenie robocze, które pomogą ci się skupić na danym temacie."
     },
     "productivity_benefits": {
@@ -51,7 +51,7 @@
         "mermaid_description": "Twórz diagramy, takie jak schematy blokowe, diagramy klas i sekwencyjne, wykresy Gantta i wiele innych, korzystając z składni Mermaid.",
         "mindmap_title": "Mapy myśli",
         "mindmap_description": "Organizuj wizualnie swoje myśli albo przeprowadź sesję burzy mózgów.",
-        "others_list": "I wiele innych: <0>mapa notatek</0>, <1>mapa powiązań</1>, <2>zapisane wyszukiwania</2>, <3>renderowane notatki</3>, and <4>podgląd stron www</4>.",
+        "others_list": "I wiele innych: <0>mapa notatek</0>, <1>mapa powiązań</1>, <2>zapisane wyszukiwania</2>, <3>renderowane notatki</3> i <4>podgląd stron www</4>.",
         "title": "Wiele sposobów przedstawienia Twoich informacji"
     },
     "extensibility_benefits": {
@@ -132,7 +132,7 @@
         "title": "Inne sposoby wsparcia",
         "way_translate": "Przetłumacz aplikacja na swój natywny język przez <Link>Weblate</Link>.",
         "way_community": "Dołącz do społeczności na <Discussions>GitHub Discussions</Discussions> lub na <Matrix>Matrix</Matrix>.",
-        "way_reports": "Zgłoś błędy przez<Link>GitHub issues</Link>.",
+        "way_reports": "Zgłoś błędy przez <Link>GitHub issues</Link>.",
         "way_document": "Pomóż nam w doskonaleniu dokumentacji przez informowanie nas o lukach albo sam pomóż w tworzeniu treści (dokumentacja, FAQ, poradniki).",
         "way_market": "Powiedz o nas swoim znajomym, na blogu albo na social mediach."
     },

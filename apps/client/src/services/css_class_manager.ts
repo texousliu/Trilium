@@ -1,19 +1,22 @@
-import {readCssVar} from "../utils/css-var";
+import clsx from "clsx";
 import Color, { ColorInstance } from "color";
 
+import {readCssVar} from "../utils/css-var";
+
 const registeredClasses = new Set<string>();
+const colorsWithHue = new Set<string>();
 
 // Read the color lightness limits defined in the theme as CSS variables
 
 const lightThemeColorMaxLightness = readCssVar(
-                                        document.documentElement,
-                                        "tree-item-light-theme-max-color-lightness"
-                                    ).asNumber(70);
+    document.documentElement,
+    "tree-item-light-theme-max-color-lightness"
+).asNumber(70);
 
 const darkThemeColorMinLightness = readCssVar(
-                                        document.documentElement,
-                                        "tree-item-dark-theme-min-color-lightness"
-                                    ).asNumber(50);
+    document.documentElement,
+    "tree-item-dark-theme-min-color-lightness"
+).asNumber(50);
 
 function createClassForColor(colorString: string | null) {
     if (!colorString?.trim()) return "";
@@ -25,25 +28,30 @@ function createClassForColor(colorString: string | null) {
 
     if (!registeredClasses.has(className)) {
         const adjustedColor = adjustColorLightness(color, lightThemeColorMaxLightness!,
-                                                   darkThemeColorMinLightness!);
+            darkThemeColorMinLightness!);
+        const hue = getHue(color);
 
         $("head").append(`<style>
             .${className}, span.fancytree-active.${className} {
+                --original-custom-color: ${color.hex()};
                 --light-theme-custom-color: ${adjustedColor.lightThemeColor};
                 --dark-theme-custom-color: ${adjustedColor.darkThemeColor};
-                --custom-color-hue: ${getHue(color) ?? 'unset'};
+                --custom-color-hue: ${hue ?? 'unset'};
             }
         </style>`);
 
         registeredClasses.add(className);
+        if (hue !== undefined) {
+            colorsWithHue.add(className);
+        }
     }
 
-    return className;
+    return clsx("use-note-color", className, colorsWithHue.has(className) && "with-hue");
 }
 
 function parseColor(color: string) {
     try {
-        return Color(color);
+        return Color(color.toLowerCase());
     } catch (ex) {
         console.error(ex);
     }
@@ -74,6 +82,11 @@ function getHue(color: ColorInstance) {
     if (hslColor.saturationl() > 0) {
         return hslColor.hue();
     }
+}
+
+export function getReadableTextColor(bgColor: string) {
+    const colorInstance = parseColor(bgColor);
+    return !colorInstance || colorInstance?.isLight() ? "#000" : "#fff";
 }
 
 export default {

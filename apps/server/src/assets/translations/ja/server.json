@@ -215,7 +215,7 @@
   "set_password": {
     "title": "パスワードの設定",
     "heading": "パスワードの設定",
-    "description": "ウェブからTriliumを始めるには、パスワードを設定する必要があります。設定したパスワードを使ってログインします。",
+    "description": "web から Trilium を始めるには、パスワードを設定する必要があります。設定したパスワードを使ってログインします。",
     "password": "パスワード",
     "button": "パスワードの設定",
     "password-confirmation": "パスワードの再入力"
@@ -343,7 +343,9 @@
     "etapi-title": "ETAPI",
     "visible-launchers-title": "可視化されたランチャー",
     "inbox-title": "Inbox",
-    "base-abstract-launcher-title": "ベース アブストラクトランチャー"
+    "base-abstract-launcher-title": "ベース アブストラクトランチャー",
+    "command-palette": "コマンドパレットを開く",
+    "zen-mode": "禅モード"
   },
   "notes": {
     "new-note": "新しいノート",

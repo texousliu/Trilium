@@ -27,11 +27,7 @@ Follow the <a class="reference-link" href="Internationalisation%20%20Translatio
 
 ### Adding a new locale
 
-To add a new locale, go to `src/public/translations` with your favorite text editor and copy the `en` directory.
-
-Rename the copy to the ISO code (e.g. `fr`, `ro`) of the language being translated.
-
-Translations with a country-language combination, using their corresponding ISO code (e.g. `fr_FR`, `fr_BE`), has not been tested yet.
+See <a class="reference-link" href="Internationalisation%20%20Translations/Adding%20a%20new%20locale.md">Adding a new locale</a>.
 
 ### Changing the language
 

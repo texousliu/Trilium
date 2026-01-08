@@ -21,7 +21,13 @@
     },
     "bundle-error": {
       "title": "Echec du chargement d'un script personnalisé",
-      "message": "Le script de la note avec l'ID \"{{id}}\", intitulé \"{{title}}\" n'a pas pu être exécuté à cause de\n\n{{message}}"
+      "message": "Le script n'a pas pu être exécuté à cause de\n\n{{message}}"
+    },
+    "widget-list-error": {
+      "title": "Impossible d'obtenir la liste des widgets depuis le serveur"
+    },
+    "widget-render-error": {
+      "title": "Rendu impossible d'un widget React custom"
     }
   },
   "add_link": {
@@ -39,7 +45,10 @@
     "help_on_tree_prefix": "Aide sur le préfixe de l'arbre",
     "prefix": "Préfixe : ",
     "save": "Sauvegarder",
-    "branch_prefix_saved": "Le préfixe de la branche a été enregistré."
+    "branch_prefix_saved": "Le préfixe de la branche a été enregistré.",
+    "edit_branch_prefix_multiple": "Modifier le préfixe de branche pour {{count}} branches",
+    "branch_prefix_saved_multiple": "Le préfixe de la branche a été sauvegardé pour {{count}} branches.",
+    "affected_branches": "Branches impactées ({{count}}):"
   },
   "bulk_actions": {
     "bulk_actions": "Actions groupées",
@@ -104,7 +113,8 @@
     "export_status": "Statut d'exportation",
     "export_in_progress": "Exportation en cours : {{progressCount}}",
     "export_finished_successfully": "L'exportation s'est terminée avec succès.",
-    "format_pdf": "PDF - pour l'impression ou le partage de documents."
+    "format_pdf": "PDF - pour l'impression ou le partage de documents.",
+    "share-format": "HTML pour la publication Web - utilise le même thème que celui utilisé pour les notes partagées, mais peut être publié sous forme de site Web statique."
   },
   "help": {
     "noteNavigation": "Navigation dans les notes",
@@ -158,7 +168,8 @@
     "quickSearch": "aller à la recherche rapide",
     "inPageSearch": "recherche sur la page",
     "title": "Aide-mémoire",
-    "newTabWithActivationNoteLink": "Lorsqu’on clique sur un lien de note, celle-ci s’ouvre et devient active dans un nouvel onglet"
+    "newTabWithActivationNoteLink": "Lorsqu’on clique sur un lien de note, celle-ci s’ouvre et devient active dans un nouvel onglet",
+    "editShortcuts": "Modifier les raccourcis clavier"
   },
   "import": {
     "importIntoNote": "Importer dans la note",
@@ -200,7 +211,8 @@
   "info": {
     "modalTitle": "Message d'information",
     "closeButton": "Fermer",
-    "okButton": "OK"
+    "okButton": "OK",
+    "copy_to_clipboard": "Copier dans le presse-papiers"
   },
   "jump_to_note": {
     "search_button": "Rechercher dans le texte intégral",
@@ -273,7 +285,6 @@
     "download_button": "Télécharger",
     "mime": "MIME : ",
     "file_size": "Taille du fichier :",
-    "preview": "Aperçu :",
     "preview_not_available": "L'aperçu n'est pas disponible pour ce type de note.",
     "restore_button": "Restaurer",
     "delete_button": "Supprimer",
@@ -686,7 +697,13 @@
     "convert_into_attachment_failed": "La conversion de la note '{{title}}' a échoué.",
     "convert_into_attachment_successful": "La note '{{title}}' a été convertie en pièce jointe.",
     "convert_into_attachment_prompt": "Êtes-vous sûr de vouloir convertir la note '{{title}}' en une pièce jointe de la note parente ?",
-    "print_pdf": "Exporter en PDF..."
+    "print_pdf": "Exporter en PDF...",
+    "open_note_on_server": "Ouvrir la note sur le serveur",
+    "view_revisions": "Révisions...",
+    "advanced": "Avancé",
+    "export_as_image": "Exporter en tant qu'image",
+    "export_as_image_png": "PNG",
+    "export_as_image_svg": "SVG (vectoriel)"
   },
   "onclick_button": {
     "no_click_handler": "Le widget bouton '{{componentId}}' n'a pas de gestionnaire de clic défini"
@@ -730,9 +747,10 @@
     "zoom_out_title": "Zoom arrière"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Lien inverse",
-    "backlinks": "{{count}} Liens inverses",
-    "relation": "relation"
+    "relation": "relation",
+    "backlink_one": "{{count}} Lien inverse",
+    "backlink_many": "",
+    "backlink_other": "{{count}} Liens inverses"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Insérer une note enfant",
@@ -743,9 +761,12 @@
   },
   "note_icon": {
     "change_note_icon": "Changer l'icône de note",
-    "category": "Catégorie :",
     "search": "Recherche :",
-    "reset-default": "Réinitialiser l'icône par défaut"
+    "reset-default": "Réinitialiser l'icône par défaut",
+    "filter": "Filtre",
+    "filter-none": "Toutes les icônes",
+    "filter-default": "Icônes par défaut",
+    "icon_tooltip": "{{name}}\nPack d'icônes : {{iconPack}}"
   },
   "basic_properties": {
     "note_type": "Type de note",
@@ -759,7 +780,6 @@
     "grid": "Grille",
     "list": "Liste",
     "collapse_all_notes": "Réduire toutes les notes",
-    "expand_all_children": "Développer tous les enfants",
     "collapse": "Réduire",
     "expand": "Développer",
     "invalid_view_type": "Type de vue non valide '{{type}}'",
@@ -769,7 +789,11 @@
     "geo-map": "Carte géographique",
     "board": "Tableau de bord",
     "include_archived_notes": "Afficher les notes archivées",
-    "presentation": "Présentation"
+    "presentation": "Présentation",
+    "expand_tooltip": "Développe les éléments enfants directs de cette collection (à un niveau). Pour plus d'options, appuyez sur la flèche à droite.",
+    "expand_first_level": "Développer les enfants directs",
+    "expand_nth_level": "Développer sur {{depth}} niveaux",
+    "expand_all_levels": "Développer tous les niveaux"
   },
   "edited_notes": {
     "no_edited_notes_found": "Aucune note modifiée ce jour-là...",
@@ -813,7 +837,9 @@
     "note_size_info": "La taille de la note fournit une estimation approximative des besoins de stockage pour cette note. Il prend en compte le contenu de la note et de ses versions.",
     "calculate": "calculer",
     "subtree_size": "(taille du sous-arbre : {{size}} pour {{count}} notes)",
-    "title": "Infos sur la Note"
+    "title": "Infos sur la Note",
+    "mime": "type MIME",
+    "show_similar_notes": "Afficher des notes similaires"
   },
   "note_map": {
     "open_full": "Développer au maximum",
@@ -876,7 +902,8 @@
     "search_parameters": "Paramètres de recherche",
     "unknown_search_option": "Option de recherche inconnue {{searchOptionName}}",
     "search_note_saved": "La note de recherche a été enregistrée dans {{- notePathTitle}}",
-    "actions_executed": "Les actions ont été exécutées."
+    "actions_executed": "Les actions ont été exécutées.",
+    "view_options": "Afficher les options:"
   },
   "similar_notes": {
     "title": "Notes similaires",
@@ -978,7 +1005,14 @@
     "placeholder": "Saisir le contenu de votre note de code ici..."
   },
   "editable_text": {
-    "placeholder": "Saisir le contenu de votre note ici..."
+    "placeholder": "Saisir le contenu de votre note ici...",
+    "auto-detect-language": "Détecté automatiquement",
+    "editor_crashed_title": "L'éditeur de texte a cessé de fonctionner",
+    "editor_crashed_content": "Votre contenu a été récupéré avec succès, mais certaines de vos modifications les plus récentes n'ont peut-être pas été enregistrées.",
+    "editor_crashed_details_button": "Afficher plus de détails...",
+    "editor_crashed_details_intro": "Si cette erreur se produit plusieurs fois, pensez à la signaler sur GitHub en collant les informations ci-dessous.",
+    "editor_crashed_details_title": "Informations techniques",
+    "keeps-crashing": "Le composant d'édition cesse de fonctionner. Veuillez essayer de redémarrer Trilium. Si le problème persiste, envisager de créer un rapport de bogue."
   },
   "empty": {
     "open_note_instruction": "Ouvrez une note en tapant son titre dans la zone ci-dessous ou choisissez une note dans l'arborescence.",
@@ -991,7 +1025,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "L'affichage de la note protégée nécessite la saisie de votre mot de passe :",
-    "start_session_button": "Démarrer une session protégée <kbd>Entrée</kbd>",
+    "start_session_button": "Démarrer une session protégée",
     "started": "La session protégée a démarré.",
     "wrong_password": "Mot de passe incorrect.",
     "protecting-finished-successfully": "La protection de la note s'est terminée avec succès.",
@@ -1073,9 +1107,9 @@
     "failed": "Échec de la synchronisation : {{message}}"
   },
   "vacuum_database": {
-    "title": "Nettoyage la base de donnée",
+    "title": "Nettoyage de la base de données",
     "description": "Cela reconstruira la base de données, ce qui générera un fichier de base de données généralement plus petit. Aucune donnée ne sera réellement modifiée.",
-    "button_text": "Nettoyer de la base de donnée",
+    "button_text": "Nettoyer la base de données",
     "vacuuming_database": "Nettoyage de la base de données en cours...",
     "database_vacuumed": "La base de données a été nettoyée"
   },
@@ -1106,10 +1140,8 @@
     "title": "Largeur du contenu",
     "default_description": "Trilium limite par défaut la largeur maximale du contenu pour améliorer la lisibilité sur des écrans larges.",
     "max_width_label": "Largeur maximale du contenu en pixels",
-    "apply_changes_description": "Pour appliquer les modifications de largeur du contenu, cliquez sur",
-    "reload_button": "recharger l'interface",
-    "reload_description": "changements par rapport aux options d'apparence",
-    "max_width_unit": "Pixels"
+    "max_width_unit": "Pixels",
+    "centerContent": "Garder le contenu centré"
   },
   "native_title_bar": {
     "title": "Barre de titre native (nécessite le redémarrage de l'application)",
@@ -1148,7 +1180,10 @@
     "unit": "caractères"
   },
   "code_mime_types": {
-    "title": "Types MIME disponibles dans la liste déroulante"
+    "title": "Types MIME disponibles dans la liste déroulante",
+    "tooltip_syntax_highlighting": "Souligner la syntaxe",
+    "tooltip_code_block_syntax": "Blocs de code dans les notes de texte",
+    "tooltip_code_note_syntax": "Notes de code"
   },
   "vim_key_bindings": {
     "use_vim_keybindings_in_code_notes": "Raccourcis clavier Vim",
@@ -1515,7 +1550,8 @@
     "refresh-saved-search-results": "Rafraîchir les résultats de recherche enregistrée",
     "create-child-note": "Créer une note enfant",
     "unhoist": "Désactiver le focus",
-    "toggle-sidebar": "Basculer la barre latérale"
+    "toggle-sidebar": "Basculer la barre latérale",
+    "dropping-not-allowed": "Lâcher des notes à cet endroit n'est pas autorisé"
   },
   "title_bar_buttons": {
     "window-on-top": "Épingler cette fenêtre au premier plan"
@@ -1523,10 +1559,19 @@
   "note_detail": {
     "could_not_find_typewidget": "Impossible de trouver typeWidget pour le type '{{type}}'",
     "printing": "Impression en cours...",
-    "printing_pdf": "Export au format PDF en cours..."
+    "printing_pdf": "Export au format PDF en cours...",
+    "print_report_title": "Imprimer le rapport",
+    "print_report_collection_details_button": "Consulter les détails",
+    "print_report_collection_details_ignored_notes": "Notes ignorées"
   },
   "note_title": {
-    "placeholder": "saisir le titre de la note ici..."
+    "placeholder": "saisir le titre de la note ici...",
+    "created_on": "Créé le <Value />",
+    "last_modified": "Modifié le <Value />",
+    "note_type_switcher_label": "Basculer de {{type}} à :",
+    "note_type_switcher_others": "Autre type de note",
+    "note_type_switcher_templates": "Modèle",
+    "note_type_switcher_collection": "Collection"
   },
   "search_result": {
     "no_notes_found": "Aucune note n'a été trouvée pour les paramètres de recherche donnés.",
@@ -1555,7 +1600,8 @@
   },
   "toc": {
     "table_of_contents": "Table des matières",
-    "options": "Options"
+    "options": "Options",
+    "no_headings": "Pas d'en-tête."
   },
   "watched_file_update_status": {
     "file_last_modified": "Le fichier <code class=\"file-path\"></code> a été modifié pour la dernière fois le <span class=\"file-last-modified\"></span>.",
@@ -1617,9 +1663,6 @@
     "move-to-available-launchers": "Déplacer vers les raccourcis disponibles",
     "duplicate-launcher": "Dupliquer le raccourci <kbd data-command=\"duplicateSubtree\">"
   },
-  "editable-text": {
-    "auto-detect-language": "Détecté automatiquement"
-  },
   "highlighting": {
     "description": "Contrôle la coloration syntaxique des blocs de code à l'intérieur des notes texte, les notes de code ne seront pas affectées.",
     "color-scheme": "Jeu de couleurs",
@@ -1659,7 +1702,8 @@
     "copy-link": "Copier le lien",
     "paste": "Coller",
     "paste-as-plain-text": "Coller comme texte brut",
-    "search_online": "Rechercher «{{term}}» avec {{searchEngine}}"
+    "search_online": "Rechercher «{{term}}» avec {{searchEngine}}",
+    "search_in_trilium": "Rechercher \"{{term}}\" dans Trilium"
   },
   "image_context_menu": {
     "copy_reference_to_clipboard": "Copier la référence dans le presse-papiers",
@@ -1767,12 +1811,6 @@
     "not_started": "Non démarré",
     "title": "Paramètres IA",
     "processed_notes": "Notes traitées",
-    "n_notes_queued_0": "{{ count }} note en attente d’indexation",
-    "n_notes_queued_1": "{{ count }} notes en attente d’indexation",
-    "n_notes_queued_2": "",
-    "notes_indexed_0": "{{ count }} note indexée",
-    "notes_indexed_1": "{{ count }} notes indexées",
-    "notes_indexed_2": "",
     "anthropic_url_description": "URL de base pour l'API Anthropic (par défaut : https ://api.anthropic.com)",
     "anthropic_model_description": "Modèles Anthropic Claude pour la complétion",
     "voyage_settings": "Réglages d'IA Voyage",
@@ -1974,7 +2012,8 @@
     "add-column": "Ajouter une colonne",
     "add-column-placeholder": "Entrez le nom de la colonne...",
     "edit-note-title": "Cliquez pour modifier le titre de la note",
-    "edit-column-title": "Cliquez pour modifier le titre de la colonne"
+    "edit-column-title": "Cliquez pour modifier le titre de la colonne",
+    "column-already-exists": "Cette colonne existe déjà dans le tableau."
   },
   "presentation_view": {
     "edit-slide": "Modifier cette diapositive",
@@ -2058,7 +2097,8 @@
     "button_title": "Exporter le diagramme au format PNG"
   },
   "svg": {
-    "export_to_png": "Le diagramme n'a pas pu être exporté au format PNG."
+    "export_to_png": "Le diagramme n'a pas pu être exporté au format PNG.",
+    "export_to_svg": "Le diagramme n'a pas pu être exporté en SVG."
   },
   "code_theme": {
     "title": "Apparence",
@@ -2082,5 +2122,19 @@
     "note_completion_description": "Si cette option est activée, des liens vers des notes peuvent être créés en tapant `@` suivi du titre d'une note.",
     "slash_commands_enabled": "Activer les commandes slash",
     "slash_commands_description": "Si cette option est activée, les commandes d'édition telles que l'insertion de sauts de ligne ou d'en-têtes peuvent être activées en tapant `/`."
+  },
+  "experimental_features": {
+    "title": "Options expérimentales",
+    "disclaimer": "Ces options sont expérimentales et peuvent provoquer une instabilité. Utilisez avec prudence.",
+    "new_layout_name": "Nouvelle mise en page",
+    "new_layout_description": "Essayez la nouvelle mise en page pour un look plus moderne et un usage améliorée. Sous réserve de changements importants dans les prochaines versions."
+  },
+  "read-only-info": {
+    "read-only-note": "Vous consultez actuellement une note en lecture seule.",
+    "auto-read-only-note": "Cette note s'affiche en mode lecture seule pour un chargement plus rapide.",
+    "edit-note": "Editer la note"
+  },
+  "calendar_view": {
+    "delete_note": "Effacer la note..."
   }
 }

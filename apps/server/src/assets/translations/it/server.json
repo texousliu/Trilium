@@ -147,7 +147,9 @@
     "settings-title": "Impostazioni",
     "llm-chat-title": "Parla con Notes",
     "note-launcher-title": "Scorciatoie delle note",
-    "script-launcher-title": "Scorciatoie degli script"
+    "script-launcher-title": "Scorciatoie degli script",
+    "command-palette": "Apri tavolozza comandi",
+    "zen-mode": "Modalità Zen"
   },
   "notes": {
     "new-note": "Nuova nota",

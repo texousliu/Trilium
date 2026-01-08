@@ -37,5 +37,11 @@
         "apps/server/src/assets/doc_notes/**": true,
         "apps/edit-docs/demo/**": true
     },
-    "kiroAgent.configureMCP": "Disabled"
+    "kiroAgent.configureMCP": "Disabled",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.rules.customizations": [
+        { "rule": "*", "severity": "warn" }
+    ]
 }

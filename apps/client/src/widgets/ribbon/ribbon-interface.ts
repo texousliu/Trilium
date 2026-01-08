@@ -1,7 +1,8 @@
 import { KeyboardActionNames } from "@triliumnext/commons";
+import { VNode } from "preact";
+
 import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
-import { VNode } from "preact";
 
 export interface TabContext {
     note: FNote | null | undefined;
@@ -16,13 +17,14 @@ export interface TabContext {
 
 export interface TitleContext {
     note: FNote | null | undefined;
+    noteContext: NoteContext | undefined;
 }
 
 export interface TabConfiguration {
     title: string | ((context: TitleContext) => string);
     icon: string;
     content: (context: TabContext) => VNode | false;
-    show: boolean | ((context: TitleContext) => boolean | null | undefined);
+    show: boolean | ((context: TitleContext) => Promise<boolean | null | undefined> | boolean | null | undefined);
     toggleCommand?: KeyboardActionNames;
     activate?: boolean | ((context: TitleContext) => boolean);
     /**

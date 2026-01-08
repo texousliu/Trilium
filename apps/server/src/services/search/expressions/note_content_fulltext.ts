@@ -113,7 +113,16 @@ class NoteContentFulltextExp extends Expression {
                 const normalizedFlatText = normalizeSearchText(flatText);
 
                 // Check if =phrase appears in flatText (indicates attribute value match)
-                matches = normalizedFlatText.includes(`=${normalizedPhrase}`);
+                // For single words, use word-boundary matching to avoid substring matches
+                if (!normalizedPhrase.includes(' ')) {
+                    // Single word: look for =word with word boundaries
+                    // Split by = to get attribute values, then check each value for exact word match
+                    const parts = normalizedFlatText.split('=');
+                    matches = parts.slice(1).some(part => this.exactWordMatch(normalizedPhrase, part));
+                } else {
+                    // Multi-word phrase: check for substring match
+                    matches = normalizedFlatText.includes(`=${normalizedPhrase}`);
+                }
 
                 if ((this.operator === "=" && matches) || (this.operator === "!=" && !matches)) {
                     resultNoteSet.add(noteFromBecca);
@@ -122,6 +131,17 @@ class NoteContentFulltextExp extends Expression {
         }
 
         return resultNoteSet;
+    }
+
+    /**
+     * Helper method to check if a single word appears as an exact match in text
+     * @param wordToFind - The word to search for (should be normalized)
+     * @param text - The text to search in (should be normalized)
+     * @returns true if the word is found as an exact match (not substring)
+     */
+    private exactWordMatch(wordToFind: string, text: string): boolean {
+        const words = text.split(/\s+/);
+        return words.some(word => word === wordToFind);
     }
 
     /**
@@ -139,9 +159,8 @@ class NoteContentFulltextExp extends Expression {
             return normalizedContent.includes(normalizedToken);
         }
 
-        // For single words, split content into words and check for exact match
-        const words = normalizedContent.split(/\s+/);
-        return words.some(word => word === normalizedToken);
+        // For single words, use exact word matching to avoid substring matches
+        return this.exactWordMatch(normalizedToken, normalizedContent);
     }
 
     /**
@@ -155,7 +174,14 @@ class NoteContentFulltextExp extends Expression {
         // Join tokens with single space to form the phrase
         const phrase = normalizedTokens.join(" ");
 
-        // Check if the phrase appears as a substring (consecutive words)
+        // For single-word phrases, use word-boundary matching to avoid substring matches
+        // e.g., "asd" should not match "asdfasdf"
+        if (!phrase.includes(' ')) {
+            // Single word: use exact word matching to avoid substring matches
+            return this.exactWordMatch(phrase, normalizedContent);
+        }
+
+        // For multi-word phrases, check if the phrase appears as consecutive words
         if (normalizedContent.includes(phrase)) {
             return true;
         }
@@ -293,13 +319,18 @@ class NoteContentFulltextExp extends Expression {
                 [key: string]: any; // Other properties that may exist
             }
 
-            let canvasContent = JSON.parse(content);
-            const elements: Element[] = canvasContent.elements;
-            const texts = elements
-                .filter((element: Element) => element.type === "text" && element.text) // Filter for 'text' type elements with a 'text' property
-                .map((element: Element) => element.text!); // Use `!` to assert `text` is defined after filtering
+            const canvasContent = JSON.parse(content);
+            const elements = canvasContent.elements;
 
-            content = normalize(texts.toString());
+            if (Array.isArray(elements)) {
+                const texts = elements
+                    .filter((element: Element) => element.type === "text" && element.text) // Filter for 'text' type elements with a 'text' property
+                    .map((element: Element) => element.text!); // Use `!` to assert `text` is defined after filtering
+
+                content = normalize(texts.join(" "));
+            } else {
+                content = "";
+            }
         }
 
         return content.trim();

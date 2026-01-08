@@ -4,7 +4,7 @@ Releasing is mostly handled by the CI:
 *   The version on GitHub is published automatically, including the description with the change log which is taken from the documentation.
 *   A PR is created automatically on the Winget repository to update to the new version.
 
-Releases are usually made directly from the `main` branch.
+Releases are usually made directly from the `main` branch. For hot-fixes the process is the same but with a different branch, consult the <a class="reference-link" href="../Branching%20strategy.md">Branching strategy</a> for more information.
 
 The process is as follows:
 

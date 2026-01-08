@@ -1,12 +1,18 @@
 .board-view {
-  overflow-x: auto;
   position: relative;
   height: 100%;
   user-select: none;
+  overflow-x: auto;
 
   --card-font-size: 0.9em;
   --card-line-height: 1.2;
   --card-padding: 0.6em;
+}
+
+body.mobile .board-view {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .board-view-container {
@@ -14,7 +20,6 @@
   display: flex;
   gap: 1em;
   padding: 1em;
-  padding-bottom: 0;
   align-items: flex-start;
 }
 
@@ -29,6 +34,12 @@
   max-height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+body.mobile .board-view-container .board-column {
+  width: 75vw;
+  max-width: 300px;
+  scroll-snap-align: center;
 }
 
 .board-view-container .board-column.drag-over {
@@ -53,7 +64,21 @@
   align-items: center;
 }
 
-.board-view-container .board-column h3 > .title {
+.board-view-container .board-column h3 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.board-view-container .board-column h3 .counter-badge {
+  background-color: var(--muted-text-color);
+  color: var(--main-background-color);
+  border-radius: 12px;
+  padding: 0.1em 0.6em;
+  font-size: 0.75em;
+  margin-inline-start: 0.5em;
+}
+
+.board-view-container .board-column h3 > .spacer {
   flex-grow: 1;
 }
 
@@ -101,7 +126,8 @@
 
 .board-view-container .board-column > .board-column-content {
   flex-grow: 1;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: 0.5em;
 }
 

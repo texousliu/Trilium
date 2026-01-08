@@ -4,6 +4,7 @@
   <figcaption>Screenshot of the note contextual menu indicating the “Export as PDF”
     option.</figcaption>
 </figure>
+
 <h2>Printing</h2>
 <p>This feature allows printing of notes. It works on both the desktop client,
   but also on the web.</p>
@@ -52,22 +53,47 @@ class="admonition note">
     the default application might seem incorrect (such as opening in GIMP).
     This is because it uses Gnome's “Recommended applications” list.</p>
   <p>To solve this, you can change the recommended application for PDFs via
-    this command line. First, list the available applications via <code>gio mime application/pdf</code> and
+    this command line. First, list the available applications via <code spellcheck="false">gio mime application/pdf</code> and
     then set the desired one. For example to use GNOME's Evince:</p><pre><code class="language-text-x-trilium-auto">gio mime application/pdf</code></pre>
   <h3>Customizing exporting as PDF</h3>
   <p>When exporting to PDF, there are no customizable settings such as page
     orientation, size. However, there are a few&nbsp;<a class="reference-link"
     href="#root/_help_zEY4DaJG4YT5">Attributes</a>&nbsp;to adjust some of the settings:</p>
   <ul>
-    <li data-list-item-id="e059818dc4b086a895efa23fdde670cb0">To print in landscape mode instead of portrait (useful for big diagrams
-      or slides), add <code>#printLandscape</code>.</li>
-    <li data-list-item-id="ebb801d5830e9662602ce85e96e351ee5">By default, the resulting PDF will be in Letter format. It is possible
-      to adjust it to another page size via the <code>#printPageSize</code> attribute,
-      with one of the following values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.</li>
+    <li>To print in landscape mode instead of portrait (useful for big diagrams
+      or slides), add <code spellcheck="false">#printLandscape</code>.</li>
+    <li>By default, the resulting PDF will be in Letter format. It is possible
+      to adjust it to another page size via the <code spellcheck="false">#printPageSize</code> attribute,
+      with one of the following values: <code spellcheck="false">A0</code>,
+      <code
+      spellcheck="false">A1</code>, <code spellcheck="false">A2</code>, <code spellcheck="false">A3</code>,
+        <code
+        spellcheck="false">A4</code>, <code spellcheck="false">A5</code>, <code spellcheck="false">A6</code>,
+          <code
+          spellcheck="false">Legal</code>, <code spellcheck="false">Letter</code>, <code spellcheck="false">Tabloid</code>,
+            <code
+            spellcheck="false">Ledger</code>.</li>
   </ul>
   <aside class="admonition note">
     <p>These options have no effect when used with the printing feature, since
       the user-defined settings are used instead.</p>
+  </aside>
+  <h2>Printing multiple notes</h2>
+  <p>Since v0.100.0, it is possible to print more than one note at the time
+    by using&nbsp;<a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>:</p>
+  <ol>
+    <li>First create a collection.</li>
+    <li>Configure it to use&nbsp;<a class="reference-link" href="#root/_help_mULW0Q3VojwY">List View</a>.</li>
+    <li>Print the collection note normally.</li>
+  </ol>
+  <p>The resulting collection will contain all the children of the collection,
+    while maintaining the hierarchy.</p>
+  <aside class="admonition note">
+    <p>Not all note types are supported when printing or exporting to PDF. When
+      an unsupported note is encountered, it is skipped. At the end, if any of
+      the notes were skipped, a message will be displayed with the possibility
+      of viewing the full list of skipped notes. The same limitations as the
+      ones described in <em>Constraints &amp; limitations</em> apply.</p>
   </aside>
   <h2>Keyboard shortcut</h2>
   <p>It's possible to trigger both printing and export as PDF from the keyboard
@@ -75,9 +101,9 @@ class="admonition note">
     href="#root/_help_4TIF1oA4VQRO">Options</a>&nbsp;and assigning a key combination
     for:</p>
   <ul>
-    <li class="ck-list-marker-italic" data-list-item-id="ed834da40ebe17dd104c66956579e8db8"><em>Print Active Note</em>
+    <li><em>Print Active Note</em>
     </li>
-    <li class="ck-list-marker-italic" data-list-item-id="e12469c162de60af8653a92238f286176"><em>Export Active Note as PDF</em>
+    <li><em>Export Active Note as PDF</em>
     </li>
   </ul>
   <h2>Constraints &amp; limitations</h2>
@@ -85,41 +111,59 @@ class="admonition note">
     supported when printing, in which case the <em>Print</em> and <em>Export as PDF</em> options
     will be disabled.</p>
   <ul>
-    <li data-list-item-id="ecbc8f07fc543357dbe65e874d2812923">For&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;notes:
+    <li>For&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;notes:
       <ul>
-        <li data-list-item-id="e5a65e990187f7457b1ef3b90b3efca65">Line numbers are not printed.</li>
-        <li data-list-item-id="ed32da7175b6215d5c1461029b85310b6">Syntax highlighting is enabled, however a default theme (Visual Studio)
+        <li>Line numbers are not printed.</li>
+        <li>Syntax highlighting is enabled, however a default theme (Visual Studio)
           is enforced.</li>
       </ul>
     </li>
-    <li data-list-item-id="e2336e670a5137a961dbaa520180f1ca3">For&nbsp;<a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>:
+    <li>For&nbsp;<a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>,
+      the following are supported:
       <ul>
-        <li data-list-item-id="e2dfe21a479e4e4574d70e3c818d3580c">Only&nbsp;<a class="reference-link" href="#root/_help_zP3PMqaG71Ct">Presentation</a>&nbsp;is
-          currently supported.</li>
-        <li data-list-item-id="eb710e8646deac11a960fc762ff059ffc">We plan to add support for all the collection types at some point.</li>
+        <li><a class="reference-link" href="#root/_help_mULW0Q3VojwY">List View</a>, allowing
+          to print multiple notes at once while preserving hierarchy (similar to
+          a book).</li>
+        <li><a class="reference-link" href="#root/_help_zP3PMqaG71Ct">Presentation</a>,
+          where each slide/sub-note is displayed.
+          <ul>
+            <li>Most note types are supported, especially the ones that have an image
+              representation such as&nbsp;<a class="reference-link" href="#root/_help_grjYqerjn243">Canvas</a>&nbsp;and&nbsp;
+              <a
+              class="reference-link" href="#root/_help_gBbsAeiuUxI5">Mind Map</a>.</li>
+          </ul>
+        </li>
+        <li><a class="reference-link" href="#root/_help_2FvYrpmOXm29">Table</a>, where the
+          table is rendered in a print-friendly way.
+          <ul>
+            <li>Tables that are too complex (especially if they have multiple columns)
+              might not fit properly, however tables with a large number of rows are
+              supported thanks to pagination.</li>
+            <li>Consider printing in landscape mode, or using <code spellcheck="false">#printLandscape</code> if
+              exporting to PDF.</li>
+          </ul>
+        </li>
+        <li>The rest of the collections are not supported, but we plan to add support
+          for all the collection types at some point.</li>
       </ul>
     </li>
-    <li data-list-item-id="e92e4035db060328f92b290f201746687">Using&nbsp;<a class="reference-link" href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
-      printing is not longer supported, due to a more stable but isolated mechanism.
-      <ul>
-        <li data-list-item-id="e8ceb3650a468052a8728a40f05ba8ba9">We plan to introduce a new mechanism specifically for a print CSS.</li>
-      </ul>
-    </li>
+    <li>Using&nbsp;<a class="reference-link" href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
+      printing is no longer supported, instead a custom <code spellcheck="false">printCss</code> relation
+      needs to be used (see below).</li>
   </ul>
   <h2>Customizing the print CSS</h2>
   <p>As an advanced use case, it's possible to customize the CSS used for printing
     such as adjusting the fonts, sizes or margins. Note that&nbsp;<a class="reference-link"
-    href="#root/pOsGYCXsbNQG/pKK96zzmvBGf/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;will
-    not work for printing.</p>
+    href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;will not work for
+    printing.</p>
   <p>To do so:</p>
   <ul>
-    <li data-list-item-id="e9888834b45670c7ab11c0f229e38e32f">Create a CSS <a href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_6f9hih2hXXZk">code note</a>.</li>
-    <li
-    data-list-item-id="ea9e3983ea0c81ecc73c6cd73bcb3e400">On the note being printed, apply the <code>~printCss</code> relation to
-      point to the newly created CSS code note.</li>
-      <li data-list-item-id="ed4fdf9dd70c9770c03637eb4fb011654">To apply the CSS to multiple notes, consider using <a href="#root/pOsGYCXsbNQG/tC7s2alapj8V/zEY4DaJG4YT5/_help_bwZpz2ajCEwO">inheritable attributes</a> or&nbsp;
-        <a
-        class="reference-link" href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_KC1HB96bqqHX">Templates</a>.</li>
+    <li>Create a CSS <a href="#root/_help_6f9hih2hXXZk">code note</a>.</li>
+    <li>On the note being printed, apply the <code spellcheck="false">~printCss</code> relation
+      to point to the newly created CSS code note.</li>
+    <li>To apply the CSS to multiple notes, consider using <a href="#root/_help_bwZpz2ajCEwO">inheritable attributes</a> or&nbsp;
+      <a
+      class="reference-link" href="#root/_help_KC1HB96bqqHX">Templates</a>.</li>
   </ul>
   <p>For example, to change the font of the document from the one defined by
     the theme or the user to a serif one:</p><pre><code class="language-text-x-trilium-auto">body {
@@ -128,21 +172,22 @@ class="admonition note">
 }</code></pre>
   <p>To remark:</p>
   <ul>
-    <li data-list-item-id="e0fcaa62313f3f428f8243c0631a578b3">Multiple CSS notes can be add by using multiple <code>~printCss</code> relations.</li>
-    <li
-    data-list-item-id="e0388e16113a44b8200aed433f680b795">If the note pointing to the <code>printCss</code> doesn't have the right
-      note type or mime type, it will be ignored.</li>
-      <li data-list-item-id="ec4c3f5dcee6428c4a5e409f1461c2433">If migrating from a previous version where&nbsp;<a class="reference-link"
-        href="#root/pOsGYCXsbNQG/pKK96zzmvBGf/_help_AlhDUqhENtH7">Custom app-wide CSS</a>,
-        there's no need for <code>@media print {</code>  since the style-sheet is
-        used only for printing.</li>
+    <li>Multiple CSS notes can be add by using multiple <code spellcheck="false">~printCss</code> relations.</li>
+    <li>If the note pointing to the <code spellcheck="false">printCss</code> doesn't
+      have the right note type or mime type, it will be ignored.</li>
+    <li>If migrating from a previous version where&nbsp;<a class="reference-link"
+      href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>, there's no need for
+      <code
+      spellcheck="false">@media print {</code> since the style-sheet is used only for printing.</li>
   </ul>
   <h2>Under the hood</h2>
   <p>Both printing and exporting as PDF use the same mechanism: a note is rendered
     individually in a separate webpage that is then sent to the browser or
     the Electron application either for printing or exporting as PDF.</p>
   <p>The webpage that renders a single note can actually be accessed in a web
-    browser. For example <code>http://localhost:8080/#root/WWRGzqHUfRln/RRZsE9Al8AIZ?ntxId=0o4fzk</code> becomes <code>http://localhost:8080/?print#root/WWRGzqHUfRln/RRZsE9Al8AIZ</code>.</p>
+    browser. For example <code spellcheck="false">http://localhost:8080/#root/WWRGzqHUfRln/RRZsE9Al8AIZ?ntxId=0o4fzk</code> becomes
+    <code
+    spellcheck="false">http://localhost:8080/?print#root/WWRGzqHUfRln/RRZsE9Al8AIZ</code>.</p>
   <p>Accessing the print note in a web browser allows for easy debugging to
     understand why a particular note doesn't render well. The mechanism for
     rendering is similar to the one used in&nbsp;<a class="reference-link"

@@ -1,9 +1,10 @@
+import fs from "fs";
+import html from "html";
+import path from "path";
+
 import type NoteMeta from "../../meta/note_meta.js";
 import { escapeHtml, getResourceDir, isDev } from "../../utils";
-import html from "html";
 import { ZipExportProvider } from "./abstract_provider.js";
-import path from "path";
-import fs from "fs";
 import markdownService from "../../import/markdown.js";
 import type BNote from "../../../becca/entities/bnote.js";
 import type BBranch from "../../../becca/entities/bbranch.js";
@@ -16,6 +17,8 @@ export default class HtmlExportProvider extends ZipExportProvider {
     private cssMeta: NoteMeta | null = null;
 
     prepareMeta(metaFile) {
+        if (this.zipExportOptions?.skipExtraFiles) return;
+
         this.navigationMeta = {
             noImport: true,
             dataFileName: "navigation.html"
@@ -65,23 +68,23 @@ export default class HtmlExportProvider extends ZipExportProvider {
             }
 
             if (content.length < 100_000) {
-                content = html.prettyPrint(content, { indent_size: 2 })
+                content = html.prettyPrint(content, { indent_size: 2 });
             }
             content = this.rewriteFn(content as string, noteMeta);
-            return content;
-        } else if (noteMeta.type === "markdown" && typeof content === "string") {
-            // Handle markdown note type - convert to HTML for HTML export
-            let htmlContent = markdownService.renderToHtml(content, title);
+        return content;
+    } else if (noteMeta.type === "markdown" && typeof content === "string") {
+        // Handle markdown note type - convert to HTML for HTML export
+        let htmlContent = markdownService.renderToHtml(content, title);
 
-            if (!htmlContent.substr(0, 100).toLowerCase().includes("<html") && !this.zipExportOptions?.skipHtmlTemplate) {
-                if (!noteMeta?.notePath?.length) {
-                    throw new Error("Missing note path.");
-                }
+        if (!htmlContent.substr(0, 100).toLowerCase().includes("<html") && !this.zipExportOptions?.skipHtmlTemplate) {
+            if (!noteMeta?.notePath?.length) {
+                throw new Error("Missing note path.");
+            }
 
-                const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
-                const htmlTitle = escapeHtml(title);
+            const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
+            const htmlTitle = escapeHtml(title);
 
-                htmlContent = `<html>
+            htmlContent = `<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,16 +100,16 @@ export default class HtmlExportProvider extends ZipExportProvider {
     </div>
 </body>
 </html>`;
-            }
-
-            if (htmlContent.length < 100_000) {
-                htmlContent = html.prettyPrint(htmlContent, { indent_size: 2 })
-            }
-            htmlContent = this.rewriteFn(htmlContent, noteMeta);
-            return htmlContent;
-        } else {
-            return content;
         }
+
+        if (htmlContent.length < 100_000) {
+            htmlContent = html.prettyPrint(htmlContent, { indent_size: 2 })
+        }
+        htmlContent = this.rewriteFn(htmlContent, noteMeta);
+        return htmlContent;
+    }
+    return content;
+
     }
 
     mapExtension(type: string | null, mime: string, existingExtension: string, format: ExportFormat) {
@@ -119,6 +122,8 @@ export default class HtmlExportProvider extends ZipExportProvider {
     }
 
     afterDone(rootMeta: NoteMeta) {
+        if (this.zipExportOptions?.skipExtraFiles) return;
+
         if (!this.navigationMeta || !this.indexMeta || !this.cssMeta) {
             throw new Error("Missing meta.");
         }

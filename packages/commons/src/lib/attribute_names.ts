@@ -4,7 +4,10 @@
 type Labels = {
     color: string;
     iconClass: string;
+    workspace: boolean;
+    workspaceTabBackgroundColor: string;
     workspaceIconClass: string;
+    executeButton: boolean;
     executeDescription: string;
     executeTitle: string;
     limit: string; // should be probably be number
@@ -17,6 +20,7 @@ type Labels = {
     language: string;
     originalFileName: string;
     pageUrl: string;
+    dateNote: string;
 
     // Search
     searchString: string;
@@ -24,16 +28,21 @@ type Labels = {
     orderBy: string;
     orderDirection: string;
 
+    // Launch bar
+    bookmarkFolder: boolean;
+    command: string;
+    keyboardShortcut: string;
+
     // Collection-specific
     viewType: string;
     status: string;
     pageSize: number;
     geolocation: string;
-    readOnly: boolean;
-    expanded: boolean;
+    expanded: string;
     "calendar:hideWeekends": boolean;
     "calendar:weekNumbers": boolean;
     "calendar:view": string;
+    "calendar:initialDate": string;
     "map:style": string;
     "map:scale": boolean;
     "board:groupBy": string;
@@ -41,6 +50,12 @@ type Labels = {
     includeArchived: boolean;
     "presentation:theme": string;
     "slide:background": string;
+
+    // Note-type specific
+    webViewSrc: string;
+    readOnly: boolean;
+    mapType: string;
+    mapRootNoteId: string;
 }
 
 /**
@@ -49,7 +64,11 @@ type Labels = {
  */
 type Relations = [
     "searchScript",
-    "ancestor"
+    "ancestor",
+
+    // Launcher-specific
+    "target",
+    "widget"
 ];
 
 export type LabelNames = keyof Labels;

@@ -279,7 +279,6 @@
     "collapse": "Minimizează",
     "collapse_all_notes": "Minimizează toate notițele",
     "expand": "Expandează",
-    "expand_all_children": "Expandează toate subnotițele",
     "grid": "Grilă",
     "invalid_view_type": "Mod de afișare incorect „{{type}}”",
     "list": "Listă",
@@ -290,7 +289,11 @@
     "geo-map": "Hartă geografică",
     "board": "Tablă Kanban",
     "include_archived_notes": "Afișează notițele arhivate",
-    "presentation": "Prezentare"
+    "presentation": "Prezentare",
+    "expand_tooltip": "Expandează subnotițele directe ale acestei colecții (un singur nivel de adâncime). Pentru mai multe opțiuni, apăsați săgeata din dreapta.",
+    "expand_first_level": "Expandează subnotițele directe",
+    "expand_nth_level": "Expandează pe {{depth}} nivele",
+    "expand_all_levels": "Expandează pe toate nivelele"
   },
   "bookmark_switch": {
     "bookmark": "Semn de carte",
@@ -302,7 +305,10 @@
     "edit_branch_prefix": "Editează prefixul ramurii",
     "help_on_tree_prefix": "Informații despre prefixe de ierarhie",
     "prefix": "Prefix: ",
-    "save": "Salvează"
+    "save": "Salvează",
+    "edit_branch_prefix_multiple": "Editează prefixul pentru {{count}} ramuri",
+    "branch_prefix_saved_multiple": "Prefixul a fost modificat pentru {{count}} ramuri.",
+    "affected_branches": "Ramuri afectate ({{count}}):"
   },
   "bulk_actions": {
     "affected_notes": "Notițe afectate",
@@ -381,7 +387,10 @@
     "trilium_api_docs_button_title": "Deschide documentația API pentru Trilium"
   },
   "code_mime_types": {
-    "title": "Tipuri MIME disponibile în meniul derulant"
+    "title": "Tipuri MIME disponibile în meniul derulant",
+    "tooltip_syntax_highlighting": "Evidențiere de sintaxă",
+    "tooltip_code_block_syntax": "Blocuri de cod în notițe text",
+    "tooltip_code_note_syntax": "Notițe de tip cod"
   },
   "confirm": {
     "also_delete_note": "Șterge și notița",
@@ -482,7 +491,14 @@
     "placeholder": "Scrieți conținutul notiței de cod aici..."
   },
   "editable_text": {
-    "placeholder": "Scrieți conținutul notiței aici..."
+    "placeholder": "Scrieți conținutul notiței aici...",
+    "auto-detect-language": "Automat",
+    "keeps-crashing": "Componenta de editare se blochează în continuu. Încercați să reporniți Trilium. Dacă problema persistă, luați în considerare să raportați această problemă.",
+    "editor_crashed_title": "Editorul text a avut o eroare",
+    "editor_crashed_content": "Conținutul a fost recuperat cu succes, dar este posibil ca o parte din cele mai recente modificări ale dvs. să nu se fi salvat.",
+    "editor_crashed_details_button": "Mai multe detalii...",
+    "editor_crashed_details_intro": "Dacă întâmpinați frecvent această eroare, considerați să o raportați pe GitHub copiând informația de mai jos.",
+    "editor_crashed_details_title": "Informații tehnice"
   },
   "edited_notes": {
     "deleted": "(șters)",
@@ -537,7 +553,8 @@
     "opml_version_1": "OPML v1.0 - text simplu",
     "opml_version_2": "OPML v2.0 - permite și HTML",
     "format_html": "HTML - recomandat deoarece păstrează toata formatarea",
-    "format_pdf": "PDF - cu scopul de printare sau partajare."
+    "format_pdf": "PDF - cu scopul de printare sau partajare.",
+    "share-format": "HTML pentru publicare web - folosește aceeași temă pentru notițele partajate, dar se pot publica într-un website static."
   },
   "fast_search": {
     "description": "Căutarea rapidă dezactivează căutarea la nivel de conținut al notițelor cu scopul de a îmbunătăți performanța de căutare pentru baze de date mari.",
@@ -670,7 +687,8 @@
     "tabShortcuts": "Scurtături pentru tab-uri",
     "troubleshooting": "Unelte pentru depanare",
     "newTabWithActivationNoteLink": "pe o legătură către o notiță deschide și activează notița într-un tab nou",
-    "title": "Ghid rapid"
+    "title": "Ghid rapid",
+    "editShortcuts": "Editează scurtăturile de la tastatură"
   },
   "hide_floating_buttons_button": {
     "button_title": "Ascunde butoanele"
@@ -753,7 +771,8 @@
       "placeholder": "Introduceți etichetele HTML, câte unul pe linie",
       "reset_button": "Resetează la lista implicită",
       "title": "Etichete HTML la importare"
-    }
+    },
+    "importZipRecommendation": "Când importați un fișier ZIP, ierarhia notițelor va reflecta structura subdirectoarelor din arhivă."
   },
   "include_archived_notes": {
     "include_archived_notes": "Include notițele arhivate"
@@ -771,7 +790,8 @@
   "info": {
     "closeButton": "Închide",
     "modalTitle": "Mesaj informativ",
-    "okButton": "OK"
+    "okButton": "OK",
+    "copy_to_clipboard": "Copiază în clipboard"
   },
   "inherited_attribute_list": {
     "no_inherited_attributes": "Niciun atribut moștenit.",
@@ -796,13 +816,11 @@
     "modal_body_text": "Din cauza limitărilor la nivel de navigator, nu este posibilă citirea clipboard-ului din JavaScript. Inserați Markdown-ul pentru a-l importa în caseta de mai jos și dați clic pe butonul Import"
   },
   "max_content_width": {
-    "apply_changes_description": "Pentru a aplica schimbările de lățime a conținutului, dați click pe",
     "default_description": "În mod implicit Trilium limitează lățimea conținutului pentru a îmbunătăți lizibilitatea pentru ferestrele maximizate pe ecrane late.",
     "max_width_label": "Lungimea maximă a conținutului",
     "max_width_unit": "pixeli",
-    "reload_button": "reîncarcă interfața",
-    "reload_description": "schimbări din opțiunile de afișare",
-    "title": "Lățime conținut"
+    "title": "Lățime conținut",
+    "centerContent": "Centrează conținutul"
   },
   "mobile_detail_menu": {
     "delete_this_note": "Șterge această notiță",
@@ -855,11 +873,14 @@
     "print_note": "Imprimare notiță",
     "re_render_note": "Reinterpretare notiță",
     "save_revision": "Salvează o nouă revizie",
+    "advanced": "Advansat",
     "search_in_note": "Caută în notiță",
     "convert_into_attachment_failed": "Nu s-a putut converti notița „{{title}}”.",
     "convert_into_attachment_successful": "Notița „{{title}}” a fost convertită în atașament.",
     "convert_into_attachment_prompt": "Doriți convertirea notiței „{{title}}” într-un atașament al notiței părinte?",
-    "print_pdf": "Exportare ca PDF..."
+    "print_pdf": "Exportare ca PDF...",
+    "open_note_on_server": "Deschide notița pe server",
+    "view_revisions": "Revizii ale notițelor..."
   },
   "note_erasure_timeout": {
     "deleted_notes_erased": "Notițele șterse au fost eliminate permanent.",
@@ -985,7 +1006,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "Afișarea notițelor protejate necesită introducerea parolei:",
-    "start_session_button": "Deschide sesiunea protejată <kbd>enter</kbd>",
+    "start_session_button": "Deschide sesiunea protejată",
     "started": "Sesiunea protejată este activă.",
     "wrong_password": "Parolă greșită.",
     "protecting-finished-successfully": "Protejarea a avut succes.",
@@ -1082,7 +1103,6 @@
     "mime": "MIME: ",
     "no_revisions": "Nu există încă nicio revizie pentru această notiță...",
     "note_revisions": "Revizii ale notiței",
-    "preview": "Previzualizare:",
     "preview_not_available": "Nu este disponibilă o previzualizare pentru acest tip de notiță.",
     "restore_button": "Restaurează",
     "revision_deleted": "Revizia notiței a fost ștearsă.",
@@ -1249,11 +1269,11 @@
     "timeout_unit": "milisecunde"
   },
   "table_of_contents": {
-    "description": "Tabela de conținut va apărea în notițele de tip text atunci când notița are un număr de titluri mai mare decât cel definit. Acest număr se poate personaliza:",
+    "description": "Cuprinsul va apărea în notițele de tip text atunci când notița are un număr de titluri mai mare decât cel definit. Acest număr se poate personaliza:",
     "unit": "titluri",
-    "disable_info": "De asemenea se poate dezactiva tabela de conținut setând o valoare foarte mare.",
-    "shortcut_info": "Se poate configura și o scurtatură pentru a comuta rapid vizibilitatea panoului din dreapta (inclusiv tabela de conținut) în Opțiuni -> Scurtături (denumirea „toggleRightPane”).",
-    "title": "Tabelă de conținut"
+    "disable_info": "De asemenea se poate dezactiva cuprinsul setând o valoare foarte mare.",
+    "shortcut_info": "Se poate configura și o scurtatură pentru a comuta rapid vizibilitatea panoului din dreapta (inclusiv cuprinsul) în Opțiuni -> Scurtături (denumirea „toggleRightPane”).",
+    "title": "Cuprins"
   },
   "text_auto_read_only_size": {
     "description": "Marchează pragul în care o notiță de o anumită dimensiune va fi afișată în mod de citire (pentru motive de performanță).",
@@ -1352,8 +1372,9 @@
     "title": "Factorul de zoom (doar pentru versiunea desktop)"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} legături de retur",
-    "backlinks": "{{count}} legături de retur",
+    "backlink_one": "{{count}} legătură de retur",
+    "backlink_few": "{{count}} legături de retur",
+    "backlink_other": "{{count}} de legături de retur",
     "relation": "relație"
   },
   "svg_export_button": {
@@ -1393,7 +1414,7 @@
     "hoist-note": "Focalizează notița",
     "unhoist-note": "Defocalizează notița",
     "converted-to-attachments": "{{count}} notițe au fost convertite în atașamente.",
-    "convert-to-attachment-confirm": "Doriți convertirea notițelor selectate în atașamente ale notiței părinte?",
+    "convert-to-attachment-confirm": "Doriți convertirea notițelor selectate în atașamente ale notiței părinte? Această operațiune se aplică doar notițelor de tip imagine, celelalte vor fi ignorate.",
     "open-in-popup": "Editare rapidă",
     "archive": "Arhivează",
     "unarchive": "Dezarhivează"
@@ -1461,7 +1482,6 @@
   },
   "note_icon": {
     "change_note_icon": "Schimbă iconița notiței",
-    "category": "Categorie:",
     "reset-default": "Resetează la iconița implicită",
     "search": "Căutare:"
   },
@@ -1500,16 +1520,21 @@
     "hoist-this-note-workspace": "Focalizează spațiul de lucru",
     "refresh-saved-search-results": "Reîmprospătează căutarea salvată",
     "unhoist": "Defocalizează notița",
-    "toggle-sidebar": "Comută bara laterală"
+    "toggle-sidebar": "Comută bara laterală",
+    "dropping-not-allowed": "Aici nu este permisă plasarea notițelor."
   },
   "title_bar_buttons": {
     "window-on-top": "Menține fereastra mereu vizibilă"
   },
   "note_detail": {
-    "could_not_find_typewidget": "Nu s-a putut găsi widget-ul corespunzător tipului „{{type}}”"
+    "could_not_find_typewidget": "Nu s-a putut găsi widget-ul corespunzător tipului „{{type}}”",
+    "printing": "Imprimare în curs...",
+    "printing_pdf": "Exportare ca PDF în curs..."
   },
   "note_title": {
-    "placeholder": "introduceți titlul notiței aici..."
+    "placeholder": "introduceți titlul notiței aici...",
+    "created_on": "Creată la <Value />",
+    "last_modified": "Modificată la <Value />"
   },
   "revisions_snapshot_limit": {
     "erase_excess_revision_snapshots": "Șterge acum reviziile excesive",
@@ -1611,9 +1636,6 @@
     "move-to-visible-launchers": "Mută în Lansatoare vizibile",
     "reset": "Resetează"
   },
-  "editable-text": {
-    "auto-detect-language": "Automat"
-  },
   "highlighting": {
     "color-scheme": "Temă de culori",
     "description": "Controlează evidențierea de sintaxă pentru blocurile de cod în interiorul notițelor text, notițele de tip cod nu vor fi afectate de aceste setări.",
@@ -1653,7 +1675,8 @@
     "cut": "Decupează",
     "paste": "Lipește",
     "paste-as-plain-text": "Lipește doar textul",
-    "search_online": "Caută „{{term}}” cu {{searchEngine}}"
+    "search_online": "Caută „{{term}}” cu {{searchEngine}}",
+    "search_in_trilium": "Caută „{{term}}” în Trilium"
   },
   "image_context_menu": {
     "copy_image_to_clipboard": "Copiază imaginea în clipboard",
@@ -1663,7 +1686,8 @@
     "open_note_in_new_split": "Deschide notița într-un panou nou",
     "open_note_in_new_tab": "Deschide notița într-un tab nou",
     "open_note_in_new_window": "Deschide notița într-o fereastră nouă",
-    "open_note_in_popup": "Editare rapidă"
+    "open_note_in_popup": "Editare rapidă",
+    "open_note_in_other_split": "Deschide notița în celălalt panou"
   },
   "note_autocomplete": {
     "clear-text-field": "Șterge conținutul casetei",
@@ -1742,7 +1766,8 @@
   },
   "note_language": {
     "configure-languages": "Configurează limbile...",
-    "not_set": "Nedefinită"
+    "not_set": "Nicio limbă setată",
+    "help-on-languages": "Informații despre limba conținutului..."
   },
   "png_export_button": {
     "button_title": "Exportă diagrama ca PNG"
@@ -1874,13 +1899,7 @@
     "indexing_stopped": "Indexarea s-a oprit",
     "indexing_in_progress": "Indexare în curs...",
     "last_indexed": "Ultima indexare",
-    "n_notes_queued_0": "O notiță adăugată în coada de indexare",
-    "n_notes_queued_1": "{{ count }} notițe adăugate în coada de indexare",
-    "n_notes_queued_2": "{{ count }} de notițe adăugate în coada de indexare",
     "note_chat": "Discuție pe baza notițelor",
-    "notes_indexed_0": "O notiță indexată",
-    "notes_indexed_1": "{{ count }} notițe indexate",
-    "notes_indexed_2": "{{ count }} de notițe indexate",
     "sources": "Surse",
     "start_indexing": "Indexează",
     "use_advanced_context": "Folosește context îmbogățit",
@@ -1944,7 +1963,8 @@
     "oauth_user_not_logged_in": "Neautentificat!"
   },
   "svg": {
-    "export_to_png": "Diagrama nu a putut fi exportată în PNG."
+    "export_to_png": "Diagrama nu a putut fi exportată în PNG.",
+    "export_to_svg": "Diagrama nu a putut fi exportată în SVG."
   },
   "code_theme": {
     "title": "Afișare",
@@ -2017,7 +2037,8 @@
     "new-item-placeholder": "Introduceți titlul notiței...",
     "add-column-placeholder": "Introduceți denumirea coloanei...",
     "edit-note-title": "Clic pentru a edita titlul notiței",
-    "edit-column-title": "Clic pentru a edita titlul coloanei"
+    "edit-column-title": "Clic pentru a edita titlul coloanei",
+    "column-already-exists": "Această coloană deja există."
   },
   "command_palette": {
     "tree-action-name": "Listă de notițe: {{name}}",
@@ -2079,5 +2100,46 @@
     "edit-slide": "Editați acest slide",
     "start-presentation": "Începeți prezentarea",
     "slide-overview": "Afișați o imagine de ansamblu a slide-urilor"
+  },
+  "read-only-info": {
+    "read-only-note": "Vizualizați o notiță în modul doar în citire.",
+    "auto-read-only-note": "Această notiță este afișată în modul doar în citire din motive de performanță.",
+    "edit-note": "Editează notița"
+  },
+  "calendar_view": {
+    "delete_note": "Șterge notița..."
+  },
+  "note-color": {
+    "clear-color": "Înlăturați culoarea notiței",
+    "set-color": "Setați culoarea notiței",
+    "set-custom-color": "Setați culoare personalizată pentru notiță"
+  },
+  "popup-editor": {
+    "maximize": "Comută la editorul principal"
+  },
+  "experimental_features": {
+    "title": "Opțiuni experimentale",
+    "disclaimer": "Aceste opțiuni sunt experimentale și pot cauza instabilitate. Folosiți cu prudență.",
+    "new_layout_name": "Aspect nou",
+    "new_layout_description": "Încercați noul aspect pentru un design mai modern și mai ușor de utilizat. Poate surveni modificări semnificative în următoarele release-uri."
+  },
+  "server": {
+    "unknown_http_error_title": "Eroare de comunicare cu server-ul",
+    "unknown_http_error_content": "Cod: {{statusCode}}\nURL: {{method}} {{url}}\nMesaj: {{message}}",
+    "traefik_blocks_requests": "Dacă utilizați reverse proxy-ul Traefik, acesta a introdus o schimbare majoră ce afectează comunicarea cu server-ul."
+  },
+  "tab_history_navigation_buttons": {
+    "go-back": "Înapoi la notița anterioară",
+    "go-forward": "Înainte către notița următoare"
+  },
+  "breadcrumb_badges": {
+    "read_only_explicit": "Mod citire",
+    "read_only_explicit_description": "Această notiță a fost setată explicit să fie doar în citire.\nClick pentru a o edita temporar.",
+    "read_only_auto": "Mod citire auto",
+    "read_only_auto_description": "Această notița a fost setată automată să fie în mod doar de citire din motive de performanță. Această limită automată este ajustabilă din setări.\n\nClick pentru a o edita temporar.",
+    "read_only_temporarily_disabled": "Editabilă temporar",
+    "read_only_temporarily_disabled_description": "Această notiță se poate modifica, deși în mod normal ea este doar în citire. Notița va reveni la modul doar în citire imediat ce navigați către altă notiță.\n\nClick pentru a re-activa modul doar în citire.",
+    "shared_publicly": "Partajată public",
+    "shared_locally": "Partajată local"
   }
 }

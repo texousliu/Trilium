@@ -1,17 +1,18 @@
-import appContext from "./components/app_context.js";
-import utils from "./services/utils.js";
-import noteTooltipService from "./services/note_tooltip.js";
-import bundleService from "./services/bundle.js";
-import toastService from "./services/toast.js";
-import noteAutocompleteService from "./services/note_autocomplete.js";
-import electronContextMenu from "./menus/electron_context_menu.js";
-import glob from "./services/glob.js";
-import { t } from "./services/i18n.js";
-import options from "./services/options.js";
+import "autocomplete.js/index_jquery.js";
+
 import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
-import "boxicons/css/boxicons.min.css";
-import "autocomplete.js/index_jquery.js";
+
+import appContext from "./components/app_context.js";
+import electronContextMenu from "./menus/electron_context_menu.js";
+import bundleService from "./services/bundle.js";
+import glob from "./services/glob.js";
+import { t } from "./services/i18n.js";
+import noteAutocompleteService from "./services/note_autocomplete.js";
+import noteTooltipService from "./services/note_tooltip.js";
+import options from "./services/options.js";
+import toastService from "./services/toast.js";
+import utils from "./services/utils.js";
 
 await appContext.earlyInit();
 
@@ -22,6 +23,7 @@ bundleService.getWidgetBundlesByParent().then(async (widgetBundles) => {
     appContext.setLayout(new DesktopLayout(widgetBundles));
     appContext.start().catch((e) => {
         toastService.showPersistent({
+            id: "critical-error",
             title: t("toast.critical-error.title"),
             icon: "alert",
             message: t("toast.critical-error.message", { message: e.message })
@@ -58,10 +60,14 @@ function initOnElectron() {
 
     initDarkOrLightMode(style);
     initTransparencyEffects(style, currentWindow);
+    initFullScreenDetection(currentWindow);
 
     if (options.get("nativeTitleBarVisible") !== "true") {
         initTitleBarButtons(style, currentWindow);
     }
+
+    // Clear navigation history on frontend refresh.
+    currentWindow.webContents.navigationHistory.clear();
 }
 
 function initTitleBarButtons(style: CSSStyleDeclaration, currentWindow: Electron.BrowserWindow) {
@@ -85,6 +91,11 @@ function initTitleBarButtons(style: CSSStyleDeclaration, currentWindow: Electron
         const yOffset = parseInt(style.getPropertyValue("--native-titlebar-darwin-y-offset"), 10);
         currentWindow.setWindowButtonPosition({ x: xOffset, y: yOffset });
     }
+}
+
+function initFullScreenDetection(currentWindow: Electron.BrowserWindow) {
+    currentWindow.on("enter-full-screen", () => document.body.classList.add("full-screen"));
+    currentWindow.on("leave-full-screen", () => document.body.classList.remove("full-screen"));
 }
 
 function initTransparencyEffects(style: CSSStyleDeclaration, currentWindow: Electron.BrowserWindow) {

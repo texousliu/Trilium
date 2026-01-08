@@ -1,4 +1,4 @@
-FROM docker.cnb.cool/texous/docker-images-chrom/node:24.10.0-alpine_amd64 AS builder
+FROM node:24.12.0-alpine AS builder
 RUN corepack enable
 
 # 安装 Python、构建工具和依赖
@@ -21,7 +21,7 @@ COPY ./docker/package.json ./docker/pnpm-workspace.yaml /usr/src/app/
 # We have to use --no-frozen-lockfile due to CKEditor patches
 RUN pnpm install --no-frozen-lockfile --prod && pnpm rebuild
 
-FROM docker.cnb.cool/texous/docker-images-chrom/node:24.10.0-alpine_amd64
+FROM node:24.12.0-alpine
 # Install runtime dependencies
 RUN apk add --no-cache su-exec shadow
 

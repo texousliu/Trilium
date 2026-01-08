@@ -130,9 +130,6 @@
     "move-to-available-launchers": "Перейти до доступних лаунчерів",
     "duplicate-launcher": "Дублікат програми запуску <kbd data-command=\"duplicateSubtree\">"
   },
-  "editable-text": {
-    "auto-detect-language": "Автовизначено"
-  },
   "highlighting": {
     "color-scheme": "Схема кольорів",
     "title": "Блоки коду",
@@ -324,7 +321,6 @@
     "download_button": "Завантажити",
     "mime": "МІМЕ: ",
     "file_size": "Розмір файлу:",
-    "preview": "Попередній перегляд:",
     "preview_not_available": "Попередній перегляд недоступний для цього типу нотатки.",
     "diff_on": "Показати різницю",
     "diff_off": "Показати вміст",
@@ -839,9 +835,10 @@
     "zoom_out_title": "Зменшити масштаб"
   },
   "zpetne_odkazy": {
-    "backlink": "{{count}} Зворотне посилання",
-    "backlinks": "{{count}} Зворотні посилання",
-    "relation": "зв'язок"
+    "relation": "зв'язок",
+    "backlink_one": "{{count}} Зворотне посилання",
+    "backlink_few": "{{count}} Зворотні посилання",
+    "backlink_many": "{{count}} Зворотні посилання"
   },
   "mobile_detail_menu": {
     "insert_child_note": "Вставити дочірню нотатку",
@@ -851,7 +848,6 @@
   },
   "note_icon": {
     "change_note_icon": "Змінити значок нотатки",
-    "category": "Категорія:",
     "search": "Пошук:",
     "reset-default": "Скинути значок до стандартного значення"
   },
@@ -867,7 +863,6 @@
     "grid": "Сітка",
     "list": "Список",
     "collapse_all_notes": "Згорнути всі нотатки",
-    "expand_all_children": "Розгорнути всі дочірні",
     "collapse": "Згорнути",
     "expand": "Розгорнути",
     "book_properties": "Властивості Колекції",
@@ -1076,7 +1071,8 @@
     "placeholder": "Введіть тут вміст вашої нотатки з кодом..."
   },
   "editable_text": {
-    "placeholder": "Введіть тут вміст вашої нотатки..."
+    "placeholder": "Введіть тут вміст вашої нотатки...",
+    "auto-detect-language": "Автовизначено"
   },
   "empty": {
     "open_note_instruction": "Відкрийте нотатку, ввівши її заголовок в поле нижче, або виберіть нотатку в дереві.",
@@ -1089,7 +1085,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "Для відображення захищеної нотатки потрібно ввести пароль:",
-    "start_session_button": "Розпочати захищений сеанс <kbd>enter</kbd>",
+    "start_session_button": "Розпочати захищений сеанс",
     "started": "Захищений сеанс розпочато.",
     "wrong_password": "Неправильний пароль.",
     "protecting-finished-successfully": "Захист успішно завершено.",
@@ -1204,10 +1200,7 @@
     "title": "Ширина вмісту",
     "default_description": "Trilium за замовчуванням обмежує максимальну ширину вмісту, щоб поліпшити читабельність на широкоформатних екранах у режимі максимального розширення.",
     "max_width_label": "Максимальна ширина вмісту",
-    "max_width_unit": "пікселів",
-    "apply_changes_description": "Щоб застосувати зміни ширини вмісту, натисніть на",
-    "reload_button": "перезавантажити інтерфейс",
-    "reload_description": "зміни в параметрах зовнішнього вигляду"
+    "max_width_unit": "пікселів"
   },
   "native_title_bar": {
     "title": "Нативний рядок заголовка (потрібен перезапуск)",
@@ -1354,13 +1347,7 @@
     "indexing_stopped": "Індексацію зупинено",
     "indexing_in_progress": "Триває індексація...",
     "last_indexed": "Остання індексація",
-    "n_notes_queued_0": "{{ count }} нотатка в черзі на індексацію",
-    "n_notes_queued_1": "{{ count }} нотатки в черзі на індексацію",
-    "n_notes_queued_2": "{{ count }} нотаток в черзі на індексацію",
     "note_chat": "Нотатка Чат",
-    "notes_indexed_0": "{{ count }} нотатка індексовано",
-    "notes_indexed_1": "{{ count }} нотатки індексовано",
-    "notes_indexed_2": "{{ count }} нотаток індексовано",
     "sources": "Джерела",
     "start_indexing": "Почати індексацію",
     "use_advanced_context": "Використовувати розширений контекст",

@@ -77,11 +77,13 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     imageJpegQuality: number;
     leftPaneWidth: number;
     rightPaneWidth: number;
+    rightPaneCollapsedItems: string;
     eraseEntitiesAfterTimeInSeconds: number;
     eraseEntitiesAfterTimeScale: number;
     autoReadonlySizeText: number;
     autoReadonlySizeCode: number;
     maxContentWidth: number;
+    centerContent: boolean;
     minTocHeadings: number;
     eraseUnusedAttachmentsAfterSeconds: number;
     eraseUnusedAttachmentsAfterTimeScale: number;
@@ -120,7 +122,6 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     downloadImagesAutomatically: boolean;
     checkForUpdates: boolean;
     disableTray: boolean;
-    promotedAttributesOpenInRibbon: boolean;
     editedNotesOpenInRibbon: boolean;
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
@@ -131,6 +132,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     /** Whether keyboard auto-completion for editing commands is triggered when typing `/`. */
     textNoteSlashCommandsEnabled: boolean;
     backgroundEffects: boolean;
+    newLayout: boolean;
 
     // Share settings
     redirectBareDomain: boolean;
@@ -155,6 +157,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeOpenAiModel: string;
     aiSelectedProvider: string;
     seenCallToActions: string;
+    experimentalFeatures: string;
 }
 
 export type OptionNames = keyof OptionDefinitions;
