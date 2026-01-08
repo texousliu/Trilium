@@ -38,6 +38,8 @@ export default function TableOfContents() {
             {((noteType === "text" && isReadOnly) || (noteType === "doc")) && <ReadOnlyTextTableOfContents />}
             {noteType === "text" && !isReadOnly && <EditableTextTableOfContents />}
             {noteType === "file" && noteMime === "application/pdf" && <PdfTableOfContents />}
+            {((noteType === "markdown" && isReadOnly) || noteType === "readOnlyMarkdown") && <ReadOnlyMarkdownTableOfContents />}
+            {noteType === "markdown" && !isReadOnly && <EditableMarkdownTableOfContents />}
         </RightPanelWidget>
     );
 }
@@ -242,5 +244,34 @@ function extractTocFromStaticHtml(el: HTMLElement | null) {
     }
 
     return headings;
+}
+
+//#region Read-only markdown
+function ReadOnlyMarkdownTableOfContents() {
+    const { note, noteContext } = useActiveNoteContext();
+    const contentEl = useContentElement(noteContext);
+    const headings = extractTocFromStaticHtml(contentEl);
+
+    const scrollToHeading = useCallback((heading: DomHeading) => {
+        heading.element.scrollIntoView();
+    }, []);
+
+    return <AbstractTableOfContents
+        headings={headings}
+        scrollToHeading={scrollToHeading}
+    />;
+}
+
+//#region Editable markdown
+function EditableMarkdownTableOfContents() {
+    const { note, noteContext } = useActiveNoteContext();
+    const data = useGetContextData("toc");
+
+    return (
+        <AbstractTableOfContents
+            headings={data?.headings || []}
+            scrollToHeading={data?.scrollToHeading || (() => {})}
+        />
+    );
 }
 //#endregion

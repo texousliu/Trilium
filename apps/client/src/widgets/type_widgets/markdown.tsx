@@ -15,6 +15,7 @@ interface MarkdownEditorState {
 export default function Markdown({ note, viewScope, ntxId, parentComponent, noteContext }: TypeWidgetProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const fallbackTextareaRef = useRef<HTMLTextAreaElement>(null);
+    const editorRef = useRef<any>(null);
     const [editorState, setEditorState] = useState<MarkdownEditorState>({
         content: "",
         isEditorReady: false,
@@ -36,6 +37,65 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
         }
     });
 
+    // Extract headings from markdown content
+    const extractHeadings = (markdown: string) => {
+        const headings: Array<{ id: string; level: number; text: string }> = [];
+        const lines = markdown.split('\n');
+        const headingRegex = /^(#{1,6})\s+(.*)$/;
+
+        lines.forEach((line, index) => {
+            const match = line.match(headingRegex);
+            if (match) {
+                const level = match[1].length;
+                const text = match[2].trim();
+                const id = `heading-${index}-${Date.now()}`;
+                headings.push({ id, level, text });
+            }
+        });
+
+        return headings;
+    };
+
+    // Update TOC in context
+    const updateTableOfContents = (content: string) => {
+        const headings = extractHeadings(content);
+
+        if (noteContext) {
+            noteContext.setContextData("toc", {
+                headings,
+                scrollToHeading: (heading: { id: string; level: number; text: string }) => {
+                    // Find the heading in the editor content and scroll to it
+                    const content = editorRef.current?.getMarkdown() || "";
+                    const lines = content.split('\n');
+                    let lineIndex = 0;
+                    let headingFound = false;
+
+                    for (let i = 0; i < lines.length; i++) {
+                        const match = lines[i].match(/^(#{1,6})\s+(.*)$/);
+                        if (match && match[2].trim() === heading.text) {
+                            lineIndex = i;
+                            headingFound = true;
+                            break;
+                        }
+                    }
+
+                    if (headingFound && editorRef.current) {
+                        // Scroll to the line in the editor
+                        const editorElement = editorRef.current.el;
+                        const editorContent = editorElement.querySelector('.toastui-editor-contents');
+                        if (editorContent) {
+                            // Toast UI Editor uses CodeMirror internally, so we need to scroll to the line
+                            const codeMirror = editorRef.current.editor.codeMirror;
+                            if (codeMirror) {
+                                codeMirror.scrollIntoView({ line: lineIndex, ch: 0 });
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    };
+
     useEffect(() => {
         const initializeEditor = async () => {
             setEditorState(prev => ({ ...prev, isLoading: true }));
@@ -44,6 +104,9 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                 const blob = await note.getBlob();
                 const markdownContent = blob?.content || "";
                 setEditorState(prev => ({ ...prev, content: markdownContent }));
+
+                // Update TOC initially
+                updateTableOfContents(markdownContent);
 
                 // Try to load Toast UI Editor
                 try {
@@ -87,11 +150,17 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                         }
                     });
 
+                    // Store editor reference
+                    editorRef.current = editor;
+
                     // Set up change listener
                     editor.on('change', () => {
                         const newContent = editor.getMarkdown();
                         setEditorState(prev => ({ ...prev, content: newContent }));
                         spacedUpdate.scheduleUpdate();
+
+                        // Update TOC on content change
+                        updateTableOfContents(newContent);
                     });
 
                     setEditorState(prev => ({ ...prev, isEditorReady: true, isFallbackMode: false, isLoading: false }));
@@ -100,6 +169,10 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                     return () => {
                         try {
                             editor.destroy();
+                            // Clear TOC when editor is destroyed
+                            if (noteContext) {
+                                noteContext.setContextData("toc", { headings: [], scrollToHeading: () => {} });
+                            }
                         } catch (e) {
                             console.warn("Error destroying Toast UI Editor:", e);
                         }
@@ -123,7 +196,14 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
         };
 
         initializeEditor();
-    }, [note, spacedUpdate]);
+    }, [note, noteContext, spacedUpdate]);
+
+    // Update TOC for fallback mode when content changes
+    useEffect(() => {
+        if (editorState.isFallbackMode) {
+            updateTableOfContents(editorState.content);
+        }
+    }, [editorState.isFallbackMode, editorState.content, noteContext]);
 
     const handleFallbackInput = (e: Event) => {
         const target = e.target as HTMLTextAreaElement;

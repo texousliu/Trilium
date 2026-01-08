@@ -156,7 +156,8 @@ export default class TocWidget extends RightPanelWidget {
 
         const isHelpNote = this.note.type === "doc" && this.note.noteId.startsWith("_help");
         const isTextNote = this.note.type === "text";
-        const isNoteSupported = isTextNote || isHelpNote;
+        const isMarkdownNote = this.note.type === "markdown" || this.note.type === "readOnlyMarkdown";
+        const isNoteSupported = isTextNote || isHelpNote || isMarkdownNote;
 
         return isNoteSupported
             && !this.noteContext?.viewScope?.tocTemporarilyHidden
@@ -185,10 +186,10 @@ export default class TocWidget extends RightPanelWidget {
         }
 
         // Check for type text unconditionally in case alwaysShowWidget is set
-        if (this.note.type === "text") {
+        if (this.note.type === "text" || this.note.type === "markdown" || this.note.type === "readOnlyMarkdown") {
             const blob = await note.getBlob();
             if (blob) {
-                const toc = await this.getToc(blob.content);
+                const toc = await this.getToc(blob.content, this.note.type);
                 this.#updateToc(toc);
             }
             return;
@@ -205,7 +206,7 @@ export default class TocWidget extends RightPanelWidget {
                 const $contentEl = await this.noteContext?.getContentElement();
                 if ($contentEl) {
                     const content = $contentEl.html();
-                    const toc = await this.getToc(content);
+                    const toc = await this.getToc(content, this.note.type);
                     this.#updateToc(toc);
                 } else {
                     console.warn("Unable to get content element for doctype");
@@ -284,10 +285,7 @@ export default class TocWidget extends RightPanelWidget {
      *         with an onclick event that will cause the document to scroll to
      *         the desired position.
      */
-    async getToc(html: string): Promise<Toc> {
-        // Regular expression for headings <h1>...</h1> using non-greedy
-        // matching and backreferences
-        const headingTagsRegex = /<h(\d+)[^>]*>(.*?)<\/h\1>/gi;
+    async getToc(content: string, noteType: string): Promise<Toc> {
 
         // Use jquery to build the table rather than html text, since it makes
         // it easier to set the onclick event that will be executed with the
@@ -304,12 +302,45 @@ export default class TocWidget extends RightPanelWidget {
         const tocCollapsedHeadings = this.noteContext!.viewScope!.tocCollapsedHeadings as Set<string>;
         const validHeadingKeys = new Set<string>(); // Used to clean up obsolete entries in tocCollapsedHeadings
 
+        // Extract headings based on note type
+        const headings: Array<{ level: number; text: string }> = [];
+
+        if (noteType === "markdown" || noteType === "readOnlyMarkdown") {
+            // Parse markdown headings like # Heading 1
+            const markdownHeadingRegex = /^\s*(#{1,6})\s+(.*)$/gm;
+            let match: RegExpExecArray | null;
+
+            while ((match = markdownHeadingRegex.exec(content)) !== null) {
+                // Convert markdown # (level 1) to Trilium's starting level (h2 = level 2)
+                const markdownLevel = match[1].length;
+                // Trilium uses h2 as the first available level, so adjust accordingly
+                const triliumLevel = Math.min(markdownLevel + 1, 7);
+
+                headings.push({
+                    level: triliumLevel,
+                    text: match[2].trim()
+                });
+            }
+        } else {
+            // Parse HTML headings like <h1>Heading 1</h1>
+            const headingTagsRegex = /<h(\d+)[^>]*>(.*?)<\/h\1>/gi;
+            let match: RegExpExecArray | null;
+
+            while ((match = headingTagsRegex.exec(content)) !== null) {
+                headings.push({
+                    level: parseInt(match[1]),
+                    text: match[2]
+                });
+            }
+        }
+
         let headingCount = 0;
-        for (let m: RegExpMatchArray | null = null, headingIndex = 0; (m = headingTagsRegex.exec(html)) !== null; headingIndex++) {
+        for (let headingIndex = 0; headingIndex < headings.length; headingIndex++) {
+            const heading = headings[headingIndex];
             //
             // Nest/unnest whatever necessary number of ordered lists
             //
-            const newLevel = parseInt(m[1]);
+            const newLevel = heading.level;
             const levelDelta = newLevel - curLevel;
             if (levelDelta > 0) {
                 // Open as many lists as newLevel - curLevel
@@ -336,12 +367,17 @@ export default class TocWidget extends RightPanelWidget {
             // Create the list item and set up the click callback
             //
 
-            const headingText = await this.replaceMathTextWithKatax(m[2]);
+            const headingText = await this.replaceMathTextWithKatax(heading.text);
             const $itemContent = $('<div class="item-content">').html(headingText);
             const $li = $("<li>").append($itemContent)
                 .on("click", () => this.jumpToHeading(headingIndex));
             $ols[$ols.length - 1].append($li);
-            headingCount = headingIndex;
+
+            // Add heading key to validHeadingKeys
+            const headingKey = `h${heading.level}_${headingIndex}_${heading.text.trim()}`;
+            validHeadingKeys.add(headingKey);
+
+            headingCount = headingIndex + 1;
             $previousLi = $li;
         }
 
