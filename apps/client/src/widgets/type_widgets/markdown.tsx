@@ -39,7 +39,7 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
 
     // Extract headings from markdown content
     const extractHeadings = (markdown: string) => {
-        const headings: Array<{ id: string; level: number; text: string }> = [];
+        const headings: Array<{ id: string; level: number; text: string; lineIndex: number }> = [];
         const lines = markdown.split('\n');
         const headingRegex = /^(#{1,6})\s+(.*)$/;
 
@@ -49,7 +49,7 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                 const level = match[1].length;
                 const text = match[2].trim();
                 const id = `heading-${index}-${Date.now()}`;
-                headings.push({ id, level, text });
+                headings.push({ id, level, text, lineIndex: index });
             }
         });
 
@@ -63,33 +63,59 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
         if (noteContext) {
             noteContext.setContextData("toc", {
                 headings,
-                scrollToHeading: (heading: { id: string; level: number; text: string }) => {
-                    // Find the heading in the editor content and scroll to it
-                    const content = editorRef.current?.getMarkdown() || "";
-                    const lines = content.split('\n');
-                    let lineIndex = 0;
-                    let headingFound = false;
+                scrollToHeading: (targetHeading: { id: string; level: number; text: string; lineIndex: number }) => {
+                    if (!editorRef.current) return;
 
-                    for (let i = 0; i < lines.length; i++) {
-                        const match = lines[i].match(/^(#{1,6})\s+(.*)$/);
-                        if (match && match[2].trim() === heading.text) {
-                            lineIndex = i;
-                            headingFound = true;
-                            break;
-                        }
-                    }
+                    try {
+                        const editor = editorRef.current;
 
-                    if (headingFound && editorRef.current) {
-                        // Scroll to the line in the editor
-                        const editorElement = editorRef.current.el;
-                        const editorContent = editorElement.querySelector('.toastui-editor-contents');
-                        if (editorContent) {
-                            // Toast UI Editor uses CodeMirror internally, so we need to scroll to the line
-                            const codeMirror = editorRef.current.editor.codeMirror;
-                            if (codeMirror) {
-                                codeMirror.scrollIntoView({ line: lineIndex, ch: 0 });
+                        // Define different line heights for different content types
+                        const lineHeights = editor.isWysiwygMode() ? {
+                            content: 20.8,  // Regular content line height: 13px * 160% = 20.8px
+                            h1: 28,         // Heading 1 line height from CSS
+                            h2: 23,         // Heading 2 line height from CSS
+                            h3: 18,         // Heading 3 line height from CSS
+                            h4: 18,         // Heading 4 line height from CSS
+                            h5: 17,         // Heading 5 line height from CSS
+                            h6: 17          // Heading 6 line height from CSS
+                        } : {
+                            content: 19.5, // Regular content line height
+                            h1: 36,      // Heading 1 line height
+                            h2: 33,      // Heading 2 line height
+                            h3: 30,      // Heading 3 line height
+                            h4: 27,      // Heading 4 line height
+                            h5: 24,      // Heading 5 line height
+                            h6: 21       // Heading 6 line height
+                        };
+
+                        // Get the current content
+                        const content = editor.getMarkdown();
+                        const lines = content.split('\n');
+                        let scrollPosition = 0;
+
+                        // Iterate through all lines up to the target heading's line index
+                        for (let i = 0; i < targetHeading.lineIndex; i++) {
+                            const line = lines[i];
+                            const match = line.match(/^\s*(#{1,6})\s+(.*)$/);
+
+                            if (match) {
+                                // This is a heading, use heading line height
+                                const headingLevel = match[1].length;
+                                const headingType = `h${headingLevel}` as keyof typeof lineHeights;
+                                scrollPosition += lineHeights[headingType];
+                                if (i === 0 && headingLevel === 1) {
+                                    scrollPosition -= 38;
+                                }
+                            } else {
+                                // This is regular content, use content line height
+                                scrollPosition += lineHeights.content;
                             }
                         }
+
+                        // Apply the calculated scroll position
+                        editor.setScrollTop(scrollPosition);
+                    } catch (error) {
+                        console.error("Error scrolling to heading:", error);
                     }
                 }
             });
@@ -204,6 +230,20 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
             updateTableOfContents(editorState.content);
         }
     }, [editorState.isFallbackMode, editorState.content, noteContext]);
+
+    // Update TOC when note changes and editor is ready
+    useEffect(() => {
+        if (editorState.content && !editorState.isLoading) {
+            updateTableOfContents(editorState.content);
+        }
+
+        // Cleanup function to clear TOC when component unmounts or note changes
+        return () => {
+            if (noteContext) {
+                noteContext.setContextData("toc", { headings: [], scrollToHeading: () => {} });
+            }
+        };
+    }, [note, editorState.content, editorState.isLoading, noteContext]);
 
     const handleFallbackInput = (e: Event) => {
         const target = e.target as HTMLTextAreaElement;

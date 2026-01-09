@@ -17,6 +17,7 @@ const escape = utils.escapeHtml;
  * Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
  */
 class CustomMarkdownRenderer extends Renderer {
+    private headingCounter: Record<string, number> = {};
 
     override heading(data: Tokens.Heading): string {
         // Treat h1 as raw text.
@@ -24,7 +25,18 @@ class CustomMarkdownRenderer extends Renderer {
             return `<h1>${data.text}</h1>`;
         }
 
-        return super.heading(data).trimEnd();
+        // Generate unique id for each heading
+        const baseId = data.text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '');
+
+        if (!this.headingCounter[baseId]) {
+            this.headingCounter[baseId] = 1;
+        } else {
+            this.headingCounter[baseId]++;
+        }
+
+        const uniqueId = this.headingCounter[baseId] > 1 ? `${baseId}-${this.headingCounter[baseId]}` : baseId;
+
+        return `<h${data.depth} id="${uniqueId}">${data.text}</h${data.depth}>`.trimEnd();
     }
 
     override paragraph(data: Tokens.Paragraph): string {

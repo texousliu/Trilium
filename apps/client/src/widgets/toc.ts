@@ -315,7 +315,7 @@ export default class TocWidget extends RightPanelWidget {
                 const markdownLevel = match[1].length;
                 // Trilium uses h2 as the first available level, so adjust accordingly
                 const triliumLevel = Math.min(markdownLevel + 1, 7);
-
+                
                 headings.push({
                     level: triliumLevel,
                     text: match[2].trim()

@@ -96,9 +96,21 @@ const mobileLogoHeight = logoHeight && logoWidth ? 32 / (logoWidth / logoHeight)
 const shareRootLink = subRoot.note.hasLabel("shareRootLink") ? subRoot.note.getLabelValue("shareRootLink") : `./${subRoot.note.noteId}`;
 const headingRe = /(<h[1-6]>)(.+?)(<\/h[1-6]>)/g;
 const headingMatches = [...content.matchAll(headingRe)];
+const slugCounter = {};
 content = content.replaceAll(headingRe, (...match) => {
-    const slug = utils.slugify(utils.stripTags(match[2]));
-    match[0] = match[0].replace(match[3], `<a id="${slug}" class="toc-anchor" name="${slug}" href="#${slug}">#</a>${match[3]}`);
+    const headingText = utils.stripTags(match[2]);
+    const baseSlug = utils.slugify(headingText);
+    
+    // Generate unique slug for each heading
+    if (!slugCounter[baseSlug]) {
+        slugCounter[baseSlug] = 1;
+    } else {
+        slugCounter[baseSlug]++;
+    }
+    
+    const uniqueSlug = slugCounter[baseSlug] > 1 ? `${baseSlug}-${slugCounter[baseSlug]}` : baseSlug;
+    
+    match[0] = match[0].replace(match[3], `<a id="${uniqueSlug}" class="toc-anchor" name="${uniqueSlug}" href="#${uniqueSlug}">#</a>${match[3]}`);
     return match[0];
 });
 %>
@@ -200,16 +212,32 @@ content = content.replaceAll(headingRe, (...match) => {
         <%
         if (headingMatches.length > 1) {
             const level = (m) => parseInt(m[1].replace(/[<h>]+/g, ""));
+            
+            // Reset slug counter for TOC generation
+            const tocSlugCounter = {};
+            const getUniqueSlug = (text) => {
+                const headingText = utils.stripTags(text);
+                const baseSlug = utils.slugify(headingText);
+                
+                if (!tocSlugCounter[baseSlug]) {
+                    tocSlugCounter[baseSlug] = 1;
+                } else {
+                    tocSlugCounter[baseSlug]++;
+                }
+                
+                return tocSlugCounter[baseSlug] > 1 ? `${baseSlug}-${tocSlugCounter[baseSlug]}` : baseSlug;
+            };
 
             const toc = [
                 {
                     level: level(headingMatches[0]),
                     name: headingMatches[0][2],
+                    slug: getUniqueSlug(headingMatches[0][2]),
                     children: []
                 }
             ];
             const last = (arr = toc) => arr[arr.length - 1];
-            const makeEntry = (m) => ({level: level(m), name: m[2], children: []});
+            const makeEntry = (m) => ({level: level(m), name: m[2], slug: getUniqueSlug(m[2]), children: []});
             const getLevelArr = (lvl, arr = toc) => {
                 if (arr[0].level === lvl) return arr;
                 const top = last(arr);

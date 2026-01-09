@@ -19,6 +19,7 @@ interface RawHeading {
 
 interface HeadingsWithNesting extends RawHeading {
     children: HeadingsWithNesting[];
+    element?: HTMLHeadingElement; // Add element property to support direct scrolling
 }
 
 export interface HeadingContext {
@@ -111,6 +112,7 @@ function buildHeadingTree(headings: RawHeading[]): HeadingsWithNesting[] {
     const stack: HeadingsWithNesting[] = [root];
 
     for (const h of headings) {
+        // Create node and preserve all properties from the original heading (including element)
         const node: HeadingsWithNesting = { ...h, children: [] };
 
         // Pop until we find a parent with lower level
@@ -220,8 +222,13 @@ function ReadOnlyTextTableOfContents() {
     const contentEl = useContentElement(noteContext);
     const headings = extractTocFromStaticHtml(contentEl);
 
-    const scrollToHeading = useCallback((heading: DomHeading) => {
-        heading.element.scrollIntoView();
+    const scrollToHeading = useCallback((heading: HeadingsWithNesting) => {
+        if (heading.element) {
+            heading.element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     }, []);
 
     return <AbstractTableOfContents
@@ -234,12 +241,25 @@ function extractTocFromStaticHtml(el: HTMLElement | null) {
     if (!el) return [];
 
     const headings: DomHeading[] = [];
+    const headingTextCount: Record<string, number> = {};
+
     for (const headingEl of el.querySelectorAll<HTMLHeadingElement>("h1,h2,h3,h4,h5,h6")) {
+        const text = headingEl.textContent || "";
+
+        // Count occurrences of this heading text to handle duplicates
+        if (!headingTextCount[text]) {
+            headingTextCount[text] = 0;
+        }
+        headingTextCount[text]++;
+
+        // Create a unique id based on text and occurrence count for debugging purposes
+        const uniqueId = `${text}-${headingTextCount[text]}`;
+
         headings.push({
-            id: randomString(),
+            id: randomString(), // Keep random id for React key uniqueness
             level: parseInt(headingEl.tagName.substring(1), 10),
-            text: headingEl.textContent,
-            element: headingEl
+            text: text, // Use original text for display
+            element: headingEl // Keep direct reference to the element for precise scrolling
         });
     }
 
@@ -252,8 +272,13 @@ function ReadOnlyMarkdownTableOfContents() {
     const contentEl = useContentElement(noteContext);
     const headings = extractTocFromStaticHtml(contentEl);
 
-    const scrollToHeading = useCallback((heading: DomHeading) => {
-        heading.element.scrollIntoView();
+    const scrollToHeading = useCallback((heading: HeadingsWithNesting) => {
+        if (heading.element) {
+            heading.element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     }, []);
 
     return <AbstractTableOfContents

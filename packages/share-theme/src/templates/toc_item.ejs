@@ -1,10 +1,9 @@
 <%
 const strippedName = utils.stripTags(entry.name);
-const slug = utils.slugify(strippedName);
 %>
 
 <li>
-    <a href="#<%= slug %>">
+    <a href="#<%= entry.slug %>">
         <span><%= strippedName %></span>
     </a>
 
