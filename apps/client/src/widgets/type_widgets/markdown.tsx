@@ -33,12 +33,13 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
             };
         },
         onContentChange(newContent) {
+            console.log("onContentChange");
             setEditorState(prev => ({ ...prev, content: newContent }));
         }
     });
 
-    // Extract headings from markdown content
-    const extractHeadings = (markdown: string) => {
+    // Extract headings from markdown content - fallback for when editor instance is not available
+    const extractHeadingsFromContent = (markdown: string) => {
         const headings: Array<{ id: string; level: number; text: string; lineIndex: number }> = [];
         const lines = markdown.split('\n');
         const headingRegex = /^(#{1,6})\s+(.*)$/;
@@ -53,12 +54,32 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
             }
         });
 
+        console.log('Extracted headings from content:');
+        return headings;
+    };
+
+    // Extract headings directly from editor instance
+    const extractHeadingsFromEditor = (editor: any) => {
+        // For Toast UI Editor, we can get the markdown content directly from the editor
+        // and then parse it for headings. This is more reliable than parsing from content state
+        const markdown = editor.getMarkdown();
+        const headings = extractHeadingsFromContent(markdown);
+        console.log('Extracted headings from editor:', headings);
         return headings;
     };
 
     // Update TOC in context
-    const updateTableOfContents = (content: string) => {
-        const headings = extractHeadings(content);
+    const updateTableOfContents = () => {
+        console.log("updateTableOfContents");
+        let headings;
+
+        // Prioritize getting headings directly from editor instance if available
+        if (editorRef.current) {
+            headings = extractHeadingsFromEditor(editorRef.current);
+        } else {
+            // Fallback to extracting from content string
+            headings = extractHeadingsFromContent(editorState.content);
+        }
 
         if (noteContext) {
             noteContext.setContextData("toc", {
@@ -88,7 +109,7 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                             h6: 21       // Heading 6 line height
                         };
 
-                        // Get the current content
+                        // Get the current content directly from editor
                         const content = editor.getMarkdown();
                         const lines = content.split('\n');
                         let scrollPosition = 0;
@@ -123,7 +144,9 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
     };
 
     useEffect(() => {
+        console.log("useEffect one");
         const initializeEditor = async () => {
+            console.log("initializeEditor");
             setEditorState(prev => ({ ...prev, isLoading: true }));
 
             try {
@@ -132,7 +155,7 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                 setEditorState(prev => ({ ...prev, content: markdownContent }));
 
                 // Update TOC initially
-                updateTableOfContents(markdownContent);
+                updateTableOfContents();
 
                 // Try to load Toast UI Editor
                 try {
@@ -185,8 +208,8 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                         setEditorState(prev => ({ ...prev, content: newContent }));
                         spacedUpdate.scheduleUpdate();
 
-                        // Update TOC on content change
-                        updateTableOfContents(newContent);
+                        // Update TOC on content change - now gets content directly from editor
+                        updateTableOfContents();
                     });
 
                     setEditorState(prev => ({ ...prev, isEditorReady: true, isFallbackMode: false, isLoading: false }));
@@ -195,10 +218,7 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
                     return () => {
                         try {
                             editor.destroy();
-                            // Clear TOC when editor is destroyed
-                            if (noteContext) {
-                                noteContext.setContextData("toc", { headings: [], scrollToHeading: () => {} });
-                            }
+                            // Removed TOC clearing to prevent loss when switching notes
                         } catch (e) {
                             console.warn("Error destroying Toast UI Editor:", e);
                         }
@@ -224,34 +244,37 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
         initializeEditor();
     }, [note, noteContext, spacedUpdate]);
 
-    // Update TOC for fallback mode when content changes
-    useEffect(() => {
-        if (editorState.isFallbackMode) {
-            updateTableOfContents(editorState.content);
-        }
-    }, [editorState.isFallbackMode, editorState.content, noteContext]);
+    // // Single unified TOC update effect for all cases
+    // useEffect(() => {
+    //     console.log("useEffect second");
+    //     // Only update TOC if we have content or if content is empty but note is set
+    //     // This ensures TOC is properly updated even for empty notes
+    //     updateTableOfContents();
 
-    // Update TOC when note changes and editor is ready
-    useEffect(() => {
-        if (editorState.content && !editorState.isLoading) {
-            updateTableOfContents(editorState.content);
-        }
+    //     // Refresh TOC after a short delay to ensure content is fully loaded
+    //     // This helps with race conditions during note switching
+    //     const timer = setTimeout(() => {
+    //         updateTableOfContents();
+    //     }, 100);
 
-        // Cleanup function to clear TOC when component unmounts or note changes
-        return () => {
-            if (noteContext) {
-                noteContext.setContextData("toc", { headings: [], scrollToHeading: () => {} });
-            }
-        };
-    }, [note, editorState.content, editorState.isLoading, noteContext]);
+    //     return () => {
+    //         clearTimeout(timer);
+    //     };
+    // }, [note, editorState.content, editorState.isLoading, editorState.isFallbackMode, noteContext]);
+
+    // Remove component unmount cleanup that clears TOC data
+    // This prevents TOC from disappearing when switching note types
+
 
     const handleFallbackInput = (e: Event) => {
+        console.log("handleFallbackInput");
         const target = e.target as HTMLTextAreaElement;
         setEditorState(prev => ({ ...prev, content: target.value }));
         spacedUpdate.scheduleUpdate();
     };
 
     const handleFallbackKeyDown = (e: KeyboardEvent) => {
+        console.log("handleFallbackKeyDown");
         if (e.key === 'Tab') {
             e.preventDefault();
             const target = e.target as HTMLTextAreaElement;
@@ -282,6 +305,9 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
         div.textContent = text;
         return div.innerHTML;
     };
+
+    // 应该在只有当前节点为markdown时执行
+    updateTableOfContents();
 
     return (
         <div className="note-detail-markdown note-detail-printable" style={{ height: "100%" }}>

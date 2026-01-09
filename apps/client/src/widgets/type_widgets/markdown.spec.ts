@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import MarkdownTypeWidget from "./markdown.js";
+import MarkdownTypeWidget from "./markdown";
 
 // Mock @toast-ui/editor
 vi.mock("@toast-ui/editor", () => ({
