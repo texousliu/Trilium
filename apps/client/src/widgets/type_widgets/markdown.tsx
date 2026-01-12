@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import type FNote from "../../entities/fnote.js";
-import { TypeWidgetProps } from "./type_widget.js";
 import { useEditorSpacedUpdate } from "../react/hooks.js";
-import utils from "../../services/utils.js";
-import server from "../../services/server.js";
+import { TypeWidgetProps } from "./type_widget.js";
 
 interface MarkdownEditorState {
     content: string;
@@ -294,10 +291,10 @@ export default function Markdown({ note, viewScope, ntxId, parentComponent, note
     const isDarkTheme = (): boolean => {
         const body = document.body;
         return body.classList.contains("theme-dark") ||
-               body.classList.contains("dark") ||
-               body.classList.contains("theme-next-dark") ||
-               body.getAttribute('data-theme') === 'dark' ||
-               getComputedStyle(body).getPropertyValue('--theme-style')?.trim() === 'dark';
+            body.classList.contains("dark") ||
+            body.classList.contains("theme-next-dark") ||
+            body.getAttribute('data-theme') === 'dark' ||
+            getComputedStyle(body).getPropertyValue('--theme-style')?.trim() === 'dark';
     };
 
     const escapeHtml = (text: string): string => {
